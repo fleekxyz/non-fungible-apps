@@ -28,9 +28,9 @@ describe("SitesNFTs contract", function () {
         
             const DEFAULT_ADMIN_ROLE_STRING = ""
         
-            const userRole = await hardhatSitesNFTs.hasRole(ethers.utils.formatBytes32String(DEFAULT_ADMIN_ROLE_STRING) , await owner.getAddress());
+            const hasAdminRole = await hardhatSitesNFTs.hasRole(ethers.utils.formatBytes32String(DEFAULT_ADMIN_ROLE_STRING) , await owner.getAddress());
         
-            expect(userRole).to.equal(true);
+            expect(hasAdminRole).to.equal(true);
           });
         
           it("Deployment should assign initial tokenId to 0", async function () {
@@ -46,17 +46,77 @@ describe("SitesNFTs contract", function () {
           });
     });
 
-    describe("Role management", () => {
-        it("User with admin role should be able to assign MINTER_ROLE to another user", async function () {
+    describe("Access control", () => {
+        it("User with DEFAULT_ADMIN_ROLE should be able to assign MINTER_ROLE to another user", async function () {
             const [owner, address1] = await ethers.getSigners();
         
             const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
         
             const hardhatSitesNFTs = await SitesNFTs.deploy("Sites NFTs", "SNFT");
         
-            const currentTokenId = await hardhatSitesNFTs.getCurrentTokenId();
+            const MINTER_ROLE = "MINTER_ROLE"
+
+            await hardhatSitesNFTs.grantRole(ethers.utils.formatBytes32String(MINTER_ROLE), await address1.getAddress());
+
+            const hasMinterRole = await hardhatSitesNFTs.hasRole(ethers.utils.formatBytes32String(MINTER_ROLE), await address1.getAddress());
+
+            expect(hasMinterRole).to.equal(true);
+          });
+
+          it("User with DEFAULT_ADMIN_ROLE should be able to assign DEFAULT_ADMIN_ROLE to another user", async function () {
+            const [owner, address1] = await ethers.getSigners();
         
-            expect(currentTokenId).to.equal(0);
+            const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
+        
+            const hardhatSitesNFTs = await SitesNFTs.deploy("Sites NFTs", "SNFT");
+        
+            const DEFAULT_ADMIN_ROLE = "";
+
+            await hardhatSitesNFTs.grantRole(ethers.utils.formatBytes32String(DEFAULT_ADMIN_ROLE), await address1.getAddress());
+
+            const hasAdminRole = await hardhatSitesNFTs.hasRole(ethers.utils.formatBytes32String(DEFAULT_ADMIN_ROLE), await address1.getAddress());
+
+            expect(hasAdminRole).to.equal(true);
+          });
+
+          it("User without DEFAULT_ADMIN_ROLE shouldnt be able to assign DEFAULT_ADMIN_ROLE to another user", async function () {
+            const [owner, address1, address2] = await ethers.getSigners();
+        
+            const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
+        
+            const hardhatSitesNFTs = await SitesNFTs.deploy("Sites NFTs", "SNFT");
+        
+            const DEFAULT_ADMIN_ROLE = "";
+
+            try {
+                await hardhatSitesNFTs.connect(address1).grantRole(ethers.utils.formatBytes32String(DEFAULT_ADMIN_ROLE), await address2.getAddress());
+            } catch (e) {
+
+            }
+
+            const hasAdminRole = await hardhatSitesNFTs.hasRole(ethers.utils.formatBytes32String(DEFAULT_ADMIN_ROLE), await address2.getAddress());
+
+            expect(hasAdminRole).to.equal(false);
+          });
+
+          it("User without DEFAULT_ADMIN_ROLE shouldnt be able to assign MINTER_ROLE to another user", async function () {
+            const [owner, address1, address2] = await ethers.getSigners();
+        
+            const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
+        
+            const hardhatSitesNFTs = await SitesNFTs.deploy("Sites NFTs", "SNFT");
+        
+            const MINTER_ROLE = "MINTER_ROLE"
+
+            try {
+                await hardhatSitesNFTs.connect(address1).grantRole(ethers.utils.formatBytes32String(MINTER_ROLE), await address2.getAddress());
+            } catch (e) {
+
+            }
+
+            const hasMinterRole = await hardhatSitesNFTs.hasRole(ethers.utils.formatBytes32String(MINTER_ROLE), await address2.getAddress());
+
+            expect(hasMinterRole).to.equal(false);
           });
     });
 });
