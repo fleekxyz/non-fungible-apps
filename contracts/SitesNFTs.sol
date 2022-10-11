@@ -17,7 +17,6 @@ contract SitesNFTs is ERC721URIStorage, AccessControl {
     constructor(string memory name, string memory symbol) ERC721(name, symbol) {
         baseURI = "data:application/json;base64,";
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _;
     }
 
     // Token uri is the Base64 encoded json metadata
