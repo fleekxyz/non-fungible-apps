@@ -4,17 +4,23 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "base64-sol/base64.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract SitesNFTs is ERC721URIStorage {
+contract SitesNFTs is ERC721URIStorage, AccessControl {
 
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
+    string private baseURI;
 
-    constructor() ERC721("Fleek Sites NFTs", "SNFT") {}
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+
+    constructor(string memory name, string memory symbol) ERC721(name, symbol) {
+        baseURI = "data:application/json;base64,";
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    }
 
     // Token uri is the Base64 encoded json metadata
-    function mintNFT(string memory _tokenURI) public returns (uint256) {
+    function mintNFT(string memory _tokenURI) public onlyRole(MINTER_ROLE) returns (uint256) {
         uint256 newItemId = _tokenIds.current();
         _safeMint(msg.sender, newItemId);
         _setTokenURI(newItemId, _tokenURI);
@@ -23,13 +29,15 @@ contract SitesNFTs is ERC721URIStorage {
         return newItemId;
     }
 
-    function _htmlToImageURI(string memory html) internal pure returns (string memory) {
-        // text/html;charset=UTF-8,
-        string memory baseURL = "data:text/html;charset=UTF-8,";
-        return string(abi.encodePacked(baseURL, html));
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, AccessControl) returns (bool) {
+        return super.supportsInterface(interfaceId);
     }
 
-    function _baseURI() internal pure override returns (string memory) {
-        return "data:application/json;base64,";
+    function setBaseURI(string memory _newBbaseURI) public {
+        baseURI = _newBbaseURI;
+    }
+
+    function getCurrentTokenId() public view returns (uint256) {
+        return _tokenIds.current();
     }
 }
