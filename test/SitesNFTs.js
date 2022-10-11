@@ -2,7 +2,7 @@ const { expect } = require("chai");
 
 describe("SitesNFTs contract", function () {
     describe("Deployment", () => {
-        it("Deployment should assign the name and the symbol of the ERC721 contract", async function () {
+        it("Deployment should assign the name and the symbol of the ERC721 contract", async () => {
             const [owner] = await ethers.getSigners();
         
             const name = "Sites NFTs";
@@ -19,7 +19,7 @@ describe("SitesNFTs contract", function () {
             expect(contractSymbol).to.equal(symbol);
           });
         
-          it("Deployment should assign the deployer DEFAULT_ADMIN_ROLE", async function () {
+          it("Deployment should assign the deployer DEFAULT_ADMIN_ROLE", async () => {
             const [owner] = await ethers.getSigners();
         
             const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
@@ -33,7 +33,7 @@ describe("SitesNFTs contract", function () {
             expect(hasAdminRole).to.equal(true);
           });
         
-          it("Deployment should assign initial tokenId to 0", async function () {
+          it("Deployment should assign initial tokenId to 0", async () => {
             const [owner] = await ethers.getSigners();
         
             const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
@@ -47,7 +47,7 @@ describe("SitesNFTs contract", function () {
     });
 
     describe("Access control", () => {
-        it("User with DEFAULT_ADMIN_ROLE should be able to assign MINTER_ROLE to another user", async function () {
+        it("User with DEFAULT_ADMIN_ROLE should be able to assign MINTER_ROLE to another user", async () => {
             const [owner, address1] = await ethers.getSigners();
         
             const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
@@ -63,7 +63,7 @@ describe("SitesNFTs contract", function () {
             expect(hasMinterRole).to.equal(true);
           });
 
-          it("User with DEFAULT_ADMIN_ROLE should be able to assign DEFAULT_ADMIN_ROLE to another user", async function () {
+          it("User with DEFAULT_ADMIN_ROLE should be able to assign DEFAULT_ADMIN_ROLE to another user", async () => {
             const [owner, address1] = await ethers.getSigners();
         
             const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
@@ -79,7 +79,7 @@ describe("SitesNFTs contract", function () {
             expect(hasAdminRole).to.equal(true);
           });
 
-          it("User without DEFAULT_ADMIN_ROLE shouldnt be able to assign DEFAULT_ADMIN_ROLE to another user", async function () {
+          it("User without DEFAULT_ADMIN_ROLE shouldnt be able to assign DEFAULT_ADMIN_ROLE to another user", async () => {
             const [owner, address1, address2] = await ethers.getSigners();
         
             const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
@@ -99,7 +99,7 @@ describe("SitesNFTs contract", function () {
             expect(hasAdminRole).to.equal(false);
           });
 
-          it("User without DEFAULT_ADMIN_ROLE shouldnt be able to assign MINTER_ROLE to another user", async function () {
+          it("User without DEFAULT_ADMIN_ROLE shouldnt be able to assign MINTER_ROLE to another user", async () => {
             const [owner, address1, address2] = await ethers.getSigners();
         
             const SitesNFTs = await ethers.getContractFactory("SitesNFTs");

@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/migue/Documents/psychedelic/sites_nfts/contracts/SitesNFTs.sol": {
-      "lastModificationDate": 1665508068244,
-      "contentHash": "e72dc1748efc4646c33553ef83e2462d",
+      "lastModificationDate": 1665514025103,
+      "contentHash": "28e17cde1dc2d621c69ac3d29df60e12",
       "sourceName": "contracts/SitesNFTs.sol",
       "solcConfig": {
         "version": "0.8.7",
