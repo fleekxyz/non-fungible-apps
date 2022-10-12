@@ -201,7 +201,7 @@ describe("SitesNFTs contract", function () {
             const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
         
             const hardhatSitesNFTs = await SitesNFTs.deploy("Sites NFTs", "SNFT");
-            
+
             const tokenURI = "tokenURI";
             
             try {
@@ -211,6 +211,24 @@ describe("SitesNFTs contract", function () {
             const balance = await hardhatSitesNFTs.balanceOf(await address2.getAddress());
 
             expect(balance).to.equal(0);
+        });
+
+        it("Minted NFT should have data:application/json;base64, baseURI", async () => {
+            const [owner, address1] = await ethers.getSigners();
+        
+            const SitesNFTs = await ethers.getContractFactory("SitesNFTs");
+        
+            const hardhatSitesNFTs = await SitesNFTs.deploy("Sites NFTs", "SNFT");
+
+            const tokenURI = "tokenURI";
+
+            await hardhatSitesNFTs.mint(tokenURI, await address1.getAddress());
+
+            const mintedNFT = await hardhatSitesNFTs.tokenURI(0);
+
+            console.log(mintedNFT);
+
+            expect(mintedNFT.includes("data:application/json;base64,")).to.equal(true);
         });
     })
 });

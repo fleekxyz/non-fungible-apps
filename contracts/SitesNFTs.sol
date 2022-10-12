@@ -47,6 +47,10 @@ contract SitesNFTs is ERC721URIStorage, AccessControl {
         return _tokenIds.current();
     }
 
+    function _baseURI() internal view override returns (string memory) {
+        return baseURI;
+    }
+
     receive() external payable {}
 
     fallback() external {}
