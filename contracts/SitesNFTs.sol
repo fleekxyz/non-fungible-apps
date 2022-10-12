@@ -12,7 +12,13 @@ contract SitesNFTs is ERC721URIStorage, AccessControl {
     Counters.Counter private _tokenIds;
     string private baseURI;
 
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant MINTER_ROLE = 0x4d494e5445525f524f4c45000000000000000000000000000000000000000000; // "MINTER_ROLE"
+
+    modifier canMint() {
+        bool isMinterOrAdmin = hasRole(MINTER_ROLE, msg.sender) || hasRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        require(isMinterOrAdmin, "Caller has no permission to mint.");
+        _;
+    }
 
     constructor(string memory name, string memory symbol) ERC721(name, symbol) {
         baseURI = "data:application/json;base64,";
@@ -20,9 +26,9 @@ contract SitesNFTs is ERC721URIStorage, AccessControl {
     }
 
     // Token uri is the Base64 encoded json metadata
-    function mintNFT(string memory _tokenURI) public onlyRole(MINTER_ROLE) returns (uint256) {
+    function mint(string memory _tokenURI, address account) public canMint()  returns (uint256) {
         uint256 newItemId = _tokenIds.current();
-        _safeMint(msg.sender, newItemId);
+        _safeMint(account, newItemId);
         _setTokenURI(newItemId, _tokenURI);
 
         _tokenIds.increment();
