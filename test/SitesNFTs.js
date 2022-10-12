@@ -226,8 +226,6 @@ describe("SitesNFTs contract", function () {
 
             const mintedNFT = await hardhatSitesNFTs.tokenURI(0);
 
-            console.log(mintedNFT);
-
             expect(mintedNFT.includes("data:application/json;base64,")).to.equal(true);
         });
     })
