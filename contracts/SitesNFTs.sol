@@ -25,7 +25,6 @@ contract SitesNFTs is ERC721URIStorage, AccessControl {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    // Token uri is the Base64 encoded json metadata
     function mint(string memory base64EncodedMetadata, address account) public canMint()  returns (uint256) {
         uint256 newItemId = _tokenIds.current();
         _safeMint(account, newItemId);
