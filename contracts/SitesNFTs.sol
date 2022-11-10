@@ -20,8 +20,9 @@ contract SitesNFTs is ERC721URIStorage, AccessControl {
         _;
     }
 
-    modifier addressOwnsTokenId(address owner, uint256 tokenId) {
-        require(_owners[owner]);
+    modifier canChangeBaseURI() {
+        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender));
+        _;
     }
 
     constructor(string memory name, string memory symbol) ERC721(name, symbol) {
@@ -40,6 +41,7 @@ contract SitesNFTs is ERC721URIStorage, AccessControl {
 
     function updateTokenURI(address tokenHolderAddress, uint256 tokenId, string memory base64EncodedMetadata) public canMint() {
         address tokenOwner = ownerOf(tokenId);
+        require(tokenOwner == tokenHolderAddress, "Address does not own provided tokenId");
         _setTokenURI(tokenId, base64EncodedMetadata);
     }
 
@@ -47,8 +49,9 @@ contract SitesNFTs is ERC721URIStorage, AccessControl {
         return super.supportsInterface(interfaceId);
     }
 
-    function setBaseURI(string memory _newBbaseURI) public {
+    function setBaseURI(string memory _newBbaseURI) public canChangeBaseURI() returns (string memory) {
         baseURI = _newBbaseURI;
+        return baseURI;
     }
 
     function getCurrentTokenId() public view returns (uint256) {
