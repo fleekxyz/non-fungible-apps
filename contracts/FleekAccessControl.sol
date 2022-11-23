@@ -3,85 +3,32 @@
 pragma solidity ^0.8.7;
 
 import "../interfaces/IFleekSite.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-abstract contract FleekAccessControl is IFleekAccessControl {
-    address[] public controllers;
-    address public owner;
+abstract contract FleekAccessControl is AccessControl {
+    bytes32 public constant OWNER_ROLE = keccak256("OWNER_ROLE");
+    bytes32 public constant CONTROLLER_ROLE = keccak256("CONTROLLER_ROLE");
 
     constructor() {
-        owner = msg.sender;
+        _setRoleAdmin(OWNER_ROLE, DEFAULT_ADMIN_ROLE);
+        _grantRole(OWNER_ROLE, msg.sender);
     }
 
     modifier requireOwner() {
         require(
-            msg.sender == owner,
-            "FleekNFT: Only owner can call this function"
+            hasRole(OWNER_ROLE, msg.sender),
+            "FleekAccessControl: must have owner role"
         );
         _;
     }
 
     modifier requireController() {
-        bool _isController = false;
-        for (uint256 i = 0; i < controllers.length; i++) {
-            if (msg.sender == controllers[i]) {
-                _isController = true;
-                break;
-            }
-        }
-        bool _isOwner = owner == msg.sender;
+        bool hasPermission = hasRole(CONTROLLER_ROLE, msg.sender) ||
+            hasRole(DEFAULT_ADMIN_ROLE, msg.sender);
         require(
-            _isController || _isOwner,
-            "FleekNFT: Only controller can call this function"
+            hasPermission,
+            "FleekAccessControl: caller is not a controller"
         );
         _;
-    }
-
-    function transferOwnership(
-        address _newOwner
-    ) external override requireOwner {
-        owner = _newOwner;
-    }
-
-    function getOwner() external view override returns (address) {
-        return owner;
-    }
-
-    function isOwner(address _account) external view override returns (bool) {
-        return _account == owner;
-    }
-
-    function addController(address _controller) external override requireOwner {
-        controllers[controllers.length] = _controller;
-    }
-
-    function removeController(
-        address _controller
-    ) external override requireOwner {
-        for (uint256 i = 0; i < controllers.length; i++) {
-            if (controllers[i] == _controller) {
-                controllers[i] = controllers[controllers.length - 1];
-                delete controllers[controllers.length - 1];
-            }
-        }
-    }
-
-    function isController(
-        address _controller
-    ) external view override returns (bool) {
-        for (uint256 i = 0; i < controllers.length; i++) {
-            if (controllers[i] == _controller) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function getControllers()
-        external
-        view
-        override
-        returns (address[] memory)
-    {
-        return controllers;
     }
 }
