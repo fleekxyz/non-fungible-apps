@@ -11,7 +11,8 @@ interface IFleekBuilds {
     }
 
     event InitialVersionDeploy();
-    event Upgraded();
+
+    event Upgraded(build _build);
 
     function update(build calldata _newBuild) external;
 
