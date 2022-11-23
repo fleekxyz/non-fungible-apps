@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.7;
 
-import "../interfaces/IFleekSiteNFT.sol";
+import "../interfaces/IFleekSite.sol";
 
-abstract contract FleekNFTControllers is IFleekNFTControllers {
+abstract contract FleekAccessControl is IFleekAccessControl {
     address[] public controllers;
     address public owner;
 
@@ -36,8 +36,9 @@ abstract contract FleekNFTControllers is IFleekNFTControllers {
         _;
     }
 
-    function transferOwnership(address _newOwner) external override {
-        require(msg.sender == owner, "Only owner can transfer ownership");
+    function transferOwnership(
+        address _newOwner
+    ) external override requireOwner {
         owner = _newOwner;
     }
 

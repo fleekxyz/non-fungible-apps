@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.7;
 
-interface IFleekNFTControllers {
+interface IFleekAccessControl {
     event ControllersChanged();
     event OwnerChanged();
 

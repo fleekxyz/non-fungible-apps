@@ -2,10 +2,10 @@
 
 pragma solidity ^0.8.7;
 
-import "./FleekNFT.sol";
-import "../interfaces/IFleekSiteNFT.sol";
+import "./Fleek.sol";
+import "../interfaces/IFleekSite.sol";
 
-contract FleekSiteNFT is IFleekSiteNFT, FleekNFT {
+contract FleekSite is IFleekSite, Fleek {
     metadata public _metadata;
 
     function updateMetadata(

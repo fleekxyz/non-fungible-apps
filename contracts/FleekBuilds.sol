@@ -2,10 +2,10 @@
 
 pragma solidity ^0.8.7;
 
-import "../interfaces/IFleekNFTBuilds.sol";
-import "./FleekNFTControllers.sol";
+import "../interfaces/IFleekBuilds.sol";
+import "./FleekAccessControl.sol";
 
-abstract contract FleekNFTBuilds is IFleekNFTBuilds, FleekNFTControllers {
+abstract contract FleekBuilds is IFleekBuilds, FleekAccessControl {
     build[] public builds;
 
     function update(

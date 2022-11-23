@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.7;
 
-import "./IFleekNFT.sol";
+import "./IFleek.sol";
 
-interface IFleekSiteNFT is IFleekNFT {
+interface IFleekSite is IFleek {
     struct metadata {
         string _name;
         string _description;

@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.7;
 
-interface IFleekNFTBuilds {
+interface IFleekBuilds {
     struct build {
         string _uri;
         string _hash;
