@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "hardhat test",
+    "format": "prettier --write \"./**/*.{js,ts,sol}\""
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,8 @@
     "hardhat-contract-sizer": "^2.6.1",
     "hardhat-deploy": "^0.11.15",
     "hardhat-gas-reporter": "^1.0.9",
+    "prettier": "^2.7.1",
+    "prettier-plugin-solidity": "^1.0.0",
     "solidity-coverage": "^0.8.2"
   }
 }
