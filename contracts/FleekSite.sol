@@ -6,6 +6,16 @@ import "./Fleek.sol";
 import "../interfaces/IFleekSite.sol";
 
 contract FleekSite is IFleekSite, Fleek {
+    constructor(
+        string _name,
+        string _description,
+        string _thumbnail,
+        string _external_url
+    ) Fleek(_name, _description) {
+        thumbnail = _thumbnail;
+        external_url = _external_url;
+    }
+
     function setThumbnail(
         string calldata _thumbnail
     ) external override requireController {
