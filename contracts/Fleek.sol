@@ -7,6 +7,9 @@ import "./FleekBuilds.sol";
 import "./FleekAccessControl.sol";
 
 abstract contract Fleek is IFleek, FleekBuilds {
+    string name;
+    string description;
+
     constructor(string memory _name, string memory _description) {
         name = _name;
         description = _description;

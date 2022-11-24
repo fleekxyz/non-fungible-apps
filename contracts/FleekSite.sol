@@ -6,6 +6,9 @@ import "./Fleek.sol";
 import "../interfaces/IFleekSite.sol";
 
 contract FleekSite is IFleekSite, Fleek {
+    string thumbnail;
+    string external_url;
+
     constructor(
         string memory _name,
         string memory _description,
