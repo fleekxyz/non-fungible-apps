@@ -7,7 +7,7 @@ import "./FleekBuilds.sol";
 import "./FleekAccessControl.sol";
 
 abstract contract Fleek is IFleek, FleekBuilds {
-    constructor(string _name, string _description) {
+    constructor(string memory _name, string memory _description) {
         name = _name;
         description = _description;
     }
@@ -16,22 +16,13 @@ abstract contract Fleek is IFleek, FleekBuilds {
         string calldata _name
     ) external override requireController {
         name = _name;
-        emit MetadataUpdated();
+        emit MetadataUpdated(name, description);
     }
 
     function setDescription(
         string calldata _description
     ) external override requireController {
         description = _description;
-        emit MetadataUpdated();
-    }
-
-    function getMetadata()
-        external
-        view
-        override
-        returns (string memory, string memory)
-    {
-        return (name, description);
+        emit MetadataUpdated(name, description);
     }
 }

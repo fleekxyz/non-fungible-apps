@@ -14,6 +14,4 @@ interface IFleek is IFleekBuilds, IAccessControl {
     function setName(string calldata _name) external;
 
     function setDescription(string calldata _description) external;
-
-    function getMetadata() external view returns (string, string);
 }

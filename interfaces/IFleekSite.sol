@@ -18,10 +18,4 @@ interface IFleekSite is IFleek {
     function setThumbnail(string calldata _thumbnail) external;
 
     function setExternalUrl(string calldata _external_url) external;
-
-    function getMetadata()
-        external
-        view
-        override
-        returns (string, string, string, string);
 }
