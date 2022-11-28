@@ -6,29 +6,45 @@ import "../interfaces/IFleekSite.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
 abstract contract FleekAccessControl is AccessControl {
-    bytes32 public constant OWNER_ROLE = keccak256("OWNER_ROLE");
-    bytes32 public constant CONTROLLER_ROLE = keccak256("CONTROLLER_ROLE");
+    bytes32 public constant COLLECTION_OWNER_ROLE =
+        keccak256("COLLECTION_OWNER_ROLE");
+    bytes32 public constant COLLECTION_CONTROLLER_ROLE =
+        keccak256("COLLECTION_CONTROLLER_ROLE");
 
     constructor() {
-        _setRoleAdmin(OWNER_ROLE, DEFAULT_ADMIN_ROLE);
-        _grantRole(OWNER_ROLE, msg.sender);
+        _setRoleAdmin(COLLECTION_OWNER_ROLE, DEFAULT_ADMIN_ROLE);
+        _grantRole(COLLECTION_OWNER_ROLE, msg.sender);
     }
 
-    modifier requireOwner() {
+    modifier requireCollectionOwner() {
         require(
-            hasRole(OWNER_ROLE, msg.sender),
-            "FleekAccessControl: must have owner role"
+            hasRole(COLLECTION_OWNER_ROLE, msg.sender),
+            "FleekAccessControl: must have collection owner role"
         );
         _;
     }
 
-    modifier requireController() {
-        bool hasPermission = hasRole(CONTROLLER_ROLE, msg.sender) ||
-            hasRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    modifier requireCollectionController() {
         require(
-            hasPermission,
-            "FleekAccessControl: caller is not a controller"
+            hasRole(COOLECTION_OWNER_ROLE, msg.sender) ||
+                hasRole(COLLECTION_CONTROLLER_ROLE, msg.sender),
+            "FleekAccessControl: must have collection controller role"
         );
         _;
+    }
+
+    modifier requireTokenController(uint256 tokenId) {
+        require(
+            hasRole(_tokenRole(tokenId, "CONTROLLER"), msg.sender),
+            "FleekAccessControl: must have token role"
+        );
+        _;
+    }
+
+    function _tokenRole(
+        uint256 tokenId,
+        string role
+    ) internal pure returns (bytes32) {
+        return keccak256(abi.encodePacked("TOKEN_", role, tokenId));
     }
 }
