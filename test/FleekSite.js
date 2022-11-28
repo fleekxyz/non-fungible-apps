@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const { loadFixture } = require('ethereum-waffle');
+const { ethers } = require('hardhat');
 const hre = require('hardhat');
 
 describe('FleekSite contract', function () {
@@ -29,6 +30,21 @@ describe('FleekSite contract', function () {
 
       const currentBuilds = await hardhatFleekSite.getBuilds();
       expect(currentBuilds.length).to.equal(0);
+    });
+
+    it('Deployment should assign to OWNER_ROLE the DEFAULT_ADMIN_ROLE', async () => {
+      const { hardhatFleekSite } = await loadFixture(deploy);
+
+      const OWNER_ROLE = 'OWNER_ROLE';
+      const DEFAULT_ADMIN_ROLE_STRING = '';
+
+      const role = await hardhatFleekSite.getRoleAdmin(
+        ethers.utils.formatBytes32String(OWNER_ROLE)
+      );
+
+      expect(role).to.equal(
+        ethers.utils.formatBytes32String(DEFAULT_ADMIN_ROLE_STRING)
+      );
     });
   });
 });
