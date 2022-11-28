@@ -2,18 +2,17 @@
 
 pragma solidity ^0.8.7;
 
-import "@openzeppelin/contracts/interfaces/IERC721.sol";
-import "@openzeppelin/contracts/access/IAccessControl.sol";
+import "../node_modules/@openzeppelin/contracts/interfaces/IERC721.sol";
+import "../node_modules/@openzeppelin/contracts/access/IAccessControl.sol";
 
-/// @title SitesNFTs - A contract for managing sites NFTs
-/// @dev See
-interface ISitesNFTs is IERC721 {
+/// @title IFleekERC721 - A contract for managing sites NFTs
+interface IFleekERC721 is IERC721 {
     enum FleekContract {
         Site
     }
 
     function mint(
-        FleekContract memory fleekContract,
+        uint8 fleekContract,
         string memory base64EncodedMetadata,
         address account
     ) external returns (uint256);
@@ -25,4 +24,6 @@ interface ISitesNFTs is IERC721 {
     ) external;
 
     function getCurrentTokenId() external view returns (uint256);
+
+    function tokenContract(uint256 tokenId) external view returns (address);
 }
