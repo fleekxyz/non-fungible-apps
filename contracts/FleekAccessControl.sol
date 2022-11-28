@@ -41,6 +41,20 @@ abstract contract FleekAccessControl is AccessControl {
         _;
     }
 
+    function addTokenController(
+        uint256 tokenId,
+        address controller
+    ) public require requireMinted(tokenId) requireTokenOwner(tokenId) {
+        _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
+    }
+
+    function removeTokenController(
+        uint256 tokenId,
+        address controller
+    ) public require requireMinted(tokenId) requireTokenOwner(tokenId) {
+        _revokeRole(_tokenRole(tokenId, "CONTROLLER"), controller);
+    }
+
     function _tokenRole(
         uint256 tokenId,
         string role

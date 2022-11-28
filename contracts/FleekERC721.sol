@@ -13,8 +13,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     using Counters for Counters.Counter;
 
     struct Build {
-        string _commit;
-        string _repository;
+        string commit;
+        string repository;
     }
 
     struct Site {
@@ -39,8 +39,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory repository
     ) public payable requireCollectionOwner returns (uint256) {
         uint256 tokenId = _tokenIds.current();
-        _grantRole(_tokenRole(tokenId), to);
         _mint(to, tokenId);
+        addTokenController(tokenId, to);
         _tokenIds.increment();
         _sites[tokenId] = Site(URI, ENS, 0, [Build(commit, repository)]);
         return tokenId;
@@ -75,8 +75,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
                 '"URI":"', site.URI, '",',
                 '"build:{',
                     '"id":"', site.currentBuild, '",',
-                    '"commit":"', site.builds[site.currentBuild]._commit, '",',
-                    '"repository":"', site.builds[site.currentBuild]._repository, '"'
+                    '"commit":"', site.builds[site.currentBuild].commit, '",',
+                    '"repository":"', site.builds[site.currentBuild].repository, '"'
                 '}',
             '}'
         );
