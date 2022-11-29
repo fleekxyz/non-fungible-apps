@@ -1,16 +1,23 @@
 const { expect } = require('chai');
+const { loadFixture } = require('ethereum-waffle');
 
 describe('SitesNFTs contract', function () {
+  const name = 'Sites NFTs';
+  const symbol = 'SNFT';
+
+  async function deploy() {
+    const [owner, address1, address2] = await hre.ethers.getSigners();
+
+    const SitesNFTs = await hre.ethers.getContractFactory('SitesNFTs');
+
+    const hardhatSitesNFTs = await SitesNFTs.deploy(name, symbol);
+
+    return { owner, address1, address2, hardhatSitesNFTs };
+  }
+
   describe('Deployment', () => {
     it('Deployment should assign the name and the symbol of the ERC721 contract', async () => {
-      const [owner] = await ethers.getSigners();
-
-      const name = 'Sites NFTs';
-      const symbol = 'SNFT';
-
-      const SitesNFTs = await ethers.getContractFactory('SitesNFTs');
-
-      const hardhatSitesNFTs = await SitesNFTs.deploy('Sites NFTs', 'SNFT');
+      const { hardhatSitesNFTs } = await loadFixture(deploy);
 
       const contractName = await hardhatSitesNFTs.name();
       const contractSymbol = await hardhatSitesNFTs.symbol();
@@ -20,11 +27,7 @@ describe('SitesNFTs contract', function () {
     });
 
     it('Deployment should assign the deployer DEFAULT_ADMIN_ROLE', async () => {
-      const [owner] = await ethers.getSigners();
-
-      const SitesNFTs = await ethers.getContractFactory('SitesNFTs');
-
-      const hardhatSitesNFTs = await SitesNFTs.deploy('Sites NFTs', 'SNFT');
+      const { hardhatSitesNFTs, owner } = await loadFixture(deploy);
 
       const DEFAULT_ADMIN_ROLE_STRING = '';
 
@@ -37,12 +40,7 @@ describe('SitesNFTs contract', function () {
     });
 
     it('Deployment should assign initial tokenId to 0', async () => {
-      const [owner] = await ethers.getSigners();
-
-      const SitesNFTs = await ethers.getContractFactory('SitesNFTs');
-
-      const hardhatSitesNFTs = await SitesNFTs.deploy('Sites NFTs', 'SNFT');
-
+      const { hardhatSitesNFTs } = await loadFixture(deploy);
       const currentTokenId = await hardhatSitesNFTs.getCurrentTokenId();
 
       expect(currentTokenId).to.equal(0);
@@ -51,12 +49,7 @@ describe('SitesNFTs contract', function () {
 
   describe('Access control', () => {
     it('User with DEFAULT_ADMIN_ROLE should be able to assign MINTER_ROLE to another user', async () => {
-      const [owner, address1] = await ethers.getSigners();
-
-      const SitesNFTs = await ethers.getContractFactory('SitesNFTs');
-
-      const hardhatSitesNFTs = await SitesNFTs.deploy('Sites NFTs', 'SNFT');
-
+      const { hardhatSitesNFTs, address1 } = await loadFixture(deploy);
       const MINTER_ROLE = 'MINTER_ROLE';
 
       await hardhatSitesNFTs.grantRole(
@@ -73,12 +66,7 @@ describe('SitesNFTs contract', function () {
     });
 
     it('User with DEFAULT_ADMIN_ROLE should be able to assign MINTER_ROLE to himself and still have DEFAULT_ADMIN_ROLE', async () => {
-      const [owner] = await ethers.getSigners();
-
-      const SitesNFTs = await ethers.getContractFactory('SitesNFTs');
-
-      const hardhatSitesNFTs = await SitesNFTs.deploy('Sites NFTs', 'SNFT');
-
+      const { hardhatSitesNFTs, owner } = await loadFixture(deploy);
       const MINTER_ROLE = 'MINTER_ROLE';
       const DEFAULT_ADMIN_ROLE = '';
 
@@ -101,12 +89,7 @@ describe('SitesNFTs contract', function () {
     });
 
     it('User with DEFAULT_ADMIN_ROLE should be able to assign DEFAULT_ADMIN_ROLE to another user', async () => {
-      const [owner, address1] = await ethers.getSigners();
-
-      const SitesNFTs = await ethers.getContractFactory('SitesNFTs');
-
-      const hardhatSitesNFTs = await SitesNFTs.deploy('Sites NFTs', 'SNFT');
-
+      const { hardhatSitesNFTs, address1 } = await loadFixture(deploy);
       const DEFAULT_ADMIN_ROLE = '';
 
       await hardhatSitesNFTs.grantRole(
@@ -123,12 +106,7 @@ describe('SitesNFTs contract', function () {
     });
 
     it('User with DEFAULT_ADMIN_ROLE should be able to assign DEFAULT_ADMIN_ROLE to another user and still have DEFAULT_ADMIN_ROLE', async () => {
-      const [owner, address1] = await ethers.getSigners();
-
-      const SitesNFTs = await ethers.getContractFactory('SitesNFTs');
-
-      const hardhatSitesNFTs = await SitesNFTs.deploy('Sites NFTs', 'SNFT');
-
+      const { hardhatSitesNFTs, owner, address1 } = await loadFixture(deploy);
       const DEFAULT_ADMIN_ROLE = '';
 
       await hardhatSitesNFTs.grantRole(
@@ -206,12 +184,7 @@ describe('SitesNFTs contract', function () {
 
   describe('Minting', () => {
     it('User with DEFAULT_ADMIN_ROLE should be able to mint', async () => {
-      const [owner, address1] = await ethers.getSigners();
-
-      const SitesNFTs = await ethers.getContractFactory('SitesNFTs');
-
-      const hardhatSitesNFTs = await SitesNFTs.deploy('Sites NFTs', 'SNFT');
-
+      const { hardhatSitesNFTs, address1 } = await loadFixture(deploy);
       const tokenURI = 'tokenURI';
 
       await hardhatSitesNFTs.mint(tokenURI, await address1.getAddress());
@@ -224,12 +197,9 @@ describe('SitesNFTs contract', function () {
     });
 
     it('User with MINTER_ROLE should be able to mint', async () => {
-      const [owner, address1, address2] = await ethers.getSigners();
-
-      const SitesNFTs = await ethers.getContractFactory('SitesNFTs');
-
-      const hardhatSitesNFTs = await SitesNFTs.deploy('Sites NFTs', 'SNFT');
-
+      const { hardhatSitesNFTs, address1, address2 } = await loadFixture(
+        deploy
+      );
       const MINTER_ROLE = 'MINTER_ROLE';
       const tokenURI = 'tokenURI';
 
@@ -277,12 +247,7 @@ describe('SitesNFTs contract', function () {
     });
 
     it('Minted NFT should have data:application/json;base64, baseURI', async () => {
-      const [owner, address1] = await ethers.getSigners();
-
-      const SitesNFTs = await ethers.getContractFactory('SitesNFTs');
-
-      const hardhatSitesNFTs = await SitesNFTs.deploy('Sites NFTs', 'SNFT');
-
+      const { hardhatSitesNFTs, address1 } = await loadFixture(deploy);
       const tokenURI = 'tokenURI';
 
       await hardhatSitesNFTs.mint(tokenURI, await address1.getAddress());

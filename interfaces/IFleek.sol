@@ -6,9 +6,6 @@ import "./IFleekBuilds.sol";
 import "@openzeppelin/contracts/access/IAccessControl.sol";
 
 interface IFleek is IFleekBuilds, IAccessControl {
-    string name;
-    string description;
-
     event MetadataUpdated(string name, string description);
 
     function setName(string calldata _name) external;

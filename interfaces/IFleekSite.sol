@@ -5,10 +5,7 @@ pragma solidity ^0.8.7;
 import "./IFleek.sol";
 
 interface IFleekSite is IFleek {
-    string thumbnail;
-    string external_url;
-
-    event MetadataUpdated(
+    event SiteMetadataUpdated(
         string name,
         string description,
         string thumbnail,

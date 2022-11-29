@@ -6,6 +6,9 @@ import "./Fleek.sol";
 import "../interfaces/IFleekSite.sol";
 
 contract FleekSite is IFleekSite, Fleek {
+    string thumbnail;
+    string external_url;
+
     constructor(
         string memory _name,
         string memory _description,
@@ -20,13 +23,13 @@ contract FleekSite is IFleekSite, Fleek {
         string calldata _thumbnail
     ) external override requireController {
         thumbnail = _thumbnail;
-        emit MetadataUpdated(name, description, thumbnail, external_url);
+        emit SiteMetadataUpdated(name, description, thumbnail, external_url);
     }
 
     function setExternalUrl(
         string calldata _external_url
     ) external override requireController {
         external_url = _external_url;
-        emit MetadataUpdated(name, description, thumbnail, external_url);
+        emit SiteMetadataUpdated(name, description, thumbnail, external_url);
     }
 }
