@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "hardhat test",
-    "format": "prettier --write \"./**/*.{js,ts,sol}\""
+    "format": "prettier --write \"./**/*.{js,ts,sol}\"",
+    "deploy:mumbai": "node scripts/deploy.js --network polygon_mumbai --contract FleekERC721 --param \"Fleek Sites Test\" --param FST"
   },
   "repository": {
     "type": "git",
@@ -26,10 +27,12 @@
     "chai": "^4.3.6",
     "dotenv": "^16.0.2",
     "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.0.0",
     "hardhat": "^2.11.2",
     "hardhat-contract-sizer": "^2.6.1",
     "hardhat-deploy": "^0.11.15",
     "hardhat-gas-reporter": "^1.0.9",
+    "minimist": "^1.2.7",
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0",
     "solidity-coverage": "^0.8.2"

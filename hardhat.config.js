@@ -1,5 +1,6 @@
 require('@nomiclabs/hardhat-waffle');
 require('@nomiclabs/hardhat-etherscan');
+require('@nomiclabs/hardhat-ethers');
 require('hardhat-deploy');
 require('solidity-coverage');
 require('hardhat-gas-reporter');
@@ -22,8 +23,7 @@ const POLYGON_MAINNET_RPC_URL =
   'https://polygon-mainnet.alchemyapi.io/v2/your-api-key';
 
 const POLYGON_MUMBAI_RPC_URL =
-  process.env.POLYGON_MUMBAI_RPC_URL ||
-  'https://polygon-mumbai.g.alchemy.com/v2/aIjNlC4r4aLYOHrdCTFT_JUX6OJsOsu0';
+  process.env.API_KEY || 'https://polygon-mumbai.g.alchemy.com/v2/your-api-key';
 const PRIVATE_KEY = process.env.PRIVATE_KEY || '0x';
 // optional
 const MNEMONIC = process.env.MNEMONIC || 'your mnemonic';
@@ -36,14 +36,14 @@ const POLYGONSCAN_API_KEY =
 const REPORT_GAS = process.env.REPORT_GAS || false;
 
 module.exports = {
-  defaultNetwork: 'hardhat',
+  defaultNetwork: 'polygon_mumbai',
   networks: {
     hardhat: {
       // // If you want to do some forking, uncomment this
       // forking: {
       //   url: MAINNET_RPC_URL
       // }
-      chainId: 31337,
+      // chainId: 31337,
     },
     localhost: {
       chainId: 31337,
@@ -78,6 +78,10 @@ module.exports = {
     //     saveDeployments: true,
     //     chainId: 	80001,
     // }
+    polygon_mumbai: {
+      url: POLYGON_MUMBAI_RPC_URL,
+      accounts: [`0x${PRIVATE_KEY}`],
+    },
   },
   etherscan: {
     // npx hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>

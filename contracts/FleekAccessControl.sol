@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.7;
 
-import "../interfaces/IFleekSite.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
 abstract contract FleekAccessControl is AccessControl {
@@ -26,7 +25,7 @@ abstract contract FleekAccessControl is AccessControl {
 
     modifier requireCollectionController() {
         require(
-            hasRole(COOLECTION_OWNER_ROLE, msg.sender) ||
+            hasRole(COLLECTION_OWNER_ROLE, msg.sender) ||
                 hasRole(COLLECTION_CONTROLLER_ROLE, msg.sender),
             "FleekAccessControl: must have collection controller role"
         );
@@ -41,23 +40,9 @@ abstract contract FleekAccessControl is AccessControl {
         _;
     }
 
-    function addTokenController(
-        uint256 tokenId,
-        address controller
-    ) public require requireMinted(tokenId) requireTokenOwner(tokenId) {
-        _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
-    }
-
-    function removeTokenController(
-        uint256 tokenId,
-        address controller
-    ) public require requireMinted(tokenId) requireTokenOwner(tokenId) {
-        _revokeRole(_tokenRole(tokenId, "CONTROLLER"), controller);
-    }
-
     function _tokenRole(
         uint256 tokenId,
-        string role
+        string memory role
     ) internal pure returns (bytes32) {
         return keccak256(abi.encodePacked("TOKEN_", role, tokenId));
     }

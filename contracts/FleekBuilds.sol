@@ -10,7 +10,7 @@ abstract contract FleekBuilds is IFleekBuilds, FleekAccessControl {
 
     function update(
         build calldata _newBuild
-    ) external override requireController {
+    ) external override requireCollectionController {
         builds.push(_newBuild);
         emit Upgraded(_newBuild);
     }

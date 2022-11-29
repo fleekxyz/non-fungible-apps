@@ -5,8 +5,6 @@ pragma solidity ^0.8.7;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./FleekAccessControl.sol";
-import "../interfaces/IFleekERC721.sol";
-import "./FleekSite.sol";
 
 contract FleekERC721 is ERC721, FleekAccessControl {
     using Strings for uint256;
@@ -27,8 +25,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     Counters.Counter private _tokenIds;
     mapping(uint256 => Site) private _sites;
 
-    modifier requireMinted(uint256 tokenId) {
-        require(_requireMinted(tokenId), "FleekERC721: token not minted");
+    constructor(
+        string memory _name,
+        string memory _symbol
+    ) ERC721(_name, _symbol) {}
+
+    modifier requireTokenOwner(uint256 tokenId) {
+        require(
+            msg.sender == ownerOf(tokenId),
+            "FleekERC721: must be token owner"
+        );
+        _;
     }
 
     function mint(
@@ -42,7 +49,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _mint(to, tokenId);
         addTokenController(tokenId, to);
         _tokenIds.increment();
-        _sites[tokenId] = Site(URI, ENS, 0, [Build(commit, repository)]);
+
+        Build[] memory _builds = new Build[](1);
+        _builds[0] = Build(commit, repository);
+        _sites[tokenId] = Site(URI, ENS, 0, _builds);
         return tokenId;
     }
 
@@ -50,21 +60,16 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         uint256 tokenId,
         string memory commit,
         string memory repository
-    ) public payable require requireMinted(tokenId) requireTokenOwner(tokenId) {
-        _setTokenBuild(commit, repository);
+    ) public payable requireTokenOwner(tokenId) {
+        _requireMinted(tokenId);
+        _setTokenBuild(tokenId, commit, repository);
     }
 
     function tokenURI(
         uint256 tokenId
-    )
-        public
-        view
-        virtual
-        override
-        requireMinted(tokenId)
-        returns (string memory)
-    {
-        address memory owner = ownerOf(tokenId);
+    ) public view virtual override returns (string memory) {
+        _requireMinted(tokenId);
+        address owner = ownerOf(tokenId);
         Site memory site = _sites[tokenId];
 
         // prettier-ignore
@@ -84,6 +89,28 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return string(abi.encodePacked(_baseURI(), dataURI));
     }
 
+    function addTokenController(
+        uint256 tokenId,
+        address controller
+    ) public requireTokenOwner(tokenId) {
+        _requireMinted(tokenId);
+        _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
+    }
+
+    function removeTokenController(
+        uint256 tokenId,
+        address controller
+    ) public requireTokenOwner(tokenId) {
+        _requireMinted(tokenId);
+        _revokeRole(_tokenRole(tokenId, "CONTROLLER"), controller);
+    }
+
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(ERC721, AccessControl) returns (bool) {
+        return super.supportsInterface(interfaceId);
+    }
+
     function _baseURI() internal view virtual override returns (string memory) {
         return "data:application/json;base64,";
     }
@@ -91,14 +118,16 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function _setTokenURI(
         uint256 tokenId,
         string memory _tokenURI
-    ) internal virtual requireMinted(tokenId) requireTokenController(tokenId) {
+    ) internal virtual requireTokenController(tokenId) {
+        _requireMinted(tokenId);
         _sites[tokenId].URI = _tokenURI;
     }
 
     function _setTokenENS(
         uint256 tokenId,
         string memory _tokenENS
-    ) internal virtual requireMinted(tokenId) requireTokenController(tokenId) {
+    ) internal virtual requireTokenController(tokenId) {
+        _requireMinted(tokenId);
         _sites[tokenId].ENS = _tokenENS;
     }
 
@@ -106,7 +135,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         uint256 tokenId,
         string memory _commit,
         string memory _repository
-    ) internal virtual requireMinted(tokenId) requireTokenController(tokenId) {
+    ) internal virtual requireTokenController(tokenId) {
+        _requireMinted(tokenId);
         _sites[tokenId].builds.push(Build(_commit, _repository));
         _sites[tokenId].currentBuild = _sites[tokenId].builds.length - 1;
     }
@@ -118,7 +148,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         );
         super._burn(tokenId);
 
-        if (bytes(_sites[tokenId]).length != 0) {
+        if (bytes(_sites[tokenId].URI).length != 0) {
             delete _sites[tokenId];
         }
     }
