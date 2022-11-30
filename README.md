@@ -54,18 +54,7 @@ The project should provide a way for interacting with the contract as owner with
 
 ## 🙏 Contributing
 
-Create branches from the `main` branch and name it in accordance to **conventional
-commits** [here](https://www.conventionalcommits.org/en/v1.0.0/), or follow the examples bellow:
-
-```txt
-test: adding missing tests
-feat: a new feature
-fix: a bug fix
-chore: build process or auxiliary tool changes
-docs: documentation only changes
-refactor: code change that neither fixes a bug or adds a feature
-style: markup, white-space, formatting, missing semi-colons...
-```
+This is an open source initiative! Any new idea is welcome, if you want to help us to improve the project please checkout [the contributing guide](/CONTRIBUTING.md).
 
 ## 📜 License
 
