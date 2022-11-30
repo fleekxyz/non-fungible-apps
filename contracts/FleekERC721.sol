@@ -11,15 +11,15 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     using Counters for Counters.Counter;
 
     struct Build {
-        string commit;
-        string repository;
+        string commit_hash;
+        string git_repository;
     }
 
     struct Site {
-        string URI; //ipfs hash example
-        string ENS;
-        uint256 currentBuild;
-        Build[] builds;
+        bytes32 external_url; //ipfs hash example
+        bytes32 ENS;
+        uint256 current_build;
+        mapping(uint256 => Build) builds;
     }
 
     Counters.Counter private _tokenIds;
@@ -40,19 +40,24 @@ contract FleekERC721 is ERC721, FleekAccessControl {
 
     function mint(
         address to,
-        string memory URI,
-        string memory ENS,
-        string memory commit,
-        string memory repository
+        bytes32 external_url,
+        bytes32 ENS,
+        string memory commit_hash,
+        string memory git_repository
     ) public payable requireCollectionOwner returns (uint256) {
         uint256 tokenId = _tokenIds.current();
         _mint(to, tokenId);
         addTokenController(tokenId, to);
         _tokenIds.increment();
 
-        Build[] memory _builds = new Build[](1);
-        _builds[0] = Build(commit, repository);
-        _sites[tokenId] = Site(URI, ENS, 0, _builds);
+        Site storage site = _sites[tokenId];
+        site.external_url = external_url;
+        site.ENS = ENS;
+
+        // The mint interaction is considered to be the first build of the site. Updates from now on all increment the current_build by one and update the mapping.
+        site.current_build = 0;
+        site.builds[0] = Build(commit_hash, git_repository);
+    
         return tokenId;
     }
 
@@ -70,18 +75,18 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public view virtual override returns (string memory) {
         _requireMinted(tokenId);
         address owner = ownerOf(tokenId);
-        Site memory site = _sites[tokenId];
+        Site storage site = _sites[tokenId];
 
         // prettier-ignore
         bytes memory dataURI = abi.encodePacked(
             '{',
                 '"owner":"', owner, '",',
                 '"ENS":"', site.ENS, '",',
-                '"URI":"', site.URI, '",',
+                '"external_url":"', site.external_url, '",',
                 '"build:{',
-                    '"id":"', site.currentBuild, '",',
-                    '"commit":"', site.builds[site.currentBuild].commit, '",',
-                    '"repository":"', site.builds[site.currentBuild].repository, '"'
+                    '"id":"', site.current_build, '",',
+                    '"commit_hash":"', site.builds[site.current_build].commit_hash, '",',
+                    '"repository":"', site.builds[site.current_build].git_repository, '"'
                 '}',
             '}'
         );
@@ -115,17 +120,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return "data:application/json;base64,";
     }
 
-    function _setTokenURI(
+    function _setTokenExternalURL(
         uint256 tokenId,
-        string memory _tokenURI
+        bytes32 _tokenExternalURL
     ) internal virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _sites[tokenId].URI = _tokenURI;
+        _sites[tokenId].external_url = _tokenExternalURL;
     }
 
     function _setTokenENS(
         uint256 tokenId,
-        string memory _tokenENS
+        bytes32 _tokenENS
     ) internal virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _sites[tokenId].ENS = _tokenENS;
@@ -133,12 +138,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
 
     function _setTokenBuild(
         uint256 tokenId,
-        string memory _commit,
-        string memory _repository
+        string memory _commit_hash,
+        string memory _git_repository
     ) internal virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _sites[tokenId].builds.push(Build(_commit, _repository));
-        _sites[tokenId].currentBuild = _sites[tokenId].builds.length - 1;
+        _sites[tokenId].builds[_sites[tokenId].current_build] = Build(_commit_hash, _git_repository);
+        _sites[tokenId].current_build = _sites[tokenId].current_build + 1;
     }
 
     function _burn(uint256 tokenId) internal virtual override {
@@ -148,7 +153,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         );
         super._burn(tokenId);
 
-        if (bytes(_sites[tokenId].URI).length != 0) {
+        if (_sites[tokenId].external_url.length != 0) {
             delete _sites[tokenId];
         }
     }
