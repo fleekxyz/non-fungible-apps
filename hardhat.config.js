@@ -24,7 +24,9 @@ const POLYGON_MAINNET_RPC_URL =
 
 const POLYGON_MUMBAI_RPC_URL =
   process.env.API_KEY || 'https://polygon-mumbai.g.alchemy.com/v2/your-api-key';
-const PRIVATE_KEY = process.env.PRIVATE_KEY || '0x';
+const PRIVATE_KEY =
+  process.env.PRIVATE_KEY ||
+  'ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
 // optional
 const MNEMONIC = process.env.MNEMONIC || 'your mnemonic';
 
@@ -36,7 +38,7 @@ const POLYGONSCAN_API_KEY =
 const REPORT_GAS = process.env.REPORT_GAS || false;
 
 module.exports = {
-  defaultNetwork: 'polygon_mumbai',
+  defaultNetwork: 'hardhat',
   networks: {
     hardhat: {
       // // If you want to do some forking, uncomment this
