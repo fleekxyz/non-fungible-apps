@@ -142,8 +142,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory _git_repository
     ) internal virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _sites[tokenId].builds[_sites[tokenId].current_build] = Build(_commit_hash, _git_repository);
         _sites[tokenId].current_build = _sites[tokenId].current_build + 1;
+        _sites[tokenId].builds[_sites[tokenId].current_build] = Build(_commit_hash, _git_repository);
     }
 
     function _burn(uint256 tokenId) internal virtual override {
