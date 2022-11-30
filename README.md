@@ -23,6 +23,35 @@ Our goal is to reach a point where trustable Solidity contracts can be used for 
 
 Later on, when the initiative prove its value, a service will be added to Fleek's platform in a friendly way for anyone be able to get their applications onboard.
 
+## 💡 Proof of concept
+
+The proof of concept is being a work in progress and you can reach more information [here](https://github.com/FleekHQ/contracts/wiki/Proof-of-Concept). Mainly the concept approached with this initiative will be proven through:
+
+### Basic contracts structure:
+
+The first goal is create a contract extended from [ERC721](https://eips.ethereum.org/EIPS/eip-721) to store metadata about the static sites minted and bind them together with their URI (e.g. IPFS hash) and the application building history. The contract should be able to:
+
+- Mint sites
+- Upgrade sites
+- Store site metadata fields
+- Store site repository and building history
+- Access levels for collection owner/controllers and token owner/controllers
+- Any other function extended from ERC721
+
+### Minimal UI
+
+It is going to be provided a minimal user interface for interacting with the created sites contract. The UI should have:
+
+- Site minting
+- Site updating
+- Site preview and link
+
+Also is important that the collection were able to be shown on [OpenSea](https://opensea.io/)
+
+### Admin commands
+
+The project should provide a way for interacting with the contract as owner with CLI.
+
 ## 🙏 Contributing
 
 Create branches from the `main` branch and name it in accordance to **conventional
