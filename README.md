@@ -14,6 +14,67 @@ The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloud
 
 Get more information about the project on our [wiki](https://github.com/FleekHQ/contracts/wiki).
 
+## ⌨️ Developing
+
+This project is based in the development of [Solidity](https://github.com/ethereum/solidity) contracts, and [Node.js](https://nodejs.org/) for running scripts and [yarn](https://yarnpkg.com/) to keep dependencies management.
+
+> ⚠️ Before starting developing make sure you Solidity, Node.js and yarn correctly installed in your environment
+
+Follow the steps:
+
+1. Clone the repo, [check out how here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
+
+2. Install the dependencies:
+
+   ```bash
+   $ yarn
+   ```
+
+3. Compile the contracts to make sure everything is correct:
+
+   ```bash
+   $ yarn compile
+   ```
+
+   The output should looks like:
+
+   ```bash
+   yarn run v1.22.19
+   $ hardhat compile
+   Compiled 24 Solidity files successfully
+   Done in 1.23s.
+   ```
+
+4. Now you are able to make your code changes in the project. To help with Solidity, check [the language references](https://docs.soliditylang.org/).
+
+## ✅ Testing
+
+The project is covered with test suits that must pass to guarantee code integrity. To run the test suits:
+
+1. Make sure that you have the dependencies installed
+
+   ```
+   $ yarn
+   ```
+
+2. Run:
+
+   ```
+   $ yarn test
+   ```
+
+   The output should finish looking like:
+
+   ```
+   ...
+
+     15 passing (3s)
+
+   Done in 4.25s.
+   ```
+
+> ⚠️ Please make sure to update tests as appropriate before pushing code
+
 ## 🛣️ Roadmap
 
 Our goal is to reach a point where trustable Solidity contracts can be used for identifying properly the data about web3 applications. Within that goal, we want to also provide ways for users to organize and list information about their application. To get at this we are currently starting with:
@@ -52,6 +113,8 @@ Also is important that the collection were able to be shown on [OpenSea](https:/
 ### Admin commands
 
 The project should provide a way for interacting with the contract as owner with CLI.
+
+<!-- We should add the commands here when they are done -->
 
 ## 🙏 Contributing
 
