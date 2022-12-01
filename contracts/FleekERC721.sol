@@ -16,10 +16,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     }
 
     struct Site {
-        bytes32 external_url; //ipfs hash example
-        bytes32 ENS;
-        uint256 current_build;
-        mapping(uint256 => Build) builds;
+        bytes32 external_url; // IPFS HASH
+        bytes32 ENS; // ENS ID
+        uint256 current_build; // THE CURRENT BUILD NUMBER (increments by one with each change, starts at zero)
+        mapping(uint256 => Build) builds; // MAPPING TO BUILD DETAILS FOR EACH BUILD NUMBER
     }
 
     Counters.Counter private _tokenIds;
@@ -67,7 +67,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory repository
     ) public payable requireTokenOwner(tokenId) {
         _requireMinted(tokenId);
-        _setTokenBuild(tokenId, commit, repository);
+        setTokenBuild(tokenId, commit, repository);
     }
 
     function tokenURI(
@@ -76,8 +76,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _requireMinted(tokenId);
         address owner = ownerOf(tokenId);
         Site storage site = _sites[tokenId];
-
-        // prettier-ignore
+        /*
+        / Note: I do not think this is the way this function is supposed to be written.
+        / I recommend returning a IPFS URL per OpenSea's own documentation:
+        / https://docs.opensea.io/docs/metadata-standards#implementing-token-uri
+        */
+        
         bytes memory dataURI = abi.encodePacked(
             '{',
                 '"owner":"', owner, '",',
@@ -120,33 +124,32 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return "data:application/json;base64,";
     }
 
-    function _setTokenExternalURL(
+    function setTokenExternalURL(
         uint256 tokenId,
         bytes32 _tokenExternalURL
-    ) internal virtual requireTokenController(tokenId) {
+    ) public virtual payable requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _sites[tokenId].external_url = _tokenExternalURL;
     }
 
-    function _setTokenENS(
+    function setTokenENS(
         uint256 tokenId,
         bytes32 _tokenENS
-    ) internal virtual requireTokenController(tokenId) {
+    ) public virtual payable requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _sites[tokenId].ENS = _tokenENS;
     }
 
-    function _setTokenBuild(
+    function setTokenBuild(
         uint256 tokenId,
         string memory _commit_hash,
         string memory _git_repository
-    ) internal virtual requireTokenController(tokenId) {
+    ) public virtual payable requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _sites[tokenId].current_build = _sites[tokenId].current_build + 1;
-        _sites[tokenId].builds[_sites[tokenId].current_build] = Build(_commit_hash, _git_repository);
+        _sites[tokenId].builds[++_sites[tokenId].current_build] = Build(_commit_hash, _git_repository);
     }
 
-    function _burn(uint256 tokenId) internal virtual override {
+    function burn(uint256 tokenId) public virtual payable requireTokenController(tokenId) {
         require(
             ownerOf(tokenId) == msg.sender,
             "FleekERC721: must be token owner"
