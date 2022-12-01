@@ -1,10 +1,11 @@
 import React from 'react';
 import './list-sites.css';
+import { Heading } from '@chakra-ui/react';
 
 export const ListSites = () => {
   return (
     <div className="main">
-      <h1>Welcome to Sites as NFTs by Fleek</h1>
+      <Heading>Welcome to Sites as NFTs by Fleek</Heading>
     </div>
   );
 };
