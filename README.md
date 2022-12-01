@@ -87,6 +87,30 @@ The project is covered with test suits that must pass to guarantee code integrit
 
 > ⚠️ Please make sure to update tests as appropriate before pushing code
 
+### 🖥️ User Interface
+
+Within the project is included a [React](https://reactjs.org/) web application to expose and test the interaction with deployed scripts. To run it:
+
+1. Get in the `/ui` folder:
+
+   ```
+   $ cd ui
+   ```
+
+2. Install the UI dependencies:
+
+   ```
+   $ yarn
+   ```
+
+3. Start the local server running the app:
+
+   ```
+   $ yarn dev
+   ```
+
+   Now a local server should be running on [http://localhost:5173](http://localhost:5173).
+
 ### 💅 Code Styling
 
 For code formatting we are using [Prettier](https://prettier.io/) and following the [styling guide from Solidity documentation](https://docs.soliditylang.org/en/v0.8.16/style-guide.html). For formatting the code you are able to run:

@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "hardhat compile",
     "test": "hardhat test",
     "format": "prettier --write \"./**/*.{js,ts,sol}\""
   },
