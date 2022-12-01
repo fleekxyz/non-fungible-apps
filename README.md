@@ -37,6 +37,7 @@ The first goal is create a contract extended from [ERC721](https://eips.ethereum
 - Store site repository and building history
 - Access levels for collection owner/controllers and token owner/controllers
 - Any other function extended from ERC721
+- All tokens be correctly presentable on [OpenSea](https://opensea.io/) and others marketplaces
 
 ### Minimal UI
 
@@ -46,7 +47,7 @@ It is going to be provided a minimal user interface for interacting with the cre
 - Site updating
 - Site preview and link
 
-Also is important that the collection were able to be shown on [OpenSea](https://opensea.io/)
+Also is important that the collection were able to be shown on [OpenSea](https://opensea.io/).
 
 ### Admin commands
 
