@@ -1,24 +1,25 @@
 {
-  "name": "sites_nfts",
-  "version": "1.0.0",
+  "name": "fleek_contracts",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "hardhat test",
     "format": "prettier --write \"./**/*.{js,ts,sol}\"",
     "deploy:mumbai": "node scripts/deploy.js --network polygon_mumbai --contract FleekERC721 --param \"Fleek Sites Test\" --param FST",
+    "deploy:local": "hardhat deploy --tags local",
     "compile": "hardhat compile"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FleekHQ/sites_nfts.git"
+    "url": "git+https://github.com/FleekHQ/contracts.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/FleekHQ/sites_nfts/issues"
+    "url": "https://github.com/FleekHQ/contracts/issues"
   },
-  "homepage": "https://github.com/FleekHQ/sites_nfts#readme",
+  "homepage": "https://github.com/FleekHQ/contracts#readme",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
     "@nomiclabs/hardhat-ethers": "^2.2.1",
