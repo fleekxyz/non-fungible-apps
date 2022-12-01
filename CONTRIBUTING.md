@@ -1,6 +1,6 @@
 # Contributing
 
-Fleek Contracts is a open source project where the main developer team wants to the entire community be able to contribute and help the project to grows consistently.
+The core developer team of Fleek Contracts welcomes all contributions from the community to achieve consistent code updates and enhancements.
 
 If you want to help us to improve the project you can always start a conversation through the [issues page](https://github.com/FleekHQ/contracts/issues). By doing it make sure you are being ethical and respectful with anyone on the community. We take our open source community seriously and hold ourselves and other contributors to high standards of communication.
 
