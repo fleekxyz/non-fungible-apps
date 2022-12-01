@@ -51,7 +51,7 @@ Follow the steps:
 
 The project is covered with test suits that must pass to guarantee code integrity. To run the test suits:
 
-1. Make sure that you have the dependencies installed
+1. Make sure that you have the dependencies installed:
 
    ```
    $ yarn
@@ -74,6 +74,16 @@ The project is covered with test suits that must pass to guarantee code integrit
    ```
 
 > ⚠️ Please make sure to update tests as appropriate before pushing code
+
+## 💅 Code Styling
+
+For code formatting we are using [Prettier](https://prettier.io/) and following the [styling guide from Solidity documentation](https://docs.soliditylang.org/en/v0.8.16/style-guide.html). For formatting the code you are able to run:
+
+```
+$ yarn format
+```
+
+> ⚠️ Please make sure you are following the code styling guid before pushing code
 
 ## 🛣️ Roadmap
 
