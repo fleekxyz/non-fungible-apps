@@ -39,17 +39,13 @@ style: markup, white-space, formatting, missing semi-colons...
 
 Please ensure your code is clear and readable and also provide as much information you can in the description.
 
-> 🚧 IMPORTANT 🚧 - Your code and any changes made needs to be covered with tests.
+> ⚠️ Your code and any changes made needs to be covered with tests
 
-> 🚧 IMPORTANT 🚧 - In case of need, you have to provide all documentation changes within your PR.
+> ⚠️ In case of need, you have to provide all documentation changes within your PR
 
 ## Testing
 
 We are up to write tests using both [Hardhat](https://hardhat.org/) and [Foundry](https://book.getfoundry.sh/) frameworks. Its mandatory that all tests were well described and all validations to make the code consistent and secure. To get more information about it, check the [Testing section on our wiki](https://github.com/FleekHQ/contracts/wiki/Getting-Started#testing). You can also get some examples of how to test it on [test folder](/test).
-
-## Deploying
-
-After developing your changes you are up to deploy the contracts through testnets and test it. We recommend using [Mumbai Network](https://mumbai.polygonscan.com/). You can checkout the deploying script under [scripts folder](/scripts/). Also you might get more information about how to deploy it on the [Deploying section on our wiki](https://github.com/FleekHQ/contracts/wiki/Getting-Started#deploying).
 
 ## Getting help
 
