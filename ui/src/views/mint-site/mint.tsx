@@ -7,8 +7,10 @@ import {
   FormLabel,
   Input,
   Button,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { Formik, Field } from 'formik';
+import { ethers } from 'ethers';
 
 export const MintSite = () => {
   return (
@@ -28,7 +30,7 @@ export const MintSite = () => {
                 ens: '',
               }}
             >
-              {({ values, touched, handleSubmit, isSubmitting }) => (
+              {({ values, touched, handleSubmit, isSubmitting, errors }) => (
                 <form onSubmit={handleSubmit}>
                   <FormControl
                     isRequired
@@ -47,7 +49,11 @@ export const MintSite = () => {
                   <FormControl
                     mt={6}
                     isRequired
-                    isInvalid={touched.ownerAddress && !values.ownerAddress}
+                    isInvalid={
+                      touched.ownerAddress &&
+                      (!values.ownerAddress ||
+                        !ethers.utils.isAddress(values.ownerAddress))
+                    }
                   >
                     <FormLabel htmlFor="ownerAddress">Owner address</FormLabel>
                     <Field
@@ -55,7 +61,16 @@ export const MintSite = () => {
                       name="ownerAddress"
                       id="ownerAddress"
                       type="text"
+                      validate={(value: string) => {
+                        let error;
+                        if (!value) error = 'Owner address cannot be empty';
+                        else if (!ethers.utils.isAddress(value))
+                          error = 'Owner address is not a valid address';
+
+                        return error;
+                      }}
                     />
+                    <FormErrorMessage>{errors.ownerAddress}</FormErrorMessage>
                   </FormControl>
                   <FormControl mt={6}>
                     <FormLabel>Controller address</FormLabel>
