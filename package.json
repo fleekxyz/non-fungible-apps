@@ -6,7 +6,8 @@
   "scripts": {
     "test": "hardhat test",
     "format": "prettier --write \"./**/*.{js,ts,sol}\"",
-    "deploy:mumbai": "node scripts/deploy.js --network polygon_mumbai --contract FleekERC721 --param \"Fleek Sites Test\" --param FST"
+    "deploy:mumbai": "node scripts/deploy.js --network polygon_mumbai --contract FleekERC721 --param \"Fleek Sites Test\" --param FST",
+    "compile": "hardhat compile"
   },
   "repository": {
     "type": "git",
