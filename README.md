@@ -16,7 +16,19 @@ Get more information about the project on our [wiki](https://github.com/FleekHQ/
 
 ## ⌨️ Developing
 
-This project is based in the development of [Solidity](https://github.com/ethereum/solidity) contracts, and [Node.js](https://nodejs.org/) for running scripts and [yarn](https://yarnpkg.com/) to keep dependencies management.
+### 📁 Project Structure
+
+Inside the folder you are going to find different folders:
+
+- [/contracts](/contracts): all the developed contracts
+- [/interfaces](/interfaces): interfaces used by contracts
+- [/scripts](/scripts): any utility scripts used for contracts
+- [/test](/test): tests suits to validate contracts
+- [/ui](/ui): a web application to interact with deployed contracts
+
+### 📄 Contracts
+
+The contracts present in this project are based in [Solidity](https://github.com/ethereum/solidity) and it uses [Node.js](https://nodejs.org/) for running scripts and [yarn](https://yarnpkg.com/) to keep dependencies management.
 
 > ⚠️ Before starting developing make sure you Solidity, Node.js and yarn correctly installed in your environment
 
@@ -47,7 +59,7 @@ Follow the steps:
 
 4. Now you are able to make your code changes in the project. To help with Solidity, check [the language references](https://docs.soliditylang.org/).
 
-## ✅ Testing
+### ✅ Testing Contracts
 
 The project is covered with test suits that must pass to guarantee code integrity. To run the test suits:
 
@@ -75,7 +87,7 @@ The project is covered with test suits that must pass to guarantee code integrit
 
 > ⚠️ Please make sure to update tests as appropriate before pushing code
 
-## 💅 Code Styling
+### 💅 Code Styling
 
 For code formatting we are using [Prettier](https://prettier.io/) and following the [styling guide from Solidity documentation](https://docs.soliditylang.org/en/v0.8.16/style-guide.html). For formatting the code you are able to run:
 
