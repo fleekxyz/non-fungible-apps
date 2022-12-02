@@ -1,6 +1,10 @@
 node_modules
 .env
 
+#ui
+ui/public
+ui/dist
+
 # hardhat
 cache
 artifacts 
