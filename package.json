@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": "false",
   "scripts": {
     "test": "hardhat test",
-    "format": "prettier --write \"./**/*.{js,ts,sol}\""
+    "format": "prettier --write \"./**/*.{js,ts,sol}\"",
+    "postinstall": "husky install",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable"
   },
   "repository": {
     "type": "git",
@@ -32,6 +36,7 @@
     "hardhat-gas-reporter": "^1.0.9",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.4",
+    "pinst": "^3.0.0",
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0",
     "solidity-coverage": "^0.8.2"
