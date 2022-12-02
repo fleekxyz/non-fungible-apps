@@ -6,7 +6,7 @@
   "private": "false",
   "scripts": {
     "test": "hardhat test",
-    "format": "prettier --write \"./**/*.{js,ts,sol}\"",
+    "format": "prettier --write \"./**/*.{js,json,sol,ts}\"",
     "postinstall": "husky install",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
