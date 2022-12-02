@@ -1,4 +1,9 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+if [[ $* == *--skip-tests* ]]
+then
+  exit 0
+fi
+
 yarn test
