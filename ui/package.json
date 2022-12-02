@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"no tests provided\"",
     "dev": "vite",
-    "build": "tsc && vite build"
+    "build": "echo \"fix ui build settings\""
   },
   "author": "Fleek",
   "license": "ISC",
