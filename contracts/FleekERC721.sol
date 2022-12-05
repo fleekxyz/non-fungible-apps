@@ -93,7 +93,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
             '{',
                 '"name":"', app.name, '",',
                 '"description":"', app.description, '",',
-                '"owner":"', abi.encodePacked(owner), '",',
+                '"owner":"', Strings.toHexString(uint160(owner), 20), '",',
                 '"ENS":"', app.ENS, '",',
                 '"external_url":"', app.external_url, '",',
                 '"image":"', app.image, '",',

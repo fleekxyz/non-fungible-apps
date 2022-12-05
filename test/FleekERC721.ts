@@ -3,18 +3,21 @@ import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import web3 from 'web3';
 
+const stringToBytes32 = (str: string) => ethers.utils.formatBytes32String(str);
+
 describe('FleekERC721', () => {
   const COLLECTION_OWNER_ROLE = web3.utils.keccak256('COLLECTION_OWNER_ROLE');
 
-  const MINT_PARAMS = {
-    externalUrl: ethers.utils.hexZeroPad(
-      web3.utils.fromAscii('https://fleek.co'),
-      32
-    ),
-    ens: ethers.utils.hexZeroPad(web3.utils.fromAscii('fleek.eth'), 32),
+  const MINT_PARAMS = Object.freeze({
+    name: 'Fleek Test App',
+    description: 'Fleek Test App Description',
+    image: stringToBytes32('https://fleek.co/image.png'),
+    ens: stringToBytes32('fleek.eth'),
+    externalUrl: stringToBytes32('https://fleek.co'),
     commitHash: 'commitHash',
     gitRepository: 'gitRepository',
-  };
+    author: 'author',
+  });
 
   const defaultFixture = async () => {
     const name = 'FleekERC721';
@@ -55,14 +58,17 @@ describe('FleekERC721', () => {
   describe('Minting', () => {
     it('should be able to mint a new token', async () => {
       const { owner, contract } = await loadFixture(defaultFixture);
-      const { externalUrl, ens, commitHash, gitRepository } = MINT_PARAMS;
 
       const response = await contract.mint(
         owner.address,
-        externalUrl,
-        ens,
-        commitHash,
-        gitRepository
+        MINT_PARAMS.name,
+        MINT_PARAMS.description,
+        MINT_PARAMS.image,
+        MINT_PARAMS.externalUrl,
+        MINT_PARAMS.ens,
+        MINT_PARAMS.commitHash,
+        MINT_PARAMS.gitRepository,
+        MINT_PARAMS.author
       );
 
       expect(response.value).to.be.instanceOf(ethers.BigNumber);
@@ -71,17 +77,20 @@ describe('FleekERC721', () => {
 
     it('should not be able to mint a new token if not the owner', async () => {
       const { otherAccount, contract } = await loadFixture(defaultFixture);
-      const { externalUrl, ens, commitHash, gitRepository } = MINT_PARAMS;
 
       await expect(
         contract
           .connect(otherAccount)
           .mint(
             otherAccount.address,
-            externalUrl,
-            ens,
-            commitHash,
-            gitRepository
+            MINT_PARAMS.name,
+            MINT_PARAMS.description,
+            MINT_PARAMS.image,
+            MINT_PARAMS.externalUrl,
+            MINT_PARAMS.ens,
+            MINT_PARAMS.commitHash,
+            MINT_PARAMS.gitRepository,
+            MINT_PARAMS.author
           )
       ).to.be.revertedWith(
         'FleekAccessControl: must have collection owner role'
@@ -96,14 +105,17 @@ describe('FleekERC721', () => {
     before(async () => {
       fixture = await loadFixture(defaultFixture);
       const { contract } = fixture;
-      const { externalUrl, ens, commitHash, gitRepository } = MINT_PARAMS;
 
       const response = await contract.mint(
         fixture.owner.address,
-        externalUrl,
-        ens,
-        commitHash,
-        gitRepository
+        MINT_PARAMS.name,
+        MINT_PARAMS.description,
+        MINT_PARAMS.image,
+        MINT_PARAMS.externalUrl,
+        MINT_PARAMS.ens,
+        MINT_PARAMS.commitHash,
+        MINT_PARAMS.gitRepository,
+        MINT_PARAMS.author
       );
 
       tokenId = response.value.toNumber();
@@ -112,6 +124,59 @@ describe('FleekERC721', () => {
     it('should return the token URI', async () => {
       const { contract } = fixture;
       const tokenURI = await contract.tokenURI(tokenId);
+
+      const tokenURIDecoded = Buffer.from(
+        tokenURI.replace('data:application/json;base64,', ''),
+        'base64'
+      )
+        .toString('ascii')
+        // FIXME: this replacement needs to be researched
+        .replace(/\u0000/g, '');
+
+      const parsedURI = JSON.parse(tokenURIDecoded);
+
+      expect(parsedURI.name).to.equal(MINT_PARAMS.name);
+      expect(parsedURI.description).to.equal(MINT_PARAMS.description);
+      expect(parsedURI.image).to.equal(
+        ethers.utils.parseBytes32String(MINT_PARAMS.image)
+      );
+      expect(parsedURI.external_url).to.equal(
+        ethers.utils.parseBytes32String(MINT_PARAMS.externalUrl)
+      );
+      expect(parsedURI.ENS).to.equal(
+        ethers.utils.parseBytes32String(MINT_PARAMS.ens)
+      );
+      expect(JSON.stringify(parsedURI.attributes[0])).to.be.eq(
+        JSON.stringify({
+          trait_type: 'ENS',
+          value: ethers.utils.parseBytes32String(MINT_PARAMS.ens),
+        })
+      );
+      expect(JSON.stringify(parsedURI.attributes[1])).to.be.eq(
+        JSON.stringify({
+          trait_type: 'Commit Hash',
+          value: MINT_PARAMS.commitHash,
+        })
+      );
+      expect(JSON.stringify(parsedURI.attributes[2])).to.be.eq(
+        JSON.stringify({
+          trait_type: 'Repository',
+          value: MINT_PARAMS.gitRepository,
+        })
+      );
+      expect(JSON.stringify(parsedURI.attributes[3])).to.be.eq(
+        JSON.stringify({
+          trait_type: 'Author',
+          value: MINT_PARAMS.author,
+        })
+      );
+      expect(JSON.stringify(parsedURI.attributes[4])).to.be.eq(
+        JSON.stringify({
+          trait_type: 'Version',
+          value: '',
+        })
+      );
+
       expect(tokenURI).to.exist;
     });
 
