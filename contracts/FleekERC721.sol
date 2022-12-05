@@ -20,7 +20,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     struct App {
         string name; // Name of the site
         string description; // Description about the site
-        bytes32 image; // Preview Image IPFS Link
+        string image; // Preview Image IPFS Link
         bytes32 external_url; // Site URL
         bytes32 ENS; // ENS ID
         uint256 current_build; // The current build number (Increments by one with each change, starts at zero)
@@ -47,7 +47,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         address to,
         string memory name,
         string memory description,
-        bytes32 image,
+        string memory image,
         bytes32 external_url,
         bytes32 ENS,
         string memory commit_hash,
@@ -150,6 +150,30 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual payable requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
+    }
+
+    function setTokenName(
+        uint256 tokenId,
+        string memory _tokenName
+    ) public virtual payable requireTokenController(tokenId) {
+        _requireMinted(tokenId);
+        _apps[tokenId].name = _tokenName;
+    }
+
+    function setTokenDescription(
+        uint256 tokenId,
+        string memory _tokenDescription
+    ) public virtual payable requireTokenController(tokenId) {
+        _requireMinted(tokenId);
+        _apps[tokenId].description = _tokenDescription;
+    }
+
+    function setTokenImage(
+        uint256 tokenId,
+        string memory _tokenImage
+    ) public virtual payable requireTokenController(tokenId) {
+        _requireMinted(tokenId);
+        _apps[tokenId].image = _tokenImage;
     }
 
     function setTokenBuild(
