@@ -110,11 +110,9 @@ describe('FleekERC721', () => {
     });
 
     it('should return the token URI', async () => {
-      /** TODO: fix tokenURI function
       const { contract } = fixture;
       const tokenURI = await contract.tokenURI(tokenId);
       expect(tokenURI).to.exist;
-      */
     });
 
     it('should match the token owner', async () => {
