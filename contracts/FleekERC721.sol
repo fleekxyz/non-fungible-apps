@@ -96,12 +96,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
             '}'
         );
 
-        return string(
-            abi.encodePacked(
-                "data:application/json;base64,",
-                Base64.encode(dataURI)
-            )
-        );
+        return string(abi.encodePacked(_baseURI(), Base64.encode(dataURI)));
     }
 
     function addTokenController(
