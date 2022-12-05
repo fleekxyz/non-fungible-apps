@@ -1,10 +1,10 @@
 module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy, log } = deployments;
   const namedAccounts = await getNamedAccounts();
-  const { privatekey } = namedAccounts;
+  const { privateKey } = namedAccounts;
 
   const deployResult = await deploy('FleekERC721', {
-    from: privatekey,
+    from: privateKey,
     args: ['FleekSites', 'FLKSITE'],
   });
   if (deployResult.newlyDeployed) {
