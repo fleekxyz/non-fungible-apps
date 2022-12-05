@@ -8,15 +8,42 @@ import {
   Input,
   Button,
   FormErrorMessage,
+  IconButton,
+  useToast,
+  UseToastOptions,
 } from '@chakra-ui/react';
 import { Formik, Field } from 'formik';
 import { ethers } from 'ethers';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { useNavigate } from 'react-router-dom';
 
 export const MintSite = () => {
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  const showToast = (
+    title: string,
+    description: string,
+    status: UseToastOptions['status']
+  ) => {
+    toast({
+      title,
+      description,
+      status,
+      duration: 9000,
+      isClosable: true,
+    });
+  };
+
   return (
     <>
       <Flex width="full" align="center" justifyContent="center" mt="50px">
         <Box width="40%">
+          <IconButton
+            aria-label="back home"
+            icon={<ArrowBackIcon />}
+            onClick={() => navigate('/home')}
+          />
           <Box textAlign="center">
             <Heading>Mint your Site</Heading>
           </Box>
@@ -28,6 +55,22 @@ export const MintSite = () => {
                 controllerAddress: '',
                 ipfsHash: '',
                 ens: '',
+              }}
+              onSubmit={() => {
+                try {
+                  //TODO connect to the contract
+                  showToast(
+                    'Success!',
+                    'Your site has been minted.',
+                    'success'
+                  );
+                } catch (err) {
+                  showToast(
+                    'Error!',
+                    'We had an error while minting your site. Please try again later',
+                    'error'
+                  );
+                }
               }}
             >
               {({ values, touched, handleSubmit, isSubmitting, errors }) => (
