@@ -56,9 +56,9 @@ export const MintSite = () => {
                 ipfsHash: '',
                 ens: '',
               }}
-              onSubmit={() => {
+              onSubmit={(values, { setSubmitting }) => {
                 try {
-                  //TODO connect to the contract
+                  //TODO connect to the contract.
                   showToast(
                     'Success!',
                     'Your site has been minted.',
@@ -71,6 +71,7 @@ export const MintSite = () => {
                     'error'
                   );
                 }
+                setSubmitting(false);
               }}
             >
               {({ values, touched, handleSubmit, isSubmitting, errors }) => (
