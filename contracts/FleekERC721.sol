@@ -4,6 +4,7 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 import "./FleekAccessControl.sol";
 
 contract FleekERC721 is ERC721, FleekAccessControl {
@@ -81,7 +82,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         / I recommend returning a IPFS URL per OpenSea's own documentation:
         / https://docs.opensea.io/docs/metadata-standards#implementing-token-uri
         */
-        
+
         bytes memory dataURI = abi.encodePacked(
             '{',
                 '"owner":"', owner, '",',
@@ -95,7 +96,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
             '}'
         );
 
-        return string(abi.encodePacked(_baseURI(), dataURI));
+        return string(
+            abi.encodePacked(
+                "data:application/json;base64,",
+                Base64.encode(dataURI)
+            )
+        );
     }
 
     function addTokenController(
