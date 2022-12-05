@@ -11,6 +11,14 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     using Strings for uint256;
     using Counters for Counters.Counter;
 
+    event NewBuild(uint256 indexed token, string indexed commit_hash);
+    
+    event NewTokenName(uint256 indexed token, string indexed name);
+    event NewTokenDescription(uint256 indexed token, string indexed description);
+    event NewTokenImage(uint256 indexed token, string indexed image);
+    event NewTokenExternalURL(uint256 indexed token, bytes32 indexed external_url);
+    event NewTokenENS(uint256 indexed token, bytes32 indexed ENS);
+    
     struct Build {
         string commit_hash;
         string git_repository;
@@ -142,6 +150,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual payable requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].external_url = _tokenExternalURL;
+        emit NewTokenExternalURL(tokenId, _tokenExternalURL);
     }
 
     function setTokenENS(
@@ -150,6 +159,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual payable requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
+        emit NewTokenENS(tokenId, _tokenENS);
     }
 
     function setTokenName(
@@ -158,6 +168,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual payable requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].name = _tokenName;
+        emit NewTokenName(tokenId, _tokenName);
     }
 
     function setTokenDescription(
@@ -166,6 +177,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual payable requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
+        emit NewTokenDescription(tokenId, _tokenDescription);
     }
 
     function setTokenImage(
@@ -174,6 +186,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual payable requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].image = _tokenImage;
+        emit NewTokenImage(tokenId, _tokenImage);
     }
 
     function setTokenBuild(
@@ -184,6 +197,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual payable requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(_commit_hash, _git_repository, _author);
+        emit NewBuild(tokenId, _commit_hash);
     }
 
     function burn(uint256 tokenId) public virtual payable requireTokenController(tokenId) {
