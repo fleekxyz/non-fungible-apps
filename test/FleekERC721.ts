@@ -44,6 +44,12 @@ describe('FleekERC721', () => {
         await contract.hasRole(COLLECTION_OWNER_ROLE, owner.address)
       ).to.equal(true);
     });
+
+    it('should support ERC721 interface', async () => {
+      const { contract } = await loadFixture(defaultFixture);
+
+      expect(await contract.supportsInterface('0x80ac58cd')).to.equal(true);
+    });
   });
 
   describe('Minting', () => {
