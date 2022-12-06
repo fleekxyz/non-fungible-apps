@@ -1,23 +1,26 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2019",
+    "module": "ES2020",
+    "target": "ESNext",
     "esModuleInterop": true,
     "sourceMap": true,
-    "rootDirs": ["src", "tests"],
+    "rootDirs": ["src"],
     "baseUrl": "src",
     "paths": {
-      "@/*": ["*"],
-      "@tests/*": ["../tests/*"]
+      "@/*": ["*"]
     },
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "jsx": "react-jsx",
     "strict": true,
     "noUnusedLocals": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "types": ["vite/client"]
   },
-  "include": ["src", "tests", "src/mocks", "mocks"]
+  "include": ["./src", "./*.ts"]
 }
+

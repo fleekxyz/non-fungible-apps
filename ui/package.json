@@ -4,9 +4,9 @@
   "description": "Minimal UI for sites as NFTs",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch",
     "dev": "vite",
-    "build": "tsc && vite build"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "author": "Fleek",
   "license": "ISC",
@@ -39,6 +39,7 @@
     "prettier": "^2.8.0",
     "ts-loader": "^9.4.1",
     "typescript": "^4.9.3",
-    "vite": "^3.2.4"
+    "vite": "^3.2.4",
+    "vite-tsconfig-paths": "^3.6.0"
   }
 }
