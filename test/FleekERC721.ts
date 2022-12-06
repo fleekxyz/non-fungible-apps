@@ -146,38 +146,28 @@ describe('FleekERC721', () => {
       expect(parsedURI.ENS).to.equal(
         ethers.utils.parseBytes32String(MINT_PARAMS.ens)
       );
-      expect(JSON.stringify(parsedURI.attributes[0])).to.be.eq(
-        JSON.stringify({
+      expect(parsedURI.attributes).to.be.eql([
+        {
           trait_type: 'ENS',
           value: ethers.utils.parseBytes32String(MINT_PARAMS.ens),
-        })
-      );
-      expect(JSON.stringify(parsedURI.attributes[1])).to.be.eq(
-        JSON.stringify({
+        },
+        {
           trait_type: 'Commit Hash',
           value: MINT_PARAMS.commitHash,
-        })
-      );
-      expect(JSON.stringify(parsedURI.attributes[2])).to.be.eq(
-        JSON.stringify({
+        },
+        {
           trait_type: 'Repository',
           value: MINT_PARAMS.gitRepository,
-        })
-      );
-      expect(JSON.stringify(parsedURI.attributes[3])).to.be.eq(
-        JSON.stringify({
+        },
+        {
           trait_type: 'Author',
           value: MINT_PARAMS.author,
-        })
-      );
-      expect(JSON.stringify(parsedURI.attributes[4])).to.be.eq(
-        JSON.stringify({
+        },
+        {
           trait_type: 'Version',
           value: '',
-        })
-      );
-
-      expect(tokenURI).to.exist;
+        },
+      ]);
     });
 
     it('should match the token owner', async () => {
