@@ -4,6 +4,8 @@ import { ethers } from 'hardhat';
 import web3 from 'web3';
 
 const stringToBytes32 = (str: string) => ethers.utils.formatBytes32String(str);
+const bytes32ToString = (bytes32: string) =>
+  ethers.utils.parseBytes32String(bytes32);
 
 describe('FleekERC721', () => {
   const COLLECTION_OWNER_ROLE = web3.utils.keccak256('COLLECTION_OWNER_ROLE');
@@ -128,28 +130,21 @@ describe('FleekERC721', () => {
       const tokenURIDecoded = Buffer.from(
         tokenURI.replace('data:application/json;base64,', ''),
         'base64'
-      )
-        .toString('ascii')
-        // FIXME: this replacement needs to be researched
-        .replace(/\u0000/g, '');
+      ).toString('ascii');
 
       const parsedURI = JSON.parse(tokenURIDecoded);
 
       expect(parsedURI.name).to.equal(MINT_PARAMS.name);
       expect(parsedURI.description).to.equal(MINT_PARAMS.description);
-      expect(parsedURI.image).to.equal(
-        ethers.utils.parseBytes32String(MINT_PARAMS.image)
-      );
+      expect(parsedURI.image).to.equal(bytes32ToString(MINT_PARAMS.image));
       expect(parsedURI.external_url).to.equal(
-        ethers.utils.parseBytes32String(MINT_PARAMS.externalUrl)
+        bytes32ToString(MINT_PARAMS.externalUrl)
       );
-      expect(parsedURI.ENS).to.equal(
-        ethers.utils.parseBytes32String(MINT_PARAMS.ens)
-      );
+      expect(parsedURI.ENS).to.equal(bytes32ToString(MINT_PARAMS.ens));
       expect(parsedURI.attributes).to.be.eql([
         {
           trait_type: 'ENS',
-          value: ethers.utils.parseBytes32String(MINT_PARAMS.ens),
+          value: bytes32ToString(MINT_PARAMS.ens),
         },
         {
           trait_type: 'Commit Hash',
@@ -165,7 +160,7 @@ describe('FleekERC721', () => {
         },
         {
           trait_type: 'Version',
-          value: '',
+          value: '0',
         },
       ]);
     });

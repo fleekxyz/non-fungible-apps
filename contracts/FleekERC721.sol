@@ -69,7 +69,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the current_build by one and update the mapping.
         app.current_build = 0;
         app.builds[0] = Build(commit_hash, git_repository, author);
-    
+
         return tokenId;
     }
 
@@ -89,25 +89,28 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _requireMinted(tokenId);
         address owner = ownerOf(tokenId);
         App storage app = _apps[tokenId];
+
+        bytes memory ens = _removeEmptyBytes(app.ENS);
+
         bytes memory dataURI = abi.encodePacked(
             '{',
                 '"name":"', app.name, '",',
                 '"description":"', app.description, '",',
                 '"owner":"', Strings.toHexString(uint160(owner), 20), '",',
-                '"ENS":"', app.ENS, '",',
-                '"external_url":"', app.external_url, '",',
-                '"image":"', app.image, '",',
+                '"ENS":"', ens, '",',
+                '"external_url":"', _removeEmptyBytes(app.external_url), '",',
+                '"image":"', _removeEmptyBytes(app.image), '",',
                 '"attributes": [',
-                    '{"trait_type": "ENS", "value":"', app.ENS,'"},',
+                    '{"trait_type": "ENS", "value":"', ens,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.current_build].commit_hash,'"},',
                     '{"trait_type": "Repository", "value":"', app.builds[app.current_build].git_repository,'"},',
                     '{"trait_type": "Author", "value":"', app.builds[app.current_build].author,'"},',
-                    '{"trait_type": "Version", "value":"', app.current_build,'"}',
+                    '{"trait_type": "Version", "value":"', Strings.toString(app.current_build),'"}',
                 ']',
             '}'
         );
 
-        return string(abi.encodePacked(_baseURI(), Base64.encode(dataURI)));
+        return string(abi.encodePacked(_baseURI(), Base64.encode((dataURI))));
     }
 
     function addTokenController(
@@ -139,7 +142,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenExternalURL(
         uint256 tokenId,
         bytes32 _tokenExternalURL
-    ) public virtual payable requireTokenController(tokenId) {
+    ) public payable virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].external_url = _tokenExternalURL;
     }
@@ -147,7 +150,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenENS(
         uint256 tokenId,
         bytes32 _tokenENS
-    ) public virtual payable requireTokenController(tokenId) {
+    ) public payable virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
     }
@@ -157,12 +160,18 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory _commit_hash,
         string memory _git_repository,
         string memory _author
-    ) public virtual payable requireTokenController(tokenId) {
+    ) public payable virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(_commit_hash, _git_repository, _author);
+        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(
+            _commit_hash,
+            _git_repository,
+            _author
+        );
     }
 
-    function burn(uint256 tokenId) public virtual payable requireTokenController(tokenId) {
+    function burn(
+        uint256 tokenId
+    ) public payable virtual requireTokenController(tokenId) {
         require(
             ownerOf(tokenId) == msg.sender,
             "FleekERC721: must be token owner"
@@ -172,5 +181,21 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         if (_apps[tokenId].external_url.length != 0) {
             delete _apps[tokenId];
         }
+    }
+
+    // Removes empty bytes from a bytes32
+    // IMPORTANT: this function is gas intensive and should only by view functions
+    function _removeEmptyBytes(
+        bytes32 _bytes
+    ) private pure returns (bytes memory) {
+        uint256 i = _bytes.length;
+        while (i > 0 && _bytes[i - 1] == 0) {
+            i--;
+        }
+        bytes memory tempBytes = new bytes(i);
+        for (uint256 j = 0; j < i; j++) {
+            tempBytes[j] = _bytes[j];
+        }
+        return tempBytes;
     }
 }
