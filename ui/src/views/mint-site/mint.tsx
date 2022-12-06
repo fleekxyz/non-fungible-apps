@@ -274,15 +274,7 @@ export const MintSite = () => {
                     mt={4}
                     type="submit"
                     disabled={
-                      isSubmitting ||
-                      !(
-                        !!values.name &&
-                        !!values.description &&
-                        !!values.githubCommit &&
-                        !!values.ownerAddress &&
-                        !!values.externalUrl &&
-                        !!values.ens
-                      )
+isSubmitting || Object.values(values).some((value) => !value)
                     }
                   >
                     {isSubmitting ? 'Minting...' : 'Mint'}
