@@ -7,5 +7,6 @@ export type SiteNFT = {
   ens: string;
   commitHash: string;
   repo: string;
+  controllerAddress?: string;
 };
 
