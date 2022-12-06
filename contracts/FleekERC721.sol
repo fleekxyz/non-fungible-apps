@@ -11,6 +11,14 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     using Strings for uint256;
     using Counters for Counters.Counter;
 
+    event NewBuild(uint256 indexed token, string indexed commit_hash);
+    
+    event NewTokenName(uint256 indexed token, string indexed name);
+    event NewTokenDescription(uint256 indexed token, string indexed description);
+    event NewTokenImage(uint256 indexed token, string indexed image);
+    event NewTokenExternalURL(uint256 indexed token, bytes32 indexed external_url);
+    event NewTokenENS(uint256 indexed token, bytes32 indexed ENS);
+    
     struct Build {
         string commit_hash;
         string git_repository;
@@ -20,7 +28,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     struct App {
         string name; // Name of the site
         string description; // Description about the site
-        bytes32 image; // Preview Image IPFS Link
+        string image; // Preview Image IPFS Link
         bytes32 external_url; // Site URL
         bytes32 ENS; // ENS ID
         uint256 current_build; // The current build number (Increments by one with each change, starts at zero)
@@ -47,7 +55,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         address to,
         string memory name,
         string memory description,
-        bytes32 image,
+        string memory image,
         bytes32 external_url,
         bytes32 ENS,
         string memory commit_hash,
@@ -99,7 +107,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
                 '"owner":"', Strings.toHexString(uint160(owner), 20), '",',
                 '"ENS":"', ens, '",',
                 '"external_url":"', _removeEmptyBytes(app.external_url), '",',
-                '"image":"', _removeEmptyBytes(app.image), '",',
+                '"image":"', app.image, '",',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', ens,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.current_build].commit_hash,'"},',
@@ -145,6 +153,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public payable virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].external_url = _tokenExternalURL;
+        emit NewTokenExternalURL(tokenId, _tokenExternalURL);
     }
 
     function setTokenENS(
@@ -153,6 +162,34 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public payable virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
+        emit NewTokenENS(tokenId, _tokenENS);
+    }
+
+    function setTokenName(
+        uint256 tokenId,
+        string memory _tokenName
+    ) public virtual payable requireTokenController(tokenId) {
+        _requireMinted(tokenId);
+        _apps[tokenId].name = _tokenName;
+        emit NewTokenName(tokenId, _tokenName);
+    }
+
+    function setTokenDescription(
+        uint256 tokenId,
+        string memory _tokenDescription
+    ) public virtual payable requireTokenController(tokenId) {
+        _requireMinted(tokenId);
+        _apps[tokenId].description = _tokenDescription;
+        emit NewTokenDescription(tokenId, _tokenDescription);
+    }
+
+    function setTokenImage(
+        uint256 tokenId,
+        string memory _tokenImage
+    ) public virtual payable requireTokenController(tokenId) {
+        _requireMinted(tokenId);
+        _apps[tokenId].image = _tokenImage;
+        emit NewTokenImage(tokenId, _tokenImage);
     }
 
     function setTokenBuild(
@@ -162,11 +199,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory _author
     ) public payable virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(
-            _commit_hash,
-            _git_repository,
-            _author
-        );
+        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(_commit_hash, _git_repository, _author);
+        emit NewBuild(tokenId, _commit_hash);
     }
 
     function burn(
