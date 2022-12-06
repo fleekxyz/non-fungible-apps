@@ -18,7 +18,7 @@ import { Formik, Field } from 'formik';
 import { ethers } from 'ethers';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
-import './mint.css';
+import { mintSiteNFT } from 'mocks';
 
 export const MintSite = () => {
   const toast = useToast();
@@ -43,11 +43,9 @@ export const MintSite = () => {
     //TODO validate is a github url
     url = url.replace('/commit', '');
     const lastIndexSlash = url.lastIndexOf('/');
-    const repo_hash = url
-      .substring(0, lastIndexSlash + 1)
-      .slice(0, lastIndexSlash);
+    const repo = url.substring(0, lastIndexSlash + 1).slice(0, lastIndexSlash);
     const commit_hash = url.substring(lastIndexSlash + 1, url.length);
-    return { repo_hash, commit_hash };
+    return { repo, commit_hash };
   };
 
   const isValidUrl = (url: string) => {
@@ -80,10 +78,10 @@ export const MintSite = () => {
                 ownerAddress: '',
                 controllerAddress: '',
                 externalUrl: '',
-                image: '',
+                image: new File([], ''),
                 ens: '',
               }}
-              onSubmit={(values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting }) => {
                 const {
                   name,
                   description,
@@ -96,10 +94,20 @@ export const MintSite = () => {
                   ens,
                 } = values;
 
-                const { repo_hash, commit_hash } =
-                  getRepoAndCommit(githubCommit);
+                const { repo, commit_hash } = getRepoAndCommit(githubCommit);
 
                 try {
+                  const mintSite = await mintSiteNFT({
+                    name,
+                    description,
+                    owner: ownerAddress,
+                    externalUrl,
+                    image,
+                    ens,
+                    commitHash: commit_hash,
+                    repo,
+                  });
+                  console.log('mintSite', mintSite);
                   //TODO connect to the contract.
                   showToast(
                     'Success!',
@@ -116,7 +124,14 @@ export const MintSite = () => {
                 setSubmitting(false);
               }}
             >
-              {({ values, touched, handleSubmit, isSubmitting, errors }) => (
+              {({
+                values,
+                touched,
+                handleSubmit,
+                isSubmitting,
+                errors,
+                setFieldValue,
+              }) => (
                 <form onSubmit={handleSubmit}>
                   <Box display="flex" flexDirection="row">
                     <FormControl
@@ -231,7 +246,14 @@ export const MintSite = () => {
                         </Checkbox>
                       </Box>
                       <Field name="image" id="image">
-                        {() => <Input type="file" />}
+                        {() => (
+                          <Input
+                            type="file"
+                            onChange={(e) =>
+                              setFieldValue('image', e.target.files?.[0])
+                            }
+                          />
+                        )}
                       </Field>
                     </FormControl>
                   </Box>

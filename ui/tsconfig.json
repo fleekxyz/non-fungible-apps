@@ -19,5 +19,5 @@
     "noUnusedLocals": true,
     "skipLibCheck": true
   },
-  "include": ["src", "tests", "mocks"]
+  "include": ["src", "tests", "src/mocks", "mocks"]
 }
