@@ -3,43 +3,44 @@ import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import web3 from 'web3';
 
-const stringToBytes32 = (str: string) => ethers.utils.formatBytes32String(str);
-const bytes32ToString = (bytes32: string) =>
-  ethers.utils.parseBytes32String(bytes32);
-
 describe('FleekERC721', () => {
   const COLLECTION_OWNER_ROLE = web3.utils.keccak256('COLLECTION_OWNER_ROLE');
 
   const MINT_PARAMS = Object.freeze({
     name: 'Fleek Test App',
     description: 'Fleek Test App Description',
-    image: stringToBytes32('https://fleek.co/image.png'),
-    ens: stringToBytes32('fleek.eth'),
-    externalUrl: stringToBytes32('https://fleek.co'),
-    commitHash: 'commitHash',
-    gitRepository: 'gitRepository',
+    image: 'https://fleek.co/image.png',
+    ens: 'fleek.eth',
+    externalUrl: 'https://fleek.co',
+    commitHash: 'b72e47171746b6a9e29b801af9cb655ecf4d665c',
+    gitRepository: 'https://github.com/fleekxyz/contracts',
     author: 'author',
   });
 
-  const defaultFixture = async () => {
-    const name = 'FleekERC721';
-    const symbol = 'FLEEK';
+  const COLLECTION_PARAMS = Object.freeze({
+    name: 'FleekERC721',
+    symbol: 'FLEEK',
+  });
 
+  const defaultFixture = async () => {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
 
     const Contract = await ethers.getContractFactory('FleekERC721');
-    const contract = await Contract.deploy(name, symbol);
+    const contract = await Contract.deploy(
+      COLLECTION_PARAMS.name,
+      COLLECTION_PARAMS.symbol
+    );
 
-    return { name, symbol, owner, otherAccount, contract };
+    return { owner, otherAccount, contract };
   };
 
   describe('Deployment', () => {
     it('should assign the name and the symbol of the ERC721 contract', async () => {
-      const { name, symbol, contract } = await loadFixture(defaultFixture);
+      const { contract } = await loadFixture(defaultFixture);
 
-      expect(await contract.name()).to.equal(name);
-      expect(await contract.symbol()).to.equal(symbol);
+      expect(await contract.name()).to.equal(COLLECTION_PARAMS.name);
+      expect(await contract.symbol()).to.equal(COLLECTION_PARAMS.symbol);
     });
 
     it('should assign the owner of the contract', async () => {
@@ -134,35 +135,35 @@ describe('FleekERC721', () => {
 
       const parsedURI = JSON.parse(tokenURIDecoded);
 
-      expect(parsedURI.name).to.equal(MINT_PARAMS.name);
-      expect(parsedURI.description).to.equal(MINT_PARAMS.description);
-      expect(parsedURI.image).to.equal(bytes32ToString(MINT_PARAMS.image));
-      expect(parsedURI.external_url).to.equal(
-        bytes32ToString(MINT_PARAMS.externalUrl)
-      );
-      expect(parsedURI.ENS).to.equal(bytes32ToString(MINT_PARAMS.ens));
-      expect(parsedURI.attributes).to.be.eql([
-        {
-          trait_type: 'ENS',
-          value: bytes32ToString(MINT_PARAMS.ens),
-        },
-        {
-          trait_type: 'Commit Hash',
-          value: MINT_PARAMS.commitHash,
-        },
-        {
-          trait_type: 'Repository',
-          value: MINT_PARAMS.gitRepository,
-        },
-        {
-          trait_type: 'Author',
-          value: MINT_PARAMS.author,
-        },
-        {
-          trait_type: 'Version',
-          value: '0',
-        },
-      ]);
+      expect(parsedURI).to.eql({
+        owner: fixture.owner.address.toLowerCase(),
+        name: MINT_PARAMS.name,
+        description: MINT_PARAMS.description,
+        image: MINT_PARAMS.image,
+        external_url: MINT_PARAMS.externalUrl,
+        attributes: [
+          {
+            trait_type: 'ENS',
+            value: MINT_PARAMS.ens,
+          },
+          {
+            trait_type: 'Commit Hash',
+            value: MINT_PARAMS.commitHash,
+          },
+          {
+            trait_type: 'Repository',
+            value: MINT_PARAMS.gitRepository,
+          },
+          {
+            trait_type: 'Author',
+            value: MINT_PARAMS.author,
+          },
+          {
+            trait_type: 'Version',
+            value: '0',
+          },
+        ],
+      });
     });
 
     it('should match the token owner', async () => {
