@@ -16,8 +16,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     event NewTokenName(uint256 indexed token, string indexed name);
     event NewTokenDescription(uint256 indexed token, string indexed description);
     event NewTokenImage(uint256 indexed token, string indexed image);
-    event NewTokenExternalURL(uint256 indexed token, bytes32 indexed external_url);
-    event NewTokenENS(uint256 indexed token, bytes32 indexed ENS);
+    event NewTokenExternalURL(uint256 indexed token, string indexed external_url);
+    event NewTokenENS(uint256 indexed token, string indexed ENS);
     
     struct Build {
         string commit_hash;
@@ -25,12 +25,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string author;
     }
 
+    /**
+     * The properties are stored as string to keep consistency with
+     * other token contracts, we might consider changing for bytes32
+     * in the future due to gas optimization
+     */
     struct App {
         string name; // Name of the site
         string description; // Description about the site
         string image; // Preview Image IPFS Link
-        bytes32 external_url; // Site URL
-        bytes32 ENS; // ENS ID
+        string external_url; // Site URL
+        string ENS; // ENS ID
         uint256 current_build; // The current build number (Increments by one with each change, starts at zero)
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
     }
@@ -56,8 +61,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory name,
         string memory description,
         string memory image,
-        bytes32 external_url,
-        bytes32 ENS,
+        string memory external_url,
+        string memory ENS,
         string memory commit_hash,
         string memory git_repository,
         string memory author
@@ -77,7 +82,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the current_build by one and update the mapping.
         app.current_build = 0;
         app.builds[0] = Build(commit_hash, git_repository, author);
-    
+
         return tokenId;
     }
 
@@ -97,12 +102,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _requireMinted(tokenId);
         address owner = ownerOf(tokenId);
         App storage app = _apps[tokenId];
+
         bytes memory dataURI = abi.encodePacked(
             '{',
                 '"name":"', app.name, '",',
                 '"description":"', app.description, '",',
-                '"owner":"', abi.encodePacked(owner), '",',
-                '"ENS":"', app.ENS, '",',
+                '"owner":"', Strings.toHexString(uint160(owner), 20), '",',
                 '"external_url":"', app.external_url, '",',
                 '"image":"', app.image, '",',
                 '"attributes": [',
@@ -110,12 +115,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.current_build].commit_hash,'"},',
                     '{"trait_type": "Repository", "value":"', app.builds[app.current_build].git_repository,'"},',
                     '{"trait_type": "Author", "value":"', app.builds[app.current_build].author,'"},',
-                    '{"trait_type": "Version", "value":"', app.current_build,'"}',
+                    '{"trait_type": "Version", "value":"', Strings.toString(app.current_build),'"}',
                 ']',
             '}'
         );
 
-        return string(abi.encodePacked(_baseURI(), Base64.encode(dataURI)));
+        return string(abi.encodePacked(_baseURI(), Base64.encode((dataURI))));
     }
 
     function addTokenController(
@@ -146,8 +151,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
 
     function setTokenExternalURL(
         uint256 tokenId,
-        bytes32 _tokenExternalURL
-    ) public virtual payable requireTokenController(tokenId) {
+        string memory _tokenExternalURL
+    ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].external_url = _tokenExternalURL;
         emit NewTokenExternalURL(tokenId, _tokenExternalURL);
@@ -155,8 +160,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
 
     function setTokenENS(
         uint256 tokenId,
-        bytes32 _tokenENS
-    ) public virtual payable requireTokenController(tokenId) {
+        string memory _tokenENS
+    ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
         emit NewTokenENS(tokenId, _tokenENS);
@@ -165,7 +170,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenName(
         uint256 tokenId,
         string memory _tokenName
-    ) public virtual payable requireTokenController(tokenId) {
+    ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].name = _tokenName;
         emit NewTokenName(tokenId, _tokenName);
@@ -174,7 +179,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenDescription(
         uint256 tokenId,
         string memory _tokenDescription
-    ) public virtual payable requireTokenController(tokenId) {
+    ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
         emit NewTokenDescription(tokenId, _tokenDescription);
@@ -183,7 +188,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenImage(
         uint256 tokenId,
         string memory _tokenImage
-    ) public virtual payable requireTokenController(tokenId) {
+    ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].image = _tokenImage;
         emit NewTokenImage(tokenId, _tokenImage);
@@ -194,20 +199,22 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory _commit_hash,
         string memory _git_repository,
         string memory _author
-    ) public virtual payable requireTokenController(tokenId) {
+    ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(_commit_hash, _git_repository, _author);
         emit NewBuild(tokenId, _commit_hash);
     }
 
-    function burn(uint256 tokenId) public virtual payable requireTokenController(tokenId) {
+    function burn(
+        uint256 tokenId
+    ) public virtual requireTokenController(tokenId) {
         require(
             ownerOf(tokenId) == msg.sender,
             "FleekERC721: must be token owner"
         );
         super._burn(tokenId);
 
-        if (_apps[tokenId].external_url.length != 0) {
+        if (bytes(_apps[tokenId].external_url).length != 0) {
             delete _apps[tokenId];
         }
     }
