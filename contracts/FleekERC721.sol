@@ -229,7 +229,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
 
     function burn(
         uint256 tokenId
-    ) public virtual requireTokenController(tokenId) {
+    ) public virtual requireTokenOwner(tokenId) {
         _requireMinted(tokenId);
         require(
             ownerOf(tokenId) == msg.sender,

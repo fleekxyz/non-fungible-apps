@@ -31,6 +31,7 @@ contract FleekTest is Test {
         );
 
         assertEq(mint, 0);
+        assertEq(fleekContract.ownerOf(mint), DEPLOYER);
     }
 
     function testMintingMintedToken() public {
@@ -297,6 +298,28 @@ function testFailChangingAllPossibleFieldsOnAnotherUsersTokenWithoutAccess() pub
         fleekContract.burn(mint);
     }
 
+    function testFailTokenControllerAttemptsToBurnToken() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+    
+        fleekContract.addTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+
+        fleekContract.burn(mint);
+    }
+
+
     function testSetTokenName() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
@@ -550,7 +573,7 @@ function testFailChangingAllPossibleFieldsOnAnotherUsersTokenWithoutAccess() pub
         fleekContract.addTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
     }
 
-    function testFailAddTokenControllerTwice() public {
+    function testAddTokenControllerTwice() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
             'Foundry Test App',
@@ -624,7 +647,7 @@ function testFailChangingAllPossibleFieldsOnAnotherUsersTokenWithoutAccess() pub
         fleekContract.removeTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
     }
 
-    function testFailRemoveUnknownTokenController() public {   
+    function testRemoveUnknownTokenController() public {   
         uint256 mint = fleekContract.mint(
             DEPLOYER,
             'Foundry Test App',
@@ -662,6 +685,25 @@ function testFailChangingAllPossibleFieldsOnAnotherUsersTokenWithoutAccess() pub
         fleekContract.addTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
         fleekContract.removeTokenController(mint, DEPLOYER);
+    }
+
+    function testBalanceOfDeployerAfterAndBeforeMinting() public {
+        assertEq(fleekContract.balanceOf(DEPLOYER), 0);
+
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        assertEq(fleekContract.balanceOf(DEPLOYER), 1);
     }
 
 }
