@@ -1,1 +1,1 @@
-export * from './list-sites';
+export * from './home';

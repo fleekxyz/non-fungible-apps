@@ -3,7 +3,7 @@ export type SiteNFT = {
   description: string;
   owner: string;
   externalUrl: string;
-  image?: File;
+  image: string;
   ens: string;
   commitHash: string;
   repo: string;
