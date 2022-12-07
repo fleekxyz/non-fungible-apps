@@ -1,4 +1,4 @@
-require('dotenv').config();
+// npx hardhat run scripts/tokenURI.js --network polygonMumbai
 
 // TODO: make this arguments
 const contractAddress = '0x91A425C1CA320A99a09BE1bee114Fce5d30153d9';
