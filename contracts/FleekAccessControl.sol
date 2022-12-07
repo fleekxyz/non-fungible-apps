@@ -3,31 +3,21 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-abstract contract FleekAccessControl is AccessControl {
-    bytes32 public constant COLLECTION_OWNER_ROLE =
-        keccak256("COLLECTION_OWNER_ROLE");
-    bytes32 public constant COLLECTION_CONTROLLER_ROLE =
-        keccak256("COLLECTION_CONTROLLER_ROLE");
+abstract contract FleekAccessControl is AccessControl, Ownable {
+    bytes32 public constant COLLECTION_MINTER_ROLE =
+        keccak256("COLLECTION_MINTER_ROLE");
 
     constructor() {
-        _setRoleAdmin(COLLECTION_OWNER_ROLE, DEFAULT_ADMIN_ROLE);
-        _grantRole(COLLECTION_OWNER_ROLE, msg.sender);
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(COLLECTION_MINTER_ROLE, msg.sender);
     }
 
-    modifier requireCollectionOwner() {
+    modifier requireCollectionMinter() {
         require(
-            hasRole(COLLECTION_OWNER_ROLE, msg.sender),
-            "FleekAccessControl: must have collection owner role"
-        );
-        _;
-    }
-
-    modifier requireCollectionController() {
-        require(
-            hasRole(COLLECTION_OWNER_ROLE, msg.sender) ||
-                hasRole(COLLECTION_CONTROLLER_ROLE, msg.sender),
-            "FleekAccessControl: must have collection controller role"
+            hasRole(COLLECTION_MINTER_ROLE, msg.sender),
+            "FleekAccessControl: must have collection minter role"
         );
         _;
     }

@@ -4,7 +4,7 @@ import { ethers } from 'hardhat';
 import web3 from 'web3';
 
 describe('FleekERC721', () => {
-  const COLLECTION_OWNER_ROLE = web3.utils.keccak256('COLLECTION_OWNER_ROLE');
+  const COLLECTION_MINTER_ROLE = web3.utils.keccak256('COLLECTION_MINTER_ROLE');
 
   const MINT_PARAMS = Object.freeze({
     name: 'Fleek Test App',
@@ -46,8 +46,14 @@ describe('FleekERC721', () => {
     it('should assign the owner of the contract', async () => {
       const { owner, contract } = await loadFixture(defaultFixture);
 
+      expect(await contract.owner()).to.equal(owner.address);
+    });
+
+    it('should assign the minter role to the contract creator', async () => {
+      const { owner, contract } = await loadFixture(defaultFixture);
+
       expect(
-        await contract.hasRole(COLLECTION_OWNER_ROLE, owner.address)
+        await contract.hasRole(COLLECTION_MINTER_ROLE, owner.address)
       ).to.equal(true);
     });
 
@@ -96,7 +102,7 @@ describe('FleekERC721', () => {
             MINT_PARAMS.author
           )
       ).to.be.revertedWith(
-        'FleekAccessControl: must have collection owner role'
+        'FleekAccessControl: must have collection minter role'
       );
     });
   });

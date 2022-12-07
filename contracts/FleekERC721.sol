@@ -66,7 +66,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory commit_hash,
         string memory git_repository,
         string memory author
-    ) public payable requireCollectionOwner returns (uint256) {
+    ) public payable requireCollectionMinter returns (uint256) {
         uint256 tokenId = _tokenIds.current();
         _mint(to, tokenId);
         addTokenController(tokenId, to);
