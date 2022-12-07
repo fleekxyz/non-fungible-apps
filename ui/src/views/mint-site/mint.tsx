@@ -12,13 +12,15 @@ import {
   useToast,
   UseToastOptions,
   Textarea,
+  Grid,
+  GridItem,
 } from '@chakra-ui/react';
 import { Formik, Field, FormikValues } from 'formik';
 import { ethers } from 'ethers';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import { mintSiteNFT } from '@/mocks';
-import { getRepoAndCommit, isValidUrl } from '@/utils';
+import { getRepoAndCommit, isValidImageUrl, isValidUrl } from '@/utils';
 
 const initialValues = {
   name: '',
@@ -120,6 +122,7 @@ export const MintSite = () => {
                 isSubmitting,
                 errors,
                 setFieldValue,
+                setTouched,
               }) => (
                 <form onSubmit={handleSubmit}>
                   <Box display="flex" flexDirection="row">
@@ -131,95 +134,7 @@ export const MintSite = () => {
                       <FormLabel htmlFor="name">Name</FormLabel>
                       <Field as={Input} name="name" id="name" type="text" />
                     </FormControl>
-                    <FormControl>
-                      <FormLabel>Controller address</FormLabel>
-                      <Input type="text" />
-                    </FormControl>
-                  </Box>
-                  <Box display="flex" flexDirection="row">
-                    <Box width="container.md" mr={5}>
-                      <FormControl
-                        mt={6}
-                        isRequired
-                        isInvalid={touched.description && !values.description}
-                      >
-                        <FormLabel htmlFor="description">Description</FormLabel>
-                        <Textarea
-                          id="description"
-                          name="description"
-                          height={137}
-                          onChange={(e) => {
-                            setFieldValue('description', e.target.value);
-                          }}
-                        />
-                      </FormControl>
-                    </Box>
-                    <Box width="container.md">
-                      <FormControl
-                        mt={6}
-                        isRequired
-                        isInvalid={!values.image && touched.image}
-                      >
-                        <FormLabel htmlFor="image">Image (IPFS Link)</FormLabel>
-                        <Field
-                          as={Input}
-                          name="image"
-                          id="image"
-                          type="text"
-                          validate={(value: string) => {
-                            if (!isValidUrl(value))
-                              return 'External url is not a valid url';
-                          }}
-                        />
-                      </FormControl>
-                      <FormControl
-                        mt={6}
-                        isRequired
-                        isInvalid={
-                          touched.externalUrl &&
-                          (!values.externalUrl ||
-                            !isValidUrl(values.externalUrl))
-                        }
-                      >
-                        <FormLabel htmlFor="externalUrl">
-                          External url
-                        </FormLabel>
-                        <Field
-                          as={Input}
-                          name="externalUrl"
-                          id="externalUrl"
-                          type="text"
-                          validate={(value: string) => {
-                            if (!isValidUrl(value))
-                              return 'External url is not a valid url';
-                          }}
-                        />
-                        <FormErrorMessage>
-                          {errors.externalUrl}
-                        </FormErrorMessage>
-                      </FormControl>
-                    </Box>
-                  </Box>
-                  <FormControl
-                    mr={5}
-                    mt={6}
-                    isRequired
-                    isInvalid={touched.githubCommit && !values.githubCommit}
-                  >
-                    <FormLabel htmlFor="githubCommit">
-                      Github commit url
-                    </FormLabel>
-                    <Field
-                      as={Input}
-                      name="githubCommit"
-                      id="githubCommit"
-                      type="text"
-                    />
-                  </FormControl>
-                  <Box display="flex" flexDirection="row">
                     <FormControl
-                      mr={5}
-                      mt={6}
                       isRequired
                       isInvalid={
                         touched.ownerAddress &&
@@ -246,16 +161,133 @@ export const MintSite = () => {
                       />
                       <FormErrorMessage>{errors.ownerAddress}</FormErrorMessage>
                     </FormControl>
-
+                  </Box>
+                  <FormControl
+                    mt={6}
+                    isRequired
+                    isInvalid={touched.description && !values.description}
+                  >
+                    <FormLabel htmlFor="description">Description</FormLabel>
+                    <Textarea
+                      id="description"
+                      name="description"
+                      minHeight={137}
+                      onChange={(e) => {
+                        setTouched({ ...touched, description: true });
+                        setFieldValue('description', e.target.value);
+                      }}
+                    />
+                  </FormControl>
+                  <Box display="flex" flexDirection="row">
+                    <FormControl
+                      mt={6}
+                      mr={5}
+                      isRequired
+                      isInvalid={
+                        touched.image &&
+                        (!values.image || !isValidImageUrl(values.image))
+                        // TODO validate is an imaga (png, jpg, svg)
+                      }
+                    >
+                      <FormLabel htmlFor="image">Image (IPFS Link)</FormLabel>
+                      <Field
+                        as={Input}
+                        name="image"
+                        id="image"
+                        type="text"
+                        validate={(value: string) => {
+                          if (!isValidImageUrl(value))
+                            return 'Image url is not a valid url';
+                        }}
+                      />
+                      <FormErrorMessage>{errors.image}</FormErrorMessage>
+                    </FormControl>
                     <FormControl
                       mt={6}
                       isRequired
-                      isInvalid={touched.ens && !values.ens}
+                      isInvalid={
+                        touched.externalUrl &&
+                        (!values.externalUrl || !isValidUrl(values.externalUrl))
+                      }
                     >
+                      <FormLabel htmlFor="externalUrl">External url</FormLabel>
+                      <Field
+                        as={Input}
+                        name="externalUrl"
+                        id="externalUrl"
+                        type="text"
+                        validate={(value: string) => {
+                          if (!isValidUrl(value))
+                            return 'External url is not a valid url';
+                        }}
+                      />
+                      <FormErrorMessage>{errors.externalUrl}</FormErrorMessage>
+                    </FormControl>
+                  </Box>
+                  <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+                    <GridItem colSpan={2}>
+                      <FormControl
+                        mr={5}
+                        mt={6}
+                        isRequired
+                        isInvalid={
+                          touched.githubCommit &&
+                          (!values.githubCommit ||
+                            !isValidUrl(values.githubCommit))
+                        }
+                      >
+                        <FormLabel htmlFor="githubCommit">
+                          Github commit url
+                        </FormLabel>
+                        <Field
+                          as={Input}
+                          name="githubCommit"
+                          id="githubCommit"
+                          type="text"
+                          validate={(value: string) => {
+                            if (!isValidUrl(value))
+                              return 'The github commit url is not a valid url';
+                          }}
+                        />
+                        <FormErrorMessage>
+                          {errors.githubCommit}
+                        </FormErrorMessage>
+                      </FormControl>
+                    </GridItem>
+                    <GridItem colSpan={1}>
+                      <FormControl mt={6}>
+                        <FormLabel htmlFor="ens">ENS</FormLabel>
+                        <Field as={Input} name="ens" id="ens" type="ens" />
+                      </FormControl>
+                    </GridItem>
+                  </Grid>
+                  {/* <Box display="flex" flexDirection="row">
+                    <FormControl
+                      mr={5}
+                      mt={6}
+                      isRequired
+                      isInvalid={touched.githubCommit && !values.githubCommit}
+                    >
+                      <FormLabel htmlFor="githubCommit">
+                        Github commit url
+                      </FormLabel>
+                      <Field
+                        as={Input}
+                        name="githubCommit"
+                        id="githubCommit"
+                        type="text"
+                        validate={(value: string) => {
+                          if (!isValidUrl(value))
+                            return 'The github commit url is not a valid url';
+                        }}
+                      />
+                      <FormErrorMessage>{errors.githubCommit}</FormErrorMessage>
+                    </FormControl>
+                    <FormControl mt={6}>
                       <FormLabel htmlFor="ens">ENS</FormLabel>
                       <Field as={Input} name="ens" id="ens" type="ens" />
                     </FormControl>
-                  </Box>
+                  </Box> */}
                   <Button
                     colorScheme="blue"
                     backgroundColor="#1d4ed8"
@@ -271,8 +303,7 @@ export const MintSite = () => {
                       !values.githubCommit ||
                       !values.ownerAddress ||
                       !values.image ||
-                      !values.externalUrl ||
-                      !values.ens
+                      !values.externalUrl
                     }
                   >
                     Mint
