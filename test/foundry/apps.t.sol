@@ -9,11 +9,7 @@ contract ContractBTest is Test {
     function setUp() public {
         fleekContract = new FleekERC721('Test Contract', 'FLKAPS');
     }
-
-    function testCollectionOwner() public {
-        assertEq(fleekContract.COLLECTION_OWNER_ROLE, keccak256('0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84'));
-    }
-
+    
     function testName() public {
         assertEq(fleekContract.name(), 'Test Contract');
     }

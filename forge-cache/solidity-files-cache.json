@@ -62,8 +62,8 @@
       }
     },
     "contracts/FleekERC721.sol": {
-      "lastModificationDate": 1670412322054,
-      "contentHash": "8e01be0410a9ffbb2857e7215da33704",
+      "lastModificationDate": 1670425560329,
+      "contentHash": "9522992e0912fe3d7fb8dbbd44df3550",
       "sourceName": "contracts/FleekERC721.sol",
       "solcConfig": {
         "settings": {
@@ -1356,8 +1356,8 @@
       }
     },
     "test/foundry/apps.t.sol": {
-      "lastModificationDate": 1670421448731,
-      "contentHash": "ded5c47848d94e49eb22b8f12b8327ad",
+      "lastModificationDate": 1670425619647,
+      "contentHash": "04a0358899f22e7f132b2e88e022426c",
       "sourceName": "test/foundry/apps.t.sol",
       "solcConfig": {
         "settings": {

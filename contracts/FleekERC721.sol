@@ -67,7 +67,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public payable requireCollectionOwner returns (uint256) {
         uint256 tokenId = _tokenIds.current();
         _mint(to, tokenId);
-        addTokenController(tokenId, to);
+        _addTokenController(tokenId, to);
         _tokenIds.increment();
 
         App storage app = _apps[tokenId];
@@ -123,6 +123,14 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         uint256 tokenId,
         address controller
     ) public requireTokenOwner(tokenId) {
+        _requireMinted(tokenId);
+        _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
+    }
+
+    function _addTokenController(
+        uint256 tokenId,
+        address controller
+    ) internal {
         _requireMinted(tokenId);
         _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
     }
