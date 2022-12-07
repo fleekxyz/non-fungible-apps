@@ -84,15 +84,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return tokenId;
     }
 
-    function upgradeTokenBuild(
-        uint256 tokenId,
-        string memory commit,
-        string memory repository
-    ) public payable requireTokenOwner(tokenId) {
-        _requireMinted(tokenId);
-        setTokenBuild(tokenId, commit, repository);
-    }
-
     function tokenURI(
         uint256 tokenId
     ) public view virtual override returns (string memory) {
@@ -123,8 +114,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         uint256 tokenId,
         address controller
     ) public requireTokenOwner(tokenId) {
-        _requireMinted(tokenId);
-        _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
+        _addTokenController(tokenId, controller);
     }
 
     function _addTokenController(
@@ -211,6 +201,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function burn(
         uint256 tokenId
     ) public virtual requireTokenController(tokenId) {
+        _requireMinted(tokenId);
         require(
             ownerOf(tokenId) == msg.sender,
             "FleekERC721: must be token owner"

@@ -7,3 +7,7 @@ artifacts
 
 # NPM
 package-lock.json
+
+# Foundry
+./out
+./forge-cache
