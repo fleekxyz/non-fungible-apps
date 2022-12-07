@@ -9,5 +9,5 @@ artifacts
 package-lock.json
 
 # Foundry
-./out
-./forge-cache
+out
+forge-cache

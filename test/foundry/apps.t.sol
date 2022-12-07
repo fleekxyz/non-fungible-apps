@@ -18,10 +18,6 @@ contract FleekTest is Test {
         assertEq(fleekContract.symbol(), 'FLKAPS');
     }
 
-    function test() public {
-        assertEq(fleekContract.symbol(), 'FLKAPS');
-    }
-
     function testMint() public {
         uint256 mint = fleekContract.mint(
         DEPLOYER,
@@ -140,7 +136,7 @@ contract FleekTest is Test {
             '{',
                 '"name":"Foundry Test App",',
                 '"description":"This is a test application submitted by foundry tests.",',
-                '"owner":"DEPLOYER",',
+                '"owner":"',Strings.toHexString(uint160(DEPLOYER), 20),'",',
                 '"external_url":"https://fleek.xyz",',
                 '"image":"https://fleek.xyz",',
                 '"attributes": [',
@@ -155,12 +151,98 @@ contract FleekTest is Test {
         assertEq(tokenURI, string(abi.encodePacked("data:application/json;base64,", Base64.encode((dataURI)))));
     }
 
+    function testCallingTokenURIAfterChangingAllPossibleFields() public {
+        uint256 mint = fleekContract.mint(
+        DEPLOYER,
+        'Foundry Test App',
+        'This is a test application submitted by foundry tests.',
+        'https://fleek.xyz',
+        'https://fleek.xyz',
+        'fleek_xyz',
+        'afff3f6',
+        'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.setTokenName(mint, 'Foundry Test App 2');
+        fleekContract.setTokenDescription(mint, 'This is a test application submitted by foundry tests. 2');
+        fleekContract.setTokenImage(mint, 'https://fleek2.xyz');
+        fleekContract.setTokenExternalURL(mint, 'https://fleek2.xyz');
+        fleekContract.setTokenENS(mint, 'fleek_xyz2');
+        fleekContract.setTokenBuild(mint, 'afff3f62', 'https://github.com/fleekxyz/contracts2');
+
+        string memory tokenURI = fleekContract.tokenURI(mint);
+
+        bytes memory dataURI = abi.encodePacked(
+            '{',
+                '"name":"Foundry Test App 2",',
+                '"description":"This is a test application submitted by foundry tests. 2",',
+                '"owner":"',Strings.toHexString(uint160(DEPLOYER), 20),'",',
+                '"external_url":"https://fleek2.xyz",',
+                '"image":"https://fleek2.xyz",',
+                '"attributes": [',
+                    '{"trait_type": "ENS", "value":"fleek_xyz2"},',
+                    '{"trait_type": "Commit Hash", "value":"afff3f62"},',
+                    '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/contracts2"},',
+                    '{"trait_type": "Version", "value":"1"}',
+                ']',
+            '}'
+        );
+
+        assertEq(tokenURI, string(abi.encodePacked("data:application/json;base64,", Base64.encode((dataURI)))));
+    }
+
+function testFailChangingAllPossibleFieldsOnAnotherUsersTokenWithoutAccess() public {
+        uint256 mint = fleekContract.mint(
+        DEPLOYER,
+        'Foundry Test App',
+        'This is a test application submitted by foundry tests.',
+        'https://fleek.xyz',
+        'https://fleek.xyz',
+        'fleek_xyz',
+        'afff3f6',
+        'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+
+        fleekContract.setTokenName(mint, 'Foundry Test App 2');
+        fleekContract.setTokenDescription(mint, 'This is a test application submitted by foundry tests. 2');
+        fleekContract.setTokenImage(mint, 'https://fleek2.xyz');
+        fleekContract.setTokenExternalURL(mint, 'https://fleek2.xyz');
+        fleekContract.setTokenENS(mint, 'fleek_xyz2');
+        fleekContract.setTokenBuild(mint, 'afff3f62', 'https://github.com/fleekxyz/contracts2');
+
+        string memory tokenURI = fleekContract.tokenURI(mint);
+
+        bytes memory dataURI = abi.encodePacked(
+            '{',
+                '"name":"Foundry Test App 2",',
+                '"description":"This is a test application submitted by foundry tests. 2",',
+                '"owner":"',Strings.toHexString(uint160(DEPLOYER), 20),'",',
+                '"external_url":"https://fleek2.xyz",',
+                '"image":"https://fleek2.xyz",',
+                '"attributes": [',
+                    '{"trait_type": "ENS", "value":"fleek_xyz2"},',
+                    '{"trait_type": "Commit Hash", "value":"afff3f62"},',
+                    '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/contracts2"},',
+                    '{"trait_type": "Version", "value":"1"}',
+                ']',
+            '}'
+        );
+
+        assertEq(tokenURI, string(abi.encodePacked("data:application/json;base64,", Base64.encode((dataURI)))));
+    }
+
     function testFailCallingTokenURIOnNonExistantToken() public {
         bytes memory dataURI = abi.encodePacked(
             '{',
                 '"name":"Foundry Test App",',
                 '"description":"This is a test application submitted by foundry tests.",',
-                '"owner":"DEPLOYER",',
+                '"owner":"',Strings.toHexString(uint160(DEPLOYER), 20),'",',
                 '"external_url":"https://fleek.xyz",',
                 '"image":"https://fleek.xyz",',
                 '"attributes": [',
@@ -196,6 +278,25 @@ contract FleekTest is Test {
         fleekContract.burn(0);
     }
 
+    function testFailBurnAnotherUsersTokenWithoutAccess() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+        
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+
+        fleekContract.burn(mint);
+    }
+
     function testSetTokenName() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
@@ -212,6 +313,25 @@ contract FleekTest is Test {
 
         fleekContract.setTokenName(mint, 'NEW TOKEN NAME!');
     }
+
+    function testFailSetTokenNameOnAnotherUsersTokenWithoutAccess() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+
+        fleekContract.setTokenName(mint, 'NEW TOKEN NAME!');
+    }    
 
     function testSetTokenDescription() public {
         uint256 mint = fleekContract.mint(
@@ -230,6 +350,26 @@ contract FleekTest is Test {
         fleekContract.setTokenDescription(mint, 'NEW TOKEN NAME!');
     }
 
+    function testFailSetTokenDescriptionOnAnotherUsersTokenWithoutAccess() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+
+        fleekContract.setTokenDescription(mint, 'NEW TOKEN NAME!');
+    }
+
+
     function testSetTokenImage() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
@@ -243,6 +383,25 @@ contract FleekTest is Test {
         );
 
         assertEq(mint, 0);
+
+        fleekContract.setTokenImage(mint, 'https://ethereum.org');
+    }
+
+    function testFailSetTokenImageOnAnotherUsersTokenWithoutAccess() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setTokenImage(mint, 'https://ethereum.org');
     }
@@ -264,6 +423,25 @@ contract FleekTest is Test {
         fleekContract.setTokenExternalURL(mint, 'https://ethereum.org');
     }
 
+    function testFailSetTokenExternalURLOnAnotherUsersTokenWithoutAccess() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+
+        fleekContract.setTokenExternalURL(mint, 'https://ethereum.org');
+    }
+
     function testSetTokenBuild() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
@@ -277,6 +455,25 @@ contract FleekTest is Test {
         );
 
         assertEq(mint, 0);
+
+        fleekContract.setTokenBuild(mint, 'aaaaaaa', 'https://github.com/fleekxyz/test_contracts');
+    }
+
+    function testFailSetTokenBuildOnAnotherUsersTokenWithoutAccess() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setTokenBuild(mint, 'aaaaaaa', 'https://github.com/fleekxyz/test_contracts');
     }
@@ -298,6 +495,25 @@ contract FleekTest is Test {
         fleekContract.setTokenENS(mint, 'fleek_nfts');
     }
 
+    function testFailSetTokenENSOnAnotherUsersTokenWithoutAccess() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+
+        fleekContract.setTokenENS(mint, 'fleek_nfts');
+    }
+
     function testAddTokenController() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
@@ -315,8 +531,45 @@ contract FleekTest is Test {
         fleekContract.addTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
     }
 
+    function testFailAddTokenControllerOnAnotherUsersTokenWithoutAccess() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+
+        fleekContract.addTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+    }
+
+    function testFailAddTokenControllerTwice() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+        fleekContract.addTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+    }
+
     function testRemoveTokenController() public {   
-                uint256 mint = fleekContract.mint(
+        uint256 mint = fleekContract.mint(
             DEPLOYER,
             'Foundry Test App',
             'This is a test application submitted by foundry tests.',
@@ -331,6 +584,84 @@ contract FleekTest is Test {
 
         fleekContract.addTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
         fleekContract.removeTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+    }
+
+    function testFailRemoveTokenControllerOnAnotherUsersTokenWithoutAccess() public {   
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addTokenController(mint, 0x91A425C1CA320A99a09BE1bee114Fce5d30153d9);
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+        fleekContract.removeTokenController(mint, 0x91A425C1CA320A99a09BE1bee114Fce5d30153d9);
+    }
+    
+    function testRemoveTokenControllerTwice() public {   
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+        fleekContract.removeTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+        fleekContract.removeTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+    }
+
+    function testFailRemoveUnknownTokenController() public {   
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.removeTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+    }
+
+    function testFailRemoveUnknownTokenControllerFromUnknownToken() public {
+        fleekContract.removeTokenController(0, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+    }
+
+    function testFailRemoveTokenOwnerByTokenController() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            'Foundry Test App',
+            'This is a test application submitted by foundry tests.',
+            'https://fleek.xyz',
+            'https://fleek.xyz',
+            'fleek_xyz',
+            'afff3f6',
+            'https://github.com/fleekxyz/contracts'
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addTokenController(mint, 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+        fleekContract.removeTokenController(mint, DEPLOYER);
     }
 
 }
