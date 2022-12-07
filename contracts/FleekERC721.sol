@@ -22,7 +22,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     struct Build {
         string commit_hash;
         string git_repository;
-        string author;
     }
 
     /**
@@ -64,8 +63,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory external_url,
         string memory ENS,
         string memory commit_hash,
-        string memory git_repository,
-        string memory author
+        string memory git_repository
     ) public payable requireCollectionOwner returns (uint256) {
         uint256 tokenId = _tokenIds.current();
         _mint(to, tokenId);
@@ -81,7 +79,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
 
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the current_build by one and update the mapping.
         app.current_build = 0;
-        app.builds[0] = Build(commit_hash, git_repository, author);
+        app.builds[0] = Build(commit_hash, git_repository);
 
         return tokenId;
     }
@@ -89,11 +87,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function upgradeTokenBuild(
         uint256 tokenId,
         string memory commit,
-        string memory repository,
-        string memory author
+        string memory repository
     ) public payable requireTokenOwner(tokenId) {
         _requireMinted(tokenId);
-        setTokenBuild(tokenId, commit, repository, author);
+        setTokenBuild(tokenId, commit, repository);
     }
 
     function tokenURI(
@@ -114,7 +111,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.current_build].commit_hash,'"},',
                     '{"trait_type": "Repository", "value":"', app.builds[app.current_build].git_repository,'"},',
-                    '{"trait_type": "Author", "value":"', app.builds[app.current_build].author,'"},',
                     '{"trait_type": "Version", "value":"', Strings.toString(app.current_build),'"}',
                 ']',
             '}'
@@ -197,11 +193,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenBuild(
         uint256 tokenId,
         string memory _commit_hash,
-        string memory _git_repository,
-        string memory _author
+        string memory _git_repository
     ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(_commit_hash, _git_repository, _author);
+        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(_commit_hash, _git_repository);
         emit NewBuild(tokenId, _commit_hash);
     }
 
