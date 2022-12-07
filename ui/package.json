@@ -1,0 +1,37 @@
+{
+  "name": "sites-as-nfts",
+  "version": "0.0.1",
+  "description": "Minimal UI for sites as NFTs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "author": "Fleek",
+  "license": "ISC",
+  "dependencies": {
+    "path": "^0.12.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.2.3",
+    "@types/node": "^18.11.9",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "@vitejs/plugin-react": "^2.2.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jest": "^27.1.6",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.11",
+    "prettier": "^2.8.0",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.9.3",
+    "vite": "^3.2.4",
+    "vite-tsconfig-paths": "^3.6.0"
+  }
+}

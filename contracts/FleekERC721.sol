@@ -139,6 +139,35 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return super.supportsInterface(interfaceId);
     }
 
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public virtual override {
+        super.transferFrom(from, to, tokenId);
+        _clearTokenControllers(tokenId);
+    }
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public virtual override {
+        super.safeTransferFrom(from, to, tokenId, "");
+        _clearTokenControllers(tokenId);
+    }
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes memory data
+    ) public virtual override {
+        super._safeTransfer(from, to, tokenId, data);
+        _clearTokenControllers(tokenId);
+    }
+
+
     function _baseURI() internal view virtual override returns (string memory) {
         return "data:application/json;base64,";
     }
@@ -211,5 +240,11 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         if (bytes(_apps[tokenId].external_url).length != 0) {
             delete _apps[tokenId];
         }
+    }
+
+    function _clearTokenControllers(
+        uint256 tokenId
+    ) internal {
+        // TODO: Remove token controllers from AccessControl
     }
 }
