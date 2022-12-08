@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "hardhat test",
+    "test": "hardhat test && forge test --via-ir",
+    "test:foundry": "forge test --via-ir",
+    "test:hardhat": "hardhat test",
     "format": "prettier --write \"./**/*.{js,ts,sol}\"",
-    "node:hh": "hardhat node --tags local",
+    "node:hardhat": "hardhat node --tags local",
     "deploy:local": "hardhat deploy --tags local",
     "deploy:mumbai": "hardhat deploy --tags mumbai",
-    "interact": "npx hardhat run deploy/interact.js --network hardhat",
     "compile": "hardhat compile"
   },
   "repository": {
