@@ -15,7 +15,7 @@ const params = [
     contractAddress
   );
 
-  const transaction = await contract.upgradeTokenBuild(...params);
+  const transaction = await contract.setTokenBuild(...params);
 
   console.log('Response: ', transaction);
 })();
