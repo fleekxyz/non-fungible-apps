@@ -8,3 +8,7 @@ deployments/localhost
 
 # NPM
 package-lock.json
+
+# Foundry
+out
+forge-cache
