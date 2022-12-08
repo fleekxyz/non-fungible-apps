@@ -103,6 +103,7 @@ Alternatively, you can run both test environments by executing `yarn test`.
 
 > ⚠️ Please make sure to update tests as appropriate before pushing code
 
+<<<<<<< docs/guide
 ### Deployment
 
 This guide contains instructions to deploy the contract on three networks. If the execution is successful, you will see the contract address on your screen at the end of the instructions.
@@ -131,6 +132,31 @@ The [.env.example](./.env.example) file needs to be renamed to `.env` before con
 
 After updating the `.env` file, you can run `yarn deploy:mainnet` to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
 
+=======
+### 🖥️ User Interface
+
+Within the project is included a [React](https://reactjs.org/) web application to expose and test the interaction with deployed scripts. To run it:
+
+1. Get in the `/ui` folder:
+
+   ```
+   $ cd ui
+   ```
+
+2. Install the UI dependencies:
+
+   ```
+   $ yarn
+   ```
+
+3. Start the local server running the app:
+
+   ```
+   $ yarn dev
+   ```
+
+   Now a local server should be running on [http://localhost:5173](http://localhost:5173).
+>>>>>>> chore/readme
 
 ### 💅 Code Styling
 
