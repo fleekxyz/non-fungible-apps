@@ -10,7 +10,7 @@
     "format": "prettier --write \"./**/*.{js,ts,sol}\"",
     "node:hardhat": "hardhat node --tags local",
     "deploy:local": "hardhat deploy --tags local",
-    "deploy:mumbai": "hardhat deploy --tags mumbai",
+    "deploy:mumbai": "hardhat deploy --tags mumbai --network mumbai",
     "compile": "hardhat compile"
   },
   "repository": {
