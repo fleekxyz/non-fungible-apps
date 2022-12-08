@@ -1,4 +1,4 @@
-// npx hardhat run scripts/tokenURI.js --network polygonMumbai
+// npx hardhat run scripts/tokenURI.js --network mumbai
 
 // TODO: make this arguments
 const contractAddress = '0x91A425C1CA320A99a09BE1bee114Fce5d30153d9';
