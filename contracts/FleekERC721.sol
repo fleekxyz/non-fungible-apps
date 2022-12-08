@@ -231,8 +231,4 @@ contract FleekERC721 is ERC721, FleekAccessControl {
             delete _apps[tokenId];
         }
     }
-
-    function _clearTokenControllers(uint256 tokenId) internal {
-        // TODO: Remove token controllers from AccessControl
-    }
 }

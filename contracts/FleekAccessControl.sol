@@ -40,10 +40,21 @@ abstract contract FleekAccessControl is AccessControl {
         _;
     }
 
+    function isTokenController(
+        uint256 tokenId,
+        address account
+    ) public view returns (bool) {
+        return hasRole(_tokenRole(tokenId, "CONTROLLER"), account);
+    }
+
     function _tokenRole(
         uint256 tokenId,
         string memory role
     ) internal pure returns (bytes32) {
         return keccak256(abi.encodePacked("TOKEN_", role, tokenId));
+    }
+
+    function _clearTokenControllers(uint256 tokenId) internal {
+        // TODO: Remove token controllers from AccessControl
     }
 }
