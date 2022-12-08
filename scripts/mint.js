@@ -1,7 +1,7 @@
 // npx hardhat run scripts/mint.js --network mumbai
+const { getContract } = require('./util');
 
 // TODO: make this arguments
-const contractAddress = '0x91A425C1CA320A99a09BE1bee114Fce5d30153d9';
 const params = [
   '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049', // to
   'Fleek App', // name
@@ -15,10 +15,7 @@ const params = [
 ];
 
 (async () => {
-  const contract = await hre.ethers.getContractAt(
-    'FleekERC721',
-    contractAddress
-  );
+  const contract = getContract('FleekERC721');
 
   const transaction = await contract.mint(...params);
 

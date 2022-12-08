@@ -1,14 +1,11 @@
 // npx hardhat run scripts/tokenURI.js --network mumbai
+const { getContract } = require('./util');
 
 // TODO: make this arguments
-const contractAddress = '0x91A425C1CA320A99a09BE1bee114Fce5d30153d9';
-const tokenId = 3;
+const tokenId = 1;
 
 (async () => {
-  const contract = await hre.ethers.getContractAt(
-    'FleekERC721',
-    contractAddress
-  );
+  const contract = await getContract('FleekERC721');
 
   const transaction = await contract.tokenURI(tokenId);
 
