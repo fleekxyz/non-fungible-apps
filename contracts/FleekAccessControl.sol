@@ -3,153 +3,161 @@
 pragma solidity ^0.8.7;
 
 abstract contract FleekAccessControl {
-    enum Roles {
-        Owner,
-        Controller
+    // EVENTS
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    // STORAGE
+    address internal constant SENTINEL_ADDRESS = address(0x1);
+    address private _owner;
+
+    mapping(uint256 => TokenControllers) private _tokenControllers;
+
+    struct TokenControllers {
+        mapping(address => address) controllers;
+        uint256 controllerCount;
     }
-
-    struct Role {
-        mapping(address => uint256) indexes;
-        address[] members;
-    }
-
-    // _collectionRoles[role]
-    mapping(Roles => Role) private _collectionRoles;
-
-    // _tokenRoles[tokenId][role]
-    mapping(uint256 => mapping(Roles => Role)) private _tokenRoles;
 
     constructor() {
-        _grantCollectionRole(Roles.Owner, msg.sender);
+        _transferOwnership(msg.sender);
     }
 
-    modifier requireCollectionRole(Roles role) {
-        require(
-            hasCollectionRole(role, msg.sender) ||
-                hasCollectionRole(Roles.Owner, msg.sender),
-            "FleekAccessControl: must have collection role"
-        );
+    /**
+     * @dev Throws if called by any account other than the owner.
+     */
+    modifier onlyOwner() {
+        _checkOwner();
         _;
     }
 
-    modifier requireTokenRole(uint256 tokenId, Roles role) {
+    /**
+    * @dev Required the sender to be the controller of the token
+    */
+    modifier requireTokenControllers(uint256 tokenId) {
         require(
-            hasTokenRole(tokenId, role, msg.sender) ||
-                hasTokenRole(tokenId, Roles.Owner, msg.sender),
+            isTokenController(msg.sender, tokenId),
             "FleekAccessControl: must have token role"
         );
         _;
     }
 
-    function grantCollectionRole(
-        Roles role,
-        address account
-    ) public requireCollectionRole(Roles.Owner) {
-        _grantCollectionRole(role, account);
+    /**
+     * @dev Returns the address of the current owner.
+     */
+    function owner() public view virtual returns (address) {
+        return _owner;
     }
 
-    function grantTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) public requireCollectionRole(Roles.Owner) {
-        _grantTokenRole(tokenId, role, account);
+    /**
+     * @dev Returns whether an address is the controller of a token
+     */
+    function isTokenController(address controller, uint256 tokenId) public view returns (bool) {
+        return  _tokenControllers[tokenId].controllers[controller] != address(0);
     }
 
-    function revokeCollectionRole(
-        Roles role,
-        address account
-    ) public requireCollectionRole(Roles.Owner) {
-        _revokeCollectionRole(role, account);
+    /**
+     * @dev Transfers ownership of the contract to a new account (`newOwner`).
+     * Can only be called by the current owner.
+     */
+    function transferOwnership(address newOwner) public virtual onlyOwner {
+        require(newOwner != address(0), "new owner is the zero address");
+        _transferOwnership(newOwner);
     }
 
-    function revokeTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) public requireCollectionRole(Roles.Owner) {
-        _revokeTokenRole(tokenId, role, account);
+    /// @dev Returns array of owners.
+    /// @return Array of token owners.
+    function getTokenOwners(uint256 tokenId) public view returns (address[] memory) {
+        uint256 length = _tokenControllers[tokenId].controllerCount;
+        address[] memory array = new address[](length);
+        if (length == 0){
+            return array;
+        }
+
+        // populate return array
+        uint256 index = 0;
+        address currentOwner = _tokenControllers[tokenId].controllers[SENTINEL_ADDRESS];
+        while (currentOwner != SENTINEL_ADDRESS) {
+            array[index] = currentOwner;
+            currentOwner = _tokenControllers[tokenId].controllers[currentOwner];
+            index++;
+        }
+        return array;
     }
 
-    function hasCollectionRole(
-        Roles role,
-        address account
-    ) public view returns (bool) {
-        return _collectionRoles[role].indexes[account] != 0;
-    }
+    /**
+     * @dev Adds the address as a controller of a token. No owner permissions are checked here should be called at top level and checked
+     * address being valid and not already are a controller are checked here. 
+     * @param tokenId The token to add the controller to
+     * @param controller The address to add as a controller
+     */
+    function _grantTokenControllerRole(uint256 tokenId, address controller) internal virtual {
+        require(controller != SENTINEL_ADDRESS, "FleekAccessControl: controller address is invalid");
+        require(controller != address(0), "FleekAccessControl: controller is the zero address");
+        require(_tokenControllers[tokenId].controllers[controller] == address(0), "FleekAccessControl: controller already has role");
 
-    function hasTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) public view returns (bool) {
-        return _tokenRoles[tokenId][role].indexes[account] != 0;
-    }
-
-    function getCollectionRoleMembers(
-        Roles role
-    ) public view returns (address[] memory) {
-        return _collectionRoles[role].members;
-    }
-
-    function getTokenRoleMembers(
-        uint256 tokenId,
-        Roles role
-    ) public view returns (address[] memory) {
-        return _tokenRoles[tokenId][role].members;
-    }
-
-    function _grantCollectionRole(Roles role, address account) internal {
-        _grantRole(_collectionRoles[role], account);
-    }
-
-    function _revokeCollectionRole(Roles role, address account) internal {
-        _revokeRole(_collectionRoles[role], account);
-    }
-
-    function _grantTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) internal {
-        _grantRole(_tokenRoles[tokenId][role], account);
-    }
-
-    function _revokeTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) internal {
-        _revokeRole(_tokenRoles[tokenId][role], account);
-    }
-
-    function _grantRole(Role storage role, address account) internal {
-        if (role.indexes[account] == 0) {
-            role.members.push(account);
-            role.indexes[account] = role.members.length;
+        //If the sentinal address is not set it means there is no controllers yet, so start the link list by setting the sentinal address to the controller
+        // and the controller back to the sentinal address
+        if (_tokenControllers[tokenId].controllers[SENTINEL_ADDRESS] == address(0)) {
+            _tokenControllers[tokenId].controllers[SENTINEL_ADDRESS] = controller;
+            _tokenControllers[tokenId].controllers[controller] = SENTINEL_ADDRESS;
+            _tokenControllers[tokenId].controllerCount++;
+        } else {
+            _tokenControllers[tokenId].controllers[controller] = _tokenControllers[tokenId].controllers[SENTINEL_ADDRESS];
+            _tokenControllers[tokenId].controllers[SENTINEL_ADDRESS] = controller;
+            _tokenControllers[tokenId].controllerCount++;
         }
     }
 
-    function _revokeRole(Role storage role, address account) internal {
-        if (role.indexes[account] != 0) {
-            uint256 index = role.indexes[account] - 1;
-            uint256 lastIndex = role.members.length - 1;
-            address lastAccount = role.members[lastIndex];
+    /**
+     * @dev Removes the address as a controller of a token. No owner permissions are checked here should be called at top level and checked
+     * address being valid and not already are a controller are checked here. 
+     * @param tokenId The token to remove the controller from
+     * @param controller The address to remove as a controller
+     */
+     function _revokeTokenControllerRole(uint256 tokenId, address controller) internal virtual {
+        require(controller != SENTINEL_ADDRESS, "FleekAccessControl: controller address is invalid");
+        require(_tokenControllers[tokenId].controllers[controller] != address(0), "FleekAccessControl: controller does not have role");
 
-            role.members[index] = lastAccount;
-            role.indexes[lastAccount] = index + 1;
-
-            role.members.pop();
-            delete role.indexes[account];
+        //@notice We need to get the previous controller in the link list before we remove the controller
+        // This function could be cheaper if we added that as a parameter and figured this out elsewhere
+        address previousOwner = _tokenControllers[tokenId].controllers[SENTINEL_ADDRESS];
+        while (_tokenControllers[tokenId].controllers[previousOwner] != controller) {
+            previousOwner = _tokenControllers[tokenId].controllers[previousOwner];
         }
+        _tokenControllers[tokenId].controllers[previousOwner] = _tokenControllers[tokenId].controllers[controller];
+        _tokenControllers[tokenId].controllers[controller] = address(0);
+        _tokenControllers[tokenId].controllerCount--;
+     }
+
+    /**
+     * @dev Removes all controllers of a token. 
+     * @param tokenId The token to remove the controller from
+     */
+     function _clearAllTokenControllers(uint256 tokenId) internal virtual {
+        address currentController = _tokenControllers[tokenId].controllers[SENTINEL_ADDRESS];
+        address nextController = _tokenControllers[tokenId].controllers[SENTINEL_ADDRESS];
+        while (currentController != SENTINEL_ADDRESS) {
+            nextController = _tokenControllers[tokenId].controllers[currentController];
+            _tokenControllers[tokenId].controllers[currentController] = address(0);
+            currentController = nextController;
+        }
+        _tokenControllers[tokenId].controllers[SENTINEL_ADDRESS] = address(0);
+        _tokenControllers[tokenId].controllerCount = 0;
+     }
+
+    /**
+     * @dev Throws if the sender is not the owner.
+     */
+    function _checkOwner() internal view virtual {
+        require(owner() == msg.sender, "caller is not the owner");
     }
 
-    function _clearTokenRole(uint256 tokenId, Roles role) internal {
-        delete _tokenRoles[tokenId][role];
-    }
-
-    function _clearAllTokenRoles(uint256 tokenId) internal {
-        delete _tokenRoles[tokenId][Roles.Owner];
-        delete _tokenRoles[tokenId][Roles.Controller];
+    /**
+     * @dev Transfers ownership of the contract to a new account (`newOwner`).
+     * Internal function without access restriction.
+     */
+    function _transferOwnership(address newOwner) internal virtual {
+        address oldOwner = _owner;
+        _owner = newOwner;
+        emit OwnershipTransferred(oldOwner, newOwner);
     }
 }
