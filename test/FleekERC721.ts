@@ -46,9 +46,7 @@ describe('FleekERC721', () => {
     it('should assign the owner of the contract', async () => {
       const { owner, contract } = await loadFixture(defaultFixture);
 
-      expect(
-        await contract.hasRole(COLLECTION_OWNER_ROLE, owner.address)
-      ).to.equal(true);
+      expect(await contract.hasCollectionRole(0, owner.address)).to.equal(true);
     });
 
     it('should support ERC721 interface', async () => {
@@ -95,13 +93,40 @@ describe('FleekERC721', () => {
             MINT_PARAMS.gitRepository,
             MINT_PARAMS.author
           )
-      ).to.be.revertedWith(
-        'FleekAccessControl: must have collection owner role'
+      ).to.be.revertedWith('FleekAccessControl: must have collection role');
+    });
+
+    it('should have address to as owner', async () => {
+      const { owner, otherAccount, contract } = await loadFixture(
+        defaultFixture
       );
+
+      const response = await contract.mint(
+        owner.address,
+        MINT_PARAMS.name,
+        MINT_PARAMS.description,
+        MINT_PARAMS.image,
+        MINT_PARAMS.externalUrl,
+        MINT_PARAMS.ens,
+        MINT_PARAMS.commitHash,
+        MINT_PARAMS.gitRepository,
+        MINT_PARAMS.author
+      );
+
+      const tokenId = response.value.toNumber();
+
+      expect(await contract.ownerOf(tokenId)).to.equal(owner.address);
+      expect(await contract.hasTokenRole(tokenId, 0, owner.address)).to.be.true;
+
+      expect(await contract.ownerOf(tokenId)).not.to.equal(
+        otherAccount.address
+      );
+      expect(await contract.hasTokenRole(tokenId, 0, otherAccount.address)).to
+        .be.false;
     });
   });
 
-  describe('Token', () => {
+  describe('Token URI', () => {
     let tokenId: number;
     let fixture: Awaited<ReturnType<typeof defaultFixture>>;
 
@@ -165,11 +190,98 @@ describe('FleekERC721', () => {
         ],
       });
     });
+  });
+
+  describe('Token Roles', () => {
+    let tokenId: number;
+    let fixture: Awaited<ReturnType<typeof defaultFixture>>;
+
+    beforeEach(async () => {
+      fixture = await loadFixture(defaultFixture);
+      const { contract } = fixture;
+
+      const response = await contract.mint(
+        fixture.owner.address,
+        MINT_PARAMS.name,
+        MINT_PARAMS.description,
+        MINT_PARAMS.image,
+        MINT_PARAMS.externalUrl,
+        MINT_PARAMS.ens,
+        MINT_PARAMS.commitHash,
+        MINT_PARAMS.gitRepository,
+        MINT_PARAMS.author
+      );
+
+      tokenId = response.value.toNumber();
+    });
 
     it('should match the token owner', async () => {
       const { contract, owner } = fixture;
       const tokenOwner = await contract.ownerOf(tokenId);
+
       expect(tokenOwner).to.equal(owner.address);
+    });
+
+    it('should match the owner role for minter', async () => {
+      const { contract, owner } = fixture;
+      const hasRole = await contract.hasTokenRole(tokenId, 0, owner.address);
+
+      expect(hasRole).to.be.true;
+    });
+
+    it('should add a list of controllers', async () => {
+      const { contract, owner } = fixture;
+      await contract.grantTokenRole(
+        tokenId,
+        1,
+        '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049'
+      );
+      await contract.grantTokenRole(
+        tokenId,
+        1,
+        '0x2FEd6Ef3c495922263B403319FA6DDB323DD49E3'
+      );
+
+      expect(await contract.getTokenRoleMembers(tokenId, 1)).to.eql([
+        '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049',
+        '0x2FEd6Ef3c495922263B403319FA6DDB323DD49E3',
+      ]);
+    });
+
+    it('should not match the owner role for other account', async () => {
+      const { contract, otherAccount } = fixture;
+      const hasRole = await contract.hasTokenRole(
+        tokenId,
+        0,
+        otherAccount.address
+      );
+
+      expect(hasRole).to.be.false;
+    });
+
+    it('should add a new controller', async () => {
+      const { contract, owner, otherAccount } = fixture;
+      await contract.grantTokenRole(tokenId, 1, otherAccount.address);
+
+      expect(await contract.hasTokenRole(tokenId, 1, otherAccount.address)).to
+        .be.true;
+    });
+
+    it('should transfer the token owner role', async () => {
+      // FIXME: this test is failing
+      const { contract, owner, otherAccount } = fixture;
+      await contract.transferFrom(owner.address, otherAccount.address, tokenId);
+
+      console.log(owner.address, otherAccount.address, tokenId);
+
+      console.log(await contract.getTokenRoleMembers(tokenId, 0));
+      console.log(await contract.getTokenRoleMembers(tokenId, 1));
+
+      expect(await contract.ownerOf(tokenId)).to.equal(otherAccount.address);
+      expect(await contract.hasTokenRole(tokenId, 0, otherAccount.address)).to
+        .be.true;
+      expect(await contract.hasTokenRole(tokenId, 0, owner.address)).to.be
+        .false;
     });
   });
 });
