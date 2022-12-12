@@ -71,7 +71,6 @@ describe('FleekERC721', () => {
         MINT_PARAMS.ens,
         MINT_PARAMS.commitHash,
         MINT_PARAMS.gitRepository,
-        MINT_PARAMS.author
       );
 
       expect(response.value).to.be.instanceOf(ethers.BigNumber);
@@ -93,7 +92,6 @@ describe('FleekERC721', () => {
             MINT_PARAMS.ens,
             MINT_PARAMS.commitHash,
             MINT_PARAMS.gitRepository,
-            MINT_PARAMS.author
           )
       ).to.be.revertedWith(
         'FleekAccessControl: must have collection owner role'
@@ -118,7 +116,6 @@ describe('FleekERC721', () => {
         MINT_PARAMS.ens,
         MINT_PARAMS.commitHash,
         MINT_PARAMS.gitRepository,
-        MINT_PARAMS.author
       );
 
       tokenId = response.value.toNumber();
@@ -153,10 +150,6 @@ describe('FleekERC721', () => {
           {
             trait_type: 'Repository',
             value: MINT_PARAMS.gitRepository,
-          },
-          {
-            trait_type: 'Author',
-            value: MINT_PARAMS.author,
           },
           {
             trait_type: 'Version',
