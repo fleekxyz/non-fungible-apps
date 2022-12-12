@@ -2,7 +2,11 @@
 
 pragma solidity ^0.8.7;
 
+import "@openzeppelin/contracts/utils/Counters.sol";
+
 abstract contract FleekAccessControl {
+    using Counters for Counters.Counter;
+
     enum Roles {
         Owner,
         Controller
@@ -13,11 +17,14 @@ abstract contract FleekAccessControl {
         address[] members;
     }
 
-    // _collectionRoles[role]
-    mapping(Roles => Role) private _collectionRoles;
+    Counters.Counter private _collectionRolesVersion;
+    // _collectionRoles[version][role]
+    mapping(uint256 => mapping(Roles => Role)) private _collectionRoles;
 
-    // _tokenRoles[tokenId][role]
-    mapping(uint256 => mapping(Roles => Role)) private _tokenRoles;
+    mapping(uint256 => Counters.Counter) private _tokenRolesVersion;
+    // _tokenRoles[tokenId][version][role]
+    mapping(uint256 => mapping(uint256 => mapping(Roles => Role)))
+        private _tokenRoles;
 
     constructor() {
         _grantCollectionRole(Roles.Owner, msg.sender);
@@ -75,7 +82,9 @@ abstract contract FleekAccessControl {
         Roles role,
         address account
     ) public view returns (bool) {
-        return _collectionRoles[role].indexes[account] != 0;
+        uint256 currentVersion = _collectionRolesVersion.current();
+
+        return _collectionRoles[currentVersion][role].indexes[account] != 0;
     }
 
     function hasTokenRole(
@@ -83,28 +92,33 @@ abstract contract FleekAccessControl {
         Roles role,
         address account
     ) public view returns (bool) {
-        return _tokenRoles[tokenId][role].indexes[account] != 0;
+        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        return _tokenRoles[tokenId][currentVersion][role].indexes[account] != 0;
     }
 
     function getCollectionRoleMembers(
         Roles role
     ) public view returns (address[] memory) {
-        return _collectionRoles[role].members;
+        uint256 currentVersion = _collectionRolesVersion.current();
+        return _collectionRoles[currentVersion][role].members;
     }
 
     function getTokenRoleMembers(
         uint256 tokenId,
         Roles role
     ) public view returns (address[] memory) {
-        return _tokenRoles[tokenId][role].members;
+        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        return _tokenRoles[tokenId][currentVersion][role].members;
     }
 
     function _grantCollectionRole(Roles role, address account) internal {
-        _grantRole(_collectionRoles[role], account);
+        uint256 currentVersion = _collectionRolesVersion.current();
+        _grantRole(_collectionRoles[currentVersion][role], account);
     }
 
     function _revokeCollectionRole(Roles role, address account) internal {
-        _revokeRole(_collectionRoles[role], account);
+        uint256 currentVersion = _collectionRolesVersion.current();
+        _revokeRole(_collectionRoles[currentVersion][role], account);
     }
 
     function _grantTokenRole(
@@ -112,7 +126,8 @@ abstract contract FleekAccessControl {
         Roles role,
         address account
     ) internal {
-        _grantRole(_tokenRoles[tokenId][role], account);
+        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        _grantRole(_tokenRoles[tokenId][currentVersion][role], account);
     }
 
     function _revokeTokenRole(
@@ -120,7 +135,8 @@ abstract contract FleekAccessControl {
         Roles role,
         address account
     ) internal {
-        _revokeRole(_tokenRoles[tokenId][role], account);
+        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        _revokeRole(_tokenRoles[tokenId][currentVersion][role], account);
     }
 
     function _grantRole(Role storage role, address account) internal {
@@ -144,12 +160,12 @@ abstract contract FleekAccessControl {
         }
     }
 
-    function _clearTokenRole(uint256 tokenId, Roles role) internal {
-        delete _tokenRoles[tokenId][role];
+    function _clearAllTokenRoles(uint256 tokenId) internal {
+        _tokenRolesVersion[tokenId].increment();
     }
 
-    function _clearAllTokenRoles(uint256 tokenId) internal {
-        delete _tokenRoles[tokenId][Roles.Owner];
-        delete _tokenRoles[tokenId][Roles.Controller];
+    function _clearAllTokenRoles(uint256 tokenId, address newOwner) internal {
+        _clearAllTokenRoles(tokenId);
+        _grantTokenRole(tokenId, Roles.Owner, newOwner);
     }
 }

@@ -127,8 +127,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) internal virtual override {
         if (from != address(0) && to != address(0)) {
             // Transfer
-            _clearAllTokenRoles(tokenId);
-            _grantTokenRole(tokenId, Roles.Owner, to);
+            _clearAllTokenRoles(tokenId, to);
         } else if (from == address(0)) {
             // Mint
             _grantTokenRole(tokenId, Roles.Owner, to);
