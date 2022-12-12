@@ -1,11 +1,10 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import {
   Heading,
   Flex,
   Box,
   FormControl,
   FormLabel,
-  Input,
   Button,
   FormErrorMessage,
   IconButton,
@@ -15,13 +14,23 @@ import {
   Grid,
   GridItem,
 } from '@chakra-ui/react';
-import { Formik, Field, FormikValues } from 'formik';
+import { Formik, Field } from 'formik';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import { mintSiteNFT } from '@/mocks';
 import { getRepoAndCommit } from '@/utils';
 import { validateFields } from './mint-site.utils';
 import { InputFieldForm } from './components';
+
+interface FormValues {
+  name: string;
+  description: string;
+  githubCommit: string;
+  ownerAddress: string;
+  externalUrl: string;
+  image: string;
+  ens?: string;
+}
 
 const initialValues = {
   name: '',
@@ -31,7 +40,7 @@ const initialValues = {
   externalUrl: '',
   image: '',
   ens: '',
-};
+} as FormValues;
 
 export const MintSite = () => {
   const toast = useToast();
@@ -51,47 +60,40 @@ export const MintSite = () => {
     });
   };
 
-  const handleSubmitForm = useCallback(
-    async (
-      values: FormikValues,
-      setSubmitting: (isSubmitting: boolean) => void
-    ) => {
-      const {
+  const handleSubmitForm = useCallback(async (values: FormValues) => {
+    const {
+      name,
+      description,
+      githubCommit,
+      ownerAddress,
+      externalUrl,
+      image,
+      ens,
+    } = values;
+
+    const { repo, commit_hash } = getRepoAndCommit(githubCommit);
+
+    try {
+      await mintSiteNFT({
         name,
         description,
-        githubCommit,
-        ownerAddress,
+        owner: ownerAddress,
         externalUrl,
         image,
         ens,
-      } = values;
-
-      const { repo, commit_hash } = getRepoAndCommit(githubCommit);
-
-      try {
-        await mintSiteNFT({
-          name,
-          description,
-          owner: ownerAddress,
-          externalUrl,
-          image,
-          ens,
-          commitHash: commit_hash,
-          repo,
-        });
-        //TODO connect with the integration
-        showToast('Success!', 'Your site has been minted.', 'success');
-      } catch (err) {
-        showToast(
-          'Error!',
-          'We had an error while minting your site. Please try again later',
-          'error'
-        );
-      }
-      setSubmitting(false);
-    },
-    []
-  );
+        commitHash: commit_hash,
+        repo,
+      });
+      //TODO connect with the integration
+      showToast('Success!', 'Your site has been minted.', 'success');
+    } catch (err) {
+      showToast(
+        'Error!',
+        'We had an error while minting your site. Please try again later',
+        'error'
+      );
+    }
+  }, []);
 
   return (
     <>
@@ -113,9 +115,7 @@ export const MintSite = () => {
             <Formik
               validate={validateFields}
               initialValues={initialValues}
-              onSubmit={(values, { setSubmitting }) => {
-                handleSubmitForm(values, setSubmitting);
-              }}
+              onSubmit={handleSubmitForm}
             >
               {({ values, touched, handleSubmit, isSubmitting, errors }) => (
                 <form onSubmit={handleSubmit}>
@@ -128,14 +128,14 @@ export const MintSite = () => {
                       fieldName="name"
                       mr={5}
                       error={errors.name}
-                      touched={touched.name}
+                      isInvalid={!!errors.name && touched.name}
                       isRequired
                     />
                     <InputFieldForm
                       label="Owner address"
                       fieldName="ownerAddress"
                       error={errors.ownerAddress}
-                      touched={touched.ownerAddress}
+                      isInvalid={!!errors.ownerAddress && touched.ownerAddress}
                       isRequired
                     />
                   </Box>
@@ -160,14 +160,14 @@ export const MintSite = () => {
                       fieldName="image"
                       mr={5}
                       error={errors.image}
-                      touched={touched.image}
+                      isInvalid={!!errors.image && touched.image}
                       isRequired
                     />
                     <InputFieldForm
                       label="External url"
                       fieldName="externalUrl"
                       error={errors.externalUrl}
-                      touched={touched.externalUrl}
+                      isInvalid={!!errors.externalUrl && touched.externalUrl}
                       isRequired
                     />
                   </Box>
@@ -184,17 +184,14 @@ export const MintSite = () => {
                         fieldName="githubCommit"
                         mr={5}
                         error={errors.githubCommit}
-                        touched={touched.githubCommit}
+                        isInvalid={
+                          !!errors.githubCommit && touched.githubCommit
+                        }
                         isRequired
                       />
                     </GridItem>
                     <GridItem colSpan={{ base: 2, md: 1 }}>
-                      <InputFieldForm
-                        label="ENS"
-                        fieldName="ens"
-                        error={errors.ens}
-                        touched={touched.ens}
-                      />
+                      <InputFieldForm label="ENS" fieldName="ens" />
                     </GridItem>
                   </Grid>
                   <Button
