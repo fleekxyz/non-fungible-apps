@@ -11,12 +11,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     using Strings for uint256;
     using Counters for Counters.Counter;
 
-    event NewBuild(uint256 indexed token, string indexed commit_hash);
-    event NewTokenName(uint256 indexed token, string indexed name);
-    event NewTokenDescription(uint256 indexed token, string indexed description);
-    event NewTokenImage(uint256 indexed token, string indexed image);
-    event NewTokenExternalURL(uint256 indexed token, string indexed external_url);
-    event NewTokenENS(uint256 indexed token, string indexed ENS);
+    event NewBuild(uint256 indexed token, string indexed commit_hash, address indexed triggered_by);
+    event NewTokenName(uint256 indexed token, string indexed name, address indexed triggered_by);
+    event NewTokenDescription(uint256 indexed token, string indexed description, address indexed triggered_by);
+    event NewTokenImage(uint256 indexed token, string indexed image, address indexed triggered_by);
+    event NewTokenExternalURL(uint256 indexed token, string indexed external_url, address indexed triggered_by);
+    event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggered_by);
 
     struct Build {
         string commit_hash;
@@ -168,7 +168,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].external_url = _tokenExternalURL;
-        emit NewTokenExternalURL(tokenId, _tokenExternalURL);
+        emit NewTokenExternalURL(tokenId, _tokenExternalURL, msg.sender);
     }
 
     function setTokenENS(
@@ -177,7 +177,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
-        emit NewTokenENS(tokenId, _tokenENS);
+        emit NewTokenENS(tokenId, _tokenENS, msg.sender);
     }
 
     function setTokenName(
@@ -186,7 +186,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].name = _tokenName;
-        emit NewTokenName(tokenId, _tokenName);
+        emit NewTokenName(tokenId, _tokenName, msg.sender);
     }
 
     function setTokenDescription(
@@ -195,7 +195,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
-        emit NewTokenDescription(tokenId, _tokenDescription);
+        emit NewTokenDescription(tokenId, _tokenDescription, msg.sender);
     }
 
     function setTokenImage(
@@ -204,7 +204,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].image = _tokenImage;
-        emit NewTokenImage(tokenId, _tokenImage);
+        emit NewTokenImage(tokenId, _tokenImage, msg.sender);
     }
 
     function setTokenBuild(
@@ -219,7 +219,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
             _git_repository,
             _author
         );
-        emit NewBuild(tokenId, _commit_hash);
+        emit NewBuild(tokenId, _commit_hash, msg.sender);
     }
 
     function burn(
