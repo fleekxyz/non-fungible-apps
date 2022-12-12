@@ -160,10 +160,18 @@ abstract contract FleekAccessControl {
         }
     }
 
+    /**
+     * @dev Clears all token roles and not garants an owner role.
+     * Should be used when burns the token.
+     */
     function _clearAllTokenRoles(uint256 tokenId) internal {
         _tokenRolesVersion[tokenId].increment();
     }
 
+    /**
+     * @dev Clears all token roles and garants an owner role.
+     * Should be used when transfers the token.
+     */
     function _clearAllTokenRoles(uint256 tokenId, address newOwner) internal {
         _clearAllTokenRoles(tokenId);
         _grantTokenRole(tokenId, Roles.Owner, newOwner);
