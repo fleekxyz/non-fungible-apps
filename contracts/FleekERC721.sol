@@ -19,9 +19,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggered_by);
 
     struct Build {
-        string commit_hash;
-        string git_repository;
-        string author;
+        string commitHash;
+        string gitRepository;
     }
 
     /**
@@ -33,9 +32,9 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string name; // Name of the site
         string description; // Description about the site
         string image; // Preview Image IPFS Link
-        string external_url; // Site URL
+        string externalURL; // Site URL
         string ENS; // ENS ID
-        uint256 current_build; // The current build number (Increments by one with each change, starts at zero)
+        uint256 currentBuild; // The current build number (Increments by one with each change, starts at zero)
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
     }
 
@@ -55,16 +54,25 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _;
     }
 
+    /**
+     * @dev Mints a token and returns a tokenId.
+     *
+     * If the `tokenId` has not been minted before, and the `to` address is not zero, emits a {Transfer} event.
+     *
+     * Requirements:
+     *
+     * - the caller must have ``collectionOwner``'s admin role.
+     *
+     */
     function mint(
         address to,
         string memory name,
         string memory description,
         string memory image,
-        string memory external_url,
+        string memory externalURL,
         string memory ENS,
-        string memory commit_hash,
-        string memory git_repository,
-        string memory author
+        string memory commitHash,
+        string memory gitRepository
     ) public payable requireCollectionOwner returns (uint256) {
         uint256 tokenId = _tokenIds.current();
         _mint(to, tokenId);
@@ -74,16 +82,26 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         app.name = name;
         app.description = description;
         app.image = image;
-        app.external_url = external_url;
+        app.externalURL = externalURL;
         app.ENS = ENS;
 
-        // The mint interaction is considered to be the first build of the site. Updates from now on all increment the current_build by one and update the mapping.
-        app.current_build = 0;
-        app.builds[0] = Build(commit_hash, git_repository, author);
+        // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
+        app.currentBuild = 0;
+        app.builds[0] = Build(commitHash, gitRepository);
 
         return tokenId;
     }
 
+     /**
+     * @dev Returns the token metadata associated with the `tokenId`.
+     *
+     * Returns a based64 encoded string value of the URI.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     *
+     */
     function tokenURI(
         uint256 tokenId
     ) public view virtual override returns (string memory) {
@@ -96,14 +114,13 @@ contract FleekERC721 is ERC721, FleekAccessControl {
                 '"name":"', app.name, '",',
                 '"description":"', app.description, '",',
                 '"owner":"', Strings.toHexString(uint160(owner), 20), '",',
-                '"external_url":"', app.external_url, '",',
+                '"external_url":"', app.externalURL, '",',
                 '"image":"', app.image, '",',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
-                    '{"trait_type": "Commit Hash", "value":"', app.builds[app.current_build].commit_hash,'"},',
-                    '{"trait_type": "Repository", "value":"', app.builds[app.current_build].git_repository,'"},',
-                    '{"trait_type": "Author", "value":"', app.builds[app.current_build].author,'"},',
-                    '{"trait_type": "Version", "value":"', Strings.toString(app.current_build),'"}',
+                    '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',
+                    '{"trait_type": "Repository", "value":"', app.builds[app.currentBuild].gitRepository,'"},',
+                    '{"trait_type": "Version", "value":"', Strings.toString(app.currentBuild),'"}',
                 ']',
             '}'
         );
@@ -111,6 +128,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return string(abi.encodePacked(_baseURI(), Base64.encode((dataURI))));
     }
 
+     /**
+     * @dev Adds a new address with the`tokenController` privileges to a previously minted `tokenId`.
+     *
+     * May emit a {RoleGranted} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenOwner` role.
+     *
+     */
     function addTokenController(
         uint256 tokenId,
         address controller
@@ -119,6 +147,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
     }
 
+     /**
+     * @dev Strips an address from their `tokenController` privileges on a previously minted `tokenId`.
+     *
+     * May emit a {RoleRevoked} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenOwner` role.
+     *
+     */
     function removeTokenController(
         uint256 tokenId,
         address controller
@@ -127,6 +166,9 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _revokeRole(_tokenRole(tokenId, "CONTROLLER"), controller);
     }
 
+    /**
+     * @dev See {IERC165-supportsInterface}.
+     */
     function supportsInterface(
         bytes4 interfaceId
     ) public view virtual override(ERC721, AccessControl) returns (bool) {
@@ -158,19 +200,44 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
+    /**
+     * @dev A baseURI internal function implementation to be called in the `tokenURI` function.
+     */
     function _baseURI() internal view virtual override returns (string memory) {
         return "data:application/json;base64,";
     }
 
+     /**
+     * @dev Updates the `externalURL` metadata field of a minted `tokenId`.
+     *
+     * May emit a {NewTokenExternalURL} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
     function setTokenExternalURL(
         uint256 tokenId,
         string memory _tokenExternalURL
     ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _apps[tokenId].external_url = _tokenExternalURL;
+        _apps[tokenId].externalURL = _tokenExternalURL;
         emit NewTokenExternalURL(tokenId, _tokenExternalURL, msg.sender);
     }
 
+     /**
+     * @dev Updates the `ENS` metadata field of a minted `tokenId`.
+     *
+     * May emit a {NewTokenENS} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
     function setTokenENS(
         uint256 tokenId,
         string memory _tokenENS
@@ -180,6 +247,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewTokenENS(tokenId, _tokenENS, msg.sender);
     }
 
+     /**
+     * @dev Updates the `name` metadata field of a minted `tokenId`.
+     *
+     * May emit a {NewTokenName} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
     function setTokenName(
         uint256 tokenId,
         string memory _tokenName
@@ -189,6 +267,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewTokenName(tokenId, _tokenName, msg.sender);
     }
 
+     /**
+     * @dev Updates the `description` metadata field of a minted `tokenId`.
+     *
+     * May emit a {NewTokenDescription} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
     function setTokenDescription(
         uint256 tokenId,
         string memory _tokenDescription
@@ -198,6 +287,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewTokenDescription(tokenId, _tokenDescription, msg.sender);
     }
 
+     /**
+     * @dev Updates the `image` metadata field of a minted `tokenId`.
+     *
+     * May emit a {NewTokenImage} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
     function setTokenImage(
         uint256 tokenId,
         string memory _tokenImage
@@ -207,27 +307,47 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewTokenImage(tokenId, _tokenImage, msg.sender);
     }
 
+     /**
+     * @dev Adds a new build to a minted `tokenId`'s builds mapping.
+     *
+     * May emit a {NewBuild} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
     function setTokenBuild(
         uint256 tokenId,
-        string memory _commit_hash,
-        string memory _git_repository,
-        string memory _author
+        string memory _commitHash,
+        string memory _gitRepository
     ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(
-            _commit_hash,
-            _git_repository,
-            _author
+        _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(
+            _commitHash,
+            _gitRepository
         );
-        emit NewBuild(tokenId, _commit_hash, msg.sender);
+        emit NewBuild(tokenId, _commitHash, msg.sender);
     }
 
+     /**
+     * @dev Burns a previously minted `tokenId`.
+     *
+     * May emit a {Transfer} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenOwner` role.
+     *
+     */
     function burn(
         uint256 tokenId
     ) public virtual requireTokenOwner(tokenId) {
         super._burn(tokenId);
 
-        if (bytes(_apps[tokenId].external_url).length != 0) {
+        if (bytes(_apps[tokenId].externalURL).length != 0) {
             delete _apps[tokenId];
         }
     }
