@@ -1,4 +1,4 @@
-import { Loading } from '@/components';
+import { Loading, TileInfo } from '@/components';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Accordion, Box, Flex, Heading, Link, VStack } from '@chakra-ui/react';
@@ -22,16 +22,9 @@ export const MintedSiteDetail = () => {
   const getAttributesAccordion = () => {
     return (
       <VStack align="flex-start">
-        <Heading size="sm">Commit hash</Heading>
-        <p>{commitHash}</p>
-        <Heading size="sm">Github repo</Heading>
-        <p>{githubRepo}</p>
-        {ens && (
-          <>
-            <Heading size="sm">ENS</Heading>
-            <p>{ens}</p>
-          </>
-        )}
+        <TileInfo size="sm" heading="Commit hash" info={commitHash} />
+        <TileInfo size="sm" heading="Github repo" info={githubRepo} />
+        {ens && <TileInfo size="sm" heading="ENS" info={ens} />}
       </VStack>
     );
   };

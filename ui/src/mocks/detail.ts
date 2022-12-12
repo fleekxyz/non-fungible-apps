@@ -9,7 +9,7 @@ const mockDetail = {
   githubRepo: 'https://github.com/fleekxyz/contracts',
 };
 
-export const fetchSiteDetail = async (siteId: string) => {
+export const fetchSiteDetail = async (tokenId: string) => {
   //TODO get site detail from api
   return new Promise((resolved) => {
     setTimeout(() => {
