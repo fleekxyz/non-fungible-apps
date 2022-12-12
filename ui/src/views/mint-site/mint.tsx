@@ -21,6 +21,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import { mintSiteNFT } from '@/mocks';
 import { getRepoAndCommit, isValidImageUrl, isValidUrl } from '@/utils';
+import { HomeButton } from '@/components/home-button/home-button';
 
 const initialValues = {
   name: '',
@@ -99,12 +100,7 @@ export const MintSite = () => {
     <>
       <Flex width="full" align="center" justifyContent="center" mt="50px">
         <Box width="80%">
-          <IconButton
-            as={Link}
-            to="/home"
-            aria-label="back home"
-            icon={<ArrowBackIcon />}
-          />
+          <HomeButton />
           <Box textAlign="center">
             <Heading>Mint your Site</Heading>
           </Box>
