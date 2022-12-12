@@ -21,6 +21,7 @@ import { Link } from 'react-router-dom';
 import { mintSiteNFT } from '@/mocks';
 import { getRepoAndCommit } from '@/utils';
 import { validateFields } from './mint-site.utils';
+import { InputFieldForm } from './components';
 
 const initialValues = {
   name: '',
@@ -55,7 +56,6 @@ export const MintSite = () => {
       values: FormikValues,
       setSubmitting: (isSubmitting: boolean) => void
     ) => {
-      debugger;
       const {
         name,
         description,
@@ -111,43 +111,27 @@ export const MintSite = () => {
               validate={validateFields}
               initialValues={initialValues}
               onSubmit={(values, { setSubmitting }) => {
-                debugger;
                 handleSubmitForm(values, setSubmitting);
               }}
             >
               {({ values, touched, handleSubmit, isSubmitting, errors }) => (
                 <form onSubmit={handleSubmit}>
                   <Box display="flex" flexDirection="row">
-                    <FormControl
+                    <InputFieldForm
+                      label="Name"
+                      fieldName="name"
                       mr={5}
+                      error={errors.name}
+                      touched={touched.name}
                       isRequired
-                      isInvalid={!!errors.name && touched.name}
-                    >
-                      <FormLabel htmlFor="name">Name</FormLabel>
-                      <Field as={Input} name="name" id="name" type="text" />
-                      {errors.name && (
-                        <FormErrorMessage>{errors.name}</FormErrorMessage>
-                      )}
-                    </FormControl>
-                    <FormControl
+                    />
+                    <InputFieldForm
+                      label="Owner address"
+                      fieldName="ownerAddress"
+                      error={errors.ownerAddress}
+                      touched={touched.ownerAddress}
                       isRequired
-                      isInvalid={!!errors.ownerAddress && touched.ownerAddress}
-                    >
-                      <FormLabel htmlFor="ownerAddress">
-                        Owner address
-                      </FormLabel>
-                      <Field
-                        as={Input}
-                        name="ownerAddress"
-                        id="ownerAddress"
-                        type="text"
-                      />
-                      {errors.ownerAddress && (
-                        <FormErrorMessage>
-                          {errors.ownerAddress}
-                        </FormErrorMessage>
-                      )}
-                    </FormControl>
+                    />
                   </Box>
                   <FormControl
                     mt={6}
@@ -161,65 +145,40 @@ export const MintSite = () => {
                     )}
                   </FormControl>
                   <Box display="flex" flexDirection="row" mt={6}>
-                    <FormControl
+                    <InputFieldForm
+                      label="Image (IPFS Link)"
+                      fieldName="image"
                       mr={5}
+                      error={errors.image}
+                      touched={touched.image}
                       isRequired
-                      isInvalid={!!errors.image && touched.image}
-                    >
-                      <FormLabel htmlFor="image">Image (IPFS Link)</FormLabel>
-                      <Field as={Input} name="image" id="image" type="text" />
-                      {errors.image && (
-                        <FormErrorMessage>{errors.image}</FormErrorMessage>
-                      )}
-                    </FormControl>
-                    <FormControl
+                    />
+                    <InputFieldForm
+                      label="External url"
+                      fieldName="externalUrl"
+                      error={errors.externalUrl}
+                      touched={touched.externalUrl}
                       isRequired
-                      isInvalid={touched.externalUrl && !!errors.externalUrl}
-                    >
-                      <FormLabel htmlFor="externalUrl">External url</FormLabel>
-                      <Field
-                        as={Input}
-                        name="externalUrl"
-                        id="externalUrl"
-                        type="text"
-                      />
-                      {errors.externalUrl && (
-                        <FormErrorMessage>
-                          {errors.externalUrl}
-                        </FormErrorMessage>
-                      )}
-                    </FormControl>
+                    />
                   </Box>
                   <Grid templateColumns="repeat(3, 1fr)" gap={4} mt={6}>
                     <GridItem colSpan={2}>
-                      <FormControl
+                      <InputFieldForm
+                        label="Github commit url"
+                        fieldName="githubCommit"
                         mr={5}
+                        error={errors.githubCommit}
+                        touched={touched.githubCommit}
                         isRequired
-                        isInvalid={
-                          touched.githubCommit && !!errors.githubCommit
-                        }
-                      >
-                        <FormLabel htmlFor="githubCommit">
-                          Github commit url
-                        </FormLabel>
-                        <Field
-                          as={Input}
-                          name="githubCommit"
-                          id="githubCommit"
-                          type="text"
-                        />
-                        {errors.githubCommit && (
-                          <FormErrorMessage>
-                            {errors.githubCommit}
-                          </FormErrorMessage>
-                        )}
-                      </FormControl>
+                      />
                     </GridItem>
                     <GridItem colSpan={1}>
-                      <FormControl>
-                        <FormLabel htmlFor="ens">ENS</FormLabel>
-                        <Field as={Input} name="ens" id="ens" type="ens" />
-                      </FormControl>
+                      <InputFieldForm
+                        label="ENS"
+                        fieldName="ens"
+                        error={errors.ens}
+                        touched={touched.ens}
+                      />
                     </GridItem>
                   </Grid>
                   <Button
