@@ -25,7 +25,7 @@ const config: HardhatUserConfig = {
     localhost: {
       chainId: 31337,
     },
-    polygonMumbai: {
+    mumbai: {
       url: API_URL,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       saveDeployments: true,

@@ -12,7 +12,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     using Counters for Counters.Counter;
 
     event NewBuild(uint256 indexed token, string indexed commit_hash);
-    
     event NewTokenName(uint256 indexed token, string indexed name);
     event NewTokenDescription(uint256 indexed token, string indexed description);
     event NewTokenImage(uint256 indexed token, string indexed image);
@@ -139,34 +138,30 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return super.supportsInterface(interfaceId);
     }
 
-    function transferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) public virtual override {
-        super.transferFrom(from, to, tokenId);
-        _clearTokenControllers(tokenId);
-    }
-
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) public virtual override {
-        super.safeTransferFrom(from, to, tokenId, "");
-        _clearTokenControllers(tokenId);
-    }
-
-    function safeTransferFrom(
+    /**
+     * @dev Override of _beforeTokenTransfer of ERC721.
+     * Here it needs to update the token controller roles for mint, burn and transfer.
+     * IMPORTANT: The function for clearing token controllers is not implemented yet.
+     */
+    function _beforeTokenTransfer(
         address from,
         address to,
         uint256 tokenId,
-        bytes memory data
-    ) public virtual override {
-        super._safeTransfer(from, to, tokenId, data);
-        _clearTokenControllers(tokenId);
+        uint256 batchSize
+    ) internal virtual override {
+        if (from != address(0) && to != address(0)) {
+            // Transfer
+            _clearTokenControllers(tokenId);
+            _grantRole(_tokenRole(tokenId, "CONTROLLER"), to);
+        } else if (from == address(0)) {
+            // Mint
+            _grantRole(_tokenRole(tokenId, "CONTROLLER"), to);
+        } else if (to == address(0)) {
+            // Burn
+            _clearTokenControllers(tokenId);
+        }
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
-
 
     function _baseURI() internal view virtual override returns (string memory) {
         return "data:application/json;base64,";
@@ -230,21 +225,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function burn(
         uint256 tokenId
     ) public virtual requireTokenOwner(tokenId) {
-        _requireMinted(tokenId);
-        require(
-            ownerOf(tokenId) == msg.sender,
-            "FleekERC721: must be token owner"
-        );
         super._burn(tokenId);
 
         if (bytes(_apps[tokenId].external_url).length != 0) {
             delete _apps[tokenId];
         }
-    }
-
-    function _clearTokenControllers(
-        uint256 tokenId
-    ) internal {
-        // TODO: Remove token controllers from AccessControl
     }
 }
