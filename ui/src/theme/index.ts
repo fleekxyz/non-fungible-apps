@@ -4,15 +4,15 @@ const appTheme = {
   styles: {
     global: {
       body: {
-        color: 'rgba(255, 255, 255, 0.87)',
-        bg: '#242424',
+        color: 'rgba(255, 255, 255)',
+        bg: '#161616',
         margin: '50px',
       },
     },
   },
   fonts: {
-    heading: 'Inter, Avenir, Helvetica, Arial, sans-serif',
-    body: 'Inter, Avenir, Helvetica, Arial, sans-serif',
+    heading: 'Nunito Sans,Helvetica,Arial,Lucida,sans-serif',
+    body: 'Nunito Sans,Helvetica,Arial,Lucida,sans-serif',
   },
   sizes: {
     modalHeight: '345px',
