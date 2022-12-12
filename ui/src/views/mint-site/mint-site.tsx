@@ -96,14 +96,17 @@ export const MintSite = () => {
   return (
     <>
       <Flex width="full" align="center" justifyContent="center" mt="50px">
-        <Box width="80%">
+        <Box width={{ base: '100%', md: '80%' }}>
           <IconButton
             as={Link}
             to="/home"
             aria-label="back home"
             icon={<ArrowBackIcon />}
+            variant="link"
+            size={'xl'}
+            textDecoration={'none'}
           />
-          <Box textAlign="center">
+          <Box textAlign="center" mt={2}>
             <Heading>Mint your Site</Heading>
           </Box>
           <Box my={4} textAlign="left">
@@ -116,7 +119,10 @@ export const MintSite = () => {
             >
               {({ values, touched, handleSubmit, isSubmitting, errors }) => (
                 <form onSubmit={handleSubmit}>
-                  <Box display="flex" flexDirection="row">
+                  <Box
+                    display="flex"
+                    flexDirection={{ base: 'column', md: 'row' }}
+                  >
                     <InputFieldForm
                       label="Name"
                       fieldName="name"
@@ -144,7 +150,11 @@ export const MintSite = () => {
                       <FormErrorMessage>{errors.description}</FormErrorMessage>
                     )}
                   </FormControl>
-                  <Box display="flex" flexDirection="row" mt={6}>
+                  <Box
+                    display="flex"
+                    flexDirection={{ base: 'column', md: 'row' }}
+                    mt={6}
+                  >
                     <InputFieldForm
                       label="Image (IPFS Link)"
                       fieldName="image"
@@ -161,7 +171,13 @@ export const MintSite = () => {
                       isRequired
                     />
                   </Box>
-                  <Grid templateColumns="repeat(3, 1fr)" gap={4} mt={6}>
+                  <Grid
+                    templateColumns={{
+                      md: 'repeat(3, 1fr)',
+                    }}
+                    gap={4}
+                    mt={6}
+                  >
                     <GridItem colSpan={2}>
                       <InputFieldForm
                         label="Github commit url"
@@ -172,7 +188,7 @@ export const MintSite = () => {
                         isRequired
                       />
                     </GridItem>
-                    <GridItem colSpan={1}>
+                    <GridItem colSpan={{ base: 2, md: 1 }}>
                       <InputFieldForm
                         label="ENS"
                         fieldName="ens"
