@@ -5,7 +5,7 @@ export const isValidUrl = (url: string) => {
 };
 
 export const isValidImageUrl = (url: string) => {
-  const regex = /\.(jpg|jpeg|png|gif)$/;
+  const regex = /^https?:\/\/.+\.(jpg|jpeg|png|gif|svg)$/;
   return regex.test(url);
 };
 
