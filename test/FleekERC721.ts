@@ -231,8 +231,25 @@ describe('FleekERC721', () => {
       expect(hasRole).to.be.true;
     });
 
+    it('should add a new controller', async () => {
+      const { contract, owner, otherAccount } = fixture;
+      await contract.grantTokenRole(
+        tokenId,
+        ROLES.CONTROLLER,
+        otherAccount.address
+      );
+
+      expect(
+        await contract.hasTokenRole(
+          tokenId,
+          ROLES.CONTROLLER,
+          otherAccount.address
+        )
+      ).to.be.true;
+    });
+
     it('should add a list of controllers', async () => {
-      const { contract, owner } = fixture;
+      const { contract } = fixture;
       await contract.grantTokenRole(
         tokenId,
         ROLES.CONTROLLER,
@@ -252,6 +269,26 @@ describe('FleekERC721', () => {
       ]);
     });
 
+    it('should add a list of owners', async () => {
+      const { contract, owner } = fixture;
+      await contract.grantTokenRole(
+        tokenId,
+        ROLES.OWNER,
+        '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049'
+      );
+      await contract.grantTokenRole(
+        tokenId,
+        ROLES.OWNER,
+        '0x2FEd6Ef3c495922263B403319FA6DDB323DD49E3'
+      );
+
+      expect(await contract.getTokenRoleMembers(tokenId, ROLES.OWNER)).to.eql([
+        owner.address,
+        '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049',
+        '0x2FEd6Ef3c495922263B403319FA6DDB323DD49E3',
+      ]);
+    });
+
     it('should not match the owner role for other account', async () => {
       const { contract, otherAccount } = fixture;
       const hasRole = await contract.hasTokenRole(
@@ -263,9 +300,14 @@ describe('FleekERC721', () => {
       expect(hasRole).to.be.false;
     });
 
-    it('should add a new controller', async () => {
+    it('should remove an added controller', async () => {
       const { contract, owner, otherAccount } = fixture;
       await contract.grantTokenRole(
+        tokenId,
+        ROLES.CONTROLLER,
+        otherAccount.address
+      );
+      await contract.revokeTokenRole(
         tokenId,
         ROLES.CONTROLLER,
         otherAccount.address
@@ -277,7 +319,7 @@ describe('FleekERC721', () => {
           ROLES.CONTROLLER,
           otherAccount.address
         )
-      ).to.be.true;
+      ).to.be.false;
     });
 
     it('should transfer the token owner role', async () => {
@@ -302,6 +344,47 @@ describe('FleekERC721', () => {
       await contract.transferFrom(owner.address, otherAccount.address, tokenId);
 
       expect(await contract.getTokenRoleMembers(tokenId, 1)).to.eql([]);
+    });
+
+    it('should not be able to add address role', async () => {
+      const { contract, owner, otherAccount } = fixture;
+      await expect(
+        contract
+          .connect(otherAccount)
+          .grantTokenRole(tokenId, ROLES.OWNER, otherAccount.address)
+      ).to.be.revertedWith('FleekAccessControl: must have token role');
+
+      await expect(
+        contract
+          .connect(otherAccount)
+          .grantTokenRole(tokenId, ROLES.CONTROLLER, otherAccount.address)
+      ).to.be.revertedWith('FleekAccessControl: must have token role');
+    });
+
+    it('should not be able to remove address role', async () => {
+      const { contract, owner, otherAccount } = fixture;
+      await expect(
+        contract
+          .connect(otherAccount)
+          .revokeTokenRole(tokenId, ROLES.OWNER, otherAccount.address)
+      ).to.be.revertedWith('FleekAccessControl: must have token role');
+
+      await expect(
+        contract
+          .connect(otherAccount)
+          .revokeTokenRole(tokenId, ROLES.CONTROLLER, otherAccount.address)
+      ).to.be.revertedWith('FleekAccessControl: must have token role');
+    });
+
+    it('should be able to add token role after owner role granted', async () => {
+      const { contract, owner, otherAccount } = fixture;
+      await contract.grantTokenRole(tokenId, ROLES.OWNER, otherAccount.address);
+
+      expect(
+        await contract
+          .connect(otherAccount)
+          .grantTokenRole(tokenId, ROLES.CONTROLLER, otherAccount.address)
+      ).to.not.be.reverted;
     });
   });
 

@@ -59,7 +59,7 @@ abstract contract FleekAccessControl {
         uint256 tokenId,
         Roles role,
         address account
-    ) public requireCollectionRole(Roles.Owner) {
+    ) public requireTokenRole(tokenId, Roles.Owner) {
         _grantTokenRole(tokenId, role, account);
     }
 
@@ -74,7 +74,7 @@ abstract contract FleekAccessControl {
         uint256 tokenId,
         Roles role,
         address account
-    ) public requireCollectionRole(Roles.Owner) {
+    ) public requireTokenRole(tokenId, Roles.Owner) {
         _revokeTokenRole(tokenId, role, account);
     }
 
