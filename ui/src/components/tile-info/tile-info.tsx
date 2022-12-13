@@ -1,16 +1,33 @@
-import { Heading } from '@chakra-ui/react';
-import React from 'react';
+import {
+  Flex,
+  forwardRef,
+  Heading,
+  HeadingProps,
+  Text,
+} from '@chakra-ui/react';
 
-interface Props {
-  size: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl';
+type TileInfoProps = HeadingProps & {
   heading: string;
   info: string;
-}
+  width?: number;
+};
 
-export const TileInfo: React.FC<Props> = ({ size, heading, info }) => (
-  <>
-    <Heading size={size}>{heading}</Heading>
-    <p>{info}</p>
-  </>
+export const TileInfo = forwardRef<TileInfoProps, 'h2'>(
+  ({ heading, info, width = 250, ...headingProps }, ref) => (
+    <Flex direction="column" alignItems="center">
+      <Heading ref={ref} {...headingProps}>
+        {heading}
+      </Heading>
+      <Text
+        width={width}
+        whiteSpace="nowrap"
+        overflow="hidden"
+        textOverflow="ellipsis"
+        textAlign="center"
+      >
+        {info}
+      </Text>
+    </Flex>
+  )
 );
 

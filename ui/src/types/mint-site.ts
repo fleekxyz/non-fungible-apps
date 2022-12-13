@@ -9,3 +9,7 @@ export type SiteNFT = {
   repo: string;
 };
 
+export type SiteNFTDetail = SiteNFT & {
+  tokenId: number;
+};
+
