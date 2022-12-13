@@ -4,9 +4,8 @@ export type SiteNFT = {
   owner: string;
   externalUrl: string;
   image: string;
-  ens: string;
+  ens?: string;
   commitHash: string;
   repo: string;
-  controllerAddress?: string;
 };
 

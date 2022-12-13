@@ -5,8 +5,7 @@ export const isValidUrl = (url: string) => {
 };
 
 export const isValidImageUrl = (url: string) => {
-  //TODO add http/https validation
-  const regex = /\.(jpg|jpeg|png|gif)$/;
+  const regex = /^https?:\/\/.+\.(jpg|jpeg|png|gif|svg)$/;
   return regex.test(url);
 };
 
