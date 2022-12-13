@@ -1,23 +1,22 @@
-import { Box, Image } from '@chakra-ui/react';
-import React from 'react';
+import { forwardRef, Image, ImageProps } from '@chakra-ui/react';
 
-interface Props {
-  height?: number;
-  width?: number;
+type ImagePreviewProps = ImageProps & {
   image: string;
-}
-
-export const ImagePreview: React.FC<Props> = ({ height, width, image }) => {
-  return (
-    <Box boxSize="sm">
-      {/* TODO add fallback Image */}
-      <Image
-        src={image}
-        {...(height && { height })}
-        {...(width && { width })}
-        fallbackSrc="https://via.placeholder.com/150"
-      />
-    </Box>
-  );
 };
+
+export const ImagePreview = forwardRef<ImagePreviewProps, 'img'>(
+  ({ image, ...propsImage }, ref) => {
+    return (
+      <>
+        {/* TODO add fallback Image */}
+        <Image
+          ref={ref}
+          src={image}
+          {...propsImage}
+          fallbackSrc="https://via.placeholder.com/150"
+        />
+      </>
+    );
+  }
+);
 

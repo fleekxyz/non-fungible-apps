@@ -10,3 +10,7 @@ export type SiteNFT = {
   controllerAddress?: string;
 };
 
+export type SiteNFTDetails = SiteNFT & {
+  tokenId: number;
+};
+

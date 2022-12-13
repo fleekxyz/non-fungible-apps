@@ -68,7 +68,9 @@ export const MintedSiteDetail = () => {
                 </Link>
               </Box>
             </Box>
-            <ImagePreview image={image} />
+            <Box width="md">
+              <ImagePreview image={image} />
+            </Box>
           </Box>
         </Box>
       </Flex>

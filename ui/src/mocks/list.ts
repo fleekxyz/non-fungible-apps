@@ -1,5 +1,6 @@
 const listSites = [
   {
+    tokenId: 1,
     name: 'Fleek Test App',
     owner: '0x1b5b3e8a7c245d0f2d2b2e29ba11c03ef086c06e',
     description:
@@ -12,6 +13,7 @@ const listSites = [
     githubRepo: 'https://github.com/fleekxyz/contracts',
   },
   {
+    tokenId: 2,
     name: 'Fleek Test App',
     owner: '0x1b5b3e8a7c245d0f2d2b2e29ba11c03ef086c06e',
     description:
@@ -29,7 +31,7 @@ export const fetchMintedSites = async () => {
   return new Promise((resolved) => {
     setTimeout(() => {
       resolved({
-        data: listSites,
+        listSites,
       });
     }, 2500);
   });
