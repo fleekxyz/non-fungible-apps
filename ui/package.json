@@ -11,9 +11,16 @@
   "author": "Fleek",
   "license": "ISC",
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.13",
+    "@chakra-ui/react": "^2.4.2",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "formik": "^2.2.9",
+    "framer-motion": "^7.6.17",
     "path": "^0.12.7",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.4"
   },
   "devDependencies": {
     "@types/jest": "^29.2.3",
@@ -28,6 +35,7 @@
     "eslint-plugin-jest": "^27.1.6",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.11",
+    "ethers": "^5.7.2",
     "prettier": "^2.8.0",
     "ts-loader": "^9.4.1",
     "typescript": "^4.9.3",
