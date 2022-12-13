@@ -15,6 +15,7 @@
     "@chakra-ui/react": "^2.4.2",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@ethersproject/providers": "^5.7.2",
     "@reduxjs/toolkit": "^1.9.1",
     "formik": "^2.2.9",
     "framer-motion": "^7.6.17",

@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import metamaskReducer from './features/metamask/metamask-slice';
+import walletReducer from './features/wallet/wallet-slice';
 
 export const store = configureStore({
   reducer: {
-    metamask: metamaskReducer,
+    wallet: walletReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
