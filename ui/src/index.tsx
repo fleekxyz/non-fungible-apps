@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { App } from './app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from './theme';
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from './store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -10,9 +12,11 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <ChakraProvider theme={theme} resetCSS>
-      <App />
-    </ChakraProvider>
+    <ReduxProvider store={store}>
+      <ChakraProvider theme={theme} resetCSS>
+        <App />
+      </ChakraProvider>
+    </ReduxProvider>
   </React.StrictMode>
 );
 
