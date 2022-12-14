@@ -3,4 +3,12 @@ node_modules
 
 # hardhat
 cache
-artifacts 
+artifacts
+deployments/localhost
+
+# NPM
+package-lock.json
+
+# Foundry
+out
+forge-cache

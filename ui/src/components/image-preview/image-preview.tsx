@@ -5,14 +5,14 @@ type ImagePreviewProps = ImageProps & {
 };
 
 export const ImagePreview = forwardRef<ImagePreviewProps, 'img'>(
-  ({ image, ...propsImage }, ref) => {
+  ({ image, ...imageProps }, ref) => {
     return (
       <>
         {/* TODO add fallback Image */}
         <Image
           ref={ref}
           src={image}
-          {...propsImage}
+          {...imageProps}
           fallbackSrc="https://via.placeholder.com/150"
         />
       </>

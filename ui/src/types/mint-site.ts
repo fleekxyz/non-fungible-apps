@@ -4,13 +4,17 @@ export type SiteNFT = {
   owner: string;
   externalUrl: string;
   image: string;
-  ens: string;
+  ens?: string;
   commitHash: string;
   repo: string;
-  controllerAddress?: string;
 };
 
-export type SiteNFTDetails = SiteNFT & {
-  tokenId: number;
+export type SiteNFTDetail = Omit<SiteNFT, 'ens' | 'commitHash' | 'repo'> & {
+  attributes: [
+    {
+      trait_type: string;
+      value: string;
+    }
+  ];
 };
 

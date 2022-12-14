@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { Home, MintSite } from './views';
-import { MintedSiteDetail } from './views/detail/detail';
+import { Home, MintSite, MintedSiteDetail } from './views';
 
 export const App = () => {
   return (

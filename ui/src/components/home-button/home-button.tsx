@@ -9,6 +9,9 @@ export const HomeButton = () => {
       to="/home"
       aria-label="back home"
       icon={<ArrowBackIcon />}
+      variant="link"
+      size={'xl'}
+      textDecoration={'none'}
     />
   );
 };

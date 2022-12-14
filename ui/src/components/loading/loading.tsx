@@ -1,4 +1,3 @@
-import React from 'react';
 import { Flex, Spinner } from '@chakra-ui/react';
 
 export const Loading = () => {
