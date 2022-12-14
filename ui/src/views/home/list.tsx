@@ -17,8 +17,8 @@ export const ListSites = () => {
     <>
       <Grid
         templateColumns={{ base: 'repeat(4, 1fr)', md: 'repeat(5, 1fr)' }}
-        gap={6}
-        mt={6}
+        gap={10}
+        mt="40px"
       >
         {data &&
           data.listSites.map((site: SiteNFTDetails) => (
