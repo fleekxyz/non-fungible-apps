@@ -8,10 +8,10 @@ export const Home = () => {
   return (
     <Flex flexDirection="column" alignItems="center">
       <Heading>Welcome to Sites as NFTs by Fleek</Heading>
-      <ListSites />
       <Button as={Link} to="/mint-site" mt={10}>
         Mint your site
       </Button>
+      <ListSites />
     </Flex>
   );
 };
