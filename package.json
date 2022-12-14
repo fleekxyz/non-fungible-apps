@@ -1,38 +1,50 @@
 {
-  "name": "sites_nfts",
-  "version": "1.0.0",
+  "name": "fleek_contracts",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "hardhat compile",
-    "test": "hardhat test",
-    "format": "prettier --write \"./**/*.{js,ts,sol}\""
+    "test": "hardhat test && forge test --via-ir",
+    "test:foundry": "forge test --via-ir",
+    "test:hardhat": "hardhat test",
+    "format": "prettier --write \"./**/*.{js,ts,sol}\"",
+    "node:hardhat": "hardhat node --tags local",
+    "deploy:local": "hardhat deploy --tags local",
+    "deploy:mumbai": "hardhat deploy --tags mumbai --network mumbai",
+    "compile": "hardhat compile"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FleekHQ/sites_nfts.git"
+    "url": "git+https://github.com/FleekHQ/contracts.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/FleekHQ/sites_nfts/issues"
+    "url": "https://github.com/FleekHQ/contracts/issues"
   },
-  "homepage": "https://github.com/FleekHQ/sites_nfts#readme",
+  "homepage": "https://github.com/FleekHQ/contracts#readme",
   "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.7",
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
-    "@nomiclabs/hardhat-ethers": "^2.1.1",
+    "@nomiclabs/hardhat-ethers": "^2.2.1",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
-    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@nomiclabs/hardhat-web3": "^2.0.0",
     "@openzeppelin/contracts": "^4.7.3",
+    "@types/mocha": "^10.0.1",
     "chai": "^4.3.6",
     "dotenv": "^16.0.2",
-    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.7.2",
     "hardhat": "^2.11.2",
     "hardhat-contract-sizer": "^2.6.1",
     "hardhat-deploy": "^0.11.15",
     "hardhat-gas-reporter": "^1.0.9",
+    "minimist": "^1.2.7",
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0",
-    "solidity-coverage": "^0.8.2"
+    "solidity-coverage": "^0.8.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3",
+    "web3": "^1.8.1"
   }
 }
