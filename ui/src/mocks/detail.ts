@@ -1,16 +1,43 @@
-const mockDetail = {
+const MINT_PARAMS = {
   name: 'Fleek Test App',
-  ownerAddress: '0x8f7b9e1b5f1f2c3c1f8b0b1b2e1b2f1f2c3c1f8b',
-  description:
-    ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+  description: 'Fleek Test App Description',
   image: 'https://storageapi.fleek.co/fleek-team-bucket/site/fleek-logo.png',
-  // image:
-  //   'https://i.seadn.io/gae/Z0t4BsFONk8ebFnTtog3ricAhEpW_ZPhyhxcjHpofCmslJUc5jQ0OjxUuJbU5-3XE0rJZFf6JVdPFZYqtqyg2ri4gAGRpfwkFcidpw4?auto=format&w=1000',
-  externalUrl: 'https://fleek.co',
   ens: 'fleek.eth',
-  commitHash: '6ea6ad16c46ae85faced7e50555ff7368422f57',
-  githubRepo: 'https://github.com/fleekxyz/contracts',
-  tokenId: 1,
+  externalUrl: 'https://fleek.co',
+  commitHash: 'b72e47171746b6a9e29b801af9cb655ecf4d665c',
+  gitRepository: 'https://github.com/fleekxyz/contracts',
+  author: 'author',
+};
+
+const mockDetail = {
+  owner: '0x8f7b9e1b5f1f2c3c1f8b0b1b2e1b2f1f2c3c1f8b',
+  name: MINT_PARAMS.name,
+  description: MINT_PARAMS.description,
+  image: MINT_PARAMS.image,
+  external_url: MINT_PARAMS.externalUrl,
+  attributes: [
+    {
+      trait_type: 'ENS',
+      value: MINT_PARAMS.ens,
+    },
+    {
+      trait_type: 'Commit Hash',
+      value: MINT_PARAMS.commitHash,
+    },
+    {
+      trait_type: 'Repository',
+      value: MINT_PARAMS.gitRepository,
+    },
+    //As we're not showing this on the UI, we can remove it
+    // {
+    //   trait_type: 'Author',
+    //   value: MINT_PARAMS.author,
+    // },
+    // {
+    //   trait_type: 'Version',
+    //   value: '0',
+    // },
+  ],
 };
 
 export const fetchSiteDetail = async (tokenId: string) => {
@@ -18,7 +45,7 @@ export const fetchSiteDetail = async (tokenId: string) => {
   return new Promise((resolved, reject) => {
     setTimeout(() => {
       resolved({
-        data: mockDetail,
+        data: { ...mockDetail, externalUrl: mockDetail.external_url },
       });
     }, 2500);
   });

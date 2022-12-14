@@ -1,4 +1,4 @@
-import { Loading, TileInfo } from '@/components';
+import { Loading } from '@/components';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
@@ -18,31 +18,13 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { fetchSiteDetail } from '@/mocks';
 import { AccordionItem } from '@/components/accordion-item/accordion-item';
 import { ErrorScreen } from '@/views/error-screen';
-
-const CardAttribute = ({
-  heading,
-  info,
-}: {
-  heading: string;
-  info: string;
-}) => (
-  <Card
-    mr="10px"
-    mb="5px"
-    direction={{ base: 'column', sm: 'row' }}
-    overflow="hidden"
-    variant="outline"
-    width="200px"
-  >
-    <CardBody width="200px">
-      <TileInfo size="sm" heading={heading} info={info} width={160} />
-    </CardBody>
-  </Card>
-);
+import { SiteNFTDetail } from '@/types';
+import { CardAttributes } from '@/components/card';
 
 export const MintedSiteDetail = () => {
   const [searchParams] = useSearchParams();
   const tokenIdParam = searchParams.get('tokenId');
+  //TODO handle response type
   const { data, status } = useQuery('fetchDetail', () =>
     fetchSiteDetail(tokenIdParam as string)
   );
@@ -58,26 +40,21 @@ export const MintedSiteDetail = () => {
   const getAttributesAccordion = () => {
     return (
       <HStack shouldWrapChildren display="inline" spacing="0px">
-        <CardAttribute heading="Owner" info={ownerAddress} />
-        <CardAttribute heading="Commit hash" info={commitHash} />
-        <CardAttribute heading="Github repo" info={githubRepo} />
-        <CardAttribute heading="Token ID" info={tokenId} />
-        {ens && <CardAttribute heading="ENS" info={ens} />}
+        <CardAttributes heading="Owner" info={owner} />
+        {attributes.map((attribute) => (
+          <CardAttributes
+            key={attribute.trait_type}
+            heading={attribute.trait_type}
+            info={attribute.value}
+          />
+        ))}
+        <CardAttributes heading="Token ID" info={tokenIdParam as string} />
       </HStack>
     );
   };
 
-  const {
-    name,
-    description,
-    ownerAddress,
-    image,
-    externalUrl,
-    commitHash,
-    githubRepo,
-    ens,
-    tokenId,
-  } = data.data;
+  const { owner, name, description, image, externalUrl, attributes } =
+    data.data as SiteNFTDetail;
   return (
     <>
       <Flex width="full" align="center" justifyContent="center">
