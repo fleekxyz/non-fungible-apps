@@ -4,15 +4,9 @@
   "description": "Minimal UI for sites as NFTs",
   "main": "index.js",
   "scripts": {
-<<<<<<< HEAD
-    "test": "echo \"no tests provided\"",
-    "dev": "vite",
-    "build": "echo \"fix ui build settings\""
-=======
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
->>>>>>> 09d24f9723124343f9e929f3a0f27d1aa7692191
   },
   "author": "Fleek",
   "license": "ISC",
