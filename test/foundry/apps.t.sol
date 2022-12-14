@@ -12,11 +12,11 @@ contract ContractBTest is Test {
     }
 
     function testName() public {
-        assertEq(fleekContract.name(), 'Test Contract'));
+        assertEq(fleekContract.name(), 'Test Contract');
     }
 
     function testSymbol() public {
-        assertEq(fleekContract.symbol(), 'FLKAPS'));
+        assertEq(fleekContract.symbol(), 'FLKAPS');
     }
 
     function testMint() public {
