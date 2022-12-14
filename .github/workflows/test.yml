@@ -59,6 +59,3 @@ jobs:
 
       - name: Build
         run: yarn build
-
-      - name: Run Test
-        run: yarn test
