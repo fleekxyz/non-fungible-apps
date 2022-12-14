@@ -1,13 +1,12 @@
 import { Card, CardBody } from '@chakra-ui/react';
 import { TileInfo } from '../tile-info';
 
-export const CardAttributes = ({
-  heading,
-  info,
-}: {
+type CardAttributesProps = {
   heading: string;
   info: string;
-}) => (
+};
+
+export const CardAttributes = ({ heading, info }: CardAttributesProps) => (
   <Card
     mr="10px"
     mb="5px"

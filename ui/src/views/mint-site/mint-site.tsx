@@ -20,7 +20,7 @@ import { Link } from 'react-router-dom';
 import { mintSiteNFT } from '@/mocks';
 import { getRepoAndCommit } from '@/utils';
 import { validateFields } from './mint-site.utils';
-import { InputFieldForm } from '../../components/input-field-form';
+import { InputFieldForm } from '@/components';
 
 interface FormValues {
   name: string;

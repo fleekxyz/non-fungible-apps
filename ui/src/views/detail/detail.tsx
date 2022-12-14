@@ -1,4 +1,3 @@
-import { Loading } from '@/components';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
@@ -8,18 +7,20 @@ import {
   CardBody,
   Flex,
   Heading,
-  HStack,
   Link,
   VStack,
 } from '@chakra-ui/react';
-import { HomeButton } from '@/components/home-button';
-import { ImagePreview } from '@/components/image-preview';
+import {
+  HomeButton,
+  ImagePreview,
+  AccordionItem,
+  Loading,
+  AttributesDetail,
+} from '@/components';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { fetchSiteDetail } from '@/mocks';
-import { AccordionItem } from '@/components/accordion-item/accordion-item';
-import { ErrorScreen } from '@/views/error-screen';
+import { ErrorScreen } from '@/views';
 import { SiteNFTDetail } from '@/types';
-import { CardAttributes } from '@/components/card';
 
 export const MintedSiteDetail = () => {
   const [searchParams] = useSearchParams();
@@ -36,22 +37,6 @@ export const MintedSiteDetail = () => {
   if (status === 'error') {
     return <ErrorScreen />;
   }
-
-  const getAttributesAccordion = () => {
-    return (
-      <HStack shouldWrapChildren display="inline" spacing="0px">
-        <CardAttributes heading="Owner" info={owner} />
-        {attributes.map((attribute) => (
-          <CardAttributes
-            key={attribute.trait_type}
-            heading={attribute.trait_type}
-            info={attribute.value}
-          />
-        ))}
-        <CardAttributes heading="Token ID" info={tokenIdParam as string} />
-      </HStack>
-    );
-  };
 
   const { owner, name, description, image, externalUrl, attributes } =
     data.data as SiteNFTDetail;
@@ -86,7 +71,13 @@ export const MintedSiteDetail = () => {
                     />
                     <AccordionItem
                       heading="Attributes"
-                      children={getAttributesAccordion()}
+                      children={
+                        <AttributesDetail
+                          owner={owner}
+                          attributes={attributes}
+                          tokendId={tokenIdParam as string}
+                        />
+                      }
                       padding="16px"
                     />
                   </Accordion>
