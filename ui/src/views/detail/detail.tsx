@@ -1,4 +1,3 @@
-import React from 'react';
 import { Loading, TileInfo } from '@/components';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
@@ -17,8 +16,8 @@ import { HomeButton } from '@/components/home-button';
 import { ImagePreview } from '@/components/image-preview';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { fetchSiteDetail } from '@/mocks';
-import { AccordionItem } from '../../components/accordion-item/accordion-item';
-import { ErrorScreen } from '@/components/error-screen';
+import { AccordionItem } from '@/components/accordion-item/accordion-item';
+import { ErrorScreen } from '@/views/error-screen';
 
 const CardAttribute = ({
   heading,

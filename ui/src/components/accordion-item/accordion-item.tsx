@@ -10,28 +10,24 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-type AccordtionProps = AccordionPanelProps & {
+type AccordionProps = AccordionPanelProps & {
   children: React.ReactNode;
   heading: string;
 };
-export const AccordionItem = forwardRef<AccordtionProps, 'div'>(
+export const AccordionItem = forwardRef<AccordionProps, 'div'>(
   ({ children, heading, ...panelProps }, ref) => {
     return (
-      <>
-        <AccordionItemChakra>
-          <h2>
-            <AccordionButton borderBottomWidth="1px">
-              <Box flex="1" textAlign="left">
-                <Heading size="md"> {heading}</Heading>
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel ref={ref} {...panelProps} pb={4} overflowY="scroll">
-            {children}
-          </AccordionPanel>
-        </AccordionItemChakra>
-      </>
+      <AccordionItemChakra>
+        <AccordionButton borderBottomWidth="1px">
+          <Box flex="1" textAlign="left">
+            <Heading size="md"> {heading}</Heading>
+          </Box>
+          <AccordionIcon />
+        </AccordionButton>
+        <AccordionPanel ref={ref} {...panelProps} pb={4} overflowY="scroll">
+          {children}
+        </AccordionPanel>
+      </AccordionItemChakra>
     );
   }
 );
