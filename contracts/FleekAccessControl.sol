@@ -12,6 +12,29 @@ abstract contract FleekAccessControl {
         Controller
     }
 
+    event TokenRoleGranted(
+        uint256 indexed tokenId,
+        Roles indexed role,
+        address indexed toAddress,
+        address byAddress
+    );
+    event TokenRoleRevoked(
+        uint256 indexed tokenId,
+        Roles indexed role,
+        address indexed toAddress,
+        address byAddress
+    );
+    event CollectionRoleGranted(
+        Roles indexed role,
+        address indexed toAddress,
+        address byAddress
+    );
+    event CollectionRoleRevoked(
+        Roles indexed role,
+        address indexed toAddress,
+        address byAddress
+    );
+
     struct Role {
         mapping(address => uint256) indexes;
         address[] members;
@@ -114,11 +137,13 @@ abstract contract FleekAccessControl {
     function _grantCollectionRole(Roles role, address account) internal {
         uint256 currentVersion = _collectionRolesVersion.current();
         _grantRole(_collectionRoles[currentVersion][role], account);
+        emit CollectionRoleGranted(role, account, msg.sender);
     }
 
     function _revokeCollectionRole(Roles role, address account) internal {
         uint256 currentVersion = _collectionRolesVersion.current();
         _revokeRole(_collectionRoles[currentVersion][role], account);
+        emit CollectionRoleRevoked(role, account, msg.sender);
     }
 
     function _grantTokenRole(
@@ -128,6 +153,7 @@ abstract contract FleekAccessControl {
     ) internal {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         _grantRole(_tokenRoles[tokenId][currentVersion][role], account);
+        emit TokenRoleGranted(tokenId, role, account, msg.sender);
     }
 
     function _revokeTokenRole(
@@ -137,6 +163,7 @@ abstract contract FleekAccessControl {
     ) internal {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         _revokeRole(_tokenRoles[tokenId][currentVersion][role], account);
+        emit TokenRoleRevoked(tokenId, role, account, msg.sender);
     }
 
     function _grantRole(Role storage role, address account) internal {
