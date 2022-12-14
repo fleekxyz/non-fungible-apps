@@ -4,7 +4,7 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-abstract contract FleekAccessControl {
+contract FleekAccessControl {
     using Counters for Counters.Counter;
 
     enum Roles {
