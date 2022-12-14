@@ -11,12 +11,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     using Strings for uint256;
     using Counters for Counters.Counter;
 
-    event NewBuild(uint256 indexed token, string indexed commit_hash, address indexed triggered_by);
-    event NewTokenName(uint256 indexed token, string indexed name, address indexed triggered_by);
-    event NewTokenDescription(uint256 indexed token, string indexed description, address indexed triggered_by);
-    event NewTokenImage(uint256 indexed token, string indexed image, address indexed triggered_by);
-    event NewTokenExternalURL(uint256 indexed token, string indexed external_url, address indexed triggered_by);
-    event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggered_by);
+    event NewBuild(uint256 indexed token, string indexed commitHash, address indexed triggeredBy);
+    event NewTokenName(uint256 indexed token, string indexed name, address indexed triggeredBy);
+    event NewTokenDescription(uint256 indexed token, string indexed description, address indexed triggeredBy);
+    event NewTokenImage(uint256 indexed token, string indexed image, address indexed triggeredBy);
+    event NewTokenExternalURL(uint256 indexed token, string indexed externalURL, address indexed triggeredBy);
+    event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggeredBy);
 
     struct Build {
         string commitHash;
