@@ -4,7 +4,7 @@ import { Button } from '@chakra-ui/react';
 import { contractAddress } from '@/utils';
 
 const WalletMenu: React.FC = () => {
-  const { account } = useWalletStore();
+  const { account = '' } = useWalletStore();
 
   return <Button>Wallet {`(${contractAddress(account)})`}</Button>;
 };
