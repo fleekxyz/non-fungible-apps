@@ -17,7 +17,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     event NewTokenImage(uint256 indexed token, string indexed image);
     event NewTokenExternalURL(uint256 indexed token, string indexed external_url);
     event NewTokenENS(uint256 indexed token, string indexed ENS);
-    
+
     struct Build {
         string commit_hash;
         string git_repository;
@@ -66,7 +66,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public payable requireCollectionOwner returns (uint256) {
         uint256 tokenId = _tokenIds.current();
         _mint(to, tokenId);
+<<<<<<< HEAD
         _addTokenController(tokenId, to);
+=======
+>>>>>>> 752bbb8 (refactor: change token controller role validation to _beforeTokenTransfer function)
         _tokenIds.increment();
 
         App storage app = _apps[tokenId];
