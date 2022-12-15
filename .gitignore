@@ -12,3 +12,4 @@ package-lock.json
 # Foundry
 out
 forge-cache
+lib
