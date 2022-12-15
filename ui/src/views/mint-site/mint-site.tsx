@@ -8,8 +8,6 @@ import {
   Button,
   FormErrorMessage,
   IconButton,
-  useToast,
-  UseToastOptions,
   Textarea,
   Grid,
   GridItem,
@@ -21,6 +19,7 @@ import { mintSiteNFT } from '@/mocks';
 import { getRepoAndCommit } from '@/utils';
 import { validateFields } from './mint-site.utils';
 import { InputFieldForm } from '@/components';
+import { useToastHook } from '@/hooks';
 
 interface FormValues {
   name: string;
@@ -43,22 +42,7 @@ const initialValues = {
 } as FormValues;
 
 export const MintSite = () => {
-  const toast = useToast();
-
-  //TODO add hook to show the toast
-  const showToast = (
-    title: string,
-    description: string,
-    status: UseToastOptions['status']
-  ) => {
-    toast({
-      title,
-      description,
-      status,
-      duration: 3000,
-      isClosable: true,
-    });
-  };
+  const { setToastInfo } = useToastHook();
 
   const handleSubmitForm = useCallback(async (values: FormValues) => {
     const {
@@ -85,13 +69,18 @@ export const MintSite = () => {
         repo,
       });
       //TODO connect with the integration
-      showToast('Success!', 'Your site has been minted.', 'success');
+      setToastInfo({
+        title: 'Success!',
+        description: 'Your site has been minted.',
+        status: 'success',
+      });
     } catch (err) {
-      showToast(
-        'Error!',
-        'We had an error while minting your site. Please try again later',
-        'error'
-      );
+      setToastInfo({
+        title: 'Error!',
+        description:
+          'We had an error while minting your site. Please try again later',
+        status: 'error',
+      });
     }
   }, []);
 
