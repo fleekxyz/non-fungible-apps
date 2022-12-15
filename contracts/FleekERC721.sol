@@ -95,38 +95,21 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         address owner = ownerOf(tokenId);
         App storage app = _apps[tokenId];
 
+        // prettier-ignore
         bytes memory dataURI = abi.encodePacked(
-            "{",
-            '"name":"',
-            app.name,
-            '",',
-            '"description":"',
-            app.description,
-            '",',
-            '"owner":"',
-            Strings.toHexString(uint160(owner), 20),
-            '",',
-            '"external_url":"',
-            app.external_url,
-            '",',
-            '"image":"',
-            app.image,
-            '",',
-            '"attributes": [',
-            '{"trait_type": "ENS", "value":"',
-            app.ENS,
-            '"},',
-            '{"trait_type": "Commit Hash", "value":"',
-            app.builds[app.current_build].commit_hash,
-            '"},',
-            '{"trait_type": "Repository", "value":"',
-            app.builds[app.current_build].git_repository,
-            '"},',
-            '{"trait_type": "Version", "value":"',
-            Strings.toString(app.current_build),
-            '"}',
-            "]",
-            "}"
+            '{',
+                '"name":"', app.name, '",',
+                '"description":"', app.description, '",',
+                '"owner":"', Strings.toHexString(uint160(owner), 20), '",',
+                '"external_url":"', app.external_url, '",',
+                '"image":"', app.image, '",',
+                '"attributes": [',
+                    '{"trait_type": "ENS", "value":"', app.ENS,'"},',
+                    '{"trait_type": "Commit Hash", "value":"', app.builds[app.current_build].commit_hash,'"},',
+                    '{"trait_type": "Repository", "value":"', app.builds[app.current_build].git_repository,'"},',
+                    '{"trait_type": "Version", "value":"', Strings.toString(app.current_build),'"}',
+                ']',
+            '}'
         );
 
         return string(abi.encodePacked(_baseURI(), Base64.encode((dataURI))));
