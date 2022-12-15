@@ -108,32 +108,9 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return string(abi.encodePacked(_baseURI(), Base64.encode((dataURI))));
     }
 
-    function addTokenController(
-        uint256 tokenId,
-        address controller
-    ) public requireTokenOwner(tokenId) {
-        _addTokenController(tokenId, controller);
-    }
-
-    function _addTokenController(
-        uint256 tokenId,
-        address controller
-    ) internal {
-        _requireMinted(tokenId);
-        _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
-    }
-
-    function removeTokenController(
-        uint256 tokenId,
-        address controller
-    ) public requireTokenOwner(tokenId) {
-        _requireMinted(tokenId);
-        _revokeRole(_tokenRole(tokenId, "CONTROLLER"), controller);
-    }
-
     function supportsInterface(
         bytes4 interfaceId
-    ) public view virtual override(ERC721, AccessControl) returns (bool) {
+    ) public view virtual override(ERC721) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
@@ -150,14 +127,14 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) internal virtual override {
         if (from != address(0) && to != address(0)) {
             // Transfer
-            _clearTokenControllers(tokenId);
-            _grantRole(_tokenRole(tokenId, "CONTROLLER"), to);
+            _clearAllTokenRoles(tokenId);
+            _grantTokenRole(tokenId, Roles.Owner, to);
         } else if (from == address(0)) {
             // Mint
-            _grantRole(_tokenRole(tokenId, "CONTROLLER"), to);
+            _grantTokenRole(tokenId, Roles.Owner, to);
         } else if (to == address(0)) {
             // Burn
-            _clearTokenControllers(tokenId);
+            _clearAllTokenRoles(tokenId);
         }
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
@@ -169,7 +146,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenExternalURL(
         uint256 tokenId,
         string memory _tokenExternalURL
-    ) public virtual requireTokenController(tokenId) {
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].external_url = _tokenExternalURL;
         emit NewTokenExternalURL(tokenId, _tokenExternalURL);
@@ -178,7 +155,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenENS(
         uint256 tokenId,
         string memory _tokenENS
-    ) public virtual requireTokenController(tokenId) {
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
         emit NewTokenENS(tokenId, _tokenENS);
@@ -187,7 +164,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenName(
         uint256 tokenId,
         string memory _tokenName
-    ) public virtual requireTokenController(tokenId) {
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].name = _tokenName;
         emit NewTokenName(tokenId, _tokenName);
@@ -196,7 +173,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenDescription(
         uint256 tokenId,
         string memory _tokenDescription
-    ) public virtual requireTokenController(tokenId) {
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
         emit NewTokenDescription(tokenId, _tokenDescription);
@@ -205,7 +182,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenImage(
         uint256 tokenId,
         string memory _tokenImage
-    ) public virtual requireTokenController(tokenId) {
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].image = _tokenImage;
         emit NewTokenImage(tokenId, _tokenImage);
@@ -223,7 +200,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
 
     function burn(
         uint256 tokenId
-    ) public virtual requireTokenOwner(tokenId) {
+    ) public virtual requireTokenRole(tokenId, Roles.Owner) {
         super._burn(tokenId);
 
         if (bytes(_apps[tokenId].external_url).length != 0) {
