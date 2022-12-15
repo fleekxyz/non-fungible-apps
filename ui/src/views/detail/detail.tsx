@@ -18,17 +18,17 @@ import {
   AttributesDetail,
 } from '@/components';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { fetchSiteDetail } from '@/mocks';
 import { ErrorScreen } from '@/views';
 import { SiteNFTDetail } from '@/types';
+import { FleekERC721 } from '@/integrations';
 
 export const MintedSiteDetail = () => {
   const [searchParams] = useSearchParams();
   const tokenIdParam = searchParams.get('tokenId');
   //TODO handle response type
-  const { data, status } = useQuery('fetchDetail', () =>
-    fetchSiteDetail(tokenIdParam as string)
-  );
+  const { data, status } = useQuery('fetchDetail', async () => ({
+    data: await FleekERC721.tokenMetadata(Number(tokenIdParam)),
+  }));
 
   if (status === 'loading') {
     return <Loading />;
