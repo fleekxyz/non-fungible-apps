@@ -1,30 +1,41 @@
-import { JsonRpcProvider } from '@ethersproject/providers';
+import { JsonRpcProvider, Networkish } from '@ethersproject/providers';
 import { ethers } from 'ethers';
 import * as Contracts from './contracts';
 
-export type EthereumProviders = 'metamask';
+export const Ethereum: Ethereum.Core = {
+  defaultNetwork: 'https://rpc-mumbai.maticvigil.com', // TODO: make it environment variable
 
-type EthereumObject = {
-  provider: { [key in EthereumProviders]: JsonRpcProvider };
-  getContract: (
-    contractName: keyof typeof Contracts,
-    providerName: EthereumProviders
-  ) => Promise<ethers.Contract>;
-};
-
-export const Ethereum: EthereumObject = {
   provider: {
     metamask:
       window.ethereum &&
       new ethers.providers.Web3Provider(window.ethereum as any),
   },
 
-  async getContract(contractName, providerName) {
+  getContract(contractName, providerName) {
     const contract = Contracts[contractName];
-    return new ethers.Contract(
-      contract.address,
-      contract.abi,
-      this.provider[providerName].getSigner()
-    );
+
+    const provider =
+      providerName && providerName in this.provider
+        ? this.provider[providerName].getSigner()
+        : ethers.getDefaultProvider(this.defaultNetwork);
+
+    return new ethers.Contract(contract.address, contract.abi, provider);
   },
 };
+
+export namespace Ethereum {
+  export type Providers = 'metamask';
+
+  export type Core = {
+    defaultNetwork: Networkish;
+
+    provider: {
+      [key in Providers]: JsonRpcProvider;
+    };
+
+    getContract: (
+      contractName: keyof typeof Contracts,
+      providerName?: Providers
+    ) => ethers.Contract;
+  };
+}

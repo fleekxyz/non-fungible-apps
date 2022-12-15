@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as asyncThunk from './async-thunk';
 import type { RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
-import { EthereumProviders } from '@/integrations';
+import { Ethereum } from '@/integrations';
 
 export namespace WalletState {
-  export type Provider = EthereumProviders | null;
+  export type Provider = Ethereum.Providers | null;
 
   export type State = 'disconnected' | 'loading' | 'connected';
 
