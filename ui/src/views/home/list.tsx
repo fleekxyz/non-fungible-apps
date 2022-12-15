@@ -4,7 +4,7 @@ import { fetchMintedSites } from '@/mocks';
 import { SiteNFTDetails } from '@/types';
 import { Grid, GridItem } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
-import { SiteCard } from './components';
+import { SiteCard } from '@/components';
 
 export const ListSites = () => {
   const { data, isLoading } = useQuery<Array<SiteNFTDetails>, Error>(
