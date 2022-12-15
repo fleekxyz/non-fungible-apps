@@ -10,7 +10,11 @@
     "format": "prettier --write \"./**/*.{js,ts,sol}\"",
     "node:hardhat": "hardhat node --tags local",
     "deploy:local": "hardhat deploy --tags local",
+<<<<<<< HEAD
     "deploy:mumbai": "hardhat deploy --tags mumbai --network mumbai",
+=======
+    "deploy:mumbai": "hardhat deploy --tags mumbai",
+>>>>>>> c74a270 (Update test commands & add forge-cache and out to .gitignore)
     "compile": "hardhat compile"
   },
   "repository": {
