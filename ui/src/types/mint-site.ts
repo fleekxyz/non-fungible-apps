@@ -9,3 +9,12 @@ export type SiteNFT = {
   repo: string;
 };
 
+export type SiteNFTDetail = Omit<SiteNFT, 'ens' | 'commitHash' | 'repo'> & {
+  attributes: [
+    {
+      trait_type: string;
+      value: string;
+    }
+  ];
+};
+

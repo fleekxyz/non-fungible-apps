@@ -41,6 +41,7 @@
     "eslint-plugin-react": "^7.31.11",
     "ethers": "^5.7.2",
     "prettier": "^2.8.0",
+    "react-query": "^3.39.2",
     "ts-loader": "^9.4.1",
     "typescript": "^4.9.3",
     "vite": "^3.2.4",
