@@ -13,9 +13,15 @@ contract FleekERC721 is ERC721, FleekAccessControl {
 
     event NewBuild(uint256 indexed token, string indexed commit_hash);
     event NewTokenName(uint256 indexed token, string indexed name);
-    event NewTokenDescription(uint256 indexed token, string indexed description);
+    event NewTokenDescription(
+        uint256 indexed token,
+        string indexed description
+    );
     event NewTokenImage(uint256 indexed token, string indexed image);
-    event NewTokenExternalURL(uint256 indexed token, string indexed external_url);
+    event NewTokenExternalURL(
+        uint256 indexed token,
+        string indexed external_url
+    );
     event NewTokenENS(uint256 indexed token, string indexed ENS);
 
     struct Build {
@@ -63,7 +69,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory ENS,
         string memory commit_hash,
         string memory git_repository
-    ) public payable requireCollectionOwner returns (uint256) {
+    ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
         uint256 tokenId = _tokenIds.current();
         _mint(to, tokenId);
         _tokenIds.increment();
@@ -90,19 +96,37 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         App storage app = _apps[tokenId];
 
         bytes memory dataURI = abi.encodePacked(
-            '{',
-                '"name":"', app.name, '",',
-                '"description":"', app.description, '",',
-                '"owner":"', Strings.toHexString(uint160(owner), 20), '",',
-                '"external_url":"', app.external_url, '",',
-                '"image":"', app.image, '",',
-                '"attributes": [',
-                    '{"trait_type": "ENS", "value":"', app.ENS,'"},',
-                    '{"trait_type": "Commit Hash", "value":"', app.builds[app.current_build].commit_hash,'"},',
-                    '{"trait_type": "Repository", "value":"', app.builds[app.current_build].git_repository,'"},',
-                    '{"trait_type": "Version", "value":"', Strings.toString(app.current_build),'"}',
-                ']',
-            '}'
+            "{",
+            '"name":"',
+            app.name,
+            '",',
+            '"description":"',
+            app.description,
+            '",',
+            '"owner":"',
+            Strings.toHexString(uint160(owner), 20),
+            '",',
+            '"external_url":"',
+            app.external_url,
+            '",',
+            '"image":"',
+            app.image,
+            '",',
+            '"attributes": [',
+            '{"trait_type": "ENS", "value":"',
+            app.ENS,
+            '"},',
+            '{"trait_type": "Commit Hash", "value":"',
+            app.builds[app.current_build].commit_hash,
+            '"},',
+            '{"trait_type": "Repository", "value":"',
+            app.builds[app.current_build].git_repository,
+            '"},',
+            '{"trait_type": "Version", "value":"',
+            Strings.toString(app.current_build),
+            '"}',
+            "]",
+            "}"
         );
 
         return string(abi.encodePacked(_baseURI(), Base64.encode((dataURI))));
@@ -191,9 +215,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         uint256 tokenId,
         string memory _commit_hash,
         string memory _git_repository
-    ) public virtual requireTokenController(tokenId) {
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
-        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(_commit_hash, _git_repository);
+        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(
+            _commit_hash,
+            _git_repository
+        );
         emit NewBuild(tokenId, _commit_hash);
     }
 
