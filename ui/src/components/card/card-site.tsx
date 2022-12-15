@@ -48,7 +48,7 @@ export const SiteCard: React.FC<CardSiteProps> = ({ site, tokenId }) => {
       width="350px"
       height="350px"
       //   TODO add token id param
-      onClick={(e) => {
+      onClick={() => {
         navigate(`/detail?tokenId=${1}`);
       }}
     >
