@@ -8,7 +8,7 @@
     "test": "hardhat test && forge test --via-ir",
     "test:foundry": "forge test --via-ir",
     "test:hardhat": "hardhat test",
-    "format": "prettier --write \"./**/*.{js,ts,sol}\"",
+    "format": "prettier --write \"./**/*.{js,ts,sol,json}\"",
     "node:hardhat": "hardhat node --tags local",
     "deploy:local": "hardhat deploy --tags local",
     "deploy:mumbai": "hardhat deploy --tags mumbai --network mumbai",
