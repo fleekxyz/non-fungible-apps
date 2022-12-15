@@ -28,10 +28,7 @@ export const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
-    setProvider: (
-      state,
-      action: PayloadAction<Exclude<WalletState.Provider, null>>
-    ) => {
+    setProvider: (state, action: PayloadAction<WalletState.Provider>) => {
       state.provider = action.payload;
     },
     setAccount: (state, action: PayloadAction<string>) => {
@@ -43,6 +40,12 @@ export const walletSlice = createSlice({
       action: PayloadAction<Exclude<WalletState.State, 'connected'>>
     ) => {
       state.state = action.payload;
+      state.provider = null;
+      state.account = undefined;
+    },
+    disconnect: (state) => {
+      state.state = 'disconnected';
+      state.provider = null;
       state.account = undefined;
     },
   },
