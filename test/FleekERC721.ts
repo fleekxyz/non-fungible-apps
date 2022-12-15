@@ -64,7 +64,7 @@ describe('FleekERC721', () => {
         MINT_PARAMS.externalUrl,
         MINT_PARAMS.ens,
         MINT_PARAMS.commitHash,
-        MINT_PARAMS.gitRepository,
+        MINT_PARAMS.gitRepository
       );
 
       expect(response.value).to.be.instanceOf(ethers.BigNumber);
@@ -85,7 +85,7 @@ describe('FleekERC721', () => {
             MINT_PARAMS.externalUrl,
             MINT_PARAMS.ens,
             MINT_PARAMS.commitHash,
-            MINT_PARAMS.gitRepository,
+            MINT_PARAMS.gitRepository
           )
       ).to.be.revertedWith('FleekAccessControl: must have collection role');
     });
@@ -103,8 +103,7 @@ describe('FleekERC721', () => {
         MINT_PARAMS.externalUrl,
         MINT_PARAMS.ens,
         MINT_PARAMS.commitHash,
-        MINT_PARAMS.gitRepository,
-        MINT_PARAMS.author
+        MINT_PARAMS.gitRepository
       );
 
       const tokenId = response.value.toNumber();
@@ -138,7 +137,7 @@ describe('FleekERC721', () => {
         MINT_PARAMS.externalUrl,
         MINT_PARAMS.ens,
         MINT_PARAMS.commitHash,
-        MINT_PARAMS.gitRepository,
+        MINT_PARAMS.gitRepository
       );
 
       tokenId = response.value.toNumber();
@@ -199,8 +198,7 @@ describe('FleekERC721', () => {
         MINT_PARAMS.externalUrl,
         MINT_PARAMS.ens,
         MINT_PARAMS.commitHash,
-        MINT_PARAMS.gitRepository,
-        MINT_PARAMS.author
+        MINT_PARAMS.gitRepository
       );
 
       tokenId = response.value.toNumber();
