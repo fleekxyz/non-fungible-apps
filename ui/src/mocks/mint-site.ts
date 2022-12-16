@@ -22,4 +22,3 @@ export const mintSiteNFT = async (props: SiteNFT) => {
     }, 1000);
   });
 };
-

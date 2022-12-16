@@ -8,4 +8,3 @@ export const isValidImageUrl = (url: string) => {
   const regex = /^https?:\/\/.+\.(jpg|jpeg|png|gif|svg)$/;
   return regex.test(url);
 };
-
