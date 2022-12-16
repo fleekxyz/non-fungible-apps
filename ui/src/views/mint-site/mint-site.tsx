@@ -91,7 +91,6 @@ export const MintSite = () => {
           },
           provider
         );
-        //TODO connect with the integration
         showToast('Success!', 'Your site has been minted.', 'success');
       } catch (err) {
         showToast(
