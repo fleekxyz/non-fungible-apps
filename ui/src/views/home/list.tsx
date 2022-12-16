@@ -14,7 +14,6 @@ export const ListSites = () => {
 
   if (isLoading) return <Loading />;
   return (
-    <>
       <Grid
         templateColumns={{ base: 'repeat(4, 1fr)', md: 'repeat(5, 1fr)' }}
         gap={10}
