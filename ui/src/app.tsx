@@ -1,6 +1,9 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { WalletButton } from './components';
+import { initializeWallet } from './store';
 import { Home, MintSite, MintedSiteDetail } from './views';
+
+initializeWallet();
 
 export const App = () => {
   return (

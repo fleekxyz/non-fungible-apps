@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as asyncThunk from './async-thunk';
-import type { RootState } from '@/store';
+import { RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
 import { Ethereum } from '@/integrations';
 
