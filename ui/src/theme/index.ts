@@ -20,4 +20,3 @@ const appTheme = {
 };
 
 export const theme = extendTheme(appTheme);
-
