@@ -42,6 +42,11 @@ export const FleekERC721 = {
 
     return parsed;
   },
+
+  async lastTokenId(): Promise<number> {
+    // TODO: fetch last token id
+    return 4;
+  },
 };
 
 export namespace FleekERC721 {
