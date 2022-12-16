@@ -42,16 +42,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     Counters.Counter private _tokenIds;
     mapping(uint256 => App) private _apps;
 
-    constructor(
-        string memory _name,
-        string memory _symbol
-    ) ERC721(_name, _symbol) {}
+    constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
 
     modifier requireTokenOwner(uint256 tokenId) {
-        require(
-            msg.sender == ownerOf(tokenId),
-            "FleekERC721: must be token owner"
-        );
+        require(msg.sender == ownerOf(tokenId), "FleekERC721: must be token owner");
         _;
     }
 
@@ -84,13 +78,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return tokenId;
     }
 
-    function tokenURI(
-        uint256 tokenId
-    ) public view virtual override returns (string memory) {
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         _requireMinted(tokenId);
         address owner = ownerOf(tokenId);
         App storage app = _apps[tokenId];
 
+        // prettier-ignore
         bytes memory dataURI = abi.encodePacked(
             '{',
                 '"name":"', app.name, '",',
@@ -111,25 +104,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return string(abi.encodePacked(_baseURI(), Base64.encode((dataURI))));
     }
 
-    function addTokenController(
-        uint256 tokenId,
-        address controller
-    ) public requireTokenOwner(tokenId) {
+    function addTokenController(uint256 tokenId, address controller) public requireTokenOwner(tokenId) {
         _requireMinted(tokenId);
         _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
     }
 
-    function removeTokenController(
-        uint256 tokenId,
-        address controller
-    ) public requireTokenOwner(tokenId) {
+    function removeTokenController(uint256 tokenId, address controller) public requireTokenOwner(tokenId) {
         _requireMinted(tokenId);
         _revokeRole(_tokenRole(tokenId, "CONTROLLER"), controller);
     }
 
-    function supportsInterface(
-        bytes4 interfaceId
-    ) public view virtual override(ERC721, AccessControl) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, AccessControl) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
@@ -171,19 +156,13 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewTokenExternalURL(tokenId, _tokenExternalURL);
     }
 
-    function setTokenENS(
-        uint256 tokenId,
-        string memory _tokenENS
-    ) public virtual requireTokenController(tokenId) {
+    function setTokenENS(uint256 tokenId, string memory _tokenENS) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
         emit NewTokenENS(tokenId, _tokenENS);
     }
 
-    function setTokenName(
-        uint256 tokenId,
-        string memory _tokenName
-    ) public virtual requireTokenController(tokenId) {
+    function setTokenName(uint256 tokenId, string memory _tokenName) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].name = _tokenName;
         emit NewTokenName(tokenId, _tokenName);
@@ -198,10 +177,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewTokenDescription(tokenId, _tokenDescription);
     }
 
-    function setTokenImage(
-        uint256 tokenId,
-        string memory _tokenImage
-    ) public virtual requireTokenController(tokenId) {
+    function setTokenImage(uint256 tokenId, string memory _tokenImage) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].image = _tokenImage;
         emit NewTokenImage(tokenId, _tokenImage);
@@ -214,17 +190,11 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory _author
     ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(
-            _commit_hash,
-            _git_repository,
-            _author
-        );
+        _apps[tokenId].builds[++_apps[tokenId].current_build] = Build(_commit_hash, _git_repository, _author);
         emit NewBuild(tokenId, _commit_hash);
     }
 
-    function burn(
-        uint256 tokenId
-    ) public virtual requireTokenOwner(tokenId) {
+    function burn(uint256 tokenId) public virtual requireTokenOwner(tokenId) {
         super._burn(tokenId);
 
         if (bytes(_apps[tokenId].external_url).length != 0) {
