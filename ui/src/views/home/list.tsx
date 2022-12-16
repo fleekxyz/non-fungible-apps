@@ -26,7 +26,6 @@ export const ListSites = () => {
             </GridItem>
           ))}
       </Grid>
-    </>
   );
 };
 
