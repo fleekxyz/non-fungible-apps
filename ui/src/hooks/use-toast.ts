@@ -1,39 +1,22 @@
-import { useToast, UseToastOptions } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useToast as useToastChakra, UseToastOptions } from '@chakra-ui/react';
+import { useCallback } from 'react';
 
-type ToastState = {
-  title: string;
-  description: string;
-  status: UseToastOptions['status'];
-  duration?: number;
-  position?: UseToastOptions['position'];
-};
-
-export const useToastHook = () => {
-  const [toastInfo, setToastInfo] = useState<ToastState>();
-  const toast = useToast();
-
-  useEffect(() => {
-    if (toastInfo) {
-      const {
-        title,
-        description,
-        status,
-        duration = 3000,
-        position = 'bottom',
-      } = toastInfo;
-
+export const useToast = () => {
+  const toast = useToastChakra();
+  return useCallback(
+    ({
+      duration = 3000,
+      position = 'buttom' as UseToastOptions['position'],
+      isClosable = true,
+      ...params
+    }: UseToastOptions) =>
       toast({
-        title,
-        description,
-        status,
         duration,
-        position,
-        isClosable: true,
-      });
-    }
-  }, [toastInfo, toast]);
-
-  return { setToastInfo };
+        position: position as UseToastOptions['position'],
+        isClosable,
+        ...params,
+      }) as unknown as typeof toast,
+    []
+  );
 };
 

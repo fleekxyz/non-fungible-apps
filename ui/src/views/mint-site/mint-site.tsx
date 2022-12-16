@@ -19,7 +19,7 @@ import { mintSiteNFT } from '@/mocks';
 import { getRepoAndCommit } from '@/utils';
 import { validateFields } from './mint-site.utils';
 import { InputFieldForm } from '@/components';
-import { useToastHook } from '@/hooks';
+import { useToast } from '@/hooks';
 
 interface FormValues {
   name: string;
@@ -42,7 +42,7 @@ const initialValues = {
 } as FormValues;
 
 export const MintSite = () => {
-  const { setToastInfo } = useToastHook();
+  const setToastInfo = useToast();
 
   const handleSubmitForm = useCallback(async (values: FormValues) => {
     const {
