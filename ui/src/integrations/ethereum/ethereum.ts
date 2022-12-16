@@ -7,8 +7,7 @@ export const Ethereum: Ethereum.Core = {
 
   provider: {
     metamask:
-      window.ethereum &&
-      new ethers.providers.Web3Provider(window.ethereum as any),
+      window.ethereum && new ethers.providers.Web3Provider(window.ethereum),
   },
 
   getContract(contractName, providerName) {
