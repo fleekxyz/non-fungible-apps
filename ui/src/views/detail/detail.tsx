@@ -26,9 +26,10 @@ export const MintedSiteDetail = () => {
   const [searchParams] = useSearchParams();
   const tokenIdParam = searchParams.get('tokenId');
   //TODO handle response type
-  const { data, status } = useQuery('fetchDetail', async () => ({
-    data: await FleekERC721.tokenMetadata(Number(tokenIdParam)),
-  }));
+  const { data, status } = useQuery<SiteNFTDetail>(
+    `fetchDetail${tokenIdParam}`,
+    async () => FleekERC721.tokenMetadata(Number(tokenIdParam))
+  );
 
   if (status === 'loading') {
     return <Loading />;
@@ -39,7 +40,8 @@ export const MintedSiteDetail = () => {
   }
 
   const { owner, name, description, image, externalUrl, attributes } =
-    data.data as SiteNFTDetail;
+    data as SiteNFTDetail;
+
   return (
     <>
       <Flex width="full" align="center" justifyContent="center">

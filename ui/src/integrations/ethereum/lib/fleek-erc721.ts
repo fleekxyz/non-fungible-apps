@@ -45,7 +45,7 @@ export const FleekERC721 = {
 
   async lastTokenId(): Promise<number> {
     // TODO: fetch last token id
-    return 4;
+    return 6;
   },
 };
 

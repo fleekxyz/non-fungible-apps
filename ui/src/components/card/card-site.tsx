@@ -11,10 +11,11 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import React from 'react';
+import { FleekERC721 } from '@/integrations';
+import { useQuery } from 'react-query';
 
 interface CardSiteProps {
-  site: SiteNFTDetail;
-  tokenId?: string; // TODO add param and remove optional
+  tokenId: number;
 }
 
 type InfoContainerProps = {
@@ -35,9 +36,15 @@ const InfoContainer = ({ heading, info, width }: InfoContainerProps) => (
   />
 );
 
-export const SiteCard: React.FC<CardSiteProps> = ({ site, tokenId }) => {
-  const { name, owner, image, externalUrl } = site;
+export const SiteCard: React.FC<CardSiteProps> = ({ tokenId }) => {
   const navigate = useNavigate();
+  const { data, isLoading } = useQuery<SiteNFTDetail>(
+    `fetchDetail${tokenId}`,
+    () => FleekERC721.tokenMetadata(tokenId)
+  );
+
+  if (!data || isLoading) return null;
+  const { name, owner, image, external_url: externalUrl } = data as any;
   return (
     <Card
       borderColor="#f3f3f36b !important"
@@ -47,10 +54,7 @@ export const SiteCard: React.FC<CardSiteProps> = ({ site, tokenId }) => {
       borderRadius="10px"
       width="350px"
       height="350px"
-      //   TODO add token id param
-      onClick={() => {
-        navigate(`/detail?tokenId=${1}`);
-      }}
+      onClick={() => navigate(`/detail?tokenId=${tokenId}`)}
     >
       <CardBody width="350px" height="350px" paddingTop="10px">
         <Heading size="md" textAlign="center" marginBottom="10px">
@@ -78,8 +82,7 @@ export const SiteCard: React.FC<CardSiteProps> = ({ site, tokenId }) => {
         </Link>
         <Stack mt="10px" spacing="3" overflowY="scroll">
           <InfoContainer heading="Owner" info={owner} width="auto" />
-          {/* TODO add param */}
-          <InfoContainer heading="Token ID" info="1" width="100px" />
+          <InfoContainer heading="Token ID" info={tokenId} width="100px" />
           <InfoContainer
             heading="External url"
             width="100px"
