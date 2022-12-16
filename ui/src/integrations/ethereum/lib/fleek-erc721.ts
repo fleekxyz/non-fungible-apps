@@ -2,30 +2,21 @@ import { Ethereum } from '../ethereum';
 
 export const FleekERC721 = {
   async mint(
-    {
-      owner,
-      name,
-      description,
-      image,
-      externalUrl,
-      ens,
-      commitHash,
-      repo,
-    }: FleekERC721.MintParams,
+    params: FleekERC721.MintParams,
     provider: Ethereum.Providers
   ): Promise<void> {
     const contract = Ethereum.getContract('FleekERC721', provider);
 
     const response = await contract.mint(
-      owner,
-      name,
-      description,
-      image,
-      externalUrl,
-      ens,
-      commitHash,
-      repo,
-      'author'
+      params.owner,
+      params.name,
+      params.description,
+      params.image,
+      params.externalUrl,
+      params.ens,
+      params.commitHash,
+      params.repo,
+      'author' // TODO: remove author after contract update
     );
 
     return response;
