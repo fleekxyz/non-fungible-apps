@@ -41,16 +41,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     Counters.Counter private _tokenIds;
     mapping(uint256 => App) private _apps;
 
-    constructor(
-        string memory _name,
-        string memory _symbol
-    ) ERC721(_name, _symbol) {}
+    constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
 
     modifier requireTokenOwner(uint256 tokenId) {
-        require(
-            msg.sender == ownerOf(tokenId),
-            "FleekERC721: must be token owner"
-        );
+        require(msg.sender == ownerOf(tokenId), "FleekERC721: must be token owner");
         _;
     }
 
@@ -92,7 +86,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return tokenId;
     }
 
-     /**
+    /**
      * @dev Returns the token metadata associated with the `tokenId`.
      *
      * Returns a based64 encoded string value of the URI.
@@ -102,13 +96,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the tokenId must be minted and valid.
      *
      */
-    function tokenURI(
-        uint256 tokenId
-    ) public view virtual override returns (string memory) {
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         _requireMinted(tokenId);
         address owner = ownerOf(tokenId);
         App storage app = _apps[tokenId];
 
+        // prettier-ignore
         bytes memory dataURI = abi.encodePacked(
             '{',
                 '"name":"', app.name, '",',
@@ -128,7 +121,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return string(abi.encodePacked(_baseURI(), Base64.encode((dataURI))));
     }
 
-     /**
+    /**
      * @dev Adds a new address with the`tokenController` privileges to a previously minted `tokenId`.
      *
      * May emit a {RoleGranted} event.
@@ -139,15 +132,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenOwner` role.
      *
      */
-    function addTokenController(
-        uint256 tokenId,
-        address controller
-    ) public requireTokenOwner(tokenId) {
+    function addTokenController(uint256 tokenId, address controller) public requireTokenOwner(tokenId) {
         _requireMinted(tokenId);
         _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
     }
 
-     /**
+    /**
      * @dev Strips an address from their `tokenController` privileges on a previously minted `tokenId`.
      *
      * May emit a {RoleRevoked} event.
@@ -158,10 +148,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenOwner` role.
      *
      */
-    function removeTokenController(
-        uint256 tokenId,
-        address controller
-    ) public requireTokenOwner(tokenId) {
+    function removeTokenController(uint256 tokenId, address controller) public requireTokenOwner(tokenId) {
         _requireMinted(tokenId);
         _revokeRole(_tokenRole(tokenId, "CONTROLLER"), controller);
     }
@@ -169,9 +156,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(
-        bytes4 interfaceId
-    ) public view virtual override(ERC721, AccessControl) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, AccessControl) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
@@ -207,7 +192,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return "data:application/json;base64,";
     }
 
-     /**
+    /**
      * @dev Updates the `externalURL` metadata field of a minted `tokenId`.
      *
      * May emit a {NewTokenExternalURL} event.
@@ -227,7 +212,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewTokenExternalURL(tokenId, _tokenExternalURL, msg.sender);
     }
 
-     /**
+    /**
      * @dev Updates the `ENS` metadata field of a minted `tokenId`.
      *
      * May emit a {NewTokenENS} event.
@@ -238,16 +223,13 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenController` role.
      *
      */
-    function setTokenENS(
-        uint256 tokenId,
-        string memory _tokenENS
-    ) public virtual requireTokenController(tokenId) {
+    function setTokenENS(uint256 tokenId, string memory _tokenENS) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
         emit NewTokenENS(tokenId, _tokenENS, msg.sender);
     }
 
-     /**
+    /**
      * @dev Updates the `name` metadata field of a minted `tokenId`.
      *
      * May emit a {NewTokenName} event.
@@ -258,16 +240,13 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenController` role.
      *
      */
-    function setTokenName(
-        uint256 tokenId,
-        string memory _tokenName
-    ) public virtual requireTokenController(tokenId) {
+    function setTokenName(uint256 tokenId, string memory _tokenName) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].name = _tokenName;
         emit NewTokenName(tokenId, _tokenName, msg.sender);
     }
 
-     /**
+    /**
      * @dev Updates the `description` metadata field of a minted `tokenId`.
      *
      * May emit a {NewTokenDescription} event.
@@ -287,7 +266,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewTokenDescription(tokenId, _tokenDescription, msg.sender);
     }
 
-     /**
+    /**
      * @dev Updates the `image` metadata field of a minted `tokenId`.
      *
      * May emit a {NewTokenImage} event.
@@ -298,16 +277,13 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenController` role.
      *
      */
-    function setTokenImage(
-        uint256 tokenId,
-        string memory _tokenImage
-    ) public virtual requireTokenController(tokenId) {
+    function setTokenImage(uint256 tokenId, string memory _tokenImage) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].image = _tokenImage;
         emit NewTokenImage(tokenId, _tokenImage, msg.sender);
     }
 
-     /**
+    /**
      * @dev Adds a new build to a minted `tokenId`'s builds mapping.
      *
      * May emit a {NewBuild} event.
@@ -324,14 +300,11 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory _gitRepository
     ) public virtual requireTokenController(tokenId) {
         _requireMinted(tokenId);
-        _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(
-            _commitHash,
-            _gitRepository
-        );
+        _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(_commitHash, _gitRepository);
         emit NewBuild(tokenId, _commitHash, msg.sender);
     }
 
-     /**
+    /**
      * @dev Burns a previously minted `tokenId`.
      *
      * May emit a {Transfer} event.
@@ -342,9 +315,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenOwner` role.
      *
      */
-    function burn(
-        uint256 tokenId
-    ) public virtual requireTokenOwner(tokenId) {
+    function burn(uint256 tokenId) public virtual requireTokenOwner(tokenId) {
         super._burn(tokenId);
 
         if (bytes(_apps[tokenId].externalURL).length != 0) {
