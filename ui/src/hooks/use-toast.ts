@@ -6,4 +6,3 @@ export const useToast = () => {
     isClosable: true,
   });
 };
-

@@ -14,7 +14,6 @@ describe('FleekERC721', () => {
     externalUrl: 'https://fleek.co',
     commitHash: 'b72e47171746b6a9e29b801af9cb655ecf4d665c',
     gitRepository: 'https://github.com/fleekxyz/contracts',
-    author: 'author',
   });
 
   const COLLECTION_PARAMS = Object.freeze({
@@ -70,8 +69,7 @@ describe('FleekERC721', () => {
         MINT_PARAMS.externalUrl,
         MINT_PARAMS.ens,
         MINT_PARAMS.commitHash,
-        MINT_PARAMS.gitRepository,
-        MINT_PARAMS.author
+        MINT_PARAMS.gitRepository
       );
 
       expect(response.value).to.be.instanceOf(ethers.BigNumber);
@@ -92,8 +90,7 @@ describe('FleekERC721', () => {
             MINT_PARAMS.externalUrl,
             MINT_PARAMS.ens,
             MINT_PARAMS.commitHash,
-            MINT_PARAMS.gitRepository,
-            MINT_PARAMS.author
+            MINT_PARAMS.gitRepository
           )
       ).to.be.revertedWith(
         'FleekAccessControl: must have collection owner role'
@@ -117,8 +114,7 @@ describe('FleekERC721', () => {
         MINT_PARAMS.externalUrl,
         MINT_PARAMS.ens,
         MINT_PARAMS.commitHash,
-        MINT_PARAMS.gitRepository,
-        MINT_PARAMS.author
+        MINT_PARAMS.gitRepository
       );
 
       tokenId = response.value.toNumber();
@@ -153,10 +149,6 @@ describe('FleekERC721', () => {
           {
             trait_type: 'Repository',
             value: MINT_PARAMS.gitRepository,
-          },
-          {
-            trait_type: 'Author',
-            value: MINT_PARAMS.author,
           },
           {
             trait_type: 'Version',

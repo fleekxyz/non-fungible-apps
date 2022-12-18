@@ -36,4 +36,3 @@ export const fetchMintedSites = async () => {
     }, 2500);
   });
 };
-
