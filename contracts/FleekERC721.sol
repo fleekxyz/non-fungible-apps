@@ -67,7 +67,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory ENS,
         string memory commitHash,
         string memory gitRepository
-    ) public payable requireCollectionOwner returns (uint256) {
+    ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
         uint256 tokenId = _tokenIds.current();
         _mint(to, tokenId);
         _tokenIds.increment();
@@ -122,41 +122,9 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     }
 
     /**
-     * @dev Adds a new address with the`tokenController` privileges to a previously minted `tokenId`.
-     *
-     * May emit a {RoleGranted} event.
-     *
-     * Requirements:
-     *
-     * - the tokenId must be minted and valid.
-     * - the sender must have the `tokenOwner` role.
-     *
-     */
-    function addTokenController(uint256 tokenId, address controller) public requireTokenOwner(tokenId) {
-        _requireMinted(tokenId);
-        _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
-    }
-
-    /**
-     * @dev Strips an address from their `tokenController` privileges on a previously minted `tokenId`.
-     *
-     * May emit a {RoleRevoked} event.
-     *
-     * Requirements:
-     *
-     * - the tokenId must be minted and valid.
-     * - the sender must have the `tokenOwner` role.
-     *
-     */
-    function removeTokenController(uint256 tokenId, address controller) public requireTokenOwner(tokenId) {
-        _requireMinted(tokenId);
-        _revokeRole(_tokenRole(tokenId, "CONTROLLER"), controller);
-    }
-
-    /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, AccessControl) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
@@ -173,14 +141,13 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) internal virtual override {
         if (from != address(0) && to != address(0)) {
             // Transfer
-            _clearTokenControllers(tokenId);
-            _grantRole(_tokenRole(tokenId, "CONTROLLER"), to);
+            _clearAllTokenRoles(tokenId, to);
         } else if (from == address(0)) {
             // Mint
-            _grantRole(_tokenRole(tokenId, "CONTROLLER"), to);
+            _grantTokenRole(tokenId, Roles.Owner, to);
         } else if (to == address(0)) {
             // Burn
-            _clearTokenControllers(tokenId);
+            _clearAllTokenRoles(tokenId);
         }
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
@@ -206,7 +173,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenExternalURL(
         uint256 tokenId,
         string memory _tokenExternalURL
-    ) public virtual requireTokenController(tokenId) {
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].externalURL = _tokenExternalURL;
         emit NewTokenExternalURL(tokenId, _tokenExternalURL, msg.sender);
@@ -223,7 +190,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenController` role.
      *
      */
-    function setTokenENS(uint256 tokenId, string memory _tokenENS) public virtual requireTokenController(tokenId) {
+    function setTokenENS(
+        uint256 tokenId,
+        string memory _tokenENS
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
         emit NewTokenENS(tokenId, _tokenENS, msg.sender);
@@ -240,7 +210,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenController` role.
      *
      */
-    function setTokenName(uint256 tokenId, string memory _tokenName) public virtual requireTokenController(tokenId) {
+    function setTokenName(
+        uint256 tokenId,
+        string memory _tokenName
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].name = _tokenName;
         emit NewTokenName(tokenId, _tokenName, msg.sender);
@@ -260,7 +233,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     function setTokenDescription(
         uint256 tokenId,
         string memory _tokenDescription
-    ) public virtual requireTokenController(tokenId) {
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
         emit NewTokenDescription(tokenId, _tokenDescription, msg.sender);
@@ -277,7 +250,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenController` role.
      *
      */
-    function setTokenImage(uint256 tokenId, string memory _tokenImage) public virtual requireTokenController(tokenId) {
+    function setTokenImage(
+        uint256 tokenId,
+        string memory _tokenImage
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].image = _tokenImage;
         emit NewTokenImage(tokenId, _tokenImage, msg.sender);
@@ -298,7 +274,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         uint256 tokenId,
         string memory _commitHash,
         string memory _gitRepository
-    ) public virtual requireTokenController(tokenId) {
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(_commitHash, _gitRepository);
         emit NewBuild(tokenId, _commitHash, msg.sender);
@@ -315,7 +291,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenOwner` role.
      *
      */
-    function burn(uint256 tokenId) public virtual requireTokenOwner(tokenId) {
+     function burn(uint256 tokenId) public virtual requireTokenRole(tokenId, Roles.Owner) {
         super._burn(tokenId);
 
         if (bytes(_apps[tokenId].externalURL).length != 0) {
