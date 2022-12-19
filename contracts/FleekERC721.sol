@@ -65,8 +65,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory image,
         string memory externalURL,
         string memory ENS,
-        string memory commit_hash,
-        string memory git_repository
+        string memory commitHash,
+        string memory gitRepository
     ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
         uint256 tokenId = _tokenIds.current();
         _mint(to, tokenId);
@@ -122,38 +122,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     }
 
     /**
-     * @dev Adds a new address with the`tokenController` privileges to a previously minted `tokenId`.
-     *
-     * May emit a {RoleGranted} event.
-     *
-     * Requirements:
-     *
-     * - the tokenId must be minted and valid.
-     * - the sender must have the `tokenOwner` role.
-     *
-     */
-    function addTokenController(uint256 tokenId, address controller) public requireTokenOwner(tokenId) {
-        _requireMinted(tokenId);
-        _grantRole(_tokenRole(tokenId, "CONTROLLER"), controller);
-    }
-
-    /**
-     * @dev Strips an address from their `tokenController` privileges on a previously minted `tokenId`.
-     *
-     * May emit a {RoleRevoked} event.
-     *
-     * Requirements:
-     *
-     * - the tokenId must be minted and valid.
-     * - the sender must have the `tokenOwner` role.
-     *
-     */
-    function removeTokenController(uint256 tokenId, address controller) public requireTokenOwner(tokenId) {
-        _requireMinted(tokenId);
-        _revokeRole(_tokenRole(tokenId, "CONTROLLER"), controller);
-    }
-
-    /**
      * @dev See {IERC165-supportsInterface}.
      */
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721) returns (bool) {
@@ -182,13 +150,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
             _clearAllTokenRoles(tokenId);
         }
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
-    }
-
-    /**
-     * @dev A baseURI internal function implementation to be called in the `tokenURI` function.
-     */
-    function _baseURI() internal view virtual override returns (string memory) {
-        return "data:application/json;base64,";
     }
 
     /**
