@@ -153,6 +153,13 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     }
 
     /**
+     * @dev A baseURI internal function implementation to be called in the `tokenURI` function.
+     */
+    function _baseURI() internal view virtual override returns (string memory) {
+        return "data:application/json;base64,";
+    }
+
+    /**
      * @dev Updates the `externalURL` metadata field of a minted `tokenId`.
      *
      * May emit a {NewTokenExternalURL} event.
@@ -284,8 +291,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenOwner` role.
      *
      */
-
-    function burn(uint256 tokenId) public virtual requireTokenRole(tokenId, Roles.Owner) {
+     function burn(uint256 tokenId) public virtual requireTokenRole(tokenId, Roles.Owner) {
         super._burn(tokenId);
 
         if (bytes(_apps[tokenId].externalURL).length != 0) {

@@ -16,7 +16,6 @@ describe('FleekERC721', () => {
     externalUrl: 'https://fleek.co',
     commitHash: 'b72e47171746b6a9e29b801af9cb655ecf4d665c',
     gitRepository: 'https://github.com/fleekxyz/contracts',
-    author: 'author',
   });
 
   const COLLECTION_PARAMS = Object.freeze({
@@ -122,6 +121,7 @@ describe('FleekERC721', () => {
   });
 
   describe('Token URI', () => {
+
     let tokenId: number;
     let fixture: Awaited<ReturnType<typeof defaultFixture>>;
 
@@ -207,7 +207,6 @@ describe('FleekERC721', () => {
     it('should match the token owner', async () => {
       const { contract, owner } = fixture;
       const tokenOwner = await contract.ownerOf(tokenId);
-
       expect(tokenOwner).to.equal(owner.address);
     });
 
