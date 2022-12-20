@@ -42,5 +42,6 @@ As we use vite, to build a public distribution for production run:
 
 ```bash
 $ vite build
+```
 
 This will create a dist folder where 
