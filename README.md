@@ -6,8 +6,6 @@
 
 ## ⚡ Overview
 
----
-
 This is the landing point for Fleek's initiative to implement infrastructure as Solidity contracts.
 
 The vision is to have this on a suitable L2 or L3 based on EVM so there is flexibility in terms of which chains to work with. And we can create a network of smart contracts that represent the different parts of your stack.
@@ -17,8 +15,6 @@ The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloud
 Get more information about the project on our [wiki](https://github.com/fleekxyz/contracts/wiki).
 
 ## ⌨️ Developing
-
----
 
 ### 📁 Project Structure
 
@@ -193,8 +189,6 @@ $ yarn format
 
 ## 🛣️ Roadmap
 
----
-
 Our goal is to reach a point where trustable Solidity contracts can be used for identifying properly the data about web3 applications. Within that goal, we want to also provide ways for users to organize and list information about their application. To get at this we are currently starting with:
 
 - Define trustable and extendable smart contracts and standards
@@ -250,12 +244,8 @@ $ npx hardhat run scripts/<script_name>.js --network <network_name>
 
 ## 🙏 Contributing
 
----
-
 This is an open source initiative! Any new idea is welcome, if you want to help us to improve the project please checkout [the contributing guide](/CONTRIBUTING.md).
 
 ## 📜 License
-
----
 
 Fleek Contracts is released under the [MIT License](LICENSE).
