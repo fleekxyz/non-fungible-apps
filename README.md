@@ -204,8 +204,6 @@ Later on, when the initiative prove its value, a service will be added to Fleek'
 
 ## 💡 Proof of concept
 
----
-
 The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/contracts/wiki/Proof-of-Concept). Mainly the concept approached with this initiative will be proven through:
 
 ### **Basic contracts structure:**
