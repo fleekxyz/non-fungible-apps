@@ -15,10 +15,11 @@ import {
 import { Formik, Field } from 'formik';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
-import { mintSiteNFT } from '@/mocks';
 import { getRepoAndCommit } from '@/utils';
 import { validateFields } from './mint-site.utils';
 import { InputFieldForm } from '@/components';
+import { FleekERC721 } from '@/integrations';
+import { useWalletStore } from '@/store';
 import { useToast } from '@/hooks';
 
 interface FormValues {
@@ -43,46 +44,53 @@ const initialValues = {
 
 export const MintSite = () => {
   const setToastInfo = useToast();
+  const { provider } = useWalletStore();
 
-  const handleSubmitForm = useCallback(async (values: FormValues) => {
-    const {
-      name,
-      description,
-      githubCommit,
-      ownerAddress,
-      externalUrl,
-      image,
-      ens,
-    } = values;
-
-    const { repo, commit_hash } = getRepoAndCommit(githubCommit);
-
-    try {
-      await mintSiteNFT({
+  const handleSubmitForm = useCallback(
+    async (values: FormValues) => {
+      const {
         name,
         description,
-        owner: ownerAddress,
+        githubCommit,
+        ownerAddress,
         externalUrl,
         image,
         ens,
-        commitHash: commit_hash,
-        repo,
-      });
-      //TODO connect with the integration
-      setToastInfo({
-        title: 'Success!',
-        description: 'Your site has been minted.',
-        status: 'success',
-      });
-    } catch (err) {
-      setToastInfo({
-        title: 'Error!',
-        description:
-          'We had an error while minting your site. Please try again later',
-        status: 'error',
-      });
-    }
-  }, []);
+      } = values;
+
+      const { repo, commit_hash } = getRepoAndCommit(githubCommit);
+
+      try {
+        if (!provider) throw new Error('No provider found');
+        await FleekERC721.mint(
+          {
+            name,
+            description,
+            owner: ownerAddress,
+            externalUrl,
+            image,
+            ens,
+            commitHash: commit_hash,
+            repo,
+          },
+          provider
+        );
+        setToastInfo({
+          title: 'Success!',
+          description: 'Your site has been minted.',
+          status: 'success',
+        });
+      } catch (err) {
+        setToastInfo({
+          title: 'Error!',
+          description:
+            'We had an error while minting your site. Please try again later',
+          status: 'error',
+        });
+      }
+    },
+    [provider]
+  );
 
   return (
     <>
@@ -198,7 +206,8 @@ export const MintSite = () => {
                       !values.githubCommit ||
                       !values.ownerAddress ||
                       !values.image ||
-                      !values.externalUrl
+                      !values.externalUrl ||
+                      !provider
                     }
                   >
                     Mint
