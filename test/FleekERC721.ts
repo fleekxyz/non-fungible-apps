@@ -121,7 +121,6 @@ describe('FleekERC721', () => {
   });
 
   describe('Token URI', () => {
-
     let tokenId: number;
     let fixture: Awaited<ReturnType<typeof defaultFixture>>;
 

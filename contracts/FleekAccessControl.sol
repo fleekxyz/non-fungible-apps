@@ -50,10 +50,26 @@ contract FleekAccessControl {
         _;
     }
 
+    /**
+     * @dev Grants the collection role to an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the collection role.
+     *
+     */
     function grantCollectionRole(Roles role, address account) public requireCollectionRole(Roles.Owner) {
         _grantCollectionRole(role, account);
     }
 
+    /**
+     * @dev Grants the token role to an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the token role.
+     *
+     */
     function grantTokenRole(
         uint256 tokenId,
         Roles role,
@@ -62,10 +78,26 @@ contract FleekAccessControl {
         _grantTokenRole(tokenId, role, account);
     }
 
+    /**
+     * @dev Revokes the collection role of an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the collection role.
+     *
+     */
     function revokeCollectionRole(Roles role, address account) public requireCollectionRole(Roles.Owner) {
         _revokeCollectionRole(role, account);
     }
 
+    /**
+     * @dev Revokes the token role of an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the token role.
+     *
+     */
     function revokeTokenRole(
         uint256 tokenId,
         Roles role,
@@ -74,51 +106,78 @@ contract FleekAccessControl {
         _revokeTokenRole(tokenId, role, account);
     }
 
+    /**
+     * @dev Returns `True` if a certain address has the collection role.
+     */
     function hasCollectionRole(Roles role, address account) public view returns (bool) {
         uint256 currentVersion = _collectionRolesVersion.current();
 
         return _collectionRoles[currentVersion][role].indexes[account] != 0;
     }
 
+    /**
+     * @dev Returns `True` if a certain address has the token role.
+     */
     function hasTokenRole(uint256 tokenId, Roles role, address account) public view returns (bool) {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         return _tokenRoles[tokenId][currentVersion][role].indexes[account] != 0;
     }
 
+    /**
+     * @dev Returns an array of addresses that all have the collection role.
+     */
     function getCollectionRoleMembers(Roles role) public view returns (address[] memory) {
         uint256 currentVersion = _collectionRolesVersion.current();
         return _collectionRoles[currentVersion][role].members;
     }
 
+    /**
+     * @dev Returns an array of addresses that all have the same token role for a certain tokenId.
+     */
     function getTokenRoleMembers(uint256 tokenId, Roles role) public view returns (address[] memory) {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         return _tokenRoles[tokenId][currentVersion][role].members;
     }
 
+    /**
+     * @dev Grants the collection role to an address.
+     */
     function _grantCollectionRole(Roles role, address account) internal {
         uint256 currentVersion = _collectionRolesVersion.current();
         _grantRole(_collectionRoles[currentVersion][role], account);
         emit CollectionRoleGranted(role, account, msg.sender);
     }
 
+    /**
+     * @dev Revokes the collection role of an address.
+     */
     function _revokeCollectionRole(Roles role, address account) internal {
         uint256 currentVersion = _collectionRolesVersion.current();
         _revokeRole(_collectionRoles[currentVersion][role], account);
         emit CollectionRoleRevoked(role, account, msg.sender);
     }
 
+    /**
+     * @dev Grants the token role to an address.
+     */
     function _grantTokenRole(uint256 tokenId, Roles role, address account) internal {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         _grantRole(_tokenRoles[tokenId][currentVersion][role], account);
         emit TokenRoleGranted(tokenId, role, account, msg.sender);
     }
 
+    /**
+     * @dev Revokes the token role of an address.
+     */
     function _revokeTokenRole(uint256 tokenId, Roles role, address account) internal {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         _revokeRole(_tokenRoles[tokenId][currentVersion][role], account);
         emit TokenRoleRevoked(tokenId, role, account, msg.sender);
     }
 
+    /**
+     * @dev Grants a certain role to a certain address.
+     */
     function _grantRole(Role storage role, address account) internal {
         if (role.indexes[account] == 0) {
             role.members.push(account);
@@ -126,6 +185,9 @@ contract FleekAccessControl {
         }
     }
 
+    /**
+     * @dev Revokes a certain role from a certain address.
+     */
     function _revokeRole(Role storage role, address account) internal {
         if (role.indexes[account] != 0) {
             uint256 index = role.indexes[account] - 1;
@@ -140,10 +202,18 @@ contract FleekAccessControl {
         }
     }
 
+    /**
+     * @dev Clears all token roles for a certain tokenId.
+     * Should only be used for burning tokens.
+     */
     function _clearAllTokenRoles(uint256 tokenId) internal {
         _tokenRolesVersion[tokenId].increment();
     }
 
+    /**
+     * @dev Clears all token roles for a certain tokenId and grants the owner role to a new address.
+     * Should only be used for transferring tokens.
+     */
     function _clearAllTokenRoles(uint256 tokenId, address newOwner) internal {
         _clearAllTokenRoles(tokenId);
         _grantTokenRole(tokenId, Roles.Owner, newOwner);

@@ -291,7 +291,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the `tokenOwner` role.
      *
      */
-     function burn(uint256 tokenId) public virtual requireTokenRole(tokenId, Roles.Owner) {
+    function burn(uint256 tokenId) public virtual requireTokenRole(tokenId, Roles.Owner) {
         super._burn(tokenId);
 
         if (bytes(_apps[tokenId].externalURL).length != 0) {
