@@ -50,4 +50,3 @@ export const fetchSiteDetail = async (tokenId: string) => {
     }, 2500);
   });
 };
-

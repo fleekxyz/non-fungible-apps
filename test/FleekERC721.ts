@@ -16,7 +16,6 @@ describe('FleekERC721', () => {
     externalUrl: 'https://fleek.co',
     commitHash: 'b72e47171746b6a9e29b801af9cb655ecf4d665c',
     gitRepository: 'https://github.com/fleekxyz/contracts',
-    author: 'author',
   });
 
   const COLLECTION_PARAMS = Object.freeze({
@@ -207,7 +206,6 @@ describe('FleekERC721', () => {
     it('should match the token owner', async () => {
       const { contract, owner } = fixture;
       const tokenOwner = await contract.ownerOf(tokenId);
-
       expect(tokenOwner).to.equal(owner.address);
     });
 
@@ -377,6 +375,43 @@ describe('FleekERC721', () => {
           .grantTokenRole(tokenId, ROLES.CONTROLLER, otherAccount.address)
       ).to.not.be.reverted;
     });
+
+    it('should emit event when token role is granted', async () => {
+      const { contract, owner, otherAccount } = fixture;
+      await expect(
+        contract.grantTokenRole(tokenId, ROLES.CONTROLLER, otherAccount.address)
+      )
+        .to.emit(contract, 'TokenRoleGranted')
+        .withArgs(
+          tokenId,
+          ROLES.CONTROLLER,
+          otherAccount.address,
+          owner.address
+        );
+    });
+
+    it('should emit event when token role is revoked', async () => {
+      const { contract, owner, otherAccount } = fixture;
+      await contract.grantTokenRole(
+        tokenId,
+        ROLES.CONTROLLER,
+        otherAccount.address
+      );
+      await expect(
+        contract.revokeTokenRole(
+          tokenId,
+          ROLES.CONTROLLER,
+          otherAccount.address
+        )
+      )
+        .to.emit(contract, 'TokenRoleRevoked')
+        .withArgs(
+          tokenId,
+          ROLES.CONTROLLER,
+          otherAccount.address,
+          owner.address
+        );
+    });
   });
 
   describe('Collection Roles', () => {
@@ -519,6 +554,31 @@ describe('FleekERC721', () => {
           .connect(otherAccount)
           .revokeCollectionRole(ROLES.OWNER, owner.address)
       ).to.be.revertedWith('FleekAccessControl: must have collection role');
+    });
+
+    it('should emit event when role is granted', async () => {
+      const { owner, contract, otherAccount } = fixture;
+
+      await expect(
+        contract.grantCollectionRole(ROLES.CONTROLLER, otherAccount.address)
+      )
+        .to.emit(contract, 'CollectionRoleGranted')
+        .withArgs(ROLES.CONTROLLER, otherAccount.address, owner.address);
+    });
+
+    it('should emit event when role is revoked', async () => {
+      const { owner, contract, otherAccount } = fixture;
+
+      await contract.grantCollectionRole(
+        ROLES.CONTROLLER,
+        otherAccount.address
+      );
+
+      await expect(
+        contract.revokeCollectionRole(ROLES.CONTROLLER, otherAccount.address)
+      )
+        .to.emit(contract, 'CollectionRoleRevoked')
+        .withArgs(ROLES.CONTROLLER, otherAccount.address, owner.address);
     });
   });
 });

@@ -16,7 +16,7 @@ export const CardAttributes = ({ heading, info }: CardAttributesProps) => (
     width="200px"
   >
     <CardBody width="200px">
-      <TileInfo size="sm" heading={heading} info={info} width={160} />
+      <TileInfo size="sm" heading={heading} info={info} widthText={160} />
     </CardBody>
   </Card>
 );

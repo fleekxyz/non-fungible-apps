@@ -33,4 +33,3 @@ export const validateFields = (values: FormikValues) => {
   //TODO check if ENS is a valid ens name
   return errors;
 };
-

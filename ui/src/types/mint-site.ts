@@ -17,4 +17,3 @@ export type SiteNFTDetail = Omit<SiteNFT, 'ens' | 'commitHash' | 'repo'> & {
     }
   ];
 };
-

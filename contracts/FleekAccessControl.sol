@@ -4,13 +4,18 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-abstract contract FleekAccessControl {
+contract FleekAccessControl {
     using Counters for Counters.Counter;
 
     enum Roles {
         Owner,
         Controller
     }
+
+    event TokenRoleGranted(uint256 indexed tokenId, Roles indexed role, address indexed toAddress, address byAddress);
+    event TokenRoleRevoked(uint256 indexed tokenId, Roles indexed role, address indexed toAddress, address byAddress);
+    event CollectionRoleGranted(Roles indexed role, address indexed toAddress, address byAddress);
+    event CollectionRoleRevoked(Roles indexed role, address indexed toAddress, address byAddress);
 
     struct Role {
         mapping(address => uint256) indexes;
@@ -23,8 +28,7 @@ abstract contract FleekAccessControl {
 
     mapping(uint256 => Counters.Counter) private _tokenRolesVersion;
     // _tokenRoles[tokenId][version][role]
-    mapping(uint256 => mapping(uint256 => mapping(Roles => Role)))
-        private _tokenRoles;
+    mapping(uint256 => mapping(uint256 => mapping(Roles => Role))) private _tokenRoles;
 
     constructor() {
         _grantCollectionRole(Roles.Owner, msg.sender);
@@ -32,8 +36,7 @@ abstract contract FleekAccessControl {
 
     modifier requireCollectionRole(Roles role) {
         require(
-            hasCollectionRole(role, msg.sender) ||
-                hasCollectionRole(Roles.Owner, msg.sender),
+            hasCollectionRole(role, msg.sender) || hasCollectionRole(Roles.Owner, msg.sender),
             "FleekAccessControl: must have collection role"
         );
         _;
@@ -41,17 +44,13 @@ abstract contract FleekAccessControl {
 
     modifier requireTokenRole(uint256 tokenId, Roles role) {
         require(
-            hasTokenRole(tokenId, role, msg.sender) ||
-                hasTokenRole(tokenId, Roles.Owner, msg.sender),
+            hasTokenRole(tokenId, role, msg.sender) || hasTokenRole(tokenId, Roles.Owner, msg.sender),
             "FleekAccessControl: must have token role"
         );
         _;
     }
 
-    function grantCollectionRole(
-        Roles role,
-        address account
-    ) public requireCollectionRole(Roles.Owner) {
+    function grantCollectionRole(Roles role, address account) public requireCollectionRole(Roles.Owner) {
         _grantCollectionRole(role, account);
     }
 
@@ -63,10 +62,7 @@ abstract contract FleekAccessControl {
         _grantTokenRole(tokenId, role, account);
     }
 
-    function revokeCollectionRole(
-        Roles role,
-        address account
-    ) public requireCollectionRole(Roles.Owner) {
+    function revokeCollectionRole(Roles role, address account) public requireCollectionRole(Roles.Owner) {
         _revokeCollectionRole(role, account);
     }
 
@@ -78,35 +74,23 @@ abstract contract FleekAccessControl {
         _revokeTokenRole(tokenId, role, account);
     }
 
-    function hasCollectionRole(
-        Roles role,
-        address account
-    ) public view returns (bool) {
+    function hasCollectionRole(Roles role, address account) public view returns (bool) {
         uint256 currentVersion = _collectionRolesVersion.current();
 
         return _collectionRoles[currentVersion][role].indexes[account] != 0;
     }
 
-    function hasTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) public view returns (bool) {
+    function hasTokenRole(uint256 tokenId, Roles role, address account) public view returns (bool) {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         return _tokenRoles[tokenId][currentVersion][role].indexes[account] != 0;
     }
 
-    function getCollectionRoleMembers(
-        Roles role
-    ) public view returns (address[] memory) {
+    function getCollectionRoleMembers(Roles role) public view returns (address[] memory) {
         uint256 currentVersion = _collectionRolesVersion.current();
         return _collectionRoles[currentVersion][role].members;
     }
 
-    function getTokenRoleMembers(
-        uint256 tokenId,
-        Roles role
-    ) public view returns (address[] memory) {
+    function getTokenRoleMembers(uint256 tokenId, Roles role) public view returns (address[] memory) {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         return _tokenRoles[tokenId][currentVersion][role].members;
     }
@@ -114,29 +98,25 @@ abstract contract FleekAccessControl {
     function _grantCollectionRole(Roles role, address account) internal {
         uint256 currentVersion = _collectionRolesVersion.current();
         _grantRole(_collectionRoles[currentVersion][role], account);
+        emit CollectionRoleGranted(role, account, msg.sender);
     }
 
     function _revokeCollectionRole(Roles role, address account) internal {
         uint256 currentVersion = _collectionRolesVersion.current();
         _revokeRole(_collectionRoles[currentVersion][role], account);
+        emit CollectionRoleRevoked(role, account, msg.sender);
     }
 
-    function _grantTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) internal {
+    function _grantTokenRole(uint256 tokenId, Roles role, address account) internal {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         _grantRole(_tokenRoles[tokenId][currentVersion][role], account);
+        emit TokenRoleGranted(tokenId, role, account, msg.sender);
     }
 
-    function _revokeTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) internal {
+    function _revokeTokenRole(uint256 tokenId, Roles role, address account) internal {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         _revokeRole(_tokenRoles[tokenId][currentVersion][role], account);
+        emit TokenRoleRevoked(tokenId, role, account, msg.sender);
     }
 
     function _grantRole(Role storage role, address account) internal {
