@@ -29,7 +29,7 @@ To run the UI localy follow the steps:
 
 3. Start the local server running the app:
 
-   ```
+   ```bash
    $ yarn dev
    ```
 
