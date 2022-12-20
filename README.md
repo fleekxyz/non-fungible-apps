@@ -61,7 +61,11 @@ Follow the steps:
 
 ### ✅ Testing Contracts
 
-The project is covered with test suits that must pass to guarantee code integrity. To run the test suits:
+The project is covered with test suits (Foundry & Hardhat) that must pass to guarantee code integrity.
+
+#### HardHat tests
+
+All HardHat tests are located at [this directory](../test/).
 
 1. Make sure that you have the dependencies installed:
 
@@ -72,7 +76,7 @@ The project is covered with test suits that must pass to guarantee code integrit
 2. Run:
 
    ```
-   $ yarn test
+   $ yarn test:hardhat
    ```
 
    The output should finish looking like:
@@ -85,8 +89,52 @@ The project is covered with test suits that must pass to guarantee code integrit
    Done in 4.25s.
    ```
 
+#### Foundry tests
+
+All Forge tests are located at [this directory](../test/foundry/).
+
+In order to run them, you need to have Forge by Foundry installed on your machine (check [this](https://book.getfoundry.sh/getting-started/installation.html) installation guide).
+
+It is also required for you to have [forge-std](https://github.com/foundry-rs/forge-std/tree/cd7d533f9a0ee0ec02ad81e0a8f262bc4203c653) in your `./lib/` directory.
+
+After installing Foundry and its components, you can simply run `yarn test:foundry` in the root directory of the repository and execute all test cases that are described in the `test/foundry` directory.
+
+### Running Both Test Environments
+
+Alternatively, you can run both test environments by executing `yarn test`.
+
 > ⚠️ Please make sure to update tests as appropriate before pushing code
 
+<<<<<<< docs/guide
+### Deployment
+
+This guide contains instructions to deploy the contract on three networks. If the execution is successful, you will see the contract address on your screen at the end of the instructions.
+
+#### Hardhat Local Network
+
+HardHat offers a local testnet environment that allows users and testers to deploy and interact with contracts without the need to contact external APIs and endpoints.
+
+To start your local HardHat network, you need to run a node first. It is important to not terminate the command before proceeding with the instructions: `yarn hh:node`
+
+To deploy the contract on the HardHat network, execute `yarn deploy:local`. If the execution is successful, you will see the contract address on your screen.
+
+#### Polygon Mumbai Testnet
+
+To deploy the contract on the testnet, you have to first export your wallet's private key and update the `.env.example` file at the root directory of this repository.
+
+The [.env.example](./.env.example) file needs to be renamed to `.env` before continuing. Make sure you are using your private API URL, if you have one. 
+
+After updating the `.env` file, you can run `yarn deploy:mumbai` to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
+
+#### Polygon main-net
+
+To deploy the contract on the testnet, you have to first export your wallet's private key and update the `.env.example` file at the root directory of this repository.
+
+The [.env.example](./.env.example) file needs to be renamed to `.env` before continuing. Make sure you are using your private API URL, if you have one. 
+
+After updating the `.env` file, you can run `yarn deploy:mainnet` to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
+
+=======
 ### 🖥️ User Interface
 
 Within the project is included a [React](https://reactjs.org/) web application to expose and test the interaction with deployed scripts. To run it:
@@ -110,6 +158,7 @@ Within the project is included a [React](https://reactjs.org/) web application t
    ```
 
    Now a local server should be running on [http://localhost:5173](http://localhost:5173).
+>>>>>>> chore/readme
 
 ### 💅 Code Styling
 
