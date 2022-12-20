@@ -44,4 +44,4 @@ As we use vite, to build a public distribution for production run:
 $ vite build
 ```
 
-This will create a dist folder where 
+This will create a dist folder for the deployment.
