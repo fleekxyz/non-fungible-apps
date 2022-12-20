@@ -40,8 +40,7 @@ To run the UI localy follow the steps:
 ---
 As we use vite, to build a public distribution for production run:
 
-```
-vite build
-```
+```bash
+$ vite build
 
 This will create a dist folder where 
