@@ -89,27 +89,7 @@ The project is covered with test suits that must pass to guarantee code integrit
 
 ### 🖥️ User Interface
 
-Within the project is included a [React](https://reactjs.org/) web application to expose and test the interaction with deployed scripts. To run it:
-
-1. Get in the `/ui` folder:
-
-   ```
-   $ cd ui
-   ```
-
-2. Install the UI dependencies:
-
-   ```
-   $ yarn
-   ```
-
-3. Start the local server running the app:
-
-   ```
-   $ yarn dev
-   ```
-
-   Now a local server should be running on [http://localhost:5173](http://localhost:5173).
+Within the project is included a [React](https://reactjs.org/) web application to expose and test the interaction with deployed scripts. Check the [UI readme](/ui/README.md) for more info
 
 ### 💅 Code Styling
 
