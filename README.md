@@ -143,15 +143,29 @@ To deploy the contract on the testnet, you have to first export your wallet's pr
 
 The [.env.example](./.env.example) file needs to be renamed to `.env` before continuing. Make sure you are using your private API URL, if you have one.
 
-After updating the `.env` file, you can run `yarn deploy:mumbai` to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
+After updating the `.env` file, you can run:
 
+```
+$ yarn deploy:mumbai
+```
+
+to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
+
+<!-- TODO: add this section after the mainnet setup is done and tested
 **Polygon main-net**
 
 To deploy the contract on the testnet, you have to first export your wallet's private key and update the `.env.example` file at the root directory of this repository.
 
 The [.env.example](./.env.example) file needs to be renamed to `.env` before continuing. Make sure you are using your private API URL, if you have one.
 
-After updating the `.env` file, you can run `yarn deploy:mainnet` to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
+After updating the `.env` file, you can run:
+
+```
+yarn deploy:mainnet
+```
+
+to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
+-->
 
 ### 🖥️ User Interface
 

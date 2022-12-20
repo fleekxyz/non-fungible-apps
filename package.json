@@ -10,7 +10,7 @@
     "test:hardhat": "hardhat test",
     "format": "prettier --write \"./**/*.{js,json,sol,ts}\"",
     "node:hardhat": "hardhat node --tags local",
-    "deploy:local": "hardhat deploy --tags local",
+    "deploy:local": "hardhat deploy --tags local --network localhost",
     "deploy:mumbai": "hardhat deploy --tags mumbai --network mumbai",
     "compile": "hardhat compile",
     "postinstall": "husky install",
