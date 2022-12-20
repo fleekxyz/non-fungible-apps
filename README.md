@@ -5,6 +5,7 @@
 > 🚧 IMPORTANT 🚧 - This initiative is under development, so this repo should be treated as WIP. The goals and roadmap might change as the project is shaped up.
 
 ## ⚡ Overview
+---
 
 This is the landing point for Fleek's initiative to implement infrastructure as Solidity contracts.
 
@@ -15,6 +16,7 @@ The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloud
 Get more information about the project on our [wiki](https://github.com/fleekxyz/contracts/wiki).
 
 ## ⌨️ Developing
+---
 
 ### 📁 Project Structure
 
@@ -63,33 +65,33 @@ Follow the steps:
 
 The project is covered with test suits (Foundry & Hardhat) that must pass to guarantee code integrity.
 
-#### HardHat tests
+**HardHat tests**
 
-All HardHat tests are located at [this directory](../test/).
+   All HardHat tests are located at [this directory](../test/).
 
-1. Make sure that you have the dependencies installed:
+   1. Make sure that you have the dependencies installed:
 
-   ```
-   $ yarn
-   ```
+      ```
+      $ yarn
+      ```
 
-2. Run:
+   2. Run:
 
-   ```
-   $ yarn test:hardhat
-   ```
+      ```
+      $ yarn test:hardhat
+      ```
 
-   The output should finish looking like:
+      The output should finish looking like:
 
-   ```
-   ...
+      ```
+      ...
 
-     15 passing (3s)
+      15 passing (3s)
 
-   Done in 4.25s.
-   ```
+      Done in 4.25s.
+      ```
 
-#### Foundry tests
+**Foundry tests**
 
 All Forge tests are located at [this directory](../test/foundry/).
 
@@ -105,12 +107,11 @@ Alternatively, you can run both test environments by executing `yarn test`.
 
 > ⚠️ Please make sure to update tests as appropriate before pushing code
 
-<<<<<<< docs/guide
 ### Deployment
 
 This guide contains instructions to deploy the contract on three networks. If the execution is successful, you will see the contract address on your screen at the end of the instructions.
 
-#### Hardhat Local Network
+**Hardhat Local Network**
 
 HardHat offers a local testnet environment that allows users and testers to deploy and interact with contracts without the need to contact external APIs and endpoints.
 
@@ -118,7 +119,7 @@ To start your local HardHat network, you need to run a node first. It is importa
 
 To deploy the contract on the HardHat network, execute `yarn deploy:local`. If the execution is successful, you will see the contract address on your screen.
 
-#### Polygon Mumbai Testnet
+**Polygon Mumbai Testnet**
 
 To deploy the contract on the testnet, you have to first export your wallet's private key and update the `.env.example` file at the root directory of this repository.
 
@@ -126,7 +127,7 @@ The [.env.example](./.env.example) file needs to be renamed to `.env` before con
 
 After updating the `.env` file, you can run `yarn deploy:mumbai` to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
 
-#### Polygon main-net
+**Polygon main-net**
 
 To deploy the contract on the testnet, you have to first export your wallet's private key and update the `.env.example` file at the root directory of this repository.
 
@@ -134,7 +135,6 @@ The [.env.example](./.env.example) file needs to be renamed to `.env` before con
 
 After updating the `.env` file, you can run `yarn deploy:mainnet` to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
 
-=======
 ### 🖥️ User Interface
 
 Within the project is included a [React](https://reactjs.org/) web application to expose and test the interaction with deployed scripts. To run it:
@@ -158,7 +158,7 @@ Within the project is included a [React](https://reactjs.org/) web application t
    ```
 
    Now a local server should be running on [http://localhost:5173](http://localhost:5173).
->>>>>>> chore/readme
+
 
 ### 💅 Code Styling
 
@@ -171,7 +171,7 @@ $ yarn format
 > ⚠️ Please make sure you are following the code styling guid before pushing code
 
 ## 🛣️ Roadmap
-
+---
 Our goal is to reach a point where trustable Solidity contracts can be used for identifying properly the data about web3 applications. Within that goal, we want to also provide ways for users to organize and list information about their application. To get at this we are currently starting with:
 
 - Define trustable and extendable smart contracts and standards
@@ -180,10 +180,10 @@ Our goal is to reach a point where trustable Solidity contracts can be used for 
 Later on, when the initiative prove its value, a service will be added to Fleek's platform in a friendly way for anyone be able to get their applications onboard.
 
 ## 💡 Proof of concept
-
+---
 The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/contracts/wiki/Proof-of-Concept). Mainly the concept approached with this initiative will be proven through:
 
-### Basic contracts structure:
+### **Basic contracts structure:**
 
 The first goal is create a contract extended from [ERC721](https://eips.ethereum.org/EIPS/eip-721) to store metadata about the static sites minted and bind them together with their URI (e.g. IPFS hash) and the application building history. The contract should be able to:
 
@@ -195,7 +195,7 @@ The first goal is create a contract extended from [ERC721](https://eips.ethereum
 - Any other function extended from ERC721
 - All tokens be correctly presentable on [OpenSea](https://opensea.io/) and others marketplaces
 
-### Minimal UI
+### **Minimal UI**
 
 It is going to be provided a minimal user interface for interacting with the created sites contract. The UI should have:
 
@@ -205,16 +205,19 @@ It is going to be provided a minimal user interface for interacting with the cre
 
 Also is important that the collection were able to be shown on [OpenSea](https://opensea.io/).
 
-### Admin commands
+### **Admin commands**
 
 The project should provide a way for interacting with the contract as owner with CLI.
 
 <!-- We should add the commands here when they are done -->
 
 ## 🙏 Contributing
+---
 
 This is an open source initiative! Any new idea is welcome, if you want to help us to improve the project please checkout [the contributing guide](/CONTRIBUTING.md).
 
+
 ## 📜 License
+---
 
 Fleek Contracts is released under the [MIT License](LICENSE).
