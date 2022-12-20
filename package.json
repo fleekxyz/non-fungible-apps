@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FleekHQ/sites_nfts.git"
+    "url": "git+https://github.com/fleekxyz/sites_nfts.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/FleekHQ/sites_nfts/issues"
+    "url": "https://github.com/fleekxyz/sites_nfts/issues"
   },
-  "homepage": "https://github.com/FleekHQ/sites_nfts#readme",
+  "homepage": "https://github.com/fleekxyz/sites_nfts#readme",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
     "@nomiclabs/hardhat-ethers": "^2.1.1",

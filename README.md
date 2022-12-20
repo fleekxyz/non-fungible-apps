@@ -12,7 +12,7 @@ The vision is to have this on a suitable L2 or L3 based on EVM so there is flexi
 
 The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloudformation manifests.
 
-Get more information about the project on our [wiki](https://github.com/FleekHQ/contracts/wiki).
+Get more information about the project on our [wiki](https://github.com/fleekxyz/contracts/wiki).
 
 ## ⌨️ Developing
 
@@ -132,7 +132,7 @@ Later on, when the initiative prove its value, a service will be added to Fleek'
 
 ## 💡 Proof of concept
 
-The proof of concept is being a work in progress and you can reach more information [here](https://github.com/FleekHQ/contracts/wiki/Proof-of-Concept). Mainly the concept approached with this initiative will be proven through:
+The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/contracts/wiki/Proof-of-Concept). Mainly the concept approached with this initiative will be proven through:
 
 ### Basic contracts structure:
 
