@@ -19,14 +19,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FleekHQ/contracts.git"
+    "url": "git+https://github.com/fleekxyz/contracts.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/FleekHQ/contracts/issues"
+    "url": "https://github.com/fleekxyz/contracts/issues"
   },
-  "homepage": "https://github.com/FleekHQ/contracts#readme",
+  "homepage": "https://github.com/fleekxyz/contracts#readme",
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.7",
