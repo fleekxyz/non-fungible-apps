@@ -105,7 +105,11 @@ All Forge tests are located at [this directory](../test/foundry/).
 
 In order to run them, you need to have Forge by Foundry installed on your machine (check [this](https://book.getfoundry.sh/getting-started/installation.html) installation guide).
 
-It is also required for you to have [forge-std](https://github.com/foundry-rs/forge-std/tree/cd7d533f9a0ee0ec02ad81e0a8f262bc4203c653) in your `./lib/` directory.
+It is also required for you to have [forge-std](https://github.com/foundry-rs/forge-std/tree/cd7d533f9a0ee0ec02ad81e0a8f262bc4203c653) in your `./lib/` directory. In case you don't have it yet, you can run:
+
+```
+$ git submodule update --init --recursive
+```
 
 After installing Foundry and its components, you can simply run in the root directory:
 
