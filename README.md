@@ -145,7 +145,7 @@ HardHat offers a local testnet environment that allows users and testers to depl
 To start your local HardHat network, you need to run a node first. It is important to not terminate the command before proceeding with the instructions:
 
 ```
-$ yarn hh:node
+$ yarn node:hardhat
 ```
 
 To deploy the contract on the HardHat network, execute:
