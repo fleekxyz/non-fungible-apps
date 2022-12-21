@@ -134,11 +134,11 @@ $ yarn test
 
 > ⚠️ Please make sure to update tests as appropriate before pushing code
 
-### Deployment
+### 🚀 Deployment
 
 This guide contains instructions to deploy the contract on three networks. If the execution is successful, you will see the contract address on your screen at the end of the instructions.
 
-**Hardhat Local Network**
+#### **Hardhat Local Network**
 
 HardHat offers a local testnet environment that allows users and testers to deploy and interact with contracts without the need to contact external APIs and endpoints.
 
@@ -156,7 +156,7 @@ $ yarn deploy:local
 
 If the execution is successful, you will see the contract address on your screen.
 
-**Polygon Mumbai Testnet**
+#### **Polygon Mumbai Testnet**
 
 To deploy the contract on the testnet, you have to first export your wallet's private key and update the `.env.example` file at the root directory of this repository.
 
@@ -168,7 +168,7 @@ After updating the `.env` file, you can run:
 $ yarn deploy:mumbai
 ```
 
-to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
+to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful. To reach more in-depth information about how to deploy contract checkout [this guide](https://wiki.polygon.technology/docs/develop/alchemy).
 
 <!-- TODO: add this section after the mainnet setup is done and tested
 **Polygon main-net**
@@ -184,6 +184,25 @@ yarn deploy:mainnet
 ```
 
 to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
+-->
+
+### ▶️ Interaction scripts
+
+Right away, in the [/scripts](/scripts/) folder you are able to see some scripts that will help you to interact with deployed contracts. By default you are able to select `localhost`, `hardhat` or `mumbai` network name predefined on [hardhat.config.ts](/hardhat.config.ts). The scripts will be using the deployment information stored in the [/deployments](/deployments/) folder. You should have a nested folder for each of the networks you have deployed it. The scripts needs be run using the Hardhat environment following the pattern:
+
+```bash
+# Replace <script_name> with the selected script
+# Replace <network_name> with the selected network
+$ npx hardhat run scripts/<script_name>.js --network <network_name>
+```
+
+<!-- TODO: add the commands here when they are done
+### Admin commands
+
+The project should provide a way for interacting with the contract as owner with CLI.
+
+> 🛠️ Work in progress...
+
 -->
 
 ### 🖥️ User Interface
@@ -213,24 +232,6 @@ Later on, when the initiative prove its value, a service will be added to Fleek'
 ## 💡 Proof of concept
 
 The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/contracts/wiki/Proof-of-Concept).
-
-### **Admin commands**
-
-The project should provide a way for interacting with the contract as owner with CLI.
-
-> 🛠️ Work in progress...
-
-<!-- TODO: add the commands here when they are done -->
-
-### **Interaction script examples**
-
-Right away, in the [/scripts](/scripts/) folder you are able to see some scripts that will help you to interact with deployed contracts. By default you are able to select `localhost`, `hardhat` or `mumbai` network name predefined on [hardhat.config.ts](/hardhat.config.ts). The scripts will be using the deployment information stored in the [/deployments](/deployments/) folder. You should have a nested folder for each of the networks you have deployed it. The scripts needs be run using the Hardhat environment following the pattern:
-
-```bash
-# Replace <script_name> with the selected script
-# Replace <network_name> with the selected network
-$ npx hardhat run scripts/<script_name>.js --network <network_name>
-```
 
 > 💡You are able to see and change the arguments for each script at the top of each file
 
