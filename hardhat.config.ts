@@ -44,12 +44,11 @@ const config: HardhatUserConfig = {
     only: ['NftMarketplace'],
   },
   namedAccounts: {
-    deployer: {
-      default: 1, // here this will by default take the first account as deployer
-      1: 0,
+    localDeployer: {
+      default: 0,
     },
     privateKey: {
-      default: `privatekey://${PRIVATE_KEY}`,
+      default: PRIVATE_KEY ? `privatekey://${PRIVATE_KEY}` : null,
     },
   },
   solidity: {
