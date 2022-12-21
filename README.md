@@ -196,6 +196,8 @@ Right away, in the [/scripts](/scripts/) folder you are able to see some scripts
 $ npx hardhat run scripts/<script_name>.js --network <network_name>
 ```
 
+> 💡You are able to see and change the arguments for each script at the top of each file
+
 <!-- TODO: add the commands here when they are done
 ### Admin commands
 
@@ -232,8 +234,6 @@ Later on, when the initiative prove its value, a service will be added to Fleek'
 ## 💡 Proof of concept
 
 The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/contracts/wiki/Proof-of-Concept).
-
-> 💡You are able to see and change the arguments for each script at the top of each file
 
 ## 🙏 Contributing
 
