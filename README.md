@@ -1,18 +1,34 @@
-# Fleek Contracts
 
-**The repository for Fleek smart contracts**
+<img src="add link"></img>
+
+<h1>Non-Fungible Apps (NFAs)</h1>
+
+**A standard for tokenizing web3 apps.**
 
 > 🚧 IMPORTANT 🚧 - This initiative is under development, so this repo should be treated as WIP. The goals and roadmap might change as the project is shaped up.
 
 ## ⚡ Overview
 
-This is the landing point for Fleek's initiative to implement infrastructure as Solidity contracts.
+This is the landing point for the Fleek's NFA initiative to implement infrastructure as Solidity contracts.
 
-The vision is to have this on a suitable L2 or L3 based on EVM so there is flexibility in terms of which chains to work with. And we can create a network of smart contracts that represent the different parts of your stack.
+The vision is to create a network of smart contracts that represent & manage different parts of your web3 app's decentralized infrastructure stack. We plan to deploy the contract to a suitable L2 or L3 based on EVM.
 
 The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloudformation manifests that will enable us to develop use cases on top like community hosting.
 
-Get more information about the project on our [wiki](https://github.com/fleekxyz/contracts/wiki).
+Find more information about the future of the NFA project on [our wiki](https://github.com/fleekxyz/contracts/wiki) & [this blog post](https://blog.fleek.co/posts/introducing-nfas-non-fungible-apps).
+
+### Table of Contents
+1. [Developing](#⌨️-developing)
+2. [Testing Contracts](#✅-testing-contracts)
+3. [Deployment](#🚀-deployment)
+4. [Interaction Scripts](#▶️-interaction-scripts)
+5. [User Interface](#🖥️-user-interface)
+6. [Code Styling](#💅-code-styling)
+7. [Roadmap](#🛣️-roadmap)
+8. [Proof of Concept](#💡-proof-of-concept)
+9. [External Libraries](#📚-external-libraries)
+10. [Contributing](#🙏-contributing)
+11. [License](#📜-license)
 
 ## ⌨️ Developing
 
@@ -38,7 +54,7 @@ And after running it locally some folders may be generated:
 
 ### 📄 Contracts
 
-The contracts present in this project are based in [Solidity](https://github.com/ethereum/solidity) and it uses [Node.js](https://nodejs.org/) for running scripts and [yarn](https://yarnpkg.com/) to keep dependencies management.
+The contracts present in this project are based in [Solidity](https://github.com/ethereum/solidity) and use [Node.js](https://nodejs.org/) for running scripts and [yarn](https://yarnpkg.com/) for dependency management.
 
 > ⚠️ Before starting developing make sure you Solidity, Node.js and yarn correctly installed in your environment
 
