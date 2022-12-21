@@ -10,7 +10,7 @@ This is the landing point for Fleek's initiative to implement infrastructure as 
 
 The vision is to have this on a suitable L2 or L3 based on EVM so there is flexibility in terms of which chains to work with. And we can create a network of smart contracts that represent the different parts of your stack.
 
-The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloudformation manifests.
+The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloudformation manifests that will enable us to develop use cases on top like community hosting.
 
 Get more information about the project on our [wiki](https://github.com/fleekxyz/contracts/wiki).
 
