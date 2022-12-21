@@ -235,6 +235,18 @@ Later on, when the initiative prove its value, a service will be added to Fleek'
 
 The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/contracts/wiki/Proof-of-Concept).
 
+## 📚 External libraries
+
+We use the following libraries to develop Fleek Non Fungible Apps
+* [Hardhat](https://hardhat.org/)
+* [Foundry](https://book.getfoundry.sh/)
+* [Ethers](https://docs.ethers.io/v5/)
+* [Husky](https://github.com/typicode/husky)
+* [Prettier](https://prettier.io/)
+* [Chakra](https://chakra-ui.com/)
+* [React](https://reactjs.org/)
+* [Vite](https://vitejs.dev/)
+
 ## 🙏 Contributing
 
 This is an open source initiative! Any new idea is welcome, if you want to help us to improve the project please checkout [the contributing guide](/CONTRIBUTING.md).
