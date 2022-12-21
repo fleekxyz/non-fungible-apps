@@ -63,8 +63,8 @@ Follow the steps:
    ```bash
    yarn run v1.22.19
    $ hardhat compile
-   Compiled 24 Solidity files successfully
-   Done in 1.23s.
+   Compiled 14 Solidity files successfully.
+   Done in 0.98s.
    ```
 
 4. Now you are able to make your code changes in the project. To help with Solidity, check [the language references](https://docs.soliditylang.org/).
@@ -94,9 +94,9 @@ All HardHat tests are located at [this directory](../test/).
     ```
     ...
 
-    15 passing (3s)
+    33 passing (1s)
 
-    Done in 4.25s.
+    Done in 2.11s.
     ```
 
 **Foundry tests**
@@ -113,7 +113,12 @@ After installing Foundry and its components, you can simply run in the root dire
 $ yarn test:foundry
 ```
 
-It is going to execute all test cases that are described in the [/test/foundry](test/foundry/) directory.
+It is going to execute all test cases that are described in the [/test/foundry](test/foundry/) directory. Your output should looks like:
+
+```
+Test result: ok. 36 passed; 0 failed; finished in 4.06ms
+Done in 0.58s.
+```
 
 ### Running Both Test Environments
 
