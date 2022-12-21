@@ -1,5 +1,4 @@
 ## ⚡ Overview
----
 
 Minimal UI to interact with the contract, build with [React](https://reactjs.org/). It will allow you to:
 
@@ -8,14 +7,12 @@ Minimal UI to interact with the contract, build with [React](https://reactjs.org
 - View the details of the minted site
 
 ### ⚙️ Requirements
----
 
 You'll need to have [nodejs](https://nodejs.org/en/) and [YARN](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable) installed. Please do not use NPM for package installation.
 
 Also, don't forget to check the [Getting started section](https://github.com/fleekxyz/contracts/wiki/Getting-Started) on the wiki if you didn't do it yet, cause you need to configure your wallet to be able to mint a site.
 
 ### 🖥️ Running
----
 
 To run the UI localy follow the steps:
 
@@ -37,7 +34,7 @@ To run the UI localy follow the steps:
 
 
 ### 🤖 Build public
----
+
 As we use vite, to build a public distribution for production run:
 
 ```bash
