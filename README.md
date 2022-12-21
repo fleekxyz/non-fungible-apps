@@ -206,6 +206,7 @@ Our goal is to reach a point where trustable Solidity contracts can be used for 
 
 - Define trustable and extendable smart contracts and standards
 - Prove how the concept would be applicable using static sites
+- Prove community hosted apps via these contracts
 
 Later on, when the initiative prove its value, a service will be added to Fleek's platform in a friendly way for anyone be able to get their applications onboard.
 
