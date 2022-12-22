@@ -140,7 +140,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     /**
      * @dev Override of _beforeTokenTransfer of ERC721.
      * Here it needs to update the token controller roles for mint, burn and transfer.
-     * IMPORTANT: The function for clearing token controllers is not implemented yet.
      */
     function _beforeTokenTransfer(
         address from,

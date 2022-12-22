@@ -27,7 +27,6 @@ const listSites = [
 ];
 
 export const fetchMintedSites = async () => {
-  //TODO get minted sites from api
   return new Promise((resolved) => {
     setTimeout(() => {
       resolved({
