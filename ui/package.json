@@ -1,7 +1,7 @@
 {
-  "name": "sites-as-nfts",
+  "name": "@fleekxyz/nfa-ui",
   "version": "0.0.1",
-  "description": "Minimal UI for sites as NFTs",
+  "description": "Minimal UI for Fleek Non Fungible Apps",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "author": "Fleek",
-  "license": "ISC",
   "dependencies": {
     "@chakra-ui/icons": "^2.0.13",
     "@chakra-ui/react": "^2.4.2",

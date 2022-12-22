@@ -10,7 +10,7 @@ type TileInfoProps = HeadingProps & {
   heading: string;
   info: React.ReactNode;
   widthText?: number;
-  textAlignText?: 'center' | 'left';
+  textAlignText?: 'center' | 'left'; //TODO allow more text alignment types
   direction?: 'column' | 'row';
   alignItems?: string;
 };
