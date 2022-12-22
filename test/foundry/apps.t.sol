@@ -28,7 +28,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -44,7 +44,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         uint256 second_mint = fleekContract.mint(
@@ -55,7 +55,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(first_mint, 0);
@@ -71,7 +71,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(first_mint, 0);
@@ -84,7 +84,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(second_mint, 1);
@@ -99,7 +99,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(first_mint, 0);
@@ -112,7 +112,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(second_mint, 1);
@@ -127,7 +127,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -146,21 +146,13 @@ contract FleekTest is Test {
             '"attributes": [',
             '{"trait_type": "ENS", "value":"fleek_xyz"},',
             '{"trait_type": "Commit Hash", "value":"afff3f6"},',
-            '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/contracts"},',
+            '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/non-fungible-apps"},',
             '{"trait_type": "Version", "value":"0"}',
             "]",
             "}"
         );
 
-        assertEq(
-            tokenURI,
-            string(
-                abi.encodePacked(
-                    "data:application/json;base64,",
-                    Base64.encode((dataURI))
-                )
-            )
-        );
+        assertEq(tokenURI, string(abi.encodePacked("data:application/json;base64,", Base64.encode((dataURI)))));
     }
 
     function testCallingTokenURIAfterChangingAllPossibleFields() public {
@@ -172,24 +164,17 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
 
         fleekContract.setTokenName(mint, "Foundry Test App 2");
-        fleekContract.setTokenDescription(
-            mint,
-            "This is a test application submitted by foundry tests. 2"
-        );
+        fleekContract.setTokenDescription(mint, "This is a test application submitted by foundry tests. 2");
         fleekContract.setTokenImage(mint, "https://fleek2.xyz");
         fleekContract.setTokenExternalURL(mint, "https://fleek2.xyz");
         fleekContract.setTokenENS(mint, "fleek_xyz2");
-        fleekContract.setTokenBuild(
-            mint,
-            "afff3f62",
-            "https://github.com/fleekxyz/contracts2"
-        );
+        fleekContract.setTokenBuild(mint, "afff3f62", "https://github.com/fleekxyz/non-fungible-apps2");
 
         string memory tokenURI = fleekContract.tokenURI(mint);
 
@@ -205,26 +190,16 @@ contract FleekTest is Test {
             '"attributes": [',
             '{"trait_type": "ENS", "value":"fleek_xyz2"},',
             '{"trait_type": "Commit Hash", "value":"afff3f62"},',
-            '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/contracts2"},',
+            '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/non-fungible-apps2"},',
             '{"trait_type": "Version", "value":"1"}',
             "]",
             "}"
         );
 
-        assertEq(
-            tokenURI,
-            string(
-                abi.encodePacked(
-                    "data:application/json;base64,",
-                    Base64.encode((dataURI))
-                )
-            )
-        );
+        assertEq(tokenURI, string(abi.encodePacked("data:application/json;base64,", Base64.encode((dataURI)))));
     }
 
-    function testFailChangingAllPossibleFieldsOnAnotherUsersTokenWithoutAccess()
-        public
-    {
+    function testFailChangingAllPossibleFieldsOnAnotherUsersTokenWithoutAccess() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
             "Foundry Test App",
@@ -233,7 +208,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -241,18 +216,11 @@ contract FleekTest is Test {
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setTokenName(mint, "Foundry Test App 2");
-        fleekContract.setTokenDescription(
-            mint,
-            "This is a test application submitted by foundry tests. 2"
-        );
+        fleekContract.setTokenDescription(mint, "This is a test application submitted by foundry tests. 2");
         fleekContract.setTokenImage(mint, "https://fleek2.xyz");
         fleekContract.setTokenExternalURL(mint, "https://fleek2.xyz");
         fleekContract.setTokenENS(mint, "fleek_xyz2");
-        fleekContract.setTokenBuild(
-            mint,
-            "afff3f62",
-            "https://github.com/fleekxyz/contracts2"
-        );
+        fleekContract.setTokenBuild(mint, "afff3f62", "https://github.com/fleekxyz/non-fungible-apps2");
 
         string memory tokenURI = fleekContract.tokenURI(mint);
 
@@ -268,21 +236,13 @@ contract FleekTest is Test {
             '"attributes": [',
             '{"trait_type": "ENS", "value":"fleek_xyz2"},',
             '{"trait_type": "Commit Hash", "value":"afff3f62"},',
-            '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/contracts2"},',
+            '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/non-fungible-apps2"},',
             '{"trait_type": "Version", "value":"1"}',
             "]",
             "}"
         );
 
-        assertEq(
-            tokenURI,
-            string(
-                abi.encodePacked(
-                    "data:application/json;base64,",
-                    Base64.encode((dataURI))
-                )
-            )
-        );
+        assertEq(tokenURI, string(abi.encodePacked("data:application/json;base64,", Base64.encode((dataURI)))));
     }
 
     function testFailCallingTokenURIOnNonExistantToken() public {
@@ -298,7 +258,7 @@ contract FleekTest is Test {
             '"attributes": [',
             '{"trait_type": "ENS", "value":"fleek_xyz"},',
             '{"trait_type": "Commit Hash", "value":"afff3f6"},',
-            '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/contracts"},',
+            '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/non-fungible-apps"},',
             '{"trait_type": "Version", "value":"0"}',
             "]",
             "}"
@@ -306,12 +266,7 @@ contract FleekTest is Test {
 
         assertEq(
             fleekContract.tokenURI(0),
-            string(
-                abi.encodePacked(
-                    "data:application/json;base64,",
-                    Base64.encode((dataURI))
-                )
-            )
+            string(abi.encodePacked("data:application/json;base64,", Base64.encode((dataURI))))
         );
     }
 
@@ -324,7 +279,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -345,7 +300,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -364,7 +319,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -389,7 +344,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -406,7 +361,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -425,7 +380,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -433,9 +388,7 @@ contract FleekTest is Test {
         fleekContract.setTokenDescription(mint, "NEW TOKEN NAME!");
     }
 
-    function testFailSetTokenDescriptionOnAnotherUsersTokenWithoutAccess()
-        public
-    {
+    function testFailSetTokenDescriptionOnAnotherUsersTokenWithoutAccess() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
             "Foundry Test App",
@@ -444,7 +397,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -463,7 +416,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -480,7 +433,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -499,7 +452,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -507,9 +460,7 @@ contract FleekTest is Test {
         fleekContract.setTokenExternalURL(mint, "https://ethereum.org");
     }
 
-    function testFailSetTokenExternalURLOnAnotherUsersTokenWithoutAccess()
-        public
-    {
+    function testFailSetTokenExternalURLOnAnotherUsersTokenWithoutAccess() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
             "Foundry Test App",
@@ -518,7 +469,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -537,16 +488,12 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
 
-        fleekContract.setTokenBuild(
-            mint,
-            "aaaaaaa",
-            "https://github.com/fleekxyz/test_contracts"
-        );
+        fleekContract.setTokenBuild(mint, "aaaaaaa", "https://github.com/fleekxyz/test_contracts");
     }
 
     function testFailSetTokenBuildOnAnotherUsersTokenWithoutAccess() public {
@@ -558,18 +505,14 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
 
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
-        fleekContract.setTokenBuild(
-            mint,
-            "aaaaaaa",
-            "https://github.com/fleekxyz/test_contracts"
-        );
+        fleekContract.setTokenBuild(mint, "aaaaaaa", "https://github.com/fleekxyz/test_contracts");
     }
 
     function testSetTokenENS() public {
@@ -581,7 +524,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -598,7 +541,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -617,7 +560,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -629,9 +572,7 @@ contract FleekTest is Test {
         );
     }
 
-    function testFailAddTokenControllerOnAnotherUsersTokenWithoutAccess()
-        public
-    {
+    function testFailAddTokenControllerOnAnotherUsersTokenWithoutAccess() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
             "Foundry Test App",
@@ -640,7 +581,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -663,7 +604,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -689,7 +630,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -706,9 +647,7 @@ contract FleekTest is Test {
         );
     }
 
-    function testFailRemoveTokenControllerOnAnotherUsersTokenWithoutAccess()
-        public
-    {
+    function testFailRemoveTokenControllerOnAnotherUsersTokenWithoutAccess() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
             "Foundry Test App",
@@ -717,7 +656,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -744,7 +683,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -775,7 +714,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -804,7 +743,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);
@@ -815,11 +754,7 @@ contract FleekTest is Test {
             0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84
         );
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
-        fleekContract.revokeTokenRole(
-            mint,
-            FleekAccessControl.Roles.Controller,
-            DEPLOYER
-        );
+        fleekContract.revokeTokenRole(mint, FleekAccessControl.Roles.Controller, DEPLOYER);
     }
 
     function testBalanceOfDeployerAfterAndBeforeMinting() public {
@@ -833,7 +768,7 @@ contract FleekTest is Test {
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
-            "https://github.com/fleekxyz/contracts"
+            "https://github.com/fleekxyz/non-fungible-apps"
         );
 
         assertEq(mint, 0);

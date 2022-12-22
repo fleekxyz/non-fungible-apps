@@ -5,7 +5,7 @@ const MINT_PARAMS = {
   ens: 'fleek.eth',
   externalUrl: 'https://fleek.co',
   commitHash: 'b72e47171746b6a9e29b801af9cb655ecf4d665c',
-  gitRepository: 'https://github.com/fleekxyz/contracts',
+  gitRepository: 'https://github.com/fleekxyz/non-fungible-apps',
   author: 'author',
 };
 
