@@ -15,7 +15,7 @@ The vision is to create a network of smart contracts that represent & manage dif
 
 The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloudformation manifests that will enable us to develop use cases on top like community hosting.
 
-Find more information about the future of the NFA project on [our wiki](https://github.com/fleekxyz/contracts/wiki) & [this blog post](https://blog.fleek.co/posts/introducing-nfas-non-fungible-apps).
+Find more information about the future of the NFA project on [our wiki](https://github.com/fleekxyz/non-fungible-apps/wiki) & [this blog post](https://blog.fleek.co/posts/introducing-nfas-non-fungible-apps).
 
 ### Table of Contents
 1. [Developing](#⌨️-developing)
