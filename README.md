@@ -17,17 +17,17 @@ The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloud
 Find more information about the future of the NFA project on [our wiki](https://github.com/fleekxyz/non-fungible-apps/wiki) & [this blog post](https://blog.fleek.co/posts/introducing-nfas-non-fungible-apps).
 
 ### Table of Contents
-- [Developing](#⌨️-developing)
-- [Testing Contracts](#✅-testing-contracts)
-- [Deployment](#🚀-deployment)
-- [Interaction Scripts](#▶️-interaction-scripts)
-- [User Interface](#🖥️-user-interface)
-- [Code Styling](#💅-code-styling)
-- [Roadmap](#🛣️-roadmap)
-- [Proof of Concept](#💡-proof-of-concept)
-- [Dependency Highlights](#📚-dependency-highlights)
-- [Contributing](#🙏-contributing)
-- [License](#📜-license)
+- [Developing](#%EF%B8%8F-developing)
+- [Testing Contracts](#-testing-contracts)
+- [Deployment](#-deployment)
+- [Interaction Scripts](#%EF%B8%8F-interaction-scripts)
+- [User Interface](#%EF%B8%8F-user-interface)
+- [Code Styling](#-code-styling)
+- [Roadmap](#%EF%B8%8F-roadmap)
+- [Proof of Concept](#-proof-of-concept)
+- [Dependency Highlights](#-dependency-highlights)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ## ⌨️ Developing
 
