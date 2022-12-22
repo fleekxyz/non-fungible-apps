@@ -15,8 +15,7 @@ export const FleekERC721 = {
       params.externalUrl,
       params.ens,
       params.commitHash,
-      params.repo,
-      'author' // TODO: remove author after contract update
+      params.repo
     );
 
     return response;

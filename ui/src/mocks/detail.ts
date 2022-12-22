@@ -6,7 +6,6 @@ const MINT_PARAMS = {
   externalUrl: 'https://fleek.co',
   commitHash: 'b72e47171746b6a9e29b801af9cb655ecf4d665c',
   gitRepository: 'https://github.com/fleekxyz/non-fungible-apps',
-  author: 'author',
 };
 
 const mockDetail = {
@@ -28,20 +27,14 @@ const mockDetail = {
       trait_type: 'Repository',
       value: MINT_PARAMS.gitRepository,
     },
-    //As we're not showing this on the UI, we can remove it
-    // {
-    //   trait_type: 'Author',
-    //   value: MINT_PARAMS.author,
-    // },
-    // {
-    //   trait_type: 'Version',
-    //   value: '0',
-    // },
+    {
+      trait_type: 'Version',
+      value: '0',
+    },
   ],
 };
 
 export const fetchSiteDetail = async (tokenId: string) => {
-  //TODO get site detail from api
   return new Promise((resolved, reject) => {
     setTimeout(() => {
       resolved({
