@@ -10,7 +10,7 @@ Minimal UI to interact with the contract, build with [React](https://reactjs.org
 
 You'll need to have [nodejs](https://nodejs.org/en/) and [YARN](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable) installed. Please do not use NPM for package installation.
 
-Also, don't forget to check the [Getting started section](https://github.com/fleekxyz/non-fungible-apps/wiki/Getting-Started) on the wiki if you didn't do it yet, cause you need to configure your wallet to be able to mint a site.
+Also, don't forget to check the [Getting started section](https://github.com/fleekxyz/non-fungible-apps/wiki/%F0%9F%93%98-Getting-Started) on the wiki if you didn't do it yet, cause you need to configure your wallet to be able to mint a site.
 
 ### 🖥️ Running
 
@@ -41,3 +41,4 @@ $ vite build
 ```
 
 This will create a dist folder for the deployment.
+
