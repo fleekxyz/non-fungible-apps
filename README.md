@@ -235,17 +235,19 @@ Later on, when the initiative prove its value, a service will be added to Fleek'
 
 The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/non-fungible-apps/wiki/Proof-of-Concept).
 
-## 📚 External libraries
+## 📚 Dependency Highlights
 
 We use the following libraries to develop Fleek Non Fungible Apps
-* [Hardhat](https://hardhat.org/)
-* [Foundry](https://book.getfoundry.sh/)
-* [Ethers](https://docs.ethers.io/v5/)
-* [Husky](https://github.com/typicode/husky)
-* [Prettier](https://prettier.io/)
-* [Chakra](https://chakra-ui.com/)
-* [React](https://reactjs.org/)
-* [Vite](https://vitejs.dev/)
+
+- [Chakra](https://chakra-ui.com/)
+- [Eslint](https://eslint.org/) + [Prettier](https://prettier.io/)
+- [Ethers](https://docs.ethers.io/v5/)
+- [Foundry](https://book.getfoundry.sh/)
+- [Hardhat](https://hardhat.org/)
+- [Open Zeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts)
+- [React](https://reactjs.org/)
+- [Typescript](https://www.typescriptlang.org)
+- [Vite](https://vitejs.dev/)
 
 ## 🙏 Contributing
 
