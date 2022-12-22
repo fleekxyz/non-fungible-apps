@@ -6,7 +6,12 @@ If you want to help us improve the project you can always start a conversation t
 
 ## Getting Started
 
-Contributions are made to this repo via Issues and Pull Requests (PRs). A few general guidelines that cover both:
+Contributions are made to this repository via Issues and Pull Requests (PRs). A few general guidelines that cover both:
+
+
+1. Search for existing related Issues and PRs before creating your own.
+2. Make sure you are clear about your ideas and expose as much information as you can (e.g. code samples, images).
+3. We will be working hard to respond to all Issues as soon as possible, but it can take time to investigate root causes. Please be patient.
 
 1. Search for existing related Issues and PRs before creating your own.
 2. Make sure you are clear about your ideas and expose as much information as you possibly can, as that can help the investigation process immensly. (e.g. code samples, images).
