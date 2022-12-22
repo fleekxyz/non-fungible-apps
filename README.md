@@ -235,7 +235,7 @@ Later on, when the initiative prove its value, a service will be added to Fleek'
 
 ## 💡 Proof of concept
 
-The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/non-fungible-apps/wiki/Proof-of-Concept).
+The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/non-fungible-apps/wiki/%F0%9F%92%A1-Proof-of-Concept).
 
 ## 📚 Dependency Highlights
 

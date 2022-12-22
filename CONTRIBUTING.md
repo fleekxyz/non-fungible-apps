@@ -12,7 +12,7 @@ Contributions are made to this repo via Issues and Pull Requests (PRs). A few ge
 2. Make sure you are being clear about your ideas and expose as much information as you can (e.g. code samples, images);
 3. We will be working hard to handle and respond all Issues as soon as possible, but it can takes time for investigation root causes. Please be patient.
 
-If you don't know where to start, you can take a look in the [Getting Started section on our wiki](https://github.com/fleekxyz/non-fungible-apps/wiki/Getting-Started).
+If you don't know where to start, you can take a look in the [Getting Started section on our wiki](https://github.com/fleekxyz/non-fungible-apps/wiki/%F0%9F%93%98-Getting-Started).
 
 ## Issues
 
@@ -45,7 +45,7 @@ Please ensure your code is clear and readable and also provide as much informati
 
 ## Testing
 
-We are up to write tests using both [Hardhat](https://hardhat.org/) and [Foundry](https://book.getfoundry.sh/) frameworks. Its mandatory that all tests were well described and all validations to make the code consistent and secure. To get more information about it, check the [Testing section on our wiki](https://github.com/fleekxyz/non-fungible-apps/wiki/Getting-Started#testing). You can also get some examples of how to test it on [test folder](/test).
+We are up to write tests using both [Hardhat](https://hardhat.org/) and [Foundry](https://book.getfoundry.sh/) frameworks. Its mandatory that all tests were well described and all validations to make the code consistent and secure. To get more information about it, check the [Testing section on our wiki](https://github.com/fleekxyz/non-fungible-apps/wiki/%F0%9F%93%98-Getting-Started#testing). You can also get some examples of how to test it on [test folder](/test).
 
 ## Getting help
 
