@@ -1,8 +1,7 @@
 {
-  "name": "fleek_contracts",
+  "name": "@fleekxyz/non-fungible-apps",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
   "private": "false",
   "scripts": {
     "test": "hardhat test && forge test --via-ir",
@@ -10,7 +9,7 @@
     "test:hardhat": "hardhat test",
     "format": "prettier --write \"./**/*.{js,json,sol,ts}\"",
     "node:hardhat": "hardhat node --tags local",
-    "deploy:local": "hardhat deploy --tags local",
+    "deploy:local": "hardhat deploy --tags local --network localhost",
     "deploy:mumbai": "hardhat deploy --tags mumbai --network mumbai",
     "compile": "hardhat compile",
     "postinstall": "husky install",
@@ -19,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FleekHQ/contracts.git"
+    "url": "git+https://github.com/fleekxyz/non-fungible-apps.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FleekHQ/contracts/issues"
+    "url": "https://github.com/fleekxyz/non-fungible-apps/issues"
   },
-  "homepage": "https://github.com/FleekHQ/contracts#readme",
+  "homepage": "https://github.com/fleekxyz/non-fungible-apps#readme",
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.7",

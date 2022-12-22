@@ -10,7 +10,7 @@ const listSites = [
     externalUrl: 'https://onepiece.fandom.com/wiki/Roronoa_Zoro',
     ens: 'zoro.eth',
     commitHash: '6ea6ad16c46ae85faced7e50555ff7368422f57',
-    githubRepo: 'https://github.com/fleekxyz/contracts',
+    githubRepo: 'https://github.com/fleekxyz/non-fungible-apps',
   },
   {
     tokenId: 2,
@@ -22,7 +22,7 @@ const listSites = [
     externalUrl: 'https://fleek.co',
     ens: 'fleek.eth',
     commitHash: '6ea6ad16c46ae85faced7e50555ff7368422f57',
-    githubRepo: 'https://github.com/fleekxyz/contracts',
+    githubRepo: 'https://github.com/fleekxyz/non-fungible-apps',
   },
 ];
 
