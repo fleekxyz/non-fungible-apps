@@ -1,5 +1,5 @@
 
-<img src="add link"></img>
+<!-- <img src="add link"></img> -->
 
 <h1>Non-Fungible Apps (NFAs)</h1>
 
