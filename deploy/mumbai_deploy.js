@@ -1,8 +1,8 @@
 const contractName = 'FleekERC721';
 
 const args = [
-  'FleekSites', // Collection name
-  'FLKSITE', // Collection symbol
+  'FleekNFAs', // Collection name
+  'FLKNFA', // Collection symbol
 ];
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
