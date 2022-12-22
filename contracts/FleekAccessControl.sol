@@ -30,10 +30,16 @@ contract FleekAccessControl {
     // _tokenRoles[tokenId][version][role]
     mapping(uint256 => mapping(uint256 => mapping(Roles => Role))) private _tokenRoles;
 
+    /**
+     * @dev Initializes the contract by granting the `Owner` role to the deployer.
+     */
     constructor() {
         _grantCollectionRole(Roles.Owner, msg.sender);
     }
 
+    /**
+     * @dev Checks if the `msg.sender` has a certain role.
+     */
     modifier requireCollectionRole(Roles role) {
         require(
             hasCollectionRole(role, msg.sender) || hasCollectionRole(Roles.Owner, msg.sender),
@@ -42,6 +48,9 @@ contract FleekAccessControl {
         _;
     }
 
+    /**
+     * @dev Checks if the `msg.sender` has the `Token` role for a certain `tokenId`.
+     */
     modifier requireTokenRole(uint256 tokenId, Roles role) {
         require(
             hasTokenRole(tokenId, role, msg.sender) || hasTokenRole(tokenId, Roles.Owner, msg.sender),
