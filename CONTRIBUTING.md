@@ -2,15 +2,18 @@
 
 The core developer team of Fleek Non Fungible Apps welcomes all contributions from the community to achieve consistent code updates and enhancements.
 
-If you want to help us to improve the project you can always start a conversation through the [issues page](https://github.com/fleekxyz/non-fungible-apps/issues). By doing it make sure you are being ethical and respectful with anyone on the community. We take our open source community seriously and hold ourselves and other contributors to high standards of communication.
+If you want to help us improve the project, you can always start a conversation through the [issues page](https://github.com/fleekxyz/non-fungible-apps/issues). Make sure you are being respectful towards the members of the community. We take our open-source community seriously and hold ourselves and other contributors to high communication standards.
+
 
 ## Getting Started
 
-Contributions are made to this repo via Issues and Pull Requests (PRs). A few general guidelines that cover both:
+Contributions are made to this repository via Issues and Pull Requests (PRs). A few general guidelines that cover both:
 
-1. Search for existing Issues and PRs related before creating your own;
-2. Make sure you are being clear about your ideas and expose as much information as you can (e.g. code samples, images);
-3. We will be working hard to handle and respond all Issues as soon as possible, but it can takes time for investigation root causes. Please be patient.
+
+1. Search for existing related Issues and PRs before creating your own.
+2. Make sure you are clear about your ideas and expose as much information as you can (e.g. code samples, images).
+3. We will be working hard to respond to all Issues as soon as possible, but it can take time to investigate root causes. Please be patient.
+
 
 If you don't know where to start, you can take a look in the [Getting Started section on our wiki](https://github.com/fleekxyz/non-fungible-apps/wiki/%F0%9F%93%98-Getting-Started).
 

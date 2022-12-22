@@ -2,7 +2,8 @@
 
 **The repository for Fleek Non Fungible Apps project**
 
-> 🚧 IMPORTANT 🚧 - This initiative is under development, so this repo should be treated as WIP. The goals and roadmap might change as the project is shaped up.
+> 🚧 IMPORTANT 🚧 - This initiative is under development, so this repo should be treated as a WIP. The goals and the roadmap might change as the project is shaped.
+
 
 ## ⚡ Overview
 
