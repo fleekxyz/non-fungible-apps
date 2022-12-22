@@ -1,6 +1,6 @@
-# Fleek Contracts
+# Fleek Non Fungible Apps
 
-**The repository for Fleek smart contracts**
+**The repository for Fleek Non Fungible Apps project**
 
 > 🚧 IMPORTANT 🚧 - This initiative is under development, so this repo should be treated as WIP. The goals and roadmap might change as the project is shaped up.
 
@@ -12,7 +12,7 @@ The vision is to have this on a suitable L2 or L3 based on EVM so there is flexi
 
 The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloudformation manifests that will enable us to develop use cases on top like community hosting.
 
-Get more information about the project on our [wiki](https://github.com/fleekxyz/contracts/wiki).
+Get more information about the project on our [wiki](https://github.com/fleekxyz/non-fungible-apps/wiki).
 
 ## ⌨️ Developing
 
@@ -233,7 +233,7 @@ Later on, when the initiative prove its value, a service will be added to Fleek'
 
 ## 💡 Proof of concept
 
-The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/contracts/wiki/Proof-of-Concept).
+The proof of concept is being a work in progress and you can reach more information [here](https://github.com/fleekxyz/non-fungible-apps/wiki/Proof-of-Concept).
 
 ## 📚 External libraries
 
@@ -253,4 +253,4 @@ This is an open source initiative! Any new idea is welcome, if you want to help 
 
 ## 📜 License
 
-Fleek Contracts is released under the [MIT License](LICENSE).
+Fleek Non Fungible Apps is released under the [MIT License](LICENSE).
