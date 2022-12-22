@@ -18,15 +18,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     event NewTokenExternalURL(uint256 indexed token, string indexed externalURL, address indexed triggeredBy);
     event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggeredBy);
 
-    struct Build {
-        string commitHash;
-        string gitRepository;
-    }
-
     /**
      * The properties are stored as string to keep consistency with
      * other token contracts, we might consider changing for bytes32
-     * in the future due to gas optimization
+     * in the future due to gas optimization.
      */
     struct App {
         string name; // Name of the site
@@ -38,11 +33,25 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
     }
 
+    /**
+     * The metadata that is stored for each build.
+     */
+    struct Build {
+        string commitHash;
+        string gitRepository;
+    }
+
     Counters.Counter private _tokenIds;
     mapping(uint256 => App) private _apps;
 
+    /**
+     * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
+     */
     constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
 
+    /**
+     * @dev Checks if msg.sender has the role of tokenOwner for a certain tokenId.
+     */
     modifier requireTokenOwner(uint256 tokenId) {
         require(msg.sender == ownerOf(tokenId), "FleekERC721: must be token owner");
         _;
