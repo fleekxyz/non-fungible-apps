@@ -12,7 +12,9 @@ The vision is to have this on a suitable L2 or L3 based on EVM so there is flexi
 
 The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloudformation manifests that will enable us to develop use cases on top like community hosting.
 
-Get more information about the project on our [wiki](https://github.com/fleekxyz/non-fungible-apps/wiki).
+We've developed a base set of contract code so now we want to harden it as well as add more metadata and features to support use cases with the first use case being community hosting. So be sure to check out the roadmap on the wiki.
+
+You can find the wiki [here](https://github.com/fleekxyz/non-fungible-apps/wiki) for more information about the project.
 
 ## ⌨️ Developing
 
@@ -256,3 +258,7 @@ This is an open source initiative! Any new idea is welcome, if you want to help 
 ## 📜 License
 
 Fleek Non Fungible Apps is released under the [MIT License](LICENSE).
+
+## 🐛 Bug reporting
+
+If you have found a bug to report, please create an [issue](https://github.com/fleekxyz/non-fungible-apps/issues). Thank you!
