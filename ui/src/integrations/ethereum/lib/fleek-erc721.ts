@@ -27,7 +27,9 @@ export const FleekERC721 = {
     const response = await contract.tokenURI(Number(tokenId));
 
     const parsed = JSON.parse(
-      Buffer.from(response.slice(29), 'base64').toString('utf-8')
+      Buffer.from(response.slice(29), 'base64')
+        .toString('utf-8')
+        .replaceAll(/\n/g, '\\n') // replace escaped newlines
     );
 
     return parsed;

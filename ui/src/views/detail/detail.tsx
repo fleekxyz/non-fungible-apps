@@ -69,7 +69,16 @@ export const MintedSiteDetail = () => {
                       heading="Description"
                       minH={120}
                       maxH="auto"
-                      children={<p>{description}</p>}
+                      children={
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              '<p>' +
+                              description.replaceAll('\n', '</p><p>') +
+                              '</p>',
+                          }}
+                        />
+                      }
                     />
                     <AccordionItem
                       heading="Attributes"

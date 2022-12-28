@@ -65,7 +65,7 @@ export const MintSite = () => {
         await FleekERC721.mint(
           {
             name,
-            description,
+            description: description.replaceAll(/\n/g, '\\n'), //replace break lines with \\n so it doesn't break the json
             owner: ownerAddress,
             externalUrl,
             image,
