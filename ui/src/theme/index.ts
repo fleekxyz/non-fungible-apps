@@ -6,7 +6,7 @@ const appTheme = {
       body: {
         color: 'rgba(255, 255, 255)',
         bg: '#161616',
-        margin: '50px',
+        margin: '25px 50px',
       },
     },
   },

@@ -44,7 +44,7 @@ export const MintedSiteDetail = () => {
 
   return (
     <>
-      <Flex width="full" align="center" justifyContent="center">
+      <Flex width="full" align="center" justifyContent="center" mt="30px">
         <Box width={{ base: '100%' }}>
           <HomeButton />
           <Box
