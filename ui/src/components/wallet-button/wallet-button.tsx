@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useAppDispatch, useWalletStore, walletActions } from '@/store';
 import { contractAddress } from '@/utils';
 import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
+import { CopyIcon, DisconnectIcon, WalletIcon } from './';
 
 const WalletMenu: React.FC = () => {
   const { account = '', provider } = useWalletStore();
@@ -17,13 +18,27 @@ const WalletMenu: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <Menu>
-      <MenuButton as={Button}>
+    <Menu colorScheme={'#282824'}>
+      <MenuButton as={Button} borderRadius="50px">
         {`${provider} (${contractAddress(account)})`}
       </MenuButton>
-      <MenuList>
-        <MenuItem onClick={handleCopyAccount}>Copy Account</MenuItem>
-        <MenuItem onClick={handleDisconnect}>Disconnect</MenuItem>
+      <MenuList bg={'#282824'}>
+        <MenuItem
+          _hover={{ bg: '#4b4b4b' }}
+          bg={'#282824'}
+          onClick={handleCopyAccount}
+          icon={<CopyIcon />}
+        >
+          Copy Account
+        </MenuItem>
+        <MenuItem
+          _hover={{ bg: '#4b4b4b' }}
+          bg={'#282824'}
+          onClick={handleDisconnect}
+          icon={<DisconnectIcon />}
+        >
+          Disconnect
+        </MenuItem>
       </MenuList>
     </Menu>
   );
@@ -40,15 +55,23 @@ const ConnectionMenu: React.FC = () => {
 
   return (
     <Menu>
-      <MenuButton
-        as={Button}
+      <Button
+        borderRadius="50px"
+        as={MenuButton}
+        leftIcon={<WalletIcon />}
         isLoading={state === 'loading'}
         disabled={state === 'loading'}
       >
-        Connect Wallet
-      </MenuButton>
-      <MenuList>
-        <MenuItem onClick={handleConnectWallet}>Metamask</MenuItem>
+        Connect
+      </Button>
+      <MenuList bg={'#282824'}>
+        <MenuItem
+          _hover={{ bg: '#4b4b4b' }}
+          bg={'#282824'}
+          onClick={handleConnectWallet}
+        >
+          Metamask
+        </MenuItem>
       </MenuList>
     </Menu>
   );
