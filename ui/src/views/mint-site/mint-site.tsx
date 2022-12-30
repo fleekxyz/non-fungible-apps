@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import {
   Heading,
   Flex,
@@ -11,8 +11,12 @@ import {
   Grid,
   GridItem,
   VStack,
+  InputGroup,
+  Input,
+  InputRightElement,
+  InputProps,
 } from '@chakra-ui/react';
-import { Formik, Field } from 'formik';
+import { Formik, Field, useFormikContext } from 'formik';
 import { getRepoAndCommit } from '@/utils';
 import { validateFields } from './mint-site.utils';
 import { HomeButton, InputFieldForm } from '@/components';
@@ -39,6 +43,31 @@ const initialValues = {
   image: '',
   ens: '',
 } as FormValues;
+
+const OwnerAdress = (props: InputProps) => {
+  const { setFieldValue } = useFormikContext();
+
+  return (
+    <InputGroup size="md">
+      <Input {...props} pr="4.5rem" />
+      <InputRightElement width="4.5rem">
+        <Button
+          h="1.75rem"
+          size="sm"
+          onClick={() => {
+            if (setFieldValue && props.name) {
+              navigator.clipboard
+                .readText()
+                .then((text) => setFieldValue(props.name as string, text));
+            }
+          }}
+        >
+          Paste
+        </Button>
+      </InputRightElement>
+    </InputGroup>
+  );
+};
 
 export const MintSite = () => {
   const setToastInfo = useToast();
@@ -105,7 +134,14 @@ export const MintSite = () => {
                 initialValues={initialValues}
                 onSubmit={handleSubmitForm}
               >
-                {({ values, touched, handleSubmit, isSubmitting, errors }) => (
+                {({
+                  values,
+                  touched,
+                  handleSubmit,
+                  isSubmitting,
+                  errors,
+                  setFieldValue,
+                }) => (
                   <form onSubmit={handleSubmit}>
                     <Box
                       display="flex"
@@ -119,15 +155,26 @@ export const MintSite = () => {
                         isInvalid={!!errors.name && touched.name}
                         isRequired
                       />
-                      <InputFieldForm
-                        label="Owner address"
-                        fieldName="ownerAddress"
-                        error={errors.ownerAddress}
+                      <FormControl
+                        isRequired
                         isInvalid={
                           !!errors.ownerAddress && touched.ownerAddress
                         }
-                        isRequired
-                      />
+                      >
+                        <FormLabel htmlFor="ownerAddress">
+                          Owner address
+                        </FormLabel>
+                        <Field
+                          as={OwnerAdress}
+                          name="ownerAddress"
+                          id="ownerAddress"
+                        />
+                        {errors.description && (
+                          <FormErrorMessage>
+                            {errors.description}
+                          </FormErrorMessage>
+                        )}
+                      </FormControl>
                     </Box>
                     <FormControl
                       mt={6}
