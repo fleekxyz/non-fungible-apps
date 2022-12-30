@@ -1,8 +1,15 @@
 import { useCallback } from 'react';
 import { useAppDispatch, useWalletStore, walletActions } from '@/store';
 import { contractAddress } from '@/utils';
-import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
-import { CopyIcon, DisconnectIcon, WalletIcon } from './';
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Button,
+  Flex,
+} from '@chakra-ui/react';
+import { ConnectedWalletIcon, CopyIcon, DisconnectIcon, WalletIcon } from './';
 
 const WalletMenu: React.FC = () => {
   const { account = '', provider } = useWalletStore();
@@ -19,9 +26,12 @@ const WalletMenu: React.FC = () => {
 
   return (
     <Menu colorScheme={'#282824'}>
-      <MenuButton as={Button} borderRadius="50px">
-        {`${provider} (${contractAddress(account)})`}
-      </MenuButton>
+      <Button borderRadius="50px" as={MenuButton}>
+        <Flex alignItems={'center'}>
+          <ConnectedWalletIcon provider={provider?.toString() as string} />
+          {contractAddress(account)}
+        </Flex>
+      </Button>
       <MenuList bg={'#282824'}>
         <MenuItem
           _hover={{ bg: '#4b4b4b' }}
