@@ -79,6 +79,7 @@ const ConnectionMenu: React.FC = () => {
           _hover={{ bg: '#4b4b4b' }}
           bg={'#282824'}
           onClick={handleConnectWallet}
+          icon={<ConnectedWalletIcon provider={'metamask'} />}
         >
           Metamask
         </MenuItem>
