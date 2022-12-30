@@ -46,7 +46,7 @@ const initialValues = {
 
 const OwnerAdress = (props: InputProps) => {
   const { setFieldValue } = useFormikContext();
-
+  console.log(props);
   return (
     <InputGroup size="md">
       <Input {...props} pr="4.5rem" />
@@ -134,14 +134,7 @@ export const MintSite = () => {
                 initialValues={initialValues}
                 onSubmit={handleSubmitForm}
               >
-                {({
-                  values,
-                  touched,
-                  handleSubmit,
-                  isSubmitting,
-                  errors,
-                  setFieldValue,
-                }) => (
+                {({ values, touched, handleSubmit, isSubmitting, errors }) => (
                   <form onSubmit={handleSubmit}>
                     <Box
                       display="flex"
@@ -169,9 +162,9 @@ export const MintSite = () => {
                           name="ownerAddress"
                           id="ownerAddress"
                         />
-                        {errors.description && (
+                        {errors.ownerAddress && (
                           <FormErrorMessage>
-                            {errors.description}
+                            {errors.ownerAddress}
                           </FormErrorMessage>
                         )}
                       </FormControl>
