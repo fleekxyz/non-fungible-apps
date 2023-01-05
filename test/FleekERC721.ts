@@ -610,6 +610,8 @@ describe('FleekERC721', () => {
       await expect(contract.addMirror(tokenId, 'mirror.com'))
         .to.emit(contract, 'NewMirror')
         .withArgs('mirror.com', tokenId, owner.address);
+
+      expect(await contract.appMirrors(tokenId)).eql(['mirror.com']);
     });
 
     it('should return a mirror json object', async () => {
@@ -714,6 +716,8 @@ describe('FleekERC721', () => {
       await expect(contract.removeMirror('mirror.com'))
         .to.emit(contract, 'RemovedMirror')
         .withArgs('mirror.com', owner.address);
+
+      expect(await contract.appMirrors(tokenId)).eql([]);
     });
 
     it('should allow only mirror owner to remove it', async () => {
@@ -756,6 +760,39 @@ describe('FleekERC721', () => {
       const isMirrorActive = await contract.isMirrorVerified('mirror.com');
 
       expect(isMirrorActive).to.be.true;
+    });
+
+    it('should get a list of added mirrors for an app', async () => {
+      const { contract } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror1.com');
+      await contract.addMirror(tokenId, 'mirror2.com');
+      await contract.addMirror(tokenId, 'mirror3.com');
+      await contract.addMirror(tokenId, 'mirror4.com');
+
+      const mirrors = await contract.appMirrors(tokenId);
+
+      expect(mirrors).to.eql([
+        'mirror1.com',
+        'mirror2.com',
+        'mirror3.com',
+        'mirror4.com',
+      ]);
+    });
+
+    it('should get a list of added mirrors for an app after removing one', async () => {
+      const { contract } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror1.com');
+      await contract.addMirror(tokenId, 'mirror2.com');
+      await contract.addMirror(tokenId, 'mirror3.com');
+      await contract.addMirror(tokenId, 'mirror4.com');
+
+      await contract.removeMirror('mirror2.com');
+
+      const mirrors = await contract.appMirrors(tokenId);
+
+      expect(mirrors).to.eql(['mirror1.com', 'mirror4.com', 'mirror3.com']);
     });
   });
 });

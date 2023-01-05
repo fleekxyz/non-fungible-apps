@@ -35,6 +35,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string ENS; // ENS ID
         uint256 currentBuild; // The current build number (Increments by one with each change, starts at zero)
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
+        string[] mirrors; // List of app mirrors
     }
 
     /**
@@ -52,6 +53,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      */
     struct Mirror {
         uint256 tokenId;
+        uint256 index;
         uint256 score;
         address owner;
     }
@@ -112,6 +114,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
         app.builds[0] = Build(commitHash, gitRepository);
+        app.mirrors = new string[](0);
 
         return tokenId;
     }
@@ -306,13 +309,16 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _requireMinted(tokenId);
         require(_mirrors[mirrorName].owner == address(0), "Mirror already exists");
 
-        _mirrors[mirrorName] = Mirror(tokenId, 0, msg.sender);
+        _mirrors[mirrorName] = Mirror(tokenId, _apps[tokenId].mirrors.length, 0, msg.sender);
+        _apps[tokenId].mirrors.push(mirrorName);
+
         emit NewMirror(mirrorName, tokenId, msg.sender);
     }
 
     /**
      * @dev Remove a mirror registry for an app token.
      * Only the owner of the mirror can remove it.
+     * It will also remove the mirror from the app token mirrors list.
      *
      * May emit a {RemovedMirror} event.
      *
@@ -322,6 +328,19 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      */
     function removeMirror(string memory mirrorName) public requireMirror(mirrorName) {
         require(msg.sender == _mirrors[mirrorName].owner, "You are not the owner of this mirror");
+        App storage _app = _apps[_mirrors[mirrorName].tokenId];
+
+        // the index of the mirror to remove
+        uint256 indexToRemove = _mirrors[mirrorName].index;
+
+        // the last item is reposited in the index to remove
+        string memory lastMirror = _app.mirrors[_app.mirrors.length - 1];
+        _app.mirrors[indexToRemove] = lastMirror;
+        _mirrors[lastMirror].index = indexToRemove;
+
+        // remove the last item
+        _app.mirrors.pop();
+
         delete _mirrors[mirrorName];
         emit RemovedMirror(mirrorName, msg.sender);
     }
@@ -417,6 +436,13 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
         _mirrors[mirrorName].score = 0;
         emit NewMirrorScore(mirrorName, _mirrors[mirrorName].score, msg.sender);
+    }
+
+    /**
+     * @dev A view function to gether the list of mirrros for a given app.
+     */
+    function appMirrors(uint256 tokenId) public view returns (string[] memory) {
+        return _apps[tokenId].mirrors;
     }
 
     /**
