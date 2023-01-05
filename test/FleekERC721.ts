@@ -627,6 +627,14 @@ describe('FleekERC721', () => {
       });
     });
 
+    it('should revert if mirror does not exist', async () => {
+      const { contract } = fixture;
+
+      await expect(contract.mirror('mirror.com')).to.be.revertedWith(
+        'FleekERC721: mirror does not exist'
+      );
+    });
+
     it('should increase the mirror score', async () => {
       const { contract, owner } = fixture;
 
@@ -726,6 +734,28 @@ describe('FleekERC721', () => {
       await expect(
         contract.addMirror(tokenId, 'mirror.com')
       ).to.be.revertedWith('Mirror already exists');
+    });
+
+    it('should return false when mirror score is 0', async () => {
+      const { contract } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror.com');
+
+      const isMirrorActive = await contract.isMirrorVerified('mirror.com');
+
+      expect(isMirrorActive).to.be.false;
+    });
+
+    it('should return true when mirror score is greater than 0', async () => {
+      const { contract } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror.com');
+
+      await contract.increaseMirrorScore('mirror.com');
+
+      const isMirrorActive = await contract.isMirrorVerified('mirror.com');
+
+      expect(isMirrorActive).to.be.true;
     });
   });
 });

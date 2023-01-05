@@ -351,6 +351,19 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     }
 
     /**
+     * @dev A view function to check if a mirror is verified.
+     * A mirror is verified if its score is greater than 0.
+     *
+     * Requirements:
+     *
+     * - the mirror must exist.
+     *
+     */
+    function isMirrorVerified(string memory mirrorName) public view requireMirror(mirrorName) returns (bool) {
+        return _mirrors[mirrorName].score > 0;
+    }
+
+    /**
      * @dev Increases the score of a mirror registry.
      *
      * May emit a {NewMirrorScore} event.
