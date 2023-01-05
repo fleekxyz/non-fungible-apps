@@ -581,4 +581,151 @@ describe('FleekERC721', () => {
         .withArgs(ROLES.CONTROLLER, otherAccount.address, owner.address);
     });
   });
+
+  describe('Mirrors', () => {
+    let tokenId: number;
+    let fixture: Awaited<ReturnType<typeof defaultFixture>>;
+
+    beforeEach(async () => {
+      fixture = await loadFixture(defaultFixture);
+      const { contract } = fixture;
+
+      const response = await contract.mint(
+        fixture.owner.address,
+        MINT_PARAMS.name,
+        MINT_PARAMS.description,
+        MINT_PARAMS.image,
+        MINT_PARAMS.externalUrl,
+        MINT_PARAMS.ens,
+        MINT_PARAMS.commitHash,
+        MINT_PARAMS.gitRepository
+      );
+
+      tokenId = response.value.toNumber();
+    });
+
+    it('should add a mirror', async () => {
+      const { contract, owner } = fixture;
+
+      await expect(contract.addMirror(tokenId, 'mirror.com'))
+        .to.emit(contract, 'NewMirror')
+        .withArgs('mirror.com', tokenId, owner.address);
+    });
+
+    it('should return a mirror json object', async () => {
+      const { contract, owner } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror.com');
+
+      const mirror = await contract.mirror('mirror.com');
+      const parsedMirror = JSON.parse(mirror);
+
+      expect(parsedMirror).to.eql({
+        tokenId,
+        score: 0,
+        owner: owner.address.toLowerCase(),
+      });
+    });
+
+    it('should increase the mirror score', async () => {
+      const { contract, owner } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror.com');
+
+      await contract.increaseMirrorScore('mirror.com');
+
+      const mirror = await contract.mirror('mirror.com');
+      const parsedMirror = JSON.parse(mirror);
+
+      expect(parsedMirror).to.eql({
+        tokenId,
+        score: 1,
+        owner: owner.address.toLowerCase(),
+      });
+    });
+
+    it('should decrease the mirror score', async () => {
+      const { contract, owner } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror.com');
+
+      await contract.increaseMirrorScore('mirror.com');
+      await contract.increaseMirrorScore('mirror.com');
+      await contract.decreaseMirrorScore('mirror.com');
+
+      const mirror = await contract.mirror('mirror.com');
+      const parsedMirror = JSON.parse(mirror);
+
+      expect(parsedMirror).to.eql({
+        tokenId,
+        score: 1,
+        owner: owner.address.toLowerCase(),
+      });
+    });
+
+    it('should clear the mirror score', async () => {
+      const { contract, owner } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror.com');
+
+      await contract.increaseMirrorScore('mirror.com');
+      await contract.increaseMirrorScore('mirror.com');
+      await contract.clearMirrorScore('mirror.com');
+
+      const mirror = await contract.mirror('mirror.com');
+      const parsedMirror = JSON.parse(mirror);
+
+      expect(parsedMirror).to.eql({
+        tokenId,
+        score: 0,
+        owner: owner.address.toLowerCase(),
+      });
+    });
+
+    it('should allow only token controller to change mirror score', async () => {
+      const { contract, owner, otherAccount } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror.com');
+
+      await expect(
+        contract.connect(otherAccount).increaseMirrorScore('mirror.com')
+      ).to.be.revertedWith('FleekAccessControl: must have token role');
+      await expect(
+        contract.connect(otherAccount).decreaseMirrorScore('mirror.com')
+      ).to.be.revertedWith('FleekAccessControl: must have token role');
+      await expect(
+        contract.connect(otherAccount).clearMirrorScore('mirror.com')
+      ).to.be.revertedWith('FleekAccessControl: must have token role');
+    });
+
+    it('should remove a mirror', async () => {
+      const { contract, owner } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror.com');
+
+      await expect(contract.removeMirror('mirror.com'))
+        .to.emit(contract, 'RemovedMirror')
+        .withArgs('mirror.com', owner.address);
+    });
+
+    it('should allow only mirror owner to remove it', async () => {
+      const { contract, otherAccount } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror.com');
+
+      await expect(
+        contract.connect(otherAccount).removeMirror('mirror.com')
+      ).to.be.revertedWith('You are not the owner of this mirror');
+    });
+
+    it('should not be allowed to add the same mirror more than once', async () => {
+      const { contract } = fixture;
+
+      await contract.addMirror(tokenId, 'mirror.com');
+
+      await expect(
+        contract.addMirror(tokenId, 'mirror.com')
+      ).to.be.revertedWith('Mirror already exists');
+    });
+  });
 });
