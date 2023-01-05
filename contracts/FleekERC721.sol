@@ -440,8 +440,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
 
     /**
      * @dev A view function to gether the list of mirrros for a given app.
+     *
+     * Requirements:
+     * - the tokenId must be minted and valid.
      */
     function appMirrors(uint256 tokenId) public view returns (string[] memory) {
+        _requireMinted(tokenId);
         return _apps[tokenId].mirrors;
     }
 
