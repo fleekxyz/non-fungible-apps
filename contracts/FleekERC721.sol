@@ -288,6 +288,19 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewTokenImage(tokenId, _tokenImage, msg.sender);
     }
 
+    /**
+     * @dev Add a new mirror registry for an app token.
+     * The mirror name should be a DNS or ENS url and it should be unique.
+     * Anyone can add a mirror but it should requires a payment.
+     *
+     * May emit a {NewMirror} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     *
+     * IMPORTANT: The payment is not set yet
+     */
     function addMirror(uint256 tokenId, string memory mirrorName) public payable {
         // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
         _requireMinted(tokenId);
@@ -297,12 +310,31 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewMirror(mirrorName, tokenId, msg.sender);
     }
 
+    /**
+     * @dev Remove a mirror registry for an app token.
+     * Only the owner of the mirror can remove it.
+     *
+     * May emit a {RemovedMirror} event.
+     *
+     * Requirements:
+     *
+     * - the mirror must exist.
+     */
     function removeMirror(string memory mirrorName) public requireMirror(mirrorName) {
         require(msg.sender == _mirrors[mirrorName].owner, "You are not the owner of this mirror");
         delete _mirrors[mirrorName];
         emit RemovedMirror(mirrorName, msg.sender);
     }
 
+    /**
+     * @dev A view function to gether information about a mirror.
+     * It returns a JSON string representing the mirror information.
+     *
+     * Requirements:
+     *
+     * - the mirror must exist.
+     *
+     */
     function mirror(string memory mirrorName) public view requireMirror(mirrorName) returns (string memory) {
         Mirror storage _mirror = _mirrors[mirrorName];
 
@@ -318,6 +350,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         return string(mirrorJSON);
     }
 
+    /**
+     * @dev Increases the score of a mirror registry.
+     *
+     * May emit a {NewMirrorScore} event.
+     *
+     * Requirements:
+     *
+     * - the mirror must exist.
+     * - the sender must have the token controller role.
+     *
+     */
     function increaseMirrorScore(
         string memory mirrorName
     ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
@@ -325,6 +368,17 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewMirrorScore(mirrorName, _mirrors[mirrorName].score, msg.sender);
     }
 
+    /**
+     * @dev Decreases the score of a mirror registry if is greater than 0.
+     *
+     * May emit a {NewMirrorScore} event.
+     *
+     * Requirements:
+     *
+     * - the mirror must exist.
+     * - the sender must have the token controller role.
+     *
+     */
     function decreaseMirrorScore(
         string memory mirrorName
     ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
@@ -333,6 +387,18 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         emit NewMirrorScore(mirrorName, _mirrors[mirrorName].score, msg.sender);
     }
 
+    /**
+     * @dev Sets the score of a mirror registry to 0.
+     * Setting the score to 0 will make the mirror not verified anymore.
+     *
+     * May emit a {NewMirrorScore} event.
+     *
+     * Requirements:
+     *
+     * - the mirror must exist.
+     * - the sender must have the token controller role.
+     *
+     */
     function clearMirrorScore(
         string memory mirrorName
     ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
