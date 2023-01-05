@@ -18,6 +18,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     event NewTokenExternalURL(uint256 indexed token, string indexed externalURL, address indexed triggeredBy);
     event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggeredBy);
 
+    event NewMirror(string indexed mirrorName, uint256 indexed tokenId, address indexed owner);
+    event NewMirrorScore(string indexed mirrorName, uint256 score, address indexed triggeredBy);
+    event RemovedMirror(string indexed mirrorName, address indexed owner);
+
     /**
      * The properties are stored as string to keep consistency with
      * other token contracts, we might consider changing for bytes32
@@ -41,8 +45,20 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string gitRepository;
     }
 
-    Counters.Counter private _tokenIds;
+    /**
+     * The stored data for each mirror.
+     * The mirror "score" is used to determine the best mirror to use.
+     * The mirror "score" equals to 0 means that the mirror is not verified.
+     */
+    struct Mirror {
+        uint256 tokenId;
+        uint256 score;
+        address owner;
+    }
+
+    Counters.Counter private _appIds;
     mapping(uint256 => App) private _apps;
+    mapping(string => Mirror) private _mirrors;
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -54,6 +70,11 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      */
     modifier requireTokenOwner(uint256 tokenId) {
         require(msg.sender == ownerOf(tokenId), "FleekERC721: must be token owner");
+        _;
+    }
+
+    modifier requireMirror(string memory mirrorName) {
+        require(_mirrors[mirrorName].owner != address(0), "FleekERC721: mirror does not exist");
         _;
     }
 
@@ -77,9 +98,9 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory commitHash,
         string memory gitRepository
     ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
-        uint256 tokenId = _tokenIds.current();
+        uint256 tokenId = _appIds.current();
         _mint(to, tokenId);
-        _tokenIds.increment();
+        _appIds.increment();
 
         App storage app = _apps[tokenId];
         app.name = name;
@@ -265,6 +286,58 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _requireMinted(tokenId);
         _apps[tokenId].image = _tokenImage;
         emit NewTokenImage(tokenId, _tokenImage, msg.sender);
+    }
+
+    function addMirror(uint256 tokenId, string memory mirrorName) public payable {
+        // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
+        _requireMinted(tokenId);
+        require(_mirrors[mirrorName].owner == address(0), "Mirror already exists");
+
+        _mirrors[mirrorName] = Mirror(tokenId, 0, msg.sender);
+        emit NewMirror(mirrorName, tokenId, msg.sender);
+    }
+
+    function removeMirror(string memory mirrorName) public requireMirror(mirrorName) {
+        require(msg.sender == _mirrors[mirrorName].owner, "You are not the owner of this mirror");
+        delete _mirrors[mirrorName];
+        emit RemovedMirror(mirrorName, msg.sender);
+    }
+
+    function mirror(string memory mirrorName) public view requireMirror(mirrorName) returns (string memory) {
+        Mirror storage _mirror = _mirrors[mirrorName];
+
+        // prettier-ignore
+        bytes memory mirrorJSON = abi.encodePacked(
+            "{",
+                '"tokenId":', Strings.toString(_mirror.tokenId), ",",
+                '"score":', Strings.toString(_mirror.score), ",",
+                '"owner":"', Strings.toHexString(uint160(_mirror.owner), 20), '"',
+            "}"
+        );
+
+        return string(mirrorJSON);
+    }
+
+    function increaseMirrorScore(
+        string memory mirrorName
+    ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
+        _mirrors[mirrorName].score++;
+        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].score, msg.sender);
+    }
+
+    function decreaseMirrorScore(
+        string memory mirrorName
+    ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
+        require(_mirrors[mirrorName].score > 0, "Mirror score is already 0");
+        _mirrors[mirrorName].score--;
+        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].score, msg.sender);
+    }
+
+    function clearMirrorScore(
+        string memory mirrorName
+    ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
+        _mirrors[mirrorName].score = 0;
+        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].score, msg.sender);
     }
 
     /**
