@@ -19,8 +19,13 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggeredBy);
 
     event NewMirror(string indexed mirrorName, uint256 indexed tokenId, address indexed owner);
-    event NewMirrorScore(string indexed mirrorName, uint256 score, address indexed triggeredBy);
-    event RemovedMirror(string indexed mirrorName, address indexed owner);
+    event NewMirrorScore(
+        string indexed mirrorName,
+        uint256 indexed tokenId,
+        uint256 score,
+        address indexed triggeredBy
+    );
+    event RemovedMirror(string indexed mirrorName, uint256 indexed tokenId, address indexed owner);
 
     /**
      * The properties are stored as string to keep consistency with
@@ -328,7 +333,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      */
     function removeMirror(string memory mirrorName) public requireMirror(mirrorName) {
         require(msg.sender == _mirrors[mirrorName].owner, "You are not the owner of this mirror");
-        App storage _app = _apps[_mirrors[mirrorName].tokenId];
+        uint256 tokenId = _mirrors[mirrorName].tokenId;
+        App storage _app = _apps[tokenId];
 
         // the index of the mirror to remove
         uint256 indexToRemove = _mirrors[mirrorName].index;
@@ -342,7 +348,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _app.mirrors.pop();
 
         delete _mirrors[mirrorName];
-        emit RemovedMirror(mirrorName, msg.sender);
+        emit RemovedMirror(mirrorName, tokenId, msg.sender);
     }
 
     /**
@@ -397,7 +403,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory mirrorName
     ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
         _mirrors[mirrorName].score++;
-        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].score, msg.sender);
+        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].tokenId, _mirrors[mirrorName].score, msg.sender);
     }
 
     /**
@@ -416,7 +422,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
         require(_mirrors[mirrorName].score > 0, "Mirror score is already 0");
         _mirrors[mirrorName].score--;
-        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].score, msg.sender);
+        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].tokenId, _mirrors[mirrorName].score, msg.sender);
     }
 
     /**
@@ -435,7 +441,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory mirrorName
     ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
         _mirrors[mirrorName].score = 0;
-        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].score, msg.sender);
+        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].tokenId, _mirrors[mirrorName].score, msg.sender);
     }
 
     /**
