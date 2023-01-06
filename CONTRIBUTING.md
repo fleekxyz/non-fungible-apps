@@ -2,16 +2,11 @@
 
 The core developer team of Fleek Non-Fungible Apps welcomes all contributions from the community to achieve consistent code updates and enhancements.
 
-If you want to help us improve the project you can always start a conversation through the [issues page](https://github.com/fleekxyz/non-fungible-apps/issues). Please, make sure you are respectful towards all members of the community. We take our open-source community seriously and hold ourselves and our contributors to high communication standards.
+If you want to help us improve the project you can always start a conversation through the [discussions page](https://github.com/fleekxyz/non-fungible-apps/discussions). Please, make sure you are respectful towards all members of the community. We take our open-source community seriously and hold ourselves and our contributors to high communication standards. If an issue is spotted, you can use the [issues page](https://github.com/fleekxyz/non-fungible-apps/issues).
 
 ## Getting Started
 
 Contributions are made to this repository via Issues and Pull Requests (PRs). A few general guidelines that cover both:
-
-
-1. Search for existing related Issues and PRs before creating your own.
-2. Make sure you are clear about your ideas and expose as much information as you can (e.g. code samples, images).
-3. We will be working hard to respond to all Issues as soon as possible, but it can take time to investigate root causes. Please be patient.
 
 1. Search for existing related Issues and PRs before creating your own.
 2. Make sure you are clear about your ideas and expose as much information as you possibly can, as that can help the investigation process immensly. (e.g. code samples, images).
@@ -29,7 +24,7 @@ If you find any topic related to your subject, please feel free to post your sto
 
 All PRs are welcome. PRs are the fastest way to solve your issue. We are going to review all of them as fast as possible.
 
-You can create branches from the `main` branch and name them in accordance with **conventional
+You can create branches from the `develop` branch and name them in accordance with **conventional
 commits** [here](https://www.conventionalcommits.org/en/v1.0.0/), or follow the examples below:
 
 ```txt
