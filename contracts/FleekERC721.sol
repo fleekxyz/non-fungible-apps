@@ -18,14 +18,26 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     event NewTokenExternalURL(uint256 indexed token, string indexed externalURL, address indexed triggeredBy);
     event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggeredBy);
 
-    event NewMirror(string indexed mirrorName, uint256 indexed tokenId, address indexed owner);
-    event NewMirrorScore(
-        string indexed mirrorName,
+    event NewAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
+    event RemoveAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
+    event ChangeAccessPointScore(
+        string indexed apName,
         uint256 indexed tokenId,
         uint256 score,
         address indexed triggeredBy
     );
-    event RemovedMirror(string indexed mirrorName, uint256 indexed tokenId, address indexed owner);
+    event ChangeAccessPointNameVerify(
+        string indexed apName,
+        uint256 tokenId,
+        bool indexed verified,
+        address indexed triggeredBy
+    );
+    event ChangeAccessPointContentVerify(
+        string indexed apName,
+        uint256 tokenId,
+        bool indexed verified,
+        address indexed triggeredBy
+    );
 
     /**
      * The properties are stored as string to keep consistency with
@@ -40,7 +52,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string ENS; // ENS ID
         uint256 currentBuild; // The current build number (Increments by one with each change, starts at zero)
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
-        string[] mirrors; // List of app mirrors
+        string[] accessPoints; // List of app AccessPoint
     }
 
     /**
@@ -52,20 +64,21 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     }
 
     /**
-     * The stored data for each mirror.
-     * The mirror "score" is used to determine the best mirror to use.
-     * The mirror "score" equals to 0 means that the mirror is not verified.
+     * The stored data for each AccessPoint.
      */
-    struct Mirror {
+    struct AccessPoint {
         uint256 tokenId;
         uint256 index;
         uint256 score;
+        string source;
+        bool contentVerified;
+        bool nameVerified;
         address owner;
     }
 
     Counters.Counter private _appIds;
     mapping(uint256 => App) private _apps;
-    mapping(string => Mirror) private _mirrors;
+    mapping(string => AccessPoint) private _accessPoints;
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -80,8 +93,11 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _;
     }
 
-    modifier requireMirror(string memory mirrorName) {
-        require(_mirrors[mirrorName].owner != address(0), "FleekERC721: mirror does not exist");
+    /**
+     * @dev Checks if the AccessPoint exists.
+     */
+    modifier requireAP(string memory apName) {
+        require(_accessPoints[apName].owner != address(0), "FleekERC721: invalid AP");
         _;
     }
 
@@ -119,7 +135,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
         app.builds[0] = Build(commitHash, gitRepository);
-        app.mirrors = new string[](0);
+        app.accessPoints = new string[](0);
 
         return tokenId;
     }
@@ -297,11 +313,11 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     }
 
     /**
-     * @dev Add a new mirror registry for an app token.
-     * The mirror name should be a DNS or ENS url and it should be unique.
-     * Anyone can add a mirror but it should requires a payment.
+     * @dev Add a new AccessPoint register for an app token.
+     * The AP name should be a DNS or ENS url and it should be unique.
+     * Anyone can add an AP but it should requires a payment.
      *
-     * May emit a {NewMirror} event.
+     * May emit a {NewAccessPoint} event.
      *
      * Requirements:
      *
@@ -309,139 +325,163 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      *
      * IMPORTANT: The payment is not set yet
      */
-    function addMirror(uint256 tokenId, string memory mirrorName) public payable {
+    function addAccessPoint(uint256 tokenId, string memory apName, string memory source) public payable {
         // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
         _requireMinted(tokenId);
-        require(_mirrors[mirrorName].owner == address(0), "Mirror already exists");
+        require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
 
-        _mirrors[mirrorName] = Mirror(tokenId, _apps[tokenId].mirrors.length, 0, msg.sender);
-        _apps[tokenId].mirrors.push(mirrorName);
+        _accessPoints[apName] = AccessPoint(
+            tokenId,
+            _apps[tokenId].accessPoints.length,
+            0,
+            source,
+            false,
+            false,
+            msg.sender
+        );
+        _apps[tokenId].accessPoints.push(apName);
 
-        emit NewMirror(mirrorName, tokenId, msg.sender);
+        emit NewAccessPoint(apName, tokenId, msg.sender);
     }
 
     /**
-     * @dev Remove a mirror registry for an app token.
-     * Only the owner of the mirror can remove it.
-     * It will also remove the mirror from the app token mirrors list.
+     * @dev Remove an AccessPoint registry for an app token.
+     * It will also remove the AP from the app token APs list.
      *
-     * May emit a {RemovedMirror} event.
+     * May emit a {RemoveAccessPoint} event.
      *
      * Requirements:
      *
-     * - the mirror must exist.
+     * - the AP must exist.
+     * - must be called by the AP owner.
      */
-    function removeMirror(string memory mirrorName) public requireMirror(mirrorName) {
-        require(msg.sender == _mirrors[mirrorName].owner, "You are not the owner of this mirror");
-        uint256 tokenId = _mirrors[mirrorName].tokenId;
+    function removeAccessPoint(string memory apName) public requireAP(apName) {
+        require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
+        uint256 tokenId = _accessPoints[apName].tokenId;
         App storage _app = _apps[tokenId];
 
-        // the index of the mirror to remove
-        uint256 indexToRemove = _mirrors[mirrorName].index;
+        // the index of the AP to remove
+        uint256 indexToRemove = _accessPoints[apName].index;
 
         // the last item is reposited in the index to remove
-        string memory lastMirror = _app.mirrors[_app.mirrors.length - 1];
-        _app.mirrors[indexToRemove] = lastMirror;
-        _mirrors[lastMirror].index = indexToRemove;
+        string memory lastAP = _app.accessPoints[_app.accessPoints.length - 1];
+        _app.accessPoints[indexToRemove] = lastAP;
+        _accessPoints[lastAP].index = indexToRemove;
 
         // remove the last item
-        _app.mirrors.pop();
+        _app.accessPoints.pop();
 
-        delete _mirrors[mirrorName];
-        emit RemovedMirror(mirrorName, tokenId, msg.sender);
+        delete _accessPoints[apName];
+        emit RemoveAccessPoint(apName, tokenId, msg.sender);
     }
 
     /**
-     * @dev A view function to gether information about a mirror.
-     * It returns a JSON string representing the mirror information.
+     * @dev A view function to gether information about an AccessPoint.
+     * It returns a JSON string representing the AccessPoint information.
      *
      * Requirements:
      *
-     * - the mirror must exist.
+     * - the AP must exist.
      *
      */
-    function mirror(string memory mirrorName) public view requireMirror(mirrorName) returns (string memory) {
-        Mirror storage _mirror = _mirrors[mirrorName];
+    function accessPoint(string memory apName) public view requireAP(apName) returns (string memory) {
+        AccessPoint storage _ap = _accessPoints[apName];
 
         // prettier-ignore
-        bytes memory mirrorJSON = abi.encodePacked(
+        bytes memory apJSON = abi.encodePacked(
             "{",
-                '"tokenId":', Strings.toString(_mirror.tokenId), ",",
-                '"score":', Strings.toString(_mirror.score), ",",
-                '"owner":"', Strings.toHexString(uint160(_mirror.owner), 20), '"',
+                '"tokenId":', Strings.toString(_ap.tokenId), ",",
+                '"score":', Strings.toString(_ap.score), ",",
+                '"nameVerified":', _ap.nameVerified, ",",
+                '"contentVerified":', _ap.contentVerified, ",",
+                '"owner":"', Strings.toHexString(uint160(_ap.owner), 20), '"',
             "}"
         );
 
-        return string(mirrorJSON);
+        return string(apJSON);
     }
 
     /**
-     * @dev A view function to check if a mirror is verified.
-     * A mirror is verified if its score is greater than 0.
+     * @dev A view function to check if a AccessPoint is verified.
      *
      * Requirements:
      *
-     * - the mirror must exist.
+     * - the AP must exist.
      *
      */
-    function isMirrorVerified(string memory mirrorName) public view requireMirror(mirrorName) returns (bool) {
-        return _mirrors[mirrorName].score > 0;
+    function isAccessPointNameVerified(string memory apName) public view requireAP(apName) returns (bool) {
+        return _accessPoints[apName].nameVerified;
     }
 
     /**
-     * @dev Increases the score of a mirror registry.
+     * @dev Increases the score of a AccessPoint registry.
      *
-     * May emit a {NewMirrorScore} event.
+     * May emit a {ChangeAccessPointScore} event.
      *
      * Requirements:
      *
-     * - the mirror must exist.
+     * - the AP must exist.
      * - the sender must have the token controller role.
      *
      */
-    function increaseMirrorScore(
-        string memory mirrorName
-    ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
-        _mirrors[mirrorName].score++;
-        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].tokenId, _mirrors[mirrorName].score, msg.sender);
+    function increaseAccessPointScore(string memory apName) public requireAP(apName) {
+        _accessPoints[apName].score++;
+        emit ChangeAccessPointScore(apName, _accessPoints[apName].tokenId, _accessPoints[apName].score, msg.sender);
     }
 
     /**
-     * @dev Decreases the score of a mirror registry if is greater than 0.
+     * @dev Decreases the score of a AccessPoint registry if is greater than 0.
      *
-     * May emit a {NewMirrorScore} event.
+     * May emit a {ChangeAccessPointScore} event.
      *
      * Requirements:
      *
-     * - the mirror must exist.
+     * - the AP must exist.
      * - the sender must have the token controller role.
      *
      */
-    function decreaseMirrorScore(
-        string memory mirrorName
-    ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
-        require(_mirrors[mirrorName].score > 0, "Mirror score is already 0");
-        _mirrors[mirrorName].score--;
-        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].tokenId, _mirrors[mirrorName].score, msg.sender);
+    function decreaseAccessPointScore(string memory apName) public requireAP(apName) {
+        require(_accessPoints[apName].score > 0, "FleekERC721: score cant be lower");
+        _accessPoints[apName].score--;
+        emit ChangeAccessPointScore(apName, _accessPoints[apName].tokenId, _accessPoints[apName].score, msg.sender);
     }
 
     /**
-     * @dev Sets the score of a mirror registry to 0.
-     * Setting the score to 0 will make the mirror not verified anymore.
+     * @dev Set the content verification of a AccessPoint registry.
      *
-     * May emit a {NewMirrorScore} event.
+     * May emit a {ChangeAccessPointContentVerify} event.
      *
      * Requirements:
      *
-     * - the mirror must exist.
+     * - the AP must exist.
      * - the sender must have the token controller role.
      *
      */
-    function clearMirrorScore(
-        string memory mirrorName
-    ) public requireMirror(mirrorName) requireTokenRole(_mirrors[mirrorName].tokenId, Roles.Controller) {
-        _mirrors[mirrorName].score = 0;
-        emit NewMirrorScore(mirrorName, _mirrors[mirrorName].tokenId, _mirrors[mirrorName].score, msg.sender);
+    function setAccessPointContentVerification(
+        string memory apName,
+        bool verified
+    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
+        _accessPoints[apName].contentVerified = verified;
+        emit ChangeAccessPointContentVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
+    }
+
+    /**
+     * @dev Set the name verification of a AccessPoint registry.
+     *
+     * May emit a {ChangeAccessPointNameVerify} event.
+     *
+     * Requirements:
+     *
+     * - the AP must exist.
+     * - the sender must have the token controller role.
+     *
+     */
+    function setAccessPointContentNameVerification(
+        string memory apName,
+        bool verified
+    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
+        _accessPoints[apName].nameVerified = verified;
+        emit ChangeAccessPointNameVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
 
     /**
@@ -449,10 +489,11 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      *
      * Requirements:
      * - the tokenId must be minted and valid.
+     *
      */
-    function appMirrors(uint256 tokenId) public view returns (string[] memory) {
+    function appAccessPoints(uint256 tokenId) public view returns (string[] memory) {
         _requireMinted(tokenId);
-        return _apps[tokenId].mirrors;
+        return _apps[tokenId].accessPoints;
     }
 
     /**
