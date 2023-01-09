@@ -70,14 +70,7 @@ export const MintedSiteDetail = () => {
                       minH={120}
                       maxH="auto"
                       children={
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              '<p>' +
-                              description.replaceAll('\n', '</p><p>') +
-                              '</p>',
-                          }}
-                        />
+                        <p style={{ whiteSpace: 'pre' }}>{description}</p>
                       }
                     />
                     <AccordionItem
