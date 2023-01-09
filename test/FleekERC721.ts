@@ -582,9 +582,11 @@ describe('FleekERC721', () => {
     });
   });
 
-  describe('Mirrors', () => {
+  describe('AccessPoints', () => {
     let tokenId: number;
     let fixture: Awaited<ReturnType<typeof defaultFixture>>;
+
+    const getDefaultAddParams = () => [tokenId, 'accesspoint.com', 'ipfs.com'];
 
     beforeEach(async () => {
       fixture = await loadFixture(defaultFixture);
@@ -604,195 +606,220 @@ describe('FleekERC721', () => {
       tokenId = response.value.toNumber();
     });
 
-    it('should add a mirror', async () => {
+    it('should add an AP', async () => {
       const { contract, owner } = fixture;
 
-      await expect(contract.addMirror(tokenId, 'mirror.com'))
-        .to.emit(contract, 'NewMirror')
-        .withArgs('mirror.com', tokenId, owner.address);
+      await expect(contract.addAccessPoint(...getDefaultAddParams()))
+        .to.emit(contract, 'NewAccessPoint')
+        .withArgs('accesspoint.com', tokenId, owner.address);
 
-      expect(await contract.appMirrors(tokenId)).eql(['mirror.com']);
+      expect(await contract.appAccessPoints(tokenId)).eql(['accesspoint.com']);
     });
 
-    it('should return a mirror json object', async () => {
+    it('should return a AP json object', async () => {
       const { contract, owner } = fixture;
 
-      await contract.addMirror(tokenId, 'mirror.com');
+      await contract.addAccessPoint(...getDefaultAddParams());
 
-      const mirror = await contract.mirror('mirror.com');
-      const parsedMirror = JSON.parse(mirror);
+      const ap = await contract.accessPoint('accesspoint.com');
+      const parsedAp = JSON.parse(ap);
 
-      expect(parsedMirror).to.eql({
+      expect(parsedAp).to.eql({
         tokenId,
         score: 0,
         owner: owner.address.toLowerCase(),
+        contentVerified: false,
+        nameVerified: false,
       });
     });
 
-    it('should revert if mirror does not exist', async () => {
+    it('should revert if AP does not exist', async () => {
       const { contract } = fixture;
 
-      await expect(contract.mirror('mirror.com')).to.be.revertedWith(
-        'FleekERC721: mirror does not exist'
+      await expect(contract.accessPoint('accesspoint.com')).to.be.revertedWith(
+        'FleekERC721: invalid AP'
       );
     });
 
-    it('should increase the mirror score', async () => {
+    it('should increase the AP score', async () => {
       const { contract, owner } = fixture;
 
-      await contract.addMirror(tokenId, 'mirror.com');
+      await contract.addAccessPoint(...getDefaultAddParams());
 
-      await contract.increaseMirrorScore('mirror.com');
+      await contract.increaseAccessPointScore('accesspoint.com');
 
-      const mirror = await contract.mirror('mirror.com');
-      const parsedMirror = JSON.parse(mirror);
+      const ap = await contract.accessPoint('accesspoint.com');
+      const parsedAp = JSON.parse(ap);
 
-      expect(parsedMirror).to.eql({
+      expect(parsedAp).to.eql({
         tokenId,
         score: 1,
         owner: owner.address.toLowerCase(),
+        contentVerified: false,
+        nameVerified: false,
       });
     });
 
-    it('should decrease the mirror score', async () => {
+    it('should decrease the AP score', async () => {
       const { contract, owner } = fixture;
 
-      await contract.addMirror(tokenId, 'mirror.com');
+      await contract.addAccessPoint(...getDefaultAddParams());
 
-      await contract.increaseMirrorScore('mirror.com');
-      await contract.increaseMirrorScore('mirror.com');
-      await contract.decreaseMirrorScore('mirror.com');
+      await contract.increaseAccessPointScore('accesspoint.com');
+      await contract.increaseAccessPointScore('accesspoint.com');
+      await contract.decreaseAccessPointScore('accesspoint.com');
 
-      const mirror = await contract.mirror('mirror.com');
-      const parsedMirror = JSON.parse(mirror);
+      const ap = await contract.accessPoint('accesspoint.com');
+      const parsedAp = JSON.parse(ap);
 
-      expect(parsedMirror).to.eql({
+      expect(parsedAp).to.eql({
         tokenId,
         score: 1,
         owner: owner.address.toLowerCase(),
+        contentVerified: false,
+        nameVerified: false,
       });
     });
 
-    it('should clear the mirror score', async () => {
-      const { contract, owner } = fixture;
-
-      await contract.addMirror(tokenId, 'mirror.com');
-
-      await contract.increaseMirrorScore('mirror.com');
-      await contract.increaseMirrorScore('mirror.com');
-      await contract.clearMirrorScore('mirror.com');
-
-      const mirror = await contract.mirror('mirror.com');
-      const parsedMirror = JSON.parse(mirror);
-
-      expect(parsedMirror).to.eql({
-        tokenId,
-        score: 0,
-        owner: owner.address.toLowerCase(),
-      });
-    });
-
-    it('should allow only token controller to change mirror score', async () => {
-      const { contract, owner, otherAccount } = fixture;
-
-      await contract.addMirror(tokenId, 'mirror.com');
-
-      await expect(
-        contract.connect(otherAccount).increaseMirrorScore('mirror.com')
-      ).to.be.revertedWith('FleekAccessControl: must have token role');
-      await expect(
-        contract.connect(otherAccount).decreaseMirrorScore('mirror.com')
-      ).to.be.revertedWith('FleekAccessControl: must have token role');
-      await expect(
-        contract.connect(otherAccount).clearMirrorScore('mirror.com')
-      ).to.be.revertedWith('FleekAccessControl: must have token role');
-    });
-
-    it('should remove a mirror', async () => {
-      const { contract, owner } = fixture;
-
-      await contract.addMirror(tokenId, 'mirror.com');
-
-      await expect(contract.removeMirror('mirror.com'))
-        .to.emit(contract, 'RemovedMirror')
-        .withArgs('mirror.com', owner.address);
-
-      expect(await contract.appMirrors(tokenId)).eql([]);
-    });
-
-    it('should allow only mirror owner to remove it', async () => {
+    it('should allow anyone to change AP score', async () => {
       const { contract, otherAccount } = fixture;
 
-      await contract.addMirror(tokenId, 'mirror.com');
+      await contract.addAccessPoint(...getDefaultAddParams());
+      await contract.increaseAccessPointScore('accesspoint.com');
+      await contract
+        .connect(otherAccount)
+        .increaseAccessPointScore('accesspoint.com');
+    });
+
+    it('should remove an AP', async () => {
+      const { contract, owner } = fixture;
+
+      await contract.addAccessPoint(...getDefaultAddParams());
+
+      await expect(contract.removeAccessPoint('accesspoint.com'))
+        .to.emit(contract, 'RemoveAccessPoint')
+        .withArgs('accesspoint.com', tokenId, owner.address);
+
+      expect(await contract.appAccessPoints(tokenId)).eql([]);
+    });
+
+    it('should allow only AP owner to remove it', async () => {
+      const { contract, otherAccount } = fixture;
+
+      await contract.addAccessPoint(...getDefaultAddParams());
 
       await expect(
-        contract.connect(otherAccount).removeMirror('mirror.com')
-      ).to.be.revertedWith('You are not the owner of this mirror');
+        contract.connect(otherAccount).removeAccessPoint('accesspoint.com')
+      ).to.be.revertedWith('FleekERC721: must be AP owner');
     });
 
-    it('should not be allowed to add the same mirror more than once', async () => {
+    it('should not be allowed to add the same AP more than once', async () => {
       const { contract } = fixture;
 
-      await contract.addMirror(tokenId, 'mirror.com');
+      await contract.addAccessPoint(...getDefaultAddParams());
 
       await expect(
-        contract.addMirror(tokenId, 'mirror.com')
-      ).to.be.revertedWith('Mirror already exists');
+        contract.addAccessPoint(...getDefaultAddParams())
+      ).to.be.revertedWith('FleekERC721: AP already exists');
     });
 
-    it('should return false when mirror score is 0', async () => {
+    it('should change "contentVerified" to true', async () => {
       const { contract } = fixture;
 
-      await contract.addMirror(tokenId, 'mirror.com');
+      await contract.addAccessPoint(...getDefaultAddParams());
 
-      const isMirrorActive = await contract.isMirrorVerified('mirror.com');
+      await contract.setAccessPointContentVerify('accesspoint.com', true);
 
-      expect(isMirrorActive).to.be.false;
+      const ap = await contract.accessPoint('accesspoint.com');
+      const parsedAp = JSON.parse(ap);
+
+      expect(parsedAp.contentVerified).to.be.true;
     });
 
-    it('should return true when mirror score is greater than 0', async () => {
+    it('should change "contentVerified" to false', async () => {
       const { contract } = fixture;
 
-      await contract.addMirror(tokenId, 'mirror.com');
+      await contract.addAccessPoint(...getDefaultAddParams());
 
-      await contract.increaseMirrorScore('mirror.com');
+      const beforeAp = await contract.accessPoint('accesspoint.com');
+      const beforeParsedAp = JSON.parse(beforeAp);
+      expect(beforeParsedAp.contentVerified).to.be.false;
 
-      const isMirrorActive = await contract.isMirrorVerified('mirror.com');
+      await contract.setAccessPointContentVerify('accesspoint.com', true);
+      await contract.setAccessPointContentVerify('accesspoint.com', false);
 
-      expect(isMirrorActive).to.be.true;
+      const ap = await contract.accessPoint('accesspoint.com');
+      const parsedAp = JSON.parse(ap);
+
+      expect(parsedAp.contentVerified).to.be.false;
     });
 
-    it('should get a list of added mirrors for an app', async () => {
+    it('should change "nameVerified" to true', async () => {
       const { contract } = fixture;
 
-      await contract.addMirror(tokenId, 'mirror1.com');
-      await contract.addMirror(tokenId, 'mirror2.com');
-      await contract.addMirror(tokenId, 'mirror3.com');
-      await contract.addMirror(tokenId, 'mirror4.com');
+      await contract.addAccessPoint(...getDefaultAddParams());
 
-      const mirrors = await contract.appMirrors(tokenId);
+      await contract.setAccessPointNameVerify('accesspoint.com', true);
 
-      expect(mirrors).to.eql([
-        'mirror1.com',
-        'mirror2.com',
-        'mirror3.com',
-        'mirror4.com',
+      const ap = await contract.accessPoint('accesspoint.com');
+      const parsedAp = JSON.parse(ap);
+
+      expect(parsedAp.nameVerified).to.be.true;
+    });
+
+    it('should change "nameVerified" to false', async () => {
+      const { contract } = fixture;
+
+      await contract.addAccessPoint(...getDefaultAddParams());
+
+      const beforeAp = await contract.accessPoint('accesspoint.com');
+      const beforeParsedAp = JSON.parse(beforeAp);
+      expect(beforeParsedAp.nameVerified).to.be.false;
+
+      await contract.setAccessPointNameVerify('accesspoint.com', true);
+      await contract.setAccessPointNameVerify('accesspoint.com', false);
+
+      const ap = await contract.accessPoint('accesspoint.com');
+      const parsedAp = JSON.parse(ap);
+
+      expect(parsedAp.nameVerified).to.be.false;
+    });
+
+    it('should get a list of added APs for an app', async () => {
+      const { contract } = fixture;
+
+      await contract.addAccessPoint(tokenId, 'accesspoint1.com', 'ipfs.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint2.com', 'ipfs.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint3.com', 'ipfs.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint4.com', 'ipfs.com');
+
+      const aps = await contract.appAccessPoints(tokenId);
+
+      expect(aps).to.eql([
+        'accesspoint1.com',
+        'accesspoint2.com',
+        'accesspoint3.com',
+        'accesspoint4.com',
       ]);
     });
 
-    it('should get a list of added mirrors for an app after removing one', async () => {
+    it('should get a list of added APs for an app after removing one', async () => {
       const { contract } = fixture;
 
-      await contract.addMirror(tokenId, 'mirror1.com');
-      await contract.addMirror(tokenId, 'mirror2.com');
-      await contract.addMirror(tokenId, 'mirror3.com');
-      await contract.addMirror(tokenId, 'mirror4.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint1.com', 'ipfs.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint2.com', 'ipfs.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint3.com', 'ipfs.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint4.com', 'ipfs.com');
 
-      await contract.removeMirror('mirror2.com');
+      await contract.removeAccessPoint('accesspoint2.com');
 
-      const mirrors = await contract.appMirrors(tokenId);
+      const aps = await contract.appAccessPoints(tokenId);
 
-      expect(mirrors).to.eql(['mirror1.com', 'mirror4.com', 'mirror3.com']);
+      expect(aps).to.eql([
+        'accesspoint1.com',
+        'accesspoint4.com',
+        'accesspoint3.com',
+      ]);
     });
   });
 });

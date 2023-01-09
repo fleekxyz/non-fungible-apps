@@ -392,8 +392,8 @@ contract FleekERC721 is ERC721, FleekAccessControl {
             "{",
                 '"tokenId":', Strings.toString(_ap.tokenId), ",",
                 '"score":', Strings.toString(_ap.score), ",",
-                '"nameVerified":', _ap.nameVerified, ",",
-                '"contentVerified":', _ap.contentVerified, ",",
+                '"nameVerified":', _castBoolToString(_ap.nameVerified), ",",
+                '"contentVerified":', _castBoolToString(_ap.contentVerified), ",",
                 '"owner":"', Strings.toHexString(uint160(_ap.owner), 20), '"',
             "}"
         );
@@ -457,7 +457,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the token controller role.
      *
      */
-    function setAccessPointContentVerification(
+    function setAccessPointContentVerify(
         string memory apName,
         bool verified
     ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
@@ -476,7 +476,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the sender must have the token controller role.
      *
      */
-    function setAccessPointContentNameVerification(
+    function setAccessPointNameVerify(
         string memory apName,
         bool verified
     ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
@@ -534,5 +534,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         if (bytes(_apps[tokenId].externalURL).length != 0) {
             delete _apps[tokenId];
         }
+    }
+
+    /**
+     * @dev Converts a boolean value to a string.
+     */
+    function _castBoolToString(bool _bool) internal pure returns (string memory) {
+        return _bool ? "true" : "false";
     }
 }
