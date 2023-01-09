@@ -423,7 +423,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * Requirements:
      *
      * - the AP must exist.
-     * - the sender must have the token controller role.
      *
      */
     function increaseAccessPointScore(string memory apName) public requireAP(apName) {
@@ -439,7 +438,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * Requirements:
      *
      * - the AP must exist.
-     * - the sender must have the token controller role.
      *
      */
     function decreaseAccessPointScore(string memory apName) public requireAP(apName) {
