@@ -10,7 +10,7 @@ export const FleekERC721 = {
     const response = await contract.mint(
       params.owner,
       params.name,
-      params.description,
+      params.description.replaceAll(/\n/g, '\\n'), //replace break lines with \\n so it doesn't break the json,
       params.image,
       params.externalUrl,
       params.ens,
@@ -37,7 +37,7 @@ export const FleekERC721 = {
 
   async lastTokenId(): Promise<number> {
     // TODO: fetch last token id
-    return 6;
+    return 7;
   },
 };
 

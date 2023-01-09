@@ -70,7 +70,13 @@ export const MintedSiteDetail = () => {
                       minH={120}
                       maxH="auto"
                       children={
-                        <p style={{ whiteSpace: 'pre' }}>{description}</p>
+                        <p
+                          style={{
+                            whiteSpace: 'pre-line',
+                          }}
+                        >
+                          {description}
+                        </p>
                       }
                     />
                     <AccordionItem
