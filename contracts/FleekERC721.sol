@@ -66,7 +66,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
                 abi.encodePacked(
                     '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="640" height="480" viewBox="0 0 640 480" xml:space="preserve">',
                     "<defs>",
-                    "</defs>"
+                    "</defs>",
                     '<g transform="matrix(3.42 0 0 3.42 300.98 252.98)"  >',
                     '<polygon style="stroke: rgb(0,0,0); stroke-width: 8; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(152,152,183); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  points="-50,-50 -50,50 50,50 50,-50 " />',
                     "</g>",
