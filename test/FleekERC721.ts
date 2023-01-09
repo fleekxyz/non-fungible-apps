@@ -153,6 +153,8 @@ describe('FleekERC721', () => {
 
       const parsedURI = JSON.parse(tokenURIDecoded);
 
+      console.log(parsedURI.image);
+
       expect(parsedURI).to.eql({
         owner: fixture.owner.address.toLowerCase(),
         name: MINT_PARAMS.name,
