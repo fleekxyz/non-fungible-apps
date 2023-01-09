@@ -6,8 +6,10 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "./FleekAccessControl.sol";
+import "./util/FleekStrings.sol";
 
 contract FleekERC721 is ERC721, FleekAccessControl {
+    using FleekStrings for bool;
     using Strings for uint256;
     using Counters for Counters.Counter;
 
@@ -167,7 +169,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',
                     '{"trait_type": "Repository", "value":"', app.builds[app.currentBuild].gitRepository,'"},',
-                    '{"trait_type": "Version", "value":"', Strings.toString(app.currentBuild),'"}',
+                    '{"trait_type": "Version", "value":"', app.currentBuild.toString(),'"}',
                 ']',
             '}'
         );
@@ -390,10 +392,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         // prettier-ignore
         bytes memory apJSON = abi.encodePacked(
             "{",
-                '"tokenId":', Strings.toString(_ap.tokenId), ",",
-                '"score":', Strings.toString(_ap.score), ",",
-                '"nameVerified":', _castBoolToString(_ap.nameVerified), ",",
-                '"contentVerified":', _castBoolToString(_ap.contentVerified), ",",
+                '"tokenId":', _ap.tokenId.toString(), ",",
+                '"score":', _ap.score.toString(), ",",
+                '"nameVerified":', _ap.nameVerified.toString(), ",",
+                '"contentVerified":', _ap.contentVerified.toString(), ",",
                 '"owner":"', Strings.toHexString(uint160(_ap.owner), 20), '"',
             "}"
         );
@@ -534,12 +536,5 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         if (bytes(_apps[tokenId].externalURL).length != 0) {
             delete _apps[tokenId];
         }
-    }
-
-    /**
-     * @dev Converts a boolean value to a string.
-     */
-    function _castBoolToString(bool _bool) internal pure returns (string memory) {
-        return _bool ? "true" : "false";
     }
 }
