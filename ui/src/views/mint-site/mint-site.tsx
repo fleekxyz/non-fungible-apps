@@ -232,7 +232,7 @@ export const MintSite = () => {
                     </Grid>
                     <Button
                       colorScheme="blue"
-                      backgroundColor="#1d4ed8"
+                      backgroundColor="custom.blue.100"
                       width="full"
                       mt={4}
                       type="submit"

@@ -25,25 +25,25 @@ const WalletMenu: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <Menu colorScheme={'#282824'}>
+    <Menu colorScheme={'custom.gray.200'}>
       <Button borderRadius="50px" as={MenuButton}>
         <Flex alignItems={'center'}>
           <ConnectedWalletIcon provider={provider?.toString() as string} />
           {contractAddress(account)}
         </Flex>
       </Button>
-      <MenuList bg={'#282824'}>
+      <MenuList bg={'custom.gray.200'}>
         <MenuItem
-          _hover={{ bg: '#4b4b4b' }}
-          bg={'#282824'}
+          _hover={{ bg: 'custom.gray.100' }}
+          bg={'custom.gray.200'}
           onClick={handleCopyAccount}
           icon={<CopyIcon />}
         >
           Copy Account
         </MenuItem>
         <MenuItem
-          _hover={{ bg: '#4b4b4b' }}
-          bg={'#282824'}
+          _hover={{ bg: 'custom.gray.100' }}
+          bg={'custom.gray.200'}
           onClick={handleDisconnect}
           icon={<DisconnectIcon />}
         >
@@ -74,10 +74,10 @@ const ConnectionMenu: React.FC = () => {
       >
         Connect
       </Button>
-      <MenuList bg={'#282824'}>
+      <MenuList bg={'custom.gray.200'}>
         <MenuItem
-          _hover={{ bg: '#4b4b4b' }}
-          bg={'#282824'}
+          _hover={{ bg: 'custom.gray.100' }}
+          bg={'custom.gray.200'}
           onClick={handleConnectWallet}
           icon={<ConnectedWalletIcon provider={'metamask'} />}
         >
