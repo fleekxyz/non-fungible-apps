@@ -89,14 +89,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
 
     /**
-     * @dev Checks if msg.sender has the role of tokenOwner for a certain tokenId.
-     */
-    modifier requireTokenOwner(uint256 tokenId) {
-        require(msg.sender == ownerOf(tokenId), "FleekERC721: must be token owner");
-        _;
-    }
-
-    /**
      * @dev Checks if the AccessPoint exists.
      */
     modifier requireAP(string memory apName) {
