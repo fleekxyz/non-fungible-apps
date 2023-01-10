@@ -47,21 +47,19 @@ const initialValues = {
 const OwnerAdress = (props: InputProps) => {
   const { setFieldValue } = useFormikContext();
 
+  const handlePasteAddress = () => {
+    if (setFieldValue && props.name) {
+      navigator.clipboard
+        .readText()
+        .then((text) => setFieldValue(props.name as string, text));
+    }
+  };
+
   return (
     <InputGroup size="md">
       <Input {...props} pr="4.5rem" />
       <InputRightElement width="4.5rem">
-        <Button
-          h="1.75rem"
-          size="sm"
-          onClick={() => {
-            if (setFieldValue && props.name) {
-              navigator.clipboard
-                .readText()
-                .then((text) => setFieldValue(props.name as string, text));
-            }
-          }}
-        >
+        <Button h="1.75rem" size="sm" onClick={handlePasteAddress}>
           Paste
         </Button>
       </InputRightElement>
