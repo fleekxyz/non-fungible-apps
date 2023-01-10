@@ -9,9 +9,10 @@ import "./FleekAccessControl.sol";
 import "./util/FleekStrings.sol";
 
 contract FleekERC721 is ERC721, FleekAccessControl {
-    using FleekStrings for bool;
-    using Strings for uint256;
     using Counters for Counters.Counter;
+    using FleekStrings for FleekERC721.App;
+    using FleekStrings for FleekERC721.AccessPoint;
+    using FleekStrings for string;
 
     event NewBuild(uint256 indexed token, string indexed commitHash, address indexed triggeredBy);
     event NewTokenName(uint256 indexed token, string indexed name, address indexed triggeredBy);
@@ -88,14 +89,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
 
     /**
-     * @dev Checks if msg.sender has the role of tokenOwner for a certain tokenId.
-     */
-    modifier requireTokenOwner(uint256 tokenId) {
-        require(msg.sender == ownerOf(tokenId), "FleekERC721: must be token owner");
-        _;
-    }
-
-    /**
      * @dev Checks if the AccessPoint exists.
      */
     modifier requireAP(string memory apName) {
@@ -157,24 +150,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         address owner = ownerOf(tokenId);
         App storage app = _apps[tokenId];
 
-        // prettier-ignore
-        bytes memory dataURI = abi.encodePacked(
-            '{',
-                '"name":"', app.name, '",',
-                '"description":"', app.description, '",',
-                '"owner":"', Strings.toHexString(uint160(owner), 20), '",',
-                '"external_url":"', app.externalURL, '",',
-                '"image":"', app.image, '",',
-                '"attributes": [',
-                    '{"trait_type": "ENS", "value":"', app.ENS,'"},',
-                    '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',
-                    '{"trait_type": "Repository", "value":"', app.builds[app.currentBuild].gitRepository,'"},',
-                    '{"trait_type": "Version", "value":"', app.currentBuild.toString(),'"}',
-                ']',
-            '}'
-        );
-
-        return string(abi.encodePacked(_baseURI(), Base64.encode((dataURI))));
+        return string(abi.encodePacked(_baseURI(), app.toString(owner).toBase64()));
     }
 
     /**
@@ -388,19 +364,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      */
     function accessPoint(string memory apName) public view requireAP(apName) returns (string memory) {
         AccessPoint storage _ap = _accessPoints[apName];
-
-        // prettier-ignore
-        bytes memory apJSON = abi.encodePacked(
-            "{",
-                '"tokenId":', _ap.tokenId.toString(), ",",
-                '"score":', _ap.score.toString(), ",",
-                '"nameVerified":', _ap.nameVerified.toString(), ",",
-                '"contentVerified":', _ap.contentVerified.toString(), ",",
-                '"owner":"', Strings.toHexString(uint160(_ap.owner), 20), '"',
-            "}"
-        );
-
-        return string(apJSON);
+        return _ap.toString();
     }
 
     /**
