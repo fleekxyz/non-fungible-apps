@@ -9,7 +9,8 @@ import {
   Button,
   Flex,
 } from '@chakra-ui/react';
-import { ConnectedWalletIcon, CopyIcon, DisconnectIcon, WalletIcon } from './';
+import { ConnectedWalletIcon } from './';
+import { Icon } from 'components/icon';
 
 const WalletMenu: React.FC = () => {
   const { account = '', provider } = useWalletStore();
@@ -37,7 +38,7 @@ const WalletMenu: React.FC = () => {
           _hover={{ bg: 'custom.gray.100' }}
           bg={'custom.gray.200'}
           onClick={handleCopyAccount}
-          icon={<CopyIcon />}
+          icon={<Icon name="copy" />}
         >
           Copy Account
         </MenuItem>
@@ -45,7 +46,7 @@ const WalletMenu: React.FC = () => {
           _hover={{ bg: 'custom.gray.100' }}
           bg={'custom.gray.200'}
           onClick={handleDisconnect}
-          icon={<DisconnectIcon />}
+          icon={<Icon name="log-out" />}
         >
           Disconnect
         </MenuItem>
@@ -68,7 +69,7 @@ const ConnectionMenu: React.FC = () => {
       <Button
         borderRadius="50px"
         as={MenuButton}
-        leftIcon={<WalletIcon />}
+        leftIcon={<Icon name="wallet" />}
         isLoading={state === 'loading'}
         disabled={state === 'loading'}
       >

@@ -1,0 +1,1 @@
+export {default as metamaskIcon} from './metamask-logo.svg'
