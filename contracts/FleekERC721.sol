@@ -59,7 +59,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     /**
      * @dev Generates a SVG image.
      */
-    function _generateSVG(string memory name, string memory ENS) internal returns (string memory) {
+    function _generateSVG(string memory name, string memory ENS) internal pure returns (string memory) {
         return (
             string(
                 abi.encodePacked(
