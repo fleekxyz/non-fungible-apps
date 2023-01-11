@@ -14,7 +14,7 @@ export const ListSites = () => {
     <Flex gap={10} mt="40px" flexWrap="wrap" justifyContent="center">
       {new Array(data).fill(0).map((_, index) => {
         const id = data - index - 1;
-        return <SiteCard tokenId={id} />;
+        return <SiteCard key={id} tokenId={id} />;
       })}
     </Flex>
   );
