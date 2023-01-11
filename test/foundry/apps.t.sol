@@ -197,7 +197,6 @@ contract FleekTest is Test {
 
         fleekContract.setTokenName(mint, "Foundry Test App 2");
         fleekContract.setTokenDescription(mint, "This is a test application submitted by foundry tests. 2");
-        fleekContract.setTokenImage(mint, "https://fleek2.xyz");
         fleekContract.setTokenExternalURL(mint, "https://fleek2.xyz");
         fleekContract.setTokenENS(mint, "fleek_xyz2");
         fleekContract.setTokenBuild(mint, "afff3f62", "https://github.com/fleekxyz/non-fungible-apps2");
@@ -212,7 +211,9 @@ contract FleekTest is Test {
             Strings.toHexString(uint160(DEPLOYER), 20),
             '",',
             '"external_url":"https://fleek2.xyz",',
-            '"image":"https://fleek2.xyz",',
+            '"image":"',
+            _generateSVG("Foundry Test App 2", "fleek_xyz2"),
+            '",',
             '"attributes": [',
             '{"trait_type": "ENS", "value":"fleek_xyz2"},',
             '{"trait_type": "Commit Hash", "value":"afff3f62"},',
@@ -242,7 +243,6 @@ contract FleekTest is Test {
 
         fleekContract.setTokenName(mint, "Foundry Test App 2");
         fleekContract.setTokenDescription(mint, "This is a test application submitted by foundry tests. 2");
-        fleekContract.setTokenImage(mint, "https://fleek2.xyz");
         fleekContract.setTokenExternalURL(mint, "https://fleek2.xyz");
         fleekContract.setTokenENS(mint, "fleek_xyz2");
         fleekContract.setTokenBuild(mint, "afff3f62", "https://github.com/fleekxyz/non-fungible-apps2");
@@ -257,7 +257,9 @@ contract FleekTest is Test {
             Strings.toHexString(uint160(DEPLOYER), 20),
             '",',
             '"external_url":"https://fleek2.xyz",',
-            '"image":"https://fleek2.xyz",',
+            '"image":"',
+            _generateSVG("Foundry Test App 2", "fleek_xyz2"),
+            '",',
             '"attributes": [',
             '{"trait_type": "ENS", "value":"fleek_xyz2"},',
             '{"trait_type": "Commit Hash", "value":"afff3f62"},',
@@ -423,40 +425,6 @@ contract FleekTest is Test {
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setTokenDescription(mint, "NEW TOKEN NAME!");
-    }
-
-    function testSetTokenImage() public {
-        uint256 mint = fleekContract.mint(
-            DEPLOYER,
-            "Foundry Test App",
-            "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
-            "fleek_xyz",
-            "afff3f6",
-            "https://github.com/fleekxyz/non-fungible-apps"
-        );
-
-        assertEq(mint, 0);
-
-        fleekContract.setTokenImage(mint, "https://ethereum.org");
-    }
-
-    function testFailSetTokenImageOnAnotherUsersTokenWithoutAccess() public {
-        uint256 mint = fleekContract.mint(
-            DEPLOYER,
-            "Foundry Test App",
-            "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
-            "fleek_xyz",
-            "afff3f6",
-            "https://github.com/fleekxyz/non-fungible-apps"
-        );
-
-        assertEq(mint, 0);
-
-        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
-
-        fleekContract.setTokenImage(mint, "https://ethereum.org");
     }
 
     function testSetTokenExternalURL() public {
