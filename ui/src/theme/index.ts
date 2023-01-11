@@ -5,6 +5,9 @@ const appTheme = {
   styles: {
     global: {
       body: {
+        html: {
+          fontSize: '16px',
+        },
         color: 'rgba(255, 255, 255)',
         bg: 'custom.black',
         margin: '25px 50px',

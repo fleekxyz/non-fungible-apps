@@ -11,7 +11,7 @@ export const ListSites = () => {
 
   if (!data || isLoading) return <Loading />;
   return (
-    <Flex gap={10} mt="40px" flexWrap="wrap" justifyContent="center">
+    <Flex gap={10} mt="2.5rem" flexWrap="wrap" justifyContent="center">
       {new Array(data).fill(0).map((_, index) => {
         const id = data - index - 1;
         return <SiteCard key={id} tokenId={id} />;
@@ -19,4 +19,3 @@ export const ListSites = () => {
     </Flex>
   );
 };
-

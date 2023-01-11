@@ -27,7 +27,7 @@ const WalletMenu: React.FC = () => {
 
   return (
     <Menu colorScheme={'custom.gray.200'}>
-      <Button borderRadius="50px" as={MenuButton}>
+      <Button borderRadius="3.125em" as={MenuButton}>
         <Flex alignItems={'center'}>
           <Icon
             name={WalletType[provider?.toString() as keyof typeof WalletType]}
@@ -70,7 +70,7 @@ const ConnectionMenu: React.FC = () => {
   return (
     <Menu>
       <Button
-        borderRadius="50px"
+        borderRadius="3.125em"
         as={MenuButton}
         leftIcon={<Icon name="wallet" />}
         isLoading={state === 'loading'}

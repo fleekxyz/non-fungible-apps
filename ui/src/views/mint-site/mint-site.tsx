@@ -119,14 +119,14 @@ export const MintSite = () => {
 
   return (
     <>
-      <Flex width="full" align="center" justifyContent="center" mt="30px">
-        <Box width={{ base: '100%' }}>
+      <Flex width="full" align="center" justifyContent="center" mt="1.5em">
+        <Box width={{ base: '100vw' }}>
           <HomeButton />
-          <VStack spacing="10px">
+          <VStack spacing="0.625em">
             <Box textAlign="center" mt={2}>
               <Heading>Mint your Site</Heading>
             </Box>
-            <Box textAlign="left" width="80%" justifyContent="center">
+            <Box textAlign="left" width="80vw" justifyContent="center">
               <Formik
                 validate={validateFields}
                 initialValues={initialValues}
@@ -232,7 +232,7 @@ export const MintSite = () => {
                       colorScheme="blue"
                       backgroundColor="custom.blue.100"
                       width="full"
-                      mt={4}
+                      mt="1em"
                       type="submit"
                       isLoading={isSubmitting}
                       loadingText="Minting..."
@@ -259,4 +259,3 @@ export const MintSite = () => {
     </>
   );
 };
-

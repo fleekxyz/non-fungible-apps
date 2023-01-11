@@ -44,30 +44,31 @@ export const MintedSiteDetail = () => {
 
   return (
     <>
-      <Flex width="full" align="center" justifyContent="center" mt="30px">
-        <Box width={{ base: '100%' }}>
+      {/* TODO create component/layout. mint view use same config */}
+      <Flex width="full" align="center" justifyContent="center" mt="1.5em">
+        <Box width={{ base: '100vw' }}>
           <HomeButton />
           <Box
             flexDirection="row"
             display="flex"
             justifyContent="space-evenly"
-            mt={10}
+            mt="2.5rem"
           >
-            <Box mr={5}>
+            <Box mr="1.25rem">
               <Box
                 display="flex"
                 flexDirection="row"
                 alignItems="flex-end"
-                mb={5}
+                mb="1.25rem"
               >
-                <Heading mr={5}>{name}</Heading>
+                <Heading mr="1.25rem">{name}</Heading>
               </Box>
               <Card backgroundColor="transparent" border="1px">
                 <CardBody padding="1px 8px 10px 8px">
                   <Accordion defaultIndex={[0, 1]} allowMultiple width="45vw">
                     <AccordionItem
                       heading="Description"
-                      minH={120}
+                      minH="10rem"
                       maxH="auto"
                       children={
                         <p
@@ -88,12 +89,12 @@ export const MintedSiteDetail = () => {
                           tokendId={tokenIdParam as string}
                         />
                       }
-                      padding="16px"
+                      padding="1rem"
                     />
                   </Accordion>
-                  <Box ml={5} mt={2}>
+                  <Box ml="1.25rem" mt={2}>
                     <Link href={externalUrl} isExternal>
-                      Visit site <ExternalLinkIcon mx="2px" />
+                      Visit site <ExternalLinkIcon mx="0.125rem" />
                     </Link>
                   </Box>
                 </CardBody>
@@ -104,17 +105,17 @@ export const MintedSiteDetail = () => {
                 border="1px"
                 width="-webkit-fill-available"
                 padding="5px 10px"
-                borderTopRadius={10}
+                borderTopRadius="0.625rem"
               >
                 <Heading size="md">Preview</Heading>
               </Box>
               <Box
-                mt="0px !important"
+                mt="0!important"
                 boxSize="md"
                 border="1px"
-                padding={10}
-                borderRadius={20}
-                borderTopRadius={0}
+                padding="0.625rem"
+                borderRadius="1.25rem"
+                borderTopRadius="0"
                 boxShadow="12px 10px 14px 6px #868686d1"
               >
                 <ImagePreview
@@ -132,4 +133,3 @@ export const MintedSiteDetail = () => {
     </>
   );
 };
-

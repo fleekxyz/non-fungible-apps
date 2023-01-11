@@ -14,7 +14,7 @@ export const AttributesDetail = ({
   tokendId,
 }: AttributesDetailProps) => {
   return (
-    <HStack shouldWrapChildren display="inline" spacing="0px">
+    <HStack shouldWrapChildren display="inline" spacing="0">
       <CardAttributes heading="Owner" info={owner} />
       {attributes.map(
         (attribute) =>
@@ -30,4 +30,3 @@ export const AttributesDetail = ({
     </HStack>
   );
 };
-

@@ -28,7 +28,7 @@ const InfoContainer = ({ heading, info, width }: InfoContainerProps) => (
   <TileInfo
     size="xs"
     direction="row"
-    mr="5px"
+    mr="0.3em"
     width={width}
     heading={heading}
     textAlignText="left"
@@ -53,12 +53,12 @@ export const SiteCard: React.FC<CardSiteProps> = ({ tokenId }) => {
       backgroundColor="custom.white.50"
       border="1px"
       borderRadius="10px"
-      width="350px"
-      height="350px"
+      width="21.875em"
+      height="21.875em"
       onClick={() => navigate(`/detail?tokenId=${tokenId}`)}
     >
-      <CardBody width="350px" height="350px" paddingTop="10px">
-        <Heading size="md" textAlign="center" marginBottom="10px">
+      <CardBody width="21.875em" height="21.875em" paddingTop="0.625em">
+        <Heading size="md" textAlign="center" marginBottom="0.625em">
           {name}
         </Heading>
         <Link
@@ -66,7 +66,7 @@ export const SiteCard: React.FC<CardSiteProps> = ({ tokenId }) => {
           isExternal
           onClick={(e) => e.stopPropagation()}
         >
-          <Box height="180px">
+          <Box height="11.25em">
             <ImagePreview
               backgroundColor="custom.black"
               display="block"
@@ -81,12 +81,12 @@ export const SiteCard: React.FC<CardSiteProps> = ({ tokenId }) => {
             />
           </Box>
         </Link>
-        <Stack mt="10px" spacing="3" overflowY="scroll">
+        <Stack mt="0.625em" spacing="3" overflowY="scroll">
           <InfoContainer heading="Owner" info={owner} width="auto" />
-          <InfoContainer heading="Token ID" info={tokenId} width="100px" />
+          <InfoContainer heading="Token ID" info={tokenId} width="6.25em" />
           <InfoContainer
             heading="External url"
-            width="100px"
+            width="6.25em"
             info={
               <Link
                 href={externalUrl}
@@ -102,4 +102,3 @@ export const SiteCard: React.FC<CardSiteProps> = ({ tokenId }) => {
     </Card>
   );
 };
-
