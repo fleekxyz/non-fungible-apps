@@ -26,7 +26,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     struct App {
         string name; // Name of the site
         string description; // Description about the site
-        string image; // Preview Image IPFS Link
         string externalURL; // Site URL
         string ENS; // ENS ID
         uint256 currentBuild; // The current build number (Increments by one with each change, starts at zero)
@@ -112,7 +111,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         App storage app = _apps[tokenId];
         app.name = name;
         app.description = description;
-        app.image = _generateSVG(name, ENS);
         app.externalURL = externalURL;
         app.ENS = ENS;
 
@@ -145,7 +143,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
                 '"description":"', app.description, '",',
                 '"owner":"', Strings.toHexString(uint160(owner), 20), '",',
                 '"external_url":"', app.externalURL, '",',
-                '"image":"', app.image, '",',
+                '"image":"', _generateSVG(app.name, app.ENS), '",',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',
@@ -273,26 +271,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
         emit NewTokenDescription(tokenId, _tokenDescription, msg.sender);
-    }
-
-    /**
-     * @dev Updates the `image` metadata field of a minted `tokenId`.
-     *
-     * May emit a {NewTokenImage} event.
-     *
-     * Requirements:
-     *
-     * - the tokenId must be minted and valid.
-     * - the sender must have the `tokenController` role.
-     *
-     */
-    function setTokenImage(
-        uint256 tokenId,
-        string memory _tokenImage
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
-        _requireMinted(tokenId);
-        _apps[tokenId].image = _tokenImage;
-        emit NewTokenImage(tokenId, _tokenImage, msg.sender);
     }
 
     /**
