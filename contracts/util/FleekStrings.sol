@@ -5,6 +5,7 @@ pragma solidity ^0.8.7;
 import "../FleekERC721.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
+import "./FleekSVG.sol";
 
 library FleekStrings {
     using Strings for uint256;
@@ -37,6 +38,7 @@ library FleekStrings {
                 '"description":"', app.description, '",',
                 '"owner":"', uint160(owner).toHexString(20), '",',
                 '"external_url":"', app.externalURL, '",',
+                '"image":"', FleekSVG.generateBase64(app.name, app.ENS), '",',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',

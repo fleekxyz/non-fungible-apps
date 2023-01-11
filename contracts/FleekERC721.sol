@@ -96,40 +96,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     }
 
     /**
-     * @dev Generates a SVG image.
-     */
-    function _generateSVG(string memory name, string memory ENS) internal view returns (string memory) {
-        return (
-            string(
-                abi.encodePacked(
-                    _baseURI(),
-                    Base64.encode(
-                        abi.encodePacked(
-                            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="640" height="480" viewBox="0 0 640 480" xml:space="preserve">',
-                            "<defs>",
-                            "</defs>",
-                            '<g transform="matrix(3.42 0 0 3.42 300.98 252.98)"  >',
-                            '<polygon style="stroke: rgb(0,0,0); stroke-width: 8; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(152,152,183); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  points="-50,-50 -50,50 50,50 50,-50 " />',
-                            "</g>",
-                            '<g transform="matrix(1 0 0 1 303.5 115.67)" style=""  >',
-                            '<text xml:space="preserve" font-family="Open Sans" font-size="24" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-45.7" y="5.65" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">Fleek NFAs</tspan></text>',
-                            "</g>",
-                            '<g transform="matrix(1 0 0 1 302 261.47)" style=""  >',
-                            '<text xml:space="preserve" font-family="Open Sans" font-size="28" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-44.26" y="-6.14" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">',
-                            name,
-                            '</tspan><tspan x="-37.14" y="17.45" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">',
-                            ENS,
-                            "</tspan></text>",
-                            "</g>",
-                            "</svg>"
-                        )
-                    )
-                )
-            )
-        );
-    }
-
-    /**
      * @dev Mints a token and returns a tokenId.
      *
      * If the `tokenId` has not been minted before, and the `to` address is not zero, emits a {Transfer} event.
@@ -299,26 +265,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
         emit NewTokenDescription(tokenId, _tokenDescription, msg.sender);
-    }
-
-    /**
-     * @dev Updates the `image` metadata field of a minted `tokenId`.
-     *
-     * May emit a {NewTokenImage} event.
-     *
-     * Requirements:
-     *
-     * - the tokenId must be minted and valid.
-     * - the sender must have the `tokenController` role.
-     *
-     */
-    function setTokenImage(
-        uint256 tokenId,
-        string memory _tokenImage
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
-        _requireMinted(tokenId);
-        _apps[tokenId].image = _tokenImage;
-        emit NewTokenImage(tokenId, _tokenImage, msg.sender);
     }
 
     /**

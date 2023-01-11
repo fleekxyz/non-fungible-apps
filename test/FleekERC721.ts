@@ -615,7 +615,6 @@ describe('FleekERC721', () => {
         fixture.owner.address,
         MINT_PARAMS.name,
         MINT_PARAMS.description,
-        MINT_PARAMS.image,
         MINT_PARAMS.externalUrl,
         MINT_PARAMS.ens,
         MINT_PARAMS.commitHash,
