@@ -37,7 +37,6 @@ library FleekStrings {
                 '"description":"', app.description, '",',
                 '"owner":"', uint160(owner).toHexString(20), '",',
                 '"external_url":"', app.externalURL, '",',
-                '"image":"', app.image, '",',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',

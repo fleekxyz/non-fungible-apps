@@ -25,7 +25,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -41,7 +40,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -51,7 +49,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -68,7 +65,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -80,7 +76,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App 2",
             "This is a test application submitted by foundry tests [2].",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -96,7 +91,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -109,7 +103,6 @@ contract FleekTest is Test {
             "Foundry Test App 2",
             "This is a test application submitted by foundry tests[2].",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -118,14 +111,47 @@ contract FleekTest is Test {
         assertEq(second_mint, 1);
     }
 
+    function _generateSVG(string memory name, string memory ENS) internal pure returns (string memory) {
+        return (
+            string(
+                abi.encodePacked(
+                    "data:application/json;base64,",
+                    Base64.encode(
+                        abi.encodePacked(
+                            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="640" height="480" viewBox="0 0 640 480" xml:space="preserve">',
+                            "<defs>",
+                            "</defs>",
+                            '<g transform="matrix(3.42 0 0 3.42 300.98 252.98)"  >',
+                            '<polygon style="stroke: rgb(0,0,0); stroke-width: 8; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(152,152,183); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  points="-50,-50 -50,50 50,50 50,-50 " />',
+                            "</g>",
+                            '<g transform="matrix(1 0 0 1 303.5 115.67)" style=""  >',
+                            '<text xml:space="preserve" font-family="Open Sans" font-size="24" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-45.7" y="5.65" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">Fleek NFAs</tspan></text>',
+                            "</g>",
+                            '<g transform="matrix(1 0 0 1 302 261.47)" style=""  >',
+                            '<text xml:space="preserve" font-family="Open Sans" font-size="28" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-44.26" y="-6.14" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">',
+                            name,
+                            '</tspan><tspan x="-37.14" y="17.45" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">',
+                            ENS,
+                            "</tspan></text>",
+                            "</g>",
+                            "</svg>"
+                        )
+                    )
+                )
+            )
+        );
+    }
+
     function testTokenURI() public {
+        string memory name = "Foundry Test App";
+        string memory ens = "fleek_xyz";
+
         uint256 mint = fleekContract.mint(
             DEPLOYER,
-            "Foundry Test App",
+            name,
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
-            "fleek_xyz",
+            ens,
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
         );
@@ -136,15 +162,21 @@ contract FleekTest is Test {
 
         bytes memory dataURI = abi.encodePacked(
             "{",
-            '"name":"Foundry Test App",',
+            '"name":"',
+            name,
+            '",',
             '"description":"This is a test application submitted by foundry tests.",',
             '"owner":"',
             Strings.toHexString(uint160(DEPLOYER), 20),
             '",',
             '"external_url":"https://fleek.xyz",',
-            '"image":"https://fleek.xyz",',
+            '"image":"',
+            _generateSVG(name, ens),
+            '",',
             '"attributes": [',
-            '{"trait_type": "ENS", "value":"fleek_xyz"},',
+            '{"trait_type": "ENS", "value":"',
+            ens,
+            '"},',
             '{"trait_type": "Commit Hash", "value":"afff3f6"},',
             '{"trait_type": "Repository", "value":"https://github.com/fleekxyz/non-fungible-apps"},',
             '{"trait_type": "Version", "value":"0"}',
@@ -161,7 +193,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -171,7 +202,6 @@ contract FleekTest is Test {
 
         fleekContract.setTokenName(mint, "Foundry Test App 2");
         fleekContract.setTokenDescription(mint, "This is a test application submitted by foundry tests. 2");
-        fleekContract.setTokenImage(mint, "https://fleek2.xyz");
         fleekContract.setTokenExternalURL(mint, "https://fleek2.xyz");
         fleekContract.setTokenENS(mint, "fleek_xyz2");
         fleekContract.setTokenBuild(mint, "afff3f62", "https://github.com/fleekxyz/non-fungible-apps2");
@@ -186,7 +216,9 @@ contract FleekTest is Test {
             Strings.toHexString(uint160(DEPLOYER), 20),
             '",',
             '"external_url":"https://fleek2.xyz",',
-            '"image":"https://fleek2.xyz",',
+            '"image":"',
+            _generateSVG("Foundry Test App 2", "fleek_xyz2"),
+            '",',
             '"attributes": [',
             '{"trait_type": "ENS", "value":"fleek_xyz2"},',
             '{"trait_type": "Commit Hash", "value":"afff3f62"},',
@@ -205,7 +237,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -217,7 +248,6 @@ contract FleekTest is Test {
 
         fleekContract.setTokenName(mint, "Foundry Test App 2");
         fleekContract.setTokenDescription(mint, "This is a test application submitted by foundry tests. 2");
-        fleekContract.setTokenImage(mint, "https://fleek2.xyz");
         fleekContract.setTokenExternalURL(mint, "https://fleek2.xyz");
         fleekContract.setTokenENS(mint, "fleek_xyz2");
         fleekContract.setTokenBuild(mint, "afff3f62", "https://github.com/fleekxyz/non-fungible-apps2");
@@ -232,7 +262,9 @@ contract FleekTest is Test {
             Strings.toHexString(uint160(DEPLOYER), 20),
             '",',
             '"external_url":"https://fleek2.xyz",',
-            '"image":"https://fleek2.xyz",',
+            '"image":"',
+            _generateSVG("Foundry Test App 2", "fleek_xyz2"),
+            '",',
             '"attributes": [',
             '{"trait_type": "ENS", "value":"fleek_xyz2"},',
             '{"trait_type": "Commit Hash", "value":"afff3f62"},',
@@ -276,7 +308,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -297,7 +328,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -315,7 +345,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -341,7 +370,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -357,7 +385,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -377,7 +404,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -394,7 +420,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -407,48 +432,11 @@ contract FleekTest is Test {
         fleekContract.setTokenDescription(mint, "NEW TOKEN NAME!");
     }
 
-    function testSetTokenImage() public {
-        uint256 mint = fleekContract.mint(
-            DEPLOYER,
-            "Foundry Test App",
-            "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
-            "https://fleek.xyz",
-            "fleek_xyz",
-            "afff3f6",
-            "https://github.com/fleekxyz/non-fungible-apps"
-        );
-
-        assertEq(mint, 0);
-
-        fleekContract.setTokenImage(mint, "https://ethereum.org");
-    }
-
-    function testFailSetTokenImageOnAnotherUsersTokenWithoutAccess() public {
-        uint256 mint = fleekContract.mint(
-            DEPLOYER,
-            "Foundry Test App",
-            "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
-            "https://fleek.xyz",
-            "fleek_xyz",
-            "afff3f6",
-            "https://github.com/fleekxyz/non-fungible-apps"
-        );
-
-        assertEq(mint, 0);
-
-        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
-
-        fleekContract.setTokenImage(mint, "https://ethereum.org");
-    }
-
     function testSetTokenExternalURL() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -465,7 +453,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -485,7 +472,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -501,7 +487,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -521,7 +506,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -537,7 +521,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -556,7 +539,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -577,7 +559,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -600,7 +581,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -627,7 +607,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -652,7 +631,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -679,7 +657,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
@@ -711,7 +688,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -740,7 +716,6 @@ contract FleekTest is Test {
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
             "https://fleek.xyz",
-            "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps"
@@ -764,7 +739,6 @@ contract FleekTest is Test {
             DEPLOYER,
             "Foundry Test App",
             "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
             "https://fleek.xyz",
             "fleek_xyz",
             "afff3f6",
