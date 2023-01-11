@@ -1,3 +1,3 @@
 export enum WalletType {
-  MetaMask = 'metamask',
+  metamask = 'metamask',
 }

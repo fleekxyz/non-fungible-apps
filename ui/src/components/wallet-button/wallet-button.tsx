@@ -9,8 +9,8 @@ import {
   Button,
   Flex,
 } from '@chakra-ui/react';
-import { ConnectedWalletIcon } from './';
-import { Icon } from 'components/icon';
+import { Icon } from '../icon';
+import { WalletType } from './wallet.utils';
 
 const WalletMenu: React.FC = () => {
   const { account = '', provider } = useWalletStore();
@@ -29,7 +29,10 @@ const WalletMenu: React.FC = () => {
     <Menu colorScheme={'custom.gray.200'}>
       <Button borderRadius="50px" as={MenuButton}>
         <Flex alignItems={'center'}>
-          <ConnectedWalletIcon provider={provider?.toString() as string} />
+          <Icon
+            name={WalletType[provider?.toString() as keyof typeof WalletType]}
+            mr="0.5em"
+          />
           {contractAddress(account)}
         </Flex>
       </Button>
@@ -80,7 +83,7 @@ const ConnectionMenu: React.FC = () => {
           _hover={{ bg: 'custom.gray.100' }}
           bg={'custom.gray.200'}
           onClick={handleConnectWallet}
-          icon={<ConnectedWalletIcon provider={'metamask'} />}
+          icon={<Icon name={WalletType.metamask} />}
         >
           Metamask
         </MenuItem>
