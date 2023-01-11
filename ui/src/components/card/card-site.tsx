@@ -47,9 +47,10 @@ export const SiteCard: React.FC<CardSiteProps> = ({ tokenId }) => {
   const { name, owner, image, external_url: externalUrl } = data as any;
   return (
     <Card
-      borderColor="#f3f3f36b !important"
+      _hover={{ cursor: 'pointer' }}
+      borderColor="custom.white.100 !important"
       boxShadow="1px 10px 24px -2px #85848480"
-      backgroundColor="#c5c5c50a"
+      backgroundColor="custom.white.50"
       border="1px"
       borderRadius="10px"
       width="350px"
@@ -67,7 +68,7 @@ export const SiteCard: React.FC<CardSiteProps> = ({ tokenId }) => {
         >
           <Box height="180px">
             <ImagePreview
-              backgroundColor="#161616"
+              backgroundColor="custom.black"
               display="block"
               marginLeft="auto"
               marginRight="auto"

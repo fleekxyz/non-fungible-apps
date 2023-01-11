@@ -1,12 +1,13 @@
 import { extendTheme } from '@chakra-ui/react';
+import { colors } from './foundations';
 
 const appTheme = {
   styles: {
     global: {
       body: {
         color: 'rgba(255, 255, 255)',
-        bg: '#161616',
-        margin: '50px',
+        bg: 'custom.black',
+        margin: '25px 50px',
       },
     },
   },
@@ -17,6 +18,7 @@ const appTheme = {
   sizes: {
     modalHeight: '345px',
   },
+  colors,
 };
 
 export const theme = extendTheme(appTheme);

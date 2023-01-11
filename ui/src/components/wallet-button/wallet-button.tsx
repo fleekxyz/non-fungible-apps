@@ -1,7 +1,16 @@
 import { useCallback } from 'react';
 import { useAppDispatch, useWalletStore, walletActions } from '@/store';
 import { contractAddress } from '@/utils';
-import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Button,
+  Flex,
+} from '@chakra-ui/react';
+import { Icon } from '../icon';
+import { WalletType } from './wallet.utils';
 
 const WalletMenu: React.FC = () => {
   const { account = '', provider } = useWalletStore();
@@ -17,13 +26,33 @@ const WalletMenu: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <Menu>
-      <MenuButton as={Button}>
-        {`${provider} (${contractAddress(account)})`}
-      </MenuButton>
-      <MenuList>
-        <MenuItem onClick={handleCopyAccount}>Copy Account</MenuItem>
-        <MenuItem onClick={handleDisconnect}>Disconnect</MenuItem>
+    <Menu colorScheme={'custom.gray.200'}>
+      <Button borderRadius="50px" as={MenuButton}>
+        <Flex alignItems={'center'}>
+          <Icon
+            name={WalletType[provider?.toString() as keyof typeof WalletType]}
+            mr="0.5em"
+          />
+          {contractAddress(account)}
+        </Flex>
+      </Button>
+      <MenuList bg={'custom.gray.200'}>
+        <MenuItem
+          _hover={{ bg: 'custom.gray.100' }}
+          bg={'custom.gray.200'}
+          onClick={handleCopyAccount}
+          icon={<Icon name="copy" />}
+        >
+          Copy Account
+        </MenuItem>
+        <MenuItem
+          _hover={{ bg: 'custom.gray.100' }}
+          bg={'custom.gray.200'}
+          onClick={handleDisconnect}
+          icon={<Icon name="log-out" />}
+        >
+          Disconnect
+        </MenuItem>
       </MenuList>
     </Menu>
   );
@@ -40,15 +69,24 @@ const ConnectionMenu: React.FC = () => {
 
   return (
     <Menu>
-      <MenuButton
-        as={Button}
+      <Button
+        borderRadius="50px"
+        as={MenuButton}
+        leftIcon={<Icon name="wallet" />}
         isLoading={state === 'loading'}
         disabled={state === 'loading'}
       >
-        Connect Wallet
-      </MenuButton>
-      <MenuList>
-        <MenuItem onClick={handleConnectWallet}>Metamask</MenuItem>
+        Connect
+      </Button>
+      <MenuList bg={'custom.gray.200'}>
+        <MenuItem
+          _hover={{ bg: 'custom.gray.100' }}
+          bg={'custom.gray.200'}
+          onClick={handleConnectWallet}
+          icon={<Icon name={WalletType.metamask} />}
+        >
+          Metamask
+        </MenuItem>
       </MenuList>
     </Menu>
   );
