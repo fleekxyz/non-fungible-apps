@@ -6,12 +6,15 @@ describe('Proxy', function () {
     const Contract = await ethers.getContractFactory('FleekERC721');
     const ContractV2 = await ethers.getContractFactory('FleekERC721');
 
-    const instance = await upgrades.deployProxy(Contract, [42], {
-      constructorArgs: ['Fleek', 'FLEEK'],
-    });
+    const instance = await upgrades.deployProxy(Contract, [
+      'Collection Name',
+      'SYMBOL',
+    ]);
     const upgraded = await upgrades.upgradeProxy(instance.address, ContractV2);
 
-    const value = await upgraded.value();
-    expect(value.toString()).to.equal('42');
+    const name = await upgraded.name();
+    const symbol = await upgraded.symbol();
+    expect(name).to.equal('Collection Name');
+    expect(symbol).to.equal('SYMBOL');
   });
 });
