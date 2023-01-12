@@ -34,6 +34,7 @@
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "@nomiclabs/hardhat-web3": "^2.0.0",
     "@openzeppelin/contracts": "^4.7.3",
+    "@openzeppelin/hardhat-upgrades": "^1.22.0",
     "@types/mocha": "^10.0.1",
     "chai": "^4.3.6",
     "dotenv": "^16.0.2",

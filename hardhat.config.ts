@@ -5,6 +5,7 @@ import 'hardhat-deploy';
 import 'solidity-coverage';
 import 'hardhat-gas-reporter';
 import 'hardhat-contract-sizer';
+import '@openzeppelin/hardhat-upgrades';
 import * as dotenv from 'dotenv';
 import { HardhatUserConfig } from 'hardhat/types';
 
