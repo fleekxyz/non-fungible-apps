@@ -8,7 +8,8 @@ contract FleekTest is Test {
     address constant DEPLOYER = 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496;
 
     function setUp() public {
-        fleekContract = new FleekERC721("Test Contract", "FLKAPS");
+        fleekContract = new FleekERC721();
+        fleekContract.initialize("Test Contract", "FLKAPS");
     }
 
     function testName() public {
