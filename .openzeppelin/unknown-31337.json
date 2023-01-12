@@ -2,24 +2,24 @@
   "manifestVersion": "3.2",
   "admin": {
     "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-    "txHash": "0x29fe2725139b465f9008bd083d6ea513b2f0f36d2895602190acfdd81d69007f"
+    "txHash": "0x4b5b54af91e7ab557a8ebffce81e8fcaf9c8c68f6782bf41801231e980bc8572"
   },
   "proxies": [
     {
       "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
-      "txHash": "0x592bc5ba848eca25fcf7bf1227214a4bc51c735fc03a1143ed0796962e9f1824",
+      "txHash": "0x84800abf4af113a2da29e2d9c92c1cca6a791eb0d7fb5af9b4d9dcf456604788",
       "kind": "transparent"
     },
     {
       "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
-      "txHash": "0xfe97151e70a1fb624638cdb5908d32e833baa480f752f7ebffbaa1792159749f",
+      "txHash": "0x57c214ce37d8f5132168b81c3943027214bd308ae7f2f8244a6e73f0eb1a38f7",
       "kind": "transparent"
     }
   ],
   "impls": {
-    "a49d5f84c3f80722899c6437fcc0d494fefd2e0d4863cc6e509f6c724a016687": {
+    "ba48746efba84064194f0b749287993876403d35e009bd80543b6f3551e0207b": {
       "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-      "txHash": "0xf8819d2953f6b6f9eebf11f81a1f32c4cc9c5195e1f38e0ae6d4bcfc22de5ca0",
+      "txHash": "0x09f54352ecdb2e5bc58ab325eaebdba4e468e37ea791ec60c8ca24fcfc3d2d36",
       "layout": {
         "solcVersion": "0.8.7",
         "storage": [
@@ -156,7 +156,7 @@
             "label": "_apps",
             "offset": 0,
             "slot": "156",
-            "type": "t_mapping(t_uint256,t_struct(App)4606_storage)",
+            "type": "t_mapping(t_uint256,t_struct(App)4604_storage)",
             "contract": "FleekERC721",
             "src": "contracts/FleekERC721.sol:45"
           }
@@ -215,11 +215,11 @@
             "label": "mapping(uint256 => mapping(uint256 => mapping(enum FleekAccessControl.Roles => struct FleekAccessControl.Role)))",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_uint256,t_struct(App)4606_storage)": {
+          "t_mapping(t_uint256,t_struct(App)4604_storage)": {
             "label": "mapping(uint256 => struct FleekERC721.App)",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_uint256,t_struct(Build)4611_storage)": {
+          "t_mapping(t_uint256,t_struct(Build)4609_storage)": {
             "label": "mapping(uint256 => struct FleekERC721.Build)",
             "numberOfBytes": "32"
           },
@@ -231,7 +231,7 @@
             "label": "string",
             "numberOfBytes": "32"
           },
-          "t_struct(App)4606_storage": {
+          "t_struct(App)4604_storage": {
             "label": "struct FleekERC721.App",
             "members": [
               {
@@ -266,14 +266,14 @@
               },
               {
                 "label": "builds",
-                "type": "t_mapping(t_uint256,t_struct(Build)4611_storage)",
+                "type": "t_mapping(t_uint256,t_struct(Build)4609_storage)",
                 "offset": 0,
                 "slot": "5"
               }
             ],
             "numberOfBytes": "192"
           },
-          "t_struct(Build)4611_storage": {
+          "t_struct(Build)4609_storage": {
             "label": "struct FleekERC721.Build",
             "members": [
               {
