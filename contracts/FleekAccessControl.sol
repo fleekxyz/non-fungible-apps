@@ -34,7 +34,7 @@ contract FleekAccessControl is Initializable {
     /**
      * @dev Initializes the contract by granting the `Owner` role to the deployer.
      */
-    function __FleekAccessControl_init() public {
+    function __FleekAccessControl_init() internal {
         _grantCollectionRole(Roles.Owner, msg.sender);
     }
 
