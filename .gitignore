@@ -4,7 +4,7 @@ node_modules
 # hardhat
 cache
 artifacts
-deployments/localhost
+deployments/hardhat
 
 # NPM
 package-lock.json
@@ -12,3 +12,6 @@ package-lock.json
 # Foundry
 out
 forge-cache
+
+# OpenZeppelin
+.openzeppelin/unknown-*.json
