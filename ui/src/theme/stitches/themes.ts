@@ -34,15 +34,6 @@ export const {
       'h-md': '1.5rem',
       'h-lg': '2rem',
     },
-    sizes: {
-      sm: '220px',
-      md: '320px',
-      'modal-sm': '509px',
-      'modal-lg': '618px',
-      'container-sm': '414px',
-      'container-md': '618px',
-      'container-lg': '1280px',
-    },
     radii: {
       xs: '0.25rem',
       sm: '0.5rem',
