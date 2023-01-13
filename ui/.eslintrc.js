@@ -8,6 +8,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
+    'plugin:storybook/recommended',
   ],
   overrides: [],
   parser: '@typescript-eslint/parser',
@@ -19,7 +20,9 @@ module.exports = {
   rules: {
     '@typescript-eslint/explicit-function-return-type': [
       'error',
-      { allowExpressions: true },
+      {
+        allowExpressions: true,
+      },
     ],
     '@typescript-eslint/no-namespace': 'off',
     'simple-import-sort/imports': 2,
