@@ -98,7 +98,7 @@ export function handleNewBuild(event: NewBuildEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.token = event.params.token;
-  entity.commitHash = event.params.commitHash;
+  entity.commitHash = event.params.commitHash.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
   entity.blockNumber = event.block.number;
@@ -115,7 +115,7 @@ export function handleNewTokenDescription(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.token = event.params.token;
-  entity.description = event.params.description;
+  entity.description = event.params.description.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
   entity.blockNumber = event.block.number;
@@ -130,7 +130,7 @@ export function handleNewTokenENS(event: NewTokenENSEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.token = event.params.token;
-  entity.ENS = event.params.ENS;
+  entity.ENS = event.params.ENS.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
   entity.blockNumber = event.block.number;
@@ -147,7 +147,7 @@ export function handleNewTokenExternalURL(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.token = event.params.token;
-  entity.externalURL = event.params.externalURL;
+  entity.externalURL = event.params.externalURL.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
   entity.blockNumber = event.block.number;
@@ -162,7 +162,7 @@ export function handleNewTokenImage(event: NewTokenImageEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.token = event.params.token;
-  entity.image = event.params.image;
+  entity.image = event.params.image.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
   entity.blockNumber = event.block.number;
@@ -177,7 +177,7 @@ export function handleNewTokenName(event: NewTokenNameEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.token = event.params.token;
-  entity.name = event.params.name;
+  entity.name = event.params.name.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
   entity.blockNumber = event.block.number;
