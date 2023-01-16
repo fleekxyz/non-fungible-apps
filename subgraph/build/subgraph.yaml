@@ -1,0 +1,59 @@
+specVersion: 0.0.5
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: FleekNFA
+    network: mumbai
+    source:
+      address: "0x34F21E970A7cd383eE429aDB5ed57bbc40ea2B57"
+      abi: FleekNFA
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - ApprovalForAll
+        - CollectionRoleGranted
+        - CollectionRoleRevoked
+        - NewBuild
+        - NewTokenDescription
+        - NewTokenENS
+        - NewTokenExternalURL
+        - NewTokenImage
+        - NewTokenName
+        - TokenRoleGranted
+        - TokenRoleRevoked
+        - Transfer
+      abis:
+        - name: FleekNFA
+          file: FleekNFA/abis/FleekNFA.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: CollectionRoleGranted(indexed uint8,indexed address,address)
+          handler: handleCollectionRoleGranted
+        - event: CollectionRoleRevoked(indexed uint8,indexed address,address)
+          handler: handleCollectionRoleRevoked
+        - event: NewBuild(indexed uint256,indexed string,indexed address)
+          handler: handleNewBuild
+        - event: NewTokenDescription(indexed uint256,indexed string,indexed address)
+          handler: handleNewTokenDescription
+        - event: NewTokenENS(indexed uint256,indexed string,indexed address)
+          handler: handleNewTokenENS
+        - event: NewTokenExternalURL(indexed uint256,indexed string,indexed address)
+          handler: handleNewTokenExternalURL
+        - event: NewTokenImage(indexed uint256,indexed string,indexed address)
+          handler: handleNewTokenImage
+        - event: NewTokenName(indexed uint256,indexed string,indexed address)
+          handler: handleNewTokenName
+        - event: TokenRoleGranted(indexed uint256,indexed uint8,indexed address,address)
+          handler: handleTokenRoleGranted
+        - event: TokenRoleRevoked(indexed uint256,indexed uint8,indexed address,address)
+          handler: handleTokenRoleRevoked
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: FleekNFA/FleekNFA.wasm
