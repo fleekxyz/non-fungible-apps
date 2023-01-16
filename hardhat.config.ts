@@ -1,7 +1,6 @@
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-web3';
 import '@nomicfoundation/hardhat-chai-matchers';
-import 'hardhat-deploy';
 import 'solidity-coverage';
 import 'hardhat-gas-reporter';
 import 'hardhat-contract-sizer';
@@ -26,7 +25,6 @@ const config: HardhatUserConfig = {
     mumbai: {
       url: API_URL,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
-      saveDeployments: true,
       chainId: 80001,
     },
   },
@@ -40,14 +38,6 @@ const config: HardhatUserConfig = {
   contractSizer: {
     runOnCompile: false,
     only: ['NftMarketplace'],
-  },
-  namedAccounts: {
-    localDeployer: {
-      default: 0,
-    },
-    privateKey: {
-      default: PRIVATE_KEY ? `privatekey://${PRIVATE_KEY}` : null,
-    },
   },
   solidity: {
     version: '0.8.7',

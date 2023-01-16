@@ -6,7 +6,7 @@ const PROXY_FILE_NAME = 'proxy';
 const getProxyFilePath = (network) => {
   return path.resolve(
     __dirname,
-    `../deployments/${network}/${PROXY_FILE_NAME}.json`
+    `../../deployments/${network}/${PROXY_FILE_NAME}.json`
   );
 };
 
