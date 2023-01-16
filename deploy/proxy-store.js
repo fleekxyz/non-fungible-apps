@@ -1,37 +1,57 @@
-const fs = require('fs');
+const { existsSync, promises: fs } = require('fs');
 const path = require('path');
 
 const PROXY_FILE_NAME = 'proxy';
 
 const getProxyFilePath = (network) => {
-  return path.join(
+  return path.resolve(
     __dirname,
     `../deployments/${network}/${PROXY_FILE_NAME}.json`
   );
 };
 
-module.exports.proxyStore = (contract, proxyAddress, network) => {
+module.exports.proxyStore = async (contract, proxyAddress, network) => {
   const filePath = getProxyFilePath(network);
 
-  const file = fs.existsSync(filePath) ? require(filePath) : {};
-  file[contract] = proxyAddress;
+  const file = existsSync(filePath) ? require(filePath) : {};
+  const newRecord = {
+    address: proxyAddress,
+    timestamp: new Date().toLocaleString('en-US'),
+  };
+  if (file[contract]) {
+    file[contract].push(newRecord);
+  } else {
+    file[contract] = [newRecord];
+  }
 
-  return new Promise((resolve, reject) => {
-    if (!fs.existsSync(filePath.split('/').slice(0, -2).join('/'))) {
-      fs.mkdir(
-        filePath.split('/').slice(0, -1).join('/'),
-        { recursive: true },
-        (err) => {
-          if (err) reject(`Could not create network folder: ${err}`);
-        }
-      );
+  console.log('Writing proxy file', filePath.split('/').slice(0, -1).join('/'));
+  if (!existsSync(filePath.split('/').slice(0, -1).join('/'))) {
+    try {
+      await fs.mkdir(filePath.split('/').slice(0, -1).join('/'), {
+        recursive: true,
+      });
+    } catch (err) {
+      throw `Could not create network folder: ${err}`;
     }
+  }
 
-    fs.writeFile(filePath, JSON.stringify(file, null, 2), (err) => {
-      if (err) reject(`Could not write file: ${err}`);
-      resolve();
-    });
-  });
+  try {
+    await fs.writeFile(filePath, JSON.stringify(file, null, 2));
+  } catch (err) {
+    throw `Could not write file: ${err}`;
+  }
 };
 
 module.exports.getProxyFilePath = getProxyFilePath;
+
+module.exports.getProxyAddress = (contract, network) => {
+  const filePath = getProxyFilePath(network);
+
+  return new Promise((resolve) => {
+    try {
+      resolve(require(filePath)[contract].address);
+    } catch (err) {
+      resolve();
+    }
+  });
+};

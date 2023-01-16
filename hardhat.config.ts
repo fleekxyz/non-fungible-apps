@@ -23,9 +23,6 @@ const config: HardhatUserConfig = {
     hardhat: {
       chainId: 31337,
     },
-    localhost: {
-      chainId: 31337,
-    },
     mumbai: {
       url: API_URL,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
