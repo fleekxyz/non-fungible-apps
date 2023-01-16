@@ -1,7 +1,14 @@
 module.exports.getContract = async function (contractName) {
-  const {
-    address,
-  } = require(`../deployments/${hre.network.name}/${contractName}.json`);
+  const proxyDeployments =
+    require(`../deployments/${hre.network.name}/proxy.json`)[contractName];
 
-  return hre.ethers.getContractAt(contractName, address);
+  if (!proxyDeployments || !proxyDeployments.length) {
+    throw new Error(
+      `No proxy deployments found for "${contractName}" under "${hre.network.name}"`
+    );
+  }
+
+  const latestDeployment = proxyDeployments[proxyDeployments.length - 1];
+
+  return hre.ethers.getContractAt(contractName, latestDeployment.address);
 };

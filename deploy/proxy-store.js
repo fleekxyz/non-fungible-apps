@@ -49,7 +49,9 @@ module.exports.getProxyAddress = (contract, network) => {
 
   return new Promise((resolve) => {
     try {
-      resolve(require(filePath)[contract].address);
+      const proxyList = require(filePath)[contract];
+      const lastItem = proxyList[proxyList.length - 1];
+      resolve(lastItem.address);
     } catch (err) {
       resolve();
     }

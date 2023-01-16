@@ -2,7 +2,7 @@
 const { getContract } = require('./util');
 
 // TODO: make this arguments
-const tokenId = 1;
+const tokenId = 0;
 
 (async () => {
   const contract = await getContract('FleekERC721');
