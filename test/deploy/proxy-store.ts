@@ -26,11 +26,11 @@ describe('Proxy Store', () => {
     const file = require(getProxyFilePath(network));
 
     expect(file[contractName]).to.eql([
-      { address: proxyAddress, timestamp: new Date().toLocaleString('en-US') },
       {
         address: newProxyAddress,
         timestamp: new Date().toLocaleString('en-US'),
       },
+      { address: proxyAddress, timestamp: new Date().toLocaleString('en-US') },
     ]);
   });
 });
