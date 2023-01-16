@@ -19,7 +19,7 @@ module.exports.proxyStore = async (contract, proxyAddress, network) => {
     timestamp: new Date().toLocaleString('en-US'),
   };
   if (file[contract]) {
-    file[contract].push(newRecord);
+    file[contract].unshift(newRecord);
   } else {
     file[contract] = [newRecord];
   }
@@ -50,7 +50,7 @@ module.exports.getProxyAddress = (contract, network) => {
   return new Promise((resolve) => {
     try {
       const proxyList = require(filePath)[contract];
-      const lastItem = proxyList[proxyList.length - 1];
+      const lastItem = proxyList[0];
       resolve(lastItem.address);
     } catch (err) {
       resolve();

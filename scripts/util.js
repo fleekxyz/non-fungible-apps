@@ -8,7 +8,7 @@ module.exports.getContract = async function (contractName) {
     );
   }
 
-  const latestDeployment = proxyDeployments[proxyDeployments.length - 1];
+  const latestDeployment = proxyDeployments[0];
 
   return hre.ethers.getContractAt(contractName, latestDeployment.address);
 };
