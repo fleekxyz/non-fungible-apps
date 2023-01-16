@@ -639,7 +639,7 @@ describe('FleekERC721', () => {
 
       await contract.addAccessPoint(...getDefaultAddParams());
 
-      const ap = await contract.accessPoint('accesspoint.com');
+      const ap = await contract.getAccessPointJSON('accesspoint.com');
       const parsedAp = JSON.parse(ap);
 
       expect(parsedAp).to.eql({
@@ -654,9 +654,9 @@ describe('FleekERC721', () => {
     it('should revert if AP does not exist', async () => {
       const { contract } = fixture;
 
-      await expect(contract.accessPoint('accesspoint.com')).to.be.revertedWith(
-        'FleekERC721: invalid AP'
-      );
+      await expect(
+        contract.getAccessPointJSON('accesspoint.com')
+      ).to.be.revertedWith('FleekERC721: invalid AP');
     });
 
     it('should increase the AP score', async () => {
@@ -666,7 +666,7 @@ describe('FleekERC721', () => {
 
       await contract.increaseAccessPointScore('accesspoint.com');
 
-      const ap = await contract.accessPoint('accesspoint.com');
+      const ap = await contract.getAccessPointJSON('accesspoint.com');
       const parsedAp = JSON.parse(ap);
 
       expect(parsedAp).to.eql({
@@ -687,7 +687,7 @@ describe('FleekERC721', () => {
       await contract.increaseAccessPointScore('accesspoint.com');
       await contract.decreaseAccessPointScore('accesspoint.com');
 
-      const ap = await contract.accessPoint('accesspoint.com');
+      const ap = await contract.getAccessPointJSON('accesspoint.com');
       const parsedAp = JSON.parse(ap);
 
       expect(parsedAp).to.eql({
@@ -748,7 +748,7 @@ describe('FleekERC721', () => {
 
       await contract.setAccessPointContentVerify('accesspoint.com', true);
 
-      const ap = await contract.accessPoint('accesspoint.com');
+      const ap = await contract.getAccessPointJSON('accesspoint.com');
       const parsedAp = JSON.parse(ap);
 
       expect(parsedAp.contentVerified).to.be.true;
@@ -759,14 +759,14 @@ describe('FleekERC721', () => {
 
       await contract.addAccessPoint(...getDefaultAddParams());
 
-      const beforeAp = await contract.accessPoint('accesspoint.com');
+      const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
       const beforeParsedAp = JSON.parse(beforeAp);
       expect(beforeParsedAp.contentVerified).to.be.false;
 
       await contract.setAccessPointContentVerify('accesspoint.com', true);
       await contract.setAccessPointContentVerify('accesspoint.com', false);
 
-      const ap = await contract.accessPoint('accesspoint.com');
+      const ap = await contract.getAccessPointJSON('accesspoint.com');
       const parsedAp = JSON.parse(ap);
 
       expect(parsedAp.contentVerified).to.be.false;
@@ -779,7 +779,7 @@ describe('FleekERC721', () => {
 
       await contract.setAccessPointNameVerify('accesspoint.com', true);
 
-      const ap = await contract.accessPoint('accesspoint.com');
+      const ap = await contract.getAccessPointJSON('accesspoint.com');
       const parsedAp = JSON.parse(ap);
 
       expect(parsedAp.nameVerified).to.be.true;
@@ -790,14 +790,14 @@ describe('FleekERC721', () => {
 
       await contract.addAccessPoint(...getDefaultAddParams());
 
-      const beforeAp = await contract.accessPoint('accesspoint.com');
+      const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
       const beforeParsedAp = JSON.parse(beforeAp);
       expect(beforeParsedAp.nameVerified).to.be.false;
 
       await contract.setAccessPointNameVerify('accesspoint.com', true);
       await contract.setAccessPointNameVerify('accesspoint.com', false);
 
-      const ap = await contract.accessPoint('accesspoint.com');
+      const ap = await contract.getAccessPointJSON('accesspoint.com');
       const parsedAp = JSON.parse(ap);
 
       expect(parsedAp.nameVerified).to.be.false;

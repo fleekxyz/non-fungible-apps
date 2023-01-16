@@ -330,7 +330,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      * - the AP must exist.
      *
      */
-    function accessPoint(string memory apName) public view requireAP(apName) returns (string memory) {
+    function getAccessPointJSON(string memory apName) public view requireAP(apName) returns (string memory) {
         AccessPoint storage _ap = _accessPoints[apName];
         return _ap.toString();
     }
