@@ -8,7 +8,7 @@
     "dev:css": "tailwindcss -o ./tailwind.css --watch && yarn dev",
     "build": "vite build",
     "preview": "vite preview",
-    "storybook": "start-storybook -p 6006 --openssl-legacy-provide",
+    "storybook": "export SET NODE_OPTIONS=--openssl-legacy-provider && start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
   "author": "Fleek",
