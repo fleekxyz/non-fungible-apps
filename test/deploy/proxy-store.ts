@@ -14,7 +14,9 @@ describe('Proxy Store', () => {
   it('should store the data', async () => {
     await proxyStore(contractName, proxyAddress, network);
     const file = require(getProxyFilePath(network));
-    expect(file[contractName]).to.equal(proxyAddress);
+    expect(file[contractName]).to.eql([
+      { address: proxyAddress, timestamp: new Date().toLocaleString('en-US') },
+    ]);
   });
 
   it('should update the data', async () => {
@@ -22,6 +24,13 @@ describe('Proxy Store', () => {
     await proxyStore(contractName, proxyAddress, network);
     await proxyStore(contractName, newProxyAddress, network);
     const file = require(getProxyFilePath(network));
-    expect(file[contractName]).to.equal(newProxyAddress);
+
+    expect(file[contractName]).to.eql([
+      { address: proxyAddress, timestamp: new Date().toLocaleString('en-US') },
+      {
+        address: newProxyAddress,
+        timestamp: new Date().toLocaleString('en-US'),
+      },
+    ]);
   });
 });
