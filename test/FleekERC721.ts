@@ -605,7 +605,7 @@ describe('FleekERC721', () => {
     let tokenId: number;
     let fixture: Awaited<ReturnType<typeof defaultFixture>>;
 
-    const getDefaultAddParams = () => [tokenId, 'accesspoint.com', 'ipfs.com'];
+    const getDefaultAddParams = () => [tokenId, 'accesspoint.com'];
 
     beforeEach(async () => {
       fixture = await loadFixture(defaultFixture);
@@ -806,10 +806,10 @@ describe('FleekERC721', () => {
     it('should get a list of added APs for an app', async () => {
       const { contract } = fixture;
 
-      await contract.addAccessPoint(tokenId, 'accesspoint1.com', 'ipfs.com');
-      await contract.addAccessPoint(tokenId, 'accesspoint2.com', 'ipfs.com');
-      await contract.addAccessPoint(tokenId, 'accesspoint3.com', 'ipfs.com');
-      await contract.addAccessPoint(tokenId, 'accesspoint4.com', 'ipfs.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint1.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint2.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint3.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint4.com');
 
       const aps = await contract.appAccessPoints(tokenId);
 
@@ -824,10 +824,10 @@ describe('FleekERC721', () => {
     it('should get a list of added APs for an app after removing one', async () => {
       const { contract } = fixture;
 
-      await contract.addAccessPoint(tokenId, 'accesspoint1.com', 'ipfs.com');
-      await contract.addAccessPoint(tokenId, 'accesspoint2.com', 'ipfs.com');
-      await contract.addAccessPoint(tokenId, 'accesspoint3.com', 'ipfs.com');
-      await contract.addAccessPoint(tokenId, 'accesspoint4.com', 'ipfs.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint1.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint2.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint3.com');
+      await contract.addAccessPoint(tokenId, 'accesspoint4.com');
 
       await contract.removeAccessPoint('accesspoint2.com');
 

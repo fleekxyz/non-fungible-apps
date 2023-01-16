@@ -72,7 +72,6 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         uint256 tokenId;
         uint256 index;
         uint256 score;
-        string source;
         bool contentVerified;
         bool nameVerified;
         address owner;
@@ -280,20 +279,12 @@ contract FleekERC721 is ERC721, FleekAccessControl {
      *
      * IMPORTANT: The payment is not set yet
      */
-    function addAccessPoint(uint256 tokenId, string memory apName, string memory source) public payable {
+    function addAccessPoint(uint256 tokenId, string memory apName) public payable {
         // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
         _requireMinted(tokenId);
         require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
 
-        _accessPoints[apName] = AccessPoint(
-            tokenId,
-            _apps[tokenId].accessPoints.length,
-            0,
-            source,
-            false,
-            false,
-            msg.sender
-        );
+        _accessPoints[apName] = AccessPoint(tokenId, _apps[tokenId].accessPoints.length, 0, false, false, msg.sender);
         _apps[tokenId].accessPoints.push(apName);
 
         emit NewAccessPoint(apName, tokenId, msg.sender);
