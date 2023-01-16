@@ -12,3 +12,6 @@ package-lock.json
 # Foundry
 out
 forge-cache
+
+# Subgraph
+*.wasm
