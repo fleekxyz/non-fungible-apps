@@ -1,13 +1,9 @@
-const { existsSync, promises: fs } = require('fs');
+const { existsSync } = require('fs');
 const path = require('path');
-
-const PROXY_FILE_NAME = 'proxy';
+const { writeFile } = require('./file');
 
 const getProxyFilePath = (network) => {
-  return path.resolve(
-    __dirname,
-    `../../deployments/${network}/${PROXY_FILE_NAME}.json`
-  );
+  return path.resolve(__dirname, `../../deployments/${network}/proxy.json`);
 };
 
 module.exports.proxyStore = async (contract, proxyAddress, network) => {
@@ -24,19 +20,9 @@ module.exports.proxyStore = async (contract, proxyAddress, network) => {
     file[contract] = [newRecord];
   }
 
-  console.log('Writing proxy file', filePath.split('/').slice(0, -1).join('/'));
-  if (!existsSync(filePath.split('/').slice(0, -1).join('/'))) {
-    try {
-      await fs.mkdir(filePath.split('/').slice(0, -1).join('/'), {
-        recursive: true,
-      });
-    } catch (err) {
-      throw `Could not create network folder: ${err}`;
-    }
-  }
-
   try {
-    await fs.writeFile(filePath, JSON.stringify(file, null, 2));
+    console.log('Writing proxy file', filePath);
+    await writeFile(filePath, JSON.stringify(file, null, 2));
   } catch (err) {
     throw `Could not write file: ${err}`;
   }
