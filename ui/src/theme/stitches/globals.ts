@@ -5,10 +5,10 @@ export const themeGlobals = globalCss({
     height: '100%',
     padding: 0,
     margin: '25px 50px',
-    color: 'rgba(255, 255, 255)',
-    backgroundColor: '#161616',
+    color: '#ECEDEE',
+    backgroundColor: 'black',
 
-    fontFamily: 'Nunito Sans,Helvetica,Arial,Lucida,sans-serif',
+    fontFamily: 'Manrope',
 
     fontSize: '16px',
     '@media (max-width: 850px)': {

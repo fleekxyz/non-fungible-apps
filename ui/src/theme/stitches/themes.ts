@@ -1,4 +1,5 @@
 import { createStitches } from '@stitches/react';
+import { colors, darkColors } from './foundations';
 
 export const {
   styled,
@@ -11,13 +12,8 @@ export const {
 } = createStitches({
   theme: {
     colors: {
-      gray50: '#3b3b3b',
-      gray100: '#4e4e4e',
-      gray200: '#282824',
-      black: '#161616',
-      blue100: '#1d4ed8',
-      transparent50: '#c5c5c50a',
-      transparent100: '#f3f3f36b',
+      ...colors,
+      ...darkColors,
     },
     space: {
       xs: '0.32rem',
