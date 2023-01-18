@@ -2,6 +2,7 @@ pragma solidity ^0.8.7;
 
 import "forge-std/Test.sol";
 import "../../contracts/FleekERC721.sol";
+import "../../contracts/util/FleekStrings.sol";
 
 contract FleekTest is Test {
     FleekERC721 fleekContract;
@@ -748,5 +749,181 @@ contract FleekTest is Test {
         assertEq(mint, 0);
 
         assertEq(fleekContract.balanceOf(DEPLOYER), 1);
+    }
+
+    function testAddAccessPoint() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        string
+            memory json = '("tokenId":0,"score":0,"nameVerified":false,"contentVerified":false,"owner":"0x7fa9385be102ac3eac297483dd6233d62b3e1496")';
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
+
+        //  assertEq(fleekContract.getAccessPointJSON('https://fleek_cloned.xyz'), json);
+    }
+
+    function testRemoveAccessPoint() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
+        fleekContract.removeAccessPoint("https://fleek_cloned.xyz");
+    }
+
+    function testIsAccessPointNameVerified() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
+        assertFalse(fleekContract.isAccessPointNameVerified("https://fleek_cloned.xyz")); // is false now.
+
+        fleekContract.setAccessPointNameVerify("https://fleek_cloned.xyz", true);
+        assertTrue(fleekContract.isAccessPointNameVerified("https://fleek_cloned.xyz")); // is true now.
+    }
+
+    function testIncreaseAccessPointScore() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
+        fleekContract.increaseAccessPointScore("https://fleek_cloned.xyz");
+    }
+
+    function testFailDecreaseAccessPointScoreToMinusOne() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
+        fleekContract.decreaseAccessPointScore("https://fleek_cloned.xyz");
+    }
+
+    function testDecreaseAccessPointScore() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
+        fleekContract.increaseAccessPointScore("https://fleek_cloned.xyz");
+        fleekContract.decreaseAccessPointScore("https://fleek_cloned.xyz");
+    }
+
+    function testAppAccessPoints() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
+
+        string[] memory accessPointList = fleekContract.appAccessPoints(mint);
+        /** assertEq(accessPointList, ['https://fleek_cloned.xyz']);
+        
+        fleekContract.addAccessPoint(0, 'https://fleek_cloned_2.xyz');
+        accessPointList = fleekContract.appAccessPoints(mint);
+        assertEq(accessPointList, ['https://fleek_cloned_2.xyz']);**/
+    }
+
+    function testFailSetAccessPointNameVerifyWithUnknownIdentity() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+
+        fleekContract.setAccessPointNameVerify("https://fleek_cloned.xyz", true);
+
+        // Fetch the ap and compare the name verified field.
+    }
+
+    function testFailSetAccessPointContentVerify() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+
+        fleekContract.setAccessPointContentVerify("https://fleek_cloned.xyz", true);
+
+        // Fetch the ap and compare the name verified field.
     }
 }
