@@ -6,6 +6,7 @@ import { theme } from './theme';
 import { Provider as ReduxProvider } from 'react-redux';
 import { store } from './store';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import './styles.css';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
@@ -26,4 +27,3 @@ root.render(
     </ReduxProvider>
   </React.StrictMode>
 );
-
