@@ -40,16 +40,16 @@ const config: HardhatUserConfig = {
     only: ['NftMarketplace'],
   },
   solidity: {
-    version: '0.8.7',
+    version: '0.8.12',
     settings: {
       optimizer: {
         enabled: true,
         runs: 200,
         details: {
-          yul: false,
+          yul: true,
         },
       },
-      viaIR: false,
+      viaIR: true,
     },
   },
   mocha: {
