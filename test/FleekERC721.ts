@@ -641,7 +641,6 @@ describe('FleekERC721', () => {
 
       const ap = await contract.getAccessPointJSON('accesspoint.com');
       const parsedAp = JSON.parse(ap);
-      console.log(parsedAp);
 
       expect(parsedAp).to.eql({
         tokenId,

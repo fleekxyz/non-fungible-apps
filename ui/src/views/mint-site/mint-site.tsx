@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import {
   Heading,
   Flex,
@@ -7,17 +7,19 @@ import {
   FormLabel,
   Button,
   FormErrorMessage,
-  IconButton,
   Textarea,
   Grid,
   GridItem,
+  VStack,
+  InputGroup,
+  Input,
+  InputRightElement,
+  InputProps,
 } from '@chakra-ui/react';
-import { Formik, Field } from 'formik';
-import { ArrowBackIcon } from '@chakra-ui/icons';
-import { Link } from 'react-router-dom';
+import { Formik, Field, useFormikContext } from 'formik';
 import { getRepoAndCommit } from '@/utils';
 import { validateFields } from './mint-site.utils';
-import { InputFieldForm } from '@/components';
+import { HomeButton, InputFieldForm } from '@/components';
 import { FleekERC721 } from '@/integrations';
 import { useWalletStore } from '@/store';
 import { useToast } from '@/hooks';
@@ -41,6 +43,29 @@ const initialValues = {
   image: '',
   ens: '',
 } as FormValues;
+
+const OwnerAdress = (props: InputProps) => {
+  const { setFieldValue } = useFormikContext();
+
+  const handlePasteAddress = () => {
+    if (setFieldValue && props.name) {
+      navigator.clipboard
+        .readText()
+        .then((text) => setFieldValue(props.name as string, text));
+    }
+  };
+
+  return (
+    <InputGroup size="md">
+      <Input {...props} pr="4.5rem" />
+      <InputRightElement width="4.5rem">
+        <Button h="1.75rem" size="sm" onClick={handlePasteAddress}>
+          Paste
+        </Button>
+      </InputRightElement>
+    </InputGroup>
+  );
+};
 
 export const MintSite = () => {
   const setToastInfo = useToast();
@@ -94,128 +119,141 @@ export const MintSite = () => {
 
   return (
     <>
-      <Flex width="full" align="center" justifyContent="center" mt="50px">
-        <Box width={{ base: '100%', md: '80%' }}>
-          <IconButton
-            as={Link}
-            to="/home"
-            aria-label="back home"
-            icon={<ArrowBackIcon />}
-            variant="link"
-            size={'xl'}
-            textDecoration={'none'}
-          />
-          <Box textAlign="center" mt={2}>
-            <Heading>Mint your Site</Heading>
-          </Box>
-          <Box my={4} textAlign="left">
-            <Formik
-              validate={validateFields}
-              initialValues={initialValues}
-              onSubmit={handleSubmitForm}
-            >
-              {({ values, touched, handleSubmit, isSubmitting, errors }) => (
-                <form onSubmit={handleSubmit}>
-                  <Box
-                    display="flex"
-                    flexDirection={{ base: 'column', md: 'row' }}
-                  >
-                    <InputFieldForm
-                      label="Name"
-                      fieldName="name"
-                      mr={5}
-                      error={errors.name}
-                      isInvalid={!!errors.name && touched.name}
-                      isRequired
-                    />
-                    <InputFieldForm
-                      label="Owner address"
-                      fieldName="ownerAddress"
-                      error={errors.ownerAddress}
-                      isInvalid={!!errors.ownerAddress && touched.ownerAddress}
-                      isRequired
-                    />
-                  </Box>
-                  <FormControl
-                    mt={6}
-                    isRequired
-                    isInvalid={!!errors.description && touched.description}
-                  >
-                    <FormLabel htmlFor="description">Description</FormLabel>
-                    <Field as={Textarea} name="description" id="description" />
-                    {errors.description && (
-                      <FormErrorMessage>{errors.description}</FormErrorMessage>
-                    )}
-                  </FormControl>
-                  <Box
-                    display="flex"
-                    flexDirection={{ base: 'column', md: 'row' }}
-                    mt={6}
-                  >
-                    <InputFieldForm
-                      label="Image (IPFS Link)"
-                      fieldName="image"
-                      mr={5}
-                      error={errors.image}
-                      isInvalid={!!errors.image && touched.image}
-                      isRequired
-                    />
-                    <InputFieldForm
-                      label="External url"
-                      fieldName="externalUrl"
-                      error={errors.externalUrl}
-                      isInvalid={!!errors.externalUrl && touched.externalUrl}
-                      isRequired
-                    />
-                  </Box>
-                  <Grid
-                    templateColumns={{
-                      md: 'repeat(3, 1fr)',
-                    }}
-                    gap={4}
-                    mt={6}
-                  >
-                    <GridItem colSpan={2}>
+      <Flex width="full" align="center" justifyContent="center" mt="30px">
+        <Box width={{ base: '100%' }}>
+          <HomeButton />
+          <VStack spacing="10px">
+            <Box textAlign="center" mt={2}>
+              <Heading>Mint your Site</Heading>
+            </Box>
+            <Box textAlign="left" width="80%" justifyContent="center">
+              <Formik
+                validate={validateFields}
+                initialValues={initialValues}
+                onSubmit={handleSubmitForm}
+              >
+                {({ values, touched, handleSubmit, isSubmitting, errors }) => (
+                  <form onSubmit={handleSubmit}>
+                    <Box
+                      display="flex"
+                      flexDirection={{ base: 'column', md: 'row' }}
+                    >
                       <InputFieldForm
-                        label="Github commit url"
-                        fieldName="githubCommit"
+                        label="Name"
+                        fieldName="name"
                         mr={5}
-                        error={errors.githubCommit}
-                        isInvalid={
-                          !!errors.githubCommit && touched.githubCommit
-                        }
+                        error={errors.name}
+                        isInvalid={!!errors.name && touched.name}
                         isRequired
                       />
-                    </GridItem>
-                    <GridItem colSpan={{ base: 2, md: 1 }}>
-                      <InputFieldForm label="ENS" fieldName="ens" />
-                    </GridItem>
-                  </Grid>
-                  <Button
-                    colorScheme="blue"
-                    backgroundColor="#1d4ed8"
-                    width="full"
-                    mt={4}
-                    type="submit"
-                    isLoading={isSubmitting}
-                    loadingText="Minting..."
-                    disabled={
-                      isSubmitting ||
-                      !values.name ||
-                      !values.description ||
-                      !values.githubCommit ||
-                      !values.ownerAddress ||
-                      !values.image ||
-                      !values.externalUrl ||
-                      !provider
-                    }
-                  >
-                    Mint
-                  </Button>
-                </form>
-              )}
-            </Formik>
-          </Box>
+                      <FormControl
+                        isRequired
+                        isInvalid={
+                          !!errors.ownerAddress && touched.ownerAddress
+                        }
+                      >
+                        <FormLabel htmlFor="ownerAddress">
+                          Owner address
+                        </FormLabel>
+                        <Field
+                          as={OwnerAdress}
+                          name="ownerAddress"
+                          id="ownerAddress"
+                        />
+                        {errors.ownerAddress && (
+                          <FormErrorMessage>
+                            {errors.ownerAddress}
+                          </FormErrorMessage>
+                        )}
+                      </FormControl>
+                    </Box>
+                    <FormControl
+                      mt={6}
+                      isRequired
+                      isInvalid={!!errors.description && touched.description}
+                    >
+                      <FormLabel htmlFor="description">Description</FormLabel>
+                      <Field
+                        as={Textarea}
+                        name="description"
+                        id="description"
+                      />
+                      {errors.description && (
+                        <FormErrorMessage>
+                          {errors.description}
+                        </FormErrorMessage>
+                      )}
+                    </FormControl>
+                    <Box
+                      display="flex"
+                      flexDirection={{ base: 'column', md: 'row' }}
+                      mt={6}
+                    >
+                      <InputFieldForm
+                        label="Image (IPFS Link)"
+                        fieldName="image"
+                        mr={5}
+                        error={errors.image}
+                        isInvalid={!!errors.image && touched.image}
+                        isRequired
+                      />
+                      <InputFieldForm
+                        label="External url"
+                        fieldName="externalUrl"
+                        error={errors.externalUrl}
+                        isInvalid={!!errors.externalUrl && touched.externalUrl}
+                        isRequired
+                      />
+                    </Box>
+                    <Grid
+                      templateColumns={{
+                        md: 'repeat(3, 1fr)',
+                      }}
+                      gap={4}
+                      mt={6}
+                    >
+                      <GridItem colSpan={2}>
+                        <InputFieldForm
+                          label="Github commit url"
+                          fieldName="githubCommit"
+                          mr={5}
+                          error={errors.githubCommit}
+                          isInvalid={
+                            !!errors.githubCommit && touched.githubCommit
+                          }
+                          isRequired
+                        />
+                      </GridItem>
+                      <GridItem colSpan={{ base: 2, md: 1 }}>
+                        <InputFieldForm label="ENS" fieldName="ens" />
+                      </GridItem>
+                    </Grid>
+                    <Button
+                      colorScheme="blue"
+                      backgroundColor="custom.blue.100"
+                      width="full"
+                      mt={4}
+                      type="submit"
+                      isLoading={isSubmitting}
+                      loadingText="Minting..."
+                      disabled={
+                        isSubmitting ||
+                        !values.name ||
+                        !values.description ||
+                        !values.githubCommit ||
+                        !values.ownerAddress ||
+                        !values.image ||
+                        !values.externalUrl ||
+                        !provider
+                      }
+                    >
+                      Mint
+                    </Button>
+                  </form>
+                )}
+              </Formik>
+            </Box>
+          </VStack>
         </Box>
       </Flex>
     </>

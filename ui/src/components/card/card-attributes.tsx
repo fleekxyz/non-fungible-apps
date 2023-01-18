@@ -1,4 +1,4 @@
-import { Card, CardBody } from '@chakra-ui/react';
+import { Card, CardBody, Tooltip } from '@chakra-ui/react';
 import { TileInfo } from '../tile-info';
 
 type CardAttributesProps = {
@@ -15,9 +15,11 @@ export const CardAttributes = ({ heading, info }: CardAttributesProps) => (
     variant="outline"
     width="200px"
   >
-    <CardBody width="200px">
-      <TileInfo size="sm" heading={heading} info={info} widthText={160} />
-    </CardBody>
+    <Tooltip label={info} bg="gray">
+      <CardBody width="200px">
+        <TileInfo size="sm" heading={heading} info={info} widthText={160} />
+      </CardBody>
+    </Tooltip>
   </Card>
 );
 

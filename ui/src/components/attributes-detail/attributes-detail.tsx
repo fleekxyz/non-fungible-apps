@@ -16,13 +16,16 @@ export const AttributesDetail = ({
   return (
     <HStack shouldWrapChildren display="inline" spacing="0px">
       <CardAttributes heading="Owner" info={owner} />
-      {attributes.map((attribute) => (
-        <CardAttributes
-          key={attribute.trait_type}
-          heading={attribute.trait_type}
-          info={attribute.value}
-        />
-      ))}
+      {attributes.map(
+        (attribute) =>
+          attribute.value !== '' && (
+            <CardAttributes
+              key={attribute.trait_type}
+              heading={attribute.trait_type}
+              info={attribute.value}
+            />
+          )
+      )}
       <CardAttributes heading="Token ID" info={tokendId} />
     </HStack>
   );
