@@ -1,5 +1,14 @@
+import { dripStitches } from '../src/theme/stitches';
+import addons from '@storybook/addons';
+import { useEffect } from 'react';
+
+const channel = addons.getChannel();
+
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
+  backgrounds: {
+    disable: true,
+  },
   controls: {
     matchers: {
       color: /(background|color)$/i,
@@ -7,3 +16,31 @@ export const parameters = {
     },
   },
 };
+
+const { darkTheme: darkThemeClassName } = dripStitches;
+
+export const decorators = [
+  (renderStory) => {
+    const { globalCss } = dripStitches;
+
+    const globalStyles = globalCss({
+      '*, html': {
+        'font-family': 'Manrope',
+      },
+    });
+
+    globalStyles();
+
+    useEffect(() => {
+      function switchColorMode(isDarkMode) {
+        document.body.classList.remove('light', darkThemeClassName);
+        document.body.classList.add(isDarkMode ? darkThemeClassName : 'light');
+      }
+
+      channel.on('DARK_MODE', switchColorMode);
+      return () => channel.off('DARK_MODE', switchColorMode);
+    }, []);
+
+    return renderStory();
+  },
+];
