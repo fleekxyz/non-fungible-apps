@@ -11,6 +11,7 @@ library FleekStrings {
     using Strings for uint256;
     using Strings for uint160;
     using FleekStrings for bool;
+    using FleekStrings for bytes3;
 
     /**
      * @dev Converts a boolean value to a string.
@@ -38,12 +39,13 @@ library FleekStrings {
                 '"description":"', app.description, '",',
                 '"owner":"', uint160(owner).toHexString(20), '",',
                 '"external_url":"', app.externalURL, '",',
-                '"image":"', FleekSVG.generateBase64(app.name, app.ENS), '",',
+                '"image":"', FleekSVG.generateBase64(app.name, app.ENS, app.logo, app.color.toColorString()), '",',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',
                     '{"trait_type": "Repository", "value":"', app.builds[app.currentBuild].gitRepository,'"},',
                     '{"trait_type": "Version", "value":"', app.currentBuild.toString(),'"}',
+                    '{"trait_type": "Color", "value":"', app.color.toColorString(),'"}',
                 ']',
             '}'
         ));
@@ -63,5 +65,12 @@ library FleekStrings {
                 '"owner":"', uint160(ap.owner).toHexString(20), '"',
             "}"
         ));
+    }
+
+    /**
+     * @dev Converts bytes3 to a hex color string.
+     */
+    function toColorString(bytes3 _bytes) internal pure returns (string memory) {
+        return string(abi.encodePacked("#", _bytes[0], _bytes[1], _bytes[2]));
     }
 }

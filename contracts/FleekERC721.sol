@@ -57,6 +57,8 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         uint256 currentBuild; // The current build number (Increments by one with each change, starts at zero)
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
         string[] accessPoints; // List of app AccessPoint
+        string logo;
+        bytes3 color; // Color of the nft
     }
 
     /**
@@ -116,7 +118,9 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         string memory externalURL,
         string memory ENS,
         string memory commitHash,
-        string memory gitRepository
+        string memory gitRepository,
+        string memory logo,
+        bytes3 color
     ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
         uint256 tokenId = _appIds.current();
         _mint(to, tokenId);
@@ -127,6 +131,8 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         app.description = description;
         app.externalURL = externalURL;
         app.ENS = ENS;
+        app.logo = logo;
+        app.color = color;
 
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
