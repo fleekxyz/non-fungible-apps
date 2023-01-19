@@ -10,29 +10,42 @@ library FleekSVG {
     /**
      * @dev Generates a SVG image.
      */
-    function generateBase64(string memory name, string memory ENS) internal pure returns (string memory) {
+    function generateBase64(
+        string memory name,
+        string memory ENS,
+        string memory logo,
+        string memory color
+    ) internal pure returns (string memory) {
         return (
             string(
                 abi.encodePacked(
-                    "data:application/json;base64,",
+                    "data:image/svg+xml;base64,",
                     Base64.encode(
                         abi.encodePacked(
-                            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="640" height="480" viewBox="0 0 640 480" xml:space="preserve">',
-                            "<defs>",
-                            "</defs>",
-                            '<g transform="matrix(3.42 0 0 3.42 300.98 252.98)"  >',
-                            '<polygon style="stroke: rgb(0,0,0); stroke-width: 8; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(152,152,183); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  points="-50,-50 -50,50 50,50 50,-50 " />',
-                            "</g>",
-                            '<g transform="matrix(1 0 0 1 303.5 115.67)" style=""  >',
-                            '<text xml:space="preserve" font-family="Open Sans" font-size="24" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-45.7" y="5.65" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">Fleek NFAs</tspan></text>',
-                            "</g>",
-                            '<g transform="matrix(1 0 0 1 302 261.47)" style=""  >',
-                            '<text xml:space="preserve" font-family="Open Sans" font-size="28" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-44.26" y="-6.14" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">',
+                            '<svg width="878" height="918" viewBox="0 0 878 918" fill="none" xmlns="http://www.w3.org/2000/svg">',
+                            '<style type="text/css">@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;600");</style>',
+                            '<path d="M876 129.5V127.5H874H857.5V79H874H876V77V68.2786C876 61.8106 873.589 55.5749 869.238 50.7891L832.622 10.5105C827.694 5.09017 820.708 2 813.383 2H737.947C728.897 2 720.498 6.70579 715.773 14.424L710.135 23.6329C709.044 25.414 707.106 26.5 705.018 26.5H682H680V11V9H678H99H97V11C97 6.02944 92.9706 2 88 2H28C13.6406 2 2 13.6406 2 28V890C2 904.359 13.6406 916 28 916H850C864.359 916 876 904.359 876 890V129.5Z" fill="#131316" />'
+                            '<path d="M876 129.5V127.5H874H857.5V79H874H876V77V68.2786C876 61.8106 873.589 55.5749 869.238 50.7891L832.622 10.5105C827.694 5.09017 820.708 2 813.383 2H737.947C728.897 2 720.498 6.70579 715.773 14.424L710.135 23.6329C709.044 25.414 707.106 26.5 705.018 26.5H682H680V11V9H678H99H97V11C97 6.02944 92.9706 2 88 2H28C13.6406 2 2 13.6406 2 28V890C2 904.359 13.6406 916 28 916H850C864.359 916 876 904.359 876 890V129.5Z" fill="url(#paint0_linear_13_33)" stroke="url(#main)" stroke-width="4" fill-opacity="0.2"/>',
+                            '<path d="M783 916H785V914V424C785 410.745 774.255 400 761 400H117C103.745 400 93 410.745 93 424V914V916H95H783Z" fill="black" fill-opacity="0.14" stroke="url(#main)" stroke-width="4"/>',
+                            '<path d="M65.3258 64.5C66.0825 64.5 66.565 63.6921 66.2063 63.0259L50.3805 33.6352C50.0029 32.934 48.9971 32.934 48.6195 33.6352L32.7937 63.0259C32.435 63.6921 32.9175 64.5 33.6742 64.5H41C41.5523 64.5 42 64.9477 42 65.5V86C42 86.5523 42.4477 87 43 87H56C56.5523 87 57 86.5523 57 86V65.5C57 64.9477 57.4477 64.5 58 64.5H65.3258Z" fill="url(#main)"/>',
+                            '<path d="M65.3258 151.5C66.0825 151.5 66.565 150.692 66.2063 150.026L50.3805 120.635C50.0029 119.934 48.9971 119.934 48.6195 120.635L32.7937 150.026C32.435 150.692 32.9175 151.5 33.6742 151.5H41C41.5523 151.5 42 151.948 42 152.5V173C42 173.552 42.4477 174 43 174H56C56.5523 174 57 173.552 57 173V152.5C57 151.948 57.4477 151.5 58 151.5H65.3258Z" fill="black" fill-opacity="0.5"/>',
+                            '<path d="M65.3258 238.5C66.0825 238.5 66.565 237.692 66.2063 237.026L50.3805 207.635C50.0029 206.934 48.9971 206.934 48.6195 207.635L32.7937 237.026C32.435 237.692 32.9175 238.5 33.6742 238.5H41C41.5523 238.5 42 238.948 42 239.5V260C42 260.552 42.4477 261 43 261H56C56.5523 261 57 260.552 57 260V239.5C57 238.948 57.4477 238.5 58 238.5H65.3258Z" fill="black" fill-opacity="0.5"/>',
+                            '<path fill-rule="evenodd" clip-rule="evenodd" d="M682 7H225V299C225 312.255 235.745 323 249 323H658C671.255 323 682 312.255 682 299V7ZM514 44.9609C507.373 44.9609 502 50.3335 502 56.9609V284.325C502 290.952 507.373 296.325 514 296.325H610C616.627 296.325 622 290.952 622 284.325V56.9609C622 50.3335 616.627 44.9609 610 44.9609H514Z" fill="url(#main)"/>',
+                            '<path fill-rule="evenodd" clip-rule="evenodd" d="M801.805 54.1984C802.417 53.626 803.346 54.4065 802.868 55.0908L781.489 85.6918C781.152 86.1734 781.537 86.8229 782.129 86.772L794.697 85.69C795.322 85.6361 795.7 86.356 795.292 86.8267L773.723 111.758C773.316 112.228 773.693 112.948 774.319 112.894L787.852 111.729C788.514 111.672 788.879 112.468 788.398 112.919L736.195 161.802C735.583 162.374 734.654 161.593 735.132 160.909L756.792 129.905C757.129 129.424 756.744 128.774 756.152 128.825L743.316 129.93C742.692 129.984 742.314 129.269 742.717 128.797L763.652 104.293C764.055 103.821 763.677 103.105 763.053 103.159L750.148 104.27C749.486 104.327 749.121 103.532 749.603 103.081L801.805 54.1984Z" fill="white"/>',
+                            '<image x="339" y="476" width="200" height="200" href="',
+                            logo,
+                            '"/>'
+                            '<defs><linearGradient id="main"><stop stop-color="',
+                            color,
+                            '"/></linearGradient><linearGradient id="paint0_linear_13_33" x1="4" y1="914" x2="874" y2="3.99998" gradientUnits="userSpaceOnUse"><stop stop-color="#1D1E25"/><stop offset="1" stop-color="',
+                            color,
+                            '"/></linearGradient></defs>'
+                            '<text font-family="Inter, sans-serif" font-weight="bold" x="137" y="790" font-size="56" fill="#E5E7F8">',
                             name,
-                            '</tspan><tspan x="-37.14" y="17.45" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">',
+                            "</text>"
+                            '<text font-family="Inter, sans-serif" font-weight="normal" x="137" y="846" font-size="30" fill="#7F8192">',
                             ENS,
-                            "</tspan></text>",
-                            "</g>",
+                            "</text>"
                             "</svg>"
                         )
                     )
