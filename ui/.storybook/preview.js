@@ -9,9 +9,6 @@ export const parameters = {
   backgrounds: {
     disable: true,
   },
-
-export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
       color: /(background|color)$/i,
