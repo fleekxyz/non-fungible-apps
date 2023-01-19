@@ -6,10 +6,13 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "./FleekAccessControl.sol";
+import "./util/FleekStrings.sol";
 
 contract FleekERC721 is ERC721, FleekAccessControl {
-    using Strings for uint256;
     using Counters for Counters.Counter;
+    using FleekStrings for FleekERC721.App;
+    using FleekStrings for FleekERC721.AccessPoint;
+    using FleekStrings for string;
 
     event NewBuild(uint256 indexed token, string indexed commitHash, address indexed triggeredBy);
     event NewTokenName(uint256 indexed token, string indexed name, address indexed triggeredBy);
@@ -17,6 +20,27 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     event NewTokenImage(uint256 indexed token, string indexed image, address indexed triggeredBy);
     event NewTokenExternalURL(uint256 indexed token, string indexed externalURL, address indexed triggeredBy);
     event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggeredBy);
+
+    event NewAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
+    event RemoveAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
+    event ChangeAccessPointScore(
+        string indexed apName,
+        uint256 indexed tokenId,
+        uint256 score,
+        address indexed triggeredBy
+    );
+    event ChangeAccessPointNameVerify(
+        string indexed apName,
+        uint256 tokenId,
+        bool indexed verified,
+        address indexed triggeredBy
+    );
+    event ChangeAccessPointContentVerify(
+        string indexed apName,
+        uint256 tokenId,
+        bool indexed verified,
+        address indexed triggeredBy
+    );
 
     /**
      * The properties are stored as string to keep consistency with
@@ -30,6 +54,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string ENS; // ENS ID
         uint256 currentBuild; // The current build number (Increments by one with each change, starts at zero)
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
+        string[] accessPoints; // List of app AccessPoint
     }
 
     /**
@@ -40,8 +65,21 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string gitRepository;
     }
 
-    Counters.Counter private _tokenIds;
+    /**
+     * The stored data for each AccessPoint.
+     */
+    struct AccessPoint {
+        uint256 tokenId;
+        uint256 index;
+        uint256 score;
+        bool contentVerified;
+        bool nameVerified;
+        address owner;
+    }
+
+    Counters.Counter private _appIds;
     mapping(uint256 => App) private _apps;
+    mapping(string => AccessPoint) private _accessPoints;
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -49,45 +87,11 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
 
     /**
-     * @dev Checks if msg.sender has the role of tokenOwner for a certain tokenId.
+     * @dev Checks if the AccessPoint exists.
      */
-    modifier requireTokenOwner(uint256 tokenId) {
-        require(msg.sender == ownerOf(tokenId), "FleekERC721: must be token owner");
+    modifier requireAP(string memory apName) {
+        require(_accessPoints[apName].owner != address(0), "FleekERC721: invalid AP");
         _;
-    }
-
-    /**
-     * @dev Generates a SVG image.
-     */
-    function _generateSVG(string memory name, string memory ENS) internal view returns (string memory) {
-        return (
-            string(
-                abi.encodePacked(
-                    _baseURI(),
-                    Base64.encode(
-                        abi.encodePacked(
-                            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="640" height="480" viewBox="0 0 640 480" xml:space="preserve">',
-                            "<defs>",
-                            "</defs>",
-                            '<g transform="matrix(3.42 0 0 3.42 300.98 252.98)"  >',
-                            '<polygon style="stroke: rgb(0,0,0); stroke-width: 8; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(152,152,183); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  points="-50,-50 -50,50 50,50 50,-50 " />',
-                            "</g>",
-                            '<g transform="matrix(1 0 0 1 303.5 115.67)" style=""  >',
-                            '<text xml:space="preserve" font-family="Open Sans" font-size="24" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-45.7" y="5.65" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">Fleek NFAs</tspan></text>',
-                            "</g>",
-                            '<g transform="matrix(1 0 0 1 302 261.47)" style=""  >',
-                            '<text xml:space="preserve" font-family="Open Sans" font-size="28" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-44.26" y="-6.14" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">',
-                            name,
-                            '</tspan><tspan x="-37.14" y="17.45" style="stroke-width: 1; font-family: "Open Sans", sans-serif; font-size: 18px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">',
-                            ENS,
-                            "</tspan></text>",
-                            "</g>",
-                            "</svg>"
-                        )
-                    )
-                )
-            )
-        );
     }
 
     /**
@@ -109,9 +113,9 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         string memory commitHash,
         string memory gitRepository
     ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
-        uint256 tokenId = _tokenIds.current();
+        uint256 tokenId = _appIds.current();
         _mint(to, tokenId);
-        _tokenIds.increment();
+        _appIds.increment();
 
         App storage app = _apps[tokenId];
         app.name = name;
@@ -122,6 +126,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
         app.builds[0] = Build(commitHash, gitRepository);
+        app.accessPoints = new string[](0);
 
         return tokenId;
     }
@@ -141,24 +146,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         address owner = ownerOf(tokenId);
         App storage app = _apps[tokenId];
 
-        // prettier-ignore
-        bytes memory dataURI = abi.encodePacked(
-            '{',
-                '"name":"', app.name, '",',
-                '"description":"', app.description, '",',
-                '"owner":"', Strings.toHexString(uint160(owner), 20), '",',
-                '"external_url":"', app.externalURL, '",',
-                '"image":"', _generateSVG(app.name, app.ENS), '",',
-                '"attributes": [',
-                    '{"trait_type": "ENS", "value":"', app.ENS,'"},',
-                    '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',
-                    '{"trait_type": "Repository", "value":"', app.builds[app.currentBuild].gitRepository,'"},',
-                    '{"trait_type": "Version", "value":"', Strings.toString(app.currentBuild),'"}',
-                ']',
-            '}'
-        );
-
-        return string(abi.encodePacked(_baseURI(), Base64.encode((dataURI))));
+        return string(abi.encodePacked(_baseURI(), app.toString(owner).toBase64()));
     }
 
     /**
@@ -276,6 +264,168 @@ contract FleekERC721 is ERC721, FleekAccessControl {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
         emit NewTokenDescription(tokenId, _tokenDescription, msg.sender);
+    }
+
+    /**
+     * @dev Add a new AccessPoint register for an app token.
+     * The AP name should be a DNS or ENS url and it should be unique.
+     * Anyone can add an AP but it should requires a payment.
+     *
+     * May emit a {NewAccessPoint} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     *
+     * IMPORTANT: The payment is not set yet
+     */
+    function addAccessPoint(uint256 tokenId, string memory apName) public payable {
+        // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
+        _requireMinted(tokenId);
+        require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
+
+        _accessPoints[apName] = AccessPoint(tokenId, _apps[tokenId].accessPoints.length, 0, false, false, msg.sender);
+        _apps[tokenId].accessPoints.push(apName);
+
+        emit NewAccessPoint(apName, tokenId, msg.sender);
+    }
+
+    /**
+     * @dev Remove an AccessPoint registry for an app token.
+     * It will also remove the AP from the app token APs list.
+     *
+     * May emit a {RemoveAccessPoint} event.
+     *
+     * Requirements:
+     *
+     * - the AP must exist.
+     * - must be called by the AP owner.
+     */
+    function removeAccessPoint(string memory apName) public requireAP(apName) {
+        require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
+        uint256 tokenId = _accessPoints[apName].tokenId;
+        App storage _app = _apps[tokenId];
+
+        // the index of the AP to remove
+        uint256 indexToRemove = _accessPoints[apName].index;
+
+        // the last item is reposited in the index to remove
+        string memory lastAP = _app.accessPoints[_app.accessPoints.length - 1];
+        _app.accessPoints[indexToRemove] = lastAP;
+        _accessPoints[lastAP].index = indexToRemove;
+
+        // remove the last item
+        _app.accessPoints.pop();
+
+        delete _accessPoints[apName];
+        emit RemoveAccessPoint(apName, tokenId, msg.sender);
+    }
+
+    /**
+     * @dev A view function to gether information about an AccessPoint.
+     * It returns a JSON string representing the AccessPoint information.
+     *
+     * Requirements:
+     *
+     * - the AP must exist.
+     *
+     */
+    function getAccessPointJSON(string memory apName) public view requireAP(apName) returns (string memory) {
+        AccessPoint storage _ap = _accessPoints[apName];
+        return _ap.toString();
+    }
+
+    /**
+     * @dev A view function to check if a AccessPoint is verified.
+     *
+     * Requirements:
+     *
+     * - the AP must exist.
+     *
+     */
+    function isAccessPointNameVerified(string memory apName) public view requireAP(apName) returns (bool) {
+        return _accessPoints[apName].nameVerified;
+    }
+
+    /**
+     * @dev Increases the score of a AccessPoint registry.
+     *
+     * May emit a {ChangeAccessPointScore} event.
+     *
+     * Requirements:
+     *
+     * - the AP must exist.
+     *
+     */
+    function increaseAccessPointScore(string memory apName) public requireAP(apName) {
+        _accessPoints[apName].score++;
+        emit ChangeAccessPointScore(apName, _accessPoints[apName].tokenId, _accessPoints[apName].score, msg.sender);
+    }
+
+    /**
+     * @dev Decreases the score of a AccessPoint registry if is greater than 0.
+     *
+     * May emit a {ChangeAccessPointScore} event.
+     *
+     * Requirements:
+     *
+     * - the AP must exist.
+     *
+     */
+    function decreaseAccessPointScore(string memory apName) public requireAP(apName) {
+        require(_accessPoints[apName].score > 0, "FleekERC721: score cant be lower");
+        _accessPoints[apName].score--;
+        emit ChangeAccessPointScore(apName, _accessPoints[apName].tokenId, _accessPoints[apName].score, msg.sender);
+    }
+
+    /**
+     * @dev Set the content verification of a AccessPoint registry.
+     *
+     * May emit a {ChangeAccessPointContentVerify} event.
+     *
+     * Requirements:
+     *
+     * - the AP must exist.
+     * - the sender must have the token controller role.
+     *
+     */
+    function setAccessPointContentVerify(
+        string memory apName,
+        bool verified
+    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
+        _accessPoints[apName].contentVerified = verified;
+        emit ChangeAccessPointContentVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
+    }
+
+    /**
+     * @dev Set the name verification of a AccessPoint registry.
+     *
+     * May emit a {ChangeAccessPointNameVerify} event.
+     *
+     * Requirements:
+     *
+     * - the AP must exist.
+     * - the sender must have the token controller role.
+     *
+     */
+    function setAccessPointNameVerify(
+        string memory apName,
+        bool verified
+    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
+        _accessPoints[apName].nameVerified = verified;
+        emit ChangeAccessPointNameVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
+    }
+
+    /**
+     * @dev A view function to gether the list of mirrros for a given app.
+     *
+     * Requirements:
+     * - the tokenId must be minted and valid.
+     *
+     */
+    function appAccessPoints(uint256 tokenId) public view returns (string[] memory) {
+        _requireMinted(tokenId);
+        return _apps[tokenId].accessPoints;
     }
 
     /**
