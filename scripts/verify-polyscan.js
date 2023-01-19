@@ -1,13 +1,11 @@
 const { ethers } = require('hardhat');
-require('dotenv').config({ path: '.env' });
+const { address } = require('../deployments/mumbai/FleekERC721.json');
 require('@nomiclabs/hardhat-etherscan');
-
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 
 async function main() {
   // Verify the contract after deploying
   await hre.run('verify:verify', {
-    address: CONTRACT_ADDRESS,
+    address: address,
     constructorArguments: [
       'FleekNFAs', // Collection name
       'FLKNFA', // Collection symbol
