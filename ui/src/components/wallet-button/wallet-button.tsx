@@ -9,7 +9,7 @@ import {
   Button,
   Flex,
 } from '@chakra-ui/react';
-import { Icon } from '../icon';
+import { Icon } from '../core/icon';
 import { WalletType } from './wallet.utils';
 
 const WalletMenu: React.FC = () => {
