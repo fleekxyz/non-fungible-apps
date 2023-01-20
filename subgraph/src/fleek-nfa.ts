@@ -1,8 +1,10 @@
+import { Address, log } from '@graphprotocol/graph-ts';
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
   CollectionRoleGranted as CollectionRoleGrantedEvent,
   CollectionRoleRevoked as CollectionRoleRevokedEvent,
+  FleekNFA,
   NewBuild as NewBuildEvent,
   NewTokenDescription as NewTokenDescriptionEvent,
   NewTokenENS as NewTokenENSEvent,
@@ -232,4 +234,26 @@ export function handleTransfer(event: TransferEvent): void {
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  if (parseInt(event.params.from.toHexString()) === 0) {
+    // This is a new mint
+
+    let id = event.transaction.hash;
+    let token = new Token(id);
+    let owner = event.params.to;
+
+    let holder = Holder.load(owner);
+
+    if (!holder) {
+      // Create a new holder entity
+      holder = new Holder(owner);
+    }
+
+    token.owner = owner;
+    token.minted_by = event.transaction.from;
+    token.tokenId = event.params.tokenId;
+
+    holder.save();
+    token.save();
+  }
 }

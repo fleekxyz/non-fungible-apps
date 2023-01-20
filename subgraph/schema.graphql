@@ -129,3 +129,15 @@ type Transfer @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+type Token @entity {
+  id: Bytes! #transaction hash
+  tokenId: BigInt! # uint256
+  owner: Holder!
+  minted_by: Bytes!
+}
+
+type Holder @entity {
+  id: Bytes! #address
+  tokens: [Token!] @derivedFrom(field: "owner")
+}
