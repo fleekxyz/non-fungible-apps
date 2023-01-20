@@ -1,6 +1,6 @@
 // npx hardhat run scripts/mint.js --network mumbai
 const { getContract } = require('./util');
-const { getSVGBase64, getSVGColor } = require('./assets/read-svg');
+const { getSVGBase64, getSVGColor } = require('./utils/read-svg');
 const path = require('path');
 
 const DEFAULT_MINTS = {
@@ -11,7 +11,7 @@ const DEFAULT_MINTS = {
     'html.eth', // ens
     '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash
     'https://github.com/org/repo', // repo
-    path.resolve(__dirname, './assets/html.svg'), // svg
+    path.resolve(__dirname, '../assets/html.svg'), // svg
   ],
   psych: [
     'Psychedelic App', // name
@@ -20,7 +20,7 @@ const DEFAULT_MINTS = {
     'psychedelic.eth', // ens
     '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash
     'https://github.com/org/repo', // repo
-    path.resolve(__dirname, './assets/psych.svg'), // svg
+    path.resolve(__dirname, '../assets/psych.svg'), // svg
   ],
   fleek: [
     'Fleek App', // name
@@ -29,7 +29,7 @@ const DEFAULT_MINTS = {
     'fleek.eth', // ens
     '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash
     'https://github.com/org/repo', // repo
-    path.resolve(__dirname, './assets/fleek.svg'), // svg
+    path.resolve(__dirname, '../assets/fleek.svg'), // svg
   ],
   dydx: [
     'dydx', // name
@@ -38,7 +38,7 @@ const DEFAULT_MINTS = {
     'dydx.eth', // ens
     '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash
     'https://github.com/org/repo', // repo
-    path.resolve(__dirname, './assets/dydx.svg'), // svg
+    path.resolve(__dirname, '../assets/dydx.svg'), // svg
   ],
   aave: [
     'aave', // name
@@ -47,7 +47,7 @@ const DEFAULT_MINTS = {
     'aave.eth', // ens
     '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash
     'https://github.com/org/repo', // repo
-    path.resolve(__dirname, './assets/aave.svg'), // svg
+    path.resolve(__dirname, '../assets/aave.svg'), // svg
   ],
   uniswap: [
     'Uniswap', // name
@@ -56,7 +56,7 @@ const DEFAULT_MINTS = {
     'uniswap.eth', // ens
     '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash
     'https://github.com/org/repo', // repo
-    path.resolve(__dirname, './assets/uniswap.svg'), // svg
+    path.resolve(__dirname, '../assets/uniswap.svg'), // svg
   ],
   yearn: [
     'Yearn', // name
@@ -65,7 +65,7 @@ const DEFAULT_MINTS = {
     'yearn.eth', // ens
     '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash
     'https://github.com/org/repo', // repo
-    path.resolve(__dirname, './assets/yearn.svg'), // svg
+    path.resolve(__dirname, '../assets/yearn.svg'), // svg
   ],
   pancake: [
     'PancakeSwap', // name
@@ -74,7 +74,7 @@ const DEFAULT_MINTS = {
     'pancake.eth', // ens
     '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash
     'https://github.com/org/repo', // repo
-    path.resolve(__dirname, './assets/pancakeswap.svg'), // svg
+    path.resolve(__dirname, '../assets/pancakeswap.svg'), // svg
   ],
 };
 
