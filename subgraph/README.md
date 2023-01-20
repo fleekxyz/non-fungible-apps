@@ -75,6 +75,47 @@ The `graph-cli` command to init a subgraph is included below, please make sure y
 
 `graph init --contract-name CONTRACT_NAME --index-events --studio --from-contract CONTRACT_ADDRESS --abi PATH/TO/ABI/JSON --network mumbai SUBGRAPH_NAME`
 
+## Re-deployment
+
+If a change is needed in the subgraph, you should update the `schema.graphql` and `subgraph.yaml` files to match the new changes that have happened on the contract side.
+
+A typical re-deployment consists of a new contract address, ABI, and finally entities.
+
+### Updating the addresses
+
+To update the address of the contract, the following files need to be changed:
+
+- [networks.json](./networks.json): update the address for the right blockchain network
+- [subgraph.yaml](./subgraph.yaml): update the address in `dataSources.source.address`
+
+### Updating the entities and handlers
+
+It is important to make sure the subgraph is going to support the new version of the entities by updating the `schema.graphql` file.
+
+Define the new entities and the relationships between them. Also, take care of entities that should be removed from the schema.
+
+If your contract is emitting new events, update the `subgraph.yaml` file's `dataSources.mapping.eventHandlers`. Remove events that are not a part of the new contract.
+
+### Re-generating the TS files
+
+To re-generate files in `generated/` you can simply run `yarn codegen` or `npm run codegen` only and only **after** the previous two steps. If you do it before, you will still need to redo it later.
+
+### Update the handlers
+
+If you need new handlers in your code, you should update the `./src/fleek-nfa.ts` file and create functions to handle new events.
+
+**NOTE: The name of your handler functions should be exactly the same as the name you have specified in the `subgraph.yaml` file for the target event.**
+
+### Generate a new build
+
+Finally, you can generate the build that is going to be deployed to the Hosted Service by running `yarn build` or `npm run build`.
+
+### Re-deployment
+
+The command that should be used for re-deployment purposes is no different than the one that is used to deploy subgraphs in the first place (remember to replace the access token and the github_username/subgraph_name parts):
+
+`graph deploy --product hosted-service --deploy-key YOUR_ACCESS_TOKEN --version-lable v0.0.1 YOUR_GITHUB_USERNAME/SUBGRAPH_NAME_ON_HOSTED_SERVICE`
+
 ## Testing
 
 You can run the unit tests found in `./tests/` with `yarn test` or `npm run test`.
