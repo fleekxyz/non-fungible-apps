@@ -20,10 +20,24 @@ const StoryFlex = styled(Flex, {
 });
 
 export const Default = () => (
-  <StoryFlex>
+  <>
     <Button colorScheme="blue">Primary</Button>
     <Button>Default</Button>
-  </StoryFlex>
+    <Button
+      colorScheme="blue"
+      variant="outline"
+      css={{ py: '$1', borderRadius: '$md' }}
+    >
+      Use for NFA
+    </Button>
+    <Button
+      colorScheme="gray"
+      variant="outline"
+      css={{ py: '$1', borderRadius: '$md' }}
+    >
+      NFA Repo
+    </Button>
+  </>
 );
 export const Icon = () => (
   <>

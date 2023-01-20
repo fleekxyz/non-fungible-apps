@@ -35,11 +35,7 @@ export abstract class IconStyles {
     },
   });
 
-  static readonly Custom = styled('svg', {
-    // '& *': {
-    //   fill: 'currentColor',
-    // },
-  });
+  static readonly Custom = styled('svg');
 }
 
 export namespace IconStyles {

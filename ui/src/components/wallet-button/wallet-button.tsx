@@ -41,7 +41,7 @@ const WalletMenu: React.FC = () => {
           _hover={{ bg: 'custom.gray.100' }}
           bg={'custom.gray.200'}
           onClick={handleCopyAccount}
-          icon={<Icon name="copy" />}
+          // icon={<Icon name="copy" />}
         >
           Copy Account
         </MenuItem>
@@ -49,7 +49,7 @@ const WalletMenu: React.FC = () => {
           _hover={{ bg: 'custom.gray.100' }}
           bg={'custom.gray.200'}
           onClick={handleDisconnect}
-          icon={<Icon name="log-out" />}
+          // icon={<Icon name="log-out" />}
         >
           Disconnect
         </MenuItem>
@@ -72,7 +72,7 @@ const ConnectionMenu: React.FC = () => {
       <Button
         borderRadius="50px"
         as={MenuButton}
-        leftIcon={<Icon name="wallet" />}
+        // leftIcon={<Icon name="wallet" />}
         isLoading={state === 'loading'}
         disabled={state === 'loading'}
       >
@@ -83,7 +83,7 @@ const ConnectionMenu: React.FC = () => {
           _hover={{ bg: 'custom.gray.100' }}
           bg={'custom.gray.200'}
           onClick={handleConnectWallet}
-          icon={<Icon name={WalletType.metamask} />}
+          // icon={<Icon name={WalletType.metamask} />}
         >
           Metamask
         </MenuItem>
