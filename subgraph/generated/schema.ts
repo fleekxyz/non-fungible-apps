@@ -1172,3 +1172,147 @@ export class Transfer extends Entity {
     this.set('transactionHash', Value.fromBytes(value));
   }
 }
+
+export class Token extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set('id', Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get('id');
+    assert(id != null, 'Cannot save Token entity without an ID');
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type Token must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set('Token', id.toBytes().toHexString(), this);
+    }
+  }
+
+  static load(id: Bytes): Token | null {
+    return changetype<Token | null>(store.get('Token', id.toHexString()));
+  }
+
+  get id(): Bytes {
+    let value = this.get('id');
+    return value!.toBytes();
+  }
+
+  set id(value: Bytes) {
+    this.set('id', Value.fromBytes(value));
+  }
+
+  get tokenId(): BigInt {
+    let value = this.get('tokenId');
+    return value!.toBigInt();
+  }
+
+  set tokenId(value: BigInt) {
+    this.set('tokenId', Value.fromBigInt(value));
+  }
+
+  get owner(): Bytes {
+    let value = this.get('owner');
+    return value!.toBytes();
+  }
+
+  set owner(value: Bytes) {
+    this.set('owner', Value.fromBytes(value));
+  }
+
+  get image(): string {
+    let value = this.get('image');
+    return value!.toString();
+  }
+
+  set image(value: string) {
+    this.set('image', Value.fromString(value));
+  }
+
+  get ENS(): string {
+    let value = this.get('ENS');
+    return value!.toString();
+  }
+
+  set ENS(value: string) {
+    this.set('ENS', Value.fromString(value));
+  }
+
+  get externalURL(): string {
+    let value = this.get('externalURL');
+    return value!.toString();
+  }
+
+  set externalURL(value: string) {
+    this.set('externalURL', Value.fromString(value));
+  }
+
+  get name(): string {
+    let value = this.get('name');
+    return value!.toString();
+  }
+
+  set name(value: string) {
+    this.set('name', Value.fromString(value));
+  }
+
+  get description(): string {
+    let value = this.get('description');
+    return value!.toString();
+  }
+
+  set description(value: string) {
+    this.set('description', Value.fromString(value));
+  }
+}
+
+export class Holder extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set('id', Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get('id');
+    assert(id != null, 'Cannot save Holder entity without an ID');
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type Holder must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set('Holder', id.toBytes().toHexString(), this);
+    }
+  }
+
+  static load(id: Bytes): Holder | null {
+    return changetype<Holder | null>(store.get('Holder', id.toHexString()));
+  }
+
+  get id(): Bytes {
+    let value = this.get('id');
+    return value!.toBytes();
+  }
+
+  set id(value: Bytes) {
+    this.set('id', Value.fromBytes(value));
+  }
+
+  get tokens(): Array<Bytes> | null {
+    let value = this.get('tokens');
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytesArray();
+    }
+  }
+
+  set tokens(value: Array<Bytes> | null) {
+    if (!value) {
+      this.unset('tokens');
+    } else {
+      this.set('tokens', Value.fromBytesArray(<Array<Bytes>>value));
+    }
+  }
+}

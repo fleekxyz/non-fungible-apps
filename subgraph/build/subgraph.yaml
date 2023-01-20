@@ -26,6 +26,8 @@ dataSources:
         - TokenRoleGranted
         - TokenRoleRevoked
         - Transfer
+        - Token
+        - Holder
       abis:
         - name: FleekNFA
           file: FleekNFA/abis/FleekNFA.json
@@ -56,4 +58,7 @@ dataSources:
           handler: handleTokenRoleRevoked
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+      callHandlers:
+        - function: mint(address,string,string,string,string,string,string,string)
+          handler: handleMint
       file: FleekNFA/FleekNFA.wasm

@@ -12,6 +12,7 @@ import {
   TokenRoleGranted as TokenRoleGrantedEvent,
   TokenRoleRevoked as TokenRoleRevokedEvent,
   Transfer as TransferEvent,
+  MintCall,
 } from '../generated/FleekNFA/FleekNFA';
 import {
   Approval,
@@ -27,7 +28,21 @@ import {
   TokenRoleGranted,
   TokenRoleRevoked,
   Transfer,
+  Token,
+  Holder,
 } from '../generated/schema';
+
+export function handleMint(call: MintCall): void {
+  let id = call.transaction.hash;
+  let token = new Token(id);
+  token.image = call.inputs.image;
+  token.ENS = call.inputs.ENS;
+  token.externalURL = call.inputs.externalURL;
+  token.owner = call.transaction.from;
+  token.name = call.inputs.name;
+  token.description = call.inputs.description;
+  token.save();
+}
 
 export function handleApproval(event: ApprovalEvent): void {
   let entity = new Approval(
