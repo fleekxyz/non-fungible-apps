@@ -58,7 +58,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
         string[] accessPoints; // List of app AccessPoint
         string logo;
-        bytes3 color; // Color of the nft
+        uint24 color; // Color of the nft
     }
 
     /**
@@ -120,7 +120,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
-        bytes3 color
+        uint24 color
     ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
         uint256 tokenId = _appIds.current();
         _mint(to, tokenId);
