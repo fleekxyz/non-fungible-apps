@@ -140,6 +140,32 @@ export class NewBuild__Params {
   }
 }
 
+export class NewMint extends ethereum.Event {
+  get params(): NewMint__Params {
+    return new NewMint__Params(this);
+  }
+}
+
+export class NewMint__Params {
+  _event: NewMint;
+
+  constructor(event: NewMint) {
+    this._event = event;
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get owner(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get triggeredBy(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+}
+
 export class NewTokenDescription extends ethereum.Event {
   get params(): NewTokenDescription__Params {
     return new NewTokenDescription__Params(this);

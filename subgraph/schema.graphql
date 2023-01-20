@@ -134,11 +134,7 @@ type Token @entity {
   id: Bytes! #transaction hash
   tokenId: BigInt! # uint256
   owner: Holder!
-  image: String!
-  ENS: String!
-  externalURL: String!
-  name: String!
-  description: String!
+  minted_by: Bytes!
 }
 
 type Holder @entity {

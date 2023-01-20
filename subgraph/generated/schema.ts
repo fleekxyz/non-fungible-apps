@@ -1222,49 +1222,13 @@ export class Token extends Entity {
     this.set('owner', Value.fromBytes(value));
   }
 
-  get image(): string {
-    let value = this.get('image');
-    return value!.toString();
+  get minted_by(): Bytes {
+    let value = this.get('minted_by');
+    return value!.toBytes();
   }
 
-  set image(value: string) {
-    this.set('image', Value.fromString(value));
-  }
-
-  get ENS(): string {
-    let value = this.get('ENS');
-    return value!.toString();
-  }
-
-  set ENS(value: string) {
-    this.set('ENS', Value.fromString(value));
-  }
-
-  get externalURL(): string {
-    let value = this.get('externalURL');
-    return value!.toString();
-  }
-
-  set externalURL(value: string) {
-    this.set('externalURL', Value.fromString(value));
-  }
-
-  get name(): string {
-    let value = this.get('name');
-    return value!.toString();
-  }
-
-  set name(value: string) {
-    this.set('name', Value.fromString(value));
-  }
-
-  get description(): string {
-    let value = this.get('description');
-    return value!.toString();
-  }
-
-  set description(value: string) {
-    this.set('description', Value.fromString(value));
+  set minted_by(value: Bytes) {
+    this.set('minted_by', Value.fromBytes(value));
   }
 }
 
