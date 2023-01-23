@@ -13,6 +13,10 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  darkMode: {
+    dark: { ...themes.dark, backgroundColor: 'black' },
+    // light: { ...themes.normal, backgroundColor: 'white' },
+  },
 };
 
 const { darkTheme: darkThemeClassName } = dripStitches;

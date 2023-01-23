@@ -1,16 +1,12 @@
-import { Icon, IconProps } from '@chakra-ui/react';
+import { IconStyles as IS } from '../icon.styles';
 
-export const MetamaskIcon: React.FC<IconProps> = (props) => {
-  const { width = '1.5em', height = '1.5em' } = props;
+export const MetamaskIcon: React.FC<IS.CustomProps> = (props) => {
   return (
-    <Icon
-      width={width}
-      height={height}
+    <IS.Custom
       {...props}
       viewBox="0 0 256 240"
-      version="1.1"
+      fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      preserveAspectRatio="xMidYMid"
     >
       <title>MetaMask</title>
       <g>
@@ -131,6 +127,6 @@ export const MetamaskIcon: React.FC<IconProps> = (props) => {
           points="163.383898 33.1117385 147.744691 75.3505047 144.425852 132.411352 143.155934 150.295986 143.055195 195.983514 112.943788 195.983514 112.846176 150.381702 111.572114 132.395585 108.251786 75.3505047 92.6150854 33.1117385"
         ></polygon>
       </g>
-    </Icon>
+    </IS.Custom>
   );
 };

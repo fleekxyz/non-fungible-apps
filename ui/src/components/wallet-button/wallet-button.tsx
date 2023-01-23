@@ -9,7 +9,7 @@ import {
   Button,
   Flex,
 } from '@chakra-ui/react';
-import { Icon } from '../icon';
+import { Icon } from '../core/icon';
 import { WalletType } from './wallet.utils';
 
 const WalletMenu: React.FC = () => {
@@ -41,7 +41,6 @@ const WalletMenu: React.FC = () => {
           _hover={{ bg: 'custom.gray.100' }}
           bg={'custom.gray.200'}
           onClick={handleCopyAccount}
-          icon={<Icon name="copy" />}
         >
           Copy Account
         </MenuItem>
@@ -49,7 +48,6 @@ const WalletMenu: React.FC = () => {
           _hover={{ bg: 'custom.gray.100' }}
           bg={'custom.gray.200'}
           onClick={handleDisconnect}
-          icon={<Icon name="log-out" />}
         >
           Disconnect
         </MenuItem>
@@ -72,7 +70,6 @@ const ConnectionMenu: React.FC = () => {
       <Button
         borderRadius="50px"
         as={MenuButton}
-        leftIcon={<Icon name="wallet" />}
         isLoading={state === 'loading'}
         disabled={state === 'loading'}
       >
@@ -83,7 +80,6 @@ const ConnectionMenu: React.FC = () => {
           _hover={{ bg: 'custom.gray.100' }}
           bg={'custom.gray.200'}
           onClick={handleConnectWallet}
-          icon={<Icon name={WalletType.metamask} />}
         >
           Metamask
         </MenuItem>

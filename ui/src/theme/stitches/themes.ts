@@ -101,6 +101,10 @@ export const createDripStitches = <
         ...zIndices,
         ...(theme?.zIndices || {}),
       },
+      transitions: {
+        'all-200': 'all 200ms',
+        ...(theme?.transitions || {}),
+      },
       ...(theme || {}),
     },
     themeMap,
