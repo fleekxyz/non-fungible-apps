@@ -762,16 +762,17 @@ contract FleekTest is Test {
             "https://github.com/fleekxyz/non-fungible-apps"
         );
 
-        string
-            memory json = '("tokenId":0,"score":0,"nameVerified":false,"contentVerified":false,"owner":"0x7fa9385be102ac3eac297483dd6233d62b3e1496")';
         assertEq(mint, 0);
 
         fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
 
-        //  assertEq(fleekContract.getAccessPointJSON('https://fleek_cloned.xyz'), json);
+        assertEq(
+            fleekContract.getAccessPointJSON("https://fleek_cloned.xyz"),
+            '{"tokenId":0,"score":0,"nameVerified":false,"contentVerified":false,"owner":"0x7fa9385be102ac3eac297483dd6233d62b3e1496"}'
+        );
     }
 
-    function testRemoveAccessPoint() public {
+    function testFailRemoveAccessPoint() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
             "Foundry Test App",
@@ -786,6 +787,7 @@ contract FleekTest is Test {
 
         fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
         fleekContract.removeAccessPoint("https://fleek_cloned.xyz");
+        fleekContract.getAccessPointJSON("https://fleek_cloned.xyz");
     }
 
     function testIsAccessPointNameVerified() public {
@@ -823,6 +825,10 @@ contract FleekTest is Test {
 
         fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
         fleekContract.increaseAccessPointScore("https://fleek_cloned.xyz");
+        assertEq(
+            fleekContract.getAccessPointJSON("https://fleek_cloned.xyz"),
+            '{"tokenId":0,"score":1,"nameVerified":false,"contentVerified":false,"owner":"0x7fa9385be102ac3eac297483dd6233d62b3e1496"}'
+        );
     }
 
     function testFailDecreaseAccessPointScoreToMinusOne() public {
@@ -858,6 +864,10 @@ contract FleekTest is Test {
         fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
         fleekContract.increaseAccessPointScore("https://fleek_cloned.xyz");
         fleekContract.decreaseAccessPointScore("https://fleek_cloned.xyz");
+        assertEq(
+            fleekContract.getAccessPointJSON("https://fleek_cloned.xyz"),
+            '{"tokenId":0,"score":0,"nameVerified":false,"contentVerified":false,"owner":"0x7fa9385be102ac3eac297483dd6233d62b3e1496"}'
+        );
     }
 
     function testAppAccessPoints() public {
@@ -876,11 +886,12 @@ contract FleekTest is Test {
         fleekContract.addAccessPoint(0, "https://fleek_cloned.xyz");
 
         string[] memory accessPointList = fleekContract.appAccessPoints(mint);
-        /** assertEq(accessPointList, ['https://fleek_cloned.xyz']);
-        
-        fleekContract.addAccessPoint(0, 'https://fleek_cloned_2.xyz');
+        assertEq(accessPointList[0], "https://fleek_cloned.xyz");
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned_2.xyz");
+
         accessPointList = fleekContract.appAccessPoints(mint);
-        assertEq(accessPointList, ['https://fleek_cloned_2.xyz']);**/
+        assertEq(accessPointList[1], "https://fleek_cloned_2.xyz");
     }
 
     function testFailSetAccessPointNameVerifyWithUnknownIdentity() public {
@@ -901,11 +912,9 @@ contract FleekTest is Test {
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setAccessPointNameVerify("https://fleek_cloned.xyz", true);
-
-        // Fetch the ap and compare the name verified field.
     }
 
-    function testFailSetAccessPointContentVerify() public {
+    function testFailSetAccessPointContentVerifyWithUnknownIdentity() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
             "Foundry Test App",
@@ -923,7 +932,5 @@ contract FleekTest is Test {
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setAccessPointContentVerify("https://fleek_cloned.xyz", true);
-
-        // Fetch the ap and compare the name verified field.
     }
 }
