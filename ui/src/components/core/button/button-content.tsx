@@ -17,7 +17,7 @@ export type ButtonContentProps = Pick<
   | 'iconSpacing'
 >;
 
-export function ButtonContent(props: ButtonContentProps) {
+export const ButtonContent: React.FC<ButtonContentProps> = (props) => {
   const {
     leftIcon,
     rightIcon,
@@ -54,4 +54,4 @@ export function ButtonContent(props: ButtonContentProps) {
       {bottomIcon && <ButtonIcon>{bottomIcon}</ButtonIcon>}
     </StyledButtonContentGrid>
   );
-}
+};

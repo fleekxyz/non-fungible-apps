@@ -30,7 +30,6 @@ export abstract class IconStyles {
     },
 
     defaultVariants: {
-      size: 'md',
       rotate: false,
     },
   });

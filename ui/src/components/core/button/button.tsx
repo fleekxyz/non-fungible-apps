@@ -1,13 +1,9 @@
-// import { forwardRef } from '../../utils';
 import { ButtonProps, StyledButton } from './button.styled';
 import { ButtonContent } from './button-content';
 import { ButtonSpinner } from './button-spinner';
 import { forwardRef } from 'react';
 
-export const Button = forwardRef<ButtonProps, 'button'>(function Button(
-  props,
-  ref
-) {
+export const Button = forwardRef<ButtonProps, 'button'>((props, ref) => {
   const {
     isActive,
     isLoading,

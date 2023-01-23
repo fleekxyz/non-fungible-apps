@@ -1,17 +1,15 @@
-import { styled } from '@stitches/react';
-import {
-  IoArrowBackCircleSharp,
-  IoInformationCircleSharp,
-} from 'react-icons/io5';
 import { Flex } from '../../layout';
 import { Button } from './button';
 import { IconButton } from './icon-button';
 import { Icon as IconComponent } from '../icon';
+import { dripStitches } from '../../../theme/stitches';
 
 export default {
   title: 'Components/Button',
   component: Button,
 };
+
+const { styled } = dripStitches;
 
 const StoryFlex = styled(Flex, {
   display: 'flex',
@@ -20,7 +18,7 @@ const StoryFlex = styled(Flex, {
 });
 
 export const Default = () => (
-  <>
+  <StoryFlex>
     <Button colorScheme="blue">Primary</Button>
     <Button>Default</Button>
     <Button
@@ -37,7 +35,7 @@ export const Default = () => (
     >
       NFA Repo
     </Button>
-  </>
+  </StoryFlex>
 );
 export const Icon = () => (
   <>
