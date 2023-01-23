@@ -7,25 +7,52 @@ import {
   afterAll,
 } from 'matchstick-as/assembly/index';
 import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { Approval } from '../generated/schema';
-import { Approval as ApprovalEvent } from '../generated/FleekNFA/FleekNFA';
-import { handleApproval } from '../src/fleek-nfa';
-import { createApprovalEvent } from './fleek-nfa-utils';
+import '../generated/schema';
+import '../generated/FleekNFA/FleekNFA';
+import '../src/fleek-nfa';
+import './fleek-nfa-utils';
+import { handleTransfer } from '../src/fleek-nfa';
+import { createTransferEvent } from './fleek-nfa-utils';
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0
 
 describe('Describe entity assertions', () => {
   beforeAll(() => {
-    let owner = Address.fromString(
-      '0x0000000000000000000000000000000000000001'
+    let contract = Address.fromString(
+      '0x0000000000000000000000000000000000000000'
     );
-    let approved = Address.fromString(
-      '0x0000000000000000000000000000000000000001'
+    let contractOwner = Address.fromString(
+      '0x1000000000000000000000000000000000000001'
     );
-    let tokenId = BigInt.fromI32(234);
-    let newApprovalEvent = createApprovalEvent(owner, approved, tokenId);
-    handleApproval(newApprovalEvent);
+    let tokenOwnerOne = Address.fromString(
+      '0x2000000000000000000000000000000000000002'
+    );
+    let tokenOwnerTwo = Address.fromString(
+      '0x3000000000000000000000000000000000000003'
+    );
+
+    handleTransfer(
+      createTransferEvent(contract, tokenOwnerOne, BigInt.fromI32(0))
+    );
+    handleTransfer(
+      createTransferEvent(contract, tokenOwnerTwo, BigInt.fromI32(1))
+    );
+    handleTransfer(
+      createTransferEvent(contract, tokenOwnerOne, BigInt.fromI32(2))
+    );
+    handleTransfer(
+      createTransferEvent(contract, tokenOwnerOne, BigInt.fromI32(3))
+    );
+    handleTransfer(
+      createTransferEvent(tokenOwnerTwo, tokenOwnerOne, BigInt.fromI32(1))
+    );
+    handleTransfer(
+      createTransferEvent(contract, tokenOwnerTwo, BigInt.fromI32(4))
+    );
+    handleTransfer(
+      createTransferEvent(tokenOwnerOne, tokenOwnerTwo, BigInt.fromI32(0))
+    );
   });
 
   afterAll(() => {
@@ -35,10 +62,9 @@ describe('Describe entity assertions', () => {
   // For more test scenarios, see:
   // https://thegraph.com/docs/en/developer/matchstick/#write-a-unit-test
 
-  test('Approval created and stored', () => {
-    assert.entityCount('Approval', 1);
+  test('Mints & Transfers', () => {
+    assert.entityCount('Transfer', 7);
 
-    // 0xa16081f360e3847006db660bae1c6d1b2e17ec2a is the default address used in newMockEvent() function
     assert.fieldEquals(
       'Approval',
       '0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1',
