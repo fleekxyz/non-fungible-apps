@@ -3,7 +3,7 @@ import { dripStitches } from '../../../theme/stitches';
 const { styled } = dripStitches;
 
 export const StyledErrorMessage = styled('span', {
-  color: '$red9',
+  color: '$red11',
   variants: {
     size: {
       sm: {
@@ -13,7 +13,7 @@ export const StyledErrorMessage = styled('span', {
         fontSize: '$xs',
       },
       lg: {
-        fontSize: '$md',
+        fontSize: '$sm',
       },
     },
   },
