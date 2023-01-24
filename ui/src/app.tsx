@@ -10,7 +10,7 @@ export const App = () => {
   themeGlobals();
   return (
     <>
-      <WalletButton />
+      {/* <WalletButton /> */}
       <BrowserRouter>
         <Routes>
           <Route path="/mint-site" element={<MintSite />} />
