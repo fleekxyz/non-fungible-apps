@@ -4,14 +4,10 @@ const { styled } = dripStitches;
 
 export const StyledErrorMessage = styled('span', {
   color: '$red11',
+  fontSize: '0.625rem',
+
   variants: {
     size: {
-      sm: {
-        fontSize: '$xs', //TODO check with royce font size
-      },
-      md: {
-        fontSize: '$xs',
-      },
       lg: {
         fontSize: '$sm',
       },

@@ -2,6 +2,7 @@ import { Flex } from '../../layout';
 import { dripStitches } from '../../../theme/stitches';
 import { useRef, useState } from 'react';
 import { Icon } from '../icon';
+import { StyledErrorMessage } from './input-error-message';
 
 const { styled } = dripStitches;
 
@@ -21,13 +22,27 @@ const BorderInput = styled('div', {
   },
 });
 
+const validateFileSize = (file: File) => {
+  const fileSize = file.size / 1024; // in KB
+  return fileSize <= 10;
+};
+
 export const InputFileStyled = () => {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null); //TODO: do it with redux
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    e.target.files && e.target.files.length > 0 && setFile(e.target.files[0]);
+    setErrorMessage(null);
+
+    if (e.target.files && e.target.files.length > 0) {
+      if (validateFileSize(e.target.files[0])) setFile(e.target.files[0]);
+      else {
+        setFile(null);
+        setErrorMessage('File size is too big');
+      }
+    }
   };
   return (
     <>
@@ -49,6 +64,7 @@ export const InputFileStyled = () => {
           <Icon name="upload" size="md" css={{ position: 'absolute' }} />
         )}
         <BorderInput />
+
         <input
           type="file"
           className="hidden"
@@ -57,6 +73,7 @@ export const InputFileStyled = () => {
           onChange={handleFileChange}
         />
       </Flex>
+      {errorMessage && <StyledErrorMessage>{errorMessage}</StyledErrorMessage>}
     </>
   );
 };
