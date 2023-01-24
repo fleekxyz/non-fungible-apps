@@ -20,7 +20,7 @@ export const Input = forwardRef<InputProps, 'input'>((props, ref) => {
     <Flex
       css={{
         flexDirection: 'column',
-        width: type === 'file' ? '$20' : ownProps.width,
+        width: type === 'file' ? '$22' : ownProps.width,
       }}
     >
       {label && (

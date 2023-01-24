@@ -33,6 +33,29 @@ export const StyledInput = styled('input', {
   color: '$slate12',
   my: '$1h',
 
+  transition: 'border-color 0.2s ease-in-out',
+  borderWidth: '$default',
+  borderColor: '$gray7',
+  backgroundColor: 'transparent',
+  '&:hover': {
+    borderColor: '$gray8',
+  },
+  '&:focus': {
+    outline: 'none',
+    borderColor: '$blue9',
+  },
+  '&[aria-invalid=true], &[data-invalid]': {
+    borderColor: '$red9',
+  },
+  '&:disabled': {
+    color: '$slate8',
+    borderColor: '$slate6',
+    backgroundColor: '$slate2',
+    '&::placeholder': {
+      color: '$slate8',
+    },
+  },
+
   variants: {
     size: {
       sm: {
@@ -52,35 +75,8 @@ export const StyledInput = styled('input', {
         p: '$4 $5',
       },
     },
-    variant: {
-      outline: {
-        transition: 'border-color 0.2s ease-in-out',
-        borderWidth: '$default',
-        borderColor: '$gray7',
-        backgroundColor: 'transparent',
-        '&:hover': {
-          borderColor: '$gray8',
-        },
-        '&:focus': {
-          outline: 'none',
-          borderColor: '$blue9',
-        },
-        '&[aria-invalid=true], &[data-invalid]': {
-          borderColor: '$red9',
-        },
-        '&:disabled': {
-          color: '$slate8',
-          borderColor: '$slate6',
-          backgroundColor: '$slate2',
-          '&::placeholder': {
-            color: '$slate8',
-          },
-        },
-      },
-    },
   },
   defaultVariants: {
     size: 'md',
-    variant: 'outline',
   },
 });
