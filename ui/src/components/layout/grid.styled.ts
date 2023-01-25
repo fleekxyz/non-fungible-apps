@@ -1,4 +1,4 @@
-import { dripStitches } from '../../theme/stitches'; //TODO replace with absolute path
+import { dripStitches } from '../../theme'; //TODO replace with absolute path
 
 const { styled } = dripStitches;
 

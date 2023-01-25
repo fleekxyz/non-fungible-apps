@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { initializeWallet } from './store';
-import { themeGlobals } from 'theme/stitches/globals';
+import { themeGlobals } from '@/theme/globals';
 import { Home } from './views';
 
 initializeWallet();

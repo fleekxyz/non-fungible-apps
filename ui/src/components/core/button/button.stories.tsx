@@ -2,7 +2,7 @@ import { Flex } from '../../layout';
 import { Button } from './button';
 import { IconButton } from './icon-button';
 import { Icon as IconComponent } from '../icon';
-import { dripStitches } from '../../../theme/stitches';
+import { dripStitches } from '../../../theme';
 
 export default {
   title: 'Components/Button',
