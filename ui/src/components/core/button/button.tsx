@@ -1,4 +1,4 @@
-import { ButtonProps, StyledButton } from './button.styled';
+import { ButtonProps, StyledButton } from './button.styles';
 import { ButtonContent } from './button-content';
 import { ButtonSpinner } from './button-spinner';
 import { forwardRef } from 'react';
