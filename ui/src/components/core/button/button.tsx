@@ -38,6 +38,7 @@ export const Button = forwardRef<ButtonProps, 'button'>((props, ref) => {
       data-loading={isLoading}
       css={{
         width: isFullWidth ? '100%' : undefined,
+        ...(ownProps?.css || {}),
       }}
       {...ownProps}
     >
