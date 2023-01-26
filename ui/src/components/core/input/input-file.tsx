@@ -2,7 +2,7 @@ import { Flex } from '../../layout';
 import { dripStitches } from '../../../theme/stitches';
 import { useRef, useState } from 'react';
 import { Icon } from '../icon';
-import { StyledErrorMessage } from './input-error-message';
+import { Form } from '../../../components/form/form';
 
 const { styled } = dripStitches;
 
@@ -25,12 +25,14 @@ const BorderInput = styled('div', {
 const DEFAULT_MAX_FILE_SIZE = 10; // in KB
 
 // The file size must be capped to a size that the contract can handle
-const validateFileSize = (file: File, maxSize = DEFAULT_MAX_FILE_SIZE): boolean => {
-  return file.size  <= 1024 * maxSize;
+const validateFileSize = (
+  file: File,
+  maxSize = DEFAULT_MAX_FILE_SIZE
+): boolean => {
+  return file.size <= 1024 * maxSize;
 };
 
-
-export const InputFileStyled = () => {
+export const StyledInputFile = () => {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null); //TODO: do it with redux
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -76,7 +78,7 @@ export const InputFileStyled = () => {
           onChange={handleFileChange}
         />
       </Flex>
-      {errorMessage && <StyledErrorMessage>{errorMessage}</StyledErrorMessage>}
+      {errorMessage && <Form.Error>{errorMessage}</Form.Error>}
     </>
   );
 };

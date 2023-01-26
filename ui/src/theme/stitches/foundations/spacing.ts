@@ -14,11 +14,12 @@ export const spacing = {
   8: '2rem',
   9: '2.25rem',
   10: '2.5rem',
+  11: '2.75rem',
   12: '3rem',
   14: '3.5rem',
   16: '4rem',
-  20: '5rem',
-  22: '5.5rem',
+  20: '5rem', // 80px
+  22: '5.5rem', // 88px
   24: '6rem',
   28: '7rem',
   32: '8rem',
