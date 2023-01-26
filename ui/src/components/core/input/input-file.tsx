@@ -22,10 +22,13 @@ const BorderInput = styled('div', {
   },
 });
 
-const validateFileSize = (file: File) => {
-  const fileSize = file.size / 1024; // in KB
-  return fileSize <= 10;
+const DEFAULT_MAX_FILE_SIZE = 10; // in KB
+
+// The file size must be capped to a size that the contract can handle
+const validateFileSize = (file: File, maxSize = DEFAULT_MAX_FILE_SIZE): boolean => {
+  return file.size  <= 1024 * maxSize;
 };
+
 
 export const InputFileStyled = () => {
   const inputFileRef = useRef<HTMLInputElement>(null);
