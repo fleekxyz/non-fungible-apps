@@ -1,3 +1,11 @@
+/**
+ * This file is just proof of concept and a code example
+ * to be split in correct component files and use the correct
+ * components from the project that still under development.
+ *
+ * This file should be removed after used as example.
+ */
+
 import { useRef, useState } from 'react';
 // @ts-ignore
 import ColorThief from 'colorthief';
@@ -10,6 +18,9 @@ type SVGPreviewProps = {
   size: string;
 };
 
+/**
+ * SVGPreview renders the NFA image based in the provided props.
+ */
 const SVGPreview: React.FC<SVGPreviewProps> = ({
   color,
   logo,
@@ -190,7 +201,10 @@ const SVGPreview: React.FC<SVGPreviewProps> = ({
   );
 };
 
-const fileToBase64 = (file: File) =>
+/**
+ * Converts the File from the input to a base64 string.
+ */
+const fileToBase64 = (file: File): Promise<string> =>
   new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -198,11 +212,20 @@ const fileToBase64 = (file: File) =>
     reader.onerror = reject;
   });
 
+/**
+ * Converts a hex color string to a number.
+ */
+const parseColorToNumber = (color: string): number => {
+  const hexColor = color.replace('#', '');
+  return parseInt(hexColor, 16);
+};
+
 export const SVGTestScreen: React.FC = () => {
+  // These states are the properties that will be sent to the contract
   const [name, setName] = useState('');
   const [ens, setENS] = useState('');
-  const [logo, setLogo] = useState<string>('');
-  const [color, setColor] = useState('');
+  const [logo, setLogo] = useState(''); // The logo needs to be a base64 of a SVG capped at 10kb
+  const [color, setColor] = useState(''); // The color used in preview is a hex string (e.g. #ffffff) but it requires to be a number when sending to the contract
 
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -211,6 +234,8 @@ export const SVGTestScreen: React.FC = () => {
     if (!file) return;
     const fileBase64 = await fileToBase64(file);
     setLogo(fileBase64);
+    // To send to the contract the logo needs to be a base64 string
+    console.log('Sending to contract:', fileBase64);
   };
 
   const handleLogoLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -219,6 +244,8 @@ export const SVGTestScreen: React.FC = () => {
       .map((c: number) => c.toString(16).padStart(2, '0'))
       .join('')}`;
     setColor(hexColor);
+    // To send to the contract the color needs to be a number
+    console.log('Sending to contract:', parseColorToNumber(hexColor));
   };
 
   return (
