@@ -6,6 +6,7 @@ const { styled } = dripStitches;
 const StyledTrigger = styled(Select.Trigger, {
   display: 'inline-flex',
   width: '176px', //TODO set width to 100% of parent
+  height: '$11',
   alignItems: 'center',
   justifyContent: 'space-between',
   borderRadius: '$lg',
@@ -25,14 +26,17 @@ const StyledTrigger = styled(Select.Trigger, {
 });
 
 const StyledPortal = styled(Select.Portal, {
-  // position: 'absolute',
+  position: 'absolute',
+  left: '$1h',
+  top: '$1h',
+  width: '176px', //TODO set width to 100% of parent
   borderStyle: 'solid',
   borderColor: '$slate7',
   borderWidth: '1px',
 });
 
 const StyledContent = styled(Select.Content, {
-  overflow: 'hidden',
+  overflow: 'none',
   backgroundColor: 'black',
   borderRadius: '$lg',
 });
@@ -41,6 +45,8 @@ const StyledViewport = styled(Select.Viewport, {
   p: '$2 $3',
   color: '$slate11',
 });
+
+const StyledDropdownGroup = styled(Select.Group, { overflow: 'hidden' });
 
 const StyledSeparator = styled(Select.Separator, {
   height: '1px',
@@ -90,7 +96,7 @@ export const DropdownIcon = Select.Icon;
 export const DropdownPortal = StyledPortal;
 export const DropdownContent = StyledContent;
 export const DropdownViewport = StyledViewport;
-export const DropdownGroup = Select.Group;
+export const DropdownGroup = StyledDropdownGroup;
 export const DropdownSeparator = StyledSeparator;
 export const DopdownItem = StyledItem;
 export const DropdownItemText = Select.ItemText;
