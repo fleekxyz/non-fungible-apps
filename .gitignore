@@ -15,3 +15,6 @@ forge-cache
 
 # Subgraph
 *.wasm
+subgraph/build
+subgraph/generated
+subgraph/abis
