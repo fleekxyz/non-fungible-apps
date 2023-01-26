@@ -5,7 +5,8 @@ const { styled } = dripStitches;
 
 const StyledTrigger = styled(Select.Trigger, {
   display: 'inline-flex',
-  width: '176px', //TODO set width to 100% of parent
+  width: 'fit-content',
+  minWidth: '$40',
   height: '$11',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -20,16 +21,17 @@ const StyledTrigger = styled(Select.Trigger, {
   borderWidth: '1px',
   outline: 'none',
 
+  transition: 'border-color 0.2s ease-in-out',
   '&:hover': {
-    //TODO - add same hover state of input
+    borderColor: '$gray8',
   },
 });
 
 const StyledPortal = styled(Select.Portal, {
-  position: 'absolute',
   left: '$1h',
   top: '$1h',
-  width: '176px', //TODO set width to 100% of parent
+  width: 'fit-content',
+  minWidth: '$40',
   borderStyle: 'solid',
   borderColor: '$slate7',
   borderWidth: '1px',
@@ -90,7 +92,7 @@ export const StyledDropdownInput = styled('input', {
   color: '$slate12',
 });
 
-export const DropdownRoot = Select.Root;
+export const DropdownRoot = styled(Select.Root);
 export const DropdownTrigger = StyledTrigger;
 export const DropdownValue = Select.Value;
 export const DropdownIcon = Select.Icon;
