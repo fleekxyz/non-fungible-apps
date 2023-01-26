@@ -18,3 +18,4 @@ forge-cache
 subgraph/build
 subgraph/generated
 subgraph/abis
+subgraph/examples/query/.graphclient
