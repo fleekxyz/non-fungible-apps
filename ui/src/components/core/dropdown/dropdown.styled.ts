@@ -36,6 +36,7 @@ const StyledPortal = styled(Select.Portal, {
 });
 
 const StyledContent = styled(Select.Content, {
+  position: 'absolute',
   overflow: 'none',
   backgroundColor: 'black',
   borderRadius: '$lg',

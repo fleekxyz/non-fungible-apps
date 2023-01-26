@@ -1,5 +1,5 @@
 import { Flex } from '../../layout';
-import React, { forwardRef, ReactNode, useRef, useState } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import { Icon, IconName } from '../icon';
 import {
   DopdownItem,
@@ -25,6 +25,8 @@ export type DopdownItemProps = {
 
 type DropdownProps = {
   withSearch?: boolean;
+  selectedValue: string;
+  onChange(value: string): void;
   items: DopdownItemProps[];
 };
 
@@ -47,8 +49,7 @@ const SelectItem = forwardRef(({ children, ...props }, forwardedRef) => {
 });
 
 export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
-  const { withSearch, items } = props;
-  const [value, setValue] = useState('');
+  const { withSearch, items, onChange, selectedValue } = props;
   const [searchValue, setSearchValue] = useState('');
 
   const timeOutRef = useRef<NodeJS.Timeout>();
@@ -62,29 +63,35 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
   };
 
   const handleDropdownChange = (value: string) => {
-    setValue(value);
+    onChange(value);
     setSearchValue('');
   };
+
   return (
     <DropdownRoot
+      value={selectedValue ? selectedValue : undefined}
       onValueChange={(value: string) => handleDropdownChange(value)}
     >
       <DropdownTrigger
-        css={{ ...(withSearch && !value && { justifyContent: 'flex-start' }) }}
+        css={{
+          ...(withSearch && !selectedValue && { justifyContent: 'flex-start' }),
+        }}
       >
         <>
-          {withSearch && !value && (
+          {withSearch && !selectedValue && (
             <Icon name="search" size="sm" css={{ mr: '$1' }} />
           )}
           <DropdownValue placeholder={withSearch ? 'Search' : 'Select'} />
-          {(!withSearch || value) && (
+          {(!withSearch || selectedValue) && (
             <DropdownIcon>
               <Icon name="chevron-down" />
             </DropdownIcon>
           )}
         </>
       </DropdownTrigger>
-      <DropdownPortal css={{ ...(withSearch && !value && { left: '-$2' }) }}>
+      <DropdownPortal
+        css={{ ...(withSearch && !selectedValue && { left: '-$2' }) }}
+      >
         <DropdownContent onCloseAutoFocus={() => setSearchValue('')}>
           <DropdownViewport>
             {withSearch && (
@@ -98,6 +105,7 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
                 >
                   <Icon name="search" size="sm" />
                   <StyledDropdownInput
+                    id="search"
                     placeholder="Search..."
                     onChange={(e) => handleSearchChange(e)}
                   />
