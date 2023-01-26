@@ -1,27 +1,28 @@
 import { newMockEvent } from 'matchstick-as';
 import { ethereum, Address, BigInt } from '@graphprotocol/graph-ts';
 import {
-  Approval,
-  ApprovalForAll,
-  CollectionRoleGranted,
-  CollectionRoleRevoked,
-  NewBuild,
-  NewTokenDescription,
-  NewTokenENS,
-  NewTokenExternalURL,
-  NewTokenImage,
-  NewTokenName,
-  TokenRoleGranted,
-  TokenRoleRevoked,
-  Transfer,
+  Approval as ApprovalEvent,
+  ApprovalForAll as ApprovalForAllEvent,
+  CollectionRoleGranted as CollectionRoleGrantedEvent,
+  CollectionRoleRevoked as CollectionRoleRevokedEvent,
+  NewBuild as NewBuildEvent,
+  NewTokenDescription as NewTokenDescriptionEvent,
+  NewTokenENS as NewTokenENSEvent,
+  NewTokenExternalURL as NewTokenExternalURLEvent,
+  NewTokenImage as NewTokenImageEvent,
+  NewTokenName as NewTokenNameEvent,
+  TokenRoleGranted as TokenRoleGrantedEvent,
+  TokenRoleRevoked as TokenRoleRevokedEvent,
+  Transfer as TransferEvent,
 } from '../generated/FleekNFA/FleekNFA';
+import { handleTransfer } from '../src/fleek-nfa';
 
 export function createApprovalEvent(
   owner: Address,
   approved: Address,
   tokenId: BigInt
-): Approval {
-  let approvalEvent = changetype<Approval>(newMockEvent());
+): ApprovalEvent {
+  let approvalEvent = changetype<ApprovalEvent>(newMockEvent());
 
   approvalEvent.parameters = new Array();
 
@@ -45,8 +46,8 @@ export function createApprovalForAllEvent(
   owner: Address,
   operator: Address,
   approved: boolean
-): ApprovalForAll {
-  let approvalForAllEvent = changetype<ApprovalForAll>(newMockEvent());
+): ApprovalForAllEvent {
+  let approvalForAllEvent = changetype<ApprovalForAllEvent>(newMockEvent());
 
   approvalForAllEvent.parameters = new Array();
 
@@ -67,8 +68,8 @@ export function createCollectionRoleGrantedEvent(
   role: i32,
   toAddress: Address,
   byAddress: Address
-): CollectionRoleGranted {
-  let collectionRoleGrantedEvent = changetype<CollectionRoleGranted>(
+): CollectionRoleGrantedEvent {
+  let collectionRoleGrantedEvent = changetype<CollectionRoleGrantedEvent>(
     newMockEvent()
   );
 
@@ -94,8 +95,8 @@ export function createCollectionRoleRevokedEvent(
   role: i32,
   toAddress: Address,
   byAddress: Address
-): CollectionRoleRevoked {
-  let collectionRoleRevokedEvent = changetype<CollectionRoleRevoked>(
+): CollectionRoleRevokedEvent {
+  let collectionRoleRevokedEvent = changetype<CollectionRoleRevokedEvent>(
     newMockEvent()
   );
 
@@ -121,8 +122,8 @@ export function createNewBuildEvent(
   token: BigInt,
   commitHash: string,
   triggeredBy: Address
-): NewBuild {
-  let newBuildEvent = changetype<NewBuild>(newMockEvent());
+): NewBuildEvent {
+  let newBuildEvent = changetype<NewBuildEvent>(newMockEvent());
 
   newBuildEvent.parameters = new Array();
 
@@ -146,8 +147,8 @@ export function createNewTokenDescriptionEvent(
   token: BigInt,
   description: string,
   triggeredBy: Address
-): NewTokenDescription {
-  let newTokenDescriptionEvent = changetype<NewTokenDescription>(
+): NewTokenDescriptionEvent {
+  let newTokenDescriptionEvent = changetype<NewTokenDescriptionEvent>(
     newMockEvent()
   );
 
@@ -176,8 +177,8 @@ export function createNewTokenENSEvent(
   token: BigInt,
   ENS: string,
   triggeredBy: Address
-): NewTokenENS {
-  let newTokenEnsEvent = changetype<NewTokenENS>(newMockEvent());
+): NewTokenENSEvent {
+  let newTokenEnsEvent = changetype<NewTokenENSEvent>(newMockEvent());
 
   newTokenEnsEvent.parameters = new Array();
 
@@ -201,8 +202,8 @@ export function createNewTokenExternalURLEvent(
   token: BigInt,
   externalURL: string,
   triggeredBy: Address
-): NewTokenExternalURL {
-  let newTokenExternalUrlEvent = changetype<NewTokenExternalURL>(
+): NewTokenExternalURLEvent {
+  let newTokenExternalUrlEvent = changetype<NewTokenExternalURLEvent>(
     newMockEvent()
   );
 
@@ -231,8 +232,8 @@ export function createNewTokenImageEvent(
   token: BigInt,
   image: string,
   triggeredBy: Address
-): NewTokenImage {
-  let newTokenImageEvent = changetype<NewTokenImage>(newMockEvent());
+): NewTokenImageEvent {
+  let newTokenImageEvent = changetype<NewTokenImageEvent>(newMockEvent());
 
   newTokenImageEvent.parameters = new Array();
 
@@ -256,8 +257,8 @@ export function createNewTokenNameEvent(
   token: BigInt,
   name: string,
   triggeredBy: Address
-): NewTokenName {
-  let newTokenNameEvent = changetype<NewTokenName>(newMockEvent());
+): NewTokenNameEvent {
+  let newTokenNameEvent = changetype<NewTokenNameEvent>(newMockEvent());
 
   newTokenNameEvent.parameters = new Array();
 
@@ -282,8 +283,8 @@ export function createTokenRoleGrantedEvent(
   role: i32,
   toAddress: Address,
   byAddress: Address
-): TokenRoleGranted {
-  let tokenRoleGrantedEvent = changetype<TokenRoleGranted>(newMockEvent());
+): TokenRoleGrantedEvent {
+  let tokenRoleGrantedEvent = changetype<TokenRoleGrantedEvent>(newMockEvent());
 
   tokenRoleGrantedEvent.parameters = new Array();
 
@@ -314,8 +315,8 @@ export function createTokenRoleRevokedEvent(
   role: i32,
   toAddress: Address,
   byAddress: Address
-): TokenRoleRevoked {
-  let tokenRoleRevokedEvent = changetype<TokenRoleRevoked>(newMockEvent());
+): TokenRoleRevokedEvent {
+  let tokenRoleRevokedEvent = changetype<TokenRoleRevokedEvent>(newMockEvent());
 
   tokenRoleRevokedEvent.parameters = new Array();
 
@@ -345,8 +346,8 @@ export function createTransferEvent(
   from: Address,
   to: Address,
   tokenId: BigInt
-): Transfer {
-  let transferEvent = changetype<Transfer>(newMockEvent());
+): TransferEvent {
+  let transferEvent = changetype<TransferEvent>(newMockEvent());
 
   transferEvent.parameters = new Array();
 
@@ -364,4 +365,23 @@ export function createTransferEvent(
   );
 
   return transferEvent;
+}
+
+export const CONTRACT: Address = Address.fromString(
+  '0x0000000000000000000000000000000000000000'
+);
+export const CONTRACT_OWNER: Address = Address.fromString(
+  '0x1000000000000000000000000000000000000001'
+);
+export const TOKEN_OWNER_ONE: Address = Address.fromString(
+  '0x2000000000000000000000000000000000000002'
+);
+export const TOKEN_OWNER_TWO: Address = Address.fromString(
+  '0x3000000000000000000000000000000000000003'
+);
+
+export function handleTransfers(events: TransferEvent[]): void {
+  events.forEach((event) => {
+    handleTransfer(event);
+  });
 }
