@@ -22,6 +22,7 @@
     "@react-icons/all-files": "^4.1.0",
     "@reduxjs/toolkit": "^1.9.1",
     "@stitches/react": "^1.2.8",
+    "colorthief": "^2.3.2",
     "formik": "^2.2.9",
     "framer-motion": "^7.6.17",
     "path": "^0.12.7",
