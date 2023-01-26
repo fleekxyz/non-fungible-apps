@@ -1,4 +1,4 @@
-import { dripStitches } from '../src/theme/stitches';
+import { dripStitches } from '../src/theme';
 import addons from '@storybook/addons';
 import { useEffect } from 'react';
 import { themes } from '@storybook/theming';

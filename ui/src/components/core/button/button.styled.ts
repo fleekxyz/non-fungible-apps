@@ -1,4 +1,4 @@
-import { dripStitches } from '../../../theme/stitches';
+import { dripStitches } from '../../../theme';
 import { CSS } from '@stitches/react';
 
 type StyledButtonProps = React.ComponentProps<typeof StyledButton>;
