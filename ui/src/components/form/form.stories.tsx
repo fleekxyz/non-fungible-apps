@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Form } from './form';
 
 export default {
@@ -6,6 +7,7 @@ export default {
 };
 
 export const Fields = () => {
+  const [file, setFile] = useState<File | null>(null);
   return (
     <>
       <Form.Field>
@@ -20,8 +22,7 @@ export const Fields = () => {
       </Form.Field>
       <Form.Field css={{ width: '$24' }}>
         <Form.Label>Label</Form.Label>
-        <Form.File placeholder="File" />
-        <Form.Error>File error</Form.Error>
+        <Form.File value={file} onChange={(file) => setFile(file)} />
       </Form.Field>
     </>
   );

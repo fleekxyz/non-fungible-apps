@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import { File, Input, Textarea } from '../core/input';
 import { FormStyles } from './form.styles';
 
@@ -42,7 +42,7 @@ export abstract class Form {
     return <Textarea ref={ref} {...props} />;
   });
 
-  static readonly File = forwardRef<HTMLInputElement, Form.InputProps>(
+  static readonly File = forwardRef<HTMLInputElement, Form.FileProps>(
     (props, ref) => {
       return <File ref={ref} {...props} />;
     }
@@ -58,13 +58,9 @@ export namespace Form {
 
   export type ErrorProps = React.ComponentProps<typeof FormStyles.ErrorMessage>;
 
-  export type InputProps = Omit<
-    React.ComponentProps<typeof Input>,
-    'value' | 'onChange' | 'error'
-  >;
+  export type InputProps = React.ComponentProps<typeof Input>;
 
-  export type TextareaProps = Omit<
-    React.ComponentProps<typeof Textarea>,
-    'value' | 'onChange' | 'error'
-  >;
+  export type TextareaProps = React.ComponentProps<typeof Textarea>;
+
+  export type FileProps = React.ComponentProps<typeof File>;
 }

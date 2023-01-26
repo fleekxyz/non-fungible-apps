@@ -1,6 +1,6 @@
 import { Flex } from '../../layout';
 import { dripStitches } from '../../../theme/stitches';
-import { useRef, useState } from 'react';
+import { forwardRef, useRef, useState } from 'react';
 import { Icon } from '../icon';
 import { Form } from '../../../components/form/form';
 
@@ -32,53 +32,63 @@ const validateFileSize = (
   return file.size <= 1024 * maxSize;
 };
 
-export const StyledInputFile = () => {
-  const inputFileRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File | null>(null); //TODO: do it with redux
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+type InputFileProps = {
+  value: File | null;
+  onChange: (file: File | null) => void;
+} & React.ComponentProps<typeof Flex>;
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setErrorMessage(null);
+export const StyledInputFile = forwardRef<HTMLDivElement, InputFileProps>(
+  ({ value: file, onChange, css, ...props }, ref) => {
+    const inputFileRef = useRef<HTMLInputElement>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    if (e.target.files && e.target.files.length > 0) {
-      if (validateFileSize(e.target.files[0])) setFile(e.target.files[0]);
-      else {
-        setFile(null);
-        setErrorMessage('File size is too big');
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      setErrorMessage(null);
+
+      if (e.target.files && e.target.files.length > 0) {
+        if (validateFileSize(e.target.files[0])) onChange(e.target.files[0]);
+        else {
+          onChange(null);
+          setErrorMessage('File size is too big');
+        }
       }
-    }
-  };
-  return (
-    <>
-      <Flex
-        css={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-        }}
-        onClick={() => inputFileRef.current?.click()}
-      >
-        {file ? (
-          <img
-            className="absolute w-14 h-14"
-            src={URL.createObjectURL(file)}
-            alt="logo"
-          />
-        ) : (
-          <Icon name="upload" size="md" css={{ position: 'absolute' }} />
-        )}
-        <BorderInput />
+    };
 
-        <input
-          type="file"
-          className="hidden"
-          accept={'.svg'}
-          ref={inputFileRef}
-          onChange={handleFileChange}
-        />
-      </Flex>
-      {errorMessage && <Form.Error>{errorMessage}</Form.Error>}
-    </>
-  );
-};
+    return (
+      <>
+        <Flex
+          css={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            ...(css || {}),
+          }}
+          ref={ref}
+          {...props}
+          onClick={() => inputFileRef.current?.click()}
+        >
+          {file ? (
+            <img
+              className="absolute w-14 h-14"
+              src={URL.createObjectURL(file)}
+              alt="logo"
+            />
+          ) : (
+            <Icon name="upload" size="md" css={{ position: 'absolute' }} />
+          )}
+          <BorderInput />
+
+          <input
+            type="file"
+            className="hidden"
+            accept={'.svg'}
+            ref={inputFileRef}
+            onChange={handleFileChange}
+          />
+        </Flex>
+        {errorMessage && <Form.Error>{errorMessage}</Form.Error>}
+      </>
+    );
+  }
+);
