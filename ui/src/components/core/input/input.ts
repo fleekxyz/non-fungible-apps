@@ -13,7 +13,7 @@ const styles = {
 
   transition: 'border-color 0.2s ease-in-out',
   borderWidth: '$default',
-  borderColor: '$gray7',
+  borderColor: '$slate7',
   backgroundColor: 'transparent',
   '&:hover': {
     borderColor: '$gray8',
