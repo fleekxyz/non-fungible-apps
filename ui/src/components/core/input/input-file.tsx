@@ -1,5 +1,5 @@
 import { Flex } from '../../layout';
-import { dripStitches } from '../../../theme/stitches';
+import { dripStitches } from '../../../theme';
 import { forwardRef, useRef, useState } from 'react';
 import { Icon } from '../icon';
 import { Form } from '../../../components/form/form';

@@ -1,4 +1,4 @@
-import { dripStitches } from '../../theme/stitches';
+import { dripStitches } from '../../theme';
 import { Flex } from '../layout';
 
 const { styled } = dripStitches;
