@@ -2,7 +2,7 @@
 import { createStitches, DefaultThemeMap } from '@stitches/react';
 import type { ConfigType } from '@stitches/react/types/config';
 
-import { allToNegative } from '../../utils';
+import { allToNegative } from '../utils';
 import {
   colors,
   darkColors,
