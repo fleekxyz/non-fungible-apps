@@ -17,15 +17,30 @@ const [Provider, useContext] = createContext<SelectContext>({
   providerName: 'Stepper.Provider',
 });
 
+const getStepsLength = (node: React.ReactNode): number => {
+  let length = 0;
+
+  React.Children.forEach(node, (child) => {
+    if (React.isValidElement(child)) {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      if (child.type === Stepper.Step) length += 1;
+      else length += getStepsLength(child.props.children);
+    }
+  });
+
+  return length;
+};
+
 export abstract class Stepper {
   static readonly useContext = useContext;
 
   static readonly Root: React.FC<Stepper.RootProps> = ({
     children,
-    totalSteps,
+    // totalSteps,
     initialStep = 0,
   }) => {
     const [currentStep, setCurrentStep] = useState(initialStep - 1);
+    const totalSteps = useMemo(() => getStepsLength(children), [children]);
 
     const nextStep = (): void => {
       if (currentStep < totalSteps - 1) {
@@ -116,7 +131,6 @@ export abstract class Stepper {
 export namespace Stepper {
   export type RootProps = {
     children: React.ReactNode;
-    totalSteps: number;
     initialStep?: number;
   };
 

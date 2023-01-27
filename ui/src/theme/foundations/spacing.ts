@@ -22,6 +22,7 @@ export const spacing = {
   24: '6rem',
   28: '7rem',
   32: '8rem',
+  34: '8.5rem',
   36: '9rem',
   40: '10rem',
   44: '11rem',
@@ -33,4 +34,9 @@ export const spacing = {
   72: '18rem',
   80: '20rem',
   96: '24rem',
+  100: '25rem',
+  102: '25.5rem', // 408px
+  104: '26rem', // 416px
+  106: '26.5rem', // 424px
+  128: '32rem', // 512px
 };

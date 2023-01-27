@@ -1,7 +1,7 @@
 import { globalCss } from '@stitches/react';
 
 export const themeGlobals = globalCss({
-  'html, body': {
+  'html, body, #root': {
     height: '100%',
     padding: 0,
     margin: '25px 50px',
