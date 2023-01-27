@@ -22,7 +22,7 @@ export const Fields = () => {
       </Form.Field>
       <Form.Field css={{ width: '$24' }}>
         <Form.Label>Label</Form.Label>
-        <Form.File value={file} onChange={(file) => setFile(file)} />
+        <Form.LogoFileInput value={file} onChange={(file) => setFile(file)} />
       </Form.Field>
     </>
   );

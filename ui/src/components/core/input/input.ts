@@ -63,4 +63,4 @@ export const Input = styled('input', styles);
 
 export const Textarea = styled('textarea', styles);
 
-export const File = StyledInputFile;
+export const LogoFileInput = StyledInputFile;

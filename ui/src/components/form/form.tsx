@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { File, Input, Textarea } from '../core/input';
+import { Input, LogoFileInput, Textarea } from '../core/input';
 import { FormStyles } from './form.styles';
 
 export abstract class Form {
@@ -42,11 +42,12 @@ export abstract class Form {
     return <Textarea ref={ref} {...props} />;
   });
 
-  static readonly File = forwardRef<HTMLInputElement, Form.FileProps>(
-    (props, ref) => {
-      return <File ref={ref} {...props} />;
-    }
-  );
+  static readonly LogoFileInput = forwardRef<
+    HTMLInputElement,
+    Form.LogoFileInputProps
+  >((props, ref) => {
+    return <LogoFileInput ref={ref} {...props} />;
+  });
 }
 
 export namespace Form {
@@ -62,5 +63,5 @@ export namespace Form {
 
   export type TextareaProps = React.ComponentProps<typeof Textarea>;
 
-  export type FileProps = React.ComponentProps<typeof File>;
+  export type LogoFileInputProps = React.ComponentProps<typeof LogoFileInput>;
 }
