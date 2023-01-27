@@ -2,10 +2,13 @@ pragma solidity ^0.8.7;
 
 import "forge-std/Test.sol";
 import "../../contracts/FleekERC721.sol";
+import "../../contracts/util/FleekStrings.sol";
 
 contract FleekTest is Test {
     FleekERC721 fleekContract;
+    using Strings for uint160;
     address constant DEPLOYER = 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496;
+    string constant FLEEK_AP_URL = "https://fleek_cloned.xyz";
 
     function setUp() public {
         fleekContract = new FleekERC721("Test Contract", "FLKAPS");
@@ -244,6 +247,7 @@ contract FleekTest is Test {
 
         assertEq(mint, 0);
 
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setTokenName(mint, "Foundry Test App 2");
@@ -335,6 +339,7 @@ contract FleekTest is Test {
 
         assertEq(mint, 0);
 
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.burn(mint);
@@ -359,6 +364,7 @@ contract FleekTest is Test {
             0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84
         );
 
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.burn(mint);
@@ -393,6 +399,7 @@ contract FleekTest is Test {
 
         assertEq(mint, 0);
 
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setTokenName(mint, "NEW TOKEN NAME!");
@@ -427,6 +434,7 @@ contract FleekTest is Test {
 
         assertEq(mint, 0);
 
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setTokenDescription(mint, "NEW TOKEN NAME!");
@@ -461,6 +469,7 @@ contract FleekTest is Test {
 
         assertEq(mint, 0);
 
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setTokenExternalURL(mint, "https://ethereum.org");
@@ -495,6 +504,7 @@ contract FleekTest is Test {
 
         assertEq(mint, 0);
 
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setTokenBuild(mint, "aaaaaaa", "https://github.com/fleekxyz/test_contracts");
@@ -529,6 +539,7 @@ contract FleekTest is Test {
 
         assertEq(mint, 0);
 
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.setTokenENS(mint, "fleek_nfts");
@@ -567,6 +578,7 @@ contract FleekTest is Test {
 
         assertEq(mint, 0);
 
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
 
         fleekContract.grantTokenRole(
@@ -644,6 +656,8 @@ contract FleekTest is Test {
             FleekAccessControl.Roles.Controller,
             0x91A425C1CA320A99a09BE1bee114Fce5d30153d9
         );
+
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
         fleekContract.revokeTokenRole(
             mint,
@@ -728,6 +742,8 @@ contract FleekTest is Test {
             FleekAccessControl.Roles.Controller,
             0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84
         );
+
+        // The line below changes the address that is being used for calls.
         vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
         fleekContract.revokeTokenRole(mint, FleekAccessControl.Roles.Controller, DEPLOYER);
     }
@@ -748,5 +764,200 @@ contract FleekTest is Test {
         assertEq(mint, 0);
 
         assertEq(fleekContract.balanceOf(DEPLOYER), 1);
+    }
+
+    function testAddAccessPoint() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, FLEEK_AP_URL);
+
+        assertEq(
+            fleekContract.getAccessPointJSON(FLEEK_AP_URL),
+            string(
+                abi.encodePacked(
+                    '{"tokenId":0,"score":0,"nameVerified":false,"contentVerified":false,"owner":"',
+                    uint160(DEPLOYER).toHexString(20),
+                    '"}'
+                )
+            )
+        );
+    }
+
+    function testCannotRemoveAccessPoint() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, FLEEK_AP_URL);
+        fleekContract.removeAccessPoint(FLEEK_AP_URL);
+        vm.expectRevert("FleekERC721: invalid AP");
+        fleekContract.getAccessPointJSON(FLEEK_AP_URL);
+    }
+
+    function testIsAccessPointNameVerified() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, FLEEK_AP_URL);
+        assertFalse(fleekContract.isAccessPointNameVerified(FLEEK_AP_URL)); // is false now.
+
+        fleekContract.setAccessPointNameVerify(FLEEK_AP_URL, true);
+        assertTrue(fleekContract.isAccessPointNameVerified(FLEEK_AP_URL)); // is true now.
+    }
+
+    function testIncreaseAccessPointScore() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, FLEEK_AP_URL);
+        fleekContract.increaseAccessPointScore(FLEEK_AP_URL);
+        assertEq(
+            fleekContract.getAccessPointJSON(FLEEK_AP_URL),
+            '{"tokenId":0,"score":1,"nameVerified":false,"contentVerified":false,"owner":"0x7fa9385be102ac3eac297483dd6233d62b3e1496"}'
+        );
+    }
+
+    function testCannotDecreaseAccessPointScoreToMinusOne() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, FLEEK_AP_URL);
+        vm.expectRevert("FleekERC721: score cant be lower");
+        fleekContract.decreaseAccessPointScore(FLEEK_AP_URL);
+    }
+
+    function testDecreaseAccessPointScore() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, FLEEK_AP_URL);
+        fleekContract.increaseAccessPointScore(FLEEK_AP_URL);
+        fleekContract.decreaseAccessPointScore(FLEEK_AP_URL);
+        assertEq(
+            fleekContract.getAccessPointJSON(FLEEK_AP_URL),
+            '{"tokenId":0,"score":0,"nameVerified":false,"contentVerified":false,"owner":"0x7fa9385be102ac3eac297483dd6233d62b3e1496"}'
+        );
+    }
+
+    function testAppAccessPoints() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, FLEEK_AP_URL);
+
+        string[] memory accessPointList = fleekContract.appAccessPoints(mint);
+        assertEq(accessPointList[0], FLEEK_AP_URL);
+
+        fleekContract.addAccessPoint(0, "https://fleek_cloned_2.xyz");
+
+        accessPointList = fleekContract.appAccessPoints(mint);
+        assertEq(accessPointList[1], "https://fleek_cloned_2.xyz");
+    }
+
+    function testCannotSetAccessPointNameVerifyWithUnknownIdentity() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, FLEEK_AP_URL);
+
+        // The line below changes the address that is being used for calls.
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+        vm.expectRevert("FleekAccessControl: must have token role");
+
+        fleekContract.setAccessPointNameVerify(FLEEK_AP_URL, true);
+    }
+
+    function testCannotSetAccessPointContentVerifyWithUnknownIdentity() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps"
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.addAccessPoint(0, FLEEK_AP_URL);
+
+        // The line below changes the address that is being used for calls.
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+        vm.expectRevert("FleekAccessControl: must have token role");
+
+        fleekContract.setAccessPointContentVerify(FLEEK_AP_URL, true);
     }
 }
