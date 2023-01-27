@@ -15,7 +15,6 @@ export const Variants = () => {
       <Input size="sm" placeholder="Small" disabled />
       <Input size="md" placeholder="Medium" disabled />
       <Input size="lg" placeholder="Large" disabled />
-      {/* <Input label="Logo" size="md" type="file" /> */}
     </>
   );
 };
