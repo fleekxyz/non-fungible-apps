@@ -19,9 +19,10 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     event NewBuild(uint256 indexed token, string indexed commitHash, address indexed triggeredBy);
     event NewTokenName(uint256 indexed token, string indexed name, address indexed triggeredBy);
     event NewTokenDescription(uint256 indexed token, string indexed description, address indexed triggeredBy);
-    event NewTokenImage(uint256 indexed token, string indexed image, address indexed triggeredBy);
+    event NewTokenLogo(uint256 indexed token, string indexed image, address indexed triggeredBy);
     event NewTokenExternalURL(uint256 indexed token, string indexed externalURL, address indexed triggeredBy);
     event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggeredBy);
+    event newTokenColor(uint256 indexed token, uint24 indexed color, address indexed triggeredBy);
 
     event NewAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
@@ -275,6 +276,46 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
         emit NewTokenDescription(tokenId, _tokenDescription, msg.sender);
+    }
+
+    /**
+     * @dev Updates the `logo` metadata field of a minted `tokenId`.
+     *
+     * May emit a {NewTokenLogo} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
+    function setTokenLogo(
+        uint256 tokenId,
+        string memory _tokenLogo
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+        _requireMinted(tokenId);
+        _apps[tokenId].logo = _tokenLogo;
+        emit NewTokenLogo(tokenId, _tokenLogo, msg.sender);
+    }
+
+    /**
+     * @dev Updates the `color` metadata field of a minted `tokenId`.
+     *
+     * May emit a {NewTokenColor} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
+    function setTokenColor(
+        uint256 tokenId,
+        uint24 memory _tokenColor
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+        _requireMinted(tokenId);
+        _apps[tokenId].color = _tokenColor;
+        emit NewTokenColor(tokenId, _tokenColor, msg.sender);
     }
 
     /**
