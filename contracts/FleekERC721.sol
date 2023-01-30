@@ -22,7 +22,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     event NewTokenLogo(uint256 indexed token, string indexed image, address indexed triggeredBy);
     event NewTokenExternalURL(uint256 indexed token, string indexed externalURL, address indexed triggeredBy);
     event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggeredBy);
-    event newTokenColor(uint256 indexed token, uint24 indexed color, address indexed triggeredBy);
+    event NewTokenColor(uint256 indexed token, uint24 indexed color, address indexed triggeredBy);
 
     event NewAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
@@ -291,7 +291,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      */
     function setTokenLogo(
         uint256 tokenId,
-        string memory _tokenLogo
+        string calldata _tokenLogo
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].logo = _tokenLogo;
@@ -311,7 +311,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      */
     function setTokenColor(
         uint256 tokenId,
-        uint24 memory _tokenColor
+        uint24 _tokenColor
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].color = _tokenColor;
