@@ -36,7 +36,6 @@ export abstract class Stepper {
 
   static readonly Root: React.FC<Stepper.RootProps> = ({
     children,
-    // totalSteps,
     initialStep = 0,
   }) => {
     const [currentStep, setCurrentStep] = useState(initialStep - 1);
