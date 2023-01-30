@@ -61,6 +61,9 @@ export const createDripStitches = <
         ...darkColors, // TODO: replace with light colors once it's done the light mode
         ...(theme?.colors || {}),
       },
+      borderWidths: {
+        default: '1px',
+      },
       space: {
         ..._spacing,
         ...(theme?.space || {}),

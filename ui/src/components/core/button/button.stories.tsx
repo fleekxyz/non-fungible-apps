@@ -24,14 +24,14 @@ export const Default = () => (
     <Button
       colorScheme="blue"
       variant="outline"
-      css={{ py: '$1', borderRadius: '$md' }}
+      css={{ py: '$1', height: '$5', borderRadius: '$md' }}
     >
       Use for NFA
     </Button>
     <Button
       colorScheme="gray"
       variant="outline"
-      css={{ py: '$1', borderRadius: '$md' }}
+      css={{ py: '$1', height: '$5', borderRadius: '$md' }}
     >
       NFA Repo
     </Button>

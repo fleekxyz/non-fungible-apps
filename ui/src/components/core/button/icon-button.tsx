@@ -1,7 +1,7 @@
 import React, { forwardRef, useMemo } from 'react';
 
 import { Button } from './button';
-import { ButtonProps } from './button.styled';
+import { ButtonProps } from './button.styles';
 
 type OmittedProps =
   | 'leftIcon'

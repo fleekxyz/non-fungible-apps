@@ -1,2 +1,2 @@
-export * from './grid.styled';
-export * from './flex.styled';
+export * from './grid.styles';
+export * from './flex.styles';
