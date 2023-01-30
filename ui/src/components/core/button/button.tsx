@@ -1,4 +1,4 @@
-import { ButtonProps, StyledButton } from './button.styled';
+import { ButtonProps, StyledButton } from './button.styles';
 import { ButtonContent } from './button-content';
 import { ButtonSpinner } from './button-spinner';
 import { forwardRef } from 'react';
@@ -38,6 +38,7 @@ export const Button = forwardRef<ButtonProps, 'button'>((props, ref) => {
       data-loading={isLoading}
       css={{
         width: isFullWidth ? '100%' : undefined,
+        ...(ownProps?.css || {}),
       }}
       {...ownProps}
     >
