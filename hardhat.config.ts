@@ -1,3 +1,4 @@
+import '@nomiclabs/hardhat-etherscan';
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-web3';
 import '@nomicfoundation/hardhat-chai-matchers';
@@ -14,6 +15,7 @@ const {
   API_URL = 'https://polygon-mainnet.alchemyapi.io/v2/your-api-key',
   PRIVATE_KEY,
   REPORT_GAS,
+  POLYGONSCAN_KEY,
 } = process.env;
 
 const config: HardhatUserConfig = {
@@ -66,6 +68,11 @@ const config: HardhatUserConfig = {
   },
   mocha: {
     timeout: 200000, // 200 seconds max for running tests
+  },
+  etherscan: {
+    apiKey: {
+      polygonMumbai: POLYGONSCAN_KEY,
+    },
   },
 };
 
