@@ -11,7 +11,8 @@ contract FleekTest is Test {
     string constant FLEEK_AP_URL = "https://fleek_cloned.xyz";
 
     function setUp() public {
-        fleekContract = new FleekERC721("Test Contract", "FLKAPS");
+        fleekContract = new FleekERC721();
+        fleekContract.initialize("Test Contract", "FLKAPS");
     }
 
     function testName() public {

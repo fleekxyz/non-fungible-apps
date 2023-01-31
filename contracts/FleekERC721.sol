@@ -2,13 +2,15 @@
 
 pragma solidity ^0.8.7;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "./FleekAccessControl.sol";
 import "./util/FleekStrings.sol";
 
-contract FleekERC721 is ERC721, FleekAccessControl {
+contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
+    using Strings for uint256;
     using Counters for Counters.Counter;
     using FleekStrings for FleekERC721.App;
     using FleekStrings for FleekERC721.AccessPoint;
@@ -84,7 +86,10 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
-    constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
+    function initialize(string memory _name, string memory _symbol) public initializer {
+        __ERC721_init(_name, _symbol);
+        __FleekAccessControl_init();
+    }
 
     /**
      * @dev Checks if the AccessPoint exists.
@@ -152,7 +157,7 @@ contract FleekERC721 is ERC721, FleekAccessControl {
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Upgradeable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 

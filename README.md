@@ -4,7 +4,6 @@
 
 > 🚧 IMPORTANT 🚧 - This initiative is under development, so this repo should be treated as a WIP. The goals and the roadmap might change as the project is shaped.
 
-
 ## ⚡ Overview
 
 This is the landing point for Fleek's initiative to implement infrastructure as Solidity contracts.
@@ -154,7 +153,7 @@ $ yarn node:hardhat
 To deploy the contract on the HardHat network, execute:
 
 ```
-$ yarn deploy:local
+$ yarn deploy:hardhat
 ```
 
 If the execution is successful, you will see the contract address on your screen.

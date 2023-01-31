@@ -1,6 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { ethers } from 'hardhat';
+import { ethers, upgrades } from 'hardhat';
 
 describe('FleekERC721', () => {
   const ROLES = Object.freeze({
@@ -28,10 +28,10 @@ describe('FleekERC721', () => {
     const [owner, otherAccount] = await ethers.getSigners();
 
     const Contract = await ethers.getContractFactory('FleekERC721');
-    const contract = await Contract.deploy(
+    const contract = await upgrades.deployProxy(Contract, [
       COLLECTION_PARAMS.name,
-      COLLECTION_PARAMS.symbol
-    );
+      COLLECTION_PARAMS.symbol,
+    ]);
 
     return { owner, otherAccount, contract };
   };
