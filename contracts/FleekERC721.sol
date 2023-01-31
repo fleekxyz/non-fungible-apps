@@ -422,9 +422,10 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     }
 
     /**
-     * @dev A view function to gether the list of mirrros for a given app.
+     * @dev A view function to gather the list of access points of a given app.
      *
      * Requirements:
+     *
      * - the tokenId must be minted and valid.
      *
      */
