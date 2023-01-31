@@ -802,4 +802,45 @@ contract FleekTest is Test {
     function testFailSetTokenColorForInvalidToken() public {
         fleekContract.setTokenColor(3, 0x000000);
     }
+
+    function testSetTokenLogoAndColor() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps",
+            TestConstants.LOGO_0,
+            0xe34f26
+        );
+
+        assertEq(mint, 0);
+
+        fleekContract.setTokenLogoAndColor(mint, TestConstants.LOGO_1, 0x000000);
+    }
+
+    function testFailSetTokenLogoAndColorForInvalidAccount() public {
+        uint256 mint = fleekContract.mint(
+            DEPLOYER,
+            "Foundry Test App",
+            "This is a test application submitted by foundry tests.",
+            "https://fleek.xyz",
+            "fleek_xyz",
+            "afff3f6",
+            "https://github.com/fleekxyz/non-fungible-apps",
+            TestConstants.LOGO_0,
+            0xe34f26
+        );
+
+        assertEq(mint, 0);
+
+        vm.prank(address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84));
+        fleekContract.setTokenLogoAndColor(mint, TestConstants.LOGO_1, 0x000000);
+    }
+
+    function testFailSetTokenLogoAndColorForInvalidToken() public {
+        fleekContract.setTokenLogoAndColor(3, TestConstants.LOGO_1, 0x000000);
+    }
 }
