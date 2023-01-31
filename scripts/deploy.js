@@ -37,9 +37,6 @@ const libraryDeployment = async () => {
     libraries[lib] = libInstance.address;
   }
 
-  // return {
-  //   FleekSVG: '0xcee2D4448237286CBca736d42800d9D59b92002c',
-  // };
   return libraries;
 };
 
