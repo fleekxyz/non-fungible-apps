@@ -14,7 +14,8 @@
     "compile": "hardhat compile",
     "postinstall": "husky install",
     "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "postpack": "pinst --enable",
+    "verify:mumbai": "npx hardhat run ./scripts/verify-polyscan.js --network mumbai"
   },
   "repository": {
     "type": "git",

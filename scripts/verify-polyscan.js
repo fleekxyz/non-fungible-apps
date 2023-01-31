@@ -7,7 +7,7 @@ async function main() {
   await hre.run('verify:verify', {
     address: address,
     constructorArguments: [
-      'FleekNFAs', // Collection name
+      'FleekNFA', // Collection name
       'FLKNFA', // Collection symbol
     ],
   });
