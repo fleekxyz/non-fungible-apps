@@ -291,7 +291,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      */
     function setTokenLogo(
         uint256 tokenId,
-        string calldata _tokenLogo
+        string memory _tokenLogo
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].logo = _tokenLogo;
@@ -316,6 +316,22 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         _requireMinted(tokenId);
         _apps[tokenId].color = _tokenColor;
         emit NewTokenColor(tokenId, _tokenColor, msg.sender);
+    }
+
+    /**
+     * @dev Updates the `logo` and `color` metadata fields of a minted `tokenId`.
+     *
+     * May emit a {NewTokenLogo} and a {NewTokenColor} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
+    function setTokenLogoAndColor(uint256 tokenId, string memory _tokenLogo, uint24 _tokenColor) public virtual {
+        setTokenLogo(tokenId, _tokenLogo);
+        setTokenColor(tokenId, _tokenColor);
     }
 
     /**
