@@ -29,6 +29,8 @@ import {
   TokenRoleGranted,
   TokenRoleRevoked,
   Transfer,
+  Token,
+  Holder,
 } from '../generated/schema';
 
 export function handleApproval(event: ApprovalEvent): void {
@@ -222,19 +224,6 @@ export function handleTokenRoleRevoked(event: TokenRoleRevokedEvent): void {
 }
 
 export function handleTransfer(event: TransferEvent): void {
-  let entity = new Transfer(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.from = event.params.from;
-  entity.to = event.params.to;
-  entity.tokenId = event.params.tokenId;
-
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
-
   if (parseInt(event.params.from.toHexString()) === 0) {
     // This is a new mint
 
@@ -256,4 +245,17 @@ export function handleTransfer(event: TransferEvent): void {
     holder.save();
     token.save();
   }
+
+  let entity = new Transfer(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
+  entity.from = event.params.from;
+  entity.to = event.params.to;
+  entity.tokenId = event.params.tokenId;
+
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
+
+  entity.save();
 }
