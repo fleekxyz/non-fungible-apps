@@ -11,6 +11,8 @@ library FleekStrings {
     using Strings for uint256;
     using Strings for uint160;
     using FleekStrings for bool;
+    using FleekStrings for uint24;
+    using Strings for uint24;
 
     /**
      * @dev Converts a boolean value to a string.
@@ -38,12 +40,13 @@ library FleekStrings {
                 '"description":"', app.description, '",',
                 '"owner":"', uint160(owner).toHexString(20), '",',
                 '"external_url":"', app.externalURL, '",',
-                '"image":"', FleekSVG.generateBase64(app.name, app.ENS), '",',
+                '"image":"', FleekSVG.generateBase64(app.name, app.ENS, app.logo, app.color.toColorString()), '",',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',
                     '{"trait_type": "Repository", "value":"', app.builds[app.currentBuild].gitRepository,'"},',
-                    '{"trait_type": "Version", "value":"', app.currentBuild.toString(),'"}',
+                    '{"trait_type": "Version", "value":"', app.currentBuild.toString(),'"},',
+                    '{"trait_type": "Color", "value":"', app.color.toColorString(),'"}',
                 ']',
             '}'
         ));
@@ -63,5 +66,18 @@ library FleekStrings {
                 '"owner":"', uint160(ap.owner).toHexString(20), '"',
             "}"
         ));
+    }
+
+    /**
+     * @dev Converts bytes3 to a hex color string.
+     */
+    function toColorString(uint24 color) internal pure returns (string memory) {
+        bytes memory hexBytes = bytes(color.toHexString(3));
+        bytes memory hexColor = new bytes(7);
+        hexColor[0] = "#";
+        for (uint256 i = 1; i < 7; i++) {
+            hexColor[i] = hexBytes[i + 1];
+        }
+        return string(hexColor);
     }
 }
