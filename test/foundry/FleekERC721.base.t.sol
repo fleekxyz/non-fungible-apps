@@ -6,7 +6,25 @@ import "forge-std/Test.sol";
 import {FleekERC721} from "contracts/FleekERC721.sol";
 import {TestConstants} from "./Constants.sol";
 
-abstract contract Test_FleekERC721_Base is Test {
+abstract contract Test_FleekERC721_Assertions is Test {
+    function expectRevertWithTokenRole() public {
+        vm.expectRevert("FleekAccessControl: must have token role");
+    }
+
+    function expectRevertWithCollectionRole() public {
+        vm.expectRevert("FleekAccessControl: must have collection role");
+    }
+
+    function expectRevertWithAPAlreadyExists() public {
+        vm.expectRevert("FleekERC721: AP already exists");
+    }
+
+    function expectRevertWithMustBeAPOwner() public {
+        vm.expectRevert("FleekERC721: must be AP owner");
+    }
+}
+
+abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
     FleekERC721 internal CuT; // Contract Under Test
     address internal deployer;
 
