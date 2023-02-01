@@ -1,20 +1,20 @@
-node_modules
+**/node_modules
 .env
 
 # hardhat
-cache
-artifacts
-deployments/hardhat
+contracts/cache
+contracts/artifacts
+contracts/deployments/hardhat
 
 # NPM
 package-lock.json
 
 # Foundry
-out
-forge-cache
+contracts/out
+contracts/forge-cache
 
 # OpenZeppelin
-.openzeppelin/unknown-*.json
+contracts/.openzeppelin/unknown-*.json
 
 # Subgraph
 *.wasm

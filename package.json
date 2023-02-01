@@ -4,18 +4,10 @@
   "description": "",
   "private": "false",
   "scripts": {
-    "test": "hardhat test && forge test --via-ir",
-    "test:foundry": "forge test --via-ir",
-    "test:hardhat": "hardhat test",
     "format": "prettier --write \"./**/*.{js,json,sol,ts}\"",
-    "node:hardhat": "hardhat node",
-    "deploy:hardhat": "hardhat run scripts/deploy.js --network hardhat",
-    "deploy:mumbai": "hardhat run scripts/deploy.js --network mumbai",
-    "compile": "hardhat compile",
     "postinstall": "husky install",
     "prepack": "pinst --disable",
-    "postpack": "pinst --enable",
-    "verify:mumbai": "npx hardhat run ./scripts/verify-polyscan.js --network mumbai"
+    "postpack": "pinst --enable"
   },
   "repository": {
     "type": "git",
@@ -29,32 +21,15 @@
   "homepage": "https://github.com/fleekxyz/non-fungible-apps#readme",
   "devDependencies": {
     "@graphql-codegen/cli": "^2.16.4",
-    "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
-    "@nomicfoundation/hardhat-network-helpers": "^1.0.7",
-    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
-    "@nomiclabs/hardhat-ethers": "^2.2.1",
-    "@nomiclabs/hardhat-etherscan": "^3.1.0",
-    "@nomiclabs/hardhat-web3": "^2.0.0",
-    "@openzeppelin/contracts": "^4.7.3",
-    "@openzeppelin/contracts-upgradeable": "^4.8.0",
-    "@openzeppelin/hardhat-upgrades": "^1.22.0",
     "@types/mocha": "^10.0.1",
     "chai": "^4.3.6",
-    "colorthief": "^2.3.2",
     "dotenv": "^16.0.2",
-    "ethers": "^5.7.2",
-    "hardhat": "^2.11.2",
-    "hardhat-contract-sizer": "^2.6.1",
-    "hardhat-gas-reporter": "^1.0.9",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.4",
     "pinst": "^3.0.0",
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0",
-    "sharp": "^0.31.3",
-    "solidity-coverage": "^0.8.2",
     "ts-node": "^10.9.1",
-    "typescript": "^4.9.3",
-    "web3": "^1.8.1"
+    "typescript": "^4.9.3"
   }
 }
