@@ -248,7 +248,6 @@ The proof of concept is being a work in progress and you can reach more informat
 
 We use the following libraries to develop Fleek Non Fungible Apps
 
-- [Chakra](https://chakra-ui.com/)
 - [Eslint](https://eslint.org/) + [Prettier](https://prettier.io/)
 - [Ethers](https://docs.ethers.io/v5/)
 - [Foundry](https://book.getfoundry.sh/)
