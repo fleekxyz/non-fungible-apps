@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# TODO @janison: run tests in all folders?
+cd contracts
 yarn test
