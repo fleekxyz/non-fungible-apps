@@ -54,15 +54,15 @@ export const IconButton = forwardRef<IconButtonProps, 'button'>(
     const { minWidth, fontSize } = useMemo(() => {
       const props = {
         sm: {
-          minWidth: '$8',
+          // minWidth: '$8',
           fontSize: '$lg',
         },
         md: {
-          minWidth: '$11',
+          // minWidth: '$11',
           fontSize: '$xl',
         },
         lg: {
-          minWidth: '$14',
+          // minWidth: '$14',
           fontSize: '$2xl',
         },
       };

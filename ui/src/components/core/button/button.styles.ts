@@ -243,7 +243,7 @@ export const StyledButton = styled('button', {
   ],
   defaultVariants: {
     colorScheme: 'gray',
-    variant: 'solid',
+    variant: 'outline',
     size: 'md',
   },
 });
