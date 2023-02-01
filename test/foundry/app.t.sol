@@ -1,8 +1,8 @@
 pragma solidity ^0.8.7;
 
 import "forge-std/Test.sol";
-import "../../contracts/FleekERC721.sol";
-import "./constants.t.sol";
+import "contracts/FleekERC721.sol";
+import {TestConstants} from "./Constants.sol";
 
 contract FleekTest is Test {
     FleekERC721 fleekContract;
