@@ -3,6 +3,7 @@
 pragma solidity ^0.8.17;
 
 import "./FleekERC721.base.t.sol";
+import {FleekAccessControl} from "contracts/FleekAccessControl.sol";
 
 contract Test_FleekERC721_Burn is Test_FleekERC721_Base {
     uint256 internal tokenId;
@@ -23,7 +24,7 @@ contract Test_FleekERC721_Burn is Test_FleekERC721_Base {
 
     function testFail_burnAsController() public {
         address user = address(1);
-        CuT.grantTokenRole(tokenId, FleekAccessControl.Role.Controller, user);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, user);
         vm.prank(user);
         CuT.burn(tokenId);
     }
