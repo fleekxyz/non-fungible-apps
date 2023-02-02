@@ -232,7 +232,7 @@ export function handleTokenRoleGranted(event: TokenRoleGrantedEvent): void {
       token.controllers = token_controllers;
     } else {
       log.error(
-        'Controller access granted for tokenId {}. THE TOKEN DOES NOT EXIST. FAILED TO UPDATE THE TOKEN ENTITY.',
+        'Handling controller access granted event for tokenId {}. THE TOKEN DOES NOT EXIST. FAILED TO UPDATE THE TOKEN ENTITY.',
         [event.params.tokenId.toHexString()]
       );
       return;
@@ -285,7 +285,7 @@ export function handleTokenRoleRevoked(event: TokenRoleRevokedEvent): void {
     } else {
       // the token does not exist
       log.error(
-        'Controller access removed from tokenId {}. THE TOKEN DOES NOT EXIST. FAILED TO UPDATE THE TOKEN ENTITY.',
+        'Handling controller access granted event for tokenId {}. THE TOKEN DOES NOT EXIST. FAILED TO UPDATE THE TOKEN ENTITY.',
         [event.params.tokenId.toHexString()]
       );
       return;
