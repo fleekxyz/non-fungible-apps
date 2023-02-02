@@ -1,4 +1,4 @@
-import { Address, Bytes, log } from '@graphprotocol/graph-ts';
+import { Address, Bytes, log, store } from '@graphprotocol/graph-ts';
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
@@ -18,6 +18,7 @@ import {
 import {
   Approval,
   ApprovalForAll,
+  CollectionOwner,
   CollectionRoleGranted,
   CollectionRoleRevoked,
   Controller,
@@ -79,6 +80,36 @@ export function handleCollectionRoleGranted(
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  if (event.params.role === 0) {
+    // Role 0 => Owner [Probably going to change this after the ACL refactor.]
+    // Should create a new CollectionOwner entity with the address from the parameters.
+    // If it already is a collection owner, should log a warning.
+
+    let collectionOwner = CollectionOwner.load(event.params.toAddress);
+
+    if (collectionOwner) {
+      // Collection Owner already exists.
+      // Print warning log message.
+      log.warning(
+        'Although Address {} is already a collection owner, a CollectionRoleGranted event was emitted that indicated the address was granted the same role, again.',
+        [event.params.toAddress.toHexString()]
+      );
+    } else {
+      // Create a new collection owner entity and assign the values
+      collectionOwner = new CollectionOwner(event.params.toAddress);
+      collectionOwner.accessGrantedBy = event.params.byAddress;
+      collectionOwner.transactionHash = event.transaction.hash;
+
+      // Log the new CollectionOwner entity creation.
+      log.info('Created a new collection owner entity with address {}.', [
+        event.params.toAddress.toHexString(),
+      ]);
+
+      // Save the collection owner.
+      collectionOwner.save();
+    }
+  }
 }
 
 export function handleCollectionRoleRevoked(
@@ -96,6 +127,13 @@ export function handleCollectionRoleRevoked(
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  if (event.params.role === 0) {
+    // Role 0 => Owner [Probably going to change this after the ACL refactor.]
+    // Should remove the CollectionOwner entity.
+
+    store.remove('CollectionOwner', event.params.toAddress.toHexString());
+  }
 }
 
 export function handleNewBuild(event: NewBuildEvent): void {
