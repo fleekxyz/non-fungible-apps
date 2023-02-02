@@ -5,304 +5,436 @@ pragma solidity ^0.8.17;
 import "./FleekERC721.base.t.sol";
 import {FleekAccessControl} from "contracts/FleekAccessControl.sol";
 
-/**
- * Test what token owners can do
- */
-contract Test_FleekERC721_TokenAccessControl_OwnerAddress is Test_FleekERC721_Base {
+contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
     uint256 internal tokenId;
-    address internal ownerAddress = address(1);
+    address internal collectionOwner = address(1);
+    address internal collectionController = address(2);
+    address internal tokenOwner = address(3);
+    address internal tokenController = address(4);
+    address internal anyAddress = address(5);
 
     function setUp() public {
         baseSetUp();
-        tokenId = mintDefault(ownerAddress);
-        CuT.addAccessPoint(tokenId, "deployer-accesspoint.com");
 
-        // Change account to owner address
-        vm.startPrank(ownerAddress);
+        // Set collectionOwner
+        CuT.grantCollectionRole(FleekAccessControl.Roles.Owner, collectionOwner);
+        // Set collectionController
+        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, collectionController);
+        // Mint to tokenOwner to set tokenOwner
+        mintDefault(tokenOwner);
+        // Set tokenController to minted token
+        vm.prank(tokenOwner);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, tokenController);
     }
 
     function test_setUp() public {
-        assertTrue(CuT.ownerOf(tokenId) == ownerAddress);
-        assertTrue(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, ownerAddress));
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, ownerAddress));
+        // Check collectionOwner
+        assertTrue(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, collectionOwner));
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, collectionOwner));
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, collectionOwner));
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, collectionOwner));
+        // Check collectionController
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, collectionController));
+        assertTrue(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, collectionController));
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, collectionController));
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, collectionController));
+        // Check tokenOwner
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, tokenOwner));
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, tokenOwner));
+        assertTrue(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, tokenOwner));
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, tokenOwner));
+        // Check tokenController
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, tokenController));
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, tokenController));
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, tokenController));
+        assertTrue(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, tokenController));
+        // Check anyAddress
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, anyAddress));
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, anyAddress));
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, anyAddress));
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, anyAddress));
     }
 
-    function test_tokenURI() public view {
+    function test_grantAndRevokeCollectionRole() public {
+        address randomAddress = address(99);
+
+        // CollectionOwner
+        vm.startPrank(collectionOwner);
+        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        vm.stopPrank();
+
+        // CollectionController
+        vm.startPrank(collectionController);
+        expectRevertWithCollectionRole();
+        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithCollectionRole();
+        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        vm.stopPrank();
+
+        // TokenOwner
+        vm.startPrank(tokenOwner);
+        expectRevertWithCollectionRole();
+        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithCollectionRole();
+        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        vm.stopPrank();
+
+        // TokenController
+        vm.startPrank(tokenController);
+        expectRevertWithCollectionRole();
+        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithCollectionRole();
+        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        vm.stopPrank();
+
+        // AnyAddress
+        vm.startPrank(anyAddress);
+        expectRevertWithCollectionRole();
+        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithCollectionRole();
+        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        vm.stopPrank();
+    }
+
+    function test_grantAndRevokeTokenRole() public {
+        address randomAddress = address(99);
+
+        // CollectionOwner
+        vm.startPrank(collectionOwner);
+        expectRevertWithTokenRole();
+        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithTokenRole();
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        vm.stopPrank();
+
+        // CollectionController
+        vm.startPrank(collectionController);
+        expectRevertWithTokenRole();
+        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithTokenRole();
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        vm.stopPrank();
+
+        // TokenOwner
+        vm.startPrank(tokenOwner);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        vm.stopPrank();
+
+        // TokenController
+        vm.startPrank(tokenController);
+        expectRevertWithTokenRole();
+        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithTokenRole();
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        vm.stopPrank();
+
+        // AnyAddress
+        vm.startPrank(anyAddress);
+        expectRevertWithTokenRole();
+        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithTokenRole();
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        vm.stopPrank();
+    }
+
+    function test_mint() public {
+        address randomAddress = address(99);
+
+        // CollectionOwner
+        vm.startPrank(collectionOwner);
+        mintDefault(randomAddress);
+        vm.stopPrank();
+
+        // CollectionController
+        vm.startPrank(collectionController);
+        expectRevertWithCollectionRole();
+        mintDefault(randomAddress);
+        vm.stopPrank();
+
+        // TokenOwner
+        vm.startPrank(tokenOwner);
+        expectRevertWithCollectionRole();
+        mintDefault(randomAddress);
+        vm.stopPrank();
+
+        // TokenController
+        vm.startPrank(tokenController);
+        expectRevertWithCollectionRole();
+        mintDefault(randomAddress);
+        vm.stopPrank();
+
+        // AnyAddress
+        vm.startPrank(anyAddress);
+        expectRevertWithCollectionRole();
+        mintDefault(randomAddress);
+        vm.stopPrank();
+    }
+
+    function test_tokenURI() public {
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        CuT.tokenURI(tokenId);
+
+        // CollectionController
+        vm.prank(collectionController);
+        CuT.tokenURI(tokenId);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.tokenURI(tokenId);
+
+        // TokenController
+        vm.prank(tokenController);
+        CuT.tokenURI(tokenId);
+
+        // AnyAddress
+        vm.prank(anyAddress);
         CuT.tokenURI(tokenId);
     }
 
-    function test_addAccessPoint() public {
-        CuT.addAccessPoint(tokenId, "accesspoint.com");
-    }
-
-    function test_removeAccessPoint() public {
-        CuT.addAccessPoint(tokenId, "accesspoint.com");
-        CuT.removeAccessPoint("accesspoint.com");
-    }
-
-    function test_getAccessPointJSON() public view {
-        CuT.getAccessPointJSON("deployer-accesspoint.com");
-    }
-
-    function test_isAccessPointNameVerified() public view {
-        CuT.isAccessPointNameVerified("deployer-accesspoint.com");
-    }
-
-    function test_appAccessPoints() public view {
-        CuT.appAccessPoints(tokenId);
-    }
-
-    function test_setTokenName() public {
-        CuT.setTokenName(tokenId, "New Name");
-    }
-
-    function test_setTokenDescription() public {
-        CuT.setTokenDescription(tokenId, "New description");
-    }
-
     function test_setTokenExternalURL() public {
-        CuT.setTokenExternalURL(tokenId, "https://new-url.com");
+        string memory externalURL = "https://externalurl.com";
+
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithTokenRole();
+        CuT.setTokenExternalURL(tokenId, externalURL);
+
+        // CollectionController
+        vm.prank(collectionController);
+        expectRevertWithTokenRole();
+        CuT.setTokenExternalURL(tokenId, externalURL);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.setTokenExternalURL(tokenId, externalURL);
+
+        // TokenController
+        vm.prank(tokenController);
+        CuT.setTokenExternalURL(tokenId, externalURL);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithTokenRole();
+        CuT.setTokenExternalURL(tokenId, externalURL);
     }
 
     function test_setTokenENS() public {
-        CuT.setTokenENS(tokenId, "newens.eth");
+        string memory ens = "ens";
+
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithTokenRole();
+        CuT.setTokenENS(tokenId, ens);
+
+        // CollectionController
+        vm.prank(collectionController);
+        expectRevertWithTokenRole();
+        CuT.setTokenENS(tokenId, ens);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.setTokenENS(tokenId, ens);
+
+        // TokenController
+        vm.prank(tokenController);
+        CuT.setTokenENS(tokenId, ens);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithTokenRole();
+        CuT.setTokenENS(tokenId, ens);
+    }
+
+    function test_setTokenName() public {
+        string memory name = "name";
+
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithTokenRole();
+        CuT.setTokenName(tokenId, name);
+
+        // CollectionController
+        vm.prank(collectionController);
+        expectRevertWithTokenRole();
+        CuT.setTokenName(tokenId, name);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.setTokenName(tokenId, name);
+
+        // TokenController
+        vm.prank(tokenController);
+        CuT.setTokenName(tokenId, name);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithTokenRole();
+        CuT.setTokenName(tokenId, name);
+    }
+
+    function test_setTokenDescription() public {
+        string memory description = "description";
+
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithTokenRole();
+        CuT.setTokenDescription(tokenId, description);
+
+        // CollectionController
+        vm.prank(collectionController);
+        expectRevertWithTokenRole();
+        CuT.setTokenDescription(tokenId, description);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.setTokenDescription(tokenId, description);
+
+        // TokenController
+        vm.prank(tokenController);
+        CuT.setTokenDescription(tokenId, description);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithTokenRole();
+        CuT.setTokenDescription(tokenId, description);
     }
 
     function test_setTokenLogo() public {
-        CuT.setTokenLogo(tokenId, TestConstants.LOGO_1);
+        string memory logo = "logo";
+
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithTokenRole();
+        CuT.setTokenLogo(tokenId, logo);
+
+        // CollectionController
+        vm.prank(collectionController);
+        expectRevertWithTokenRole();
+        CuT.setTokenLogo(tokenId, logo);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.setTokenLogo(tokenId, logo);
+
+        // TokenController
+        vm.prank(tokenController);
+        CuT.setTokenLogo(tokenId, logo);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithTokenRole();
+        CuT.setTokenLogo(tokenId, logo);
     }
 
     function test_setTokenColor() public {
-        CuT.setTokenColor(tokenId, 0x654321);
+        uint24 color = 0x000000;
+
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithTokenRole();
+        CuT.setTokenColor(tokenId, color);
+
+        // CollectionController
+        vm.prank(collectionController);
+        expectRevertWithTokenRole();
+        CuT.setTokenColor(tokenId, color);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.setTokenColor(tokenId, color);
+
+        // TokenController
+        vm.prank(tokenController);
+        CuT.setTokenColor(tokenId, color);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithTokenRole();
+        CuT.setTokenColor(tokenId, color);
     }
 
     function test_setTokenLogoAndColor() public {
-        CuT.setTokenLogoAndColor(tokenId, TestConstants.LOGO_1, 0x654321);
-    }
+        string memory logo = "logo";
+        uint24 color = 0x000000;
 
-    function testFail_removeAccessPoint() public {
-        CuT.removeAccessPoint("deployer-accesspoint.com");
-    }
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithTokenRole();
+        CuT.setTokenLogoAndColor(tokenId, logo, color);
 
-    function test_setAccessPointContentVerify() public {
-        CuT.setAccessPointContentVerify("deployer-accesspoint.com", true);
-    }
+        // CollectionController
+        vm.prank(collectionController);
+        expectRevertWithTokenRole();
+        CuT.setTokenLogoAndColor(tokenId, logo, color);
 
-    function test_setAccessPointNameVerify() public {
-        CuT.setAccessPointNameVerify("deployer-accesspoint.com", true);
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.setTokenLogoAndColor(tokenId, logo, color);
+
+        // TokenController
+        vm.prank(tokenController);
+        CuT.setTokenLogoAndColor(tokenId, logo, color);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithTokenRole();
+        CuT.setTokenLogoAndColor(tokenId, logo, color);
     }
 
     function test_setTokenBuild() public {
-        CuT.setTokenBuild(tokenId, "284d78954060f9eeb3f04568807f920a21f00016", "https://github.com/org/repo");
+        string memory commitHash = "commitHash";
+        string memory gitRepository = "gitRepository";
+
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithTokenRole();
+        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
+
+        // CollectionController
+        vm.prank(collectionController);
+        expectRevertWithTokenRole();
+        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
+
+        // TokenController
+        vm.prank(tokenController);
+        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithTokenRole();
+        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
     }
 
-    function test_burn() public {
+    function test_testBurn() public {
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithTokenRole();
         CuT.burn(tokenId);
-    }
-}
 
-/**
- * Test what token controllers can do
- */
-contract Test_FleekERC721_TokenAccessControl_ControllerAddress is Test_FleekERC721_Base {
-    uint256 internal tokenId;
-    address internal controllerAddress = address(1);
-
-    function setUp() public {
-        baseSetUp();
-        tokenId = mintDefault(deployer);
-        CuT.addAccessPoint(tokenId, "deployer-accesspoint.com");
-        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, controllerAddress);
-
-        // Change account to controller address
-        vm.startPrank(controllerAddress);
-    }
-
-    function test_setUp() public {
-        assertFalse(CuT.ownerOf(tokenId) == controllerAddress);
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, controllerAddress));
-        assertTrue(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, controllerAddress));
-    }
-
-    function test_tokenURI() public view {
-        CuT.tokenURI(tokenId);
-    }
-
-    function test_addAccessPoint() public {
-        CuT.addAccessPoint(tokenId, "accesspoint.com");
-    }
-
-    function test_removeAccessPointCreatedByController() public {
-        CuT.addAccessPoint(tokenId, "accesspoint.com");
-        CuT.removeAccessPoint("accesspoint.com");
-    }
-
-    function test_getAccessPointJSON() public view {
-        CuT.getAccessPointJSON("deployer-accesspoint.com");
-    }
-
-    function test_isAccessPointNameVerified() public view {
-        CuT.isAccessPointNameVerified("deployer-accesspoint.com");
-    }
-
-    function test_appAccessPoints() public view {
-        CuT.appAccessPoints(tokenId);
-    }
-
-    function test_setTokenName() public {
-        CuT.setTokenName(tokenId, "New Name");
-    }
-
-    function test_setTokenDescription() public {
-        CuT.setTokenDescription(tokenId, "New description");
-    }
-
-    function test_setTokenExternalURL() public {
-        CuT.setTokenExternalURL(tokenId, "https://new-url.com");
-    }
-
-    function test_setTokenENS() public {
-        CuT.setTokenENS(tokenId, "newens.eth");
-    }
-
-    function test_setTokenLogo() public {
-        CuT.setTokenLogo(tokenId, TestConstants.LOGO_1);
-    }
-
-    function test_setTokenColor() public {
-        CuT.setTokenColor(tokenId, 0x654321);
-    }
-
-    function test_setTokenLogoAndColor() public {
-        CuT.setTokenLogoAndColor(tokenId, TestConstants.LOGO_1, 0x654321);
-    }
-
-    function test_removeAccessPointCreatedByDeployer() public {
-        expectRevertWithMustBeAPOwner();
-        CuT.removeAccessPoint("deployer-accesspoint.com");
-    }
-
-    function test_setAccessPointContentVerify() public {
-        CuT.setAccessPointContentVerify("deployer-accesspoint.com", true);
-    }
-
-    function test_setAccessPointNameVerify() public {
-        CuT.setAccessPointNameVerify("deployer-accesspoint.com", true);
-    }
-
-    function test_setTokenBuild() public {
-        CuT.setTokenBuild(tokenId, "284d78954060f9eeb3f04568807f920a21f00016", "https://github.com/org/repo");
-    }
-
-    function test_burn() public {
+        // CollectionController
+        vm.prank(collectionController);
         expectRevertWithTokenRole();
         CuT.burn(tokenId);
-    }
-}
 
-/**
- * Test what anyone can do
- */
-contract Test_FleekERC721_TokenAccessControl_RandomAddress is Test_FleekERC721_Base {
-    uint256 internal tokenId;
-    address internal randomAddress = address(1);
-
-    function setUp() public {
-        baseSetUp();
-        tokenId = mintDefault(deployer);
-        CuT.addAccessPoint(tokenId, "deployer-accesspoint.com");
-
-        // Change account to random address
-        vm.startPrank(randomAddress);
-    }
-
-    function test_setUp() public {
-        assertFalse(CuT.ownerOf(tokenId) == randomAddress);
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, randomAddress));
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress));
-    }
-
-    function test_tokenURI() public view {
-        CuT.tokenURI(tokenId);
-    }
-
-    function test_addAccessPoint() public {
-        CuT.addAccessPoint(tokenId, "accesspoint.com");
-    }
-
-    function test_removeAccessPoint() public {
-        CuT.addAccessPoint(tokenId, "accesspoint.com");
-        CuT.removeAccessPoint("accesspoint.com");
-    }
-
-    function test_getAccessPointJSON() public view {
-        CuT.getAccessPointJSON("deployer-accesspoint.com");
-    }
-
-    function test_isAccessPointNameVerified() public view {
-        CuT.isAccessPointNameVerified("deployer-accesspoint.com");
-    }
-
-    function test_appAccessPoints() public view {
-        CuT.appAccessPoints(tokenId);
-    }
-
-    function test_setTokenName() public {
+        // TokenController
+        vm.prank(tokenController);
         expectRevertWithTokenRole();
-        CuT.setTokenName(tokenId, "New Name");
-    }
+        CuT.burn(tokenId);
 
-    function test_setTokenDescription() public {
+        // AnyAddress
+        vm.prank(anyAddress);
         expectRevertWithTokenRole();
-        CuT.setTokenDescription(tokenId, "New description");
-    }
+        CuT.burn(tokenId);
 
-    function test_setTokenExternalURL() public {
-        expectRevertWithTokenRole();
-        CuT.setTokenExternalURL(tokenId, "https://new-url.com");
-    }
-
-    function test_setTokenENS() public {
-        expectRevertWithTokenRole();
-        CuT.setTokenENS(tokenId, "newens.eth");
-    }
-
-    function test_setTokenLogo() public {
-        expectRevertWithTokenRole();
-        CuT.setTokenLogo(tokenId, TestConstants.LOGO_1);
-    }
-
-    function test_setTokenColor() public {
-        expectRevertWithTokenRole();
-        CuT.setTokenColor(tokenId, 0x654321);
-    }
-
-    function test_setTokenLogoAndColor() public {
-        expectRevertWithTokenRole();
-        CuT.setTokenLogoAndColor(tokenId, TestConstants.LOGO_1, 0x654321);
-    }
-
-    function testFail_removeAccessPoint() public {
-        CuT.removeAccessPoint("deployer-accesspoint.com");
-    }
-
-    function test_setAccessPointContentVerify() public {
-        expectRevertWithTokenRole();
-        CuT.setAccessPointContentVerify("deployer-accesspoint.com", true);
-    }
-
-    function test_setAccessPointNameVerify() public {
-        expectRevertWithTokenRole();
-        CuT.setAccessPointNameVerify("deployer-accesspoint.com", true);
-    }
-
-    function test_setTokenBuild() public {
-        expectRevertWithTokenRole();
-        CuT.setTokenBuild(tokenId, "284d78954060f9eeb3f04568807f920a21f00016", "https://github.com/org/repo");
-    }
-
-    function test_burn() public {
-        expectRevertWithTokenRole();
+        // TokenOwner
+        vm.prank(tokenOwner);
         CuT.burn(tokenId);
     }
 }
