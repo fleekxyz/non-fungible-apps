@@ -285,7 +285,7 @@ export function handleTokenRoleRevoked(event: TokenRoleRevokedEvent): void {
     } else {
       // the token does not exist
       log.error(
-        'Handling controller access granted event for tokenId {}. THE TOKEN DOES NOT EXIST. FAILED TO UPDATE THE TOKEN ENTITY.',
+        'Handling controller access revoked event for tokenId {}. THE TOKEN DOES NOT EXIST. FAILED TO UPDATE THE TOKEN ENTITY.',
         [event.params.tokenId.toHexString()]
       );
       return;
