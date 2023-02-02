@@ -22,6 +22,18 @@ abstract contract Test_FleekERC721_Assertions is Test {
     function expectRevertWithMustBeAPOwner() public {
         vm.expectRevert("FleekERC721: must be AP owner");
     }
+
+    function expectRevertWithInvalidAP() public {
+        vm.expectRevert("FleekERC721: invalid AP");
+    }
+
+    function expectRevertWithMinimalScore() public {
+        vm.expectRevert("FleekERC721: score cant be lower");
+    }
+
+    function expectRevertWithInvalidTokenId() public {
+        vm.expectRevert("ERC721: invalid token ID");
+    }
 }
 
 abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
