@@ -134,10 +134,23 @@ type Token @entity {
   id: Bytes! #transaction hash
   tokenId: BigInt! # uint256
   owner: Holder!
-  minted_by: Bytes!
+  mintedBy: Bytes!
 }
 
 type Holder @entity {
   id: Bytes! #address
   tokens: [Token!] @derivedFrom(field: "owner")
+}
+
+type Collection @entity {
+  id: Bytes! #address
+  deployer: Bytes! #address
+  transactionHash: Bytes! #transaction hash
+  owners: [CollectionOwner!]
+}
+
+type CollectionOwner @entity {
+  id: Bytes! # address
+  accessGrantedBy: Bytes! #address
+  transactionHash: Bytes!
 }
