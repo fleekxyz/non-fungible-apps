@@ -29,7 +29,7 @@ export abstract class Fixtures {
   }
 
   static async withMint() {
-    const fromDefault = await this.default();
+    const fromDefault = await Fixtures.default();
 
     const response = await fromDefault.contract.mint(
       fromDefault.owner.address,
