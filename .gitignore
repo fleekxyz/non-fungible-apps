@@ -1,24 +1,7 @@
 **/node_modules
 .env
 
-# hardhat
-contracts/cache
-contracts/artifacts
-contracts/deployments/hardhat
-
 # NPM
 package-lock.json
 
-# Foundry
-contracts/out
-contracts/forge-cache
-
-# OpenZeppelin
-contracts/.openzeppelin/unknown-*.json
-
-# Subgraph
 *.wasm
-subgraph/build
-subgraph/generated
-subgraph/abis
-subgraph/examples/query/.graphclient
