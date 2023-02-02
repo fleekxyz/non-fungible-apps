@@ -41,4 +41,12 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
         assertEq(firstMint, 0);
         assertEq(secondMint, 1);
     }
+
+    function test_balanceOfDeployerAfterAndBeforeMinting() public {
+        assertEq(CuT.balanceOf(deployer), 0);
+
+        mintDefault(deployer);
+
+        assertEq(CuT.balanceOf(deployer), 1);
+    }
 }
