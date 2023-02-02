@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.17;
 
-import "./FleekERC721.base.t.sol";
+import "./TestBase.sol";
 
 contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
     function setUp() public {

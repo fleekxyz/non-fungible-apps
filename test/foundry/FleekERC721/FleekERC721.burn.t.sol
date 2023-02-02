@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.17;
 
-import "./FleekERC721.base.t.sol";
+import "./TestBase.sol";
 import {FleekAccessControl} from "contracts/FleekAccessControl.sol";
 
 contract Test_FleekERC721_Burn is Test_FleekERC721_Base {
