@@ -134,12 +134,12 @@ type Token @entity {
   id: Bytes! # Token ID
   mint_transaction_hash: Bytes!
   tokenId: BigInt! # uint256
-  owner: Holder!
+  owner: Owner!
   minted_by: Bytes!
   controllers: [Controller!]
 }
 
-type Holder @entity {
+type Owner @entity {
   id: Bytes! #address
   tokens: [Token!] @derivedFrom(field: "owner")
 }

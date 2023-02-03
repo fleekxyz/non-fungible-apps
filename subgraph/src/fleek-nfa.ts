@@ -28,6 +28,7 @@ import {
   NewTokenExternalURL,
   NewTokenImage,
   NewTokenName,
+  Owner,
   Token,
   TokenRoleGranted,
   TokenRoleRevoked,
@@ -310,25 +311,51 @@ export function handleTransfer(event: TransferEvent): void {
 
   entity.save();
 
+  let token: Token | null;
+
+  let owner_address = event.params.to;
+  let owner = Owner.load(owner_address);
+
+  if (!owner) {
+    // Create a new owner entity
+    owner = new Owner(owner_address);
+  }
+
   if (parseInt(event.params.from.toHexString()) === 0) {
-    // This is a new mint
+    // MINT
 
-    let id = event.transaction.hash;
-    let token = new Token(id);
-    let owner = event.params.to;
+    // Create a new Token entity
+    token = new Token(
+      Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId))
+    );
 
-    let holder = Holder.load(owner);
-
-    if (!holder) {
-      // Create a new holder entity
-      holder = new Holder(owner);
-    }
-
-    token.owner = owner;
+    // Populate Token with data from the event
+    token.owner = owner_address;
+    token.mint_transaction_hash = event.transaction.hash;
     token.minted_by = event.transaction.from;
     token.tokenId = event.params.tokenId;
 
-    holder.save();
+    // Save both entities
+    owner.save();
     token.save();
+  } else {
+    // Transfer
+
+    // Load the Token by using its TokenId
+    token = Token.load(
+      Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId))
+    );
+
+    if (token) {
+      // Entity exists
+      token.owner = owner_address;
+
+      // Save both entities
+      owner.save();
+      token.save();
+    } else {
+      // Entity does not exist
+      log.error('Unknown token was transferred.', []);
+    }
   }
 }
