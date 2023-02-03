@@ -136,9 +136,15 @@ type Token @entity {
   tokenId: BigInt! # uint256
   owner: Owner!
   minted_by: Bytes!
+  controllers: [Controller!]
 }
 
 type Owner @entity {
   id: Bytes! #address
   tokens: [Token!] @derivedFrom(field: "owner")
+}
+
+type Controller @entity {
+  id: Bytes! #address
+  tokens: [Token!] @derivedFrom(field: "controllers")
 }
