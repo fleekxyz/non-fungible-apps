@@ -28,7 +28,7 @@ dataSources:
         - TokenRoleRevoked
         - Transfer
         - Token
-        - Holder
+        - Owner
         - Controller
       abis:
         - name: FleekNFA
