@@ -2,28 +2,10 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { ethers, upgrades } from 'hardhat';
 
+import { TestConstants } from './FleekERC721/helpers';
+const { Roles, MintParams, CollectionParams } = TestConstants;
+
 describe('FleekERC721', () => {
-  const ROLES = Object.freeze({
-    OWNER: 0,
-    CONTROLLER: 1,
-  });
-
-  const MINT_PARAMS = Object.freeze({
-    name: 'Fleek Test App',
-    description: 'Fleek Test App Description',
-    ens: 'fleek.eth',
-    externalUrl: 'https://fleek.co',
-    commitHash: 'b72e47171746b6a9e29b801af9cb655ecf4d665c',
-    gitRepository: 'https://github.com/fleekxyz/non-fungible-apps',
-    logo: 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSJub25lIiBoZWlnaHQ9IjI1MDAiIHdpZHRoPSIyMTgzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjQgMTQxLjUzMTk5OTk5OTk5OTk4Ij48cGF0aCBkPSJNMTAuMzgzIDEyNi44OTRMMCAwbDEyNCAuMjU1LTEwLjk3OSAxMjYuNjM5LTUwLjU1MyAxNC42Mzh6IiBmaWxsPSIjZTM0ZjI2Ii8+PHBhdGggZD0iTTYyLjQ2OCAxMjkuMjc3VjEyLjA4NWw1MS4wNjQuMTctOS4xMDYgMTA0Ljg1MXoiIGZpbGw9IiNlZjY1MmEiLz48cGF0aCBkPSJNOTkuNDkgNDEuMzYybDEuNDQ2LTE1LjQ5SDIyLjM4M2w0LjM0IDQ3LjQ5aDU0LjIxM0w3OC44MSA5My42MTdsLTE3LjM2MiA0LjY4LTE3LjYxNy01LjEwNi0uOTM2LTEyLjA4NUgyNy4zMTlsMi4xMjggMjQuNjgxIDMyIDguOTM2IDMyLjI1NS04LjkzNiA0LjM0LTQ4LjE3SDQxLjEwN0wzOS40OSA0MS4zNjJ6IiBmaWxsPSIjZmZmIi8+PC9zdmc+',
-    color: 0xe34f26,
-  });
-
-  const COLLECTION_PARAMS = Object.freeze({
-    name: 'FleekERC721',
-    symbol: 'FLEEK',
-  });
-
   const defaultFixture = async () => {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
@@ -38,7 +20,7 @@ describe('FleekERC721', () => {
     });
     const contract = await upgrades.deployProxy(
       Contract,
-      [COLLECTION_PARAMS.name, COLLECTION_PARAMS.symbol],
+      [CollectionParams.name, CollectionParams.symbol],
       {
         unsafeAllow: ['external-library-linking'],
       }
@@ -46,174 +28,6 @@ describe('FleekERC721', () => {
 
     return { owner, otherAccount, contract };
   };
-
-  describe('Collection Roles', () => {
-    let fixture: Awaited<ReturnType<typeof defaultFixture>>;
-
-    beforeEach(async () => {
-      fixture = await loadFixture(defaultFixture);
-    });
-
-    it('should assign the owner of the contract on contract creation', async () => {
-      const { owner, contract } = fixture;
-
-      expect(await contract.hasCollectionRole(ROLES.OWNER, owner.address)).to.be
-        .true;
-    });
-
-    it('should assign owner role to address', async () => {
-      const { otherAccount, contract } = fixture;
-
-      await contract.grantCollectionRole(ROLES.OWNER, otherAccount.address);
-
-      expect(
-        await contract.hasCollectionRole(ROLES.OWNER, otherAccount.address)
-      ).to.be.true;
-    });
-
-    it('should assign controller role to address', async () => {
-      const { owner, contract } = fixture;
-
-      await contract.grantCollectionRole(ROLES.CONTROLLER, owner.address);
-
-      expect(await contract.hasCollectionRole(ROLES.CONTROLLER, owner.address))
-        .to.be.true;
-    });
-
-    it('should remove an assigned controller', async () => {
-      const { otherAccount, contract } = fixture;
-
-      await contract.grantCollectionRole(ROLES.OWNER, otherAccount.address);
-      await contract.revokeCollectionRole(ROLES.OWNER, otherAccount.address);
-
-      expect(
-        await contract.hasCollectionRole(ROLES.OWNER, otherAccount.address)
-      ).to.be.false;
-    });
-
-    it('should remove an assigned controller', async () => {
-      const { owner, contract } = fixture;
-
-      await contract.grantCollectionRole(ROLES.CONTROLLER, owner.address);
-      await contract.revokeCollectionRole(ROLES.CONTROLLER, owner.address);
-
-      expect(await contract.hasCollectionRole(ROLES.CONTROLLER, owner.address))
-        .to.be.false;
-    });
-
-    it('should fetch the list of controllers', async () => {
-      const { owner, contract } = fixture;
-
-      await contract.grantCollectionRole(ROLES.CONTROLLER, owner.address);
-      await contract.grantCollectionRole(
-        ROLES.CONTROLLER,
-        '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049'
-      );
-
-      expect(await contract.getCollectionRoleMembers(ROLES.CONTROLLER)).to.eql([
-        owner.address,
-        '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049',
-      ]);
-    });
-
-    it('should fetch the list of owners', async () => {
-      const { owner, contract, otherAccount } = fixture;
-
-      await contract.grantCollectionRole(ROLES.OWNER, otherAccount.address);
-      await contract.grantCollectionRole(
-        ROLES.OWNER,
-        '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049'
-      );
-
-      expect(await contract.getCollectionRoleMembers(ROLES.OWNER)).to.eql([
-        owner.address,
-        otherAccount.address,
-        '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049',
-      ]);
-    });
-
-    it('should not be able to add new owner', async () => {
-      const { otherAccount, contract } = fixture;
-
-      await expect(
-        contract
-          .connect(otherAccount)
-          .grantCollectionRole(ROLES.OWNER, otherAccount.address)
-      ).to.be.revertedWith('FleekAccessControl: must have collection role');
-    });
-
-    it('should not be able to add new controller', async () => {
-      const { otherAccount, contract } = fixture;
-
-      await expect(
-        contract
-          .connect(otherAccount)
-          .grantCollectionRole(ROLES.CONTROLLER, otherAccount.address)
-      ).to.be.revertedWith('FleekAccessControl: must have collection role');
-    });
-
-    it('should be able to add roles after owner being granted', async () => {
-      const { otherAccount, contract } = fixture;
-
-      await contract.grantCollectionRole(ROLES.OWNER, otherAccount.address);
-
-      await expect(
-        contract
-          .connect(otherAccount)
-          .grantCollectionRole(ROLES.CONTROLLER, otherAccount.address)
-      ).to.not.be.reverted;
-      await expect(
-        contract
-          .connect(otherAccount)
-          .revokeCollectionRole(ROLES.CONTROLLER, otherAccount.address)
-      ).to.not.be.reverted;
-    });
-
-    it('should not be able to change roles for controllers', async () => {
-      const { owner, otherAccount, contract } = fixture;
-
-      await contract.grantCollectionRole(
-        ROLES.CONTROLLER,
-        otherAccount.address
-      );
-
-      await expect(
-        contract
-          .connect(otherAccount)
-          .grantCollectionRole(ROLES.OWNER, owner.address)
-      ).to.be.revertedWith('FleekAccessControl: must have collection role');
-      await expect(
-        contract
-          .connect(otherAccount)
-          .revokeCollectionRole(ROLES.OWNER, owner.address)
-      ).to.be.revertedWith('FleekAccessControl: must have collection role');
-    });
-
-    it('should emit event when role is granted', async () => {
-      const { owner, contract, otherAccount } = fixture;
-
-      await expect(
-        contract.grantCollectionRole(ROLES.CONTROLLER, otherAccount.address)
-      )
-        .to.emit(contract, 'CollectionRoleGranted')
-        .withArgs(ROLES.CONTROLLER, otherAccount.address, owner.address);
-    });
-
-    it('should emit event when role is revoked', async () => {
-      const { owner, contract, otherAccount } = fixture;
-
-      await contract.grantCollectionRole(
-        ROLES.CONTROLLER,
-        otherAccount.address
-      );
-
-      await expect(
-        contract.revokeCollectionRole(ROLES.CONTROLLER, otherAccount.address)
-      )
-        .to.emit(contract, 'CollectionRoleRevoked')
-        .withArgs(ROLES.CONTROLLER, otherAccount.address, owner.address);
-    });
-  });
 
   describe('AccessPoints', () => {
     let tokenId: number;
@@ -227,14 +41,14 @@ describe('FleekERC721', () => {
 
       const response = await contract.mint(
         fixture.owner.address,
-        MINT_PARAMS.name,
-        MINT_PARAMS.description,
-        MINT_PARAMS.externalUrl,
-        MINT_PARAMS.ens,
-        MINT_PARAMS.commitHash,
-        MINT_PARAMS.gitRepository,
-        MINT_PARAMS.logo,
-        MINT_PARAMS.color
+        MintParams.name,
+        MintParams.description,
+        MintParams.externalUrl,
+        MintParams.ens,
+        MintParams.commitHash,
+        MintParams.gitRepository,
+        MintParams.logo,
+        MintParams.color
       );
 
       tokenId = response.value.toNumber();
@@ -470,14 +284,14 @@ describe('FleekERC721', () => {
 
       const response = await contract.mint(
         fixture.owner.address,
-        MINT_PARAMS.name,
-        MINT_PARAMS.description,
-        MINT_PARAMS.externalUrl,
-        MINT_PARAMS.ens,
-        MINT_PARAMS.commitHash,
-        MINT_PARAMS.gitRepository,
-        MINT_PARAMS.logo,
-        MINT_PARAMS.color
+        MintParams.name,
+        MintParams.description,
+        MintParams.externalUrl,
+        MintParams.ens,
+        MintParams.commitHash,
+        MintParams.gitRepository,
+        MintParams.logo,
+        MintParams.color
       );
 
       tokenId = response.value.toNumber();

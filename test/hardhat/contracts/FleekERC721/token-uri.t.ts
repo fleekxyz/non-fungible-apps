@@ -1,7 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { TestConstants, Fixtures, parseTokenURI } from './helpers';
-import { ethers } from 'hardhat';
 
 describe('FleekERC721.TokenURI', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;

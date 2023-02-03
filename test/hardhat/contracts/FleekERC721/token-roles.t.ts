@@ -2,9 +2,9 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { TestConstants, Fixtures, parseTokenURI } from './helpers';
 
-const { CollectionParams, Roles } = TestConstants;
+const { Roles } = TestConstants;
 
-describe('Token Roles', () => {
+describe('FleekERC721.TokenRoles', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
 
   beforeEach(async () => {
