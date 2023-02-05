@@ -8,4 +8,4 @@ out
 forge-cache
 
 # OpenZeppelin
-openzeppelin/unknown-*.json
+.openzeppelin/unknown-*.json
