@@ -1,6 +1,6 @@
 import { Button } from '../../core';
 import { Stepper } from './stepper';
-import { Flex } from '../flex.styled';
+import { Flex } from '../../layout';
 
 export default {
   title: 'Components/Layout/Stepper',
@@ -21,7 +21,7 @@ const StepperButton: React.FC = () => {
 export const Default = () => {
   return (
     <>
-      <Stepper.Root initialStep={1} totalSteps={4}>
+      <Stepper.Root initialStep={1}>
         <Stepper.Container>
           <Stepper.Step>
             {/* Step 1 */}

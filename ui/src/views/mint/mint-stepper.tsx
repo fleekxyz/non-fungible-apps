@@ -1,8 +1,4 @@
-import { Button, Flex } from '@/components';
-import { IconButton } from '@/components/core/button/icon-button';
-import { Icon } from '@/components/core/icon';
-import React from 'react';
-import { Stepper } from '@/components/layout/stepper/stepper';
+import { Button, Flex, IconButton, Icon, Stepper } from '@/components';
 
 // TODO remove after flow integration
 const StepperButton: React.FC = () => {
