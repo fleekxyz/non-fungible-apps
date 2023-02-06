@@ -4,7 +4,7 @@ import { ButtonProps } from '.';
 import {
   StyledButtonContentFlex,
   StyledButtonContentGrid,
-} from './button-content.styled';
+} from './button-content.styles';
 import { ButtonIcon } from './button-icon';
 
 export type ButtonContentProps = Pick<

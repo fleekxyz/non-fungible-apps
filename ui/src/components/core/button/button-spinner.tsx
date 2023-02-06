@@ -6,7 +6,7 @@ import {
   StyledButtonSpinnerBox,
   StyledButtonSpinnerDot,
   StyledButtonSpinnerDotsBox,
-} from './button-spinner.styled';
+} from './button-spinner.styles';
 
 export const ButtonSpinner: React.FC<ButtonSpinnerProps> = (props) => {
   const {
