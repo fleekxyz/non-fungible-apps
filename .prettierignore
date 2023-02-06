@@ -1,7 +1,0 @@
-contracts/.openzeppelin/**/*
-contracts/artifacts/**/*
-contracts/cache/**/*
-contracts/deployments/**/*
-contracts/forge-cache/**/*
-contracts/lib/**/*
-contracts/out/**/*

@@ -1,7 +1,0 @@
-.openzeppelin/**/*
-artifacts/**/*
-cache/**/*
-deployments/**/*
-forge-cache/**/*
-lib/**/*
-out/**/*
