@@ -21,10 +21,9 @@ You can find the wiki [here](https://github.com/fleekxyz/non-fungible-apps/wiki)
 ### 📁 Project Structure
 
 Inside the root folder you are going to find:
-- [./contracts](./contracts): all the developed contracts
-- [./subgraph](./subgraph): The Graph project related code
-
-- [./ui](./ui): a web application to interact with deployed contracts
+- [contracts](./contracts): all the developed contracts
+- [subgraph](./subgraph): The Graph project related code
+- [ui](./ui): a web application to interact with deployed contracts
 
 You can see breakdowns of other folders in the README within those folders.
 
