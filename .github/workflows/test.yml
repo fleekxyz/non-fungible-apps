@@ -71,7 +71,7 @@ jobs:
 
     defaults:
       run:
-        working_directory: subgraph
+        working-directory: subgraph
 
     strategy:
       matrix:
