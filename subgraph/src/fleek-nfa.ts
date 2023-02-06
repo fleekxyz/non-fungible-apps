@@ -1,4 +1,4 @@
-import { Address, Bytes, log, store } from '@graphprotocol/graph-ts';
+import { Address, Bytes, log, store, ethereum } from '@graphprotocol/graph-ts';
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
@@ -18,6 +18,7 @@ import {
 import {
   Approval,
   ApprovalForAll,
+  Collection,
   CollectionOwner,
   CollectionRoleGranted,
   CollectionRoleRevoked,
@@ -108,6 +109,22 @@ export function handleCollectionRoleGranted(
 
       // Save the collection owner.
       collectionOwner.save();
+    }
+
+    if (event.params.byAddress === event.params.toAddress) {
+      // This is the contract creation transaction.
+      log.warning('This is the contract creation transaction.', []);
+      if (event.receipt) {
+        let receipt = event.receipt as ethereum.TransactionReceipt;
+        log.warning('Contract address is: {}', [
+          receipt.contractAddress.toHexString(),
+        ]);
+        let collection = new Collection(receipt.contractAddress);
+        collection.deployer = event.params.byAddress;
+        collection.transactionHash = event.transaction.hash;
+        collection.owners = [event.params.toAddress];
+        collection.save();
+      }
     }
   }
 }
