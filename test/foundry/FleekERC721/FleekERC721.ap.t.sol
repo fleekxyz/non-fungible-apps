@@ -107,6 +107,7 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
         assertEq(accessPoints[0], "accesspoint1.com");
         assertEq(accessPoints[1], "accesspoint2.com");
         assertEq(accessPoints[2], "accesspoint3.com");
+        assertEq(accessPoints.length, 3);
     }
 
     function test_cannotAddAccessPointToNonexistentToken() public {
