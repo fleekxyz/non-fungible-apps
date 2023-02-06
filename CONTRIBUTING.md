@@ -45,7 +45,7 @@ Please ensure your code is clear and readable and provide as much information as
 
 ## Testing
 
-This project has test suites both in Solidity and JavaScript. We use [Hardhat](https://hardhat.org/) and [Foundry](https://book.getfoundry.sh/) frameworks. It is mandatory for all tests to be well described to make the code consistent and secure. To get more information about this topic, check the [Testing section on our wiki](https://github.com/fleekxyz/non-fungible-apps/wiki/%F0%9F%93%98-Getting-Started#testing). You can also treat existing test suites as your inspiration. They are located at the [test folder](/test).
+This is a mono repo so testing will be dependent on the specific folder you are in.  Please refer to the readme, test folder, and package.json commands for the testing specifics in the directory you are working in.  Reegarding contract, this project has test suites both in Solidity and JavaScript. We use [Hardhat](https://hardhat.org/) and [Foundry](https://book.getfoundry.sh/) frameworks. It is mandatory for all tests to be well described to make the code consistent and secure. To get more information about this topic, check the [Testing section on our wiki](https://github.com/fleekxyz/non-fungible-apps/wiki/%F0%9F%93%98-Getting-Started#testing). You can also treat existing test suites as your inspiration. They are located at the [test folder](/contracts/test).
 
 ## Getting help
 

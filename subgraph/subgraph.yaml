@@ -27,6 +27,9 @@ dataSources:
         - TokenRoleGranted
         - TokenRoleRevoked
         - Transfer
+        - Token
+        - Owner
+        - Controller
       abis:
         - name: FleekNFA
           file: ./abis/FleekNFA.json

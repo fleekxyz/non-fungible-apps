@@ -1,4 +1,4 @@
-import { Address, log } from '@graphprotocol/graph-ts';
+import { Address, Bytes, log } from '@graphprotocol/graph-ts';
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
@@ -20,12 +20,16 @@ import {
   ApprovalForAll,
   CollectionRoleGranted,
   CollectionRoleRevoked,
+  Controller,
+  Holder,
   NewBuild,
   NewTokenDescription,
   NewTokenENS,
   NewTokenExternalURL,
   NewTokenImage,
   NewTokenName,
+  Owner,
+  Token,
   TokenRoleGranted,
   TokenRoleRevoked,
   Transfer,
@@ -203,6 +207,41 @@ export function handleTokenRoleGranted(event: TokenRoleGrantedEvent): void {
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  if (event.params.role === 1) {
+    // This is a new controller being added to a token.
+    // First we add the controller to the token's list of controllers.
+    // Then we create a new controller entity.
+
+    let token = Token.load(
+      Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId))
+    );
+    let controller = Controller.load(event.params.toAddress);
+
+    if (!controller) {
+      // Create a new controller entity
+      log.debug('CONTROLLER IS GOING TO BE CREATED HERE.', []);
+      controller = new Controller(event.params.toAddress);
+    }
+
+    if (token !== null) {
+      let token_controllers = token.controllers;
+      if (!token_controllers) {
+        token_controllers = [];
+      }
+      token_controllers.push(event.params.toAddress);
+      token.controllers = token_controllers;
+    } else {
+      log.error(
+        'Handling controller access granted event for tokenId {}. THE TOKEN DOES NOT EXIST. FAILED TO UPDATE THE TOKEN ENTITY.',
+        [event.params.tokenId.toHexString()]
+      );
+      return;
+    }
+
+    controller.save();
+    token.save();
+  }
 }
 
 export function handleTokenRoleRevoked(event: TokenRoleRevokedEvent): void {
@@ -219,6 +258,43 @@ export function handleTokenRoleRevoked(event: TokenRoleRevokedEvent): void {
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  if (event.params.role === 1) {
+    // This is a controller being removed from a token.
+
+    // Load the token with the tokenId.
+    let token = Token.load(
+      Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId))
+    );
+
+    // Check if the token entity exists.
+    if (token !== null) {
+      // get the list of controllers.
+      let token_controllers = token.controllers;
+      if (!token_controllers) {
+        token_controllers = [];
+      }
+
+      // remove address from the controllers list
+      const index = token_controllers.indexOf(event.params.toAddress, 0);
+      if (index > -1) {
+        token_controllers.splice(index, 1);
+      }
+
+      // assign the new controllers list
+      token.controllers = token_controllers;
+    } else {
+      // the token does not exist
+      log.error(
+        'Handling controller access revoked event for tokenId {}. THE TOKEN DOES NOT EXIST. FAILED TO UPDATE THE TOKEN ENTITY.',
+        [event.params.tokenId.toHexString()]
+      );
+      return;
+    }
+
+    // save the token data
+    token.save();
+  }
 }
 
 export function handleTransfer(event: TransferEvent): void {
@@ -235,25 +311,51 @@ export function handleTransfer(event: TransferEvent): void {
 
   entity.save();
 
+  let token: Token | null;
+
+  let owner_address = event.params.to;
+  let owner = Owner.load(owner_address);
+
+  if (!owner) {
+    // Create a new owner entity
+    owner = new Owner(owner_address);
+  }
+
   if (parseInt(event.params.from.toHexString()) === 0) {
-    // This is a new mint
+    // MINT
 
-    let id = event.transaction.hash;
-    let token = new Token(id);
-    let owner = event.params.to;
+    // Create a new Token entity
+    token = new Token(
+      Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId))
+    );
 
-    let holder = Holder.load(owner);
-
-    if (!holder) {
-      // Create a new holder entity
-      holder = new Holder(owner);
-    }
-
-    token.owner = owner;
+    // Populate Token with data from the event
+    token.owner = owner_address;
+    token.mint_transaction_hash = event.transaction.hash;
     token.minted_by = event.transaction.from;
     token.tokenId = event.params.tokenId;
 
-    holder.save();
+    // Save both entities
+    owner.save();
     token.save();
+  } else {
+    // Transfer
+
+    // Load the Token by using its TokenId
+    token = Token.load(
+      Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId))
+    );
+
+    if (token) {
+      // Entity exists
+      token.owner = owner_address;
+
+      // Save both entities
+      owner.save();
+      token.save();
+    } else {
+      // Entity does not exist
+      log.error('Unknown token was transferred.', []);
+    }
   }
 }
