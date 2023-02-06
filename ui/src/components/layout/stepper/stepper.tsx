@@ -1,6 +1,6 @@
+import { Flex } from '@/components';
 import React, { useMemo, useState } from 'react';
-import { createContext } from '../../..//utils';
-import { Flex } from '../flex.styled';
+import { createContext } from '../../../utils';
 import { StepperStyles } from './stepper.styles';
 
 export type SelectContext = {

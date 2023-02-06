@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
   ButtonIconSpanProps,
   StyledButtonIconSpan,
-} from './button-icon.styled';
+} from './button-icon.styles';
 
 export const ButtonIcon: React.FC<ButtonIconSpanProps> = (props) => {
   const { children, className, ...rest } = props;
