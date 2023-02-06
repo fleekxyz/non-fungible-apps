@@ -1,0 +1,9 @@
+# .graphclientrc.yml
+sources:
+  - name: FleekNFA
+    handler:
+      graphql:
+        endpoint: https://api.thegraph.com/subgraphs/name/emperororokusaki/flk-test-subgraph
+
+documents:
+  - ./queries.graphql

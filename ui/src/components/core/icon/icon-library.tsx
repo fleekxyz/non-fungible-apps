@@ -4,6 +4,7 @@ import { IoInformationCircleSharp } from '@react-icons/all-files/io5/IoInformati
 import { AiOutlineCheck } from '@react-icons/all-files/ai/AiOutlineCheck';
 import { AiOutlineDown } from '@react-icons/all-files/ai/AiOutlineDown';
 import { BiSearch } from '@react-icons/all-files/bi/BiSearch';
+import { IoCloudUploadSharp } from '@react-icons/all-files/io5/IoCloudUploadSharp';
 import { MetamaskIcon, EthereumIcon } from './custom';
 
 export const IconLibrary = Object.freeze({
@@ -13,6 +14,7 @@ export const IconLibrary = Object.freeze({
   ethereum: EthereumIcon,
   github: IoLogoGithub,
   info: IoInformationCircleSharp,
+  upload: IoCloudUploadSharp,
   metamask: MetamaskIcon, //remove if not used
   search: BiSearch,
 });

@@ -1,0 +1,11 @@
+{
+  "name": "query-examples",
+  "version": "0.0.1",
+  "description": "Examples that query the Fleek NFA subgraph using the graphql-client package.",
+  "main": "main.ts",
+  "author": "Nima Rasooli",
+  "license": "MIT",
+  "devDependencies": {
+    "@graphprotocol/client-cli": "^2.2.16"
+  }
+}
