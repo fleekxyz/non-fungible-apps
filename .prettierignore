@@ -1,0 +1,12 @@
+contracts/.openzeppelin/**/*
+contracts/artifacts/**/*
+contracts/cache/**/*
+contracts/deployments/**/*
+contracts/forge-cache/**/*
+contracts/lib/**/*
+contracts/out/**/*
+
+subgraph/abis/**/*
+subgraph/build/**/*
+subgraph/generated/**/*
+subgraph/examples/query/.graphclient/**/*
