@@ -29,10 +29,6 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
         tokenId = mintDefault(deployer);
     }
 
-    function test_addAccessPoint() public {
-        CuT.addAccessPoint(tokenId, "accesspoint.com");
-    }
-
     function test_getAccessPointJSON() public {
         string memory accessPointName = "accesspoint.com";
         CuT.addAccessPoint(tokenId, accessPointName);
