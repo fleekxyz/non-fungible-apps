@@ -21,8 +21,6 @@
   "homepage": "https://github.com/fleekxyz/non-fungible-apps#readme",
   "devDependencies": {
     "@graphql-codegen/cli": "^2.16.4",
-    "@types/mocha": "^10.0.1",
-    "chai": "^4.3.6",
     "dotenv": "^16.0.2",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.4",
