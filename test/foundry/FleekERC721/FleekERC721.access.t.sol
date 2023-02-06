@@ -61,7 +61,9 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
         // CollectionOwner
         vm.startPrank(collectionOwner);
         CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        assertTrue(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, randomAddress));
         CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, randomAddress));
         vm.stopPrank();
 
         // CollectionController
@@ -119,7 +121,9 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
         // TokenOwner
         vm.startPrank(tokenOwner);
         CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        assertTrue(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress));
         CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress));
         vm.stopPrank();
 
         // TokenController
