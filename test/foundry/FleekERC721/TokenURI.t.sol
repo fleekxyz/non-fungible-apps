@@ -4,7 +4,7 @@ pragma solidity ^0.8.17;
 
 import "./TestBase.sol";
 
-contract Test_FleekERC721_URI is Test_FleekERC721_Base {
+contract Test_FleekERC721_TokenURI is Test_FleekERC721_Base {
     uint256 internal tokenId;
 
     function setUp() public {
