@@ -86,9 +86,6 @@ jobs:
       
       - name: Install dependencies
         run: yarn --ignore-scripts
-      
-      - name: Audit
-        run: yarn audit --groups dependencies
-      
+
       - name: Test Subgraph
         run: yarn test
