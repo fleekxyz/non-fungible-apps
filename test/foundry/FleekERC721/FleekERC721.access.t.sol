@@ -177,23 +177,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
     }
 
     function test_tokenURI() public {
-        // ColletionOwner
-        vm.prank(collectionOwner);
-        CuT.tokenURI(tokenId);
-
-        // CollectionController
-        vm.prank(collectionController);
-        CuT.tokenURI(tokenId);
-
-        // TokenOwner
-        vm.prank(tokenOwner);
-        CuT.tokenURI(tokenId);
-
-        // TokenController
-        vm.prank(tokenController);
-        CuT.tokenURI(tokenId);
-
-        // AnyAddress
+        // Anyone can get the tokenURI
         vm.prank(anyAddress);
         CuT.tokenURI(tokenId);
     }
