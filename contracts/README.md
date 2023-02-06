@@ -4,7 +4,6 @@
 
 Inside contracts you are going to find:
 - [contracts](./contracts): all the developed contracts
-- [deploy](./deploy): scripts used for deployment on different networks
 - [deployments](./deployments): resultant ABI and info for deployments (each network will have a nested folder)
 - [lib](./lib): external modules used by Foundry
 - [scripts](./scripts): any utility scripts used for interacting with deployed contracts
