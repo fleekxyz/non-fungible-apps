@@ -28,6 +28,9 @@ dataSources:
         - TokenRoleRevoked
         - Transfer
         - CollectionOwner
+        - Token
+        - Owner
+        - Controller
       abis:
         - name: FleekNFA
           file: ../deployments/mumbai/FleekERC721.json

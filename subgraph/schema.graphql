@@ -131,13 +131,15 @@ type Transfer @entity(immutable: true) {
 }
 
 type Token @entity {
-  id: Bytes! #transaction hash
+  id: Bytes! # Token ID
+  mint_transaction_hash: Bytes!
   tokenId: BigInt! # uint256
-  owner: Holder!
-  mintedBy: Bytes!
+  owner: Owner!
+  minted_by: Bytes!
+  controllers: [Controller!]
 }
 
-type Holder @entity {
+type Owner @entity {
   id: Bytes! #address
   tokens: [Token!] @derivedFrom(field: "owner")
 }
@@ -153,4 +155,9 @@ type CollectionOwner @entity {
   id: Bytes! # address
   accessGrantedBy: Bytes! #address
   transactionHash: Bytes!
+}
+
+type Controller @entity {
+  id: Bytes! #address
+  tokens: [Token!] @derivedFrom(field: "controllers")
 }
