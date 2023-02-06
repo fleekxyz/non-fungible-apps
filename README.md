@@ -21,25 +21,25 @@ You can find the wiki [here](https://github.com/fleekxyz/non-fungible-apps/wiki)
 ### 📁 Project Structure
 
 Inside the root folder you are going to find:
-- [/contracts](/contracts): all the developed contracts
-- [/subgraph](/subgraph): The Graph project related code
+- [./contracts](./contracts): all the developed contracts
+- [./subgraph](./subgraph): The Graph project related code
 
-- [/ui](/ui): a web application to interact with deployed contracts
+- [./ui](./ui): a web application to interact with deployed contracts
 
 You can see breakdowns of other folders in the README within those folders.
 
 ### Contracts
 
-Within the project is the contracts folder which houses the contracts, utils, tests and deployment scripts associated with the Solidity smart contracts. Check the [contracts readme](/contracts/README.md) for more info.
+Within the project is the contracts folder which houses the contracts, utils, tests and deployment scripts associated with the Solidity smart contracts. Check the [contracts readme](./contracts/README.md) for more info.
 
 
 ### 🖥️ User Interface
 
-Within the project is included a [React](https://reactjs.org/) web application to expose and test the interaction with deployed scripts. Check the [UI readme](/ui/README.md) for more info.
+Within the project is included a [React](https://reactjs.org/) web application to expose and test the interaction with deployed scripts. Check the [UI readme](./ui/README.md) for more info.
 
 ### Subgraph
 
-In order to index data offchain, we use TheGraph and this section is the code required for our subgraph. Check the [subgraph readme](/subgraph/README.md) for more info.
+In order to index data offchain, we use TheGraph and this section is the code required for our subgraph. Check the [subgraph readme](./subgraph/README.md) for more info.
 
 ### 💅 Code Styling
 
