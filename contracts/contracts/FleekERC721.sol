@@ -93,6 +93,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function initialize(string memory _name, string memory _symbol) public initializer {
         __ERC721_init(_name, _symbol);
         __FleekAccessControl_init();
+        __FleekPausable_init();
     }
 
     /**
@@ -111,6 +112,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the caller must have ``collectionOwner``'s admin role.
+     * - the contract must be not paused.
      *
      */
     function mint(
@@ -178,7 +180,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         address to,
         uint256 tokenId,
         uint256 batchSize
-    ) internal virtual override {
+    ) internal virtual override whenNotPaused {
         if (from != address(0) && to != address(0)) {
             // Transfer
             _clearAllTokenRoles(tokenId, to);
@@ -345,10 +347,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the tokenId must be minted and valid.
+     * - the contract must be not paused.
      *
      * IMPORTANT: The payment is not set yet
      */
-    function addAccessPoint(uint256 tokenId, string memory apName) public payable {
+    function addAccessPoint(uint256 tokenId, string memory apName) public payable whenNotPaused {
         // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
         _requireMinted(tokenId);
         require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
@@ -369,8 +372,10 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      *
      * - the AP must exist.
      * - must be called by the AP owner.
+     * - the contract must be not paused.
+     *
      */
-    function removeAccessPoint(string memory apName) public requireAP(apName) {
+    function removeAccessPoint(string memory apName) public whenNotPaused requireAP(apName) {
         require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
         uint256 tokenId = _accessPoints[apName].tokenId;
         App storage _app = _apps[tokenId];
@@ -528,6 +533,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      *
      * - the tokenId must be minted and valid.
      * - the sender must have the `tokenOwner` role.
+     * - the contract must be not paused.
      *
      */
     function burn(uint256 tokenId) public virtual requireTokenRole(tokenId, Roles.Owner) {
