@@ -18,7 +18,8 @@ describe('FleekERC721.Minting', () => {
       MintParams.commitHash,
       MintParams.gitRepository,
       MintParams.logo,
-      MintParams.color
+      MintParams.color,
+      MintParams.accessPointAutoApprovalSettings
     );
 
     expect(response.value).to.be.instanceOf(ethers.BigNumber);
@@ -40,7 +41,8 @@ describe('FleekERC721.Minting', () => {
           MintParams.commitHash,
           MintParams.gitRepository,
           MintParams.logo,
-          MintParams.color
+          MintParams.color,
+          MintParams.accessPointAutoApprovalSettings
         )
     ).to.be.revertedWith('FleekAccessControl: must have collection role');
   });
@@ -59,7 +61,8 @@ describe('FleekERC721.Minting', () => {
       MintParams.commitHash,
       MintParams.gitRepository,
       MintParams.logo,
-      MintParams.color
+      MintParams.color,
+      MintParams.accessPointAutoApprovalSettings
     );
 
     const tokenId = response.value.toNumber();
