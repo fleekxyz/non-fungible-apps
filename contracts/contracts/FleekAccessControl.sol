@@ -123,11 +123,7 @@ contract FleekAccessControl is Initializable {
     /**
      * @dev Revokes the token role of an address.
      */
-    function _revokeTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) internal requireTokenRole(tokenId, Roles.Owner) {
+    function _revokeTokenRole(uint256 tokenId, Roles role, address account) internal {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         _revokeRole(_tokenRoles[tokenId][currentVersion][role], account);
         emit TokenRoleRevoked(tokenId, role, account, msg.sender);
