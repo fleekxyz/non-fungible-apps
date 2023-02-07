@@ -8,8 +8,9 @@ import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./FleekAccessControl.sol";
 import "./util/FleekStrings.sol";
+import "./FleekPausable.sol";
 
-contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
+contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, FleekPausable {
     using Strings for uint256;
     using Counters for Counters.Counter;
     using FleekStrings for FleekERC721.App;
@@ -535,5 +536,45 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         if (bytes(_apps[tokenId].externalURL).length != 0) {
             delete _apps[tokenId];
         }
+    }
+
+    /**
+     * @dev Sets the contract to paused state.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `controller` role.
+     * - the contract must be pausable.
+     * - the contract must be not paused.
+     *
+     */
+    function pause() public requireCollectionRole(Roles.Controller) {
+        _pause();
+    }
+
+    /**
+     * @dev Sets the contract to unpaused state.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `controller` role.
+     * - the contract must be paused.
+     *
+     */
+    function unpause() public requireCollectionRole(Roles.Controller) {
+        _unpause();
+    }
+
+    /**
+     * @dev Sets the contract to pausable state.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `owner` role.
+     * - the contract must be in the oposite pausable state.
+     *
+     */
+    function setPausable(bool pausable) public requireCollectionRole(Roles.Owner) {
+        _setPausable(pausable);
     }
 }
