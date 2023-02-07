@@ -51,6 +51,12 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         bool indexed verified,
         address indexed triggeredBy
     );
+    event ChangeAccessPointApprovalStatus(
+        string indexed apName,
+        uint256 tokenId,
+        bool indexed approved,
+        address indexed triggeredBy
+    );
 
     /**
      * The properties are stored as string to keep consistency with
@@ -419,6 +425,41 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         }
 
         emit NewAccessPoint(apName, tokenId, msg.sender);
+    }
+
+    /**
+     * @dev Set approval settings for an access point.
+     * It will add the access point to the token's AP list, if `approved` is true.
+     *
+     * May emit a {ChangeAccessPointApprovalStatus} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must exist and be the same as the tokenId that is set for the AP.
+     * - the AP must exist.
+     * - must be called by a token controller.
+     */
+    function setApprovalForAccessPoint(
+        uint256 tokenId,
+        string memory apName,
+        bool approved
+    ) public requireTokenRole(tokenId, Roles.Controller) {
+        AccessPoint storage accessPoint = _accessPoints[apName];
+        require(
+            accessPoint.tokenId == tokenId,
+            "FleekERC721: the passed tokenId is not the same as the access point's tokenId."
+        );
+
+        if (approved) {
+            // Approval
+            accessPoint.status = AccessPointStatus.APPROVED;
+            _apps[tokenId].accessPoints.push(apName);
+        } else {
+            // Not Approved
+            accessPoint.status = AccessPointStatus.DISAPPROVED;
+        }
+
+        emit ChangeAccessPointApprovalStatus(apName, tokenId, approved, msg.sender);
     }
 
     /**
