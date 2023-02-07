@@ -79,6 +79,16 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     }
 
     /**
+     * Status enums for access points
+     */
+    enum AccessPointStatus {
+        DRAFT, // Waiting for approval
+        APPROVED, // Already approved
+        DISAPPROVED, // Not approved
+        REMOVED // Removed from the access point list
+    }
+
+    /**
      * The stored data for each AccessPoint.
      */
     struct AccessPoint {
@@ -88,6 +98,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         bool contentVerified;
         bool nameVerified;
         address owner;
+        AccessPointStatus status;
     }
 
     Counters.Counter private _appIds;
@@ -382,8 +393,30 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         _requireMinted(tokenId);
         require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
 
-        _accessPoints[apName] = AccessPoint(tokenId, _apps[tokenId].accessPoints.length, 0, false, false, msg.sender);
-        _apps[tokenId].accessPoints.push(apName);
+        if (_apps[tokenId].accessPointAutoApprovalSettings) {
+            // Auto Approval is on.
+            _accessPoints[apName] = AccessPoint(
+                tokenId,
+                _apps[tokenId].accessPoints.length,
+                0,
+                false,
+                false,
+                msg.sender,
+                AccessPointStatus.APPROVED
+            );
+            _apps[tokenId].accessPoints.push(apName);
+        } else {
+            // Auto Approval is off. Should wait for approval.
+            _accessPoints[apName] = AccessPoint(
+                tokenId,
+                _apps[tokenId].accessPoints.length,
+                0,
+                false,
+                false,
+                msg.sender,
+                AccessPointStatus.DRAFT
+            );
+        }
 
         emit NewAccessPoint(apName, tokenId, msg.sender);
     }
