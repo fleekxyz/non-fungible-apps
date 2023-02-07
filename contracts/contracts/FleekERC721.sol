@@ -88,10 +88,10 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      * Status enums for access points
      */
     enum AccessPointStatus {
-        DRAFT, // Waiting for approval
-        APPROVED, // Already approved
-        DISAPPROVED, // Not approved
-        REMOVED // Removed from the access point list
+        DRAFT,
+        APPROVED,
+        DISAPPROVED,
+        REMOVED
     }
 
     /**
@@ -476,18 +476,22 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function removeAccessPoint(string memory apName) public requireAP(apName) {
         require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
         uint256 tokenId = _accessPoints[apName].tokenId;
-        App storage _app = _apps[tokenId];
 
-        // the index of the AP to remove
-        uint256 indexToRemove = _accessPoints[apName].index;
+        // check if the access point is verified or not.
+        if (_accessPoints[apName].status == AccessPointStatus.APPROVED) {
+            App storage _app = _apps[tokenId];
 
-        // the last item is reposited in the index to remove
-        string memory lastAP = _app.accessPoints[_app.accessPoints.length - 1];
-        _app.accessPoints[indexToRemove] = lastAP;
-        _accessPoints[lastAP].index = indexToRemove;
+            // the index of the AP to remove
+            uint256 indexToRemove = _accessPoints[apName].index;
 
-        // remove the last item
-        _app.accessPoints.pop();
+            // the last item is reposited in the index to remove
+            string memory lastAP = _app.accessPoints[_app.accessPoints.length - 1];
+            _app.accessPoints[indexToRemove] = lastAP;
+            _accessPoints[lastAP].index = indexToRemove;
+
+            // remove the last item
+            _app.accessPoints.pop();
+        }
 
         delete _accessPoints[apName];
         emit RemoveAccessPoint(apName, tokenId, msg.sender);
