@@ -17,19 +17,22 @@ contract Test_FleekERC721_Burn is Test_FleekERC721_Base {
         CuT.burn(tokenId);
     }
 
-    function testFail_burnAsNotOwner() public {
+    function test_cannotBurnAsNotOwner() public {
         vm.prank(address(1));
+        expectRevertWithTokenRole();
         CuT.burn(tokenId);
     }
 
-    function testFail_burnAsController() public {
+    function test_cannotBurnAsController() public {
         address user = address(1);
         CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, user);
         vm.prank(user);
+        expectRevertWithTokenRole();
         CuT.burn(tokenId);
     }
 
-    function testFail_burnInexistentToken() public {
+    function test_cannotBurnInexistentToken() public {
+        expectRevertWithTokenRole(); // Token role is tested first before if token exists
         CuT.burn(1);
     }
 }
