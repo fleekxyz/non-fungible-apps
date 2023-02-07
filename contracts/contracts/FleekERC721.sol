@@ -24,9 +24,21 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     event NewTokenENS(uint256 indexed tokenId, string ENS, address indexed triggeredBy);
     event NewTokenColor(uint256 indexed tokenId, uint24 color, address indexed triggeredBy);
 
-    event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
-    event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
-    event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
+    event NewAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
+    event RemoveAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
+
+    event ChangeAccessPointAutoApprovalSettings(
+        uint256 indexed token,
+        bool indexed settings,
+        address indexed triggeredBy
+    );
+
+    event ChangeAccessPointScore(
+        string indexed apName,
+        uint256 indexed tokenId,
+        uint256 score,
+        address indexed triggeredBy
+    );
     event ChangeAccessPointNameVerify(
         string apName,
         uint256 tokenId,
@@ -55,6 +67,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         string[] accessPoints; // List of app AccessPoint
         string logo;
         uint24 color; // Color of the nft
+        bool accessPointAutoApprovalSettings; // Settings for approving new access points automatically
     }
 
     /**
@@ -116,7 +129,8 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
-        uint24 color
+        uint24 color,
+        bool accessPointAutoApprovalSettings // defaults to `false` if not specifically passed as `true`
     ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
         uint256 tokenId = _appIds.current();
         _mint(to, tokenId);
@@ -129,6 +143,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         app.ENS = ENS;
         app.logo = logo;
         app.color = color;
+        app.accessPointAutoApprovalSettings = accessPointAutoApprovalSettings;
 
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
@@ -191,6 +206,26 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      */
     function _baseURI() internal view virtual override returns (string memory) {
         return "data:application/json;base64,";
+    }
+
+    /**
+     * @dev Updates the `accessPointAutoApproval` settings on minted `tokenId`.
+     *
+     * May emit a {ChangeAccessPointAutoApprovalSettings} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
+    function changeAccessPointAutoApprovalSettings(
+        uint256 tokenId,
+        bool _settings
+    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+        _requireMinted(tokenId);
+        _apps[tokenId].accessPointAutoApprovalSettings = _settings;
+        emit ChangeAccessPointAutoApprovalSettings(tokenId, _settings, msg.sender);
     }
 
     /**
