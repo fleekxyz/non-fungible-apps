@@ -63,7 +63,8 @@ library FleekStrings {
                 '"score":', ap.score.toString(), ",",
                 '"nameVerified":', ap.nameVerified.toString(), ",",
                 '"contentVerified":', ap.contentVerified.toString(), ",",
-                '"owner":"', uint160(ap.owner).toHexString(20), '"',
+                '"owner":"', uint160(ap.owner).toHexString(20), '",',
+                '"status":"', uint(ap.status).toString(),'"'
             "}"
         ));
     }
