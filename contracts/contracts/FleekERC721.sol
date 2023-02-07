@@ -544,6 +544,70 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         }
     }
 
+    /*//////////////////////////////////////////////////////////////
+        ACCESS CONTROL
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Grants the collection role to an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the collection role.
+     *
+     */
+    function grantCollectionRole(Roles role, address account) public whenNotPaused requireCollectionRole(Roles.Owner) {
+        _grantCollectionRole(role, account);
+    }
+
+    /**
+     * @dev Grants the token role to an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the token role.
+     *
+     */
+    function grantTokenRole(
+        uint256 tokenId,
+        Roles role,
+        address account
+    ) public whenNotPaused requireTokenRole(tokenId, Roles.Owner) {
+        _grantTokenRole(tokenId, role, account);
+    }
+
+    /**
+     * @dev Revokes the collection role of an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the collection role.
+     *
+     */
+    function revokeCollectionRole(Roles role, address account) public whenNotPaused requireCollectionRole(Roles.Owner) {
+        _revokeCollectionRole(role, account);
+    }
+
+    /**
+     * @dev Revokes the token role of an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the token role.
+     *
+     */
+    function revokeTokenRole(
+        uint256 tokenId,
+        Roles role,
+        address account
+    ) public whenNotPaused requireTokenRole(tokenId, Roles.Owner) {
+        _revokeTokenRole(tokenId, role, account);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+        PAUSABLE
+    //////////////////////////////////////////////////////////////*/
+
     /**
      * @dev Sets the contract to paused state.
      *
