@@ -26,7 +26,7 @@ abstract contract FleekPausable is Initializable {
     /**
      * @dev Initializes the contract in unpaused state.
      */
-    function __Pausable_init() internal onlyInitializing {
+    function __FleekPausable_init() internal onlyInitializing {
         _paused = true;
         _canPause = true;
     }
@@ -73,14 +73,14 @@ abstract contract FleekPausable is Initializable {
      * @dev Throws if the contract is paused.
      */
     function _requireNotPaused() internal view virtual {
-        if (!paused()) revert ContractIsPaused();
+        if (paused()) revert ContractIsPaused();
     }
 
     /**
      * @dev Throws if the contract is not paused.
      */
     function _requirePaused() internal view virtual {
-        if (paused()) revert ContractIsNotPaused();
+        if (!paused()) revert ContractIsNotPaused();
     }
 
     /**
