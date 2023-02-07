@@ -15,15 +15,9 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     using FleekStrings for FleekERC721.App;
     using FleekStrings for FleekERC721.AccessPoint;
     using FleekStrings for string;
+    using FleekStrings for uint24;
 
-    event NewBuild(uint256 indexed token, string indexed commitHash, address indexed triggeredBy);
-    event NewTokenName(uint256 indexed token, string indexed name, address indexed triggeredBy);
-    event NewTokenDescription(uint256 indexed token, string indexed description, address indexed triggeredBy);
-    event NewTokenLogo(uint256 indexed token, string indexed image, address indexed triggeredBy);
-    event NewTokenExternalURL(uint256 indexed token, string indexed externalURL, address indexed triggeredBy);
-    event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggeredBy);
-    event NewTokenColor(uint256 indexed token, uint24 indexed color, address indexed triggeredBy);
-
+    event ChangeMetadata(uint256 indexed tokenId, string indexed key, string value, address indexed triggeredBy);
     event NewAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
     event ChangeAccessPointScore(
@@ -32,17 +26,13 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         uint256 score,
         address indexed triggeredBy
     );
-    event ChangeAccessPointNameVerify(
+
+    event ChangeAccessPointVerification(
         string indexed apName,
-        uint256 tokenId,
-        bool indexed verified,
-        address indexed triggeredBy
-    );
-    event ChangeAccessPointContentVerify(
-        string indexed apName,
-        uint256 tokenId,
-        bool indexed verified,
-        address indexed triggeredBy
+        uint256 indexed tokenId,
+        string indexed verificationType,
+        bool verified,
+        address triggeredBy
     );
 
     /**
@@ -215,7 +205,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].externalURL = _tokenExternalURL;
-        emit NewTokenExternalURL(tokenId, _tokenExternalURL, msg.sender);
+        emit ChangeMetadata(tokenId, "externalURL", _tokenExternalURL, msg.sender);
     }
 
     /**
@@ -235,7 +225,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
-        emit NewTokenENS(tokenId, _tokenENS, msg.sender);
+        emit ChangeMetadata(tokenId, "ENS", _tokenENS, msg.sender);
     }
 
     /**
@@ -255,7 +245,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].name = _tokenName;
-        emit NewTokenName(tokenId, _tokenName, msg.sender);
+        emit ChangeMetadata(tokenId, "name", _tokenName, msg.sender);
     }
 
     /**
@@ -275,7 +265,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
-        emit NewTokenDescription(tokenId, _tokenDescription, msg.sender);
+        emit ChangeMetadata(tokenId, "description", _tokenDescription, msg.sender);
     }
 
     /**
@@ -295,7 +285,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].logo = _tokenLogo;
-        emit NewTokenLogo(tokenId, _tokenLogo, msg.sender);
+        emit ChangeMetadata(tokenId, "logo", _tokenLogo, msg.sender);
     }
 
     /**
@@ -315,7 +305,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].color = _tokenColor;
-        emit NewTokenColor(tokenId, _tokenColor, msg.sender);
+        emit ChangeMetadata(tokenId, "color", _tokenColor.toColorString(), msg.sender);
     }
 
     /**
@@ -462,7 +452,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         bool verified
     ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
         _accessPoints[apName].contentVerified = verified;
-        emit ChangeAccessPointContentVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
+        emit ChangeAccessPointVerification(apName, _accessPoints[apName].tokenId, "content", verified, msg.sender);
     }
 
     /**
@@ -481,7 +471,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         bool verified
     ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
         _accessPoints[apName].nameVerified = verified;
-        emit ChangeAccessPointNameVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
+        emit ChangeAccessPointVerification(apName, _accessPoints[apName].tokenId, "name", verified, msg.sender);
     }
 
     /**
@@ -515,7 +505,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(_commitHash, _gitRepository);
-        emit NewBuild(tokenId, _commitHash, msg.sender);
+        emit ChangeMetadata(tokenId, "build", _commitHash, msg.sender);
     }
 
     /**
