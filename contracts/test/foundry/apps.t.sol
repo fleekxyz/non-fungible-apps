@@ -15,6 +15,7 @@ contract FleekTest is Test {
         DEPLOYER = address(this);
         fleekContract = new FleekERC721();
         fleekContract.initialize("Test Contract", "FLKAPS");
+        fleekContract.unpause();
     }
 
     function testName() public {

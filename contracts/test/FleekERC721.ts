@@ -44,6 +44,8 @@ describe('FleekERC721', () => {
       }
     );
 
+    await contract.unpause();
+
     return { owner, otherAccount, contract };
   };
 
