@@ -1,8 +1,9 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { Fixtures } from './helpers';
+import { before } from 'mocha';
+import { Fixtures } from '../helpers';
 
-describe('AccessPoints', () => {
+describe('AccessPoints with Auto Approval on', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
   const DefaultAP = 'accesspoint.com';
 
@@ -11,7 +12,7 @@ describe('AccessPoints', () => {
     fixture.contract.addAccessPoint(fixture.tokenId, DefaultAP);
   });
 
-  it('should add an AP', async () => {
+  it('should add an AP with draft status', async () => {
     const { contract, owner, tokenId } = fixture;
 
     await expect(contract.addAccessPoint(tokenId, 'random.com'))
@@ -36,6 +37,7 @@ describe('AccessPoints', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
+      status: '1',
     });
   });
 
@@ -61,6 +63,7 @@ describe('AccessPoints', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
+      status: '1',
     });
   });
 
@@ -80,6 +83,7 @@ describe('AccessPoints', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
+      status: '1',
     });
   });
 
