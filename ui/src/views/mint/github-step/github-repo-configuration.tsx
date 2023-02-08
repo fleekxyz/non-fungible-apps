@@ -1,16 +1,46 @@
-import { Button, Card, Form, Grid, Icon, IconButton } from '@/components';
-import React from 'react';
+import {
+  Button,
+  Card,
+  Form,
+  Grid,
+  Icon,
+  IconButton,
+  Stepper,
+} from '@/components';
+import React, { useState } from 'react';
+import { Mint } from '../mint.context';
 import { RepoRow } from './github-repository-selection';
 
-type GithubRepoConfigurationProps = {
-  prevStep: () => void;
-  nextStep: () => void;
-  repoSelected: string;
-};
+export const GithubRepoConfiguration: React.FC = () => {
+  const {
+    repositoryName,
+    branchName,
+    commitHash,
+    setGithubStep,
+    setRepositoryConfig,
+  } = Mint.useContext();
+  const { nextStep } = Stepper.useContext();
+  const [branchSelected, setBranchSelected] = useState(branchName);
+  const [commitHashSelected, setCommitHashSelected] = useState(commitHash);
 
-export const GithubRepoConfiguration: React.FC<
-  GithubRepoConfigurationProps
-> = ({ nextStep, prevStep, repoSelected }) => {
+  const handlePrevStepClick = () => {
+    setGithubStep(2);
+    setRepositoryConfig('', '');
+  };
+
+  const handleBranchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBranchSelected(e.target.value);
+  };
+
+  const handleCommitHashChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCommitHashSelected(e.target.value);
+  };
+
+  const handleContinueClick = () => {
+    setRepositoryConfig(branchSelected, commitHashSelected);
+    nextStep();
+  };
+
   return (
     <Card.Container css={{ width: '$107h' }}>
       <Card.Heading
@@ -22,7 +52,7 @@ export const GithubRepoConfiguration: React.FC<
             variant="link"
             icon={<Icon name="back" />}
             css={{ mr: '$2' }}
-            onClick={prevStep}
+            onClick={handlePrevStepClick}
           />
         }
         rightIcon={
@@ -37,7 +67,7 @@ export const GithubRepoConfiguration: React.FC<
       <Card.Body>
         <Grid css={{ rowGap: '$6' }}>
           <RepoRow
-            repo={repoSelected}
+            repo={repositoryName}
             button={
               <Button
                 colorScheme="gray"
@@ -51,13 +81,26 @@ export const GithubRepoConfiguration: React.FC<
           />
           <Form.Field>
             <Form.Label>Git Branch</Form.Label>
-            <Form.Input placeholder="main" />
+            <Form.Input
+              placeholder="main"
+              value={branchSelected}
+              onChange={handleBranchChange}
+            />
           </Form.Field>
           <Form.Field>
             <Form.Label>Git Commit</Form.Label>
-            <Form.Input placeholder="693f89763dbb7a6c9ce0711cc34591a4c8c77198" />
+            <Form.Input
+              placeholder="693f89763dbb7a6c9ce0711cc34591a4c8c77198"
+              value={commitHashSelected}
+              onChange={handleCommitHashChange}
+            />
           </Form.Field>
-          <Button colorScheme="blue" variant="solid" onClick={nextStep}>
+          <Button
+            disabled={!branchSelected || !commitHashSelected}
+            colorScheme="blue"
+            variant="solid"
+            onClick={handleContinueClick}
+          >
             Continue
           </Button>
         </Grid>

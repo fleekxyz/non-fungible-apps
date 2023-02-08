@@ -2,6 +2,7 @@ import { Button, Card, Flex, Grid, Icon, IconButton } from '@/components';
 import { Input } from '@/components/core/input';
 import { Separator } from '@/components/core/separator.styles';
 import React, { useRef, useState } from 'react';
+import { Mint } from '../mint.context';
 
 const repos = [
   'DyDx',
@@ -28,15 +29,9 @@ export const RepoRow = ({ repo, button }: RepoRowProps) => (
   </Flex>
 );
 
-type GithubRepositoryConnectionProps = {
-  prevStep: () => void;
-  setRepo: (repo: string) => void;
-};
-
-export const GithubRepositoryConnection: React.FC<
-  GithubRepositoryConnectionProps
-> = ({ prevStep, setRepo }) => {
+export const GithubRepositoryConnection: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
+  const { setGithubStep, setRepositoryName } = Mint.useContext();
 
   const timeOutRef = useRef<NodeJS.Timeout>();
 
@@ -46,6 +41,15 @@ export const GithubRepositoryConnection: React.FC<
     timeOutRef.current = setTimeout(() => {
       setSearchValue(event.target.value);
     }, 500);
+  };
+
+  const handlePrevStepClick = () => {
+    setGithubStep(1);
+  };
+
+  const handleSelectRepo = (repo: string) => {
+    setRepositoryName(repo);
+    setGithubStep(3);
   };
 
   return (
@@ -59,7 +63,7 @@ export const GithubRepositoryConnection: React.FC<
             variant="link"
             icon={<Icon name="back" />}
             css={{ mr: '$2' }}
-            onClick={prevStep}
+            onClick={handlePrevStepClick}
           />
         }
         rightIcon={
@@ -79,7 +83,7 @@ export const GithubRepositoryConnection: React.FC<
             <Input
               leftIcon="search"
               placeholder="Search"
-              onChange={(e) => handleSearchChange(e)}
+              onChange={handleSearchChange}
             />
           </Flex>
           <Flex
@@ -102,7 +106,7 @@ export const GithubRepositoryConnection: React.FC<
                         colorScheme="blue"
                         variant="outline"
                         css={{ py: '$1', height: '$5', borderRadius: '$md' }}
-                        onClick={() => setRepo(repo)}
+                        onClick={() => handleSelectRepo(repo)}
                       >
                         Use for NFA
                       </Button>
