@@ -39,7 +39,8 @@ export abstract class Card {
     }
   );
 
-  static readonly CardText = forwardRef<HTMLDivElement, Card.CardTextProps>(
+  static readonly Text = forwardRef<HTMLDivElement, Card.CardTextProps>(
+
     ({ children, ...props }, ref) => {
       return (
         <CardStyles.CardText {...props} ref={ref}>
