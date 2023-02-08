@@ -27,7 +27,6 @@ export const GithubConnect: React.FC<GithubConnectProps> = ({ nextStep }) => (
             color: '$slate12',
             py: '$2h',
           }}
-          //   TODO replace for
           onClick={nextStep}
           rightIcon={
             <Icon name="github" css={{ color: 'white', fontSize: '$4xl' }} />
@@ -35,11 +34,11 @@ export const GithubConnect: React.FC<GithubConnectProps> = ({ nextStep }) => (
         >
           GitHub
         </Button>
-        <Card.CardText css={{ height: '$46h', width: '$95', px: '$12' }}>
+        <Card.Text css={{ height: '$46h', width: '$95', px: '$12' }}>
           <span>
             After connecting your GitHub, your repositories will show here.
           </span>
-        </Card.CardText>
+        </Card.Text>
       </Grid>
     </Card.Body>
   </Card.Container>
