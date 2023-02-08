@@ -4,27 +4,30 @@ import { Fixtures } from './helpers';
 
 describe('AccessPoints', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
+  const DefaultAP = 'accesspoint.com';
 
   beforeEach(async () => {
     fixture = await loadFixture(Fixtures.withMint);
+    fixture.contract.addAccessPoint(fixture.tokenId, DefaultAP);
   });
 
   it('should add an AP', async () => {
     const { contract, owner, tokenId } = fixture;
 
-    await expect(contract.addAccessPoint(tokenId, 'accesspoint.com'))
+    await expect(contract.addAccessPoint(tokenId, 'random.com'))
       .to.emit(contract, 'NewAccessPoint')
-      .withArgs('accesspoint.com', tokenId, owner.address);
+      .withArgs('random.com', tokenId, owner.address);
 
-    expect(await contract.appAccessPoints(tokenId)).eql(['accesspoint.com']);
+    expect(await contract.appAccessPoints(tokenId)).eql([
+      DefaultAP,
+      'random.com',
+    ]);
   });
 
   it('should return a AP json object', async () => {
     const { contract, owner, tokenId } = fixture;
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
-
-    const ap = await contract.getAccessPointJSON('accesspoint.com');
+    const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
 
     expect(parsedAp).to.eql({
@@ -39,19 +42,17 @@ describe('AccessPoints', () => {
   it('should revert if AP does not exist', async () => {
     const { contract, tokenId } = fixture;
 
-    await expect(
-      contract.getAccessPointJSON('accesspoint.com')
-    ).to.be.revertedWith('FleekERC721: invalid AP');
+    await expect(contract.getAccessPointJSON('random.com')).to.be.revertedWith(
+      'FleekERC721: invalid AP'
+    );
   });
 
   it('should increase the AP score', async () => {
     const { contract, owner, tokenId } = fixture;
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
+    await contract.increaseAccessPointScore(DefaultAP);
 
-    await contract.increaseAccessPointScore('accesspoint.com');
-
-    const ap = await contract.getAccessPointJSON('accesspoint.com');
+    const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
 
     expect(parsedAp).to.eql({
@@ -66,13 +67,11 @@ describe('AccessPoints', () => {
   it('should decrease the AP score', async () => {
     const { contract, owner, tokenId } = fixture;
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
+    await contract.increaseAccessPointScore(DefaultAP);
+    await contract.increaseAccessPointScore(DefaultAP);
+    await contract.decreaseAccessPointScore(DefaultAP);
 
-    await contract.increaseAccessPointScore('accesspoint.com');
-    await contract.increaseAccessPointScore('accesspoint.com');
-    await contract.decreaseAccessPointScore('accesspoint.com');
-
-    const ap = await contract.getAccessPointJSON('accesspoint.com');
+    const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
 
     expect(parsedAp).to.eql({
@@ -87,102 +86,85 @@ describe('AccessPoints', () => {
   it('should allow anyone to change AP score', async () => {
     const { contract, otherAccount, tokenId } = fixture;
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
-    await contract.increaseAccessPointScore('accesspoint.com');
-    await contract
-      .connect(otherAccount)
-      .increaseAccessPointScore('accesspoint.com');
+    await contract.increaseAccessPointScore(DefaultAP);
+    await contract.connect(otherAccount).increaseAccessPointScore(DefaultAP);
   });
 
   it('should remove an AP', async () => {
     const { contract, owner, tokenId } = fixture;
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
-
-    await expect(contract.removeAccessPoint('accesspoint.com'))
+    await expect(contract.removeAccessPoint(DefaultAP))
       .to.emit(contract, 'RemoveAccessPoint')
-      .withArgs('accesspoint.com', tokenId, owner.address);
+      .withArgs(DefaultAP, tokenId, owner.address);
 
     expect(await contract.appAccessPoints(tokenId)).eql([]);
   });
 
   it('should allow only AP owner to remove it', async () => {
-    const { contract, otherAccount, tokenId } = fixture;
-
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
+    const { contract, otherAccount } = fixture;
 
     await expect(
-      contract.connect(otherAccount).removeAccessPoint('accesspoint.com')
+      contract.connect(otherAccount).removeAccessPoint(DefaultAP)
     ).to.be.revertedWith('FleekERC721: must be AP owner');
   });
 
   it('should not be allowed to add the same AP more than once', async () => {
     const { contract, tokenId } = fixture;
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
-
     await expect(
-      contract.addAccessPoint(tokenId, 'accesspoint.com')
+      contract.addAccessPoint(tokenId, DefaultAP)
     ).to.be.revertedWith('FleekERC721: AP already exists');
   });
 
   it('should change "contentVerified" to true', async () => {
-    const { contract, tokenId } = fixture;
+    const { contract } = fixture;
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
+    await contract.setAccessPointContentVerify(DefaultAP, true);
 
-    await contract.setAccessPointContentVerify('accesspoint.com', true);
-
-    const ap = await contract.getAccessPointJSON('accesspoint.com');
+    const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
 
     expect(parsedAp.contentVerified).to.be.true;
   });
 
   it('should change "contentVerified" to false', async () => {
-    const { contract, tokenId } = fixture;
+    const { contract } = fixture;
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
-
-    const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
+    const beforeAp = await contract.getAccessPointJSON(DefaultAP);
     const beforeParsedAp = JSON.parse(beforeAp);
     expect(beforeParsedAp.contentVerified).to.be.false;
 
-    await contract.setAccessPointContentVerify('accesspoint.com', true);
-    await contract.setAccessPointContentVerify('accesspoint.com', false);
+    await contract.setAccessPointContentVerify(DefaultAP, true);
+    await contract.setAccessPointContentVerify(DefaultAP, false);
 
-    const ap = await contract.getAccessPointJSON('accesspoint.com');
+    const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
 
     expect(parsedAp.contentVerified).to.be.false;
   });
 
   it('should change "nameVerified" to true', async () => {
-    const { contract, tokenId } = fixture;
+    const { contract } = fixture;
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
+    await contract.setAccessPointNameVerify(DefaultAP, true);
 
-    await contract.setAccessPointNameVerify('accesspoint.com', true);
-
-    const ap = await contract.getAccessPointJSON('accesspoint.com');
+    const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
 
     expect(parsedAp.nameVerified).to.be.true;
   });
 
   it('should change "nameVerified" to false', async () => {
-    const { contract, tokenId } = fixture;
+    const { contract } = fixture;
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
-
-    const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
+    const beforeAp = await contract.getAccessPointJSON(DefaultAP);
     const beforeParsedAp = JSON.parse(beforeAp);
     expect(beforeParsedAp.nameVerified).to.be.false;
 
-    await contract.setAccessPointNameVerify('accesspoint.com', true);
-    await contract.setAccessPointNameVerify('accesspoint.com', false);
+    await contract.setAccessPointNameVerify(DefaultAP, true);
+    await contract.setAccessPointNameVerify(DefaultAP, false);
 
-    const ap = await contract.getAccessPointJSON('accesspoint.com');
+    const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
 
     expect(parsedAp.nameVerified).to.be.false;
@@ -199,6 +181,7 @@ describe('AccessPoints', () => {
     const aps = await contract.appAccessPoints(tokenId);
 
     expect(aps).to.eql([
+      DefaultAP,
       'accesspoint1.com',
       'accesspoint2.com',
       'accesspoint3.com',
@@ -219,6 +202,7 @@ describe('AccessPoints', () => {
     const aps = await contract.appAccessPoints(tokenId);
 
     expect(aps).to.eql([
+      DefaultAP,
       'accesspoint1.com',
       'accesspoint4.com',
       'accesspoint3.com',
