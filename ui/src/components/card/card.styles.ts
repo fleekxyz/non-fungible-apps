@@ -22,7 +22,7 @@ export abstract class CardStyles {
     pt: '$5',
   });
 
-  static readonly CardText = styled('div', {
+  static readonly Text = styled('div', {
     backgroundColor: '$slate1',
     borderRadius: '$xl',
     display: 'flex',
