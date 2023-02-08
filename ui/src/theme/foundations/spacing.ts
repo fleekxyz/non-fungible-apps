@@ -37,6 +37,7 @@ export const spacing = {
   56: '14rem',
   59: '14.9375rem', // 239px
   60: '15rem',
+  62: '15.5rem',
   64: '16rem',
   72: '18rem',
   80: '20rem',
