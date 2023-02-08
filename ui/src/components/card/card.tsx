@@ -60,9 +60,10 @@ export namespace Card {
     rightIcon?: React.ReactNode;
   } & React.ComponentProps<typeof CardStyles.Heading>;
 
-  export type BodyProps = { children: React.ReactNode } & React.ComponentProps<
+  export type BodyProps = React.ComponentProps<
     typeof CardStyles.Body
   >;
+
 
   export type CardTextProps = React.ComponentProps<typeof CardStyles.CardText>;
 }
