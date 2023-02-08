@@ -14,7 +14,7 @@ const ComboboxInput = ({
   handleInputChange,
   handleInputClick,
 }: ComboboxInputProps) => (
-  <div className="relative">
+  <div className="relative w-full cursor-default ">
     <Icon
       name="search"
       size="sm"
@@ -126,33 +126,36 @@ export const Combobox: React.FC<ComboboxProps> = ({
     >
       {({ open }) => (
         <>
-          <div className="w-full cursor-default overflow-hidden bg-transparent text-left focus:outline-none sm:text-sm">
+          <div className="relative">
             <ComboboxInput
               handleInputChange={handleInputChange}
               handleInputClick={handleInputClick}
               open={open}
             />
             <ComboboxLib.Button ref={buttonRef} className="hidden" />
+
+            <Transition
+              show={open}
+              as={Fragment}
+              enter="transition duration-400 ease-out"
+              leave="transition ease-out duration-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+              afterLeave={handleLeaveTransition}
+            >
+              <ComboboxLib.Options className="absolute max-h-60 w-full z-10 overflow-auto rounded-b-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
+                {filteredItems.length === 0 && query !== '' ? (
+                  <NoResults />
+                ) : (
+                  filteredItems.map((option: ComboboxItem) => {
+                    return (
+                      <ComboboxOption key={option.value} option={option} />
+                    );
+                  })
+                )}
+              </ComboboxLib.Options>
+            </Transition>
           </div>
-          <Transition
-            show={open}
-            as={Fragment}
-            enter="transition duration-400 ease-out"
-            leave="transition ease-out duration-100"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-            afterLeave={handleLeaveTransition}
-          >
-            <ComboboxLib.Options className="absolute max-h-60 w-inherit z-10 overflow-auto rounded-b-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
-              {filteredItems.length === 0 && query !== '' ? (
-                <NoResults />
-              ) : (
-                filteredItems.map((option) => {
-                  return <ComboboxOption option={option} />;
-                })
-              )}
-            </ComboboxLib.Options>
-          </Transition>
         </>
       )}
     </ComboboxLib>
