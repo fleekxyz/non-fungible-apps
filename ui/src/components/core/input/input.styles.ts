@@ -1,5 +1,5 @@
-import { dripStitches } from '../../../theme';
-import { StyledInputFile } from './input-file';
+import { dripStitches } from '@/theme';
+import { Icon } from '../icon';
 const { styled } = dripStitches;
 
 const styles = {
@@ -9,7 +9,6 @@ const styles = {
   borderStyle: 'solid',
   minWidth: '$0',
   color: '$slate12',
-  my: '$1h',
 
   transition: 'border-color 0.2s ease-in-out',
   borderWidth: '$default',
@@ -45,6 +44,7 @@ const styles = {
       md: {
         borderRadius: '$lg',
         fontSize: '$sm',
+        height: '$11',
         p: '$3 $3h',
       },
       lg: {
@@ -59,8 +59,13 @@ const styles = {
   },
 };
 
-export const Input = styled('input', styles);
+export const InputStyled = styled('input', styles);
 
-export const Textarea = styled('textarea', styles);
+export const InputIconStyled = styled(Icon, {
+  position: 'absolute',
+  left: '$4',
+  top: '0.9375rem',
+  color: 'slate8',
+});
 
-export const LogoFileInput = StyledInputFile;
+export const TextareaStyled = styled('textarea', styles);
