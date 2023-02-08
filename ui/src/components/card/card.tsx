@@ -51,9 +51,8 @@ export abstract class Card {
 }
 
 export namespace Card {
-  export type ContainerProps = {
-    children: React.ReactNode;
-  } & React.ComponentProps<typeof CardStyles.Container>;
+  export type ContainerProps = React.ComponentProps<typeof CardStyles.Container>;
+
 
   export type HeadingProps = {
     title: string;
