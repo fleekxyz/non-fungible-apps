@@ -40,20 +40,20 @@ export abstract class Card {
   );
 
   static readonly Text = forwardRef<HTMLDivElement, Card.CardTextProps>(
-
     ({ children, ...props }, ref) => {
       return (
-        <CardStyles.CardText {...props} ref={ref}>
+        <CardStyles.Text {...props} ref={ref}>
           {children}
-        </CardStyles.CardText>
+        </CardStyles.Text>
       );
     }
   );
 }
 
 export namespace Card {
-  export type ContainerProps = React.ComponentProps<typeof CardStyles.Container>;
-
+  export type ContainerProps = React.ComponentProps<
+    typeof CardStyles.Container
+  >;
 
   export type HeadingProps = {
     title: string;
@@ -61,10 +61,7 @@ export namespace Card {
     rightIcon?: React.ReactNode;
   } & React.ComponentProps<typeof CardStyles.Heading>;
 
-  export type BodyProps = React.ComponentProps<
-    typeof CardStyles.Body
-  >;
+  export type BodyProps = React.ComponentProps<typeof CardStyles.Body>;
 
-
-  export type CardTextProps = React.ComponentProps<typeof CardStyles.CardText>;
+  export type CardTextProps = React.ComponentProps<typeof CardStyles.Text>;
 }
