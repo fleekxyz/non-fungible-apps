@@ -1,6 +1,8 @@
 import {
   Button,
   Card,
+  Dropdown,
+  DropdownItem,
   Form,
   Grid,
   Icon,
@@ -10,6 +12,22 @@ import {
 import React, { useState } from 'react';
 import { Mint } from '../mint.context';
 import { RepoRow } from './github-repository-selection';
+
+//TODO remove once it's integrated with GH login
+const branches: DropdownItem[] = [
+  {
+    label: 'master',
+    value: 'master',
+  },
+  {
+    label: 'develop',
+    value: 'develop',
+  },
+  {
+    label: 'feature/branch',
+    value: 'feature/branch',
+  },
+];
 
 export const GithubRepoConfiguration: React.FC = () => {
   const {
@@ -28,8 +46,9 @@ export const GithubRepoConfiguration: React.FC = () => {
     setRepositoryConfig('', '');
   };
 
-  const handleBranchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBranchSelected(e.target.value);
+  const handleBranchChange = (dorpdownOption: DropdownItem) => {
+    //TODO we'll have to check the data that GH API returns
+    setBranchSelected(dorpdownOption.value);
   };
 
   const handleCommitHashChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,11 +100,16 @@ export const GithubRepoConfiguration: React.FC = () => {
           />
           <Form.Field>
             <Form.Label>Git Branch</Form.Label>
-            <Form.Input
+            <Dropdown
+              items={branches}
+              selectedValue={{ label: branchSelected, value: branchSelected }}
+              onChange={handleBranchChange}
+            />
+            {/* <Form.Input
               placeholder="main"
               value={branchSelected}
               onChange={handleBranchChange}
-            />
+            /> */}
           </Form.Field>
           <Form.Field>
             <Form.Label>Git Commit</Form.Label>

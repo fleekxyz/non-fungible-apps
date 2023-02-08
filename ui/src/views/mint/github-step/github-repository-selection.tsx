@@ -1,9 +1,19 @@
-import { Button, Card, Flex, Grid, Icon, IconButton } from '@/components';
+import {
+  Button,
+  Card,
+  Combobox,
+  ComboboxItem,
+  Flex,
+  Grid,
+  Icon,
+  IconButton,
+} from '@/components';
 import { Input } from '@/components/core/input';
 import { Separator } from '@/components/core/separator.styles';
 import React, { useRef, useState } from 'react';
 import { Mint } from '../mint.context';
 
+//TODO remove once it's integrated with GH login
 const repos = [
   'DyDx',
   'Testing',
@@ -12,6 +22,17 @@ const repos = [
   'NFA',
   'NFT',
   'NFTs',
+];
+
+//TODO remove once it's integrated with GH login
+const users: ComboboxItem[] = [
+  { label: 'DyDx', value: 'DyDx', icon: 'github' },
+  { label: 'Testing', value: 'Testing', icon: 'github' },
+  { label: 'Hello World', value: 'Hello World', icon: 'github' },
+  { label: 'Portofolio', value: 'Portofolio', icon: 'github' },
+  { label: 'NFA', value: 'NFA', icon: 'github' },
+  { label: 'NFT', value: 'NFT', icon: 'github' },
+  { label: 'NFTs', value: 'NFTs', icon: 'github' },
 ];
 
 type RepoRowProps = {
@@ -31,6 +52,7 @@ export const RepoRow = ({ repo, button }: RepoRowProps) => (
 
 export const GithubRepositoryConnection: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
+  const [selectedUser, setSelectedUser] = useState<ComboboxItem | undefined>();
   const { setGithubStep, setRepositoryName } = Mint.useContext();
 
   const timeOutRef = useRef<NodeJS.Timeout>();
@@ -75,11 +97,14 @@ export const GithubRepositoryConnection: React.FC = () => {
           />
         }
       />
-      <Card.Body css={{ height: '90%', overflow: 'hidden', pt: '$4' }}>
+      <Card.Body css={{ pt: '$4' }}>
         <Grid css={{ rowGap: '$2' }}>
           <Flex css={{ gap: '$4' }}>
-            <Input />
-            {/*TODO replace for dropdown once it's merged*/}
+            <Combobox
+              items={users}
+              selectedValue={selectedUser}
+              onChange={setSelectedUser}
+            />
             <Input
               leftIcon="search"
               placeholder="Search"
@@ -88,6 +113,8 @@ export const GithubRepositoryConnection: React.FC = () => {
           </Flex>
           <Flex
             css={{
+              height: '55%',
+              overflowX: 'hidden',
               overflowY: 'scroll',
               flexDirection: 'column',
             }}
