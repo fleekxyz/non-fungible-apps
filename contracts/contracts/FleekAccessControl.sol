@@ -95,14 +95,14 @@ contract FleekAccessControl is Initializable {
     /**
      * @dev Checks if the `msg.sender` has a certain role.
      */
-    function requireCollectionRole(CollectionRoles role) internal view {
+    function _requireCollectionRole(CollectionRoles role) internal view {
         if (!hasCollectionRole(role, msg.sender)) revert MustHaveCollectionRole(uint8(role));
     }
 
     /**
      * @dev Checks if the `msg.sender` has the `Token` role for a certain `tokenId`.
      */
-    function requireTokenRole(uint256 tokenId, TokenRoles role) internal view {
+    function _requireTokenRole(uint256 tokenId, TokenRoles role) internal view {
         if (!hasTokenRole(tokenId, role, msg.sender)) revert MustHaveTokenRole(tokenId, uint8(role));
     }
 
@@ -175,7 +175,7 @@ contract FleekAccessControl is Initializable {
      * @dev Clears all token roles for a certain tokenId and grants the owner role to a new address.
      * Should only be used for transferring tokens.
      */
-    function _clearTokenRoles(uint256 tokenId, address newOwner) internal {
+    function _clearTokenRoles(uint256 tokenId) internal {
         _tokenRolesVersion[tokenId].increment();
         emit TokenRolesCleared(tokenId, msg.sender);
     }
