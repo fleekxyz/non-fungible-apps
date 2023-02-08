@@ -9,6 +9,7 @@ export abstract class FormStyles {
 
   static readonly Label = styled('label', {
     color: '$slate11',
+    mb: '$1h',
 
     '&:disabled': {
       color: '$slate8',
@@ -34,6 +35,7 @@ export abstract class FormStyles {
   static readonly ErrorMessage = styled('span', {
     color: '$red11',
     fontSize: '0.625rem',
+    mt: '$1h',
 
     variants: {
       size: {
