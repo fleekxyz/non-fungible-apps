@@ -37,9 +37,6 @@ type CardProps = {
 
 // TODO create card component for all the project and then remove this
 const Card = ({ children, title }: CardProps) => {
-  // TODO style with stitches
-  const { repositoryName, branchName, commitHash } = Mint.useContext();
-  console.log(repositoryName, branchName, commitHash);
   return (
     <div
       style={{

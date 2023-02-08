@@ -83,10 +83,11 @@ export const GithubRepoConfiguration: React.FC = () => {
           />
         }
       />
-      <Card.Body>
+      <Card.Body css={{ pt: '$2' }}>
         <Grid css={{ rowGap: '$6' }}>
           <RepoRow
             repo={repositoryName}
+            css={{ mb: '0' }}
             button={
               <Button
                 colorScheme="gray"
@@ -105,11 +106,6 @@ export const GithubRepoConfiguration: React.FC = () => {
               selectedValue={{ label: branchSelected, value: branchSelected }}
               onChange={handleBranchChange}
             />
-            {/* <Form.Input
-              placeholder="main"
-              value={branchSelected}
-              onChange={handleBranchChange}
-            /> */}
           </Form.Field>
           <Form.Field>
             <Form.Label>Git Commit</Form.Label>

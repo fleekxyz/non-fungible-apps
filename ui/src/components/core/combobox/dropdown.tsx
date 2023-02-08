@@ -71,7 +71,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   const handleDropdownChange = (option: DropdownItem) => {
     onChange(option);
   };
-  console.log(selectedValue);
+
   return (
     <Listbox value={selectedValue} by="value" onChange={handleDropdownChange}>
       {({ open }) => (
