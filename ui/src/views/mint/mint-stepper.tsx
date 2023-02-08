@@ -1,4 +1,5 @@
 import { Button, Flex, IconButton, Icon, Stepper } from '@/components';
+import { GithubStep } from './github-step';
 
 // TODO remove after flow integration
 const StepperButton: React.FC = () => {
@@ -106,59 +107,59 @@ const MintStepContainer = ({ children }: MintStepContainerProps) => (
   </Flex>
 );
 
-export const MintStepper = () => (
-  <Stepper.Root initialStep={1}>
-    <Stepper.Container>
-      <Stepper.Step>
-        <MintStepContainer>
-          <StepperIndicatorContainer>
-            <Stepper.Indicator />
-            <Heading>Connect your Ethereum Wallet to mint an NFA</Heading>
-          </StepperIndicatorContainer>
-          {/* TODO create component to handle the wallet connection */}
-          <Card title="Get Started">
-            <span>Step 1</span>
-          </Card>
-        </MintStepContainer>
-      </Stepper.Step>
-      <Stepper.Step>
-        <MintStepContainer>
-          <StepperIndicatorContainer>
-            <Stepper.Indicator />
-            <Heading>Connect GitHub and select repository</Heading>
-          </StepperIndicatorContainer>
-          {/* TODO create component to handle the github connection */}
-          <Card title="Connect GitHub">
-            <span>Step 2</span>
-          </Card>
-        </MintStepContainer>
-      </Stepper.Step>
-      <Stepper.Step>
-        <MintStepContainer>
-          <StepperIndicatorContainer>
-            <Stepper.Indicator />
-            <Heading>Finalize a few key things for your DyDx NFA</Heading>
-          </StepperIndicatorContainer>
-          {/* TODO create component to handle the NFA details */}
-          <Card title="NFA Details">
-            <span>Step 3</span>
-          </Card>
-        </MintStepContainer>
-      </Stepper.Step>
-      <Stepper.Step>
-        <MintStepContainer>
-          <StepperIndicatorContainer>
-            <Stepper.Indicator />
-            <Heading>Review your DyDx NFA and mint it on Polygon</Heading>
-          </StepperIndicatorContainer>
-          {/* TODO create component to handle the NFA mint */}
-          <Card title="Mint NFA">
-            <span>Step 4</span>
-          </Card>
-        </MintStepContainer>
-      </Stepper.Step>
-    </Stepper.Container>
-    {/* TODO remove buttons when finish to integrate all the flow */}
-    <StepperButton />
-  </Stepper.Root>
-);
+export const MintStepper = () => {
+  return (
+    <Stepper.Root initialStep={1}>
+      <Stepper.Container>
+        <Stepper.Step>
+          <MintStepContainer>
+            <StepperIndicatorContainer>
+              <Stepper.Indicator />
+              <Heading>Connect GitHub and select repository</Heading>
+            </StepperIndicatorContainer>
+            {/* TODO create component to handle the github connection */}
+            <GithubStep />
+          </MintStepContainer>
+        </Stepper.Step>
+        <Stepper.Step>
+          <MintStepContainer>
+            <StepperIndicatorContainer>
+              <Stepper.Indicator />
+              <Heading>Connect your Ethereum Wallet to mint an NFA</Heading>
+            </StepperIndicatorContainer>
+            {/* TODO create component to handle the wallet connection */}
+            <Card title="Get Started">
+              <span>Step 1</span>
+            </Card>
+          </MintStepContainer>
+        </Stepper.Step>
+        <Stepper.Step>
+          <MintStepContainer>
+            <StepperIndicatorContainer>
+              <Stepper.Indicator />
+              <Heading>Finalize a few key things for your DyDx NFA</Heading>
+            </StepperIndicatorContainer>
+            {/* TODO create component to handle the NFA details */}
+            <Card title="NFA Details">
+              <span>Step 3</span>
+            </Card>
+          </MintStepContainer>
+        </Stepper.Step>
+        <Stepper.Step>
+          <MintStepContainer>
+            <StepperIndicatorContainer>
+              <Stepper.Indicator />
+              <Heading>Review your DyDx NFA and mint it on Polygon</Heading>
+            </StepperIndicatorContainer>
+            {/* TODO create component to handle the NFA mint */}
+            <Card title="Mint NFA">
+              <span>Step 4</span>
+            </Card>
+          </MintStepContainer>
+        </Stepper.Step>
+      </Stepper.Container>
+      {/* TODO remove buttons when finish to integrate all the flow */}
+      {/* <StepperButton /> */}
+    </Stepper.Root>
+  );
+};
