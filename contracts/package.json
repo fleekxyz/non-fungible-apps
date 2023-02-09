@@ -5,7 +5,7 @@
   "private": "false",
   "scripts": {
     "test": "hardhat test && forge test --via-ir",
-    "test:foundry": "forge test --via-ir",
+    "test:foundry": "forge test --via-ir -vvv",
     "test:hardhat": "hardhat test",
     "format": "prettier --write \"./**/*.{js,json,sol,ts}\"",
     "node:hardhat": "hardhat node",
