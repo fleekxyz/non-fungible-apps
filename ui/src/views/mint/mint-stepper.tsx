@@ -1,66 +1,18 @@
-import { IconButton, Icon, Stepper, Card, Button } from '@/components';
-import { FormCard } from './form';
+import { Stepper } from '@/components';
+import { FormStep } from './form-step';
 import { MintPreview } from './preview-step/mint-preview';
-// import { IconButton, Icon, Stepper, Card } from '@/components';
 import { GithubStep } from './github-step';
 import { MintStep } from './mint-step';
+import { WalletStep } from './wallet-step';
 import { Mint } from './mint.context';
-
-//TODO remove after mint flow is done
-const Heading = ({ title }: { title: string }) => {
-  const { prevStep } = Stepper.useContext();
-
-  return (
-    <Card.Heading
-      title={title}
-      leftIcon={
-        <IconButton
-          aria-label="Add"
-          colorScheme="gray"
-          variant="link"
-          icon={<Icon name="back" />}
-          css={{ mr: '$2' }}
-          onClick={prevStep}
-        />
-      }
-      rightIcon={
-        <IconButton
-          aria-label="Add"
-          colorScheme="gray"
-          variant="link"
-          icon={<Icon name="info" />}
-        />
-      }
-    />
-  );
-};
-
-const ConnectWallet = () => {
-  const { nextStep } = Stepper.useContext();
-  return (
-    <Button
-      iconSpacing="59"
-      size="lg"
-      variant="ghost"
-      css={{
-        backgroundColor: '$slate4',
-        color: '$slate12',
-        py: '$2h',
-      }}
-      onClick={nextStep}
-      rightIcon={
-        <Icon name="metamask" css={{ color: 'white', fontSize: '$4xl' }} />
-      }
-    >
-      GitHub
-    </Button>
-  );
-};
+import { NftMinted } from './nft-minted';
 
 export const MintStepper = () => {
-  return (
-    <Stepper.Root initialStep={1}>
-      <Mint.Provider>
+  const { sucessMint } = Mint.useContext();
+
+  if (!sucessMint) {
+    return (
+      <Stepper.Root initialStep={1}>
         <Stepper.Container>
           <Stepper.Step>
             <MintStep header="Connect GitHub and select repository">
@@ -70,18 +22,13 @@ export const MintStepper = () => {
 
           <Stepper.Step>
             <MintStep header="Connect your Ethereum Wallet to mint an NFA">
-              <Card.Container>
-                <Heading title="Connect Wallet" />
-                <Card.Body>
-                  <ConnectWallet />
-                </Card.Body>
-              </Card.Container>
+              <WalletStep />
             </MintStep>
           </Stepper.Step>
 
           <Stepper.Step>
             <MintStep header="Finalize a few key things for your DyDx NFA">
-              <FormCard />
+              <FormStep />
             </MintStep>
           </Stepper.Step>
 
@@ -91,10 +38,9 @@ export const MintStepper = () => {
             </MintStep>
           </Stepper.Step>
         </Stepper.Container>
-      </Mint.Provider>
+      </Stepper.Root>
+    );
+  }
 
-      {/* TODO remove buttons when finish to integrate all the flow */}
-      {/* <StepperButton /> */}
-    </Stepper.Root>
-  );
+  return <NftMinted />;
 };

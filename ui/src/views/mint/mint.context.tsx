@@ -14,6 +14,7 @@ export type MintContext = {
   ens: DropdownItem; //maybe it would be a DropdownItem
   domain: string;
   verifyNFA: boolean;
+  sucessMint: boolean | undefined;
   setGithubStep: (step: number) => void;
   setRepositoryName: (repo: string) => void;
   setRepositoryConfig: (branch: string, hash: string) => void;
@@ -24,6 +25,7 @@ export type MintContext = {
   setEns: (ens: DropdownItem) => void;
   setDomain: (domain: string) => void;
   setVerifyNFA: (verify: boolean) => void;
+  setSucessMint: (sucess: boolean) => void;
 };
 
 const [MintProvider, useContext] = createContext<MintContext>({
@@ -36,6 +38,7 @@ export abstract class Mint {
   static readonly useContext = useContext;
 
   static readonly Provider: React.FC<Mint.ProviderProps> = ({ children }) => {
+    //Github Connection
     const [repositoryName, setRepositoryName] = useState('');
     const [branchName, setBranchName] = useState('');
     const [commitHash, setCommitHash] = useState('');
@@ -45,10 +48,15 @@ export abstract class Mint {
     const [appName, setAppName] = useState('');
     const [appDescription, setAppDescription] = useState('');
     const [appLogo, setAppLogo] = useState('');
-    const [logoColor, setLogoColor] = useState('#FFFFFF');
-    const [ens, setEns] = useState('');
+    const [logoColor, setLogoColor] = useState('');
+    const [ens, setEns] = useState({} as DropdownItem);
     const [domain, setDomain] = useState('');
     const [verifyNFA, setVerifyNFA] = useState(true);
+
+    //Mint state
+    //true means it's minted
+    //false means it's not minted yet
+    const [sucessMint, setSucessMint] = useState<boolean>(false);
 
     const setGithubStep = (step: number): void => {
       if (step > 0 && step <= 3) {
@@ -75,7 +83,7 @@ export abstract class Mint {
           ens,
           domain,
           verifyNFA,
-          // setNFADetails,
+          sucessMint,
           setGithubStep,
           setRepositoryConfig,
           setRepositoryName,
@@ -86,6 +94,7 @@ export abstract class Mint {
           setEns,
           setDomain,
           setVerifyNFA,
+          setSucessMint,
         }}
       >
         {children}

@@ -4,7 +4,7 @@ import { LogoField } from './fields/logo/logo-field';
 import { AppDescriptionField, AppNameField, EnsDomainField } from './fields';
 import { VerifyNFAField } from './fields/verify-nfa-field';
 
-export const FormCard = () => {
+export const FormStep = () => {
   const { prevStep, nextStep } = Stepper.useContext();
   const { appName, appDescription, domain } = Mint.useContext();
 
