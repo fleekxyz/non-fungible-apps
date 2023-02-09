@@ -1,4 +1,6 @@
 import { Button, Flex, IconButton, Icon, Stepper } from '@/components';
+import { FormCard } from './form';
+import { Preview } from './preview-step/preview';
 
 // TODO remove after flow integration
 const StepperButton: React.FC = () => {
@@ -113,11 +115,11 @@ export const MintStepper = () => (
         <MintStepContainer>
           <StepperIndicatorContainer>
             <Stepper.Indicator />
-            <Heading>Connect your Ethereum Wallet to mint an NFA</Heading>
+            <Heading>Connect GitHub and select repository</Heading>
           </StepperIndicatorContainer>
-          {/* TODO create component to handle the wallet connection */}
-          <Card title="Get Started">
-            <span>Step 1</span>
+          {/* TODO create component to handle the github connection */}
+          <Card title="Connect GitHub">
+            <span>Will be repalced for GH step component</span>
           </Card>
         </MintStepContainer>
       </Stepper.Step>
@@ -125,11 +127,11 @@ export const MintStepper = () => (
         <MintStepContainer>
           <StepperIndicatorContainer>
             <Stepper.Indicator />
-            <Heading>Connect GitHub and select repository</Heading>
+            <Heading>Connect your Ethereum Wallet to mint an NFA</Heading>
           </StepperIndicatorContainer>
-          {/* TODO create component to handle the github connection */}
-          <Card title="Connect GitHub">
-            <span>Step 2</span>
+          {/* TODO create component to handle the wallet connection */}
+          <Card title="Connect Wallet">
+            <span>Need to decide what to do here</span>
           </Card>
         </MintStepContainer>
       </Stepper.Step>
@@ -139,10 +141,7 @@ export const MintStepper = () => (
             <Stepper.Indicator />
             <Heading>Finalize a few key things for your DyDx NFA</Heading>
           </StepperIndicatorContainer>
-          {/* TODO create component to handle the NFA details */}
-          <Card title="NFA Details">
-            <span>Step 3</span>
-          </Card>
+          <FormCard />
         </MintStepContainer>
       </Stepper.Step>
       <Stepper.Step>
@@ -151,10 +150,7 @@ export const MintStepper = () => (
             <Stepper.Indicator />
             <Heading>Review your DyDx NFA and mint it on Polygon</Heading>
           </StepperIndicatorContainer>
-          {/* TODO create component to handle the NFA mint */}
-          <Card title="Mint NFA">
-            <span>Step 4</span>
-          </Card>
+          <Preview />
         </MintStepContainer>
       </Stepper.Step>
     </Stepper.Container>
