@@ -39,8 +39,12 @@ const DropdownButton = ({ selectedValue, open }: DropdownButtonProps) => (
       open ? 'border-b-0 rounded-t-xl bg-black border-slate6' : 'rounded-xl'
     }`}
   >
-    <span className="block truncate text-slate11">
-      {selectedValue ? selectedValue.label : 'Select'}
+    <span
+      className={`block truncate ${
+        selectedValue && selectedValue.label ? 'text-slate12' : 'text-slate11'
+      }`}
+    >
+      {selectedValue && selectedValue.label ? selectedValue.label : 'Select'}
     </span>
     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
       <Icon name="chevron-down" />
@@ -67,6 +71,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   const handleDropdownChange = (option: DropdownItem) => {
     onChange(option);
   };
+
   return (
     <Listbox value={selectedValue} by="value" onChange={handleDropdownChange}>
       {({ open }) => (
@@ -80,7 +85,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
           >
             <Listbox.Options className="absolute max-h-fit w-full z-10 overflow-auto rounded-b-xl bg-black px-3 pt-2 border-solid  border-slate6  border text-base focus:outline-none sm:text-sm">
               {items.map((option: DropdownItem) => (
-                <DropdownOption option={option} />
+                <DropdownOption key={option.value} option={option} />
               ))}
             </Listbox.Options>
           </Transition>
