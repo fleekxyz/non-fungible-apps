@@ -39,7 +39,9 @@ export const GithubConnect: React.FC = () => {
           >
             GitHub
           </Button>
-          <Card.Text css={{ height: '$46h', width: '$95', px: '$12' }}>
+          <Card.Text
+            css={{ height: '$46h', width: '$95', fontSize: '$md', px: '$12' }}
+          >
             <span>
               After connecting your GitHub, your repositories will show here.
             </span>

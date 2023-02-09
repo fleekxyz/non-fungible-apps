@@ -64,8 +64,10 @@ const ComboboxOption = ({ option }: ComboboxOptionProps) => (
   </ComboboxLib.Option>
 );
 
-const NoResults = () => (
-  <div className="relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11">
+export const NoResults = ({ css }: { css?: string }) => (
+  <div
+    className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 ${css}`}
+  >
     Nothing found.
   </div>
 );

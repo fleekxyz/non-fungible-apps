@@ -7,6 +7,7 @@ import {
   Grid,
   Icon,
   IconButton,
+  NoResults,
 } from '@/components';
 import { Input } from '@/components/core/input';
 import { Separator } from '@/components/core/separator.styles';
@@ -34,12 +35,6 @@ const users: ComboboxItem[] = [
   { label: 'NFT', value: 'NFT', icon: 'github' },
   { label: 'NFTs', value: 'NFTs', icon: 'github' },
 ];
-
-const NoResults = () => (
-  <div className="relative text-center cursor-default select-none pt-2 px-3.5 pb-4 text-slate11">
-    Nothing found.
-  </div>
-);
 
 type RepoRowProps = {
   repo: string;
@@ -161,7 +156,7 @@ export const GithubRepositoryConnection: React.FC = () => {
                 </React.Fragment>
               ))
             ) : (
-              <NoResults />
+              <NoResults css="text-center" />
             )}
           </Flex>
         </Grid>
