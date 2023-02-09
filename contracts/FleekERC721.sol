@@ -16,30 +16,25 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     using FleekStrings for FleekERC721.AccessPoint;
     using FleekStrings for string;
 
-    event NewBuild(uint256 indexed token, string indexed commitHash, address indexed triggeredBy);
-    event NewTokenName(uint256 indexed token, string indexed name, address indexed triggeredBy);
-    event NewTokenDescription(uint256 indexed token, string indexed description, address indexed triggeredBy);
-    event NewTokenLogo(uint256 indexed token, string indexed image, address indexed triggeredBy);
-    event NewTokenExternalURL(uint256 indexed token, string indexed externalURL, address indexed triggeredBy);
-    event NewTokenENS(uint256 indexed token, string indexed ENS, address indexed triggeredBy);
-    event NewTokenColor(uint256 indexed token, uint24 indexed color, address indexed triggeredBy);
+    event NewBuild(uint256 indexed tokenId, string commitHash, address indexed triggeredBy);
+    event NewTokenName(uint256 indexed tokenId, string name, address indexed triggeredBy);
+    event NewTokenDescription(uint256 indexed tokenId, string description, address indexed triggeredBy);
+    event NewTokenLogo(uint256 indexed tokenId, string logo, address indexed triggeredBy);
+    event NewTokenExternalURL(uint256 indexed tokenId, string externalURL, address indexed triggeredBy);
+    event NewTokenENS(uint256 indexed tokenId, string ENS, address indexed triggeredBy);
+    event NewTokenColor(uint256 indexed tokenId, uint24 color, address indexed triggeredBy);
 
-    event NewAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
-    event RemoveAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
-    event ChangeAccessPointScore(
-        string indexed apName,
-        uint256 indexed tokenId,
-        uint256 score,
-        address indexed triggeredBy
-    );
+    event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
+    event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
+    event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
     event ChangeAccessPointNameVerify(
-        string indexed apName,
+        string apName,
         uint256 tokenId,
         bool indexed verified,
         address indexed triggeredBy
     );
     event ChangeAccessPointContentVerify(
-        string indexed apName,
+        string apName,
         uint256 tokenId,
         bool indexed verified,
         address indexed triggeredBy
