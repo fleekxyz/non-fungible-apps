@@ -170,4 +170,19 @@ describe('AccessPoints with Auto Approval on', () => {
 
     expect(parsedAp.nameVerified).to.be.false;
   });
+
+  it('should token owner be able to change the auto approval settings to off', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await contract
+      .connect(owner)
+      .changeAccessPointAutoApprovalSettings(tokenId, false);
+
+    await contract.addAccessPoint(tokenId, 'accesspoint.com');
+
+    const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
+    const beforeParsedAp = JSON.parse(beforeAp);
+
+    expect(beforeParsedAp.status).to.be.eql('0'); //DRAFT STATUS
+  });
 });
