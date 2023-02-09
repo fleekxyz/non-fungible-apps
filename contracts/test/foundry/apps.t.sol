@@ -793,7 +793,7 @@ contract FleekTest is Test {
                 abi.encodePacked(
                     '{"tokenId":0,"score":0,"nameVerified":false,"contentVerified":false,"owner":"',
                     uint160(DEPLOYER).toHexString(20),
-                    '"}'
+                    '", status:"0"}'
                 )
             )
         );
@@ -868,7 +868,7 @@ contract FleekTest is Test {
                 abi.encodePacked(
                     '{"tokenId":0,"score":1,"nameVerified":false,"contentVerified":false,"owner":"',
                     DEPLOYER.toHexString(),
-                    '"}'
+                    '", status:"0"}'
                 )
             )
         );
@@ -921,7 +921,7 @@ contract FleekTest is Test {
                 abi.encodePacked(
                     '{"tokenId":0,"score":0,"nameVerified":false,"contentVerified":false,"owner":"',
                     DEPLOYER.toHexString(),
-                    '"}'
+                    '", status:"0"}'
                 )
             )
         );
