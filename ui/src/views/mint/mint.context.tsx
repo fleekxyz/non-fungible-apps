@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export type MintContext = {
   repositoryName: string;
-  branchName: string;
+  branchName: DropdownItem; //get value from DropdownItem to mint
   commitHash: string;
   githubStep: number;
   appName: string;
@@ -17,7 +17,7 @@ export type MintContext = {
   sucessMint: boolean | undefined;
   setGithubStep: (step: number) => void;
   setRepositoryName: (repo: string) => void;
-  setRepositoryConfig: (branch: string, hash: string) => void;
+  setRepositoryConfig: (branch: DropdownItem, hash: string) => void;
   setAppName: (name: string) => void;
   setAppDescription: (description: string) => void;
   setAppLogo: (logo: string) => void;
@@ -40,7 +40,7 @@ export abstract class Mint {
   static readonly Provider: React.FC<Mint.ProviderProps> = ({ children }) => {
     //Github Connection
     const [repositoryName, setRepositoryName] = useState('');
-    const [branchName, setBranchName] = useState('');
+    const [branchName, setBranchName] = useState({} as DropdownItem);
     const [commitHash, setCommitHash] = useState('');
     const [githubStep, setGithubStepContext] = useState(1);
 
@@ -64,7 +64,7 @@ export abstract class Mint {
       }
     };
 
-    const setRepositoryConfig = (branch: string, hash: string) => {
+    const setRepositoryConfig = (branch: DropdownItem, hash: string) => {
       setBranchName(branch);
       setCommitHash(hash);
     };

@@ -1,10 +1,7 @@
 import { Icon } from '@/components';
-import { Mint } from './mint.context';
 import { NftCard } from './nft-card';
 
 export const NftMinted = () => {
-  const { setSucessMint } = Mint.useContext();
-
   return (
     <NftCard
       title="Mint Successful"

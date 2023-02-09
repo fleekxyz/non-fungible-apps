@@ -1,30 +1,11 @@
-import { Button, Card, Grid, Icon, IconButton, Stepper } from '@/components';
+import { Button, Card, Grid, Icon, Stepper } from '@/components';
+import { MintCardHeader } from '../mint-card';
 
 export const WalletStep = () => {
   const { prevStep, nextStep } = Stepper.useContext();
   return (
     <Card.Container>
-      <Card.Heading
-        title="Connect GitHub"
-        leftIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="back" />}
-            css={{ mr: '$2' }}
-            onClick={prevStep}
-          />
-        }
-        rightIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="info" />}
-          />
-        }
-      />
+      <MintCardHeader title="Connect Wallet" onClickBack={prevStep} />
       <Card.Body>
         <Grid css={{ rowGap: '$6' }}>
           <Button
