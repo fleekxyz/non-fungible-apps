@@ -28,7 +28,6 @@ describe('AccessPoints with Auto Approval Off', () => {
       nameVerified: false,
       status: '0',
     });
-    expect(await contract.appAccessPoints(tokenId)).eql([]);
   });
 
   it('should return a AP json object', async () => {
@@ -118,7 +117,9 @@ describe('AccessPoints with Auto Approval Off', () => {
       .to.emit(contract, 'RemoveAccessPoint')
       .withArgs('accesspoint.com', tokenId, owner.address);
 
-    expect(await contract.appAccessPoints(tokenId)).eql([]);
+    await expect(
+      contract.getAccessPointJSON('accesspoint.com')
+    ).to.be.revertedWith('FleekERC721: invalid AP');
   });
 
   it('should allow only AP owner to remove it', async () => {
@@ -201,42 +202,5 @@ describe('AccessPoints with Auto Approval Off', () => {
     const parsedAp = JSON.parse(ap);
 
     expect(parsedAp.nameVerified).to.be.false;
-  });
-
-  it('should get a list of added APs for an app', async () => {
-    const { contract, tokenId } = fixture;
-
-    await contract.addAccessPoint(tokenId, 'accesspoint1.com');
-    await contract.addAccessPoint(tokenId, 'accesspoint2.com');
-    await contract.addAccessPoint(tokenId, 'accesspoint3.com');
-    await contract.addAccessPoint(tokenId, 'accesspoint4.com');
-
-    const aps = await contract.appAccessPoints(tokenId);
-
-    expect(aps).to.eql([]);
-  });
-
-  it('should get a list of added APs that are approved for an app after removing one', async () => {
-    const { contract, tokenId } = fixture;
-
-    await contract.addAccessPoint(tokenId, 'accesspoint1.com');
-    await contract.addAccessPoint(tokenId, 'accesspoint2.com');
-    await contract.addAccessPoint(tokenId, 'accesspoint3.com');
-    await contract.addAccessPoint(tokenId, 'accesspoint4.com');
-    await contract.setApprovalForAccessPoint(tokenId, 'accesspoint1.com', true);
-    await contract.setApprovalForAccessPoint(tokenId, 'accesspoint2.com', true);
-    await contract.setApprovalForAccessPoint(tokenId, 'accesspoint3.com', true);
-    await contract.setApprovalForAccessPoint(tokenId, 'accesspoint4.com', true);
-
-    await contract.removeAccessPoint('accesspoint2.com');
-
-    const aps = await contract.appAccessPoints(tokenId);
-
-    console.log(aps);
-    expect(aps).to.eql([
-      'accesspoint1.com',
-      'accesspoint4.com',
-      'accesspoint3.com',
-    ]);
   });
 });
