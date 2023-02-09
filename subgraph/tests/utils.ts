@@ -1,27 +1,17 @@
 import { newMockEvent } from 'matchstick-as';
 import { ethereum, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import {
-  Approval,
   Approval as ApprovalEvent,
-  ApprovalForAll,
   ApprovalForAll as ApprovalForAllEvent,
-  CollectionRoleGranted,
   CollectionRoleGranted as CollectionRoleGrantedEvent,
-  CollectionRoleRevoked,
   CollectionRoleRevoked as CollectionRoleRevokedEvent,
-  NewBuild,
   NewBuild as NewBuildEvent,
   NewTokenDescription as NewTokenDescriptionEvent,
-  NewTokenENS,
   NewTokenENS as NewTokenENSEvent,
-  NewTokenExternalURL,
   NewTokenExternalURL as NewTokenExternalURLEvent,
-  NewTokenImage,
-  NewTokenImage as NewTokenImageEvent,
+  NewTokenLogo as NewTokenLogoEvent,
   NewTokenName as NewTokenNameEvent,
-  TokenRoleGranted,
   TokenRoleGranted as TokenRoleGrantedEvent,
-  TokenRoleRevoked,
   TokenRoleRevoked as TokenRoleRevokedEvent,
   Transfer as TransferEvent,
 } from '../generated/FleekNFA/FleekNFA';
@@ -33,7 +23,7 @@ import {
   handleNewBuild,
   handleNewTokenENS,
   handleNewTokenExternalURL,
-  handleNewTokenImage,
+  handleNewTokenLogo,
   handleNewTokenName,
   handleTokenRoleGranted,
   handleTokenRoleRevoked,
@@ -454,46 +444,46 @@ export function handleNewTokenNames(events: NewTokenNameEvent[]): void {
   });
 }
 
-export function handleNewTokenENSAddresses(events: NewTokenENS[]): void {
+export function handleNewTokenENSAddresses(events: NewTokenENSEvent[]): void {
   events.forEach((event) => {
     handleNewTokenENS(event);
   });
 }
 
 export function handleNewTokenExternalURLs(
-  events: NewTokenExternalURL[]
+  events: NewTokenExternalURLEvent[]
 ): void {
   events.forEach((event) => {
     handleNewTokenExternalURL(event);
   });
 }
 
-export function handleNewBuilds(events: NewBuild[]): void {
+export function handleNewBuilds(events: NewBuildEvent[]): void {
   events.forEach((event) => {
     handleNewBuild(event);
   });
 }
 
-export function handleNewTokenImages(events: NewTokenImage[]): void {
+export function handleNewTokenLogos(events: NewTokenLogoEvent[]): void {
   events.forEach((event) => {
-    handleNewTokenImage(event);
+    handleNewTokenLogo(event);
   });
 }
 
-export function handleApprovals(events: Approval[]): void {
+export function handleApprovals(events: ApprovalEventEvent[]): void {
   events.forEach((event) => {
     handleApproval(event);
   });
 }
 
-export function handleApprovalForAlls(events: ApprovalForAll[]): void {
+export function handleApprovalForAlls(events: ApprovalForAllEvent[]): void {
   events.forEach((event) => {
     handleApprovalForAll(event);
   });
 }
 
 export function handleCollectionRoleGranteds(
-  events: CollectionRoleGranted[]
+  events: CollectionRoleGrantedEvent[]
 ): void {
   events.forEach((event) => {
     handleCollectionRoleGranted(event);
@@ -501,20 +491,20 @@ export function handleCollectionRoleGranteds(
 }
 
 export function handleCollectionRoleRevokeds(
-  events: CollectionRoleRevoked[]
+  events: CollectionRoleRevokedEvent[]
 ): void {
   events.forEach((event) => {
     handleCollectionRoleRevoked(event);
   });
 }
 
-export function handleTokenRoleGranteds(events: TokenRoleGranted[]): void {
+export function handleTokenRoleGranteds(events: TokenRoleGrantedEvent[]): void {
   events.forEach((event) => {
     handleTokenRoleGranted(event);
   });
 }
 
-export function handleTokenRoleRevokeds(events: TokenRoleRevoked[]): void {
+export function handleTokenRoleRevokeds(events: TokenRoleRevokedEvent[]): void {
   events.forEach((event) => {
     handleTokenRoleRevoked(event);
   });
