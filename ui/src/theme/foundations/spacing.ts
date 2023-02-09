@@ -9,8 +9,6 @@ export const spacing = {
   '3h': '0.875rem', // 14px
   4: '1rem', // 16px
   5: '1.25rem', // 20px
-  '5hh': '1.3125rem', // 21px
-  '5h': '1.375rem', // 22px
   6: '1.5rem', // 24px
   7: '1.75rem', // 28px
   8: '2rem',

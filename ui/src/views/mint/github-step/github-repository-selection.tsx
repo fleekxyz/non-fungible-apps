@@ -35,6 +35,12 @@ const users: ComboboxItem[] = [
   { label: 'NFTs', value: 'NFTs', icon: 'github' },
 ];
 
+const NoResults = () => (
+  <div className="relative text-center cursor-default select-none pt-2 px-3.5 pb-4 text-slate11">
+    Nothing found.
+  </div>
+);
+
 type RepoRowProps = {
   repo: string;
   button: React.ReactNode;
@@ -59,7 +65,8 @@ export const RepoRow = forwardRef<HTMLDivElement, RepoRowProps>(
 export const GithubRepositoryConnection: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
   const [selectedUser, setSelectedUser] = useState<ComboboxItem | undefined>();
-  const { setGithubStep, setRepositoryName } = Mint.useContext();
+  const { setGithubStep, setRepositoryName, setRepositoryConfig } =
+    Mint.useContext();
 
   const timeOutRef = useRef<NodeJS.Timeout>();
 
@@ -78,10 +85,18 @@ export const GithubRepositoryConnection: React.FC = () => {
   const handleSelectRepo = (repo: string) => {
     setRepositoryName(repo);
     setGithubStep(3);
+    setRepositoryConfig('', '');
   };
 
+  const filteredRepositories =
+    searchValue === ''
+      ? repos
+      : repos.filter(
+          (item) => item.toUpperCase().indexOf(searchValue.toUpperCase()) != -1
+        );
+
   return (
-    <Card.Container css={{ maxWidth: '$107h', height: '$95h', pb: '$0h' }}>
+    <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pb: '$0h' }}>
       <Card.Heading
         title="Select Repository"
         leftIcon={
@@ -119,18 +134,15 @@ export const GithubRepositoryConnection: React.FC = () => {
           </Flex>
           <Flex
             css={{
-              height: '55%',
+              minHeight: '$40',
+              maxHeight: '$60',
               overflowX: 'hidden',
               overflowY: 'scroll',
               flexDirection: 'column',
             }}
           >
-            {repos
-              .filter(
-                (item) =>
-                  item.toUpperCase().indexOf(searchValue.toUpperCase()) != -1
-              )
-              .map((repo, index, { length }) => (
+            {filteredRepositories.length > 0 ? (
+              filteredRepositories.map((repo, index, { length }) => (
                 <React.Fragment key={repo}>
                   <RepoRow
                     repo={repo}
@@ -147,7 +159,10 @@ export const GithubRepositoryConnection: React.FC = () => {
                   />
                   {index < length - 1 && <Separator />}
                 </React.Fragment>
-              ))}
+              ))
+            ) : (
+              <NoResults />
+            )}
           </Flex>
         </Grid>
       </Card.Body>

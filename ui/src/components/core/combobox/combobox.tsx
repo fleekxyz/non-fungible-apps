@@ -27,7 +27,7 @@ const ComboboxInput = ({
     />
     <ComboboxLib.Input
       placeholder="Search"
-      className={`w-full border-solid border border-slate7  py-3 pl-8 pr-10 text-sm bg-transparent leading-5 text-slate11 outline-none ${
+      className={`w-full border-solid border border-slate7 h-11  py-3 pl-8 pr-10 text-sm bg-transparent leading-5 text-slate11 outline-none ${
         open ? 'border-b-0 rounded-t-xl bg-black border-slate6' : 'rounded-xl'
       }`}
       displayValue={(selectedValue: ComboboxItem) => selectedValue.label}
@@ -43,7 +43,6 @@ type ComboboxOptionProps = {
 
 const ComboboxOption = ({ option }: ComboboxOptionProps) => (
   <ComboboxLib.Option
-    key={option.value}
     value={option}
     className={({ active }) =>
       `relative cursor-default select-none py-2 px-3.5 text-slate11 rounded-xl mb-2 text-sm ${
@@ -125,38 +124,34 @@ export const Combobox: React.FC<ComboboxProps> = ({
       onChange={handleComboboxChange}
     >
       {({ open }) => (
-        <>
-          <div className="relative">
-            <ComboboxInput
-              handleInputChange={handleInputChange}
-              handleInputClick={handleInputClick}
-              open={open}
-            />
-            <ComboboxLib.Button ref={buttonRef} className="hidden" />
+        <div className="relative">
+          <ComboboxInput
+            handleInputChange={handleInputChange}
+            handleInputClick={handleInputClick}
+            open={open}
+          />
+          <ComboboxLib.Button ref={buttonRef} className="hidden" />
 
-            <Transition
-              show={open}
-              as={Fragment}
-              enter="transition duration-400 ease-out"
-              leave="transition ease-out duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-              afterLeave={handleLeaveTransition}
-            >
-              <ComboboxLib.Options className="absolute max-h-60 w-full z-10 overflow-auto rounded-b-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
-                {filteredItems.length === 0 && query !== '' ? (
-                  <NoResults />
-                ) : (
-                  filteredItems.map((option: ComboboxItem) => {
-                    return (
-                      <ComboboxOption key={option.value} option={option} />
-                    );
-                  })
-                )}
-              </ComboboxLib.Options>
-            </Transition>
-          </div>
-        </>
+          <Transition
+            show={open}
+            as={Fragment}
+            enter="transition duration-400 ease-out"
+            leave="transition ease-out duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+            afterLeave={handleLeaveTransition}
+          >
+            <ComboboxLib.Options className="absolute max-h-60 w-full z-10 overflow-auto rounded-b-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
+              {filteredItems.length === 0 && query !== '' ? (
+                <NoResults />
+              ) : (
+                filteredItems.map((option: ComboboxItem) => {
+                  return <ComboboxOption key={option.value} option={option} />;
+                })
+              )}
+            </ComboboxLib.Options>
+          </Transition>
+        </div>
       )}
     </ComboboxLib>
   );
