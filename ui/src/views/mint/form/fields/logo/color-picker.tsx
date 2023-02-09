@@ -2,14 +2,10 @@ import { Card, Flex } from '@/components';
 import { useRef } from 'react';
 // @ts-ignore
 import ColorThief from 'colorthief';
+import { Mint } from '../../../mint.context';
 
-type ColorPickerProps = {
-  file: string;
-  color: string;
-  setColor: (color: string) => void;
-};
-
-export const ColorPicker = ({ file, color, setColor }: ColorPickerProps) => {
+export const ColorPicker = () => {
+  const { appLogo, logoColor, setLogoColor } = Mint.useContext();
   const imageRef = useRef<HTMLImageElement>(null);
 
   const handleLogoLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -17,7 +13,7 @@ export const ColorPicker = ({ file, color, setColor }: ColorPickerProps) => {
     const hexColor = `#${colorArray
       .map((c: number) => c.toString(16).padStart(2, '0'))
       .join('')}`;
-    setColor(hexColor);
+    setLogoColor(hexColor);
   };
 
   return (
@@ -27,13 +23,13 @@ export const ColorPicker = ({ file, color, setColor }: ColorPickerProps) => {
         {/* TODO crate color picker component */}
         <input
           type="color"
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
+          value={logoColor}
+          onChange={(e) => setLogoColor(e.target.value)}
         />
       </Flex>
       <img
         className="hidden"
-        src={file}
+        src={appLogo}
         ref={imageRef}
         onLoad={handleLogoLoad}
         style={{ width: '50px', height: '50px' }}

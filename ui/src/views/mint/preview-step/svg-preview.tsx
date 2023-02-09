@@ -1,21 +1,13 @@
-type SVGPreviewProps = {
-  color: string;
-  logo: string;
-  name: string;
-  ens: string;
-  size: string;
-};
+import { Mint } from '../mint.context';
 
 /**
  * SVGPreview renders the NFA image based in the provided props.
  */
-export const SVGPreview: React.FC<SVGPreviewProps> = ({
-  color,
-  logo,
-  name,
-  ens,
-  size,
-}) => {
+export const SVGPreview: React.FC = () => {
+  const size = '26.5rem'; //replace for
+  const { appLogo, logoColor, appName, ens: ensContext } = Mint.useContext();
+  const ens = ensContext.label || '';
+
   return (
     <svg
       width={size}
@@ -111,7 +103,7 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
           font-size="42"
           fill="#E5E7F8"
         >
-          {name}
+          {appName}
         </text>
         <text
           font-family="Inter, sans-serif"
@@ -128,7 +120,7 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
         width="167"
         height="167"
         transform="matrix(0.987827 0.155557 -0.255261 0.966872 444.117 524.17)"
-        href={logo}
+        href={appLogo}
       />
 
       <defs>
@@ -165,8 +157,8 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(532.5 532.5) rotate(89.961) scale(735)"
         >
-          <stop stop-color={color} />
-          <stop offset="1" stop-color={color} stop-opacity="0" />
+          <stop stop-color={logoColor} />
+          <stop offset="1" stop-color={logoColor} stop-opacity="0" />
         </radialGradient>
 
         <linearGradient
@@ -177,12 +169,12 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
           y2="800.203"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color={color} />
+          <stop stop-color={logoColor} />
           <stop offset="1" stop-color="#2C313F" />
         </linearGradient>
 
         <linearGradient id="main">
-          <stop stop-color={color} />
+          <stop stop-color={logoColor} />
         </linearGradient>
       </defs>
     </svg>
