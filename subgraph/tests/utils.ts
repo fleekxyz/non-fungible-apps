@@ -21,6 +21,7 @@ import {
   handleCollectionRoleGranted,
   handleCollectionRoleRevoked,
   handleNewBuild,
+  handleNewTokenDescription,
   handleNewTokenENS,
   handleNewTokenExternalURL,
   handleNewTokenLogo,
@@ -54,6 +55,7 @@ export function createApprovalEvent(
   );
 
   approvalEvent.transaction.hash = Bytes.fromI32(event_count);
+  approvalEvent.logIndex = new BigInt(event_count);
 
   return approvalEvent;
 }
@@ -79,6 +81,7 @@ export function createApprovalForAllEvent(
   );
 
   approvalForAllEvent.transaction.hash = Bytes.fromI32(event_count);
+  approvalForAllEvent.logIndex = new BigInt(event_count);
 
   return approvalForAllEvent;
 }
@@ -109,6 +112,7 @@ export function createCollectionRoleGrantedEvent(
   );
 
   collectionRoleGrantedEvent.transaction.hash = Bytes.fromI32(event_count);
+  collectionRoleGrantedEvent.logIndex = new BigInt(event_count);
 
   return collectionRoleGrantedEvent;
 }
@@ -139,6 +143,7 @@ export function createCollectionRoleRevokedEvent(
   );
 
   collectionRoleRevokedEvent.transaction.hash = Bytes.fromI32(event_count);
+  collectionRoleRevokedEvent.logIndex = new BigInt(event_count);
 
   return collectionRoleRevokedEvent;
 }
@@ -167,6 +172,7 @@ export function createNewBuildEvent(
   );
 
   newBuildEvent.transaction.hash = Bytes.fromI32(event_count);
+  newBuildEvent.logIndex = new BigInt(event_count);
 
   return newBuildEvent;
 }
@@ -200,6 +206,7 @@ export function createNewTokenDescriptionEvent(
   );
 
   newTokenDescriptionEvent.transaction.hash = Bytes.fromI32(event_count);
+  newTokenDescriptionEvent.logIndex = new BigInt(event_count);
 
   return newTokenDescriptionEvent;
 }
@@ -228,6 +235,7 @@ export function createNewTokenENSEvent(
   );
 
   newTokenEnsEvent.transaction.hash = Bytes.fromI32(event_count);
+  newTokenEnsEvent.logIndex = new BigInt(event_count);
 
   return newTokenEnsEvent;
 }
@@ -261,6 +269,7 @@ export function createNewTokenExternalURLEvent(
   );
 
   newTokenExternalUrlEvent.transaction.hash = Bytes.fromI32(event_count);
+  newTokenExternalUrlEvent.logIndex = new BigInt(event_count);
 
   return newTokenExternalUrlEvent;
 }
@@ -289,6 +298,7 @@ export function createNewTokenImageEvent(
   );
 
   newTokenImageEvent.transaction.hash = Bytes.fromI32(event_count);
+  newTokenImageEvent.logIndex = new BigInt(event_count);
 
   return newTokenImageEvent;
 }
@@ -317,6 +327,7 @@ export function createNewTokenNameEvent(
   );
 
   newTokenNameEvent.transaction.hash = Bytes.fromI32(event_count);
+  newTokenNameEvent.logIndex = new BigInt(event_count);
 
   return newTokenNameEvent;
 }
@@ -352,6 +363,7 @@ export function createTokenRoleGrantedEvent(
   );
 
   tokenRoleGrantedEvent.transaction.hash = Bytes.fromI32(event_count);
+  tokenRoleGrantedEvent.logIndex = new BigInt(event_count);
 
   return tokenRoleGrantedEvent;
 }
@@ -387,6 +399,7 @@ export function createTokenRoleRevokedEvent(
   );
 
   tokenRoleRevokedEvent.transaction.hash = Bytes.fromI32(event_count);
+  tokenRoleRevokedEvent.logIndex = new BigInt(event_count);
 
   return tokenRoleRevokedEvent;
 }
@@ -415,6 +428,7 @@ export function createTransferEvent(
   );
 
   transferEvent.transaction.hash = Bytes.fromI32(event_count);
+  transferEvent.logIndex = new BigInt(event_count);
 
   return transferEvent;
 }
@@ -444,6 +458,14 @@ export function handleNewTokenNames(events: NewTokenNameEvent[]): void {
   });
 }
 
+export function handleNewTokenDescriptions(
+  events: NewTokenDescriptionEvent[]
+): void {
+  events.forEach((event) => {
+    handleNewTokenDescription(event);
+  });
+}
+
 export function handleNewTokenENSAddresses(events: NewTokenENSEvent[]): void {
   events.forEach((event) => {
     handleNewTokenENS(event);
@@ -470,7 +492,7 @@ export function handleNewTokenLogos(events: NewTokenLogoEvent[]): void {
   });
 }
 
-export function handleApprovals(events: ApprovalEventEvent[]): void {
+export function handleApprovals(events: ApprovalEvent[]): void {
   events.forEach((event) => {
     handleApproval(event);
   });
@@ -508,4 +530,8 @@ export function handleTokenRoleRevokeds(events: TokenRoleRevokedEvent[]): void {
   events.forEach((event) => {
     handleTokenRoleRevoked(event);
   });
+}
+
+export function makeEventId(id: i32): string {
+  return Bytes.fromI32(id).toHexString() + '00000000';
 }

@@ -6,8 +6,9 @@ import {
   beforeAll,
   afterAll,
   logStore,
+  log,
 } from 'matchstick-as/assembly/index';
-import { BigInt } from '@graphprotocol/graph-ts';
+import { BigInt, Bytes } from '@graphprotocol/graph-ts';
 import '../generated/schema';
 import '../generated/FleekNFA/FleekNFA';
 import '../src/fleek-nfa';
@@ -29,10 +30,12 @@ import {
   createNewTokenNameEvent,
   createTransferEvent,
   handleNewBuilds,
+  handleNewTokenDescriptions,
   handleNewTokenENSAddresses,
   handleNewTokenExternalURLs,
   handleNewTokenNames,
   handleTransfers,
+  makeEventId,
   TOKEN_OWNER_ONE,
   TOKEN_OWNER_TWO,
 } from './utils';
@@ -228,7 +231,7 @@ describe('Describe entity assertions', () => {
         TOKEN_OWNER_TWO
       )
     );
-    handleNewTokenENSAddresses(newENSAddresses);
+    handleNewTokenDescriptions(newTokenDescriptions);
 
     // New Token External URLs
     let newTokenExternalURLs: NewTokenExternalURL[] = [];
@@ -318,43 +321,43 @@ describe('Describe entity assertions', () => {
     test('Check the `from` and `to` fields of each transfer to be equal to expected values', () => {
       assert.fieldEquals(
         'Transfer',
-        '0',
+        makeEventId(0),
         'to',
         '0x2000000000000000000000000000000000000002'
       );
       assert.fieldEquals(
         'Transfer',
-        '1',
+        makeEventId(1),
         'to',
         '0x3000000000000000000000000000000000000003'
       );
       assert.fieldEquals(
         'Transfer',
-        '2',
+        makeEventId(2),
         'to',
         '0x2000000000000000000000000000000000000002'
       );
       assert.fieldEquals(
         'Transfer',
-        '3',
+        makeEventId(3),
         'to',
         '0x2000000000000000000000000000000000000002'
       );
       assert.fieldEquals(
         'Transfer',
-        '4',
+        makeEventId(4),
         'to',
         '0x2000000000000000000000000000000000000002'
       );
       assert.fieldEquals(
         'Transfer',
-        '5',
+        makeEventId(5),
         'to',
         '0x3000000000000000000000000000000000000003'
       );
       assert.fieldEquals(
         'Transfer',
-        '6',
+        makeEventId(6),
         'to',
         '0x3000000000000000000000000000000000000003'
       );
@@ -362,18 +365,43 @@ describe('Describe entity assertions', () => {
   });
 
   describe('New Token Name Events', () => {
-    test('Check the number of newTokenName to be valid', () => {
-      assert.entityCount('newTokenName', 6);
+    test('Check the number of NewTokenName to be valid', () => {
+      assert.entityCount('NewTokenName', 6);
     });
     test('Check the `name` and `triggeredBy` fields of each new token name event to be equal to expected values', () => {
-      assert.fieldEquals('newTokenName', '0', 'name', 'Token Zero New Name');
-      assert.fieldEquals('newTokenName', '1', 'name', 'Token One New Name');
-      assert.fieldEquals('newTokenName', '2', 'name', 'Token Two New Name');
-      assert.fieldEquals('newTokenName', '3', 'name', 'Token Three New Name');
-      assert.fieldEquals('newTokenName', '4', 'name', 'Token Four New Name');
       assert.fieldEquals(
-        'newTokenName',
-        '5',
+        'NewTokenName',
+        makeEventId(0),
+        'name',
+        'Token Zero New Name'
+      );
+      assert.fieldEquals(
+        'NewTokenName',
+        makeEventId(1),
+        'name',
+        'Token One New Name'
+      );
+      assert.fieldEquals(
+        'NewTokenName',
+        makeEventId(2),
+        'name',
+        'Token Two New Name'
+      );
+      assert.fieldEquals(
+        'NewTokenName',
+        makeEventId(3),
+        'name',
+        'Token Three New Name'
+      );
+      assert.fieldEquals(
+        'NewTokenName',
+        makeEventId(4),
+        'name',
+        'Token Four New Name'
+      );
+      assert.fieldEquals(
+        'NewTokenName',
+        makeEventId(5),
         'name',
         'Token Zero New Name By New Owner'
       );
@@ -387,81 +415,81 @@ describe('Describe entity assertions', () => {
     test('Check the `description` and `triggeredBy` fields of each new token name event to be equal to expected values', () => {
       assert.fieldEquals(
         'NewTokenExternalURL',
-        '0',
+        makeEventId(0),
         'externalURL',
         'https://0_external.url'
       );
       assert.fieldEquals(
         'NewTokenExternalURL',
-        '1',
+        makeEventId(1),
         'externalURL',
         'https://1_external.url'
       );
       assert.fieldEquals(
         'NewTokenExternalURL',
-        '2',
+        makeEventId(2),
         'externalURL',
         'https://2_external.url'
       );
       assert.fieldEquals(
         'NewTokenExternalURL',
-        '3',
+        makeEventId(3),
         'externalURL',
         'https://3_external.url'
       );
       assert.fieldEquals(
         'NewTokenExternalURL',
-        '4',
+        makeEventId(4),
         'externalURL',
         'https://4_external.url'
       );
       assert.fieldEquals(
         'NewTokenExternalURL',
-        '5',
+        makeEventId(5),
         'externalURL',
-        "https://5'_external.url"
+        'https://5_external.url'
       );
     });
   });
 
   describe('New Token Description Events', () => {
-    test('Check the number of newTokenDescription events to be valid', () => {
-      assert.entityCount('newTokenDescription', 6);
+    test('Check the number of NewTokenDescription events to be valid', () => {
+      assert.entityCount('NewTokenDescription', 6);
     });
     test('Check the `description` and `triggeredBy` fields of each new token name event to be equal to expected values', () => {
       assert.fieldEquals(
-        'newTokenDescription',
-        '0',
+        'NewTokenDescription',
+        makeEventId(0),
         'description',
         'New Token Zero Description'
       );
       assert.fieldEquals(
-        'newTokenDescription',
-        '1',
+        'NewTokenDescription',
+        makeEventId(1),
         'description',
         'New Token One Description'
       );
       assert.fieldEquals(
-        'newTokenDescription',
-        '2',
+        'NewTokenDescription',
+        makeEventId(2),
         'description',
         'New Token Two Description'
       );
       assert.fieldEquals(
-        'newTokenDescription',
-        '3',
+        'NewTokenDescription',
+        makeEventId(3),
         'description',
         'New Token Three Description'
       );
       assert.fieldEquals(
-        'newTokenDescription',
-        '4',
+        'NewTokenDescription',
+        makeEventId(4),
         'description',
         'New Token Four Description'
       );
       assert.fieldEquals(
-        'newTokenDescription',
-        '5',
+        'NewTokenDescription',
+        makeEventId(5),
         'description',
         'New Token Five Description By New Owner'
       );
