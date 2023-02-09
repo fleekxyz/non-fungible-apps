@@ -2,9 +2,10 @@
 
 pragma solidity ^0.8.17;
 
-import "./TestBase.sol";
+import "../TestBase.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {FleekAccessControl} from "contracts/FleekAccessControl.sol";
+import "../../../../contracts/FleekERC721.sol";
 
 contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
     using Strings for address;
@@ -16,11 +17,12 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
         string memory score,
         string memory nameVerified,
         string memory contentVerified,
-        address owner
+        address owner,
+        string memory status
     ) internal {
         string memory current = CuT.getAccessPointJSON(accessPointName);
         // prettier-ignore
-        string memory expectedJSON = string(abi.encodePacked('{"tokenId":', _tokenId, ',"score":', score, ',"nameVerified":', nameVerified, ',"contentVerified":', contentVerified, ',"owner":"', owner.toHexString(), '"}'));
+        string memory expectedJSON = string(abi.encodePacked('{"tokenId":', _tokenId, ',"score":', score, ',"nameVerified":', nameVerified, ',"contentVerified":', contentVerified, ',"owner":"', owner.toHexString(), '", status: "', status,'"}'));
         assertEq(current, expectedJSON);
     }
 
@@ -33,7 +35,7 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
         string memory accessPointName = "accesspoint.com";
         CuT.addAccessPoint(tokenId, accessPointName);
 
-        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer);
+        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer, "0");
     }
 
     function test_removeAccessPoint() public {
@@ -69,20 +71,20 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
     function test_increaseAccessPointScore() public {
         string memory accessPointName = "accesspoint.com";
         CuT.addAccessPoint(tokenId, accessPointName);
-        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer);
+        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer, "0");
 
         CuT.increaseAccessPointScore(accessPointName);
-        assertAccessPointJSON(accessPointName, "0", "1", "false", "false", deployer);
+        assertAccessPointJSON(accessPointName, "0", "1", "false", "false", deployer, "0");
 
         CuT.increaseAccessPointScore(accessPointName);
-        assertAccessPointJSON(accessPointName, "0", "2", "false", "false", deployer);
+        assertAccessPointJSON(accessPointName, "0", "2", "false", "false", deployer, "0");
     }
 
     function test_cannotDecreaseAccessPointScoreToMinusOne() public {
         string memory accessPointName = "accesspoint.com";
         CuT.addAccessPoint(tokenId, accessPointName);
 
-        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer);
+        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer, "0");
         expectRevertWithMinimalScore();
         CuT.decreaseAccessPointScore(accessPointName);
     }
@@ -91,23 +93,11 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
         string memory accessPointName = "accesspoint.com";
         CuT.addAccessPoint(tokenId, accessPointName);
 
-        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer);
+        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer, "0");
         CuT.increaseAccessPointScore(accessPointName);
-        assertAccessPointJSON(accessPointName, "0", "1", "false", "false", deployer);
+        assertAccessPointJSON(accessPointName, "0", "1", "false", "false", deployer, "0");
         CuT.decreaseAccessPointScore(accessPointName);
-        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer);
-    }
-
-    function test_appAccessPoints() public {
-        CuT.addAccessPoint(tokenId, "accesspoint1.com");
-        CuT.addAccessPoint(tokenId, "accesspoint2.com");
-        CuT.addAccessPoint(tokenId, "accesspoint3.com");
-
-        string[] memory accessPoints = CuT.appAccessPoints(tokenId);
-        assertEq(accessPoints[0], "accesspoint1.com");
-        assertEq(accessPoints[1], "accesspoint2.com");
-        assertEq(accessPoints[2], "accesspoint3.com");
-        assertEq(accessPoints.length, 3);
+        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer, "0");
     }
 
     function test_cannotAddAccessPointToNonexistentToken() public {
@@ -134,6 +124,6 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
         CuT.setAccessPointContentVerify(accessPointName, true);
         vm.stopPrank();
 
-        assertAccessPointJSON(accessPointName, "0", "0", "true", "true", deployer);
+        assertAccessPointJSON(accessPointName, "0", "0", "true", "true", deployer, "0");
     }
 }
