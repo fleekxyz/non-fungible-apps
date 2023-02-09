@@ -35,7 +35,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -52,7 +53,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         uint256 second_mint = fleekContract.mint(
@@ -64,7 +66,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(first_mint, 0);
@@ -81,7 +84,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(first_mint, 0);
@@ -95,7 +99,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(second_mint, 1);
@@ -111,7 +116,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(first_mint, 0);
@@ -125,7 +131,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(second_mint, 1);
@@ -144,7 +151,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -164,7 +172,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -193,7 +202,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -243,7 +253,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -265,7 +276,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -286,7 +298,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -313,7 +326,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -331,7 +345,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -352,7 +367,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -370,7 +386,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -391,7 +408,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -409,7 +427,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -430,7 +449,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -448,7 +468,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -469,7 +490,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -487,7 +509,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -508,7 +531,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -530,7 +554,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -555,7 +580,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -582,7 +608,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -609,7 +636,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -639,7 +667,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -671,7 +700,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -701,7 +731,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -729,7 +760,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -747,7 +779,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -776,7 +809,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -797,7 +831,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -819,7 +854,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -848,7 +884,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -868,7 +905,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -889,32 +927,6 @@ contract FleekTest is Test {
         );
     }
 
-    function testAppAccessPoints() public {
-        uint256 mint = fleekContract.mint(
-            DEPLOYER,
-            "Foundry Test App",
-            "This is a test application submitted by foundry tests.",
-            "https://fleek.xyz",
-            "fleek_xyz",
-            "afff3f6",
-            "https://github.com/fleekxyz/non-fungible-apps",
-            TestConstants.LOGO_0,
-            0xe34f26
-        );
-
-        assertEq(mint, 0);
-
-        fleekContract.addAccessPoint(0, FLEEK_AP_URL);
-
-        string[] memory accessPointList = fleekContract.appAccessPoints(mint);
-        assertEq(accessPointList[0], FLEEK_AP_URL);
-
-        fleekContract.addAccessPoint(0, "https://fleek_cloned_2.xyz");
-
-        accessPointList = fleekContract.appAccessPoints(mint);
-        assertEq(accessPointList[1], "https://fleek_cloned_2.xyz");
-    }
-
     function testCannotSetAccessPointNameVerifyWithUnknownIdentity() public {
         uint256 mint = fleekContract.mint(
             DEPLOYER,
@@ -925,7 +937,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -949,7 +962,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -973,7 +987,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -991,7 +1006,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -1014,7 +1030,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -1032,7 +1049,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -1055,7 +1073,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
@@ -1073,7 +1092,8 @@ contract FleekTest is Test {
             "afff3f6",
             "https://github.com/fleekxyz/non-fungible-apps",
             TestConstants.LOGO_0,
-            0xe34f26
+            0xe34f26,
+            false
         );
 
         assertEq(mint, 0);
