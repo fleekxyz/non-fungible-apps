@@ -203,4 +203,56 @@ describe('AccessPoints with Auto Approval Off', () => {
 
     expect(parsedAp.nameVerified).to.be.false;
   });
+
+  it('should token owner be able to change the auto approval settings to on', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await contract
+      .connect(owner)
+      .changeAccessPointAutoApprovalSettings(tokenId, true);
+
+    await contract.addAccessPoint(tokenId, 'accesspoint.com');
+
+    const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
+    const beforeParsedAp = JSON.parse(beforeAp);
+
+    expect(beforeParsedAp.status).to.be.eql('1'); //APPROVED STATUS
+  });
+
+  it('should token owner be able to approve a draft ap', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await contract.addAccessPoint(tokenId, 'accesspoint.com');
+
+    const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
+    const beforeParsedAp = JSON.parse(beforeAp);
+    expect(beforeParsedAp.status).to.be.eql('0'); //DRAFT STATUS
+
+    await contract
+      .connect(owner)
+      .setApprovalForAccessPoint(tokenId, 'accesspoint.com', true);
+
+    const afterAp = await contract.getAccessPointJSON('accesspoint.com');
+    const afterParsedAp = JSON.parse(afterAp);
+    expect(afterParsedAp.status).to.be.eql('1'); //APPROVED STATUS
+  });
+
+  it('should token owner be able to reject a draft ap', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await contract.addAccessPoint(tokenId, 'accesspoint.com');
+
+    const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
+    const beforeParsedAp = JSON.parse(beforeAp);
+    expect(beforeParsedAp.status).to.be.eql('0'); //DRAFT STATUS
+
+    await contract
+      .connect(owner)
+      .setApprovalForAccessPoint(tokenId, 'accesspoint.com', false);
+
+    const afterAp = await contract.getAccessPointJSON('accesspoint.com');
+    const afterParsedAp = JSON.parse(afterAp);
+
+    expect(afterParsedAp.status).to.be.eql('2'); //REJECTED STATUS
+  });
 });
