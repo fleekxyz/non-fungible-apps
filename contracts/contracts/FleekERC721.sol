@@ -161,7 +161,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     /**
      * @dev Returns the token metadata associated with the `tokenId`.
      *
-     * Returns a based64 encoded string value of the URI.
+     * Returns multiple string and uint values in relation to metadata fields of the App struct.
      *
      * Requirements:
      *
