@@ -57,7 +57,6 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         string ENS; // ENS ID
         uint256 currentBuild; // The current build number (Increments by one with each change, starts at zero)
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
-        string[] accessPoints; // List of app AccessPoint
         string logo;
         uint24 color; // Color of the nft
     }
@@ -75,7 +74,6 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      */
     struct AccessPoint {
         uint256 tokenId;
-        uint256 index;
         uint256 score;
         bool contentVerified;
         bool nameVerified;
@@ -138,7 +136,6 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
         app.builds[0] = Build(commitHash, gitRepository);
-        app.accessPoints = new string[](0);
 
         return tokenId;
     }
@@ -159,6 +156,29 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         App storage app = _apps[tokenId];
 
         return string(abi.encodePacked(_baseURI(), app.toString(owner).toBase64()));
+    }
+
+    /**
+     * @dev Returns the token metadata associated with the `tokenId`.
+     *
+     * Returns a based64 encoded string value of the URI.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     *
+     */
+    function getToken(
+        uint256 tokenId
+    )
+        public
+        view
+        virtual
+        returns (string memory, string memory, string memory, string memory, uint256, string memory, uint24)
+    {
+        _requireMinted(tokenId);
+        App storage app = _apps[tokenId];
+        return (app.name, app.description, app.externalURL, app.ENS, app.currentBuild, app.logo, app.color);
     }
 
     /**
@@ -352,8 +372,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         _requireMinted(tokenId);
         require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
 
-        _accessPoints[apName] = AccessPoint(tokenId, _apps[tokenId].accessPoints.length, 0, false, false, msg.sender);
-        _apps[tokenId].accessPoints.push(apName);
+        _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender);
 
         emit NewAccessPoint(apName, tokenId, msg.sender);
     }
@@ -372,18 +391,6 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function removeAccessPoint(string memory apName) public requireAP(apName) {
         require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
         uint256 tokenId = _accessPoints[apName].tokenId;
-        App storage _app = _apps[tokenId];
-
-        // the index of the AP to remove
-        uint256 indexToRemove = _accessPoints[apName].index;
-
-        // the last item is reposited in the index to remove
-        string memory lastAP = _app.accessPoints[_app.accessPoints.length - 1];
-        _app.accessPoints[indexToRemove] = lastAP;
-        _accessPoints[lastAP].index = indexToRemove;
-
-        // remove the last item
-        _app.accessPoints.pop();
 
         delete _accessPoints[apName];
         emit RemoveAccessPoint(apName, tokenId, msg.sender);
@@ -482,19 +489,6 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
         _accessPoints[apName].nameVerified = verified;
         emit ChangeAccessPointNameVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
-    }
-
-    /**
-     * @dev A view function to gather the list of access points of a given app.
-     *
-     * Requirements:
-     *
-     * - the tokenId must be minted and valid.
-     *
-     */
-    function appAccessPoints(uint256 tokenId) public view returns (string[] memory) {
-        _requireMinted(tokenId);
-        return _apps[tokenId].accessPoints;
     }
 
     /**
