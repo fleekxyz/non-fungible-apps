@@ -457,6 +457,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      */
     function removeAccessPoint(string memory apName) public requireAP(apName) {
         require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
+        _accessPoints[apName].status = AccessPointStatus.REMOVED;
         uint256 tokenId = _accessPoints[apName].tokenId;
         emit ChangeAccessPointStatus(apName, tokenId, AccessPointStatus.REMOVED, msg.sender);
         emit RemoveAccessPoint(apName, tokenId, msg.sender);

@@ -9,20 +9,23 @@ describe('AccessPoints with Auto Approval on', () => {
 
   beforeEach(async () => {
     fixture = await loadFixture(Fixtures.withMint);
+    fixture.contract.changeAccessPointAutoApprovalSettings(
+      fixture.tokenId,
+      true
+    );
     fixture.contract.addAccessPoint(fixture.tokenId, DefaultAP);
   });
 
-  it('should add an AP with draft status', async () => {
+  it('should add an AP with approved status', async () => {
     const { contract, owner, tokenId } = fixture;
 
     await expect(contract.addAccessPoint(tokenId, 'random.com'))
-      .to.emit(contract, 'NewAccessPoint')
-      .withArgs('random.com', tokenId, owner.address);
+      .to.emit(contract, 'ChangeAccessPointStatus')
+      .withArgs('random.com', tokenId, 1, owner.address);
   });
 
   it('should return a AP json object', async () => {
     const { contract, owner, tokenId } = fixture;
-
     const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
 
@@ -96,9 +99,17 @@ describe('AccessPoints with Auto Approval on', () => {
       .to.emit(contract, 'RemoveAccessPoint')
       .withArgs(DefaultAP, tokenId, owner.address);
 
-    await expect(
-      contract.getAccessPointJSON('accesspoint.com')
-    ).to.be.revertedWith('FleekERC721: invalid AP');
+    const ap = await contract.getAccessPointJSON(DefaultAP);
+    const parsedAp = JSON.parse(ap);
+
+    expect(parsedAp).to.eql({
+      tokenId,
+      score: 0,
+      owner: owner.address.toLowerCase(),
+      contentVerified: false,
+      nameVerified: false,
+      status: '3',
+    });
   });
 
   it('should allow only AP owner to remove it', async () => {
@@ -172,15 +183,13 @@ describe('AccessPoints with Auto Approval on', () => {
   });
 
   it('should token owner be able to change the auto approval settings to off', async () => {
-    const { contract, tokenId, owner } = fixture;
+    const { contract, tokenId } = fixture;
 
-    await contract
-      .connect(owner)
-      .changeAccessPointAutoApprovalSettings(tokenId, false);
+    await contract.changeAccessPointAutoApprovalSettings(tokenId, false);
 
-    await contract.addAccessPoint(tokenId, 'accesspoint.com');
+    await contract.addAccessPoint(tokenId, 'random.com');
 
-    const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
+    const beforeAp = await contract.getAccessPointJSON('random.com');
     const beforeParsedAp = JSON.parse(beforeAp);
 
     expect(beforeParsedAp.status).to.be.eql('0'); //DRAFT STATUS

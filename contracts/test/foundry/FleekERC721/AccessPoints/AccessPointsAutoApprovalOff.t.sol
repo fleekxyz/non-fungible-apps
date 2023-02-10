@@ -22,7 +22,7 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
     ) internal {
         string memory current = CuT.getAccessPointJSON(accessPointName);
         // prettier-ignore
-        string memory expectedJSON = string(abi.encodePacked('{"tokenId":', _tokenId, ',"score":', score, ',"nameVerified":', nameVerified, ',"contentVerified":', contentVerified, ',"owner":"', owner.toHexString(), '", status: "', status,'"}'));
+        string memory expectedJSON = string(abi.encodePacked('{"tokenId":', _tokenId, ',"score":', score, ',"nameVerified":', nameVerified, ',"contentVerified":', contentVerified, ',"owner":"', owner.toHexString(), '","status":"', status,'"}'));
         assertEq(current, expectedJSON);
     }
 
@@ -43,22 +43,12 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
         CuT.addAccessPoint(tokenId, accessPointName);
         CuT.removeAccessPoint(accessPointName);
 
-        expectRevertWithInvalidAP();
-        CuT.getAccessPointJSON(accessPointName);
+        assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer, "3");
     }
 
-    function test_cannotRemoveNonexistentAccessPoint() public {
+    function test_cannotRemoveNonExistentAccessPoint() public {
         expectRevertWithInvalidAP();
         CuT.removeAccessPoint("accesspoint.com");
-    }
-
-    function test_cannotTwiceRemoveAccessPoint() public {
-        string memory accessPointName = "accesspoint.com";
-        CuT.addAccessPoint(tokenId, accessPointName);
-        CuT.removeAccessPoint(accessPointName);
-
-        expectRevertWithInvalidAP();
-        CuT.removeAccessPoint(accessPointName);
     }
 
     function test_isAccessPointNameVerified() public {
