@@ -1,13 +1,23 @@
-import { Mint } from '../mint.context';
+type SVGPreviewProps = {
+  color: string;
+  logo: string;
+  name: string;
+  ens?: string;
+  css?: string;
+  size: string;
+};
 
 /**
  * SVGPreview renders the NFA image based in the provided props.
  */
-export const SVGPreview: React.FC = () => {
-  const size = '26.5rem'; //replace for
-  const { appLogo, logoColor, appName, ens: ensContext } = Mint.useContext();
-  const ens = ensContext.label || '';
-
+export const SVGPreview: React.FC<SVGPreviewProps> = ({
+  color,
+  logo,
+  name,
+  ens = '',
+  css = '',
+  size,
+}) => {
   return (
     <svg
       width={size}
@@ -15,6 +25,7 @@ export const SVGPreview: React.FC = () => {
       viewBox="0 0 1065 1065"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={`${css}`}
     >
       <rect width="1065" height="1065" fill="url(#background)" />
       <rect
@@ -103,7 +114,7 @@ export const SVGPreview: React.FC = () => {
           font-size="42"
           fill="#E5E7F8"
         >
-          {appName}
+          {name}
         </text>
         <text
           font-family="Inter, sans-serif"
@@ -120,7 +131,7 @@ export const SVGPreview: React.FC = () => {
         width="167"
         height="167"
         transform="matrix(0.987827 0.155557 -0.255261 0.966872 444.117 524.17)"
-        href={appLogo}
+        href={logo}
       />
 
       <defs>
@@ -157,8 +168,8 @@ export const SVGPreview: React.FC = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(532.5 532.5) rotate(89.961) scale(735)"
         >
-          <stop stop-color={logoColor} />
-          <stop offset="1" stop-color={logoColor} stop-opacity="0" />
+          <stop stop-color={color} />
+          <stop offset="1" stop-color={color} stop-opacity="0" />
         </radialGradient>
 
         <linearGradient
@@ -169,12 +180,12 @@ export const SVGPreview: React.FC = () => {
           y2="800.203"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color={logoColor} />
+          <stop stop-color={color} />
           <stop offset="1" stop-color="#2C313F" />
         </linearGradient>
 
         <linearGradient id="main">
-          <stop stop-color={logoColor} />
+          <stop stop-color={color} />
         </linearGradient>
       </defs>
     </svg>
