@@ -1,27 +1,43 @@
 import { newMockEvent } from 'matchstick-as';
-import { ethereum, Address, BigInt } from '@graphprotocol/graph-ts';
+import { ethereum, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import {
-  Approval,
-  ApprovalForAll,
-  CollectionRoleGranted,
-  CollectionRoleRevoked,
-  NewBuild,
-  NewTokenDescription,
-  NewTokenENS,
-  NewTokenExternalURL,
-  NewTokenImage,
-  NewTokenName,
-  TokenRoleGranted,
-  TokenRoleRevoked,
-  Transfer,
+  Approval as ApprovalEvent,
+  ApprovalForAll as ApprovalForAllEvent,
+  CollectionRoleGranted as CollectionRoleGrantedEvent,
+  CollectionRoleRevoked as CollectionRoleRevokedEvent,
+  NewBuild as NewBuildEvent,
+  NewTokenDescription as NewTokenDescriptionEvent,
+  NewTokenENS as NewTokenENSEvent,
+  NewTokenExternalURL as NewTokenExternalURLEvent,
+  NewTokenLogo as NewTokenLogoEvent,
+  NewTokenName as NewTokenNameEvent,
+  TokenRoleGranted as TokenRoleGrantedEvent,
+  TokenRoleRevoked as TokenRoleRevokedEvent,
+  Transfer as TransferEvent,
 } from '../generated/FleekNFA/FleekNFA';
+import {
+  handleApproval,
+  handleApprovalForAll,
+  handleCollectionRoleGranted,
+  handleCollectionRoleRevoked,
+  handleNewBuild,
+  handleNewTokenDescription,
+  handleNewTokenENS,
+  handleNewTokenExternalURL,
+  handleNewTokenLogo,
+  handleNewTokenName,
+  handleTokenRoleGranted,
+  handleTokenRoleRevoked,
+  handleTransfer,
+} from '../src/fleek-nfa';
 
 export function createApprovalEvent(
+  event_count: i32,
   owner: Address,
   approved: Address,
   tokenId: BigInt
-): Approval {
-  let approvalEvent = changetype<Approval>(newMockEvent());
+): ApprovalEvent {
+  let approvalEvent = changetype<ApprovalEvent>(newMockEvent());
 
   approvalEvent.parameters = new Array();
 
@@ -38,15 +54,19 @@ export function createApprovalEvent(
     )
   );
 
+  approvalEvent.transaction.hash = Bytes.fromI32(event_count);
+  approvalEvent.logIndex = new BigInt(event_count);
+
   return approvalEvent;
 }
 
 export function createApprovalForAllEvent(
+  event_count: i32,
   owner: Address,
   operator: Address,
   approved: boolean
-): ApprovalForAll {
-  let approvalForAllEvent = changetype<ApprovalForAll>(newMockEvent());
+): ApprovalForAllEvent {
+  let approvalForAllEvent = changetype<ApprovalForAllEvent>(newMockEvent());
 
   approvalForAllEvent.parameters = new Array();
 
@@ -60,15 +80,19 @@ export function createApprovalForAllEvent(
     new ethereum.EventParam('approved', ethereum.Value.fromBoolean(approved))
   );
 
+  approvalForAllEvent.transaction.hash = Bytes.fromI32(event_count);
+  approvalForAllEvent.logIndex = new BigInt(event_count);
+
   return approvalForAllEvent;
 }
 
 export function createCollectionRoleGrantedEvent(
+  event_count: i32,
   role: i32,
   toAddress: Address,
   byAddress: Address
-): CollectionRoleGranted {
-  let collectionRoleGrantedEvent = changetype<CollectionRoleGranted>(
+): CollectionRoleGrantedEvent {
+  let collectionRoleGrantedEvent = changetype<CollectionRoleGrantedEvent>(
     newMockEvent()
   );
 
@@ -87,15 +111,19 @@ export function createCollectionRoleGrantedEvent(
     new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
   );
 
+  collectionRoleGrantedEvent.transaction.hash = Bytes.fromI32(event_count);
+  collectionRoleGrantedEvent.logIndex = new BigInt(event_count);
+
   return collectionRoleGrantedEvent;
 }
 
 export function createCollectionRoleRevokedEvent(
+  event_count: i32,
   role: i32,
   toAddress: Address,
   byAddress: Address
-): CollectionRoleRevoked {
-  let collectionRoleRevokedEvent = changetype<CollectionRoleRevoked>(
+): CollectionRoleRevokedEvent {
+  let collectionRoleRevokedEvent = changetype<CollectionRoleRevokedEvent>(
     newMockEvent()
   );
 
@@ -114,15 +142,19 @@ export function createCollectionRoleRevokedEvent(
     new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
   );
 
+  collectionRoleRevokedEvent.transaction.hash = Bytes.fromI32(event_count);
+  collectionRoleRevokedEvent.logIndex = new BigInt(event_count);
+
   return collectionRoleRevokedEvent;
 }
 
 export function createNewBuildEvent(
+  event_count: i32,
   token: BigInt,
   commitHash: string,
   triggeredBy: Address
-): NewBuild {
-  let newBuildEvent = changetype<NewBuild>(newMockEvent());
+): NewBuildEvent {
+  let newBuildEvent = changetype<NewBuildEvent>(newMockEvent());
 
   newBuildEvent.parameters = new Array();
 
@@ -139,15 +171,19 @@ export function createNewBuildEvent(
     )
   );
 
+  newBuildEvent.transaction.hash = Bytes.fromI32(event_count);
+  newBuildEvent.logIndex = new BigInt(event_count);
+
   return newBuildEvent;
 }
 
 export function createNewTokenDescriptionEvent(
+  event_count: i32,
   token: BigInt,
   description: string,
   triggeredBy: Address
-): NewTokenDescription {
-  let newTokenDescriptionEvent = changetype<NewTokenDescription>(
+): NewTokenDescriptionEvent {
+  let newTokenDescriptionEvent = changetype<NewTokenDescriptionEvent>(
     newMockEvent()
   );
 
@@ -169,15 +205,19 @@ export function createNewTokenDescriptionEvent(
     )
   );
 
+  newTokenDescriptionEvent.transaction.hash = Bytes.fromI32(event_count);
+  newTokenDescriptionEvent.logIndex = new BigInt(event_count);
+
   return newTokenDescriptionEvent;
 }
 
 export function createNewTokenENSEvent(
+  event_count: i32,
   token: BigInt,
   ENS: string,
   triggeredBy: Address
-): NewTokenENS {
-  let newTokenEnsEvent = changetype<NewTokenENS>(newMockEvent());
+): NewTokenENSEvent {
+  let newTokenEnsEvent = changetype<NewTokenENSEvent>(newMockEvent());
 
   newTokenEnsEvent.parameters = new Array();
 
@@ -194,15 +234,19 @@ export function createNewTokenENSEvent(
     )
   );
 
+  newTokenEnsEvent.transaction.hash = Bytes.fromI32(event_count);
+  newTokenEnsEvent.logIndex = new BigInt(event_count);
+
   return newTokenEnsEvent;
 }
 
 export function createNewTokenExternalURLEvent(
+  event_count: i32,
   token: BigInt,
   externalURL: string,
   triggeredBy: Address
-): NewTokenExternalURL {
-  let newTokenExternalUrlEvent = changetype<NewTokenExternalURL>(
+): NewTokenExternalURLEvent {
+  let newTokenExternalUrlEvent = changetype<NewTokenExternalURLEvent>(
     newMockEvent()
   );
 
@@ -224,15 +268,19 @@ export function createNewTokenExternalURLEvent(
     )
   );
 
+  newTokenExternalUrlEvent.transaction.hash = Bytes.fromI32(event_count);
+  newTokenExternalUrlEvent.logIndex = new BigInt(event_count);
+
   return newTokenExternalUrlEvent;
 }
 
 export function createNewTokenImageEvent(
+  event_count: i32,
   token: BigInt,
   image: string,
   triggeredBy: Address
-): NewTokenImage {
-  let newTokenImageEvent = changetype<NewTokenImage>(newMockEvent());
+): NewTokenImageEvent {
+  let newTokenImageEvent = changetype<NewTokenImageEvent>(newMockEvent());
 
   newTokenImageEvent.parameters = new Array();
 
@@ -249,15 +297,19 @@ export function createNewTokenImageEvent(
     )
   );
 
+  newTokenImageEvent.transaction.hash = Bytes.fromI32(event_count);
+  newTokenImageEvent.logIndex = new BigInt(event_count);
+
   return newTokenImageEvent;
 }
 
 export function createNewTokenNameEvent(
+  event_count: i32,
   token: BigInt,
   name: string,
   triggeredBy: Address
-): NewTokenName {
-  let newTokenNameEvent = changetype<NewTokenName>(newMockEvent());
+): NewTokenNameEvent {
+  let newTokenNameEvent = changetype<NewTokenNameEvent>(newMockEvent());
 
   newTokenNameEvent.parameters = new Array();
 
@@ -274,16 +326,20 @@ export function createNewTokenNameEvent(
     )
   );
 
+  newTokenNameEvent.transaction.hash = Bytes.fromI32(event_count);
+  newTokenNameEvent.logIndex = new BigInt(event_count);
+
   return newTokenNameEvent;
 }
 
 export function createTokenRoleGrantedEvent(
+  event_count: i32,
   tokenId: BigInt,
   role: i32,
   toAddress: Address,
   byAddress: Address
-): TokenRoleGranted {
-  let tokenRoleGrantedEvent = changetype<TokenRoleGranted>(newMockEvent());
+): TokenRoleGrantedEvent {
+  let tokenRoleGrantedEvent = changetype<TokenRoleGrantedEvent>(newMockEvent());
 
   tokenRoleGrantedEvent.parameters = new Array();
 
@@ -306,16 +362,20 @@ export function createTokenRoleGrantedEvent(
     new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
   );
 
+  tokenRoleGrantedEvent.transaction.hash = Bytes.fromI32(event_count);
+  tokenRoleGrantedEvent.logIndex = new BigInt(event_count);
+
   return tokenRoleGrantedEvent;
 }
 
 export function createTokenRoleRevokedEvent(
+  event_count: i32,
   tokenId: BigInt,
   role: i32,
   toAddress: Address,
   byAddress: Address
-): TokenRoleRevoked {
-  let tokenRoleRevokedEvent = changetype<TokenRoleRevoked>(newMockEvent());
+): TokenRoleRevokedEvent {
+  let tokenRoleRevokedEvent = changetype<TokenRoleRevokedEvent>(newMockEvent());
 
   tokenRoleRevokedEvent.parameters = new Array();
 
@@ -338,15 +398,19 @@ export function createTokenRoleRevokedEvent(
     new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
   );
 
+  tokenRoleRevokedEvent.transaction.hash = Bytes.fromI32(event_count);
+  tokenRoleRevokedEvent.logIndex = new BigInt(event_count);
+
   return tokenRoleRevokedEvent;
 }
 
 export function createTransferEvent(
+  event_count: i32,
   from: Address,
   to: Address,
   tokenId: BigInt
-): Transfer {
-  let transferEvent = changetype<Transfer>(newMockEvent());
+): TransferEvent {
+  let transferEvent = changetype<TransferEvent>(newMockEvent());
 
   transferEvent.parameters = new Array();
 
@@ -363,5 +427,111 @@ export function createTransferEvent(
     )
   );
 
+  transferEvent.transaction.hash = Bytes.fromI32(event_count);
+  transferEvent.logIndex = new BigInt(event_count);
+
   return transferEvent;
+}
+
+export const CONTRACT: Address = Address.fromString(
+  '0x0000000000000000000000000000000000000000'
+);
+export const CONTRACT_OWNER: Address = Address.fromString(
+  '0x1000000000000000000000000000000000000001'
+);
+export const TOKEN_OWNER_ONE: Address = Address.fromString(
+  '0x2000000000000000000000000000000000000002'
+);
+export const TOKEN_OWNER_TWO: Address = Address.fromString(
+  '0x3000000000000000000000000000000000000003'
+);
+
+export function handleTransfers(events: TransferEvent[]): void {
+  events.forEach((event) => {
+    handleTransfer(event);
+  });
+}
+
+export function handleNewTokenNames(events: NewTokenNameEvent[]): void {
+  events.forEach((event) => {
+    handleNewTokenName(event);
+  });
+}
+
+export function handleNewTokenDescriptions(
+  events: NewTokenDescriptionEvent[]
+): void {
+  events.forEach((event) => {
+    handleNewTokenDescription(event);
+  });
+}
+
+export function handleNewTokenENSAddresses(events: NewTokenENSEvent[]): void {
+  events.forEach((event) => {
+    handleNewTokenENS(event);
+  });
+}
+
+export function handleNewTokenExternalURLs(
+  events: NewTokenExternalURLEvent[]
+): void {
+  events.forEach((event) => {
+    handleNewTokenExternalURL(event);
+  });
+}
+
+export function handleNewBuilds(events: NewBuildEvent[]): void {
+  events.forEach((event) => {
+    handleNewBuild(event);
+  });
+}
+
+export function handleNewTokenLogos(events: NewTokenLogoEvent[]): void {
+  events.forEach((event) => {
+    handleNewTokenLogo(event);
+  });
+}
+
+export function handleApprovals(events: ApprovalEvent[]): void {
+  events.forEach((event) => {
+    handleApproval(event);
+  });
+}
+
+export function handleApprovalForAlls(events: ApprovalForAllEvent[]): void {
+  events.forEach((event) => {
+    handleApprovalForAll(event);
+  });
+}
+
+export function handleCollectionRoleGranteds(
+  events: CollectionRoleGrantedEvent[]
+): void {
+  events.forEach((event) => {
+    handleCollectionRoleGranted(event);
+  });
+}
+
+export function handleCollectionRoleRevokeds(
+  events: CollectionRoleRevokedEvent[]
+): void {
+  events.forEach((event) => {
+    handleCollectionRoleRevoked(event);
+  });
+}
+
+export function handleTokenRoleGranteds(events: TokenRoleGrantedEvent[]): void {
+  events.forEach((event) => {
+    handleTokenRoleGranted(event);
+  });
+}
+
+export function handleTokenRoleRevokeds(events: TokenRoleRevokedEvent[]): void {
+  events.forEach((event) => {
+    handleTokenRoleRevoked(event);
+  });
+}
+
+export function makeEventId(id: i32): string {
+  return Bytes.fromI32(id).toHexString() + '00000000';
 }
