@@ -3,8 +3,9 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract FleekAccessControl {
+contract FleekAccessControl is Initializable {
     using Counters for Counters.Counter;
 
     enum Roles {
@@ -33,7 +34,7 @@ contract FleekAccessControl {
     /**
      * @dev Initializes the contract by granting the `Owner` role to the deployer.
      */
-    constructor() {
+    function __FleekAccessControl_init() internal onlyInitializing {
         _grantCollectionRole(Roles.Owner, msg.sender);
     }
 

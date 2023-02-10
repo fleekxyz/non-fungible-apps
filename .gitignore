@@ -1,5 +1,6 @@
 node_modules
 .env
+<<<<<<< HEAD
 
 # hardhat
 cache
@@ -12,3 +13,6 @@ package-lock.json
 # Foundry
 out
 forge-cache
+=======
+package-lock.json
+>>>>>>> develop
