@@ -29,6 +29,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Compile contracts to get access to the ABI
+        run: cd ../contracts && yarn && yarn compile && cd ../subgraph
+
       - name: Install dependencies
         run: yarn --ignore-scripts
 
