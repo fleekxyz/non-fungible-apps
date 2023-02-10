@@ -34,9 +34,10 @@ export const RepoConfigurationBody = () => {
   const { nextStep } = Stepper.useContext();
   const [branchSelected, setBranchSelected] = useState(branchName);
   const [commitHashSelected, setCommitHashSelected] = useState(commitHash);
-
+  console.log(branchSelected);
   const handleBranchChange = (dorpdownOption: DropdownItem) => {
     //TODO we'll have to check the data that GH API returns
+    console.log(dorpdownOption);
     setBranchSelected(dorpdownOption);
   };
 
@@ -45,9 +46,10 @@ export const RepoConfigurationBody = () => {
   };
 
   const handleContinueClick = () => {
-    setRepositoryConfig({} as DropdownItem, commitHashSelected);
+    setRepositoryConfig(branchSelected, commitHashSelected);
     nextStep();
   };
+
   return (
     <Card.Body css={{ pt: '$2' }}>
       <Grid css={{ rowGap: '$6' }}>
