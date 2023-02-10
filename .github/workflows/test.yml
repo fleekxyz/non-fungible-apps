@@ -9,7 +9,11 @@ on:
 jobs:
   test-contracts:
     runs-on: ubuntu-latest
-
+    
+    defaults:
+      run:
+        working-directory: contracts
+        
     strategy:
       matrix:
         node-version: [18.x]
