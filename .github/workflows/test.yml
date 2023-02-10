@@ -87,5 +87,8 @@ jobs:
       - name: Install dependencies
         run: yarn --ignore-scripts
 
+      - name: Run codegen
+        run: yarn codegen
+        
       - name: Test Subgraph
         run: yarn test
