@@ -162,7 +162,7 @@ export function handleNewTokenExternalURL(
   entity.save();
 }
 
-export function handleNewTokenLogo(event: NewTokenLogo): void {
+export function handleNewTokenLogo(event: NewTokenLogoEvent): void {
   let entity = new NewTokenLogo(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
