@@ -25,7 +25,7 @@ export const NftCard: React.FC<NftCardProps> = ({
   const { appLogo, logoColor, appName, ens } = Mint.useContext();
 
   return (
-    <Card.Container css={{ p: '$0' }}>
+    <Card.Container css={{ width: '$107h', p: '$0' }}>
       <SVGPreview
         color={logoColor}
         logo={appLogo}
