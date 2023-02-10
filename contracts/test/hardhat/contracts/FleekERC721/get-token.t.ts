@@ -7,7 +7,7 @@ const { MintParams } = TestConstants;
 describe('FleekERC721.GetToken', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
 
-  before(async () => {
+  beforeEach(async () => {
     fixture = await loadFixture(Fixtures.withMint);
   });
 
