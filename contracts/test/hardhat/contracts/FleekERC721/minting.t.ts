@@ -1,9 +1,9 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures } from './helpers';
+import { TestConstants, Fixtures, Errors } from './helpers';
 import { ethers } from 'hardhat';
 
-const { MintParams, Roles } = TestConstants;
+const { MintParams, CollectionRoles } = TestConstants;
 
 describe('FleekERC721.Minting', () => {
   it('should be able to mint a new token', async () => {
@@ -42,7 +42,9 @@ describe('FleekERC721.Minting', () => {
           MintParams.logo,
           MintParams.color
         )
-    ).to.be.revertedWith('FleekAccessControl: must have collection role');
+    )
+      .to.be.revertedWithCustomError(contract, Errors.MustHaveCollectionRole)
+      .withArgs(CollectionRoles.Owner);
   });
 
   it('should have address to as owner', async () => {
@@ -65,12 +67,6 @@ describe('FleekERC721.Minting', () => {
     const tokenId = response.value.toNumber();
 
     expect(await contract.ownerOf(tokenId)).to.equal(owner.address);
-    expect(await contract.hasTokenRole(tokenId, Roles.Owner, owner.address)).to
-      .be.true;
-
     expect(await contract.ownerOf(tokenId)).not.to.equal(otherAccount.address);
-    expect(
-      await contract.hasTokenRole(tokenId, Roles.Owner, otherAccount.address)
-    ).to.be.false;
   });
 });
