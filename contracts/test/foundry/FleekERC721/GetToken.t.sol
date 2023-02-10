@@ -68,6 +68,7 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
     }
 
     function testFail_tokenURIForNonExistentId() public view {
+        expectRevertWithInvalidTokenId();
         CuT.getToken(1);
     }
 }
