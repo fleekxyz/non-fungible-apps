@@ -1,8 +1,12 @@
-import { Button, Card, Grid, Icon, IconButton, Stepper } from '@/components';
+import { Button, Card, Grid, Stepper } from '@/components';
 import { Mint } from '../mint.context';
-import { LogoField } from './fields/logo/logo-field';
-import { AppDescriptionField, AppNameField, EnsDomainField } from './fields';
-import { VerifyNFAField } from './fields/verify-nfa-field';
+import {
+  LogoField,
+  AppDescriptionField,
+  AppNameField,
+  EnsDomainField,
+  VerifyNFAField,
+} from './fields';
 import { MintCardHeader } from '../mint-card';
 
 export const FormStep = () => {
@@ -13,7 +17,11 @@ export const FormStep = () => {
     <Card.Container css={{ width: '$107h' }}>
       <MintCardHeader title="NFA Details" onClickBack={prevStep} />
       <Card.Body>
-        <Grid css={{ rowGap: '$6' }}>
+        <Grid
+          css={{
+            rowGap: '$6',
+          }}
+        >
           <Grid css={{ rowGap: '$4' }}>
             <AppNameField />
             <AppDescriptionField />

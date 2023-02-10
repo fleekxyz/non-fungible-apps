@@ -27,13 +27,13 @@ export const MintStepper = () => {
           </Stepper.Step>
 
           <Stepper.Step>
-            <MintStep header="Finalize a few key things for your DyDx NFA">
+            <MintStep header="Finalize a few key things for your NFA">
               <FormStep />
             </MintStep>
           </Stepper.Step>
 
           <Stepper.Step>
-            <MintStep header="Review your DyDx NFA and mint it on Polygon">
+            <MintStep header="Review your NFA and mint it on Polygon">
               <MintPreview />
             </MintStep>
           </Stepper.Step>
