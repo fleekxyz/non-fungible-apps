@@ -4,6 +4,10 @@ on:
   pull_request:
     branches:    
       - main
+      - develop
+  push:
+    paths:
+      - 'subgraph/**'
 
 jobs:
 
@@ -30,6 +34,9 @@ jobs:
 
       - name: Run codegen
         run: yarn codegen
+
+      - name: Build Subgraph
+        run: yarn build
 
       - name: Test Subgraph
         run: yarn test
