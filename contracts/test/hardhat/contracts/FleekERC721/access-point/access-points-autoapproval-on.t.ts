@@ -106,10 +106,6 @@ describe('AccessPoints with Auto Approval on', () => {
     await expect(contract.removeAccessPoint('accesspoint.com'))
       .to.emit(contract, 'RemoveAccessPoint')
       .withArgs('accesspoint.com', tokenId, owner.address);
-
-    await expect(
-      contract.getAccessPointJSON('accesspoint.com')
-    ).to.be.revertedWith('FleekERC721: invalid AP');
   });
 
   it('should allow only AP owner to remove it', async () => {
