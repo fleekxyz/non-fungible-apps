@@ -136,4 +136,33 @@ describe('FleekERC721.CollectionRoles', () => {
       .to.emit(contract, 'CollectionRoleRevoked')
       .withArgs(CollectionRoles.Owner, otherAccount.address, owner.address);
   });
+
+  it('should not be able to grant role if already granted', async () => {
+    const { otherAccount, contract } = fixture;
+
+    await contract.grantCollectionRole(
+      CollectionRoles.Owner,
+      otherAccount.address
+    );
+
+    await expect(
+      contract.grantCollectionRole(CollectionRoles.Owner, otherAccount.address)
+    ).to.be.revertedWithCustomError(contract, Errors.RoleAlreadySet);
+  });
+
+  it('should not be able to revoke role if not granted', async () => {
+    const { otherAccount, contract } = fixture;
+
+    await expect(
+      contract.revokeCollectionRole(CollectionRoles.Owner, otherAccount.address)
+    ).to.be.revertedWithCustomError(contract, Errors.RoleAlreadySet);
+  });
+
+  it('should not be able to remove all collection owners', async () => {
+    const { owner, contract } = fixture;
+
+    await expect(
+      contract.revokeCollectionRole(CollectionRoles.Owner, owner.address)
+    ).to.be.revertedWithCustomError(contract, Errors.MustHaveAtLeastOneOwner);
+  });
 });

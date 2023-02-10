@@ -183,4 +183,31 @@ describe('FleekERC721.TokenRoles', () => {
         owner.address
       );
   });
+
+  it('should not be able to grant role twice', async () => {
+    const { contract, otherAccount, tokenId } = fixture;
+    await contract.grantTokenRole(
+      tokenId,
+      TokenRoles.Controller,
+      otherAccount.address
+    );
+    await expect(
+      contract.grantTokenRole(
+        tokenId,
+        TokenRoles.Controller,
+        otherAccount.address
+      )
+    ).to.be.revertedWithCustomError(contract, Errors.RoleAlreadySet);
+  });
+
+  it('should not be able to revoke role twice', async () => {
+    const { contract, otherAccount, tokenId } = fixture;
+    await expect(
+      contract.revokeTokenRole(
+        tokenId,
+        TokenRoles.Controller,
+        otherAccount.address
+      )
+    ).to.be.revertedWithCustomError(contract, Errors.RoleAlreadySet);
+  });
 });
