@@ -32,7 +32,7 @@ dataSources:
         - Controller
       abis:
         - name: FleekNFA
-          file: ../artifacts/contracts/FleekERC721.sol/FleekERC721.json
+          file: ../contracts/deployments/mumbai/FleekERC721.json
       eventHandlers:
         - event: Approval(indexed address,indexed address,indexed uint256)
           handler: handleApproval
