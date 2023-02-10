@@ -10,10 +10,6 @@ jobs:
   test-contracts:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: contracts
-
     strategy:
       matrix:
         node-version: [18.x]
@@ -69,3 +65,27 @@ jobs:
 
       - name: Build
         run: yarn build
+        
+  test-subgraph:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: subgraph
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Install dependencies
+        run: yarn --ignore-scripts
+
+      - name: Test Subgraph
+        run: yarn test
