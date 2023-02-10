@@ -21,7 +21,6 @@ import {
   CollectionRoleGranted,
   CollectionRoleRevoked,
   Controller,
-  Holder,
   NewBuild,
   NewTokenDescription,
   NewTokenENS,
