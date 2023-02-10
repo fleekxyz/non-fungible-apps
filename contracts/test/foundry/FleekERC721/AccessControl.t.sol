@@ -5,7 +5,17 @@ pragma solidity ^0.8.17;
 import "./TestBase.sol";
 import {FleekAccessControl} from "contracts/FleekAccessControl.sol";
 
-contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
+contract Test_FleekERC721_AccessControlAssertions is Test {
+    function expectRevertWithMustHaveAtLeastOneOwner() internal {
+        vm.expectRevert(abi.encodeWithSelector(MustHaveAtLeastOneOwner.selector));
+    }
+
+    function expectRevertWithRoleAlreadySet() internal {
+        vm.expectRevert(abi.encodeWithSelector(RoleAlreadySet.selector));
+    }
+}
+
+contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC721_AccessControlAssertions {
     uint256 internal tokenId;
     address internal collectionOwner = address(1);
     address internal tokenOwner = address(3);
@@ -345,5 +355,29 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
         // TokenOwner
         vm.prank(tokenOwner);
         CuT.burn(tokenId);
+    }
+
+    function test_cannotHaveLessThanOneCollectionOwner() public {
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, collectionOwner);
+        expectRevertWithMustHaveAtLeastOneOwner();
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, deployer);
+    }
+
+    function test_cannotGrantRoleAlreadyGaranted() public {
+        expectRevertWithRoleAlreadySet();
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Owner, collectionOwner);
+
+        expectRevertWithRoleAlreadySet();
+        vm.prank(tokenOwner);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, tokenController);
+    }
+
+    function test_cannotRevokeRoleAlreadyRevoked() public {
+        expectRevertWithRoleAlreadySet();
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, anyAddress);
+
+        expectRevertWithRoleAlreadySet();
+        vm.prank(tokenOwner);
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, anyAddress);
     }
 }
