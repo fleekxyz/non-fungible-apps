@@ -1,41 +1,18 @@
-import { IconButton, Icon, Stepper, Card } from '@/components';
+import { Stepper } from '@/components';
+import { FormStep } from './form-step';
+import { MintPreview } from './preview-step/mint-preview';
 import { GithubStep } from './github-step';
 import { MintStep } from './mint-step';
+import { WalletStep } from './wallet-step';
 import { Mint } from './mint.context';
-
-//TODO remove after mint flow is done
-const Heading = ({ title }: { title: string }) => {
-  const { prevStep } = Stepper.useContext();
-
-  return (
-    <Card.Heading
-      title={title}
-      leftIcon={
-        <IconButton
-          aria-label="Add"
-          colorScheme="gray"
-          variant="link"
-          icon={<Icon name="back" />}
-          css={{ mr: '$2' }}
-          onClick={prevStep}
-        />
-      }
-      rightIcon={
-        <IconButton
-          aria-label="Add"
-          colorScheme="gray"
-          variant="link"
-          icon={<Icon name="info" />}
-        />
-      }
-    />
-  );
-};
+import { NftMinted } from './nft-minted';
 
 export const MintStepper = () => {
-  return (
-    <Stepper.Root initialStep={1}>
-      <Mint.Provider>
+  const { sucessMint } = Mint.useContext();
+
+  if (!sucessMint) {
+    return (
+      <Stepper.Root initialStep={1}>
         <Stepper.Container>
           <Stepper.Step>
             <MintStep header="Connect GitHub and select repository">
@@ -45,41 +22,25 @@ export const MintStepper = () => {
 
           <Stepper.Step>
             <MintStep header="Connect your Ethereum Wallet to mint an NFA">
-              <Card.Container>
-                <Heading title="Connect Wallet" />
-                <Card.Body>
-                  <span>Step 2</span>
-                </Card.Body>
-              </Card.Container>
+              <WalletStep />
             </MintStep>
           </Stepper.Step>
 
           <Stepper.Step>
-            <MintStep header="Finalize a few key things for your DyDx NFA">
-              <Card.Container>
-                <Heading title="NFA Detail" />
-                <Card.Body>
-                  <span>Step 3</span>
-                </Card.Body>
-              </Card.Container>
+            <MintStep header="Finalize a few key things for your NFA">
+              <FormStep />
             </MintStep>
           </Stepper.Step>
 
           <Stepper.Step>
-            <MintStep header="Review your DyDx NFA and mint it on Polygon">
-              <Card.Container>
-                <Heading title="Mint NFA" />
-                <Card.Body>
-                  <span>Step 4</span>
-                </Card.Body>
-              </Card.Container>
+            <MintStep header="Review your NFA and mint it on Polygon">
+              <MintPreview />
             </MintStep>
           </Stepper.Step>
         </Stepper.Container>
-      </Mint.Provider>
+      </Stepper.Root>
+    );
+  }
 
-      {/* TODO remove buttons when finish to integrate all the flow */}
-      {/* <StepperButton /> */}
-    </Stepper.Root>
-  );
+  return <NftMinted />;
 };
