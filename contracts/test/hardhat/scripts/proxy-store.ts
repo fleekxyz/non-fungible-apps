@@ -1,5 +1,8 @@
 import { expect } from 'chai';
-import { proxyStore, getProxyFilePath } from '../../scripts/utils/proxy-store';
+import {
+  proxyStore,
+  getProxyFilePath,
+} from '../../../scripts/utils/proxy-store';
 import fs from 'fs/promises';
 
 describe('Proxy Store', () => {
