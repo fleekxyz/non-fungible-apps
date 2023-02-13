@@ -17,20 +17,15 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     using FleekStrings for string;
     using FleekStrings for uint24;
 
-    event ChangeMetadata(uint256 indexed tokenId, string indexed key, string value, address indexed triggeredBy);
-    event NewAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
-    event RemoveAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
-    event ChangeAccessPointScore(
-        string indexed apName,
-        uint256 indexed tokenId,
-        uint256 score,
-        address indexed triggeredBy
-    );
+    event ChangeMetadata(uint256 indexed tokenId, string key, string value, address indexed triggeredBy);
+    event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
+    event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
+    event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
 
     event ChangeAccessPointVerification(
-        string indexed apName,
+        string apName,
         uint256 indexed tokenId,
-        string indexed verificationType,
+        string verificationType,
         bool verified,
         address triggeredBy
     );
