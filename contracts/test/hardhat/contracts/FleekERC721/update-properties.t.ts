@@ -1,6 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures } from './helpers';
+import { TestConstants, Fixtures, Events } from './helpers';
 
 const {
   Logos: { 1: Logo1 },
@@ -12,6 +12,46 @@ describe('FleekERC721.UpdateProperties', () => {
 
   beforeEach(async () => {
     fixture = await loadFixture(Fixtures.withMint);
+  });
+
+  it('should emit event for external url change', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await expect(contract.setTokenExternalURL(tokenId, 'https://app.com'))
+      .to.emit(contract, Events.ChangeMetadata)
+      .withArgs(tokenId, 'externalURL', 'https://app.com', owner.address);
+  });
+
+  it('should emit event for ens change', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await expect(contract.setTokenENS(tokenId, 'app.eth'))
+      .to.emit(contract, Events.ChangeMetadata)
+      .withArgs(tokenId, 'ENS', 'app.eth', owner.address);
+  });
+
+  it('should emit event for name change', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await expect(contract.setTokenName(tokenId, 'App'))
+      .to.emit(contract, Events.ChangeMetadata)
+      .withArgs(tokenId, 'name', 'App', owner.address);
+  });
+
+  it('should emit event for description change', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await expect(contract.setTokenDescription(tokenId, 'App Description'))
+      .to.emit(contract, Events.ChangeMetadata)
+      .withArgs(tokenId, 'description', 'App Description', owner.address);
+  });
+
+  it('should emit event for build change', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await expect(contract.setTokenBuild(tokenId, 'commitHash', 'gitRepository'))
+      .to.emit(contract, Events.ChangeMetadata)
+      .withArgs(tokenId, 'build', 'commitHash', owner.address);
   });
 
   it('should update token logo', async () => {
@@ -30,6 +70,14 @@ describe('FleekERC721.UpdateProperties', () => {
       'image',
       TestConstants.ResultantImage['Logo1+Default']
     );
+  });
+
+  it('should emit metadata updated event for logo change', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await expect(contract.setTokenLogo(tokenId, Logo1))
+      .to.emit(contract, Events.ChangeMetadata)
+      .withArgs(tokenId, 'logo', Logo1, owner.address);
   });
 
   it('should update token color', async () => {
@@ -55,6 +103,14 @@ describe('FleekERC721.UpdateProperties', () => {
     );
   });
 
+  it('should emit metadata updated event for color change', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await expect(contract.setTokenColor(tokenId, Color1))
+      .to.emit(contract, Events.ChangeMetadata)
+      .withArgs(tokenId, 'color', '#123456', owner.address);
+  });
+
   it('should update the token logo and color', async () => {
     const { contract, tokenId } = fixture;
     await contract.setTokenLogoAndColor(tokenId, Logo1, Color1);
@@ -77,5 +133,15 @@ describe('FleekERC721.UpdateProperties', () => {
       'image',
       TestConstants.ResultantImage['Logo1+Color1']
     );
+  });
+
+  it('should emit metadata updated event for color change', async () => {
+    const { contract, tokenId, owner } = fixture;
+
+    await expect(contract.setTokenLogoAndColor(tokenId, Logo1, Color1))
+      .to.emit(contract, Events.ChangeMetadata)
+      .withArgs(tokenId, 'logo', Logo1, owner.address)
+      .and.to.emit(contract, Events.ChangeMetadata)
+      .withArgs(tokenId, 'color', '#123456', owner.address);
   });
 });
