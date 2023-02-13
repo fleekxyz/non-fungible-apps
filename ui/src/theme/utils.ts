@@ -64,6 +64,14 @@ export const utils = {
   btlr: (value: Stitches.PropertyValue<'borderTopLeftRadius'>) => ({
     borderTopLeftRadius: value,
   }),
+  bt: (value: Stitches.PropertyValue<'borderTopLeftRadius'>) => ({
+    borderTopLeftRadius: value,
+    borderTopRightRadius: value,
+  }),
+  bb: (value: Stitches.PropertyValue<'borderBottomLeftRadius'>) => ({
+    borderBottomRightRadius: value,
+    borderBottomLeftRadius: value,
+  }),
 
   ox: (value: Stitches.PropertyValue<'overflowX'>) => ({ overflowX: value }),
   oy: (value: Stitches.PropertyValue<'overflowY'>) => ({ overflowY: value }),
