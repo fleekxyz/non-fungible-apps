@@ -9,7 +9,7 @@ import {
   NewTokenDescription as NewTokenDescriptionEvent,
   NewTokenENS as NewTokenENSEvent,
   NewTokenExternalURL as NewTokenExternalURLEvent,
-  NewTokenLogo as NewTokenLogoEvent,
+  NewTokenImage as NewTokenLogoEvent,
   NewTokenName as NewTokenNameEvent,
   TokenRoleGranted as TokenRoleGrantedEvent,
   TokenRoleRevoked as TokenRoleRevokedEvent,
@@ -101,7 +101,7 @@ export function handleNewBuild(event: NewBuildEvent): void {
   let entity = new NewBuild(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.tokenId;
+  entity.token = event.params.token;
   entity.commitHash = event.params.commitHash.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
@@ -118,7 +118,7 @@ export function handleNewTokenDescription(
   let entity = new NewTokenDescription(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.tokenId;
+  entity.token = event.params.token;
   entity.description = event.params.description.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
@@ -133,7 +133,7 @@ export function handleNewTokenENS(event: NewTokenENSEvent): void {
   let entity = new NewTokenENS(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.tokenId;
+  entity.token = event.params.token;
   entity.ENS = event.params.ENS.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
@@ -150,7 +150,7 @@ export function handleNewTokenExternalURL(
   let entity = new NewTokenExternalURL(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.tokenId;
+  entity.token = event.params.token;
   entity.externalURL = event.params.externalURL.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
@@ -161,12 +161,12 @@ export function handleNewTokenExternalURL(
   entity.save();
 }
 
-export function handleNewTokenLogo(event: NewTokenLogo): void {
+export function handleNewTokenLogo(event: NewTokenLogoEvent): void {
   let entity = new NewTokenLogo(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.tokenId;
-  entity.logo = event.params.logo.toString();
+  entity.token = event.params.token;
+  entity.logo = event.params.image.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
   entity.blockNumber = event.block.number;
@@ -180,7 +180,7 @@ export function handleNewTokenName(event: NewTokenNameEvent): void {
   let entity = new NewTokenName(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.tokenId;
+  entity.token = event.params.token;
   entity.name = event.params.name.toString();
   entity.triggeredBy = event.params.triggeredBy;
 

@@ -1,5 +1,11 @@
 import { newMockEvent } from 'matchstick-as';
-import { ethereum, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import {
+  ethereum,
+  Address,
+  BigInt,
+  Bytes,
+  ByteArray,
+} from '@graphprotocol/graph-ts';
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
@@ -9,7 +15,7 @@ import {
   NewTokenDescription as NewTokenDescriptionEvent,
   NewTokenENS as NewTokenENSEvent,
   NewTokenExternalURL as NewTokenExternalURLEvent,
-  NewTokenLogo as NewTokenLogoEvent,
+  NewTokenImage as NewTokenLogoEvent,
   NewTokenName as NewTokenNameEvent,
   TokenRoleGranted as TokenRoleGrantedEvent,
   TokenRoleRevoked as TokenRoleRevokedEvent,
@@ -162,7 +168,12 @@ export function createNewBuildEvent(
     new ethereum.EventParam('token', ethereum.Value.fromUnsignedBigInt(token))
   );
   newBuildEvent.parameters.push(
-    new ethereum.EventParam('commitHash', ethereum.Value.fromString(commitHash))
+    new ethereum.EventParam(
+      'commitHash',
+      ethereum.Value.fromBytes(
+        changetype<Bytes>(ByteArray.fromUTF8(commitHash))
+      )
+    )
   );
   newBuildEvent.parameters.push(
     new ethereum.EventParam(
@@ -195,7 +206,9 @@ export function createNewTokenDescriptionEvent(
   newTokenDescriptionEvent.parameters.push(
     new ethereum.EventParam(
       'description',
-      ethereum.Value.fromString(description)
+      ethereum.Value.fromBytes(
+        changetype<Bytes>(ByteArray.fromUTF8(description))
+      )
     )
   );
   newTokenDescriptionEvent.parameters.push(
@@ -225,7 +238,10 @@ export function createNewTokenENSEvent(
     new ethereum.EventParam('token', ethereum.Value.fromUnsignedBigInt(token))
   );
   newTokenEnsEvent.parameters.push(
-    new ethereum.EventParam('ENS', ethereum.Value.fromString(ENS))
+    new ethereum.EventParam(
+      'ENS',
+      ethereum.Value.fromBytes(changetype<Bytes>(ByteArray.fromUTF8(ENS)))
+    )
   );
   newTokenEnsEvent.parameters.push(
     new ethereum.EventParam(
@@ -258,7 +274,9 @@ export function createNewTokenExternalURLEvent(
   newTokenExternalUrlEvent.parameters.push(
     new ethereum.EventParam(
       'externalURL',
-      ethereum.Value.fromString(externalURL)
+      ethereum.Value.fromBytes(
+        changetype<Bytes>(ByteArray.fromUTF8(externalURL))
+      )
     )
   );
   newTokenExternalUrlEvent.parameters.push(
@@ -317,7 +335,10 @@ export function createNewTokenNameEvent(
     new ethereum.EventParam('token', ethereum.Value.fromUnsignedBigInt(token))
   );
   newTokenNameEvent.parameters.push(
-    new ethereum.EventParam('name', ethereum.Value.fromString(name))
+    new ethereum.EventParam(
+      'name',
+      ethereum.Value.fromBytes(changetype<Bytes>(ByteArray.fromUTF8(name)))
+    )
   );
   newTokenNameEvent.parameters.push(
     new ethereum.EventParam(

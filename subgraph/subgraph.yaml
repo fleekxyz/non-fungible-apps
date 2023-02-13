@@ -6,7 +6,7 @@ dataSources:
     name: FleekNFA
     network: mumbai
     source:
-      address: "0x34F21E970A7cd383eE429aDB5ed57bbc40ea2B57"
+      address: '0x34F21E970A7cd383eE429aDB5ed57bbc40ea2B57'
       abi: FleekNFA
       startBlock: 30825341
     mapping:
@@ -39,17 +39,17 @@ dataSources:
           handler: handleCollectionRoleGranted
         - event: CollectionRoleRevoked(indexed uint8,indexed address,address)
           handler: handleCollectionRoleRevoked
-        - event: NewBuild(indexed uint256,string,indexed address)
+        - event: NewBuild(indexed uint256,indexed string,indexed address)
           handler: handleNewBuild
-        - event: NewTokenDescription(indexed uint256,string,indexed address)
+        - event: NewTokenDescription(indexed uint256,indexed string,indexed address)
           handler: handleNewTokenDescription
-        - event: NewTokenENS(indexed uint256,string,indexed address)
+        - event: NewTokenENS(indexed uint256,indexed string,indexed address)
           handler: handleNewTokenENS
-        - event: NewTokenExternalURL(indexed uint256,string,indexed address)
+        - event: NewTokenExternalURL(indexed uint256,indexed string,indexed address)
           handler: handleNewTokenExternalURL
-        - event: NewTokenLogo(indexed uint256,string,indexed address)
+        - event: NewTokenImage(indexed uint256,indexed string,indexed address)
           handler: handleNewTokenLogo
-        - event: NewTokenName(indexed uint256,string,indexed address)
+        - event: NewTokenName(indexed uint256,indexed string,indexed address)
           handler: handleNewTokenName
         - event: TokenRoleGranted(indexed uint256,indexed uint8,indexed address,address)
           handler: handleTokenRoleGranted
