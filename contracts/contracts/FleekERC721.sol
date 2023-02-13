@@ -22,14 +22,18 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
 
-    event ChangeAccessPointVerification(
+    event ChangeAccessPointNameVerify(
         string apName,
-        uint256 indexed tokenId,
-        string verificationType,
-        bool verified,
-        address triggeredBy
+        uint256 tokenId,
+        bool indexed verified,
+        address indexed triggeredBy
     );
-
+    event ChangeAccessPointContentVerify(
+        string apName,
+        uint256 tokenId,
+        bool indexed verified,
+        address indexed triggeredBy
+    );
     /**
      * The properties are stored as string to keep consistency with
      * other token contracts, we might consider changing for bytes32
@@ -454,7 +458,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         bool verified
     ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
         _accessPoints[apName].contentVerified = verified;
-        emit ChangeAccessPointVerification(apName, _accessPoints[apName].tokenId, "content", verified, msg.sender);
+        emit ChangeAccessPointContentVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
 
     /**
@@ -473,7 +477,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         bool verified
     ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
         _accessPoints[apName].nameVerified = verified;
-        emit ChangeAccessPointVerification(apName, _accessPoints[apName].tokenId, "name", verified, msg.sender);
+        emit ChangeAccessPointNameVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
 
     /**
