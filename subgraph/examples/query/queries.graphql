@@ -1,0 +1,68 @@
+# This file contains all queries that are executed in the main.ts script.
+# The "User" who is mentioned in this file is the deployer address of the contract on the mumbai testnet: 0xd4997d0facc83231b9f26a8b2155b4869e99946f
+
+query firstFiveMintsByUser {
+  transfers(
+    where: {from: "0x0000000000000000000000000000000000000000", to: "0xd4997d0facc83231b9f26a8b2155b4869e99946f"}
+    first: 5
+  ) {
+    id
+    tokenId
+  }
+}
+
+query lastFiveMints {
+  transfers(
+    where: {from: "0x0000000000000000000000000000000000000000"}
+    first: 5
+    orderDirection: desc
+  ) {
+    id
+    tokenId
+    to
+  }
+}
+
+query allNameChangesOfTokenZero {
+  newTokenNames(where: {token: "0"}) {
+    id
+    name
+    triggeredBy
+  }
+}
+
+query allNameChangesOfTokenZeroTriggeredByUser {
+  newTokenNames(
+    where: {token: "0", triggeredBy: "0xd4997d0facc83231b9f26a8b2155b4869e99946f"}
+  ) {
+    id
+    name
+    triggeredBy
+  }
+}
+
+query theSecondAndThirdCollectionRoleGrantedsTriggeredByUser {
+  collectionRoleGranteds(
+    where: {byAddress: "0xd4997d0facc83231b9f26a8b2155b4869e99946f"}
+    first: 2
+    skip: 1
+  ) {
+    id
+    role
+    toAddress
+  }
+}
+
+query theThreeNewestBuildsThatWereNotTriggeredByUser {
+  newBuilds(
+    where: {triggeredBy_not: "0xd4997d0facc83231b9f26a8b2155b4869e99946f"}
+    orderDirection: desc
+    first: 3
+  ) {
+    id
+    commitHash
+    token
+    triggeredBy
+  }
+}
+

@@ -1,4 +1,3 @@
 export * from './home';
-export * from './mint-site';
-export * from './detail';
-export * from './error-screen';
+export * from './mint';
+export * from './svg-test';

@@ -1,0 +1,11 @@
+# hardhat
+cache
+artifacts
+deployments/hardhat
+
+# Foundry
+out
+forge-cache
+
+# OpenZeppelin
+.openzeppelin/unknown-*.json

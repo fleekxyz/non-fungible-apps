@@ -1,0 +1,45 @@
+name: Subgraph
+
+on:
+  pull_request:
+    branches:    
+      - main
+      - develop
+  push:
+    paths:
+      - 'subgraph/**'
+
+jobs:
+
+  test-subgraph:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: subgraph
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Compile contracts to get access to the ABI
+        run: cd ../contracts && yarn && yarn compile && cd ../subgraph
+
+      - name: Install dependencies
+        run: yarn --ignore-scripts
+
+      - name: Run codegen
+        run: yarn codegen
+
+      - name: Build Subgraph
+        run: yarn build
+
+      - name: Test Subgraph
+        run: yarn test
