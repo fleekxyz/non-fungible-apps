@@ -9,7 +9,7 @@ import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
 import RPC from './ethersRPC';
 import { Button, Flex } from '@/components';
 
-const clientId = 'WEB3AUTH_CLIENT_ID'; //TODO create env variable
+const clientId = import.meta.env.VITE_WEB3AUTH_CLIENT_ID || ''; // use your app client id you got from web3auth
 
 export const Web3AuthLogin = () => {
   const [web3auth, setWeb3auth] = useState<Web3AuthCore | null>(null);
@@ -46,9 +46,9 @@ export const Web3AuthLogin = () => {
               // Add login configs corresponding to the provider
               // Auth0 login works with jwt login config
               jwt: {
-                verifier: 'WEB3AUTH0_VERIFIER', //TODO create env variable
+                verifier: import.meta.env.VITE_AUTH0_VERIFIER || '', // use your app verifier you got from auth0
                 typeOfLogin: 'jwt',
-                clientId: 'AUTH0_CLIENT_ID', // use your app client id you got from auth0
+                clientId: import.meta.env.VITE_AUTH0_CLIENT_ID || '', // use your app client id you got from auth0
               },
             },
           },
@@ -81,7 +81,7 @@ export const Web3AuthLogin = () => {
         // Auth0 login works with JWT loginProvider
         loginProvider: 'github', //'jwt'
         // extraLoginOptions: {
-        //   domain: 'AUTH0_DOMAIN', // Please append "https://" before your domain
+        //   domain: import.meta.env.VITE_AUTH0_DOMAIN || '', // Please append "https://" before your domain
         //   verifierIdField: 'sub', // For SMS & Email Passwordless, use "name" as verifierIdField
         // },
       }
