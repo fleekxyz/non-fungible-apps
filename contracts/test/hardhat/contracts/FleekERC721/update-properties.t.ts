@@ -18,7 +18,7 @@ describe('FleekERC721.UpdateProperties', () => {
     const { contract, tokenId, owner } = fixture;
 
     await expect(contract.setTokenExternalURL(tokenId, 'https://app.com'))
-      .to.emit(contract, Events.ChangeMetadata)
+      .to.emit(contract, Events.MetadataUpdate)
       .withArgs(tokenId, 'externalURL', 'https://app.com', owner.address);
   });
 
@@ -26,7 +26,7 @@ describe('FleekERC721.UpdateProperties', () => {
     const { contract, tokenId, owner } = fixture;
 
     await expect(contract.setTokenENS(tokenId, 'app.eth'))
-      .to.emit(contract, Events.ChangeMetadata)
+      .to.emit(contract, Events.MetadataUpdate)
       .withArgs(tokenId, 'ENS', 'app.eth', owner.address);
   });
 
@@ -34,7 +34,7 @@ describe('FleekERC721.UpdateProperties', () => {
     const { contract, tokenId, owner } = fixture;
 
     await expect(contract.setTokenName(tokenId, 'App'))
-      .to.emit(contract, Events.ChangeMetadata)
+      .to.emit(contract, Events.MetadataUpdate)
       .withArgs(tokenId, 'name', 'App', owner.address);
   });
 
@@ -42,7 +42,7 @@ describe('FleekERC721.UpdateProperties', () => {
     const { contract, tokenId, owner } = fixture;
 
     await expect(contract.setTokenDescription(tokenId, 'App Description'))
-      .to.emit(contract, Events.ChangeMetadata)
+      .to.emit(contract, Events.MetadataUpdate)
       .withArgs(tokenId, 'description', 'App Description', owner.address);
   });
 
@@ -50,7 +50,7 @@ describe('FleekERC721.UpdateProperties', () => {
     const { contract, tokenId, owner } = fixture;
 
     await expect(contract.setTokenBuild(tokenId, 'commitHash', 'gitRepository'))
-      .to.emit(contract, Events.ChangeMetadata)
+      .to.emit(contract, Events.MetadataUpdate)
       .withArgs(tokenId, 'build', 'commitHash', owner.address);
   });
 
@@ -76,7 +76,7 @@ describe('FleekERC721.UpdateProperties', () => {
     const { contract, tokenId, owner } = fixture;
 
     await expect(contract.setTokenLogo(tokenId, Logo1))
-      .to.emit(contract, Events.ChangeMetadata)
+      .to.emit(contract, Events.MetadataUpdate)
       .withArgs(tokenId, 'logo', Logo1, owner.address);
   });
 
@@ -107,7 +107,7 @@ describe('FleekERC721.UpdateProperties', () => {
     const { contract, tokenId, owner } = fixture;
 
     await expect(contract.setTokenColor(tokenId, Color1))
-      .to.emit(contract, Events.ChangeMetadata)
+      .to.emit(contract, Events.MetadataUpdate)
       .withArgs(tokenId, 'color', '#123456', owner.address);
   });
 
@@ -139,9 +139,9 @@ describe('FleekERC721.UpdateProperties', () => {
     const { contract, tokenId, owner } = fixture;
 
     await expect(contract.setTokenLogoAndColor(tokenId, Logo1, Color1))
-      .to.emit(contract, Events.ChangeMetadata)
+      .to.emit(contract, Events.MetadataUpdate)
       .withArgs(tokenId, 'logo', Logo1, owner.address)
-      .and.to.emit(contract, Events.ChangeMetadata)
+      .and.to.emit(contract, Events.MetadataUpdate)
       .withArgs(tokenId, 'color', '#123456', owner.address);
   });
 });
