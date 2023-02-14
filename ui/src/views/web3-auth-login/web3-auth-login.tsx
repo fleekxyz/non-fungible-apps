@@ -16,9 +16,11 @@ export const Web3AuthLogin = () => {
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
     null
   );
+  const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     const init = async () => {
+      setDisabled(true);
       try {
         const web3auth = new Web3AuthCore({
           clientId,
@@ -57,6 +59,7 @@ export const Web3AuthLogin = () => {
         setWeb3auth(web3auth);
 
         await web3auth.init();
+        setDisabled(false);
 
         if (web3auth.provider) {
           setProvider(web3auth.provider);
@@ -78,12 +81,13 @@ export const Web3AuthLogin = () => {
       WALLET_ADAPTERS.OPENLOGIN,
       {
         mfaLevel: 'none', // Pass on the mfa level of your choice: default, optional, mandatory, none
+        // loginProvider: 'github',
         // Auth0 login works with JWT loginProvider
-        loginProvider: 'github', //'jwt'
-        // extraLoginOptions: {
-        //   domain: import.meta.env.VITE_AUTH0_DOMAIN || '', // Please append "https://" before your domain
-        //   verifierIdField: 'sub', // For SMS & Email Passwordless, use "name" as verifierIdField
-        // },
+        loginProvider: 'jwt',
+        extraLoginOptions: {
+          domain: import.meta.env.VITE_AUTH0_DOMAIN || '', // Please append "https://" before your domain
+          verifierIdField: 'sub', // For SMS & Email Passwordless, use "name" as verifierIdField
+        },
       }
     );
     setProvider(web3authProvider);
@@ -220,7 +224,11 @@ export const Web3AuthLogin = () => {
     </>
   );
 
-  const unloggedInView = <Button onClick={login}>Login</Button>;
+  const unloggedInView = (
+    <Button disabled={disabled} onClick={login}>
+      Login
+    </Button>
+  );
 
   return (
     <div className="container">
