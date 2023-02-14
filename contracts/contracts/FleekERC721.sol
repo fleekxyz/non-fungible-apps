@@ -16,6 +16,20 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     using FleekStrings for FleekERC721.AccessPoint;
     using FleekStrings for string;
 
+    event NewMint(
+        uint256 indexed tokenId,
+        string name,
+        string description,
+        string externalURL,
+        string ENS,
+        string commitHash,
+        string gitRepository,
+        string logo,
+        uint24 color,
+        bool accessPointAutoApprovalSettings,
+        address indexed minter,
+        address indexed owner
+    );
     event NewBuild(uint256 indexed tokenId, string commitHash, address indexed triggeredBy);
     event NewTokenName(uint256 indexed tokenId, string name, address indexed triggeredBy);
     event NewTokenDescription(uint256 indexed tokenId, string description, address indexed triggeredBy);
@@ -132,6 +146,20 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         app.currentBuild = 0;
         app.builds[0] = Build(commitHash, gitRepository);
 
+        emit NewMint(
+            tokenId,
+            name,
+            description,
+            externalURL,
+            ENS,
+            commitHash,
+            gitRepository,
+            logo,
+            color,
+            accessPointAutoApprovalSettings,
+            msg.sender,
+            to
+        );
         return tokenId;
     }
 
