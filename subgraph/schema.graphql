@@ -137,15 +137,16 @@ type Token @entity {
   owner: Owner!
   minted_by: Bytes!
   controllers: [Controller!]
+  github_repository: GithubRepository!
 }
 
 type Owner @entity {
-  id: Bytes! #address
+  id: Bytes! # address
   tokens: [Token!] @derivedFrom(field: "owner")
 }
 
 type Controller @entity {
-  id: Bytes! #address
+  id: Bytes! # address
   tokens: [Token!] @derivedFrom(field: "controllers")
 }
 type Collection @entity {
@@ -159,4 +160,9 @@ type CollectionOwner @entity {
   id: Bytes! # address
   accessGrantedBy: Bytes! #address
   transactionHash: Bytes!
+}
+
+type GithubRepository @entity {
+  id: Bytes! # transaction hash of the first transaction this repository appeared in
+  tokens: [Token!] @derivedFrom(field: "github_repository")
 }

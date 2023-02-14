@@ -31,6 +31,7 @@ dataSources:
         - Owner
         - Controller
         - CollectionOwner
+        - GithubRepository
       abis:
         - name: FleekNFA
           file: ../contracts/artifacts/contracts/FleekERC721.sol/FleekERC721.json
