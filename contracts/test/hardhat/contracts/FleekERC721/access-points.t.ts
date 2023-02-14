@@ -1,6 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { Fixtures } from './helpers';
+import { Errors, Fixtures } from './helpers';
 
 describe('AccessPoints', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
@@ -37,9 +37,9 @@ describe('AccessPoints', () => {
   it('should revert if AP does not exist', async () => {
     const { contract, tokenId } = fixture;
 
-    await expect(contract.getAccessPointJSON('random.com')).to.be.revertedWith(
-      'FleekERC721: invalid AP'
-    );
+    await expect(
+      contract.getAccessPointJSON('random.com')
+    ).to.be.revertedWithCustomError(contract, Errors.AccessPointNotExistent);
   });
 
   it('should increase the AP score', async () => {
@@ -98,7 +98,7 @@ describe('AccessPoints', () => {
 
     await expect(
       contract.connect(otherAccount).removeAccessPoint(DefaultAP)
-    ).to.be.revertedWith('FleekERC721: must be AP owner');
+    ).to.be.revertedWithCustomError(contract, Errors.MustBeAccessPointOwner);
   });
 
   it('should not be allowed to add the same AP more than once', async () => {
@@ -106,7 +106,7 @@ describe('AccessPoints', () => {
 
     await expect(
       contract.addAccessPoint(tokenId, DefaultAP)
-    ).to.be.revertedWith('FleekERC721: AP already exists');
+    ).to.be.revertedWithCustomError(contract, Errors.AccessPointAlreadyExists);
   });
 
   it('should change "contentVerified" to true', async () => {
