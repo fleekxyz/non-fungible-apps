@@ -38,6 +38,25 @@ type CollectionRoleRevoked @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type NewMint @entity(immutable: true) {
+  id: Bytes!
+  tokenId: BigInt! # uint256
+  name: String!
+  description: String!
+  externalURL: String!
+  ENS: String!
+  commitHash: String! # string
+  gitRepository: String! # string
+  logo: String!
+  color: Int!
+  accessPointAutoApprovalSettings: Boolean!
+  triggeredBy: Bytes! # address
+  tokenOwner: Owner! # address 
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type NewBuild @entity(immutable: true) {
   id: Bytes!
   token: BigInt! # uint256
@@ -132,12 +151,20 @@ type Transfer @entity(immutable: true) {
 
 type Token @entity {
   id: Bytes! # Token ID
-  mint_transaction_hash: Bytes!
+  mintTransaction: NewMint!
   tokenId: BigInt! # uint256
+  name: String!
+  description: String!
+  externalURL: String!
+  ENS: String!
+  logo: String!
+  color: Int!
+  accessPointAutoApprovalSettings: Boolean!
   owner: Owner!
-  minted_by: Bytes!
+  mintedBy: Bytes!
   controllers: [Controller!]
-  github_repository: GithubRepository!
+  gitRepository: GitRepository!
+  commitHash: String!
 }
 
 type Owner @entity {
@@ -162,7 +189,7 @@ type CollectionOwner @entity {
   transactionHash: Bytes!
 }
 
-type GithubRepository @entity {
-  id: Bytes! # transaction hash of the first transaction this repository appeared in
-  tokens: [Token!] @derivedFrom(field: "github_repository")
+type GitRepository @entity {
+  id: String! # transaction hash of the first transaction this repository appeared in
+  tokens: [Token!] @derivedFrom(field: "gitRepository")
 }
