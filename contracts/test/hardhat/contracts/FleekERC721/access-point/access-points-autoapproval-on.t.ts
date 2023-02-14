@@ -3,16 +3,13 @@ import { expect } from 'chai';
 import { before } from 'mocha';
 import { Fixtures } from '../helpers';
 
-describe('AccessPoints with Auto Approval on', () => {
+describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
   const DefaultAP = 'accesspoint.com';
 
   beforeEach(async () => {
     fixture = await loadFixture(Fixtures.withMint);
-    fixture.contract.changeAccessPointAutoApprovalSettings(
-      fixture.tokenId,
-      true
-    );
+    fixture.contract.setAccessPointAutoApprovalSettings(fixture.tokenId, true);
     fixture.contract.addAccessPoint(fixture.tokenId, DefaultAP);
   });
 
@@ -21,7 +18,7 @@ describe('AccessPoints with Auto Approval on', () => {
 
     await expect(contract.addAccessPoint(tokenId, 'random.com'))
       .to.emit(contract, 'ChangeAccessPointStatus')
-      .withArgs('random.com', tokenId, 1, owner.address);
+      .withArgs('random.com', tokenId, 'APPROVED', owner.address);
   });
 
   it('should return a AP json object', async () => {
@@ -35,7 +32,7 @@ describe('AccessPoints with Auto Approval on', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: '1',
+      status: 'APPROVED',
     });
   });
 
@@ -61,7 +58,7 @@ describe('AccessPoints with Auto Approval on', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: '1',
+      status: 'APPROVED',
     });
   });
 
@@ -81,7 +78,7 @@ describe('AccessPoints with Auto Approval on', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: '1',
+      status: 'APPROVED',
     });
   });
 
@@ -108,7 +105,7 @@ describe('AccessPoints with Auto Approval on', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: '3',
+      status: 'REMOVED',
     });
   });
 
@@ -185,13 +182,13 @@ describe('AccessPoints with Auto Approval on', () => {
   it('should token owner be able to change the auto approval settings to off', async () => {
     const { contract, tokenId } = fixture;
 
-    await contract.changeAccessPointAutoApprovalSettings(tokenId, false);
+    await contract.setAccessPointAutoApprovalSettings(tokenId, false);
 
     await contract.addAccessPoint(tokenId, 'random.com');
 
     const beforeAp = await contract.getAccessPointJSON('random.com');
     const beforeParsedAp = JSON.parse(beforeAp);
 
-    expect(beforeParsedAp.status).to.be.eql('0'); //DRAFT STATUS
+    expect(beforeParsedAp.status).to.be.eql('DRAFT'); //DRAFT STATUS
   });
 });

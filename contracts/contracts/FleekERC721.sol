@@ -24,8 +24,8 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     event NewTokenENS(uint256 indexed tokenId, string ENS, address indexed triggeredBy);
     event NewTokenColor(uint256 indexed tokenId, uint24 color, address indexed triggeredBy);
 
-    event NewAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
-    event RemoveAccessPoint(string indexed apName, uint256 indexed tokenId, address indexed owner);
+    event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
+    event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
 
     event ChangeAccessPointAutoApprovalSettings(
         uint256 indexed token,
@@ -33,12 +33,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         address indexed triggeredBy
     );
 
-    event ChangeAccessPointScore(
-        string indexed apName,
-        uint256 indexed tokenId,
-        uint256 score,
-        address indexed triggeredBy
-    );
+    event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
     event ChangeAccessPointNameVerify(
         string apName,
         uint256 tokenId,
@@ -51,12 +46,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         bool indexed verified,
         address indexed triggeredBy
     );
-    event ChangeAccessPointStatus(
-        string indexed apName,
-        uint256 tokenId,
-        AccessPointStatus indexed status,
-        address indexed triggeredBy
-    );
+    event ChangeAccessPointStatus(string apName, uint256 tokenId, string status, address indexed triggeredBy);
 
     /**
      * The properties are stored as string to keep consistency with
@@ -84,16 +74,6 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     }
 
     /**
-     * Status enums for access points
-     */
-    enum AccessPointStatus {
-        DRAFT,
-        APPROVED,
-        DISAPPROVED,
-        REMOVED
-    }
-
-    /**
      * The stored data for each AccessPoint.
      */
     struct AccessPoint {
@@ -102,7 +82,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         bool contentVerified;
         bool nameVerified;
         address owner;
-        AccessPointStatus status;
+        string status;
     }
 
     Counters.Counter private _appIds;
@@ -233,7 +213,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      * - the sender must have the `tokenController` role.
      *
      */
-    function changeAccessPointAutoApprovalSettings(
+    function setAccessPointAutoApprovalSettings(
         uint256 tokenId,
         bool _settings
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
@@ -400,13 +380,13 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
 
         if (_apps[tokenId].accessPointAutoApprovalSettings) {
             // Auto Approval is on.
-            _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender, AccessPointStatus.APPROVED);
+            _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender, "APPROVED");
 
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointStatus.APPROVED, msg.sender);
+            emit ChangeAccessPointStatus(apName, tokenId, "APPROVED", msg.sender);
         } else {
             // Auto Approval is off. Should wait for approval.
-            _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender, AccessPointStatus.DRAFT);
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointStatus.DRAFT, msg.sender);
+            _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender, "DRAFT");
+            emit ChangeAccessPointStatus(apName, tokenId, "DRAFT", msg.sender);
         }
     }
 
@@ -435,12 +415,12 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
 
         if (approved) {
             // Approval
-            accessPoint.status = AccessPointStatus.APPROVED;
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointStatus.APPROVED, msg.sender);
+            accessPoint.status = "APPROVED";
+            emit ChangeAccessPointStatus(apName, tokenId, "APPROVED", msg.sender);
         } else {
             // Not Approved
-            accessPoint.status = AccessPointStatus.DISAPPROVED;
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointStatus.DISAPPROVED, msg.sender);
+            accessPoint.status = "REJECTED";
+            emit ChangeAccessPointStatus(apName, tokenId, "REJECTED", msg.sender);
         }
     }
 
@@ -457,9 +437,9 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      */
     function removeAccessPoint(string memory apName) public requireAP(apName) {
         require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
-        _accessPoints[apName].status = AccessPointStatus.REMOVED;
+        _accessPoints[apName].status = "REMOVED";
         uint256 tokenId = _accessPoints[apName].tokenId;
-        emit ChangeAccessPointStatus(apName, tokenId, AccessPointStatus.REMOVED, msg.sender);
+        emit ChangeAccessPointStatus(apName, tokenId, "REMOVED", msg.sender);
         emit RemoveAccessPoint(apName, tokenId, msg.sender);
     }
 
