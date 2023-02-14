@@ -29,7 +29,7 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
     function setUp() public {
         baseSetUp();
         tokenId = mintDefault(deployer);
-        CuT.changeAccessPointAutoApprovalSettings(0, true);
+        CuT.setAccessPointAutoApprovalSettings(0, true);
     }
 
     function test_getAccessPointJSON() public {
