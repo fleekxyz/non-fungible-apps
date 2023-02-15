@@ -18,6 +18,9 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     using FleekStrings for uint24;
 
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
+
     event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
@@ -324,7 +327,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].color = _tokenColor;
-        emit MetadataUpdate(tokenId, "color", _tokenColor.toColorString(), msg.sender);
+        emit MetadataUpdate(tokenId, "color", _tokenColor, msg.sender);
     }
 
     /**
@@ -498,7 +501,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     ) public virtual requireTokenRole(tokenId, Roles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(_commitHash, _gitRepository);
-        emit MetadataUpdate(tokenId, "build", _commitHash, msg.sender);
+        emit MetadataUpdate(tokenId, "build", [_commitHash, _gitRepository], msg.sender);
     }
 
     /**

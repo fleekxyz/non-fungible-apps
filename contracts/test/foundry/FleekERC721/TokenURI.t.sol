@@ -6,6 +6,8 @@ import "./TestBase.sol";
 
 contract Test_FleekERC721_TokenURIAssertions is Test {
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
 
     function expectMetadataUpdate(
         uint256 _tokenId,
@@ -13,6 +15,21 @@ contract Test_FleekERC721_TokenURIAssertions is Test {
         string memory value,
         address triggeredBy
     ) public {
+        vm.expectEmit(true, true, true, true);
+        emit MetadataUpdate(_tokenId, key, value, triggeredBy);
+    }
+
+    function expectMetadataUpdate(
+        uint256 _tokenId,
+        string memory key,
+        string[2] memory value,
+        address triggeredBy
+    ) public {
+        vm.expectEmit(true, true, true, true);
+        emit MetadataUpdate(_tokenId, key, value, triggeredBy);
+    }
+
+    function expectMetadataUpdate(uint256 _tokenId, string memory key, uint24 value, address triggeredBy) public {
         vm.expectEmit(true, true, true, true);
         emit MetadataUpdate(_tokenId, key, value, triggeredBy);
     }
@@ -75,13 +92,18 @@ contract Test_FleekERC721_TokenURI is Test_FleekERC721_Base, Test_FleekERC721_To
         expectMetadataUpdate(tokenId, "ENS", "new-ens.eth", deployer);
         CuT.setTokenENS(tokenId, "new-ens.eth");
 
-        expectMetadataUpdate(tokenId, "build", "ce1a3fc141e29f8e1d00a654e156c4982d7711bf", deployer);
+        expectMetadataUpdate(
+            tokenId,
+            "build",
+            ["ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo"],
+            deployer
+        );
         CuT.setTokenBuild(tokenId, "ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo");
 
         expectMetadataUpdate(tokenId, "logo", TestConstants.LOGO_1, deployer);
         CuT.setTokenLogo(tokenId, TestConstants.LOGO_1);
 
-        expectMetadataUpdate(tokenId, "color", "#654321", deployer);
+        expectMetadataUpdate(tokenId, "color", 0x654321, deployer);
         CuT.setTokenColor(tokenId, 0x654321);
     }
 }
