@@ -35,16 +35,14 @@ contract Test_FleekERC721_TokenURI is Test_FleekERC721_Base {
         );
     }
 
-    function test_tokenURIForDifferentAddresses() public {
-        vm.prank(address(1));
-        CuT.tokenURI(tokenId);
-        vm.prank(address(2));
-        CuT.tokenURI(tokenId);
-        vm.prank(address(3));
+    function testFuzz_tokenURIForDifferentAddresses(address account) public {
+        vm.prank(account);
         CuT.tokenURI(tokenId);
     }
 
-    function testFail_tokenURIForInexistentId() public view {
-        CuT.tokenURI(1);
+    function testFuzz_tokenURIForInexistentId(uint256 _tokenId) public {
+        vm.assume(_tokenId != tokenId);
+        expectRevertWithInvalidTokenId();
+        CuT.tokenURI(_tokenId);
     }
 }
