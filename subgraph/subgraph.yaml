@@ -6,9 +6,9 @@ dataSources:
     name: FleekNFA
     network: mumbai
     source:
-      address: "0x34F21E970A7cd383eE429aDB5ed57bbc40ea2B57"
+      address: "0x113169680A417e4dB4AD11832486FF317fB4CB36"
       abi: FleekNFA
-      startBlock: 30825341
+      startBlock: 32071579
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
