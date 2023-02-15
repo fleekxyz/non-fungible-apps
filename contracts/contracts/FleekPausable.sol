@@ -58,35 +58,35 @@ abstract contract FleekPausable is Initializable {
     /**
      * @dev Returns true if the contract is paused, and false otherwise.
      */
-    function isPaused() public view virtual returns (bool) {
+    function isPaused() public view returns (bool) {
         return _paused;
     }
 
     /**
      * @dev Returns true if the contract is pausable, and false otherwise.
      */
-    function isPausable() public view virtual returns (bool) {
+    function isPausable() public view returns (bool) {
         return _canPause;
     }
 
     /**
      * @dev Throws if the contract is paused.
      */
-    function _requireNotPaused() internal view virtual {
+    function _requireNotPaused() internal view {
         if (isPaused()) revert ContractIsPaused();
     }
 
     /**
      * @dev Throws if the contract is not paused.
      */
-    function _requirePaused() internal view virtual {
+    function _requirePaused() internal view {
         if (!isPaused()) revert ContractIsNotPaused();
     }
 
     /**
      * @dev Throws if the contract is not pausable.
      */
-    function _requirePausable() internal view virtual {
+    function _requirePausable() internal view {
         if (!isPausable()) revert ContractIsNotPausable();
     }
 
@@ -94,7 +94,7 @@ abstract contract FleekPausable is Initializable {
      * @dev Sets the contract to be pausable or not.
      * @param canPause true if the contract is pausable, and false otherwise.
      */
-    function _setPausable(bool canPause) internal virtual {
+    function _setPausable(bool canPause) internal {
         if (canPause == _canPause) revert PausableIsSetTo(canPause);
         _canPause = canPause;
         emit PausableStatusChange(canPause, msg.sender);
@@ -107,7 +107,7 @@ abstract contract FleekPausable is Initializable {
      *
      * - The contract must not be paused.
      */
-    function _pause() internal virtual whenNotPaused {
+    function _pause() internal whenNotPaused {
         _requirePausable();
         _paused = true;
         emit PauseStatusChange(false, msg.sender);
@@ -120,7 +120,7 @@ abstract contract FleekPausable is Initializable {
      *
      * - The contract must be paused.
      */
-    function _unpause() internal virtual whenPaused {
+    function _unpause() internal whenPaused {
         _paused = false;
         emit PauseStatusChange(false, msg.sender);
     }
