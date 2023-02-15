@@ -13,18 +13,18 @@ abstract contract FleekPausable is Initializable {
     /**
      * @dev Emitted when the pause is triggered by `account` and set to `isPaused`.
      */
-    event PausedChange(bool indexed isPaused, address account);
+    event PauseStatusChange(bool indexed isPaused, address account);
 
     /**
      * @dev Emitted when the pausable is triggered by `account` and set to `isPausable`.
      */
-    event PausableChange(bool indexed isPausable, address account);
+    event PausableStatusChange(bool indexed isPausable, address account);
 
     bool private _paused;
     bool private _canPause; // TODO: how should we verify if the contract is pausable or not?
 
     /**
-     * @dev Initializes the contract in unpaused state.
+     * @dev Initializes the contract in paused state.
      */
     function __FleekPausable_init() internal onlyInitializing {
         _paused = true;
@@ -58,14 +58,14 @@ abstract contract FleekPausable is Initializable {
     /**
      * @dev Returns true if the contract is paused, and false otherwise.
      */
-    function paused() public view virtual returns (bool) {
+    function isPaused() public view virtual returns (bool) {
         return _paused;
     }
 
     /**
      * @dev Returns true if the contract is pausable, and false otherwise.
      */
-    function pausable() public view virtual returns (bool) {
+    function isPausable() public view virtual returns (bool) {
         return _canPause;
     }
 
@@ -73,21 +73,21 @@ abstract contract FleekPausable is Initializable {
      * @dev Throws if the contract is paused.
      */
     function _requireNotPaused() internal view virtual {
-        if (paused()) revert ContractIsPaused();
+        if (isPaused()) revert ContractIsPaused();
     }
 
     /**
      * @dev Throws if the contract is not paused.
      */
     function _requirePaused() internal view virtual {
-        if (!paused()) revert ContractIsNotPaused();
+        if (!isPaused()) revert ContractIsNotPaused();
     }
 
     /**
      * @dev Throws if the contract is not pausable.
      */
     function _requirePausable() internal view virtual {
-        if (!pausable()) revert ContractIsNotPausable();
+        if (!isPausable()) revert ContractIsNotPausable();
     }
 
     /**
@@ -97,7 +97,7 @@ abstract contract FleekPausable is Initializable {
     function _setPausable(bool canPause) internal virtual {
         if (canPause == _canPause) revert PausableIsSetTo(canPause);
         _canPause = canPause;
-        emit PausableChange(canPause, msg.sender);
+        emit PausableStatusChange(canPause, msg.sender);
     }
 
     /**
@@ -110,7 +110,7 @@ abstract contract FleekPausable is Initializable {
     function _pause() internal virtual whenNotPaused {
         _requirePausable();
         _paused = true;
-        emit PausedChange(false, msg.sender);
+        emit PauseStatusChange(false, msg.sender);
     }
 
     /**
@@ -122,7 +122,7 @@ abstract contract FleekPausable is Initializable {
      */
     function _unpause() internal virtual whenPaused {
         _paused = false;
-        emit PausedChange(false, msg.sender);
+        emit PauseStatusChange(false, msg.sender);
     }
 
     /**

@@ -30,21 +30,21 @@ contract Test_FleekERC721_Pausable is Test_FleekERC721_Base, Test_FleekERC721_Pa
     }
 
     function test_shouldBeInitializedPausedAndPausable() public {
-        assertTrue(CuT.paused());
-        assertTrue(CuT.pausable());
+        assertTrue(CuT.isPaused());
+        assertTrue(CuT.isPausable());
     }
 
     function test_shouldUnpause() public {
         CuT.unpause();
-        assertFalse(CuT.paused());
+        assertFalse(CuT.isPaused());
     }
 
     function test_shouldPause() public {
         CuT.unpause();
-        assertFalse(CuT.paused());
+        assertFalse(CuT.isPaused());
 
         CuT.pause();
-        assertTrue(CuT.paused());
+        assertTrue(CuT.isPaused());
     }
 
     function test_cannotPauseWhenAlreadyPaused() public {
@@ -63,7 +63,7 @@ contract Test_FleekERC721_Pausable is Test_FleekERC721_Base, Test_FleekERC721_Pa
         CuT.setPausable(false);
 
         CuT.unpause();
-        assertFalse(CuT.paused());
+        assertFalse(CuT.isPaused());
     }
 
     function test_cannotPauseWhenPausableIsFalse() public {

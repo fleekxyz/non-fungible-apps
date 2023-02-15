@@ -30,8 +30,8 @@ describe('FleekERC721.Pausable', () => {
   it('should be initalized as paused and pausable', async () => {
     const { contract } = fixture;
 
-    expect(await contract.paused()).to.be.true;
-    expect(await contract.pausable()).to.be.true;
+    expect(await contract.isPaused()).to.be.true;
+    expect(await contract.isPausable()).to.be.true;
   });
 
   it('should unpause', async () => {
@@ -39,7 +39,7 @@ describe('FleekERC721.Pausable', () => {
 
     await contract.unpause();
 
-    expect(await contract.paused()).to.be.false;
+    expect(await contract.isPaused()).to.be.false;
   });
 
   it('should pause', async () => {
@@ -48,7 +48,7 @@ describe('FleekERC721.Pausable', () => {
     await contract.unpause();
     await contract.pause();
 
-    expect(await contract.paused()).to.be.true;
+    expect(await contract.isPaused()).to.be.true;
   });
 
   it('should not allow pause if is paused', async () => {
@@ -77,7 +77,7 @@ describe('FleekERC721.Pausable', () => {
     await contract.setPausable(false);
     await contract.unpause();
 
-    expect(await contract.paused()).to.be.false;
+    expect(await contract.isPaused()).to.be.false;
   });
 
   it('should not allow pause when contract is not pausable', async () => {
