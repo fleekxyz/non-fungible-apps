@@ -26,40 +26,40 @@ contract Test_FleekERC721_PausableAssertions is Test {
 
 contract Test_FleekERC721_Pausable is Test_FleekERC721_Base, Test_FleekERC721_PausableAssertions {
     function setUp() public {
-        pausedSetUp();
+        baseSetUp();
     }
 
     function test_shouldBeInitializedPausedAndPausable() public {
-        assertTrue(CuT.isPaused());
+        assertFalse(CuT.isPaused());
         assertTrue(CuT.isPausable());
     }
 
     function test_shouldUnpause() public {
+        CuT.pause();
+        assertTrue(CuT.isPaused());
+
         CuT.unpause();
         assertFalse(CuT.isPaused());
     }
 
     function test_shouldPause() public {
-        CuT.unpause();
-        assertFalse(CuT.isPaused());
-
         CuT.pause();
         assertTrue(CuT.isPaused());
     }
 
     function test_cannotPauseWhenAlreadyPaused() public {
+        CuT.pause();
         expectRevertWithContractIsPaused();
         CuT.pause();
     }
 
     function test_cannotUnpauseWhenAlreadyUnpaused() public {
-        CuT.unpause();
-
         expectRevertWithContractIsNotPaused();
         CuT.unpause();
     }
 
     function test_shouldUnpauseWhenPausableIsFalse() public {
+        CuT.pause();
         CuT.setPausable(false);
 
         CuT.unpause();
@@ -67,7 +67,6 @@ contract Test_FleekERC721_Pausable is Test_FleekERC721_Base, Test_FleekERC721_Pa
     }
 
     function test_cannotPauseWhenPausableIsFalse() public {
-        CuT.unpause();
         CuT.setPausable(false);
 
         expectRevertWithContractIsNotPausable();
@@ -88,7 +87,6 @@ contract Test_FleekERC721_Pausable is Test_FleekERC721_Base, Test_FleekERC721_Pa
 
     function test_shouldRevertForFunctionsWhenContractIsPaused() public {
         address randomAddress = address(1);
-        CuT.unpause();
         uint256 tokenId = mintDefault(deployer);
         CuT.pause();
 

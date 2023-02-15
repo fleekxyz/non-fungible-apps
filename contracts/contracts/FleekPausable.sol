@@ -24,10 +24,10 @@ abstract contract FleekPausable is Initializable {
     bool private _canPause; // TODO: how should we verify if the contract is pausable or not?
 
     /**
-     * @dev Initializes the contract in paused state.
+     * @dev Initializes the contract in unpaused state.
      */
     function __FleekPausable_init() internal onlyInitializing {
-        _paused = true;
+        _paused = false;
         _canPause = true;
     }
 

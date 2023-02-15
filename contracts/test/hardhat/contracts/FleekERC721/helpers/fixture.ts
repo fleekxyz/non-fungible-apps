@@ -2,7 +2,9 @@ import { ethers, upgrades } from 'hardhat';
 import { TestConstants } from './constants';
 
 export abstract class Fixtures {
-  static async paused() {
+  static async paused() {}
+
+  static async default() {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
 
@@ -26,14 +28,6 @@ export abstract class Fixtures {
     );
 
     return { owner, otherAccount, contract };
-  }
-
-  static async default() {
-    const fromPaused = await Fixtures.paused();
-
-    await fromPaused.contract.unpause();
-
-    return fromPaused;
   }
 
   static async withMint() {

@@ -5,7 +5,7 @@ import { TestConstants, Fixtures, Errors } from './helpers';
 const { MintParams, Roles } = TestConstants;
 
 describe('FleekERC721.Pausable', () => {
-  let fixture: Awaited<ReturnType<typeof Fixtures.paused>>;
+  let fixture: Awaited<ReturnType<typeof Fixtures.default>>;
 
   const mint = () => {
     const { owner, contract } = fixture;
@@ -24,19 +24,20 @@ describe('FleekERC721.Pausable', () => {
   };
 
   beforeEach(async () => {
-    fixture = await loadFixture(Fixtures.paused);
+    fixture = await loadFixture(Fixtures.default);
   });
 
   it('should be initalized as paused and pausable', async () => {
     const { contract } = fixture;
 
-    expect(await contract.isPaused()).to.be.true;
+    expect(await contract.isPaused()).to.be.false;
     expect(await contract.isPausable()).to.be.true;
   });
 
   it('should unpause', async () => {
     const { contract } = fixture;
 
+    await contract.pause();
     await contract.unpause();
 
     expect(await contract.isPaused()).to.be.false;
@@ -45,7 +46,6 @@ describe('FleekERC721.Pausable', () => {
   it('should pause', async () => {
     const { contract } = fixture;
 
-    await contract.unpause();
     await contract.pause();
 
     expect(await contract.isPaused()).to.be.true;
@@ -53,6 +53,8 @@ describe('FleekERC721.Pausable', () => {
 
   it('should not allow pause if is paused', async () => {
     const { contract } = fixture;
+
+    await contract.pause();
 
     await expect(contract.pause()).to.be.revertedWithCustomError(
       contract,
@@ -63,8 +65,6 @@ describe('FleekERC721.Pausable', () => {
   it('should not allow unpause if is not paused', async () => {
     const { contract } = fixture;
 
-    await contract.unpause();
-
     await expect(contract.unpause()).to.be.revertedWithCustomError(
       contract,
       Errors.ContractIsNotPaused
@@ -74,6 +74,7 @@ describe('FleekERC721.Pausable', () => {
   it('should unpause when contract is not pausable', async () => {
     const { contract } = fixture;
 
+    await contract.pause();
     await contract.setPausable(false);
     await contract.unpause();
 
@@ -83,7 +84,6 @@ describe('FleekERC721.Pausable', () => {
   it('should not allow pause when contract is not pausable', async () => {
     const { contract } = fixture;
 
-    await contract.unpause();
     await contract.setPausable(false);
 
     await expect(contract.pause()).to.be.revertedWithCustomError(
@@ -108,7 +108,6 @@ describe('FleekERC721.Pausable', () => {
 
   it('should not allow call functions when paused', async () => {
     const { contract, owner, otherAccount } = fixture;
-    await contract.unpause();
     const tokenId = (await mint()).value.toNumber();
     await contract.pause();
 
