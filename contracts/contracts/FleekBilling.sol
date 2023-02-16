@@ -53,6 +53,13 @@ abstract contract FleekBilling is Initializable {
      */
     function _requireBilling(Billing key) internal {
         uint256 requiredValue = _billings[key];
-        if (msg.value < _billings[key]) revert RequiredBillingValue(requiredValue);
+        if (msg.value != _billings[key]) revert RequiredBillingValue(requiredValue);
+    }
+
+    /**
+     * @dev Internal function to withdraw the contract balance.
+     */
+    function _withdraw() internal {
+        payable(msg.sender).transfer(address(this).balance);
     }
 }
