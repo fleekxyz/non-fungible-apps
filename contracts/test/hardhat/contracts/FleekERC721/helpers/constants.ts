@@ -3,6 +3,12 @@ export const TestConstants = Object.freeze({
     Owner: 0,
     Controller: 1,
   },
+  AccessPointStatus: {
+    DRAFT: 0,
+    APPROVED: 1,
+    REJECTED: 2,
+    REMOVED: 3,
+  },
   MintParams: {
     name: 'Fleek Test App',
     description: 'Fleek Test App Description',

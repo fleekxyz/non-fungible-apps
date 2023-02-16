@@ -65,7 +65,7 @@ library FleekStrings {
                 '"nameVerified":', ap.nameVerified.toString(), ",",
                 '"contentVerified":', ap.contentVerified.toString(), ",",
                 '"owner":"', uint160(ap.owner).toHexString(20), '",',
-                '"status":"',ap.status,'"'
+                '"status":',uint(ap.status).toString(),
             "}"
         ));
     }

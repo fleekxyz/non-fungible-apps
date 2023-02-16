@@ -1,7 +1,8 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { before } from 'mocha';
-import { Fixtures } from '../helpers';
+import { TestConstants, Fixtures } from '../helpers';
+const { AccessPointStatus } = TestConstants;
 
 describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
@@ -18,7 +19,12 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
 
     await expect(contract.addAccessPoint(tokenId, 'random.com'))
       .to.emit(contract, 'ChangeAccessPointStatus')
-      .withArgs('random.com', tokenId, 'APPROVED', owner.address);
+      .withArgs(
+        'random.com',
+        tokenId,
+        AccessPointStatus.APPROVED,
+        owner.address
+      );
   });
 
   it('should return a AP json object', async () => {
@@ -32,7 +38,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: 'APPROVED',
+      status: AccessPointStatus.APPROVED,
     });
   });
 
@@ -58,7 +64,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: 'APPROVED',
+      status: AccessPointStatus.APPROVED,
     });
   });
 
@@ -78,7 +84,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: 'APPROVED',
+      status: AccessPointStatus.APPROVED,
     });
   });
 
@@ -105,7 +111,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: 'REMOVED',
+      status: AccessPointStatus.REMOVED,
     });
   });
 
@@ -189,6 +195,6 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
     const beforeAp = await contract.getAccessPointJSON('random.com');
     const beforeParsedAp = JSON.parse(beforeAp);
 
-    expect(beforeParsedAp.status).to.be.eql('DRAFT'); //DRAFT STATUS
+    expect(beforeParsedAp.status).to.be.eql(AccessPointStatus.DRAFT); //DRAFT STATUS
   });
 });

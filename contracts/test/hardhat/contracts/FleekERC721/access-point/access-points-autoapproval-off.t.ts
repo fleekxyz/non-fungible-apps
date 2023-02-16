@@ -1,7 +1,8 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { before } from 'mocha';
-import { Fixtures } from '../helpers';
+import { TestConstants, Fixtures } from '../helpers';
+const { AccessPointStatus } = TestConstants;
 
 describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
@@ -26,7 +27,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: 'DRAFT',
+      status: AccessPointStatus.DRAFT,
     });
   });
 
@@ -44,7 +45,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: 'DRAFT',
+      status: AccessPointStatus.DRAFT,
     });
   });
 
@@ -72,7 +73,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: 'DRAFT',
+      status: AccessPointStatus.DRAFT,
     });
   });
 
@@ -94,7 +95,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
-      status: 'DRAFT',
+      status: AccessPointStatus.DRAFT,
     });
   });
 
@@ -212,7 +213,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
     const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
     const beforeParsedAp = JSON.parse(beforeAp);
 
-    expect(beforeParsedAp.status).to.be.eql('APPROVED'); //APPROVED STATUS
+    expect(beforeParsedAp.status).to.be.eql(AccessPointStatus.APPROVED); //APPROVED STATUS
   });
 
   it('should token owner be able to approve a draft ap', async () => {
@@ -222,7 +223,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
 
     const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
     const beforeParsedAp = JSON.parse(beforeAp);
-    expect(beforeParsedAp.status).to.be.eql('DRAFT'); //DRAFT STATUS
+    expect(beforeParsedAp.status).to.be.eql(AccessPointStatus.DRAFT); //DRAFT STATUS
 
     await contract
       .connect(owner)
@@ -230,7 +231,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
 
     const afterAp = await contract.getAccessPointJSON('accesspoint.com');
     const afterParsedAp = JSON.parse(afterAp);
-    expect(afterParsedAp.status).to.be.eql('APPROVED'); //APPROVED STATUS
+    expect(afterParsedAp.status).to.be.eql(AccessPointStatus.APPROVED); //APPROVED STATUS
   });
 
   it('should token owner be able to reject a draft ap', async () => {
@@ -240,7 +241,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
 
     const beforeAp = await contract.getAccessPointJSON('accesspoint.com');
     const beforeParsedAp = JSON.parse(beforeAp);
-    expect(beforeParsedAp.status).to.be.eql('DRAFT'); //DRAFT STATUS
+    expect(beforeParsedAp.status).to.be.eql(AccessPointStatus.DRAFT); //DRAFT STATUS
 
     await contract
       .connect(owner)
@@ -249,6 +250,6 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
     const afterAp = await contract.getAccessPointJSON('accesspoint.com');
     const afterParsedAp = JSON.parse(afterAp);
 
-    expect(afterParsedAp.status).to.be.eql('REJECTED'); //REJECTED STATUS
+    expect(afterParsedAp.status).to.be.eql(AccessPointStatus.REJECTED); //REJECTED STATUS
   });
 });
