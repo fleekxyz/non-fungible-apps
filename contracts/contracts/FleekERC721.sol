@@ -181,6 +181,29 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     }
 
     /**
+     * @dev Returns the token metadata associated with the `tokenId`.
+     *
+     * Returns multiple string and uint values in relation to metadata fields of the App struct.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     *
+     */
+    function getToken(
+        uint256 tokenId
+    )
+        public
+        view
+        virtual
+        returns (string memory, string memory, string memory, string memory, uint256, string memory, uint24)
+    {
+        _requireMinted(tokenId);
+        App storage app = _apps[tokenId];
+        return (app.name, app.description, app.externalURL, app.ENS, app.currentBuild, app.logo, app.color);
+    }
+
+    /**
      * @dev See {IERC165-supportsInterface}.
      */
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Upgradeable) returns (bool) {

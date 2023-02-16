@@ -148,3 +148,15 @@ type Controller @entity {
   id: Bytes! #address
   tokens: [Token!] @derivedFrom(field: "controllers")
 }
+type Collection @entity {
+  id: Bytes! #address
+  deployer: Bytes! #address
+  transactionHash: Bytes! #transaction hash
+  owners: [CollectionOwner!]
+}
+
+type CollectionOwner @entity {
+  id: Bytes! # address
+  accessGrantedBy: Bytes! #address
+  transactionHash: Bytes!
+}

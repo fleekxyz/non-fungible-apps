@@ -160,10 +160,11 @@ export const StyledButton = styled('button', {
   whiteSpace: 'nowrap',
   verticalAlign: 'middle',
   userSelect: 'none',
-  fontWeight: '$medium',
+  fontWeight: '$normal',
   '&:disabled': {
     cursor: 'not-allowed',
     opacity: '0.4',
+    backgroundColor: '$slate3',
   },
 
   variants: {
