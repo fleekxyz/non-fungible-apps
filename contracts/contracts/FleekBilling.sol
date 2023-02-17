@@ -12,7 +12,7 @@ abstract contract FleekBilling is Initializable {
      */
     enum Billing {
         Mint,
-        Transfer
+        AddAccessPoint
     }
 
     /**
@@ -30,7 +30,7 @@ abstract contract FleekBilling is Initializable {
      */
     function __FleekBilling_init() internal onlyInitializing {
         _setBilling(Billing.Mint, 0);
-        _setBilling(Billing.Transfer, 0);
+        _setBilling(Billing.AddAccessPoint, 0);
     }
 
     /**

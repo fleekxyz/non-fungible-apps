@@ -105,6 +105,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the caller must have ``collectionOwner``'s admin role.
+     * - billing for the minting may be applied.
      *
      */
     function mint(
@@ -361,11 +362,13 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the tokenId must be minted and valid.
+     * - billing for add acess point may be applied.
      *
-     * IMPORTANT: The payment is not set yet
      */
-    function addAccessPoint(uint256 tokenId, string memory apName) public payable {
-        // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
+    function addAccessPoint(
+        uint256 tokenId,
+        string memory apName
+    ) public payable requireBilling(Billing.AddAccessPoint) {
         _requireMinted(tokenId);
         require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
 
