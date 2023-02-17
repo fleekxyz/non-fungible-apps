@@ -3,41 +3,55 @@ import {
   Card,
   Dropdown,
   DropdownItem,
+  Flex,
   Form,
-  Grid,
+  Spinner,
   Stepper,
 } from '@/components';
 import { Mint } from '@/views/mint/mint.context';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import { RepoRow } from '../github-repository-selection';
-
-//TODO remove once it's integrated with GH login
-const branches: DropdownItem[] = [
-  {
-    label: 'master',
-    value: 'master',
-  },
-  {
-    label: 'develop',
-    value: 'develop',
-  },
-  {
-    label: 'feature/branch',
-    value: 'feature/branch',
-  },
-];
+import { useGithub } from '../use-github';
 
 export const RepoConfigurationBody = () => {
-  const { repositoryName, branchName, commitHash, setRepositoryConfig } =
-    Mint.useContext();
+  const {
+    repositoryName,
+    selectedUserOrg,
+    branchName,
+    commitHash,
+    setRepositoryConfig,
+  } = Mint.useContext();
+  const { fetchBranches } = useGithub({
+    onError: () => {
+      //TODO show toast
+      alert('Error fetching branches');
+    },
+  });
 
   const { nextStep } = Stepper.useContext();
+  const [branches, setBranches] = useState<DropdownItem[]>([]);
   const [branchSelected, setBranchSelected] = useState(branchName);
   const [commitHashSelected, setCommitHashSelected] = useState(commitHash);
-  console.log(branchSelected);
+
+  const { data: dataBrances, status } = useQuery(
+    `fetchBranches${selectedUserOrg.label}${repositoryName.name}`,
+    async () => fetchBranches(selectedUserOrg.label, repositoryName.name)
+  );
+
+  useEffect(() => {
+    dataBrances &&
+      setBranches(
+        dataBrances.map(
+          (branch: any) =>
+            ({ label: branch.name, value: branch.commit } as DropdownItem)
+        )
+      );
+  }, [dataBrances]);
+
   const handleBranchChange = (dorpdownOption: DropdownItem) => {
     //TODO we'll have to check the data that GH API returns
-    console.log(dorpdownOption);
+    setCommitHashSelected(dorpdownOption.value);
     setBranchSelected(dorpdownOption);
   };
 
@@ -52,9 +66,9 @@ export const RepoConfigurationBody = () => {
 
   return (
     <Card.Body css={{ pt: '$2' }}>
-      <Grid css={{ rowGap: '$6' }}>
+      <Flex css={{ rowGap: '$6', flexDirection: 'column' }}>
         <RepoRow
-          repo={repositoryName}
+          repo={repositoryName.name}
           css={{ mb: '0' }}
           button={
             <Button
@@ -67,22 +81,36 @@ export const RepoConfigurationBody = () => {
             </Button>
           }
         />
-        <Form.Field>
-          <Form.Label>Git Branch</Form.Label>
-          <Dropdown
-            items={branches}
-            selectedValue={branchSelected}
-            onChange={handleBranchChange}
-          />
-        </Form.Field>
-        <Form.Field>
-          <Form.Label>Git Commit</Form.Label>
-          <Form.Input
-            placeholder="693f89763dbb7a6c9ce0711cc34591a4c8c77198"
-            value={commitHashSelected}
-            onChange={handleCommitHashChange}
-          />
-        </Form.Field>
+        {status === 'loading' ? (
+          <Flex
+            css={{
+              height: '9.75rem',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Spinner />
+          </Flex>
+        ) : (
+          <>
+            <Form.Field>
+              <Form.Label>Git Branch</Form.Label>
+              <Dropdown
+                items={branches}
+                selectedValue={branchSelected}
+                onChange={handleBranchChange}
+              />
+            </Form.Field>
+            <Form.Field>
+              <Form.Label>Git Commit</Form.Label>
+              <Form.Input
+                placeholder="693f89763dbb7a6c9ce0711cc34591a4c8c77198"
+                value={commitHashSelected}
+                onChange={handleCommitHashChange}
+              />
+            </Form.Field>
+          </>
+        )}
         <Button
           disabled={!branchSelected || !commitHashSelected}
           colorScheme="blue"
@@ -91,7 +119,7 @@ export const RepoConfigurationBody = () => {
         >
           Continue
         </Button>
-      </Grid>
+      </Flex>
     </Card.Body>
   );
 };
