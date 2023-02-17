@@ -1,4 +1,4 @@
-import { Address, Bytes, log } from '@graphprotocol/graph-ts';
+import { Address, Bytes, log, store, ethereum } from '@graphprotocol/graph-ts';
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
@@ -9,7 +9,7 @@ import {
   NewTokenDescription as NewTokenDescriptionEvent,
   NewTokenENS as NewTokenENSEvent,
   NewTokenExternalURL as NewTokenExternalURLEvent,
-  NewTokenImage as NewTokenImageEvent,
+  NewTokenLogo as NewTokenLogoEvent,
   NewTokenName as NewTokenNameEvent,
   TokenRoleGranted as TokenRoleGrantedEvent,
   TokenRoleRevoked as TokenRoleRevokedEvent,
@@ -18,15 +18,16 @@ import {
 import {
   Approval,
   ApprovalForAll,
+  Collection,
+  CollectionOwner,
   CollectionRoleGranted,
   CollectionRoleRevoked,
   Controller,
-  Holder,
   NewBuild,
   NewTokenDescription,
   NewTokenENS,
   NewTokenExternalURL,
-  NewTokenImage,
+  NewTokenLogo,
   NewTokenName,
   Owner,
   Token,
@@ -80,6 +81,52 @@ export function handleCollectionRoleGranted(
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  if (event.params.role === 0) {
+    // Role 0 => Owner [Probably going to change this after the ACL refactor.]
+    // Should create a new CollectionOwner entity with the address from the parameters.
+    // If it already is a collection owner, should log a warning.
+
+    let collectionOwner = CollectionOwner.load(event.params.toAddress);
+
+    if (collectionOwner) {
+      // Collection Owner already exists.
+      // Print warning log message.
+      log.warning(
+        'Although Address {} is already a collection owner, a CollectionRoleGranted event was emitted that indicated the address was granted the same role, again.',
+        [event.params.toAddress.toHexString()]
+      );
+    } else {
+      // Create a new collection owner entity and assign the values
+      collectionOwner = new CollectionOwner(event.params.toAddress);
+      collectionOwner.accessGrantedBy = event.params.byAddress;
+      collectionOwner.transactionHash = event.transaction.hash;
+
+      // Log the new CollectionOwner entity creation.
+      log.info('Created a new collection owner entity with address {}.', [
+        event.params.toAddress.toHexString(),
+      ]);
+
+      // Save the collection owner.
+      collectionOwner.save();
+    }
+
+    if (event.params.byAddress === event.params.toAddress) {
+      // This is the contract creation transaction.
+      log.warning('This is the contract creation transaction.', []);
+      if (event.receipt) {
+        let receipt = event.receipt as ethereum.TransactionReceipt;
+        log.warning('Contract address is: {}', [
+          receipt.contractAddress.toHexString(),
+        ]);
+        let collection = new Collection(receipt.contractAddress);
+        collection.deployer = event.params.byAddress;
+        collection.transactionHash = event.transaction.hash;
+        collection.owners = [event.params.toAddress];
+        collection.save();
+      }
+    }
+  }
 }
 
 export function handleCollectionRoleRevoked(
@@ -97,13 +144,20 @@ export function handleCollectionRoleRevoked(
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  if (event.params.role === 0) {
+    // Role 0 => Owner [Probably going to change this after the ACL refactor.]
+    // Should remove the CollectionOwner entity.
+
+    store.remove('CollectionOwner', event.params.toAddress.toHexString());
+  }
 }
 
 export function handleNewBuild(event: NewBuildEvent): void {
   let entity = new NewBuild(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.token;
+  entity.token = event.params.tokenId;
   entity.commitHash = event.params.commitHash.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
@@ -120,7 +174,7 @@ export function handleNewTokenDescription(
   let entity = new NewTokenDescription(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.token;
+  entity.token = event.params.tokenId;
   entity.description = event.params.description.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
@@ -135,7 +189,7 @@ export function handleNewTokenENS(event: NewTokenENSEvent): void {
   let entity = new NewTokenENS(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.token;
+  entity.token = event.params.tokenId;
   entity.ENS = event.params.ENS.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
@@ -152,7 +206,7 @@ export function handleNewTokenExternalURL(
   let entity = new NewTokenExternalURL(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.token;
+  entity.token = event.params.tokenId;
   entity.externalURL = event.params.externalURL.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
@@ -163,12 +217,12 @@ export function handleNewTokenExternalURL(
   entity.save();
 }
 
-export function handleNewTokenImage(event: NewTokenImageEvent): void {
-  let entity = new NewTokenImage(
+export function handleNewTokenLogo(event: NewTokenLogoEvent): void {
+  let entity = new NewTokenLogo(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.token;
-  entity.image = event.params.image.toString();
+  entity.token = event.params.tokenId;
+  entity.logo = event.params.logo.toString();
   entity.triggeredBy = event.params.triggeredBy;
 
   entity.blockNumber = event.block.number;
@@ -182,7 +236,7 @@ export function handleNewTokenName(event: NewTokenNameEvent): void {
   let entity = new NewTokenName(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.token;
+  entity.token = event.params.tokenId;
   entity.name = event.params.name.toString();
   entity.triggeredBy = event.params.triggeredBy;
 

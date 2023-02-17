@@ -6,11 +6,6 @@ import React, { forwardRef, useRef, useState } from 'react';
 import { RepositoriesList } from './repositories-list';
 import { UserOrgsCombobox } from './users-orgs-combobox';
 
-type RepoRowProps = {
-  repo: string;
-  button: React.ReactNode;
-} & React.ComponentProps<typeof Flex>;
-
 export const Loading = () => (
   <Flex
     css={{
@@ -22,6 +17,12 @@ export const Loading = () => (
     <Spinner />
   </Flex>
 );
+
+type RepoRowProps = {
+  repo: string;
+  button: React.ReactNode;
+} & React.ComponentProps<typeof Flex>;
+
 
 export const RepoRow = forwardRef<HTMLDivElement, RepoRowProps>(
   ({ repo, button, ...props }, ref) => (
@@ -58,6 +59,19 @@ export const GithubRepositoryConnection: React.FC = () => {
     setGithubStep(1);
     setSelectedUserOrg({} as ComboboxItem);
   };
+
+  const handleSelectRepo = (repo: string) => {
+    setRepositoryName(repo);
+    setGithubStep(3);
+    setRepositoryConfig({} as DropdownItem, '');
+  };
+
+  const filteredRepositories =
+    searchValue === ''
+      ? repos
+      : repos.filter(
+          (item) => item.toUpperCase().indexOf(searchValue.toUpperCase()) != -1
+        );
 
   return (
     <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pb: '$0h' }}>

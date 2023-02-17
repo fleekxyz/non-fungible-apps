@@ -1,8 +1,7 @@
 import { Card, Grid, Icon, IconButton } from '@/components';
 import { GithubButton } from './github-button';
 
-export const GithubConnect: React.FC = () => {
-  return (
+export const GithubConnect: React.FC = () =>  (
     <Card.Container>
       <Card.Heading
         title="Connect GitHub"
@@ -28,5 +27,4 @@ export const GithubConnect: React.FC = () => {
         </Grid>
       </Card.Body>
     </Card.Container>
-  );
-};
+ );
