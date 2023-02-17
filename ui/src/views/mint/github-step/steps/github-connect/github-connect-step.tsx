@@ -1,5 +1,5 @@
 import { Button, Card, Grid, Icon, IconButton } from '@/components';
-import { Mint } from '../mint.context';
+import { Mint } from '../../../mint.context';
 
 export const GithubConnect: React.FC = () => {
   const { setGithubStep } = Mint.useContext();

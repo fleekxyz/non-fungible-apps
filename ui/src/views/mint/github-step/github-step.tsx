@@ -1,9 +1,9 @@
-import { Stepper } from '@/components';
-import { useState } from 'react';
 import { Mint } from '../mint.context';
-import { GithubConnect } from './github-connect-step';
-import { GithubRepoConfiguration } from './github-repo-configuration';
-import { GithubRepositoryConnection } from './github-repository-selection';
+import {
+  GithubConnect,
+  GithubRepoConfiguration,
+  GithubRepositoryConnection,
+} from './steps';
 
 export const GithubStep = () => {
   const { githubStep } = Mint.useContext();

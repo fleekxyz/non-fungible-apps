@@ -11,8 +11,8 @@ module.exports = {
         slate11: 'rgba(155, 161, 166, 1)',
         slate12: 'rgba(236, 237, 238, 1)',
       },
-      width: {
-        inherit: 'inherit',
+      borderRadius: {
+        xhl: '1.25rem',
       },
     },
   },

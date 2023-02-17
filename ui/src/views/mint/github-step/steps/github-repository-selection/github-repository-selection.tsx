@@ -3,6 +3,7 @@ import {
   Card,
   Combobox,
   ComboboxItem,
+  DropdownItem,
   Flex,
   Grid,
   Icon,
@@ -11,8 +12,9 @@ import {
 } from '@/components';
 import { Input } from '@/components/core/input';
 import { Separator } from '@/components/core/separator.styles';
+import { MintCardHeader } from '@/views/mint/mint-card';
+import { Mint } from '@/views/mint/mint.context';
 import React, { forwardRef, useRef, useState } from 'react';
-import { Mint } from '../mint.context';
 
 //TODO remove once it's integrated with GH login
 const repos = [
@@ -80,7 +82,7 @@ export const GithubRepositoryConnection: React.FC = () => {
   const handleSelectRepo = (repo: string) => {
     setRepositoryName(repo);
     setGithubStep(3);
-    setRepositoryConfig('', '');
+    setRepositoryConfig({} as DropdownItem, '');
   };
 
   const filteredRepositories =
@@ -92,26 +94,9 @@ export const GithubRepositoryConnection: React.FC = () => {
 
   return (
     <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pb: '$0h' }}>
-      <Card.Heading
+      <MintCardHeader
         title="Select Repository"
-        leftIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="back" />}
-            css={{ mr: '$2' }}
-            onClick={handlePrevStepClick}
-          />
-        }
-        rightIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="info" />}
-          />
-        }
+        onClickBack={handlePrevStepClick}
       />
       <Card.Body css={{ pt: '$4' }}>
         <Grid css={{ rowGap: '$2' }}>

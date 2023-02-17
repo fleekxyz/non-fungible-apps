@@ -24,6 +24,7 @@ export abstract class CardStyles {
 
   static readonly Text = styled('div', {
     backgroundColor: '$slate1',
+    width: '$full',
     borderRadius: '$xl',
     display: 'flex',
     flexDirection: 'column',
@@ -31,5 +32,6 @@ export abstract class CardStyles {
     alignItems: 'center',
     textAlign: 'center',
     color: '$slate8',
+    fontSize: '$sm',
   });
 }
