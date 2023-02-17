@@ -18,7 +18,7 @@ abstract contract FleekBilling is Initializable {
     /**
      * @dev Emitted when the billing value is changed.
      */
-    event ChangeBilling(Billing key, uint256 price);
+    event BillingChanged(Billing key, uint256 price);
 
     /**
      * @dev Mapping of billing values.
@@ -45,7 +45,7 @@ abstract contract FleekBilling is Initializable {
      */
     function _setBilling(Billing key, uint256 price) internal {
         _billings[key] = price;
-        emit ChangeBilling(key, price);
+        emit BillingChanged(key, price);
     }
 
     /**

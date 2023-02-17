@@ -7,9 +7,10 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./FleekAccessControl.sol";
+import "./FleekBilling.sol";
 import "./util/FleekStrings.sol";
 
-contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
+contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, FleekBilling {
     using Strings for uint256;
     using Counters for Counters.Counter;
     using FleekStrings for FleekERC721.App;
@@ -85,6 +86,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function initialize(string memory _name, string memory _symbol) public initializer {
         __ERC721_init(_name, _symbol);
         __FleekAccessControl_init();
+        __FleekBilling_init();
     }
 
     /**
@@ -115,7 +117,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         string memory gitRepository,
         string memory logo,
         uint24 color
-    ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
+    ) public payable requireBilling(Billing.Mint) requireCollectionRole(Roles.Owner) returns (uint256) {
         uint256 tokenId = _appIds.current();
         _mint(to, tokenId);
         _appIds.increment();
@@ -524,5 +526,31 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         if (bytes(_apps[tokenId].externalURL).length != 0) {
             delete _apps[tokenId];
         }
+    }
+
+    /*//////////////////////////////////////////////////////////////
+        BILLING
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Modifier to require billing with a given key.
+     */
+    modifier requireBilling(Billing key) {
+        _requireBilling(key);
+        _;
+    }
+
+    /**
+     * @dev Sets the billing value for a given key.
+     *
+     * May emit a {BillingChanged} event.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `collectionOwner` role.
+     *
+     */
+    function setBilling(Billing key, uint256 value) public requireCollectionRole(Roles.Owner) {
+        _setBilling(key, value);
     }
 }
