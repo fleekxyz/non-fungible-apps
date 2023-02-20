@@ -9,6 +9,8 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./FleekAccessControl.sol";
 import "./util/FleekStrings.sol";
 
+error ThereIsNoTokenMinted();
+
 contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     using Strings for uint256;
     using Counters for Counters.Counter;
@@ -31,6 +33,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         address indexed minter,
         address indexed owner
     );
+    
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
@@ -64,7 +67,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         AccessPointCreationStatus status,
         address indexed triggeredBy
     );
-
+    
     /**
      * The properties are stored as string to keep consistency with
      * other token contracts, we might consider changing for bytes32
@@ -227,6 +230,15 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         _requireMinted(tokenId);
         App storage app = _apps[tokenId];
         return (app.name, app.description, app.externalURL, app.ENS, app.currentBuild, app.logo, app.color);
+    }
+
+    /**
+     * @dev Returns the last minted tokenId.
+     */
+    function getLastTokenId() public view virtual returns (uint256) {
+        uint256 current = _appIds.current();
+        if (current == 0) revert ThereIsNoTokenMinted();
+        return current - 1;
     }
 
     /**
