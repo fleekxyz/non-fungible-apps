@@ -10,7 +10,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
 
   beforeEach(async () => {
     fixture = await loadFixture(Fixtures.withMint);
-    fixture.contract.setAccessPointAutoApprovalSettings(fixture.tokenId, true);
+    fixture.contract.setAccessPointAutoApproval(fixture.tokenId, true);
     fixture.contract.addAccessPoint(fixture.tokenId, DefaultAP);
   });
 
@@ -188,7 +188,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
   it('should token owner be able to change the auto approval settings to off', async () => {
     const { contract, tokenId } = fixture;
 
-    await contract.setAccessPointAutoApprovalSettings(tokenId, false);
+    await contract.setAccessPointAutoApproval(tokenId, false);
 
     await contract.addAccessPoint(tokenId, 'random.com');
 

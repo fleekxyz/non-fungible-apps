@@ -206,7 +206,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
 
     await contract
       .connect(owner)
-      .setAccessPointAutoApprovalSettings(tokenId, true);
+      .setAccessPointAutoApproval(tokenId, true);
 
     await contract.addAccessPoint(tokenId, 'accesspoint.com');
 
