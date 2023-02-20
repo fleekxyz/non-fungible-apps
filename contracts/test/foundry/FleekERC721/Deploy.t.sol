@@ -21,4 +21,12 @@ contract Test_FleekERC721_Deploy is Test_FleekERC721_Base {
     function test_deployerShouldBeCollectionOwner() public {
         assertTrue(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, deployer));
     }
+
+    function testFuzz_nameAndSymbol(string memory _name, string memory _symbol) public {
+        CuT = new FleekERC721();
+        CuT.initialize(_name, _symbol);
+
+        assertEq(CuT.name(), _name);
+        assertEq(CuT.symbol(), _symbol);
+    }
 }
