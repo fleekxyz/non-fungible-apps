@@ -184,7 +184,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
             gitRepository,
             logo,
             color,
-            accessPointAutoApprovalSettings,
+            accessPointAutoApproval,
             msg.sender,
             to
         );
