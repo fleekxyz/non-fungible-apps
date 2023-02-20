@@ -32,13 +32,22 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
         assertEq(currentBuild, 0);
     }
 
-    function test_getTokenAfterUpdate() public {
-        CuT.setTokenName(tokenId, "New App Name");
-        CuT.setTokenDescription(tokenId, "New description for the app.");
-        CuT.setTokenExternalURL(tokenId, "https://new-url.com");
-        CuT.setTokenENS(tokenId, "new-ens.eth");
-        CuT.setTokenBuild(tokenId, "ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo");
-        CuT.setTokenLogoAndColor(tokenId, TestConstants.LOGO_1, 0x654321);
+    function testFuzz_getTokenAfterUpdate(
+        string memory newAppName,
+        string memory newDescription,
+        string memory newExternalURL,
+        string memory newENS,
+        string memory newCommitHash,
+        string memory newRepository,
+        string memory newLogo,
+        uint24 newColor
+    ) public {
+        CuT.setTokenName(tokenId, newAppName);
+        CuT.setTokenDescription(tokenId, newDescription);
+        CuT.setTokenExternalURL(tokenId, newExternalURL);
+        CuT.setTokenENS(tokenId, newENS);
+        CuT.setTokenBuild(tokenId, newCommitHash, newRepository);
+        CuT.setTokenLogoAndColor(tokenId, newLogo, newColor);
 
         (
             string memory name,
@@ -49,25 +58,23 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
             string memory logo,
             uint24 color
         ) = CuT.getToken(tokenId);
-        assertEq(name, "New App Name");
-        assertEq(description, "New description for the app.");
-        assertEq(externalURL, "https://new-url.com");
-        assertEq(logo, TestConstants.LOGO_1);
-        assertEq(color, 0x654321);
-        assertEq(ENS, "new-ens.eth");
+        assertEq(name, newAppName);
+        assertEq(description, newDescription);
+        assertEq(externalURL, newExternalURL);
+        assertEq(logo, newLogo);
+        assertEq(color, newColor);
+        assertEq(ENS, newENS);
         assertEq(currentBuild, 1);
     }
 
-    function test_getTokenForDifferentAddresses() public {
-        vm.prank(address(1));
-        CuT.getToken(tokenId);
-        vm.prank(address(2));
-        CuT.getToken(tokenId);
-        vm.prank(address(3));
+    function testFuzz_getTokenForDifferentAddresses(address account) public {
+        vm.prank(account);
         CuT.getToken(tokenId);
     }
 
-    function testFail_tokenURIForNonExistentId() public view {
-        CuT.getToken(1);
+    function testFuzz_tokenURIForNonExistentId(uint256 _tokenId) public {
+        vm.assume(_tokenId != tokenId);
+        expectRevertWithInvalidTokenId();
+        CuT.getToken(_tokenId);
     }
 }
