@@ -38,61 +38,14 @@ type CollectionRoleRevoked @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type NewBuild @entity(immutable: true) {
+type MetadataUpdate @entity(immutable: true) {
   id: Bytes!
-  token: BigInt! # uint256
-  commitHash: String! # string
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NewTokenDescription @entity(immutable: true) {
-  id: Bytes!
-  token: BigInt! # uint256
-  description: String! # string
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NewTokenENS @entity(immutable: true) {
-  id: Bytes!
-  token: BigInt! # uint256
-  ENS: String! # string
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NewTokenExternalURL @entity(immutable: true) {
-  id: Bytes!
-  token: BigInt! # uint256
-  externalURL: String! # string
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NewTokenLogo @entity(immutable: true) {
-  id: Bytes!
-  token: BigInt! # uint256
-  logo: String! # string
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NewTokenName @entity(immutable: true) {
-  id: Bytes!
-  token: BigInt! # uint256
-  name: String! # string
-  triggeredBy: Bytes! # address
+  tokenId: BigInt!
+  key: String!
+  stringValue: String
+  uint24Value: Int
+  doubleStringValue: [String!]!
+  byAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
