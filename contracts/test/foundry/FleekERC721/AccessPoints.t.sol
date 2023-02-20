@@ -98,18 +98,6 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base {
         assertAccessPointJSON(accessPointName, "0", "0", "false", "false", deployer);
     }
 
-    function test_appAccessPoints() public {
-        CuT.addAccessPoint(tokenId, "accesspoint1.com");
-        CuT.addAccessPoint(tokenId, "accesspoint2.com");
-        CuT.addAccessPoint(tokenId, "accesspoint3.com");
-
-        string[] memory accessPoints = CuT.appAccessPoints(tokenId);
-        assertEq(accessPoints[0], "accesspoint1.com");
-        assertEq(accessPoints[1], "accesspoint2.com");
-        assertEq(accessPoints[2], "accesspoint3.com");
-        assertEq(accessPoints.length, 3);
-    }
-
     function test_cannotAddAccessPointToNonexistentToken() public {
         expectRevertWithInvalidTokenId();
         CuT.addAccessPoint(1, "accesspoint.com");

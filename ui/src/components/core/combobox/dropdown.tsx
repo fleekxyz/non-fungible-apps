@@ -9,7 +9,6 @@ type DropdownOptionProps = {
 
 const DropdownOption = ({ option }: DropdownOptionProps) => (
   <Listbox.Option
-    key={option.value}
     className={({ active }) =>
       `relative cursor-default select-none py-2 px-3.5 text-slate11 rounded-xl mb-2 text-sm ${
         active ? 'bg-slate5 text-slate12' : 'bg-transparent'
@@ -35,7 +34,7 @@ type DropdownButtonProps = {
 
 const DropdownButton = ({ selectedValue, open }: DropdownButtonProps) => (
   <Listbox.Button
-    className={`relative w-full cursor-default  bg-transparent border-solid border border-slate7  py-3 pl-3.5 pr-10 text-left focus:outline-none sm:text-sm ${
+    className={`relative w-full cursor-default  bg-transparent border-solid border border-slate7  py-3 pl-3.5 pr-10 h-11 text-left focus:outline-none sm:text-sm ${
       open ? 'border-b-0 rounded-t-xl bg-black border-slate6' : 'rounded-xl'
     }`}
   >

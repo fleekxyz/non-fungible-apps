@@ -78,10 +78,10 @@ type NewTokenExternalURL @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type NewTokenImage @entity(immutable: true) {
+type NewTokenLogo @entity(immutable: true) {
   id: Bytes!
   token: BigInt! # uint256
-  image: String! # string
+  logo: String! # string
   triggeredBy: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -147,4 +147,16 @@ type Owner @entity {
 type Controller @entity {
   id: Bytes! #address
   tokens: [Token!] @derivedFrom(field: "controllers")
+}
+type Collection @entity {
+  id: Bytes! #address
+  deployer: Bytes! #address
+  transactionHash: Bytes! #transaction hash
+  owners: [CollectionOwner!]
+}
+
+type CollectionOwner @entity {
+  id: Bytes! # address
+  accessGrantedBy: Bytes! #address
+  transactionHash: Bytes!
 }
