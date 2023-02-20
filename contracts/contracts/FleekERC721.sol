@@ -10,6 +10,7 @@ import "./FleekAccessControl.sol";
 import "./util/FleekStrings.sol";
 
 error MustBeTokenOwner(uint256 tokenId);
+error ThereIsNoTokenMinted();
 
 contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     using Strings for uint256;
@@ -188,6 +189,15 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         _requireMinted(tokenId);
         App storage app = _apps[tokenId];
         return (app.name, app.description, app.externalURL, app.ENS, app.currentBuild, app.logo, app.color);
+    }
+
+    /**
+     * @dev Returns the last minted tokenId.
+     */
+    function getLastTokenId() public view virtual returns (uint256) {
+        uint256 current = _appIds.current();
+        if (current == 0) revert ThereIsNoTokenMinted();
+        return current - 1;
     }
 
     /**

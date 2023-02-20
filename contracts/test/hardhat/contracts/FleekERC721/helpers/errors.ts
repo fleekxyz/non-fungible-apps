@@ -4,4 +4,5 @@ export const Errors = Object.freeze({
   MustHaveAtLeastOneOwner: 'MustHaveAtLeastOneOwner',
   RoleAlreadySet: 'RoleAlreadySet',
   MustBeTokenOwner: 'MustBeTokenOwner',
+  ThereIsNoTokenMinted: 'ThereIsNoTokenMinted',
 });
