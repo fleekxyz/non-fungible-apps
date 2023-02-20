@@ -28,39 +28,30 @@ contract FleekAccessControl is Initializable {
     }
 
     /**
-     * @dev Emitted when a collection role is granted.
+     * @dev Emitted when a token role is changed.
      */
-    event TokenRoleGranted(
+    event TokenRoleChanged(
         uint256 indexed tokenId,
         TokenRoles indexed role,
         address indexed toAddress,
+        bool status,
         address byAddress
     );
 
     /**
-     * @dev Emitted when a collection role is revoked.
-     */
-    event TokenRoleRevoked(
-        uint256 indexed tokenId,
-        TokenRoles indexed role,
-        address indexed toAddress,
-        address byAddress
-    );
-
-    /**
-     * @dev Emitted when token roles version is increased and all token roles are cleared and.
+     * @dev Emitted when token roles version is increased and all token roles are cleared.
      */
     event TokenRolesCleared(uint256 indexed tokenId, address byAddress);
 
     /**
-     * @dev Emitted when a collection role is granted.
+     * @dev Emitted when a collection role is changed.
      */
-    event CollectionRoleGranted(CollectionRoles indexed role, address indexed toAddress, address byAddress);
-
-    /**
-     * @dev Emitted when a collection role is revoked.
-     */
-    event CollectionRoleRevoked(CollectionRoles indexed role, address indexed toAddress, address byAddress);
+    event CollectionRoleChanged(
+        CollectionRoles indexed role,
+        address indexed toAddress,
+        bool status,
+        address byAddress
+    );
 
     /**
      * @dev _collectionRolesCounter[role] is the number of addresses that have the role.
@@ -130,7 +121,7 @@ contract FleekAccessControl is Initializable {
         _collectionRoles[role][account] = true;
         _collectionRolesCounter[role].increment();
 
-        emit CollectionRoleGranted(role, account, msg.sender);
+        emit CollectionRoleChanged(role, account, true, msg.sender);
     }
 
     /**
@@ -144,7 +135,7 @@ contract FleekAccessControl is Initializable {
         _collectionRoles[role][account] = false;
         _collectionRolesCounter[role].decrement();
 
-        emit CollectionRoleRevoked(role, account, msg.sender);
+        emit CollectionRoleChanged(role, account, false, msg.sender);
     }
 
     /**
@@ -156,7 +147,7 @@ contract FleekAccessControl is Initializable {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         _tokenRoles[tokenId][currentVersion][role][account] = true;
 
-        emit TokenRoleGranted(tokenId, role, account, msg.sender);
+        emit TokenRoleChanged(tokenId, role, account, true, msg.sender);
     }
 
     /**
@@ -168,7 +159,7 @@ contract FleekAccessControl is Initializable {
         uint256 currentVersion = _tokenRolesVersion[tokenId].current();
         _tokenRoles[tokenId][currentVersion][role][account] = false;
 
-        emit TokenRoleRevoked(tokenId, role, account, msg.sender);
+        emit TokenRoleChanged(tokenId, role, account, false, msg.sender);
     }
 
     /**

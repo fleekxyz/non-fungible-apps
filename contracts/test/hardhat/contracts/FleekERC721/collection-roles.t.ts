@@ -118,8 +118,13 @@ describe('FleekERC721.CollectionRoles', () => {
     await expect(
       contract.grantCollectionRole(CollectionRoles.Owner, otherAccount.address)
     )
-      .to.emit(contract, 'CollectionRoleGranted')
-      .withArgs(CollectionRoles.Owner, otherAccount.address, owner.address);
+      .to.emit(contract, 'CollectionRoleChanged')
+      .withArgs(
+        CollectionRoles.Owner,
+        otherAccount.address,
+        true,
+        owner.address
+      );
   });
 
   it('should emit event when role is revoked', async () => {
@@ -133,8 +138,13 @@ describe('FleekERC721.CollectionRoles', () => {
     await expect(
       contract.revokeCollectionRole(CollectionRoles.Owner, otherAccount.address)
     )
-      .to.emit(contract, 'CollectionRoleRevoked')
-      .withArgs(CollectionRoles.Owner, otherAccount.address, owner.address);
+      .to.emit(contract, 'CollectionRoleChanged')
+      .withArgs(
+        CollectionRoles.Owner,
+        otherAccount.address,
+        false,
+        owner.address
+      );
   });
 
   it('should not be able to grant role if already granted', async () => {

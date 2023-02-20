@@ -152,11 +152,12 @@ describe('FleekERC721.TokenRoles', () => {
         otherAccount.address
       )
     )
-      .to.emit(contract, 'TokenRoleGranted')
+      .to.emit(contract, 'TokenRoleChanged')
       .withArgs(
         tokenId,
         TokenRoles.Controller,
         otherAccount.address,
+        true,
         owner.address
       );
   });
@@ -175,11 +176,12 @@ describe('FleekERC721.TokenRoles', () => {
         otherAccount.address
       )
     )
-      .to.emit(contract, 'TokenRoleRevoked')
+      .to.emit(contract, 'TokenRoleChanged')
       .withArgs(
         tokenId,
         TokenRoles.Controller,
         otherAccount.address,
+        false,
         owner.address
       );
   });
