@@ -104,7 +104,7 @@ export const RepoConfigurationBody = () => {
             <Form.Field>
               <Form.Label>Git Commit</Form.Label>
               <Form.Input
-                placeholder="693f89763dbb7a6c9ce0711cc34591a4c8c77198"
+                placeholder="Select branch to get last commit"
                 value={commitHashSelected}
                 onChange={handleCommitHashChange}
               />
