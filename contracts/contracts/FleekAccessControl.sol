@@ -2,12 +2,9 @@
 
 pragma solidity ^0.8.7;
 
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 contract FleekAccessControl is Initializable {
-    using Counters for Counters.Counter;
-
     enum Roles {
         Owner,
         Controller
@@ -23,11 +20,11 @@ contract FleekAccessControl is Initializable {
         address[] members;
     }
 
-    Counters.Counter private _collectionRolesVersion;
+    uint256 private _collectionRolesVersion;
     // _collectionRoles[version][role]
     mapping(uint256 => mapping(Roles => Role)) private _collectionRoles;
 
-    mapping(uint256 => Counters.Counter) private _tokenRolesVersion;
+    mapping(uint256 => uint256) private _tokenRolesVersion;
     // _tokenRoles[tokenId][version][role]
     mapping(uint256 => mapping(uint256 => mapping(Roles => Role))) private _tokenRoles;
 
@@ -36,6 +33,7 @@ contract FleekAccessControl is Initializable {
      */
     function __FleekAccessControl_init() internal onlyInitializing {
         _grantCollectionRole(Roles.Owner, msg.sender);
+        _collectionRolesVersion = 0;
     }
 
     /**
@@ -120,7 +118,7 @@ contract FleekAccessControl is Initializable {
      * @dev Returns `True` if a certain address has the collection role.
      */
     function hasCollectionRole(Roles role, address account) public view returns (bool) {
-        uint256 currentVersion = _collectionRolesVersion.current();
+        uint256 currentVersion = _collectionRolesVersion;
 
         return _collectionRoles[currentVersion][role].indexes[account] != 0;
     }
@@ -129,7 +127,7 @@ contract FleekAccessControl is Initializable {
      * @dev Returns `True` if a certain address has the token role.
      */
     function hasTokenRole(uint256 tokenId, Roles role, address account) public view returns (bool) {
-        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        uint256 currentVersion = _tokenRolesVersion[tokenId];
         return _tokenRoles[tokenId][currentVersion][role].indexes[account] != 0;
     }
 
@@ -137,7 +135,7 @@ contract FleekAccessControl is Initializable {
      * @dev Returns an array of addresses that all have the collection role.
      */
     function getCollectionRoleMembers(Roles role) public view returns (address[] memory) {
-        uint256 currentVersion = _collectionRolesVersion.current();
+        uint256 currentVersion = _collectionRolesVersion;
         return _collectionRoles[currentVersion][role].members;
     }
 
@@ -145,7 +143,7 @@ contract FleekAccessControl is Initializable {
      * @dev Returns an array of addresses that all have the same token role for a certain tokenId.
      */
     function getTokenRoleMembers(uint256 tokenId, Roles role) public view returns (address[] memory) {
-        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        uint256 currentVersion = _tokenRolesVersion[tokenId];
         return _tokenRoles[tokenId][currentVersion][role].members;
     }
 
@@ -153,7 +151,7 @@ contract FleekAccessControl is Initializable {
      * @dev Grants the collection role to an address.
      */
     function _grantCollectionRole(Roles role, address account) internal {
-        uint256 currentVersion = _collectionRolesVersion.current();
+        uint256 currentVersion = _collectionRolesVersion;
         _grantRole(_collectionRoles[currentVersion][role], account);
         emit CollectionRoleGranted(role, account, msg.sender);
     }
@@ -162,7 +160,7 @@ contract FleekAccessControl is Initializable {
      * @dev Revokes the collection role of an address.
      */
     function _revokeCollectionRole(Roles role, address account) internal {
-        uint256 currentVersion = _collectionRolesVersion.current();
+        uint256 currentVersion = _collectionRolesVersion;
         _revokeRole(_collectionRoles[currentVersion][role], account);
         emit CollectionRoleRevoked(role, account, msg.sender);
     }
@@ -171,7 +169,7 @@ contract FleekAccessControl is Initializable {
      * @dev Grants the token role to an address.
      */
     function _grantTokenRole(uint256 tokenId, Roles role, address account) internal {
-        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        uint256 currentVersion = _tokenRolesVersion[tokenId];
         _grantRole(_tokenRoles[tokenId][currentVersion][role], account);
         emit TokenRoleGranted(tokenId, role, account, msg.sender);
     }
@@ -180,7 +178,7 @@ contract FleekAccessControl is Initializable {
      * @dev Revokes the token role of an address.
      */
     function _revokeTokenRole(uint256 tokenId, Roles role, address account) internal {
-        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        uint256 currentVersion = _tokenRolesVersion[tokenId];
         _revokeRole(_tokenRoles[tokenId][currentVersion][role], account);
         emit TokenRoleRevoked(tokenId, role, account, msg.sender);
     }
@@ -217,7 +215,7 @@ contract FleekAccessControl is Initializable {
      * Should only be used for burning tokens.
      */
     function _clearAllTokenRoles(uint256 tokenId) internal {
-        _tokenRolesVersion[tokenId].increment();
+        _tokenRolesVersion[tokenId] += 1;
     }
 
     /**

@@ -3,7 +3,6 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./FleekAccessControl.sol";
@@ -11,7 +10,6 @@ import "./util/FleekStrings.sol";
 
 contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     using Strings for uint256;
-    using Counters for Counters.Counter;
     using FleekStrings for FleekERC721.App;
     using FleekStrings for FleekERC721.AccessPoint;
     using FleekStrings for string;
@@ -72,7 +70,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         address owner;
     }
 
-    Counters.Counter private _appIds;
+    uint256 private _appIds;
     mapping(uint256 => App) private _apps;
     mapping(string => AccessPoint) private _accessPoints;
 
@@ -82,6 +80,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function initialize(string memory _name, string memory _symbol) public initializer {
         __ERC721_init(_name, _symbol);
         __FleekAccessControl_init();
+        _appIds = 0;
     }
 
     /**
@@ -113,9 +112,10 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         string memory logo,
         uint24 color
     ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
-        uint256 tokenId = _appIds.current();
+        uint256 tokenId = _appIds;
         _mint(to, tokenId);
-        _appIds.increment();
+        
+        _appIds += 1;
 
         App storage app = _apps[tokenId];
         app.name = name;
@@ -127,8 +127,8 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
 
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
-        app.builds[0] = Build(commitHash, gitRepository);
-
+        app.builds[0] = Build(commitHash, gitRepository);    
+        
         return tokenId;
     }
 
