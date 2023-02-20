@@ -23,6 +23,11 @@ To run the UI localy follow the steps:
    ```bash
    $ yarn
    ```
+3. To use ConnecKit is neccessary get an [Alchemy ID](https://alchemy.com/), so create an App and get the credentials. Then set the following .env file
+   ```bash
+   VITE_ALCHEMY_API_KEY
+   VITE_ALCHEMY_APP_NAME
+   ```
 
 3. Start the local server running the app:
 

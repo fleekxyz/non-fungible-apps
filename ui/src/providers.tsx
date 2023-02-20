@@ -4,7 +4,7 @@ import { store } from './store';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { WagmiConfig, createClient } from 'wagmi';
-import { polygon, polygonMumbai, mainnet } from 'wagmi/chains';
+import { polygonMumbai } from 'wagmi/chains';
 import { ConnectKitProvider, getDefaultClient } from 'connectkit';
 
 const alchemyId = import.meta.env.VITE_ALCHEMY_API_KEY;
@@ -16,7 +16,7 @@ const queryClient = new QueryClient({
 
 const client = createClient(
   getDefaultClient({
-    appName: 'NFA Mumbai',
+    appName: import.meta.env.VITE_APP_NAME,
     alchemyId,
     chains,
   })
