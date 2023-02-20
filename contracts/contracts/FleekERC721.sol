@@ -553,4 +553,18 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setBilling(Billing key, uint256 value) public requireCollectionRole(Roles.Owner) {
         _setBilling(key, value);
     }
+
+    /**
+     * @dev Withdraws all the funds from contract.
+     *
+     * May emmit a {Withdrawn} event.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `collectionOwner` role.
+     *
+     */
+    function withdraw() public requireCollectionRole(Roles.Owner) {
+        _withdraw();
+    }
 }

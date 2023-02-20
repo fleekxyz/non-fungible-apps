@@ -21,6 +21,11 @@ abstract contract FleekBilling is Initializable {
     event BillingChanged(Billing key, uint256 price);
 
     /**
+     * @dev Emitted when contract is withdrawn.
+     */
+    event Withdrawn(uint256 value, address indexed byAddress);
+
+    /**
      * @dev Mapping of billing values.
      */
     mapping(Billing => uint256) public _billings;
@@ -60,6 +65,10 @@ abstract contract FleekBilling is Initializable {
      * @dev Internal function to withdraw the contract balance.
      */
     function _withdraw() internal {
-        payable(msg.sender).transfer(address(this).balance);
+        address by = msg.sender;
+        uint256 value = address(this).balance;
+
+        payable(by).transfer(value);
+        emit Withdrawn(value, by);
     }
 }
