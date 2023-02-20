@@ -59,7 +59,6 @@ export const UserOrgsCombobox = ({ setLoading }: UserOrgsComboboxProps) => {
   }, [dataUser, dataOrgs]);
 
   const handleUserOrgChange = (item: ComboboxItem) => {
-    setLoading(true);
     setSelectedUserOrg(item);
   };
 

@@ -1,12 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Button,
-  DropdownItem,
-  Flex,
-  NoResults,
-  Separator,
-  Spinner,
-} from '@/components';
+import { Button, DropdownItem, Flex, NoResults, Separator } from '@/components';
 import { Mint, Repo } from '@/views/mint/mint.context';
 import { useState } from 'react';
 import { Loading, RepoRow } from './github-repository-selection';
@@ -14,16 +7,10 @@ import { useGithub } from '../use-github';
 import { useQuery } from 'react-query';
 
 type RepositoriesListProps = {
-  setLoading: (loading: boolean) => void;
-  isLoading: boolean;
   searchValue: string;
 };
 
-export const RepositoriesList = ({
-  isLoading,
-  setLoading,
-  searchValue,
-}: RepositoriesListProps) => {
+export const RepositoriesList = ({ searchValue }: RepositoriesListProps) => {
   const {
     selectedUserOrg,
     setGithubStep,

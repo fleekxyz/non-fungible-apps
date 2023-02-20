@@ -23,7 +23,6 @@ type RepoRowProps = {
   button: React.ReactNode;
 } & React.ComponentProps<typeof Flex>;
 
-
 export const RepoRow = forwardRef<HTMLDivElement, RepoRowProps>(
   ({ repo, button, ...props }, ref) => (
     <Flex
@@ -60,19 +59,6 @@ export const GithubRepositoryConnection: React.FC = () => {
     setSelectedUserOrg({} as ComboboxItem);
   };
 
-  const handleSelectRepo = (repo: string) => {
-    setRepositoryName(repo);
-    setGithubStep(3);
-    setRepositoryConfig({} as DropdownItem, '');
-  };
-
-  const filteredRepositories =
-    searchValue === ''
-      ? repos
-      : repos.filter(
-          (item) => item.toUpperCase().indexOf(searchValue.toUpperCase()) != -1
-        );
-
   return (
     <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pb: '$0h' }}>
       <MintCardHeader
@@ -92,11 +78,7 @@ export const GithubRepositoryConnection: React.FC = () => {
           {isLoadingUserOrgs ? (
             <Loading />
           ) : (
-            <RepositoriesList
-              searchValue={searchValue}
-              setLoading={setIsLoadingUserOrgs}
-              isLoading={isLoadingUserOrgs}
-            />
+            <RepositoriesList searchValue={searchValue} />
           )}
         </Grid>
       </Card.Body>
