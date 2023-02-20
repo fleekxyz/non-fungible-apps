@@ -21,6 +21,7 @@ describe('FleekERC721.TokenURI', () => {
       description: TestConstants.MintParams.description,
       image: TestConstants.ResultantImage.Default,
       external_url: TestConstants.MintParams.externalUrl,
+      access_point_auto_approval: false,
       attributes: [
         {
           trait_type: 'ENS',
