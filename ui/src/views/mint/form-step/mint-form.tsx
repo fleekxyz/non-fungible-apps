@@ -11,15 +11,14 @@ import { MintCardHeader } from '../mint-card';
 import { useAccount } from 'wagmi';
 
 export const FormStep = () => {
-  const { isConnected, address } = useAccount();
-  const { prevStep, nextStep, setStep } = Stepper.useContext();
+  const { address } = useAccount();
+  const { prevStep, nextStep } = Stepper.useContext();
   const { appName, appDescription, domain } = Mint.useContext();
 
   //TODO remove once it's integrated with mint function
   console.log('address', address);
   const handlePrevStep = () => {
-    if (isConnected) setStep(1);
-    else prevStep();
+    prevStep();
   };
 
   return (
