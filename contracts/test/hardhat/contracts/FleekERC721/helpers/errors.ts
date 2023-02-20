@@ -3,4 +3,5 @@ export const Errors = Object.freeze({
   ContractIsNotPaused: 'ContractIsNotPaused',
   ContractIsNotPausable: 'ContractIsNotPausable',
   PausableIsSetTo: 'PausableIsSetTo',
+  ThereIsNoTokenMinted: 'ThereIsNoTokenMinted',
 });
