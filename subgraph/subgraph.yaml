@@ -19,6 +19,7 @@ dataSources:
         - CollectionRoleGranted
         - CollectionRoleRevoked
         - MetadataUpdate
+        - NewMint
         - TokenRoleGranted
         - TokenRoleRevoked
         - Transfer

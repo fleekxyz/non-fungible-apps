@@ -22,6 +22,7 @@ import {
   Controller,
   GitRepository as GitRepositoryEntity,
   MetadataUpdate,
+  NewMint,
   Owner,
   Token,
   TokenRoleGranted,
@@ -158,8 +159,8 @@ export function handleNewMint(event: NewMintEvent): void {
   let commitHash = event.params.commitHash;
   let logo = event.params.logo;
   let color = event.params.color;
-  let accessPointAutoApprovalSettings =
-    event.params.accessPointAutoApprovalSettings;
+  let accessPointAutoApproval =
+    event.params.accessPointAutoApproval;
   let tokenId = event.params.tokenId;
   let ownerAddress = event.params.owner;
 
@@ -172,8 +173,8 @@ export function handleNewMint(event: NewMintEvent): void {
   newMintEntity.gitRepository = gitRepository;
   newMintEntity.logo = logo;
   newMintEntity.color = color;
-  newMintEntity.accessPointAutoApprovalSettings =
-    accessPointAutoApprovalSettings;
+  newMintEntity.accessPointAutoApproval =
+    accessPointAutoApproval;
   newMintEntity.triggeredBy = event.params.minter;
   newMintEntity.tokenOwner = ownerAddress;
   newMintEntity.blockNumber = event.block.number;
@@ -213,7 +214,7 @@ export function handleNewMint(event: NewMintEvent): void {
   token.commitHash = commitHash;
   token.logo = logo;
   token.color = color;
-  token.accessPointAutoApprovalSettings = accessPointAutoApprovalSettings;
+  token.accessPointAutoApproval = accessPointAutoApproval;
   token.owner = ownerAddress;
   token.mintTransaction = event.transaction.hash.concatI32(
     event.logIndex.toI32()
@@ -240,21 +241,9 @@ export function handleMetadataUpdateWithStringValue(event: MetadataUpdateEvent):
   let entity = new MetadataUpdate(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
+
+  entity.tokenId = event.params._tokenId;
   entity.key = event.params.key;
-
-  if (event.params.key == 'externalURL') {
-
-  } else if (event.params.key == 'ENS') {
-
-  } else if (event.params.key == 'name') {
-    
-  } else if (event.params.key == 'description') {
-    
-  } else {
-    // logo
-
-  }
-
   entity.stringValue = event.params.value;
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
@@ -262,6 +251,24 @@ export function handleMetadataUpdateWithStringValue(event: MetadataUpdateEvent):
 
   entity.save();
 
+  // UPDATE TOKEN
+  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
+
+  if (token) {
+    if (event.params.key == 'externalURL') {
+      token.externalURL = event.params.value;
+    } else if (event.params.key == 'ENS') {
+      token.ENS = event.params.value;
+    } else if (event.params.key == 'name') {
+      token.name = event.params.value;
+    } else if (event.params.key == 'description') {
+      token.description = event.params.value;
+    } else {
+      // logo
+      token.logo = event.params.value;
+    }   
+    token.save();
+  }
 }
 
 export function handleMetadataUpdateWithDoubleStringValue(event: MetadataUpdateEvent2): void {
@@ -271,18 +278,32 @@ export function handleMetadataUpdateWithDoubleStringValue(event: MetadataUpdateE
   let entity = new MetadataUpdate(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
+
   entity.key = event.params.key;
-
-  if (event.params.key == 'build') {
-
-  }
-  
+  entity.tokenId = event.params._tokenId;
   entity.doubleStringValue = event.params.value;
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  // UPDATE TOKEN
+  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
+
+  if (token) {
+    if (event.params.key == 'build') {
+      let gitRepositoryEntity = GitRepositoryEntity.load(event.params.value[1]);
+      if (!gitRepositoryEntity) {
+        // Create a new gitRepository entity
+        gitRepositoryEntity = new GitRepositoryEntity(event.params.value[1]);
+      }
+      token.commitHash = event.params.value[0];
+      token.gitRepository = event.params.value[1];
+      token.save();
+      gitRepositoryEntity.save();
+    }  
+  }
 }
 
 export function handleMetadataUpdateWithIntValue(event: MetadataUpdateEvent1): void {
@@ -292,18 +313,24 @@ export function handleMetadataUpdateWithIntValue(event: MetadataUpdateEvent1): v
   let entity = new MetadataUpdate(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
+
   entity.key = event.params.key;
-
-  if (event.params.key == 'color') {
-
-  }
-
+  entity.tokenId = event.params._tokenId;
   entity.uint24Value = event.params.value;
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
+
+  if (token) {
+    if (event.params.key == 'color') {
+      token.color = event.params.value;
+    }
+    token.save();
+  }
 }
 
 export function handleTokenRoleGranted(event: TokenRoleGrantedEvent): void {
