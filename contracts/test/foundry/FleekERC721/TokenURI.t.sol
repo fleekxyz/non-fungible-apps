@@ -104,32 +104,4 @@ contract Test_FleekERC721_TokenURI is Test_FleekERC721_Base, Test_FleekERC721_To
         expectMetadataUpdate(tokenId, "color", 0x654321, deployer);
         CuT.setTokenColor(tokenId, 0x654321);
     }
-
-    function test_shouldEmitEventForMetadataChanges() public {
-        expectMetadataUpdate(tokenId, "name", "New App Name", deployer);
-        CuT.setTokenName(tokenId, "New App Name");
-
-        expectMetadataUpdate(tokenId, "description", "New description for the app.", deployer);
-        CuT.setTokenDescription(tokenId, "New description for the app.");
-
-        expectMetadataUpdate(tokenId, "externalURL", "https://new-url.com", deployer);
-        CuT.setTokenExternalURL(tokenId, "https://new-url.com");
-
-        expectMetadataUpdate(tokenId, "ENS", "new-ens.eth", deployer);
-        CuT.setTokenENS(tokenId, "new-ens.eth");
-
-        expectMetadataUpdate(
-            tokenId,
-            "build",
-            ["ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo"],
-            deployer
-        );
-        CuT.setTokenBuild(tokenId, "ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo");
-
-        expectMetadataUpdate(tokenId, "logo", TestConstants.LOGO_1, deployer);
-        CuT.setTokenLogo(tokenId, TestConstants.LOGO_1);
-
-        expectMetadataUpdate(tokenId, "color", 0x654321, deployer);
-        CuT.setTokenColor(tokenId, 0x654321);
-    }
 }
