@@ -8,11 +8,12 @@ import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./FleekAccessControl.sol";
 import "./util/FleekStrings.sol";
+import "./FleekPausable.sol";
 
 error MustBeTokenOwner(uint256 tokenId);
 error ThereIsNoTokenMinted();
 
-contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
+contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, FleekPausable {
     using Strings for uint256;
     using Counters for Counters.Counter;
     using FleekStrings for FleekERC721.App;
@@ -85,6 +86,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function initialize(string memory _name, string memory _symbol) public initializer {
         __ERC721_init(_name, _symbol);
         __FleekAccessControl_init();
+        __FleekPausable_init();
     }
 
     /**
@@ -92,21 +94,6 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      */
     modifier requireAP(string memory apName) {
         require(_accessPoints[apName].owner != address(0), "FleekERC721: invalid AP");
-        _;
-    }
-
-    modifier requireCollectionRole(CollectionRoles role) {
-        _requireCollectionRole(role);
-        _;
-    }
-
-    modifier requireTokenRole(uint256 tokenId, TokenRoles role) {
-        if (ownerOf(tokenId) != msg.sender) _requireTokenRole(tokenId, role);
-        _;
-    }
-
-    modifier requireTokenOwner(uint256 tokenId) {
-        if (ownerOf(tokenId) != msg.sender) revert MustBeTokenOwner(tokenId);
         _;
     }
 
@@ -118,6 +105,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      * Requirements:
      *
      * - the caller must have ``collectionOwner``'s admin role.
+     * - the contract must be not paused.
      *
      */
     function mint(
@@ -216,7 +204,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         address to,
         uint256 tokenId,
         uint256 batchSize
-    ) internal virtual override {
+    ) internal virtual override whenNotPaused {
         if (from != address(0) && to != address(0)) {
             // Transfer
             _clearTokenRoles(tokenId);
@@ -383,10 +371,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      * Requirements:
      *
      * - the tokenId must be minted and valid.
+     * - the contract must be not paused.
      *
      * IMPORTANT: The payment is not set yet
      */
-    function addAccessPoint(uint256 tokenId, string memory apName) public payable {
+    function addAccessPoint(uint256 tokenId, string memory apName) public payable whenNotPaused {
         // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
         _requireMinted(tokenId);
         require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
@@ -406,8 +395,10 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      *
      * - the AP must exist.
      * - must be called by the AP owner.
+     * - the contract must be not paused.
+     *
      */
-    function removeAccessPoint(string memory apName) public requireAP(apName) {
+    function removeAccessPoint(string memory apName) public whenNotPaused requireAP(apName) {
         require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
         uint256 tokenId = _accessPoints[apName].tokenId;
 
@@ -540,6 +531,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      *
      * - the tokenId must be minted and valid.
      * - the sender must be the owner of the token.
+     * - the contract must be not paused.
      *
      */
     function burn(uint256 tokenId) public virtual requireTokenOwner(tokenId) {
@@ -550,33 +542,137 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         }
     }
 
+    /*//////////////////////////////////////////////////////////////
+        ACCESS CONTROL
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Requires caller to have a selected collection role.
+     */
+    modifier requireCollectionRole(CollectionRoles role) {
+        _requireCollectionRole(role);
+        _;
+    }
+
+    /**
+     * @dev Requires caller to have a selected token role.
+     */
+    modifier requireTokenRole(uint256 tokenId, TokenRoles role) {
+        if (ownerOf(tokenId) != msg.sender) _requireTokenRole(tokenId, role);
+        _;
+    }
+
+    /**
+     * @dev Requires caller to be selected token owner.
+     */
+    modifier requireTokenOwner(uint256 tokenId) {
+        if (ownerOf(tokenId) != msg.sender) revert MustBeTokenOwner(tokenId);
+        _;
+    }
+
+    /**
+     * @dev Grants the collection role to an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the collection role.
+     *
+     */
     function grantCollectionRole(
         CollectionRoles role,
         address account
-    ) public virtual requireCollectionRole(CollectionRoles.Owner) {
+    ) public whenNotPaused requireCollectionRole(CollectionRoles.Owner) {
         _grantCollectionRole(role, account);
     }
 
-    function revokeCollectionRole(
-        CollectionRoles role,
-        address account
-    ) public virtual requireCollectionRole(CollectionRoles.Owner) {
-        _revokeCollectionRole(role, account);
-    }
-
+    /**
+     * @dev Grants the token role to an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the token role.
+     *
+     */
     function grantTokenRole(
         uint256 tokenId,
         TokenRoles role,
         address account
-    ) public virtual requireTokenOwner(tokenId) {
+    ) public whenNotPaused requireTokenOwner(tokenId) {
         _grantTokenRole(tokenId, role, account);
     }
 
+    /**
+     * @dev Revokes the collection role of an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the collection role.
+     *
+     */
+    function revokeCollectionRole(
+        CollectionRoles role,
+        address account
+    ) public whenNotPaused requireCollectionRole(CollectionRoles.Owner) {
+        _revokeCollectionRole(role, account);
+    }
+
+    /**
+     * @dev Revokes the token role of an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the token role.
+     *
+     */
     function revokeTokenRole(
         uint256 tokenId,
         TokenRoles role,
         address account
-    ) public virtual requireTokenOwner(tokenId) {
+    ) public whenNotPaused requireTokenOwner(tokenId) {
         _revokeTokenRole(tokenId, role, account);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+        PAUSABLE
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Sets the contract to paused state.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `controller` role.
+     * - the contract must be pausable.
+     * - the contract must be not paused.
+     *
+     */
+    function pause() public requireCollectionRole(CollectionRoles.Owner) {
+        _pause();
+    }
+
+    /**
+     * @dev Sets the contract to unpaused state.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `controller` role.
+     * - the contract must be paused.
+     *
+     */
+    function unpause() public requireCollectionRole(CollectionRoles.Owner) {
+        _unpause();
+    }
+
+    /**
+     * @dev Sets the contract to pausable state.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `owner` role.
+     * - the contract must be in the oposite pausable state.
+     *
+     */
+    function setPausable(bool pausable) public requireCollectionRole(CollectionRoles.Owner) {
+        _setPausable(pausable);
     }
 }

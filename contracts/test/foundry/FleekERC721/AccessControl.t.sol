@@ -3,7 +3,7 @@
 pragma solidity ^0.8.17;
 
 import "./TestBase.sol";
-import {FleekAccessControl} from "contracts/FleekAccessControl.sol";
+import "contracts/FleekAccessControl.sol";
 
 contract Test_FleekERC721_AccessControlAssertions is Test {
     function expectRevertWithMustHaveAtLeastOneOwner() internal {
@@ -336,7 +336,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
         CuT.setTokenBuild(tokenId, commitHash, gitRepository);
     }
 
-    function test_testBurn() public {
+    function test_burn() public {
         // ColletionOwner
         vm.prank(collectionOwner);
         expectRevertWithMustBeTokenOwner(tokenId);
@@ -355,6 +355,59 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
         // TokenOwner
         vm.prank(tokenOwner);
         CuT.burn(tokenId);
+    }
+
+    function test_pauseAndUnpause() public {
+        // ColletionOwner
+        vm.startPrank(collectionOwner);
+        CuT.pause();
+        CuT.unpause();
+        vm.stopPrank();
+
+        // TokenOwner
+        vm.startPrank(tokenOwner);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.pause();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.unpause();
+        vm.stopPrank();
+
+        // TokenController
+        vm.startPrank(tokenController);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.pause();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.unpause();
+        vm.stopPrank();
+
+        // AnyAddress
+        vm.startPrank(anyAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.pause();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.unpause();
+        vm.stopPrank();
+    }
+
+    function test_setPausable() public {
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        CuT.setPausable(false);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.setPausable(true);
+
+        // TokenController
+        vm.prank(tokenController);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.setPausable(true);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.setPausable(true);
     }
 
     function test_cannotHaveLessThanOneCollectionOwner() public {
