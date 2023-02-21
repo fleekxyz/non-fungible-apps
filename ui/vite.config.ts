@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-//for web3auth fix
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 import builtins from 'rollup-plugin-node-builtins';
@@ -14,6 +14,8 @@ export default defineConfig({
     alias: {
       // This Rollup aliases are extracted from @esbuild-plugins/node-modules-polyfill,
       // see https://github.com/remorses/esbuild-plugins/blob/master/node-modules-polyfill/src/polyfills.ts
+      // process and buffer are excluded because already managed
+      // by node-globals-polyfill
       util: 'rollup-plugin-node-polyfills/polyfills/util',
       sys: 'util',
       events: 'rollup-plugin-node-polyfills/polyfills/events',
@@ -22,6 +24,7 @@ export default defineConfig({
       querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
       punycode: 'rollup-plugin-node-polyfills/polyfills/punycode',
       url: 'rollup-plugin-node-polyfills/polyfills/url',
+      string_decoder: 'rollup-plugin-node-polyfills/polyfills/string-decoder',
       http: 'rollup-plugin-node-polyfills/polyfills/http',
       https: 'rollup-plugin-node-polyfills/polyfills/http',
       os: 'rollup-plugin-node-polyfills/polyfills/os',
@@ -43,8 +46,6 @@ export default defineConfig({
       zlib: 'rollup-plugin-node-polyfills/polyfills/zlib',
       tty: 'rollup-plugin-node-polyfills/polyfills/tty',
       domain: 'rollup-plugin-node-polyfills/polyfills/domain',
-      buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
-      process: 'rollup-plugin-node-polyfills/polyfills/process-es6',
     },
   },
   optimizeDeps: {
