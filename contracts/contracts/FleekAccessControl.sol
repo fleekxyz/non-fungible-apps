@@ -61,62 +61,6 @@ contract FleekAccessControl is Initializable {
     }
 
     /**
-     * @dev Grants the collection role to an address.
-     *
-     * Requirements:
-     *
-     * - the caller should have the collection role.
-     *
-     */
-    function grantCollectionRole(Roles role, address account) public requireCollectionRole(Roles.Owner) {
-        _grantCollectionRole(role, account);
-    }
-
-    /**
-     * @dev Grants the token role to an address.
-     *
-     * Requirements:
-     *
-     * - the caller should have the token role.
-     *
-     */
-    function grantTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) public requireTokenRole(tokenId, Roles.Owner) {
-        _grantTokenRole(tokenId, role, account);
-    }
-
-    /**
-     * @dev Revokes the collection role of an address.
-     *
-     * Requirements:
-     *
-     * - the caller should have the collection role.
-     *
-     */
-    function revokeCollectionRole(Roles role, address account) public requireCollectionRole(Roles.Owner) {
-        _revokeCollectionRole(role, account);
-    }
-
-    /**
-     * @dev Revokes the token role of an address.
-     *
-     * Requirements:
-     *
-     * - the caller should have the token role.
-     *
-     */
-    function revokeTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) public requireTokenRole(tokenId, Roles.Owner) {
-        _revokeTokenRole(tokenId, role, account);
-    }
-
-    /**
      * @dev Returns `True` if a certain address has the collection role.
      */
     function hasCollectionRole(Roles role, address account) public view returns (bool) {
@@ -228,4 +172,11 @@ contract FleekAccessControl is Initializable {
         _clearAllTokenRoles(tokenId);
         _grantTokenRole(tokenId, Roles.Owner, newOwner);
     }
+
+    /**
+     * @dev This empty reserved space is put in place to allow future versions to add new
+     * variables without shifting down storage in the inheritance chain.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
+    uint256[49] private __gap;
 }

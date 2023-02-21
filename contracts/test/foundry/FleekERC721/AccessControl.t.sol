@@ -400,7 +400,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
         CuT.setTokenBuild(tokenId, commitHash, gitRepository);
     }
 
-    function test_testBurn() public {
+    function test_burn() public {
         // ColletionOwner
         vm.prank(collectionOwner);
         expectRevertWithTokenRole();
@@ -424,5 +424,69 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
         // TokenOwner
         vm.prank(tokenOwner);
         CuT.burn(tokenId);
+    }
+
+    function test_pauseAndUnpause() public {
+        // ColletionOwner
+        vm.startPrank(collectionOwner);
+        CuT.pause();
+        CuT.unpause();
+        vm.stopPrank();
+
+        // CollectionController
+        vm.startPrank(collectionController);
+        CuT.pause();
+        CuT.unpause();
+        vm.stopPrank();
+
+        // TokenOwner
+        vm.startPrank(tokenOwner);
+        expectRevertWithCollectionRole();
+        CuT.pause();
+        expectRevertWithCollectionRole();
+        CuT.unpause();
+        vm.stopPrank();
+
+        // TokenController
+        vm.startPrank(tokenController);
+        expectRevertWithCollectionRole();
+        CuT.pause();
+        expectRevertWithCollectionRole();
+        CuT.unpause();
+        vm.stopPrank();
+
+        // AnyAddress
+        vm.startPrank(anyAddress);
+        expectRevertWithCollectionRole();
+        CuT.pause();
+        expectRevertWithCollectionRole();
+        CuT.unpause();
+        vm.stopPrank();
+    }
+
+    function test_setPausable() public {
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        CuT.setPausable(false);
+
+        // CollectionController
+        vm.prank(collectionController);
+        expectRevertWithCollectionRole();
+        CuT.setPausable(true);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        expectRevertWithCollectionRole();
+        CuT.setPausable(true);
+
+        // TokenController
+        vm.prank(tokenController);
+        expectRevertWithCollectionRole();
+        CuT.setPausable(true);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithCollectionRole();
+        CuT.setPausable(true);
     }
 }
