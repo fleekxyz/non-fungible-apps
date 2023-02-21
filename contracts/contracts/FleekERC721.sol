@@ -267,7 +267,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setAccessPointAutoApproval(
         uint256 tokenId,
         bool _apAutoApproval
-    ) public virtual requireTokenRole(tokenId, Roles.Owner) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].accessPointAutoApproval = _apAutoApproval;
         emit ChangeAccessPointAutoApproval(tokenId, _apAutoApproval, msg.sender);
@@ -458,7 +458,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         uint256 tokenId,
         string memory apName,
         bool approved
-    ) public requireTokenRole(tokenId, Roles.Owner) {
+    ) public requireTokenRole(tokenId, TokenRoles.Controller) {
         AccessPoint storage accessPoint = _accessPoints[apName];
         require(
             accessPoint.tokenId == tokenId,
