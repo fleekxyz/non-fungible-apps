@@ -10,6 +10,7 @@ import "./FleekAccessControl.sol";
 import "./util/FleekStrings.sol";
 import "./FleekPausable.sol";
 
+error MustBeTokenOwner(uint256 tokenId);
 error ThereIsNoTokenMinted();
 
 contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, FleekPausable {
@@ -117,7 +118,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         string memory gitRepository,
         string memory logo,
         uint24 color
-    ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
+    ) public payable requireCollectionRole(CollectionRoles.Owner) returns (uint256) {
         uint256 tokenId = _appIds.current();
         _mint(to, tokenId);
         _appIds.increment();
@@ -206,13 +207,13 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     ) internal virtual override whenNotPaused {
         if (from != address(0) && to != address(0)) {
             // Transfer
-            _clearAllTokenRoles(tokenId, to);
+            _clearTokenRoles(tokenId);
         } else if (from == address(0)) {
             // Mint
-            _grantTokenRole(tokenId, Roles.Owner, to);
+            // TODO: set contract owner as controller
         } else if (to == address(0)) {
             // Burn
-            _clearAllTokenRoles(tokenId);
+            _clearTokenRoles(tokenId);
         }
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
@@ -238,7 +239,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setTokenExternalURL(
         uint256 tokenId,
         string memory _tokenExternalURL
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].externalURL = _tokenExternalURL;
         emit MetadataUpdate(tokenId, "externalURL", _tokenExternalURL, msg.sender);
@@ -258,7 +259,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setTokenENS(
         uint256 tokenId,
         string memory _tokenENS
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
         emit MetadataUpdate(tokenId, "ENS", _tokenENS, msg.sender);
@@ -278,7 +279,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setTokenName(
         uint256 tokenId,
         string memory _tokenName
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].name = _tokenName;
         emit MetadataUpdate(tokenId, "name", _tokenName, msg.sender);
@@ -298,7 +299,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setTokenDescription(
         uint256 tokenId,
         string memory _tokenDescription
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
         emit MetadataUpdate(tokenId, "description", _tokenDescription, msg.sender);
@@ -318,7 +319,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setTokenLogo(
         uint256 tokenId,
         string memory _tokenLogo
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].logo = _tokenLogo;
         emit MetadataUpdate(tokenId, "logo", _tokenLogo, msg.sender);
@@ -338,7 +339,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setTokenColor(
         uint256 tokenId,
         uint24 _tokenColor
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].color = _tokenColor;
         emit MetadataUpdate(tokenId, "color", _tokenColor, msg.sender);
@@ -476,7 +477,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setAccessPointContentVerify(
         string memory apName,
         bool verified
-    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
+    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, TokenRoles.Controller) {
         _accessPoints[apName].contentVerified = verified;
         emit ChangeAccessPointContentVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
@@ -495,7 +496,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setAccessPointNameVerify(
         string memory apName,
         bool verified
-    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
+    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, TokenRoles.Controller) {
         _accessPoints[apName].nameVerified = verified;
         emit ChangeAccessPointNameVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
@@ -515,7 +516,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         uint256 tokenId,
         string memory _commitHash,
         string memory _gitRepository
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(_commitHash, _gitRepository);
         emit MetadataUpdate(tokenId, "build", [_commitHash, _gitRepository], msg.sender);
@@ -529,11 +530,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the tokenId must be minted and valid.
-     * - the sender must have the `tokenOwner` role.
+     * - the sender must be the owner of the token.
      * - the contract must be not paused.
      *
      */
-    function burn(uint256 tokenId) public virtual requireTokenRole(tokenId, Roles.Owner) {
+    function burn(uint256 tokenId) public virtual requireTokenOwner(tokenId) {
         super._burn(tokenId);
 
         if (bytes(_apps[tokenId].externalURL).length != 0) {
@@ -546,6 +547,30 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     //////////////////////////////////////////////////////////////*/
 
     /**
+     * @dev Requires caller to have a selected collection role.
+     */
+    modifier requireCollectionRole(CollectionRoles role) {
+        _requireCollectionRole(role);
+        _;
+    }
+
+    /**
+     * @dev Requires caller to have a selected token role.
+     */
+    modifier requireTokenRole(uint256 tokenId, TokenRoles role) {
+        if (ownerOf(tokenId) != msg.sender) _requireTokenRole(tokenId, role);
+        _;
+    }
+
+    /**
+     * @dev Requires caller to be selected token owner.
+     */
+    modifier requireTokenOwner(uint256 tokenId) {
+        if (ownerOf(tokenId) != msg.sender) revert MustBeTokenOwner(tokenId);
+        _;
+    }
+
+    /**
      * @dev Grants the collection role to an address.
      *
      * Requirements:
@@ -553,7 +578,10 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * - the caller should have the collection role.
      *
      */
-    function grantCollectionRole(Roles role, address account) public whenNotPaused requireCollectionRole(Roles.Owner) {
+    function grantCollectionRole(
+        CollectionRoles role,
+        address account
+    ) public whenNotPaused requireCollectionRole(CollectionRoles.Owner) {
         _grantCollectionRole(role, account);
     }
 
@@ -567,9 +595,9 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      */
     function grantTokenRole(
         uint256 tokenId,
-        Roles role,
+        TokenRoles role,
         address account
-    ) public whenNotPaused requireTokenRole(tokenId, Roles.Owner) {
+    ) public whenNotPaused requireTokenOwner(tokenId) {
         _grantTokenRole(tokenId, role, account);
     }
 
@@ -581,7 +609,10 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * - the caller should have the collection role.
      *
      */
-    function revokeCollectionRole(Roles role, address account) public whenNotPaused requireCollectionRole(Roles.Owner) {
+    function revokeCollectionRole(
+        CollectionRoles role,
+        address account
+    ) public whenNotPaused requireCollectionRole(CollectionRoles.Owner) {
         _revokeCollectionRole(role, account);
     }
 
@@ -595,9 +626,9 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      */
     function revokeTokenRole(
         uint256 tokenId,
-        Roles role,
+        TokenRoles role,
         address account
-    ) public whenNotPaused requireTokenRole(tokenId, Roles.Owner) {
+    ) public whenNotPaused requireTokenOwner(tokenId) {
         _revokeTokenRole(tokenId, role, account);
     }
 
@@ -615,7 +646,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * - the contract must be not paused.
      *
      */
-    function pause() public requireCollectionRole(Roles.Controller) {
+    function pause() public requireCollectionRole(CollectionRoles.Owner) {
         _pause();
     }
 
@@ -628,7 +659,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * - the contract must be paused.
      *
      */
-    function unpause() public requireCollectionRole(Roles.Controller) {
+    function unpause() public requireCollectionRole(CollectionRoles.Owner) {
         _unpause();
     }
 
@@ -641,7 +672,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * - the contract must be in the oposite pausable state.
      *
      */
-    function setPausable(bool pausable) public requireCollectionRole(Roles.Owner) {
+    function setPausable(bool pausable) public requireCollectionRole(CollectionRoles.Owner) {
         _setPausable(pausable);
     }
 }

@@ -2,7 +2,7 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { TestConstants, Fixtures, Errors } from './helpers';
 
-const { MintParams, Roles } = TestConstants;
+const { MintParams, CollectionRoles, TokenRoles } = TestConstants;
 
 describe('FleekERC721.Pausable', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.default>>;
@@ -134,19 +134,27 @@ describe('FleekERC721.Pausable', () => {
     ).to.be.revertedWithCustomError(contract, Errors.ContractIsPaused);
 
     await expect(
-      contract.grantCollectionRole(Roles.Controller, otherAccount.address)
+      contract.grantCollectionRole(CollectionRoles.Owner, otherAccount.address)
     ).to.be.revertedWithCustomError(contract, Errors.ContractIsPaused);
 
     await expect(
-      contract.revokeCollectionRole(Roles.Controller, otherAccount.address)
+      contract.revokeCollectionRole(CollectionRoles.Owner, otherAccount.address)
     ).to.be.revertedWithCustomError(contract, Errors.ContractIsPaused);
 
     await expect(
-      contract.grantTokenRole(Roles.Controller, tokenId, otherAccount.address)
+      contract.grantTokenRole(
+        CollectionRoles.Owner,
+        tokenId,
+        otherAccount.address
+      )
     ).to.be.revertedWithCustomError(contract, Errors.ContractIsPaused);
 
     await expect(
-      contract.revokeTokenRole(Roles.Controller, tokenId, otherAccount.address)
+      contract.revokeTokenRole(
+        CollectionRoles.Owner,
+        tokenId,
+        otherAccount.address
+      )
     ).to.be.revertedWithCustomError(contract, Errors.ContractIsPaused);
   });
 });

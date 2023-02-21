@@ -106,15 +106,15 @@ contract Test_FleekERC721_Pausable is Test_FleekERC721_Base, Test_FleekERC721_Pa
         CuT.removeAccessPoint("accesspoint.com");
 
         expectRevertWithContractIsPaused();
-        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress);
 
         expectRevertWithContractIsPaused();
-        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress);
 
         expectRevertWithContractIsPaused();
-        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
 
         expectRevertWithContractIsPaused();
-        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
     }
 }

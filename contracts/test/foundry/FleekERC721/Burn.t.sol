@@ -20,21 +20,21 @@ contract Test_FleekERC721_Burn is Test_FleekERC721_Base {
     function testFuzz_cannotBurnAsNotOwner(address account) public {
         vm.assume(account != deployer);
         vm.prank(account);
-        expectRevertWithTokenRole();
+        expectRevertWithMustBeTokenOwner(tokenId);
         CuT.burn(tokenId);
     }
 
     function testFuzz_cannotBurnAsController(address account) public {
         vm.assume(account != deployer);
-        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, account);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, account);
         vm.prank(account);
-        expectRevertWithTokenRole();
+        expectRevertWithMustBeTokenOwner(tokenId);
         CuT.burn(tokenId);
     }
 
     function testFuzz_cannotBurnInexistentToken(uint256 _tokenId) public {
         vm.assume(_tokenId != tokenId);
-        expectRevertWithTokenRole(); // Token role is tested first before if token exists
+        expectRevertWithInvalidTokenId();
         CuT.burn(_tokenId);
     }
 }
