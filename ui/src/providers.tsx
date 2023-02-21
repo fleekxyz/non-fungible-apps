@@ -8,7 +8,7 @@ import { polygonMumbai } from 'wagmi/chains';
 import { ConnectKitProvider, getDefaultClient } from 'connectkit';
 import { env } from './constants';
 
-const alchemyId = env.alchemyId;
+const alchemyId = env.alchemy.id;
 const chains = [polygonMumbai];
 
 const queryClient = new QueryClient({
@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
 
 const client = createClient(
   getDefaultClient({
-    appName: env.alchemyAppName,
+    appName: env.alchemy.appName,
     alchemyId,
     chains,
   })
