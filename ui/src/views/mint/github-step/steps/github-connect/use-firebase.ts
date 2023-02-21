@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { getAuth, signInWithPopup, GithubAuthProvider } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { useAppDispatch, githubActions } from '@/store';
+import { env } from '@/constants';
 
 const GithubScopes = ['repo', 'read:org', 'read:user', 'public_repo', 'user'];
 
@@ -14,13 +15,13 @@ export const useFirebase = ({ onError, onSuccess }: UseFirebaseOptions) => {
   const dispatch = useAppDispatch();
 
   const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.VITE_FIREBASE_APP_ID,
-    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+    apiKey: env.firebase.apiKey,
+    authDomain: env.firebase.authDomain,
+    projectId: env.firebase.projectId,
+    storageBucket: env.firebase.storageBucket,
+    messagingSenderId: env.firebase.messagingSenderId,
+    appId: env.firebase.appId,
+    measurementId: env.firebase.measurementId,
   };
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
