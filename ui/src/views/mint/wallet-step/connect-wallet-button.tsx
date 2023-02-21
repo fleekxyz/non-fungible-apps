@@ -7,7 +7,6 @@ export const ConnectWalletButton = () => {
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, show, truncatedAddress, address }) => {
-        console.log('address', address);
         if (isConnected && address) {
           return (
             <Button onClick={nextStep} css={{ color: '$slate12' }}>
