@@ -6,8 +6,9 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { WagmiConfig, createClient } from 'wagmi';
 import { polygonMumbai } from 'wagmi/chains';
 import { ConnectKitProvider, getDefaultClient } from 'connectkit';
+import { env } from './constants';
 
-const alchemyId = import.meta.env.VITE_ALCHEMY_API_KEY;
+const alchemyId = env.alchemyId;
 const chains = [polygonMumbai];
 
 const queryClient = new QueryClient({
@@ -16,7 +17,7 @@ const queryClient = new QueryClient({
 
 const client = createClient(
   getDefaultClient({
-    appName: import.meta.env.VITE_APP_NAME,
+    appName: env.alchemyAppName,
     alchemyId,
     chains,
   })
