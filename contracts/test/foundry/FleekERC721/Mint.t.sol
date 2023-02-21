@@ -77,10 +77,22 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
-        uint24 color
+        uint24 color,
+        bool autoApprovalAp
     ) public {
         vm.assume(to != address(0));
-        uint256 tokenId = CuT.mint(to, appName, description, externalURL, ens, commitHash, gitRepository, logo, color);
+        uint256 tokenId = CuT.mint(
+            to,
+            appName,
+            description,
+            externalURL,
+            ens,
+            commitHash,
+            gitRepository,
+            logo,
+            color,
+            autoApprovalAp
+        );
 
         assertEq(tokenId, 0);
         assertEq(CuT.ownerOf(tokenId), to);
