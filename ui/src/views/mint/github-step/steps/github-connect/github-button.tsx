@@ -1,27 +1,22 @@
 import { Button, Icon } from '@/components';
+import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-import { useFirebase } from './use-firebase';
+import { useCallback } from 'react';
 
 export const GithubButton = () => {
+  const { state } = useGithubStore();
+  const dispatch = useAppDispatch();
   const { setGithubStep } = Mint.useContext();
 
-  const handleError = (error: any) => {
-    //TODO show toast with error message
-    alert(error);
-  };
-
-  const handleSuccess = () => {
-    setGithubStep(2);
-  };
-
-  const { login } = useFirebase({
-    onError: handleError,
-    onSuccess: handleSuccess,
-  });
-
-  const handleGithubLogin = () => {
-    login();
-  };
+  const handleGithubLogin = useCallback(() => {
+    debugger;
+    dispatch(githubActions.login())
+      .then(() => setGithubStep(2))
+      .catch((error) => {
+        //TODO show toast with error message
+        console.log(error);
+      });
+  }, [dispatch]);
 
   return (
     <Button
@@ -34,6 +29,7 @@ export const GithubButton = () => {
         py: '$2h',
       }}
       onClick={handleGithubLogin}
+      disabled={state === 'loading'}
       rightIcon={
         <Icon name="github" css={{ color: 'white', fontSize: '$4xl' }} />
       }

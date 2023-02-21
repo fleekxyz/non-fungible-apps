@@ -1,4 +1,4 @@
-import { useGithubState } from '@/store';
+import { useGithubStore } from '@/store';
 import { Octokit } from 'octokit';
 
 export type UseGithubOptions = {
@@ -6,7 +6,7 @@ export type UseGithubOptions = {
 };
 
 export const useGithub = ({ onError }: UseGithubOptions) => {
-  const { token } = useGithubState();
+  const { token } = useGithubStore();
 
   const octokit = new Octokit({
     auth: token,
