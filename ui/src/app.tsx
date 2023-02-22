@@ -4,6 +4,7 @@ import { themeGlobals } from '@/theme/globals';
 import { Home, Mint } from './views';
 import { SVGTestScreen } from './views/svg-test'; // TODO: remove when done
 import { ConnectKitButton } from 'connectkit';
+import { MintTest } from './views/mint-test';
 
 initializeWallet();
 
@@ -20,6 +21,7 @@ export const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/mint" element={<Mint />} />
           <Route path="/svg" element={<SVGTestScreen />} />
+          <Route path="/mint-test" element={<MintTest />} />
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </BrowserRouter>
