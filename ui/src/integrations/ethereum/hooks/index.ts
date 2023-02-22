@@ -1,1 +1,1 @@
-export * from './use-fleek-erc721';
+export * from './ethereum-hooks';
