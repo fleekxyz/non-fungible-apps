@@ -67,4 +67,22 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
 
         assertEq(CuT.balanceOf(deployer), 1);
     }
+
+    function testFuzz_mint(
+        address to,
+        string memory appName,
+        string memory description,
+        string memory externalURL,
+        string memory ens,
+        string memory commitHash,
+        string memory gitRepository,
+        string memory logo,
+        uint24 color
+    ) public {
+        vm.assume(to != address(0));
+        uint256 tokenId = CuT.mint(to, appName, description, externalURL, ens, commitHash, gitRepository, logo, color);
+
+        assertEq(tokenId, 0);
+        assertEq(CuT.ownerOf(tokenId), to);
+    }
 }
