@@ -1,11 +1,8 @@
+import { DropdownItem } from '@/components';
 import { useGithubStore } from '@/store';
 import { Octokit } from 'octokit';
 
-export type UseGithubOptions = {
-  onError: (error: Error) => void;
-};
-
-export const useGithub = ({ onError }: UseGithubOptions) => {
+export const useGithub = () => {
   const { token } = useGithubStore();
 
   const octokit = new Octokit({
@@ -18,7 +15,7 @@ export const useGithub = ({ onError }: UseGithubOptions) => {
 
       return data;
     } catch (error) {
-      onError(error as Error);
+      return error;
     }
   };
 
@@ -28,7 +25,7 @@ export const useGithub = ({ onError }: UseGithubOptions) => {
 
       return data;
     } catch (error) {
-      onError(error as Error);
+      return error;
     }
   };
 
@@ -42,7 +39,7 @@ export const useGithub = ({ onError }: UseGithubOptions) => {
 
       return repos;
     } catch (error) {
-      onError(error as Error);
+      return error;
     }
   };
 
@@ -56,15 +53,15 @@ export const useGithub = ({ onError }: UseGithubOptions) => {
         .then((res) =>
           res.data.map((branch) => {
             return {
-              name: branch.name,
-              commit: branch.commit.sha,
-            };
+              label: branch.name,
+              value: branch.commit.sha,
+            } as DropdownItem;
           })
         );
 
       return branches;
     } catch (error) {
-      onError(error as Error);
+      return error;
     }
   };
 

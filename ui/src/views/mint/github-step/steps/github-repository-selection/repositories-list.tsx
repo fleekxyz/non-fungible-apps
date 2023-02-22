@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
-import { Button, DropdownItem, Flex, NoResults, Separator } from '@/components';
+import { Button, Flex, NoResults, Separator } from '@/components';
 import { Mint, Repo } from '@/views/mint/mint.context';
-import { useState } from 'react';
 import { Loading, RepoRow } from './github-repository-selection';
-import { useGithub } from '../use-github';
-import { useQuery } from 'react-query';
+import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 
 type RepositoriesListProps = {
   searchValue: string;
@@ -15,15 +13,11 @@ export const RepositoriesList = ({ searchValue }: RepositoriesListProps) => {
     selectedUserOrg,
     setGithubStep,
     setRepositoryName,
-    setRepositoryConfig,
+    setBranchName,
+    setCommitHash,
   } = Mint.useContext();
-  const { fetchRepos } = useGithub({
-    onError: () => {
-      //TODO show toast
-      alert('Error fetching branches');
-    },
-  });
-  const [repositories, setRepositories] = useState<Repo[]>([]);
+  const { queryLoading, repositories } = useGithubStore();
+  const dispatch = useAppDispatch();
 
   const filteredRepositories =
     searchValue === ''
@@ -36,28 +30,20 @@ export const RepositoriesList = ({ searchValue }: RepositoriesListProps) => {
   const handleSelectRepo = (repo: Repo) => {
     setRepositoryName(repo);
     setGithubStep(3);
-    setRepositoryConfig({} as DropdownItem, '');
+    // setBranchName({} as DropdownItem);
+    // setCommitHash('');
+    dispatch(githubActions.setQueryState('idle'));
   };
 
-  const { data: dataRepositories, status } = useQuery(
-    `fetchRepos${selectedUserOrg.value}`,
-    async () => fetchRepos(selectedUserOrg.value)
-  );
-
-  useEffect(() => {
-    dataRepositories &&
-      setRepositories(
-        dataRepositories.map(
-          (repo: any) => ({ name: repo.name, url: repo.url } as Repo)
-        )
-      );
-  }, [dataRepositories]);
-
-  if (status === 'loading') {
-    return <Loading />;
+  if (queryLoading === 'idle' && selectedUserOrg.value) {
+    dispatch(githubActions.fetchRepositoriesThunk(selectedUserOrg.value));
   }
 
-  if (status === 'error') {
+  // if (queryLoading === 'loading') {
+  //   return <Loading />;
+  // }
+
+  if (queryLoading === 'failed') {
     return <span>Error</span>;
   }
 

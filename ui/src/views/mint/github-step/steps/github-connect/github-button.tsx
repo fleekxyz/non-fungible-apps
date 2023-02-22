@@ -9,7 +9,6 @@ export const GithubButton = () => {
   const { setGithubStep } = Mint.useContext();
 
   const handleGithubLogin = useCallback(() => {
-    debugger;
     dispatch(githubActions.login())
       .then(() => setGithubStep(2))
       .catch((error) => {

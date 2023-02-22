@@ -1,5 +1,6 @@
 import { Card, ComboboxItem, Flex, Grid, Icon, Spinner } from '@/components';
 import { Input } from '@/components/core/input';
+import { useGithubStore } from '@/store';
 import { MintCardHeader } from '@/views/mint/mint-card';
 import { Mint } from '@/views/mint/mint.context';
 import React, { forwardRef, useRef, useState } from 'react';
@@ -40,7 +41,8 @@ export const RepoRow = forwardRef<HTMLDivElement, RepoRowProps>(
 );
 
 export const GithubRepositoryConnection: React.FC = () => {
-  const [isLoadingUserOrgs, setIsLoadingUserOrgs] = useState(true);
+  // const [isLoadingUserOrgs, setIsLoadingUserOrgs] = useState(true);
+  const { queryLoading } = useGithubStore();
   const [searchValue, setSearchValue] = useState('');
   const { setGithubStep, setSelectedUserOrg } = Mint.useContext();
 
@@ -68,14 +70,14 @@ export const GithubRepositoryConnection: React.FC = () => {
       <Card.Body css={{ pt: '$4' }}>
         <Grid css={{ rowGap: '$2' }}>
           <Flex css={{ gap: '$4' }}>
-            <UserOrgsCombobox setLoading={setIsLoadingUserOrgs} />
+            <UserOrgsCombobox />
             <Input
               leftIcon="search"
               placeholder="Search"
               onChange={handleSearchChange}
             />
           </Flex>
-          {isLoadingUserOrgs ? (
+          {queryLoading === 'loading' ? (
             <Loading />
           ) : (
             <RepositoriesList searchValue={searchValue} />

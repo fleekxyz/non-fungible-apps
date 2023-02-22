@@ -17,14 +17,15 @@ export type MintContext = {
   appDescription: string;
   appLogo: string;
   logoColor: string;
-  ens: DropdownItem; //maybe it would be a DropdownItem
+  ens: DropdownItem;
   domain: string;
   verifyNFA: boolean;
   sucessMint: boolean | undefined;
   setGithubStep: (step: number) => void;
   setSelectedUserOrg: (userOrg: ComboboxItem) => void;
   setRepositoryName: (repo: Repo) => void;
-  setRepositoryConfig: (branch: DropdownItem, hash: string) => void;
+  setBranchName: (branch: DropdownItem) => void;
+  setCommitHash: (hash: string) => void;
   setAppName: (name: string) => void;
   setAppDescription: (description: string) => void;
   setAppLogo: (logo: string) => void;
@@ -72,11 +73,6 @@ export abstract class Mint {
       }
     };
 
-    const setRepositoryConfig = (branch: DropdownItem, hash: string) => {
-      setBranchName(branch);
-      setCommitHash(hash);
-    };
-
     return (
       <MintProvider
         value={{
@@ -95,8 +91,9 @@ export abstract class Mint {
           sucessMint,
           setSelectedUserOrg,
           setGithubStep,
-          setRepositoryConfig,
           setRepositoryName,
+          setBranchName,
+          setCommitHash,
           setAppName,
           setAppDescription,
           setAppLogo,
