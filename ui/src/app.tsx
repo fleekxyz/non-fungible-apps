@@ -13,6 +13,7 @@ export const App = () => {
   return (
     <>
       <div style={{ position: 'absolute', top: '1.25rem', left: '1.25rem' }}>
+        {/* TODO remove after adding NavBar */}
         <ConnectKitButton />
       </div>
       <BrowserRouter>
