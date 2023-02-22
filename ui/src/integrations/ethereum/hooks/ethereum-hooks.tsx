@@ -39,8 +39,9 @@ const createWriteContractContext = <
   const Provider = ({
     children,
     config: {
-      settings: settingsConfig = {},
+      prepare: prepareConfig = {},
       transaction: transactionConfig = {},
+      write: writeConfig = {},
     } = {},
   }: EthereumHooks.WriteContext.ProviderProps<TFunctionName>) => {
     const [args, setArgs] = useState<TFunctionArguments>();
@@ -50,10 +51,10 @@ const createWriteContractContext = <
       abi: abi as unknown[],
       functionName,
       args,
-      ...settingsConfig,
+      ...prepareConfig,
     });
 
-    const write = useContractWrite(prepare.config);
+    const write = useContractWrite({ ...prepare.config, ...writeConfig });
 
     const transaction = useWaitForTransaction({
       hash: write.data?.hash,
@@ -114,11 +115,18 @@ export namespace EthereumHooks {
     }
 
     export interface ProviderConfig<TFunctionName extends string> {
-      settings?: Omit<
+      prepare?: Omit<
         UsePrepareContractWriteConfig<any, TFunctionName>,
         'address' | 'abi' | 'functionName' | 'args'
       >;
-      transaction?: Parameters<typeof useWaitForTransaction>[0];
+      write?: Omit<
+        Exclude<Parameters<typeof useContractWrite>[0], undefined>,
+        'mode' | 'address' | 'abi' | 'functionName' | 'args'
+      >;
+      transaction?: Omit<
+        Exclude<Parameters<typeof useWaitForTransaction>[0], undefined>,
+        'hash'
+      >;
     }
 
     export interface ProviderProps<TFunctionName extends string> {

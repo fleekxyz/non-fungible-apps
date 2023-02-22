@@ -29,11 +29,25 @@ const Preparing: React.FC = () => {
   };
 
   if (prepareStatus !== 'success') {
-    if (prepareStatus === 'error') {
-      console.error(prepareError);
-      return <Button onClick={handlePrepare}>Prepare</Button>;
-    }
-    if (prepareStatus === 'loading') return <div>Preparing transaction...</div>;
+    const isLoading = prepareStatus === 'loading';
+    return (
+      <>
+        {prepareStatus === 'error' && (
+          <Flex css={{ flexDirection: 'column', gap: '$1' }}>
+            <h2>Prepare Error:</h2>
+            <pre>{JSON.stringify(prepareError, null, 2)}</pre>
+          </Flex>
+        )}
+
+        <Button
+          onClick={handlePrepare}
+          isLoading={isLoading}
+          isDisabled={isLoading}
+        >
+          Prepare
+        </Button>
+      </>
+    );
   }
 
   return (
@@ -147,6 +161,18 @@ export const MintTest: React.FC = () => {
   return (
     <MintProvider
       config={{
+        prepare: {
+          onSuccess: (data) => {
+            console.log('Prepared', data);
+          },
+        },
+
+        write: {
+          onSuccess: (data) => {
+            console.log('Mint sent', data);
+          },
+        },
+
         transaction: {
           onSuccess: (data) => {
             console.log('Transaction success', data);
