@@ -4,226 +4,175 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
+error MustHaveCollectionRole(uint8 role);
+error MustHaveTokenRole(uint256 tokenId, uint8 role);
+error MustHaveAtLeastOneOwner();
+error RoleAlreadySet();
+
 contract FleekAccessControl is Initializable {
-    enum Roles {
-        Owner,
+
+    /**
+     * @dev All available collection roles.
+     */
+    enum CollectionRoles {
+        Owner
+    }
+
+    /**
+     * @dev All available token roles.
+     */
+    enum TokenRoles {
         Controller
     }
 
-    event TokenRoleGranted(uint256 indexed tokenId, Roles indexed role, address indexed toAddress, address byAddress);
-    event TokenRoleRevoked(uint256 indexed tokenId, Roles indexed role, address indexed toAddress, address byAddress);
-    event CollectionRoleGranted(Roles indexed role, address indexed toAddress, address byAddress);
-    event CollectionRoleRevoked(Roles indexed role, address indexed toAddress, address byAddress);
+    /**
+     * @dev Emitted when a token role is changed.
+     */
+    event TokenRoleChanged(
+        uint256 indexed tokenId,
+        TokenRoles indexed role,
+        address indexed toAddress,
+        bool status,
+        address byAddress
+    );
 
-    struct Role {
-        mapping(address => uint256) indexes;
-        address[] members;
-    }
+    /**
+     * @dev Emitted when token roles version is increased and all token roles are cleared.
+     */
+    event TokenRolesCleared(uint256 indexed tokenId, address byAddress);
 
-    uint256 private _collectionRolesVersion;
-    // _collectionRoles[version][role]
-    mapping(uint256 => mapping(Roles => Role)) private _collectionRoles;
+    /**
+     * @dev Emitted when a collection role is changed.
+     */
+    event CollectionRoleChanged(
+        CollectionRoles indexed role,
+        address indexed toAddress,
+        bool status,
+        address byAddress
+    );
 
+    /**
+     * @dev _collectionRolesCounter[role] is the number of addresses that have the role.
+     * This is prevent Owner role to go to 0.
+     */
+    mapping(CollectionRoles => uint256) private _collectionRolesCounter;
+
+    /**
+     * @dev _collectionRoles[role][address] is the mapping of addresses that have the role.
+     */
+    mapping(CollectionRoles => mapping(address => bool)) private _collectionRoles;
+
+    /**
+     * @dev _tokenRolesVersion[tokenId] is the version of the token roles.
+     * The version is incremented every time the token roles are cleared.
+     * Should be incremented every token transfer.
+     */
     mapping(uint256 => uint256) private _tokenRolesVersion;
-    // _tokenRoles[tokenId][version][role]
-    mapping(uint256 => mapping(uint256 => mapping(Roles => Role))) private _tokenRoles;
+
+    /**
+     * @dev _tokenRoles[tokenId][version][role][address] is the mapping of addresses that have the role.
+     */
+    mapping(uint256 => mapping(uint256 => mapping(TokenRoles => mapping(address => bool)))) private _tokenRoles;
 
     /**
      * @dev Initializes the contract by granting the `Owner` role to the deployer.
      */
     function __FleekAccessControl_init() internal onlyInitializing {
-        _grantCollectionRole(Roles.Owner, msg.sender);
-        _collectionRolesVersion = 0;
+        _grantCollectionRole(CollectionRoles.Owner, msg.sender);
     }
 
     /**
      * @dev Checks if the `msg.sender` has a certain role.
      */
-    modifier requireCollectionRole(Roles role) {
-        require(
-            hasCollectionRole(role, msg.sender) || hasCollectionRole(Roles.Owner, msg.sender),
-            "FleekAccessControl: must have collection role"
-        );
-        _;
+    function _requireCollectionRole(CollectionRoles role) internal view {
+        if (!hasCollectionRole(role, msg.sender)) revert MustHaveCollectionRole(uint8(role));
     }
 
     /**
      * @dev Checks if the `msg.sender` has the `Token` role for a certain `tokenId`.
      */
-    modifier requireTokenRole(uint256 tokenId, Roles role) {
-        require(
-            hasTokenRole(tokenId, role, msg.sender) || hasTokenRole(tokenId, Roles.Owner, msg.sender),
-            "FleekAccessControl: must have token role"
-        );
-        _;
-    }
-
-    /**
-     * @dev Grants the collection role to an address.
-     *
-     * Requirements:
-     *
-     * - the caller should have the collection role.
-     *
-     */
-    function grantCollectionRole(Roles role, address account) public requireCollectionRole(Roles.Owner) {
-        _grantCollectionRole(role, account);
-    }
-
-    /**
-     * @dev Grants the token role to an address.
-     *
-     * Requirements:
-     *
-     * - the caller should have the token role.
-     *
-     */
-    function grantTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) public requireTokenRole(tokenId, Roles.Owner) {
-        _grantTokenRole(tokenId, role, account);
-    }
-
-    /**
-     * @dev Revokes the collection role of an address.
-     *
-     * Requirements:
-     *
-     * - the caller should have the collection role.
-     *
-     */
-    function revokeCollectionRole(Roles role, address account) public requireCollectionRole(Roles.Owner) {
-        _revokeCollectionRole(role, account);
-    }
-
-    /**
-     * @dev Revokes the token role of an address.
-     *
-     * Requirements:
-     *
-     * - the caller should have the token role.
-     *
-     */
-    function revokeTokenRole(
-        uint256 tokenId,
-        Roles role,
-        address account
-    ) public requireTokenRole(tokenId, Roles.Owner) {
-        _revokeTokenRole(tokenId, role, account);
+    function _requireTokenRole(uint256 tokenId, TokenRoles role) internal view {
+        if (!hasTokenRole(tokenId, role, msg.sender)) revert MustHaveTokenRole(tokenId, uint8(role));
     }
 
     /**
      * @dev Returns `True` if a certain address has the collection role.
      */
-    function hasCollectionRole(Roles role, address account) public view returns (bool) {
-        uint256 currentVersion = _collectionRolesVersion;
-
-        return _collectionRoles[currentVersion][role].indexes[account] != 0;
+    function hasCollectionRole(CollectionRoles role, address account) public view returns (bool) {
+        return _collectionRoles[role][account];
     }
 
     /**
      * @dev Returns `True` if a certain address has the token role.
      */
-    function hasTokenRole(uint256 tokenId, Roles role, address account) public view returns (bool) {
+    function hasTokenRole(uint256 tokenId, TokenRoles role, address account) public view returns (bool) {
         uint256 currentVersion = _tokenRolesVersion[tokenId];
-        return _tokenRoles[tokenId][currentVersion][role].indexes[account] != 0;
-    }
-
-    /**
-     * @dev Returns an array of addresses that all have the collection role.
-     */
-    function getCollectionRoleMembers(Roles role) public view returns (address[] memory) {
-        uint256 currentVersion = _collectionRolesVersion;
-        return _collectionRoles[currentVersion][role].members;
-    }
-
-    /**
-     * @dev Returns an array of addresses that all have the same token role for a certain tokenId.
-     */
-    function getTokenRoleMembers(uint256 tokenId, Roles role) public view returns (address[] memory) {
-        uint256 currentVersion = _tokenRolesVersion[tokenId];
-        return _tokenRoles[tokenId][currentVersion][role].members;
+        return _tokenRoles[tokenId][currentVersion][role][account];
     }
 
     /**
      * @dev Grants the collection role to an address.
      */
-    function _grantCollectionRole(Roles role, address account) internal {
-        uint256 currentVersion = _collectionRolesVersion;
-        _grantRole(_collectionRoles[currentVersion][role], account);
-        emit CollectionRoleGranted(role, account, msg.sender);
+    function _grantCollectionRole(CollectionRoles role, address account) internal {
+        if (hasCollectionRole(role, account)) revert RoleAlreadySet();
+
+        _collectionRoles[role][account] = true;
+        _collectionRolesCounter[role] += 1;
+
+        emit CollectionRoleChanged(role, account, true, msg.sender);
     }
 
     /**
      * @dev Revokes the collection role of an address.
      */
-    function _revokeCollectionRole(Roles role, address account) internal {
-        uint256 currentVersion = _collectionRolesVersion;
-        _revokeRole(_collectionRoles[currentVersion][role], account);
-        emit CollectionRoleRevoked(role, account, msg.sender);
+    function _revokeCollectionRole(CollectionRoles role, address account) internal {
+        if (!hasCollectionRole(role, account)) revert RoleAlreadySet();
+        if (role == CollectionRoles.Owner && _collectionRolesCounter[role] == 1)
+            revert MustHaveAtLeastOneOwner();
+
+        _collectionRoles[role][account] = false;
+        _collectionRolesCounter[role] -= 1;
+
+        emit CollectionRoleChanged(role, account, false, msg.sender);
     }
 
     /**
      * @dev Grants the token role to an address.
      */
-    function _grantTokenRole(uint256 tokenId, Roles role, address account) internal {
+    function _grantTokenRole(uint256 tokenId, TokenRoles role, address account) internal {
+        if (hasTokenRole(tokenId, role, account)) revert RoleAlreadySet();
+
         uint256 currentVersion = _tokenRolesVersion[tokenId];
-        _grantRole(_tokenRoles[tokenId][currentVersion][role], account);
-        emit TokenRoleGranted(tokenId, role, account, msg.sender);
+        _tokenRoles[tokenId][currentVersion][role][account] = true;
+
+        emit TokenRoleChanged(tokenId, role, account, true, msg.sender);
     }
 
     /**
      * @dev Revokes the token role of an address.
      */
-    function _revokeTokenRole(uint256 tokenId, Roles role, address account) internal {
+    function _revokeTokenRole(uint256 tokenId, TokenRoles role, address account) internal {
+        if (!hasTokenRole(tokenId, role, account)) revert RoleAlreadySet();
+
         uint256 currentVersion = _tokenRolesVersion[tokenId];
-        _revokeRole(_tokenRoles[tokenId][currentVersion][role], account);
-        emit TokenRoleRevoked(tokenId, role, account, msg.sender);
-    }
+        _tokenRoles[tokenId][currentVersion][role][account] = false;
 
-    /**
-     * @dev Grants a certain role to a certain address.
-     */
-    function _grantRole(Role storage role, address account) internal {
-        if (role.indexes[account] == 0) {
-            role.members.push(account);
-            role.indexes[account] = role.members.length;
-        }
-    }
-
-    /**
-     * @dev Revokes a certain role from a certain address.
-     */
-    function _revokeRole(Role storage role, address account) internal {
-        if (role.indexes[account] != 0) {
-            uint256 index = role.indexes[account] - 1;
-            uint256 lastIndex = role.members.length - 1;
-            address lastAccount = role.members[lastIndex];
-
-            role.members[index] = lastAccount;
-            role.indexes[lastAccount] = index + 1;
-
-            role.members.pop();
-            delete role.indexes[account];
-        }
-    }
-
-    /**
-     * @dev Clears all token roles for a certain tokenId.
-     * Should only be used for burning tokens.
-     */
-    function _clearAllTokenRoles(uint256 tokenId) internal {
-        _tokenRolesVersion[tokenId] += 1;
+        emit TokenRoleChanged(tokenId, role, account, false, msg.sender);
     }
 
     /**
      * @dev Clears all token roles for a certain tokenId and grants the owner role to a new address.
      * Should only be used for transferring tokens.
      */
-    function _clearAllTokenRoles(uint256 tokenId, address newOwner) internal {
-        _clearAllTokenRoles(tokenId);
-        _grantTokenRole(tokenId, Roles.Owner, newOwner);
+    function _clearTokenRoles(uint256 tokenId) internal {
+        _tokenRolesVersion[tokenId] += 1;
+        emit TokenRolesCleared(tokenId, msg.sender);
     }
+
+    /**
+     * @dev This empty reserved space is put in place to allow future versions to add new
+     * variables without shifting down storage in the inheritance chain.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
+    uint256[49] private __gap;
 }

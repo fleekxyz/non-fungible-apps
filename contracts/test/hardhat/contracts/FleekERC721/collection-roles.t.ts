@@ -1,8 +1,8 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures } from './helpers';
+import { TestConstants, Fixtures, Errors } from './helpers';
 
-const { Roles } = TestConstants;
+const { CollectionRoles } = TestConstants;
 
 describe('FleekERC721.CollectionRoles', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.default>>;
@@ -14,77 +14,72 @@ describe('FleekERC721.CollectionRoles', () => {
   it('should assign the owner of the contract on contract creation', async () => {
     const { owner, contract } = fixture;
 
-    expect(await contract.hasCollectionRole(Roles.Owner, owner.address)).to.be
-      .true;
+    expect(
+      await contract.hasCollectionRole(CollectionRoles.Owner, owner.address)
+    ).to.be.true;
   });
 
   it('should assign owner role to address', async () => {
     const { otherAccount, contract } = fixture;
 
-    await contract.grantCollectionRole(Roles.Owner, otherAccount.address);
+    await contract.grantCollectionRole(
+      CollectionRoles.Owner,
+      otherAccount.address
+    );
 
-    expect(await contract.hasCollectionRole(Roles.Owner, otherAccount.address))
-      .to.be.true;
-  });
-
-  it('should assign controller role to address', async () => {
-    const { owner, contract } = fixture;
-
-    await contract.grantCollectionRole(Roles.Controller, owner.address);
-
-    expect(await contract.hasCollectionRole(Roles.Controller, owner.address)).to
-      .be.true;
+    expect(
+      await contract.hasCollectionRole(
+        CollectionRoles.Owner,
+        otherAccount.address
+      )
+    ).to.be.true;
   });
 
   it('should remove an assigned controller', async () => {
     const { otherAccount, contract } = fixture;
 
-    await contract.grantCollectionRole(Roles.Owner, otherAccount.address);
-    await contract.revokeCollectionRole(Roles.Owner, otherAccount.address);
-
-    expect(await contract.hasCollectionRole(Roles.Owner, otherAccount.address))
-      .to.be.false;
-  });
-
-  it('should remove an assigned controller', async () => {
-    const { owner, contract } = fixture;
-
-    await contract.grantCollectionRole(Roles.Controller, owner.address);
-    await contract.revokeCollectionRole(Roles.Controller, owner.address);
-
-    expect(await contract.hasCollectionRole(Roles.Controller, owner.address)).to
-      .be.false;
-  });
-
-  it('should fetch the list of controllers', async () => {
-    const { owner, contract } = fixture;
-
-    await contract.grantCollectionRole(Roles.Controller, owner.address);
     await contract.grantCollectionRole(
-      Roles.Controller,
-      '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049'
+      CollectionRoles.Owner,
+      otherAccount.address
+    );
+    await contract.revokeCollectionRole(
+      CollectionRoles.Owner,
+      otherAccount.address
     );
 
-    expect(await contract.getCollectionRoleMembers(Roles.Controller)).to.eql([
-      owner.address,
-      '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049',
-    ]);
+    expect(
+      await contract.hasCollectionRole(
+        CollectionRoles.Owner,
+        otherAccount.address
+      )
+    ).to.be.false;
   });
 
   it('should fetch the list of owners', async () => {
     const { owner, contract, otherAccount } = fixture;
 
-    await contract.grantCollectionRole(Roles.Owner, otherAccount.address);
     await contract.grantCollectionRole(
-      Roles.Owner,
+      CollectionRoles.Owner,
+      otherAccount.address
+    );
+    await contract.grantCollectionRole(
+      CollectionRoles.Owner,
       '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049'
     );
 
-    expect(await contract.getCollectionRoleMembers(Roles.Owner)).to.eql([
-      owner.address,
-      otherAccount.address,
-      '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049',
-    ]);
+    expect(
+      await contract.hasCollectionRole(
+        CollectionRoles.Owner,
+        otherAccount.address
+      )
+    ).to.be.true;
+
+    expect(
+      await contract.hasCollectionRole(
+        CollectionRoles.Owner,
+        '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049'
+      )
+    ).to.be.true;
   });
 
   it('should not be able to add new owner', async () => {
@@ -93,73 +88,91 @@ describe('FleekERC721.CollectionRoles', () => {
     await expect(
       contract
         .connect(otherAccount)
-        .grantCollectionRole(Roles.Owner, otherAccount.address)
-    ).to.be.revertedWith('FleekAccessControl: must have collection role');
-  });
-
-  it('should not be able to add new controller', async () => {
-    const { otherAccount, contract } = fixture;
-
-    await expect(
-      contract
-        .connect(otherAccount)
-        .grantCollectionRole(Roles.Controller, otherAccount.address)
-    ).to.be.revertedWith('FleekAccessControl: must have collection role');
+        .grantCollectionRole(CollectionRoles.Owner, otherAccount.address)
+    )
+      .to.be.revertedWithCustomError(contract, Errors.MustHaveCollectionRole)
+      .withArgs(CollectionRoles.Owner);
   });
 
   it('should be able to add roles after owner being granted', async () => {
     const { otherAccount, contract } = fixture;
 
-    await contract.grantCollectionRole(Roles.Owner, otherAccount.address);
+    await contract.grantCollectionRole(
+      CollectionRoles.Owner,
+      otherAccount.address
+    );
 
     await expect(
       contract
         .connect(otherAccount)
-        .grantCollectionRole(Roles.Controller, otherAccount.address)
+        .grantCollectionRole(
+          CollectionRoles.Owner,
+          '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049'
+        )
     ).to.not.be.reverted;
-    await expect(
-      contract
-        .connect(otherAccount)
-        .revokeCollectionRole(Roles.Controller, otherAccount.address)
-    ).to.not.be.reverted;
-  });
-
-  it('should not be able to change roles for controllers', async () => {
-    const { owner, otherAccount, contract } = fixture;
-
-    await contract.grantCollectionRole(Roles.Controller, otherAccount.address);
-
-    await expect(
-      contract
-        .connect(otherAccount)
-        .grantCollectionRole(Roles.Owner, owner.address)
-    ).to.be.revertedWith('FleekAccessControl: must have collection role');
-    await expect(
-      contract
-        .connect(otherAccount)
-        .revokeCollectionRole(Roles.Owner, owner.address)
-    ).to.be.revertedWith('FleekAccessControl: must have collection role');
   });
 
   it('should emit event when role is granted', async () => {
     const { owner, contract, otherAccount } = fixture;
 
     await expect(
-      contract.grantCollectionRole(Roles.Controller, otherAccount.address)
+      contract.grantCollectionRole(CollectionRoles.Owner, otherAccount.address)
     )
-      .to.emit(contract, 'CollectionRoleGranted')
-      .withArgs(Roles.Controller, otherAccount.address, owner.address);
+      .to.emit(contract, 'CollectionRoleChanged')
+      .withArgs(
+        CollectionRoles.Owner,
+        otherAccount.address,
+        true,
+        owner.address
+      );
   });
 
   it('should emit event when role is revoked', async () => {
     const { owner, contract, otherAccount } = fixture;
 
-    await contract.grantCollectionRole(Roles.Controller, otherAccount.address);
+    await contract.grantCollectionRole(
+      CollectionRoles.Owner,
+      otherAccount.address
+    );
 
     await expect(
-      contract.revokeCollectionRole(Roles.Controller, otherAccount.address)
+      contract.revokeCollectionRole(CollectionRoles.Owner, otherAccount.address)
     )
-      .to.emit(contract, 'CollectionRoleRevoked')
-      .withArgs(Roles.Controller, otherAccount.address, owner.address);
+      .to.emit(contract, 'CollectionRoleChanged')
+      .withArgs(
+        CollectionRoles.Owner,
+        otherAccount.address,
+        false,
+        owner.address
+      );
+  });
+
+  it('should not be able to grant role if already granted', async () => {
+    const { otherAccount, contract } = fixture;
+
+    await contract.grantCollectionRole(
+      CollectionRoles.Owner,
+      otherAccount.address
+    );
+
+    await expect(
+      contract.grantCollectionRole(CollectionRoles.Owner, otherAccount.address)
+    ).to.be.revertedWithCustomError(contract, Errors.RoleAlreadySet);
+  });
+
+  it('should not be able to revoke role if not granted', async () => {
+    const { otherAccount, contract } = fixture;
+
+    await expect(
+      contract.revokeCollectionRole(CollectionRoles.Owner, otherAccount.address)
+    ).to.be.revertedWithCustomError(contract, Errors.RoleAlreadySet);
+  });
+
+  it('should not be able to remove all collection owners', async () => {
+    const { owner, contract } = fixture;
+
+    await expect(
+      contract.revokeCollectionRole(CollectionRoles.Owner, owner.address)
+    ).to.be.revertedWithCustomError(contract, Errors.MustHaveAtLeastOneOwner);
   });
 });
