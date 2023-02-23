@@ -28,8 +28,21 @@ To run the UI localy follow the steps:
    VITE_ALCHEMY_API_KEY
    VITE_ALCHEMY_APP_NAME
    ```
+   Also, you'll need to set up your firebase cretendials to make work the github login. Add to the .env file the following variables
 
-3. Start the local server running the app:
+   ```bash
+   VITE_FIREBASE_API_KEY
+   VITE_FIREBASE_AUTH_DOMAIN
+   VITE_FIREBASE_PROJECT_ID
+   VITE_FIREBASE_STORAGE_BUCKET
+   VITE_FIREBASE_MESSAGING_SENDER_ID
+   VITE_FIREBASE_APP_ID
+   VITE_FIREBASE_MEASUREMENT_ID
+   ```
+
+Get them from the project settings on the firebase dashboard. Read [this article](https://support.google.com/firebase/answer/7015592?hl=en#zippy=%2Cin-this-article) to know how to get your porject config
+
+4. Start the local server running the app:
 
    ```bash
    $ yarn dev

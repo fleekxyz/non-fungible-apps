@@ -8,8 +8,12 @@ import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./FleekAccessControl.sol";
 import "./util/FleekStrings.sol";
+import "./FleekPausable.sol";
 
-contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
+error MustBeTokenOwner(uint256 tokenId);
+error ThereIsNoTokenMinted();
+
+contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, FleekPausable {
     using Strings for uint256;
     using Counters for Counters.Counter;
     using FleekStrings for FleekERC721.App;
@@ -23,6 +27,9 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
 
     event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
+
+    event ChangeAccessPointAutoApproval(uint256 indexed token, bool indexed settings, address indexed triggeredBy);
+
     event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
 
     event ChangeAccessPointNameVerify(
@@ -37,6 +44,13 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         bool indexed verified,
         address indexed triggeredBy
     );
+    event ChangeAccessPointStatus(
+        string apName,
+        uint256 tokenId,
+        AccessPointCreationStatus status,
+        address indexed triggeredBy
+    );
+
     /**
      * The properties are stored as string to keep consistency with
      * other token contracts, we might consider changing for bytes32
@@ -51,6 +65,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
         string logo;
         uint24 color; // Color of the nft
+        bool accessPointAutoApproval; // AP Auto Approval
     }
 
     /**
@@ -62,6 +77,16 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     }
 
     /**
+     * Creation status enums for access points
+     */
+    enum AccessPointCreationStatus {
+        DRAFT,
+        APPROVED,
+        REJECTED,
+        REMOVED
+    }
+
+    /**
      * The stored data for each AccessPoint.
      */
     struct AccessPoint {
@@ -70,6 +95,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         bool contentVerified;
         bool nameVerified;
         address owner;
+        AccessPointCreationStatus status;
     }
 
     Counters.Counter private _appIds;
@@ -82,6 +108,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function initialize(string memory _name, string memory _symbol) public initializer {
         __ERC721_init(_name, _symbol);
         __FleekAccessControl_init();
+        __FleekPausable_init();
     }
 
     /**
@@ -100,6 +127,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      * Requirements:
      *
      * - the caller must have ``collectionOwner``'s admin role.
+     * - the contract must be not paused.
      *
      */
     function mint(
@@ -111,8 +139,9 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
-        uint24 color
-    ) public payable requireCollectionRole(Roles.Owner) returns (uint256) {
+        uint24 color,
+        bool accessPointAutoApproval
+    ) public payable requireCollectionRole(CollectionRoles.Owner) returns (uint256) {
         uint256 tokenId = _appIds.current();
         _mint(to, tokenId);
         _appIds.increment();
@@ -124,6 +153,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         app.ENS = ENS;
         app.logo = logo;
         app.color = color;
+        app.accessPointAutoApproval = accessPointAutoApproval;
 
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
@@ -174,6 +204,15 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     }
 
     /**
+     * @dev Returns the last minted tokenId.
+     */
+    function getLastTokenId() public view virtual returns (uint256) {
+        uint256 current = _appIds.current();
+        if (current == 0) revert ThereIsNoTokenMinted();
+        return current - 1;
+    }
+
+    /**
      * @dev See {IERC165-supportsInterface}.
      */
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Upgradeable) returns (bool) {
@@ -189,16 +228,16 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         address to,
         uint256 tokenId,
         uint256 batchSize
-    ) internal virtual override {
+    ) internal virtual override whenNotPaused {
         if (from != address(0) && to != address(0)) {
             // Transfer
-            _clearAllTokenRoles(tokenId, to);
+            _clearTokenRoles(tokenId);
         } else if (from == address(0)) {
             // Mint
-            _grantTokenRole(tokenId, Roles.Owner, to);
+            // TODO: set contract owner as controller
         } else if (to == address(0)) {
             // Burn
-            _clearAllTokenRoles(tokenId);
+            _clearTokenRoles(tokenId);
         }
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
@@ -208,6 +247,26 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      */
     function _baseURI() internal view virtual override returns (string memory) {
         return "data:application/json;base64,";
+    }
+
+    /**
+     * @dev Updates the `accessPointAutoApproval` settings on minted `tokenId`.
+     *
+     * May emit a {ChangeAccessPointAutoApproval} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
+    function setAccessPointAutoApproval(
+        uint256 tokenId,
+        bool _apAutoApproval
+    ) public virtual requireTokenOwner(tokenId) {
+        _requireMinted(tokenId);
+        _apps[tokenId].accessPointAutoApproval = _apAutoApproval;
+        emit ChangeAccessPointAutoApproval(tokenId, _apAutoApproval, msg.sender);
     }
 
     /**
@@ -224,7 +283,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function setTokenExternalURL(
         uint256 tokenId,
         string memory _tokenExternalURL
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].externalURL = _tokenExternalURL;
         emit MetadataUpdate(tokenId, "externalURL", _tokenExternalURL, msg.sender);
@@ -244,7 +303,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function setTokenENS(
         uint256 tokenId,
         string memory _tokenENS
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
         emit MetadataUpdate(tokenId, "ENS", _tokenENS, msg.sender);
@@ -264,7 +323,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function setTokenName(
         uint256 tokenId,
         string memory _tokenName
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].name = _tokenName;
         emit MetadataUpdate(tokenId, "name", _tokenName, msg.sender);
@@ -284,7 +343,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function setTokenDescription(
         uint256 tokenId,
         string memory _tokenDescription
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].description = _tokenDescription;
         emit MetadataUpdate(tokenId, "description", _tokenDescription, msg.sender);
@@ -304,7 +363,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function setTokenLogo(
         uint256 tokenId,
         string memory _tokenLogo
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].logo = _tokenLogo;
         emit MetadataUpdate(tokenId, "logo", _tokenLogo, msg.sender);
@@ -324,7 +383,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function setTokenColor(
         uint256 tokenId,
         uint24 _tokenColor
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].color = _tokenColor;
         emit MetadataUpdate(tokenId, "color", _tokenColor, msg.sender);
@@ -356,17 +415,72 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      * Requirements:
      *
      * - the tokenId must be minted and valid.
+     * - the contract must be not paused.
      *
      * IMPORTANT: The payment is not set yet
      */
-    function addAccessPoint(uint256 tokenId, string memory apName) public payable {
+    function addAccessPoint(uint256 tokenId, string memory apName) public payable whenNotPaused {
         // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
         _requireMinted(tokenId);
         require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
 
-        _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender);
-
         emit NewAccessPoint(apName, tokenId, msg.sender);
+
+        if (_apps[tokenId].accessPointAutoApproval) {
+            // Auto Approval is on.
+            _accessPoints[apName] = AccessPoint(
+                tokenId,
+                0,
+                false,
+                false,
+                msg.sender,
+                AccessPointCreationStatus.APPROVED
+            );
+
+            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
+        } else {
+            // Auto Approval is off. Should wait for approval.
+            _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender, AccessPointCreationStatus.DRAFT);
+            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.DRAFT, msg.sender);
+        }
+    }
+
+    /**
+     * @dev Set approval settings for an access point.
+     * It will add the access point to the token's AP list, if `approved` is true.
+     *
+     * May emit a {ChangeAccessPointApprovalStatus} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must exist and be the same as the tokenId that is set for the AP.
+     * - the AP must exist.
+     * - must be called by a token controller.
+     */
+    function setApprovalForAccessPoint(
+        uint256 tokenId,
+        string memory apName,
+        bool approved
+    ) public requireTokenOwner(tokenId) {
+        AccessPoint storage accessPoint = _accessPoints[apName];
+        require(
+            accessPoint.tokenId == tokenId,
+            "FleekERC721: the passed tokenId is not the same as the access point's tokenId."
+        );
+        require(
+            accessPoint.status == AccessPointCreationStatus.DRAFT,
+            "FleekERC721: the access point creation status has been set before."
+        );
+
+        if (approved) {
+            // Approval
+            accessPoint.status = AccessPointCreationStatus.APPROVED;
+            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
+        } else {
+            // Not Approved
+            accessPoint.status = AccessPointCreationStatus.REJECTED;
+            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.REJECTED, msg.sender);
+        }
     }
 
     /**
@@ -379,12 +493,14 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      *
      * - the AP must exist.
      * - must be called by the AP owner.
+     * - the contract must be not paused.
+     *
      */
-    function removeAccessPoint(string memory apName) public requireAP(apName) {
+    function removeAccessPoint(string memory apName) public whenNotPaused requireAP(apName) {
         require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
+        _accessPoints[apName].status = AccessPointCreationStatus.REMOVED;
         uint256 tokenId = _accessPoints[apName].tokenId;
-
-        delete _accessPoints[apName];
+        emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.REMOVED, msg.sender);
         emit RemoveAccessPoint(apName, tokenId, msg.sender);
     }
 
@@ -459,7 +575,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function setAccessPointContentVerify(
         string memory apName,
         bool verified
-    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
+    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, TokenRoles.Controller) {
         _accessPoints[apName].contentVerified = verified;
         emit ChangeAccessPointContentVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
@@ -478,7 +594,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
     function setAccessPointNameVerify(
         string memory apName,
         bool verified
-    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, Roles.Controller) {
+    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, TokenRoles.Controller) {
         _accessPoints[apName].nameVerified = verified;
         emit ChangeAccessPointNameVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
@@ -498,7 +614,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
         uint256 tokenId,
         string memory _commitHash,
         string memory _gitRepository
-    ) public virtual requireTokenRole(tokenId, Roles.Controller) {
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(_commitHash, _gitRepository);
         emit MetadataUpdate(tokenId, "build", [_commitHash, _gitRepository], msg.sender);
@@ -512,14 +628,149 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl {
      * Requirements:
      *
      * - the tokenId must be minted and valid.
-     * - the sender must have the `tokenOwner` role.
+     * - the sender must be the owner of the token.
+     * - the contract must be not paused.
      *
      */
-    function burn(uint256 tokenId) public virtual requireTokenRole(tokenId, Roles.Owner) {
+    function burn(uint256 tokenId) public virtual requireTokenOwner(tokenId) {
         super._burn(tokenId);
 
         if (bytes(_apps[tokenId].externalURL).length != 0) {
             delete _apps[tokenId];
         }
+    }
+
+    /*//////////////////////////////////////////////////////////////
+        ACCESS CONTROL
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Requires caller to have a selected collection role.
+     */
+    modifier requireCollectionRole(CollectionRoles role) {
+        _requireCollectionRole(role);
+        _;
+    }
+
+    /**
+     * @dev Requires caller to have a selected token role.
+     */
+    modifier requireTokenRole(uint256 tokenId, TokenRoles role) {
+        if (ownerOf(tokenId) != msg.sender) _requireTokenRole(tokenId, role);
+        _;
+    }
+
+    /**
+     * @dev Requires caller to be selected token owner.
+     */
+    modifier requireTokenOwner(uint256 tokenId) {
+        if (ownerOf(tokenId) != msg.sender) revert MustBeTokenOwner(tokenId);
+        _;
+    }
+
+    /**
+     * @dev Grants the collection role to an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the collection role.
+     *
+     */
+    function grantCollectionRole(
+        CollectionRoles role,
+        address account
+    ) public whenNotPaused requireCollectionRole(CollectionRoles.Owner) {
+        _grantCollectionRole(role, account);
+    }
+
+    /**
+     * @dev Grants the token role to an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the token role.
+     *
+     */
+    function grantTokenRole(
+        uint256 tokenId,
+        TokenRoles role,
+        address account
+    ) public whenNotPaused requireTokenOwner(tokenId) {
+        _grantTokenRole(tokenId, role, account);
+    }
+
+    /**
+     * @dev Revokes the collection role of an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the collection role.
+     *
+     */
+    function revokeCollectionRole(
+        CollectionRoles role,
+        address account
+    ) public whenNotPaused requireCollectionRole(CollectionRoles.Owner) {
+        _revokeCollectionRole(role, account);
+    }
+
+    /**
+     * @dev Revokes the token role of an address.
+     *
+     * Requirements:
+     *
+     * - the caller should have the token role.
+     *
+     */
+    function revokeTokenRole(
+        uint256 tokenId,
+        TokenRoles role,
+        address account
+    ) public whenNotPaused requireTokenOwner(tokenId) {
+        _revokeTokenRole(tokenId, role, account);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+        PAUSABLE
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Sets the contract to paused state.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `controller` role.
+     * - the contract must be pausable.
+     * - the contract must be not paused.
+     *
+     */
+    function pause() public requireCollectionRole(CollectionRoles.Owner) {
+        _pause();
+    }
+
+    /**
+     * @dev Sets the contract to unpaused state.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `controller` role.
+     * - the contract must be paused.
+     *
+     */
+    function unpause() public requireCollectionRole(CollectionRoles.Owner) {
+        _unpause();
+    }
+
+    /**
+     * @dev Sets the contract to pausable state.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `owner` role.
+     * - the contract must be in the oposite pausable state.
+     *
+     */
+    function setPausable(bool pausable) public requireCollectionRole(CollectionRoles.Owner) {
+        _setPausable(pausable);
     }
 }

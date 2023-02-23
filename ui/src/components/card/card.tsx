@@ -1,3 +1,4 @@
+import { Octokit } from 'octokit';
 import React, { forwardRef } from 'react';
 import { Flex } from '../layout';
 import { CardStyles } from './card.styles';
