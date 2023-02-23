@@ -41,6 +41,7 @@ library FleekStrings {
                 '"owner":"', uint160(owner).toHexString(20), '",',
                 '"external_url":"', app.externalURL, '",',
                 '"image":"', FleekSVG.generateBase64(app.name, app.ENS, app.logo, app.color.toColorString()), '",',
+                '"access_point_auto_approval":',app.accessPointAutoApproval.toString(),',',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',
@@ -63,7 +64,8 @@ library FleekStrings {
                 '"score":', ap.score.toString(), ",",
                 '"nameVerified":', ap.nameVerified.toString(), ",",
                 '"contentVerified":', ap.contentVerified.toString(), ",",
-                '"owner":"', uint160(ap.owner).toHexString(20), '"',
+                '"owner":"', uint160(ap.owner).toHexString(20), '",',
+                '"status":',uint(ap.status).toString(),
             "}"
         ));
     }
