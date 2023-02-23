@@ -13,9 +13,6 @@ export const useTransactionCost = (
     if (!feeData || !feeData.gasPrice || !chain)
       return [ethers.BigNumber.from(0), '', true];
 
-    console.log('gasLimit', gasLimit);
-    console.log('feeData.gasPrice', feeData.gasPrice);
-
     return [
       gasLimit.mul(feeData.gasPrice).add(value),
       chain.nativeCurrency.symbol,
