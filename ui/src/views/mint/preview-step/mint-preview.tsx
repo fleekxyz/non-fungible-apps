@@ -4,9 +4,17 @@ import { NftCard } from '../nft-card';
 
 export const MintPreview = () => {
   const { prevStep } = Stepper.useContext();
-  const { setSucessMint } = Mint.useContext();
+  const {
+    prepare: { status: prepareStatus },
+    write: { status: writeStatus, write },
+    transaction: { status: transactionStatus },
+  } = Mint.useTransactionContext();
 
   //TODO handle error when minting
+
+  const isLoading = [prepareStatus, writeStatus, transactionStatus].some(
+    (status) => status === 'loading'
+  );
 
   return (
     <NftCard
@@ -31,9 +39,8 @@ export const MintPreview = () => {
       }
       message="Minting this NFA will cost 0.0008 MATIC."
       buttonText="Mint NFA"
-      onClick={() => {
-        setSucessMint(true);
-      }}
+      onClick={write!}
+      isLoading={isLoading}
     />
   );
 };

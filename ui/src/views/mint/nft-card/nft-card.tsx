@@ -10,6 +10,7 @@ type NftCardProps = {
   buttonText: string;
   leftIconButton?: React.ReactNode;
   onClick: () => void;
+  isLoading: boolean;
 };
 
 export const NftCard: React.FC<NftCardProps> = ({
@@ -20,6 +21,7 @@ export const NftCard: React.FC<NftCardProps> = ({
   buttonText,
   leftIconButton,
   onClick,
+  isLoading,
 }) => {
   const size = '26.5rem';
   const { appLogo, logoColor, appName, ens } = Mint.useContext();
@@ -50,6 +52,8 @@ export const NftCard: React.FC<NftCardProps> = ({
             variant="solid"
             onClick={onClick}
             leftIcon={leftIconButton}
+            isLoading={isLoading}
+            isDisabled={isLoading}
           >
             {buttonText}
           </Button>
