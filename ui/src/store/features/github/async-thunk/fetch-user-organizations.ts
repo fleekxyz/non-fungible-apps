@@ -16,17 +16,22 @@ export const fetchUserAndOrgsThunk = createAsyncThunk(
       dispatch(githubActions.setQueryUserState('loading'));
 
       const githubClient = new GithubClient(token);
-      const user = await githubClient.fetchUser();
-      const orgs = await githubClient.fetchOrgs();
+
+      const response = await Promise.all([
+        githubClient.fetchUser(),
+        githubClient.fetchOrgs(),
+      ]);
+      const userResponse = response[0];
+      const orgsResponse = response[1];
 
       let comboboxItems: UserData[] = [];
 
-      if (user) {
-        comboboxItems.push(user);
+      if (userResponse) {
+        comboboxItems.push(userResponse);
       }
 
-      if (orgs) {
-        comboboxItems = [...comboboxItems, ...orgs];
+      if (orgsResponse) {
+        comboboxItems = [...comboboxItems, ...orgsResponse];
       }
 
       dispatch(githubActions.setUserAndOrgs(comboboxItems));
