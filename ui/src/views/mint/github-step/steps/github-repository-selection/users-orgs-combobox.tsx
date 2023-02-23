@@ -20,14 +20,16 @@ export const UserOrgsCombobox = () => {
     setSelectedUserOrg(item);
   };
 
-  if (
-    queryUserAndOrganizations === 'success' &&
-    selectedUserOrg.value === undefined &&
-    userAndOrganizations.length > 0
-  ) {
-    //SET first user
-    setSelectedUserOrg(userAndOrganizations[0]);
-  }
+  useEffect(() => {
+    if (
+      queryUserAndOrganizations === 'success' &&
+      selectedUserOrg.value === undefined &&
+      userAndOrganizations.length > 0
+    ) {
+      //SET first user
+      setSelectedUserOrg(userAndOrganizations[0]);
+    }
+  }, [queryUserAndOrganizations]);
 
   return (
     <Combobox

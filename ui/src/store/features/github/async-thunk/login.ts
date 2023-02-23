@@ -25,7 +25,7 @@ const auth = getAuth(app);
 
 export const login = createAsyncThunk(
   'github/login',
-  async (param, { dispatch, getState }) => {
+  async (_, { dispatch, getState }) => {
     if ((getState() as RootState).github.state === 'loading') return;
 
     try {
