@@ -204,9 +204,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
   it('should token owner be able to change the auto approval settings to on', async () => {
     const { contract, tokenId, owner } = fixture;
 
-    await contract
-      .connect(owner)
-      .setAccessPointAutoApproval(tokenId, true);
+    await contract.connect(owner).setAccessPointAutoApproval(tokenId, true);
 
     await contract.addAccessPoint(tokenId, 'accesspoint.com');
 

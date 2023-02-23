@@ -21,6 +21,7 @@
     "@reduxjs/toolkit": "^1.9.1",
     "@stitches/react": "^1.2.8",
     "colorthief": "^2.3.2",
+    "connectkit": "^1.1.3",
     "firebase": "^9.17.1",
     "formik": "^2.2.9",
     "octokit": "^2.0.14",
@@ -28,7 +29,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.4.4"
+    "react-router-dom": "^6.4.4",
+    "wagmi": "^0.11.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",

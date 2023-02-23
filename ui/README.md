@@ -23,7 +23,12 @@ To run the UI localy follow the steps:
    ```bash
    $ yarn
    ```
-3. You'll need to set up your firebase cretendials to make work the github login. Set the .env file with the following variables
+3. To use ConnecKit is neccessary get an [Alchemy ID](https://alchemy.com/), so create an App and get the credentials. Then set the following .env file
+   ```bash
+   VITE_ALCHEMY_API_KEY
+   VITE_ALCHEMY_APP_NAME
+   ```
+   Also, you'll need to set up your firebase cretendials to make work the github login. Add to the .env file the following variables
 
    ```bash
    VITE_FIREBASE_API_KEY

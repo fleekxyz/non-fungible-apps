@@ -28,11 +28,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
 
-    event ChangeAccessPointAutoApproval(
-        uint256 indexed token,
-        bool indexed settings,
-        address indexed triggeredBy
-    );
+    event ChangeAccessPointAutoApproval(uint256 indexed token, bool indexed settings, address indexed triggeredBy);
 
     event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
 
@@ -54,7 +50,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         AccessPointCreationStatus status,
         address indexed triggeredBy
     );
-    
+
     /**
      * The properties are stored as string to keep consistency with
      * other token contracts, we might consider changing for bytes32
@@ -432,7 +428,14 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
 
         if (_apps[tokenId].accessPointAutoApproval) {
             // Auto Approval is on.
-            _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender, AccessPointCreationStatus.APPROVED);
+            _accessPoints[apName] = AccessPoint(
+                tokenId,
+                0,
+                false,
+                false,
+                msg.sender,
+                AccessPointCreationStatus.APPROVED
+            );
 
             emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
         } else {

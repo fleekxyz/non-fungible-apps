@@ -1,4 +1,8 @@
 export const env = Object.freeze({
+  alchemy: {
+    id: import.meta.env.VITE_ALCHEMY_API_KEY || '',
+    appName: import.meta.env.VITE_ALCHEMY_APP_NAME || '',
+  },
   firebase: {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
