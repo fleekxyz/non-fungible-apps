@@ -65,7 +65,7 @@ export const githubSlice = createSlice({
       state.token = '';
       state.state = action.payload;
     },
-    setRepositores: (
+    setRepositories: (
       state,
       action: PayloadAction<GithubState.Repositories>
     ) => {
