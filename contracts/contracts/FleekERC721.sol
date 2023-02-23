@@ -133,8 +133,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
 
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
-        app.builds[0] = Build(commitHash, gitRepository);    
-        
+        app.builds[0] = Build(commitHash, gitRepository);
         return tokenId;
     }
 
