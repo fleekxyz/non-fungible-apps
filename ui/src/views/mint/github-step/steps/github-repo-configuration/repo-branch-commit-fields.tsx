@@ -1,6 +1,7 @@
 import { Dropdown, DropdownItem, Flex, Form, Spinner } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
+import { useEffect } from 'react';
 
 export const RepoBranchCommitFields = () => {
   const { queryLoading, branches } = useGithubStore();
@@ -15,14 +16,16 @@ export const RepoBranchCommitFields = () => {
     setCommitHash,
   } = Mint.useContext();
 
-  if (queryLoading === 'idle') {
-    dispatch(
-      githubActions.fetchBranchesThunk({
-        owner: selectedUserOrg.label,
-        repository: repositoryName.name,
-      })
-    );
-  }
+  useEffect(() => {
+    if (queryLoading === 'idle') {
+      dispatch(
+        githubActions.fetchBranchesThunk({
+          owner: selectedUserOrg.label,
+          repository: repositoryName.name,
+        })
+      );
+    }
+  }, [queryLoading, dispatch]);
 
   const handleBranchChange = (dorpdownOption: DropdownItem) => {
     setBranchName(dorpdownOption);

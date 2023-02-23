@@ -1,15 +1,11 @@
 import { ComboboxItem, DropdownItem } from '@/components';
+import { Repository } from '@/store';
 import { createContext } from '@/utils';
 import { useState } from 'react';
 
-export type Repo = {
-  name: string;
-  url: string;
-};
-
 export type MintContext = {
   selectedUserOrg: ComboboxItem;
-  repositoryName: Repo;
+  repositoryName: Repository;
   branchName: DropdownItem; //get value from DropdownItem to mint
   commitHash: string;
   githubStep: number;
@@ -23,7 +19,7 @@ export type MintContext = {
   sucessMint: boolean | undefined;
   setGithubStep: (step: number) => void;
   setSelectedUserOrg: (userOrg: ComboboxItem) => void;
-  setRepositoryName: (repo: Repo) => void;
+  setRepositoryName: (repo: Repository) => void;
   setBranchName: (branch: DropdownItem) => void;
   setCommitHash: (hash: string) => void;
   setAppName: (name: string) => void;
@@ -48,7 +44,9 @@ export abstract class Mint {
   static readonly Provider: React.FC<Mint.ProviderProps> = ({ children }) => {
     //Github Connection
     const [selectedUserOrg, setSelectedUserOrg] = useState({} as ComboboxItem);
-    const [repositoryName, setRepositoryName] = useState<Repo>({} as Repo);
+    const [repositoryName, setRepositoryName] = useState<Repository>(
+      {} as Repository
+    );
     const [branchName, setBranchName] = useState({} as DropdownItem);
     const [commitHash, setCommitHash] = useState('');
     const [githubStep, setGithubStepContext] = useState(1);

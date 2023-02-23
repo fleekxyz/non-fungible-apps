@@ -1,69 +1,44 @@
 import { Avatar, Combobox, ComboboxItem } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-import { useEffect, useState } from 'react';
-import { useQueries } from 'react-query';
-import { useGithub } from '../use-github';
+import { useEffect } from 'react';
 
 export const UserOrgsCombobox = () => {
-  const { queryLoading, userAndOrganizations } = useGithubStore();
+  const { queryUserAndOrganizations, userAndOrganizations } = useGithubStore();
   const dispatch = useAppDispatch();
-  // const [itemsCombobox, setItemsCombobox] = useState<ComboboxItem[]>([]);
+
   const { selectedUserOrg, setSelectedUserOrg } = Mint.useContext();
 
-  // const [
-  //   { data: dataUser, status: statusUser },
-  //   { data: dataOrgs, status: statusOrgs },
-  // ] = useQueries([
-  //   { queryKey: ['fetchUser'], queryFn: fetchUser },
-  //   { queryKey: ['fetchOrgs'], queryFn: fetchOrgs },
-  // ]);
-
-  // if (statusUser === 'error' && statusOrgs === 'error') {
-  //   //TODO add error toast
-  //   alert('Error fetching user and orgs');
-  // }
-
-  // useEffect(() => {
-  //   if (dataUser && dataOrgs) {
-  //     let comboboxItems: ComboboxItem[] = [];
-
-  //     const userItem: ComboboxItem = {
-  //       value: dataUser.repos_url,
-  //       label: dataUser.login,
-  //       icon: <Avatar src={dataUser.avatar_url} />,
-  //     };
-  //     comboboxItems = [...comboboxItems, userItem];
-
-  //     const orgsItems: ComboboxItem[] = dataOrgs.map((org) => ({
-  //       value: org?.repos_url,
-  //       label: org?.login,
-  //       icon: <Avatar src={org?.avatar_url} />,
-  //     }));
-  //     comboboxItems = [...comboboxItems, ...orgsItems];
-
-  //     selectedUserOrg.value === undefined &&
-  //       setSelectedUserOrg(comboboxItems[0]);
-  //     setItemsCombobox(comboboxItems);
-
-  //     // if (statusUser === 'success' || statusOrgs === 'success')
-  //     //   setLoading(false);
-  //   }
-  // }, [dataUser, dataOrgs]);
-
-  if (queryLoading === 'idle') {
-    dispatch(githubActions.fetchUserAndOrgsThunk());
-  }
+  useEffect(() => {
+    if (queryUserAndOrganizations === 'idle') {
+      dispatch(githubActions.fetchUserAndOrgsThunk());
+    }
+  }, [dispatch, queryUserAndOrganizations]);
 
   const handleUserOrgChange = (item: ComboboxItem) => {
-    // debugger;
     dispatch(githubActions.fetchRepositoriesThunk(item.value));
     setSelectedUserOrg(item);
   };
 
+  if (
+    queryUserAndOrganizations === 'success' &&
+    selectedUserOrg.value === undefined &&
+    userAndOrganizations.length > 0
+  ) {
+    //SET first user
+    setSelectedUserOrg(userAndOrganizations[0]);
+  }
+
   return (
     <Combobox
-      items={userAndOrganizations}
+      items={userAndOrganizations.map(
+        (item) =>
+          ({
+            label: item.label,
+            value: item.value,
+            icon: <Avatar src={item.avatar} />,
+          } as ComboboxItem)
+      )}
       selectedValue={selectedUserOrg}
       onChange={handleUserOrgChange}
     />

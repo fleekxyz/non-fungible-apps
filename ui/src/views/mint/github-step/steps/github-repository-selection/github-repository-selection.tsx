@@ -41,9 +41,9 @@ export const RepoRow = forwardRef<HTMLDivElement, RepoRowProps>(
 );
 
 export const GithubRepositoryConnection: React.FC = () => {
-  // const [isLoadingUserOrgs, setIsLoadingUserOrgs] = useState(true);
-  const { queryLoading } = useGithubStore();
+  const { queryLoading, queryUserAndOrganizations } = useGithubStore();
   const [searchValue, setSearchValue] = useState('');
+
   const { setGithubStep, setSelectedUserOrg } = Mint.useContext();
 
   const timeOutRef = useRef<NodeJS.Timeout>();
@@ -77,7 +77,8 @@ export const GithubRepositoryConnection: React.FC = () => {
               onChange={handleSearchChange}
             />
           </Flex>
-          {queryLoading === 'loading' ? (
+          {queryLoading === 'loading' ||
+          queryUserAndOrganizations === 'loading' ? (
             <Loading />
           ) : (
             <RepositoriesList searchValue={searchValue} />

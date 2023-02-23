@@ -2,19 +2,30 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
 import * as asyncThunk from './async-thunk';
-import { Repo } from '@/views/mint/mint.context';
 import { ComboboxItem, DropdownItem } from '@/components';
+import { UserData } from './github-client';
+
+export type Repository = {
+  name: string;
+  url: string;
+};
 
 export namespace GithubState {
   export type Token = string;
 
   export type State = 'disconnected' | 'loading' | 'connected';
 
+  export type QueryUserAndOrganizations =
+    | 'idle'
+    | 'loading'
+    | 'failed'
+    | 'success';
+
   export type QueryLoading = 'idle' | 'loading' | 'failed' | 'success';
 
-  export type UserAndOrganizations = Array<ComboboxItem>;
+  export type UserAndOrganizations = Array<UserData>;
 
-  export type Repositoires = Array<Repo>;
+  export type Repositories = Array<Repository>;
 
   export type Branches = Array<DropdownItem>;
 }
@@ -23,14 +34,16 @@ export interface GithubState {
   token: GithubState.Token;
   state: GithubState.State;
   userAndOrganizations: GithubState.UserAndOrganizations;
+  queryUserAndOrganizations: GithubState.QueryUserAndOrganizations;
   queryLoading: GithubState.QueryLoading;
-  repositories: GithubState.Repositoires;
+  repositories: GithubState.Repositories;
   branches: GithubState.Branches;
 }
 
 const initialState: GithubState = {
   token: '',
   state: 'disconnected',
+  queryUserAndOrganizations: 'idle',
   queryLoading: 'idle',
   userAndOrganizations: [],
   repositories: [],
@@ -68,7 +81,13 @@ export const githubSlice = createSlice({
       action: PayloadAction<GithubState.UserAndOrganizations>
     ) => {
       state.userAndOrganizations = action.payload;
-      state.queryLoading = 'success';
+      state.queryUserAndOrganizations = 'success';
+    },
+    setQueryUserState: (
+      state,
+      action: PayloadAction<Exclude<GithubState.QueryLoading, 'success'>>
+    ) => {
+      state.queryUserAndOrganizations = action.payload;
     },
     setQueryState: (
       state,
