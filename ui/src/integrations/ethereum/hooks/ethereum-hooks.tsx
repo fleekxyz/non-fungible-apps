@@ -10,6 +10,11 @@ import { FleekERC721 } from '../contracts';
 import { createContext } from '@/utils';
 import { useState } from 'react';
 
+/**
+ * This is a factory to create context factories for contracts write.
+ * It should be used inside other context factories specific for each
+ * contract.
+ */
 const createWriteContractContext = <
   TAbi extends EthereumHooks.Abi,
   TArgumentsMap extends EthereumHooks.WriteContext.ArgumentsMap,
@@ -75,7 +80,13 @@ const createWriteContractContext = <
   return [Provider, useInternalProvider] as const;
 };
 
+/**
+ * React hooks and related to interact with Ethereum.
+ */
 export const EthereumHooks = {
+  /**
+   * Context factory for FleekERC721 write functions.
+   */
   createFleekERC721WriteContext: <
     TFunctionName extends keyof ArgumentsMaps.FleekERC721 & string,
     TFunctionArguments extends ArgumentsMaps.FleekERC721[TFunctionName]
@@ -91,6 +102,9 @@ export const EthereumHooks = {
   },
 };
 
+/**
+ * EthereumHooks used typings.
+ */
 export namespace EthereumHooks {
   export type Abi = AbiType | readonly unknown[];
 
@@ -136,6 +150,9 @@ export namespace EthereumHooks {
   }
 }
 
+/**
+ * Identified types to interact with known contracts using EthereumHooks contexts.
+ */
 export namespace ArgumentsMaps {
   export interface FleekERC721 extends EthereumHooks.WriteContext.ArgumentsMap {
     mint: [
@@ -150,5 +167,9 @@ export namespace ArgumentsMaps {
       number, // uint24 color
       boolean // bool accessPointAutoApproval
     ];
+
+    /**
+     * TODO: Add other functions arguments as they are needed.
+     */
   }
 }

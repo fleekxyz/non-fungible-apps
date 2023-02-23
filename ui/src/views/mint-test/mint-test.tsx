@@ -4,16 +4,19 @@ import { EthereumHooks } from '@/integrations';
 import { ConnectKitButton } from 'connectkit';
 import { useAccount } from 'wagmi';
 
+// We first create a context for a selected contract method
 const [MintProvider, useMintContext] =
   EthereumHooks.createFleekERC721WriteContext('mint');
 
 const Preparing: React.FC = () => {
+  // We can check the states of the stage of the contract using the context
   const {
     prepare: { status: prepareStatus, data: prepareData, error: prepareError },
     setArgs,
   } = useMintContext();
 
   const handlePrepare = () => {
+    // `setArgs` will fulfill the arguments used to call the contract method
     setArgs([
       '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049',
       'App NFT',
@@ -28,6 +31,7 @@ const Preparing: React.FC = () => {
     ]);
   };
 
+  // We can change the UI rendering based on the states
   if (prepareStatus !== 'success') {
     const isLoading = prepareStatus === 'loading';
     return (
@@ -61,6 +65,7 @@ const Preparing: React.FC = () => {
 const Minting: React.FC = () => {
   const {
     prepare: { status: prepareStatus },
+    // In the write key we will have the trigger to call the contract method
     write: {
       status: mintStatus,
       write: mint,
@@ -70,6 +75,10 @@ const Minting: React.FC = () => {
   } = useMintContext();
 
   const handleMint = () => {
+    // The trigger function will be undefined in case the contract method is not ready to be called
+    // Preparing the contract method will run a gas estimation and will set the trigger function
+    // If the gas estimation fails, the trigger function will be undefined
+    // This may happen for invalid arguments, if the user has no permissions to call the method, etc.
     if (mint) mint();
   };
 
@@ -159,8 +168,10 @@ export const MintTest: React.FC = () => {
   const { isConnected } = useAccount();
 
   return (
+    // The provider must wrap the UI that will use the context
     <MintProvider
       config={{
+        // We can setup callbacks for every stage of the process in this config
         prepare: {
           onSuccess: (data) => {
             console.log('Prepared', data);
