@@ -1,7 +1,15 @@
 export const TestConstants = Object.freeze({
-  Roles: {
+  CollectionRoles: {
     Owner: 0,
-    Controller: 1,
+  },
+  TokenRoles: {
+    Controller: 0,
+  },
+  AccessPointStatus: {
+    DRAFT: 0,
+    APPROVED: 1,
+    REJECTED: 2,
+    REMOVED: 3,
   },
   AccessPointStatus: {
     DRAFT: 0,
