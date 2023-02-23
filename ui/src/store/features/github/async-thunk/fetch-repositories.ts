@@ -1,4 +1,4 @@
-import { githubActions, Repository, RootState } from '@/store';
+import { githubActions, RootState } from '@/store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { GithubClient } from '../github-client';
 
@@ -16,11 +16,14 @@ export const fetchRepositoriesThunk = createAsyncThunk(
 
       const repositories = await githubClient.fetchRepos(url);
 
+      console.log(repositories);
+
       dispatch(
-        githubActions.setRepositoires(
-          repositories.map(
-            (repo: any) => ({ name: repo.name, url: repo.url } as Repository)
-          )
+        githubActions.setRepositores(
+          repositories.map((repo: any) => ({
+            name: repo.name,
+            url: repo.html_url,
+          }))
         )
       );
     } catch (error) {

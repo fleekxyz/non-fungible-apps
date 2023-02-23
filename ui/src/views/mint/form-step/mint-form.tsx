@@ -39,7 +39,7 @@ export const FormStep = () => {
       domain,
       ens.value,
       commitHash,
-      `${repositoryName}/${branchName.value}`,
+      `${repositoryName.url}/tree/${branchName.label}`,
       appLogo,
       parseColorToNumber(logoColor),
       verifyNFA,

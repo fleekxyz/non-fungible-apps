@@ -1,14 +1,10 @@
 import { Button, Separator } from '@/components';
-import {
-  githubActions,
-  Repository as RepositoryType,
-  useAppDispatch,
-} from '@/store';
+import { githubActions, GithubState, useAppDispatch } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
 import { RepoRow } from './github-repository-selection';
 
 type RepositoryProps = {
-  repository: RepositoryType;
+  repository: GithubState.Repository;
   index: number;
   length: number;
 };
