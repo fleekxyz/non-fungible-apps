@@ -8,6 +8,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
+    'plugin:react-hooks/recommended',
   ],
   overrides: [],
   parser: '@typescript-eslint/parser',
@@ -27,5 +28,6 @@ module.exports = {
     'simple-import-sort/imports': 2,
     '@typescript-eslint/explicit-function-return-type': 'off',
     'no-console': 'error',
+    'unused-imports/no-unused-imports-ts': 'error',
   },
 };

@@ -1,8 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { initializeWallet } from './store';
 import { themeGlobals } from '@/theme/globals';
-import { Home } from './views';
-import { Mint } from './views/mint';
+import { Home, Mint } from './views';
 import { SVGTestScreen } from './views/svg-test'; // TODO: remove when done
 
 initializeWallet();

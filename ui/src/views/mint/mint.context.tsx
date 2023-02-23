@@ -1,9 +1,11 @@
-import { DropdownItem } from '@/components';
+import { ComboboxItem, DropdownItem } from '@/components';
+import { Repository } from '@/store';
 import { createContext } from '@/utils';
 import { useState } from 'react';
 
 export type MintContext = {
-  repositoryName: string;
+  selectedUserOrg: ComboboxItem;
+  repositoryName: Repository;
   branchName: DropdownItem; //get value from DropdownItem to mint
   commitHash: string;
   githubStep: number;
@@ -11,13 +13,15 @@ export type MintContext = {
   appDescription: string;
   appLogo: string;
   logoColor: string;
-  ens: DropdownItem; //maybe it would be a DropdownItem
+  ens: DropdownItem;
   domain: string;
   verifyNFA: boolean;
   sucessMint: boolean | undefined;
   setGithubStep: (step: number) => void;
-  setRepositoryName: (repo: string) => void;
-  setRepositoryConfig: (branch: DropdownItem, hash: string) => void;
+  setSelectedUserOrg: (userOrg: ComboboxItem) => void;
+  setRepositoryName: (repo: Repository) => void;
+  setBranchName: (branch: DropdownItem) => void;
+  setCommitHash: (hash: string) => void;
   setAppName: (name: string) => void;
   setAppDescription: (description: string) => void;
   setAppLogo: (logo: string) => void;
@@ -39,7 +43,10 @@ export abstract class Mint {
 
   static readonly Provider: React.FC<Mint.ProviderProps> = ({ children }) => {
     //Github Connection
-    const [repositoryName, setRepositoryName] = useState('');
+    const [selectedUserOrg, setSelectedUserOrg] = useState({} as ComboboxItem);
+    const [repositoryName, setRepositoryName] = useState<Repository>(
+      {} as Repository
+    );
     const [branchName, setBranchName] = useState({} as DropdownItem);
     const [commitHash, setCommitHash] = useState('');
     const [githubStep, setGithubStepContext] = useState(1);
@@ -64,14 +71,10 @@ export abstract class Mint {
       }
     };
 
-    const setRepositoryConfig = (branch: DropdownItem, hash: string) => {
-      setBranchName(branch);
-      setCommitHash(hash);
-    };
-
     return (
       <MintProvider
         value={{
+          selectedUserOrg,
           repositoryName,
           branchName,
           commitHash,
@@ -84,9 +87,11 @@ export abstract class Mint {
           domain,
           verifyNFA,
           sucessMint,
+          setSelectedUserOrg,
           setGithubStep,
-          setRepositoryConfig,
           setRepositoryName,
+          setBranchName,
+          setCommitHash,
           setAppName,
           setAppDescription,
           setAppLogo,
