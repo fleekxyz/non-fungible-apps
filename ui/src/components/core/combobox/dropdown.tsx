@@ -10,7 +10,7 @@ type DropdownOptionProps = {
 const DropdownOption = ({ option }: DropdownOptionProps) => (
   <Listbox.Option
     className={({ active }) =>
-      `relative cursor-default select-none py-2 px-3.5 text-slate11 rounded-xl mb-2 text-sm ${
+      `relative cursor-default select-none py-2 px-3.5 text-slate11 rounded-xl mb-2 text-sm max-w-full ${
         active ? 'bg-slate5 text-slate12' : 'bg-transparent'
       }`
     }
@@ -18,10 +18,28 @@ const DropdownOption = ({ option }: DropdownOptionProps) => (
   >
     {({ selected, active }) => (
       <Flex css={{ justifyContent: 'space-between' }}>
-        <span className={`${active ? 'text-slate12' : 'text-slate11'}`}>
+        <span
+          className={`${
+            active ? 'text-slate12' : 'text-slate11'
+          } max-w-full break-words pr-5`}
+        >
           {option.label}
         </span>
-        {selected && <Icon name="check" color="white" />}
+        {selected && (
+          <Icon
+            name="check"
+            color="white"
+            css={{
+              position: 'absolute',
+              top: '$0',
+              bottom: '$0',
+              right: '$0',
+              display: 'flex',
+              alignItems: 'center',
+              pr: '$4',
+            }}
+          />
+        )}
       </Flex>
     )}
   </Listbox.Option>
@@ -41,7 +59,7 @@ const DropdownButton = ({ selectedValue, open }: DropdownButtonProps) => (
     <span
       className={`block truncate ${
         selectedValue && selectedValue.label ? 'text-slate12' : 'text-slate11'
-      }`}
+      } break-words`}
     >
       {selectedValue && selectedValue.label ? selectedValue.label : 'Select'}
     </span>
@@ -74,7 +92,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   return (
     <Listbox value={selectedValue} by="value" onChange={handleDropdownChange}>
       {({ open }) => (
-        <div className="relative">
+        <div className="relative max-w-full">
           <DropdownButton selectedValue={selectedValue} open={open} />
           <Transition
             as={Fragment}
@@ -82,7 +100,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute max-h-fit w-full z-10 overflow-auto rounded-b-xl bg-black px-3 pt-2 border-solid  border-slate6  border text-base focus:outline-none sm:text-sm">
+            <Listbox.Options className="absolute max-h-32 w-full z-10 overflow-auto rounded-b-xl bg-black px-3 pt-2 border-solid  border-slate6  border text-base focus:outline-none sm:text-sm">
               {items.map((option: DropdownItem) => (
                 <DropdownOption key={option.value} option={option} />
               ))}

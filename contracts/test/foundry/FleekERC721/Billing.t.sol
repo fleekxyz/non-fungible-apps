@@ -55,7 +55,8 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
             TestConstants.APP_COMMIT_HASH,
             TestConstants.APP_GIT_REPOSITORY,
             TestConstants.LOGO_0,
-            TestConstants.APP_COLOR
+            TestConstants.APP_COLOR,
+            TestConstants.APP_ACCESS_POINT_AUTO_APPROVAL_SETTINGS
         );
         assertEq(CuT.ownerOf(tokenId), deployer);
         assertEq(address(CuT).balance, mintPrice);
@@ -74,7 +75,8 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
             TestConstants.APP_COMMIT_HASH,
             TestConstants.APP_GIT_REPOSITORY,
             TestConstants.LOGO_0,
-            TestConstants.APP_COLOR
+            TestConstants.APP_COLOR,
+            TestConstants.APP_ACCESS_POINT_AUTO_APPROVAL_SETTINGS
         );
         assertEq(address(CuT).balance, 0);
     }
@@ -95,7 +97,8 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
             TestConstants.APP_COMMIT_HASH,
             TestConstants.APP_GIT_REPOSITORY,
             TestConstants.LOGO_0,
-            TestConstants.APP_COLOR
+            TestConstants.APP_COLOR,
+            TestConstants.APP_ACCESS_POINT_AUTO_APPROVAL_SETTINGS
         );
         assertEq(CuT.ownerOf(tokenId), deployer);
         assertEq(address(CuT).balance, value);

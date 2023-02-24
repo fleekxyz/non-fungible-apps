@@ -5,6 +5,7 @@ const { styled } = dripStitches;
 export abstract class FormStyles {
   static readonly Field = styled(Flex, {
     flexDirection: 'column',
+    maxWidth: '100%',
   });
 
   static readonly Label = styled('label', {

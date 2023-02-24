@@ -1,11 +1,9 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
-import { Fixtures, TestConstants } from './helpers';
+import { Fixtures, TestConstants, Errors } from './helpers';
 
 const { Billing, MintParams } = TestConstants;
-
-const MintError = 'RequiredBillingValue';
 
 describe('FleekERC721.Billing', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
@@ -24,6 +22,7 @@ describe('FleekERC721.Billing', () => {
       MintParams.gitRepository,
       MintParams.logo,
       MintParams.color,
+      MintParams.accessPointAutoApprovalSettings,
       { value }
     );
   };
@@ -51,20 +50,21 @@ describe('FleekERC721.Billing', () => {
   it('should allow mint with transfer', async () => {
     const { contract, owner } = fixture;
     await mint(mintPrice);
+    console.log('hit');
     expect(await contract.ownerOf(0)).to.equal(owner.address);
   });
 
   it('should not allow mint with empty value', async () => {
     const { contract } = fixture;
     await expect(mint())
-      .to.be.revertedWithCustomError(contract, MintError)
+      .to.be.revertedWithCustomError(contract, Errors.RequiredPayment)
       .withArgs(mintPrice);
   });
 
   it('should not allow mint with different value', async () => {
     const { contract } = fixture;
     await expect(mint(ethers.utils.parseEther('2')))
-      .to.be.revertedWithCustomError(contract, MintError)
+      .to.be.revertedWithCustomError(contract, Errors.RequiredPayment)
       .withArgs(mintPrice);
   });
 
@@ -77,14 +77,14 @@ describe('FleekERC721.Billing', () => {
   it('should not allow add access point with empty value', async () => {
     const { contract } = fixture;
     await expect(addAP())
-      .to.be.revertedWithCustomError(contract, MintError)
+      .to.be.revertedWithCustomError(contract, Errors.RequiredPayment)
       .withArgs(addAPPrice);
   });
 
   it('should not allow add access point with different value', async () => {
     const { contract } = fixture;
     await expect(addAP(ethers.utils.parseEther('2')))
-      .to.be.revertedWithCustomError(contract, MintError)
+      .to.be.revertedWithCustomError(contract, Errors.RequiredPayment)
       .withArgs(addAPPrice);
   });
 });

@@ -1,27 +1,34 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { Fixtures } from './helpers';
+import { before } from 'mocha';
+import { TestConstants, Fixtures } from '../helpers';
+const { AccessPointStatus } = TestConstants;
 
-describe('AccessPoints', () => {
+describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
   const DefaultAP = 'accesspoint.com';
 
   beforeEach(async () => {
     fixture = await loadFixture(Fixtures.withMint);
+    fixture.contract.setAccessPointAutoApproval(fixture.tokenId, true);
     fixture.contract.addAccessPoint(fixture.tokenId, DefaultAP);
   });
 
-  it('should add an AP', async () => {
+  it('should add an AP with approved status', async () => {
     const { contract, owner, tokenId } = fixture;
 
     await expect(contract.addAccessPoint(tokenId, 'random.com'))
-      .to.emit(contract, 'NewAccessPoint')
-      .withArgs('random.com', tokenId, owner.address);
+      .to.emit(contract, 'ChangeAccessPointStatus')
+      .withArgs(
+        'random.com',
+        tokenId,
+        AccessPointStatus.APPROVED,
+        owner.address
+      );
   });
 
   it('should return a AP json object', async () => {
     const { contract, owner, tokenId } = fixture;
-
     const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
 
@@ -31,6 +38,7 @@ describe('AccessPoints', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
+      status: AccessPointStatus.APPROVED,
     });
   });
 
@@ -56,6 +64,7 @@ describe('AccessPoints', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
+      status: AccessPointStatus.APPROVED,
     });
   });
 
@@ -75,6 +84,7 @@ describe('AccessPoints', () => {
       owner: owner.address.toLowerCase(),
       contentVerified: false,
       nameVerified: false,
+      status: AccessPointStatus.APPROVED,
     });
   });
 
@@ -91,6 +101,18 @@ describe('AccessPoints', () => {
     await expect(contract.removeAccessPoint(DefaultAP))
       .to.emit(contract, 'RemoveAccessPoint')
       .withArgs(DefaultAP, tokenId, owner.address);
+
+    const ap = await contract.getAccessPointJSON(DefaultAP);
+    const parsedAp = JSON.parse(ap);
+
+    expect(parsedAp).to.eql({
+      tokenId,
+      score: 0,
+      owner: owner.address.toLowerCase(),
+      contentVerified: false,
+      nameVerified: false,
+      status: AccessPointStatus.REMOVED,
+    });
   });
 
   it('should allow only AP owner to remove it', async () => {
@@ -161,5 +183,18 @@ describe('AccessPoints', () => {
     const parsedAp = JSON.parse(ap);
 
     expect(parsedAp.nameVerified).to.be.false;
+  });
+
+  it('should token owner be able to change the auto approval settings to off', async () => {
+    const { contract, tokenId } = fixture;
+
+    await contract.setAccessPointAutoApproval(tokenId, false);
+
+    await contract.addAccessPoint(tokenId, 'random.com');
+
+    const beforeAp = await contract.getAccessPointJSON('random.com');
+    const beforeParsedAp = JSON.parse(beforeAp);
+
+    expect(beforeParsedAp.status).to.be.eql(AccessPointStatus.DRAFT); //DRAFT STATUS
   });
 });

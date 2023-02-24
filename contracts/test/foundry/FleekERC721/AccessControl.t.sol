@@ -3,57 +3,55 @@
 pragma solidity ^0.8.17;
 
 import "./TestBase.sol";
-import {FleekAccessControl} from "contracts/FleekAccessControl.sol";
 import {FleekBilling} from "contracts/FleekBilling.sol";
+import "contracts/FleekAccessControl.sol";
 
-contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
+contract Test_FleekERC721_AccessControlAssertions is Test {
+    function expectRevertWithMustHaveAtLeastOneOwner() internal {
+        vm.expectRevert(abi.encodeWithSelector(MustHaveAtLeastOneOwner.selector));
+    }
+
+    function expectRevertWithRoleAlreadySet() internal {
+        vm.expectRevert(abi.encodeWithSelector(RoleAlreadySet.selector));
+    }
+}
+
+contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC721_AccessControlAssertions {
     uint256 internal tokenId;
     address internal collectionOwner = address(100);
-    address internal collectionController = address(200);
-    address internal tokenOwner = address(300);
-    address internal tokenController = address(400);
-    address internal anyAddress = address(500);
+    address internal tokenOwner = address(200);
+    address internal tokenController = address(300);
+    address internal anyAddress = address(400);
 
     function setUp() public {
         baseSetUp();
 
         // Set collectionOwner
-        CuT.grantCollectionRole(FleekAccessControl.Roles.Owner, collectionOwner);
-        // Set collectionController
-        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, collectionController);
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Owner, collectionOwner);
         // Mint to tokenOwner to set tokenOwner
         mintDefault(tokenOwner);
         // Set tokenController to minted token
         vm.prank(tokenOwner);
-        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, tokenController);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, tokenController);
     }
 
     function test_setUp() public {
         // Check collectionOwner
-        assertTrue(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, collectionOwner));
-        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, collectionOwner));
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, collectionOwner));
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, collectionOwner));
-        // Check collectionController
-        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, collectionController));
-        assertTrue(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, collectionController));
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, collectionController));
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, collectionController));
+        assertTrue(CuT.hasCollectionRole(FleekAccessControl.CollectionRoles.Owner, collectionOwner));
+        assertFalse(CuT.ownerOf(tokenId) == collectionOwner);
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, collectionOwner));
         // Check tokenOwner
-        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, tokenOwner));
-        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, tokenOwner));
-        assertTrue(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, tokenOwner));
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, tokenOwner));
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.CollectionRoles.Owner, tokenOwner));
+        assertTrue(CuT.ownerOf(tokenId) == tokenOwner);
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, tokenOwner));
         // Check tokenController
-        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, tokenController));
-        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, tokenController));
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, tokenController));
-        assertTrue(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, tokenController));
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.CollectionRoles.Owner, tokenController));
+        assertFalse(CuT.ownerOf(tokenId) == tokenController);
+        assertTrue(CuT.hasTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, tokenController));
         // Check anyAddress
-        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Owner, anyAddress));
-        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, anyAddress));
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Owner, anyAddress));
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, anyAddress));
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.CollectionRoles.Owner, anyAddress));
+        assertFalse(CuT.ownerOf(tokenId) == anyAddress);
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, anyAddress));
     }
 
     function test_grantAndRevokeCollectionRole() public {
@@ -61,42 +59,34 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // CollectionOwner
         vm.startPrank(collectionOwner);
-        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
-        assertTrue(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, randomAddress));
-        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
-        assertFalse(CuT.hasCollectionRole(FleekAccessControl.Roles.Controller, randomAddress));
-        vm.stopPrank();
-
-        // CollectionController
-        vm.startPrank(collectionController);
-        expectRevertWithCollectionRole();
-        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
-        expectRevertWithCollectionRole();
-        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress);
+        assertTrue(CuT.hasCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress));
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress);
+        assertFalse(CuT.hasCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress));
         vm.stopPrank();
 
         // TokenOwner
         vm.startPrank(tokenOwner);
-        expectRevertWithCollectionRole();
-        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
-        expectRevertWithCollectionRole();
-        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress);
         vm.stopPrank();
 
         // TokenController
         vm.startPrank(tokenController);
-        expectRevertWithCollectionRole();
-        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
-        expectRevertWithCollectionRole();
-        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress);
         vm.stopPrank();
 
         // AnyAddress
         vm.startPrank(anyAddress);
-        expectRevertWithCollectionRole();
-        CuT.grantCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
-        expectRevertWithCollectionRole();
-        CuT.revokeCollectionRole(FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, randomAddress);
         vm.stopPrank();
     }
 
@@ -105,42 +95,34 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // CollectionOwner
         vm.startPrank(collectionOwner);
-        expectRevertWithTokenRole();
-        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
-        expectRevertWithTokenRole();
-        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
-        vm.stopPrank();
-
-        // CollectionController
-        vm.startPrank(collectionController);
-        expectRevertWithTokenRole();
-        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
-        expectRevertWithTokenRole();
-        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
         vm.stopPrank();
 
         // TokenOwner
         vm.startPrank(tokenOwner);
-        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
-        assertTrue(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress));
-        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
-        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress));
+        CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
+        assertTrue(CuT.hasTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress));
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
+        assertFalse(CuT.hasTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress));
         vm.stopPrank();
 
         // TokenController
         vm.startPrank(tokenController);
-        expectRevertWithTokenRole();
-        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
-        expectRevertWithTokenRole();
-        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
         vm.stopPrank();
 
         // AnyAddress
         vm.startPrank(anyAddress);
-        expectRevertWithTokenRole();
-        CuT.grantTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
-        expectRevertWithTokenRole();
-        CuT.revokeTokenRole(tokenId, FleekAccessControl.Roles.Controller, randomAddress);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
         vm.stopPrank();
     }
 
@@ -152,27 +134,21 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
         mintDefault(randomAddress);
         vm.stopPrank();
 
-        // CollectionController
-        vm.startPrank(collectionController);
-        expectRevertWithCollectionRole();
-        mintDefault(randomAddress);
-        vm.stopPrank();
-
         // TokenOwner
         vm.startPrank(tokenOwner);
-        expectRevertWithCollectionRole();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
         mintDefault(randomAddress);
         vm.stopPrank();
 
         // TokenController
         vm.startPrank(tokenController);
-        expectRevertWithCollectionRole();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
         mintDefault(randomAddress);
         vm.stopPrank();
 
         // AnyAddress
         vm.startPrank(anyAddress);
-        expectRevertWithCollectionRole();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
         mintDefault(randomAddress);
         vm.stopPrank();
     }
@@ -188,12 +164,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // ColletionOwner
         vm.prank(collectionOwner);
-        expectRevertWithTokenRole();
-        CuT.setTokenExternalURL(tokenId, externalURL);
-
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenExternalURL(tokenId, externalURL);
 
         // TokenOwner
@@ -206,7 +177,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenExternalURL(tokenId, externalURL);
     }
 
@@ -215,12 +186,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // ColletionOwner
         vm.prank(collectionOwner);
-        expectRevertWithTokenRole();
-        CuT.setTokenENS(tokenId, ens);
-
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenENS(tokenId, ens);
 
         // TokenOwner
@@ -233,7 +199,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenENS(tokenId, ens);
     }
 
@@ -242,12 +208,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // ColletionOwner
         vm.prank(collectionOwner);
-        expectRevertWithTokenRole();
-        CuT.setTokenName(tokenId, name);
-
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenName(tokenId, name);
 
         // TokenOwner
@@ -260,7 +221,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenName(tokenId, name);
     }
 
@@ -269,12 +230,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // ColletionOwner
         vm.prank(collectionOwner);
-        expectRevertWithTokenRole();
-        CuT.setTokenDescription(tokenId, description);
-
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenDescription(tokenId, description);
 
         // TokenOwner
@@ -287,7 +243,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenDescription(tokenId, description);
     }
 
@@ -296,12 +252,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // ColletionOwner
         vm.prank(collectionOwner);
-        expectRevertWithTokenRole();
-        CuT.setTokenLogo(tokenId, logo);
-
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenLogo(tokenId, logo);
 
         // TokenOwner
@@ -314,7 +265,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenLogo(tokenId, logo);
     }
 
@@ -323,12 +274,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // ColletionOwner
         vm.prank(collectionOwner);
-        expectRevertWithTokenRole();
-        CuT.setTokenColor(tokenId, color);
-
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenColor(tokenId, color);
 
         // TokenOwner
@@ -341,7 +287,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenColor(tokenId, color);
     }
 
@@ -351,12 +297,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // ColletionOwner
         vm.prank(collectionOwner);
-        expectRevertWithTokenRole();
-        CuT.setTokenLogoAndColor(tokenId, logo, color);
-
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenLogoAndColor(tokenId, logo, color);
 
         // TokenOwner
@@ -369,7 +310,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenLogoAndColor(tokenId, logo, color);
     }
 
@@ -379,12 +320,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // ColletionOwner
         vm.prank(collectionOwner);
-        expectRevertWithTokenRole();
-        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
-
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenBuild(tokenId, commitHash, gitRepository);
 
         // TokenOwner
@@ -397,29 +333,24 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithTokenRole();
+        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
         CuT.setTokenBuild(tokenId, commitHash, gitRepository);
     }
 
-    function test_testBurn() public {
+    function test_burn() public {
         // ColletionOwner
         vm.prank(collectionOwner);
-        expectRevertWithTokenRole();
-        CuT.burn(tokenId);
-
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithTokenRole();
+        expectRevertWithMustBeTokenOwner(tokenId);
         CuT.burn(tokenId);
 
         // TokenController
         vm.prank(tokenController);
-        expectRevertWithTokenRole();
+        expectRevertWithMustBeTokenOwner(tokenId);
         CuT.burn(tokenId);
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithTokenRole();
+        expectRevertWithMustBeTokenOwner(tokenId);
         CuT.burn(tokenId);
 
         // TokenOwner
@@ -432,24 +363,19 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
         vm.prank(collectionOwner);
         CuT.setBilling(FleekBilling.Billing.Mint, 1 ether);
 
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithCollectionRole();
-        CuT.setBilling(FleekBilling.Billing.Mint, 2 ether);
-
         // TokenOwner
         vm.prank(tokenOwner);
-        expectRevertWithCollectionRole();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
         CuT.setBilling(FleekBilling.Billing.Mint, 2 ether);
 
         // TokenController
         vm.prank(tokenController);
-        expectRevertWithCollectionRole();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
         CuT.setBilling(FleekBilling.Billing.Mint, 2 ether);
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithCollectionRole();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
         CuT.setBilling(FleekBilling.Billing.Mint, 2 ether);
     }
 
@@ -459,24 +385,19 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
         vm.prank(collectionOwner);
         CuT.withdraw();
 
-        // CollectionController
-        vm.prank(collectionController);
-        expectRevertWithCollectionRole();
-        CuT.withdraw();
-
         // TokenOwner
         vm.prank(tokenOwner);
-        expectRevertWithCollectionRole();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
         CuT.withdraw();
 
         // TokenController
         vm.prank(tokenController);
-        expectRevertWithCollectionRole();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
         CuT.withdraw();
 
         // AnyAddress
         vm.prank(anyAddress);
-        expectRevertWithCollectionRole();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
         CuT.withdraw();
     }
 
@@ -486,4 +407,81 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base {
     receive() external payable {}
 
     fallback() external payable {}
+
+    function test_pauseAndUnpause() public {
+        // ColletionOwner
+        vm.startPrank(collectionOwner);
+        CuT.pause();
+        CuT.unpause();
+        vm.stopPrank();
+
+        // TokenOwner
+        vm.startPrank(tokenOwner);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.pause();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.unpause();
+        vm.stopPrank();
+
+        // TokenController
+        vm.startPrank(tokenController);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.pause();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.unpause();
+        vm.stopPrank();
+
+        // AnyAddress
+        vm.startPrank(anyAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.pause();
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.unpause();
+        vm.stopPrank();
+    }
+
+    function test_setPausable() public {
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        CuT.setPausable(false);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.setPausable(true);
+
+        // TokenController
+        vm.prank(tokenController);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.setPausable(true);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.setPausable(true);
+    }
+
+    function test_cannotHaveLessThanOneCollectionOwner() public {
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, collectionOwner);
+        expectRevertWithMustHaveAtLeastOneOwner();
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, deployer);
+    }
+
+    function test_cannotGrantRoleAlreadyGaranted() public {
+        expectRevertWithRoleAlreadySet();
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Owner, collectionOwner);
+
+        expectRevertWithRoleAlreadySet();
+        vm.prank(tokenOwner);
+        CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, tokenController);
+    }
+
+    function test_cannotRevokeRoleAlreadyRevoked() public {
+        expectRevertWithRoleAlreadySet();
+        CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, anyAddress);
+
+        expectRevertWithRoleAlreadySet();
+        vm.prank(tokenOwner);
+        CuT.revokeTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, anyAddress);
+    }
 }
