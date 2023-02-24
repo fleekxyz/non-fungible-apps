@@ -106,10 +106,14 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
-    function initialize(string memory _name, string memory _symbol) public initializer {
+    function initialize(
+        string memory _name,
+        string memory _symbol,
+        uint256[] memory initialBillings
+    ) public initializer {
         __ERC721_init(_name, _symbol);
         __FleekAccessControl_init();
-        __FleekBilling_init();
+        __FleekBilling_init(initialBillings);
         __FleekPausable_init();
     }
 

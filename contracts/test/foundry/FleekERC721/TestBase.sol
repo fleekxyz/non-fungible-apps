@@ -46,7 +46,7 @@ abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
 
     function baseSetUp() internal {
         CuT = new FleekERC721();
-        CuT.initialize("Test Contract", "FLKAPS");
+        CuT.initialize("Test Contract", "FLKAPS", new uint256[](0));
         deployer = address(this);
     }
 

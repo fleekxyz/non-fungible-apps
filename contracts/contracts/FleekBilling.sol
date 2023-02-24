@@ -33,9 +33,10 @@ abstract contract FleekBilling is Initializable {
     /**
      * @dev Initializes the contract by setting default billing values.
      */
-    function __FleekBilling_init() internal onlyInitializing {
-        _setBilling(Billing.Mint, 0);
-        _setBilling(Billing.AddAccessPoint, 0);
+    function __FleekBilling_init(uint256[] memory initialBillings) internal onlyInitializing {
+        for (uint256 i = 0; i < initialBillings.length; i++) {
+            _setBilling(Billing(i), initialBillings[i]);
+        }
     }
 
     /**
