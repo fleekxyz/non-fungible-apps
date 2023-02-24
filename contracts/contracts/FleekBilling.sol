@@ -4,7 +4,7 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-error RequiredBillingValue(uint value);
+error RequiredPayment(uint requiredValue);
 
 abstract contract FleekBilling is Initializable {
     /**
@@ -54,11 +54,11 @@ abstract contract FleekBilling is Initializable {
     }
 
     /**
-     * @dev Internal function to require a billing value.
+     * @dev Internal function to require a payment value.
      */
-    function _requireBilling(Billing key) internal {
+    function _requirePayment(Billing key) internal {
         uint256 requiredValue = _billings[key];
-        if (msg.value != _billings[key]) revert RequiredBillingValue(requiredValue);
+        if (msg.value != _billings[key]) revert RequiredPayment(requiredValue);
     }
 
     /**

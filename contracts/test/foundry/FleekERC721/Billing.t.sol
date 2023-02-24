@@ -11,8 +11,8 @@ contract Test_FleekERC721_BillingAssertions is Test {
     event BillingChanged(FleekBilling.Billing key, uint256 price);
     event Withdrawn(uint256 value, address indexed byAddress);
 
-    function expectRevertWithRequiredBillingValue(uint256 value) public {
-        vm.expectRevert(abi.encodeWithSelector(RequiredBillingValue.selector, value));
+    function expectRevertWithRequiredPayment(uint256 value) public {
+        vm.expectRevert(abi.encodeWithSelector(RequiredPayment.selector, value));
     }
 
     function expectEmitBillingChanged(FleekBilling.Billing key, uint256 price) public {
@@ -64,7 +64,7 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
     function testFuzz_cannotMintWithWrongValue(uint256 value) public {
         vm.assume(value != mintPrice);
         vm.deal(deployer, value);
-        expectRevertWithRequiredBillingValue(mintPrice);
+        expectRevertWithRequiredPayment(mintPrice);
         CuT.mint{value: value}(
             deployer,
             TestConstants.APP_NAME,
@@ -79,7 +79,7 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
         assertEq(address(CuT).balance, 0);
     }
 
-    function testFuzz_shouldChnageMintBillingValue(uint256 value) public {
+    function testFuzz_shouldChangeMintBillingValue(uint256 value) public {
         expectEmitBillingChanged(FleekBilling.Billing.Mint, value);
         CuT.setBilling(FleekBilling.Billing.Mint, value);
 
@@ -110,7 +110,7 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
     function testFuzz_cannotAddAccessPointWithWrongValue(uint256 value) public {
         vm.assume(value != addAPPrice);
         vm.deal(deployer, value);
-        expectRevertWithRequiredBillingValue(addAPPrice);
+        expectRevertWithRequiredPayment(addAPPrice);
         CuT.addAccessPoint{value: value}(tokenId, "accesspoint.com");
         assertEq(address(CuT).balance, 0);
     }
@@ -127,14 +127,14 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
         assertEq(address(CuT).balance, value);
     }
 
-    function testFuzz_shouldWithdrawAnyContractFounds(uint128 value) public {
+    function testFuzz_shouldWithdrawAnyContractFunds(uint128 value) public {
         uint256 balanceBefore = address(this).balance;
         vm.deal(address(CuT), value);
         CuT.withdraw();
         assertEq(address(this).balance, value + balanceBefore);
     }
 
-    function testFuzz_shouldWithdrawAllContractFoundsAfterPaybaleCall(uint8 iterations) public {
+    function testFuzz_shouldWithdrawAllContractFundsAfterPaybaleCall(uint8 iterations) public {
         // this test is going to add access points up to 256 times and then withdraw all funds
         uint256 balanceBefore = address(this).balance;
         address randomAddress = address(1);

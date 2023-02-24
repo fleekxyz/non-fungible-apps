@@ -117,7 +117,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         string memory gitRepository,
         string memory logo,
         uint24 color
-    ) public payable requireBilling(Billing.Mint) requireCollectionRole(Roles.Owner) returns (uint256) {
+    ) public payable requirePayment(Billing.Mint) requireCollectionRole(Roles.Owner) returns (uint256) {
         uint256 tokenId = _appIds.current();
         _mint(to, tokenId);
         _appIds.increment();
@@ -376,7 +376,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function addAccessPoint(
         uint256 tokenId,
         string memory apName
-    ) public payable requireBilling(Billing.AddAccessPoint) {
+    ) public payable requirePayment(Billing.AddAccessPoint) {
         _requireMinted(tokenId);
         require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
 
@@ -546,8 +546,8 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     /**
      * @dev Modifier to require billing with a given key.
      */
-    modifier requireBilling(Billing key) {
-        _requireBilling(key);
+    modifier requirePayment(Billing key) {
+        _requirePayment(key);
         _;
     }
 
