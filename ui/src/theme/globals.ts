@@ -4,7 +4,6 @@ export const themeGlobals = globalCss({
   'html, body, #root': {
     height: '100%',
     padding: 0,
-    margin: '25px 50px',
     color: '#ECEDEE',
     backgroundColor: 'black',
 

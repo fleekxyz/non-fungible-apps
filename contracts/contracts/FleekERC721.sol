@@ -158,7 +158,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         string memory gitRepository,
         string memory logo,
         uint24 color,
-        bool accessPointAutoApproval // defaults to `false` if not specifically passed as `true`
+        bool accessPointAutoApproval
     ) public payable requireCollectionRole(CollectionRoles.Owner) returns (uint256) {
         uint256 tokenId = _appIds.current();
         _mint(to, tokenId);
@@ -460,7 +460,14 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
 
         if (_apps[tokenId].accessPointAutoApproval) {
             // Auto Approval is on.
-            _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender, AccessPointCreationStatus.APPROVED);
+            _accessPoints[apName] = AccessPoint(
+                tokenId,
+                0,
+                false,
+                false,
+                msg.sender,
+                AccessPointCreationStatus.APPROVED
+            );
 
             emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
         } else {
