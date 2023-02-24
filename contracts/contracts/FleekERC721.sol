@@ -36,15 +36,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, bool value, address indexed triggeredBy);
+
 
     event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
-
-    event ChangeAccessPointAutoApproval(
-        uint256 indexed token,
-        bool indexed value,
-        address indexed triggeredBy
-    );
 
     event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
 
@@ -283,7 +279,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     /**
      * @dev Updates the `accessPointAutoApproval` settings on minted `tokenId`.
      *
-     * May emit a {ChangeAccessPointAutoApproval} event.
+     * May emit a {MetadataUpdate} event.
      *
      * Requirements:
      *
@@ -297,7 +293,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     ) public virtual requireTokenOwner(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].accessPointAutoApproval = _apAutoApproval;
-        emit ChangeAccessPointAutoApproval(tokenId, _apAutoApproval, msg.sender);
+        emit MetadataUpdate(tokenId, 'accessPointAutoApproval', _apAutoApproval, msg.sender);
     }
 
     /**

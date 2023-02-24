@@ -44,6 +44,7 @@ type MetadataUpdate @entity(immutable: true) {
   stringValue: String
   uint24Value: Int
   doubleStringValue: [String!]!
+  booleanValue: Boolean
   byAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
