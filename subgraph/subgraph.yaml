@@ -5,9 +5,9 @@ dataSources:
     name: FleekNFA
     network: mumbai
     source:
-      address: "0x11cd77eac1a0883de9435b5586474903a2a084cd" # <- Proxy Contract | Current implementation contract: 0x113169680A417e4dB4AD11832486FF317fB4CB36
+      address: "0x550Ee47Fa9E0B81c1b9C394FeE62Fe699a955519" # <- Proxy Contract | Current implementation contract: 0x9e4a318c788e0097a24146fe7041a0cd93939d56
       abi: FleekNFA
-      startBlock: 32071579
+      startBlock: 32373064
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
