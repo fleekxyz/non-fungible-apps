@@ -3,7 +3,6 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./FleekAccessControl.sol";
@@ -15,7 +14,6 @@ error ThereIsNoTokenMinted();
 
 contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, FleekPausable {
     using Strings for uint256;
-    using Counters for Counters.Counter;
     using FleekStrings for FleekERC721.App;
     using FleekStrings for FleekERC721.AccessPoint;
     using FleekStrings for string;
@@ -116,7 +114,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         AccessPointCreationStatus status;
     }
 
-    Counters.Counter private _appIds;
+    uint256 private _appIds;
     mapping(uint256 => App) private _apps;
     mapping(string => AccessPoint) private _accessPoints;
 
@@ -126,6 +124,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function initialize(string memory _name, string memory _symbol) public initializer {
         __ERC721_init(_name, _symbol);
         __FleekAccessControl_init();
+        _appIds = 0;
         __FleekPausable_init();
     }
 
@@ -160,9 +159,10 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         uint24 color,
         bool accessPointAutoApproval
     ) public payable requireCollectionRole(CollectionRoles.Owner) returns (uint256) {
-        uint256 tokenId = _appIds.current();
+        uint256 tokenId = _appIds;
         _mint(to, tokenId);
-        _appIds.increment();
+        
+        _appIds += 1;
 
         App storage app = _apps[tokenId];
         app.name = name;
@@ -176,7 +176,6 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
         app.builds[0] = Build(commitHash, gitRepository);
-
         emit NewMint(
             tokenId,
             name,
@@ -239,7 +238,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * @dev Returns the last minted tokenId.
      */
     function getLastTokenId() public view virtual returns (uint256) {
-        uint256 current = _appIds.current();
+        uint256 current = _appIds;
         if (current == 0) revert ThereIsNoTokenMinted();
         return current - 1;
     }
