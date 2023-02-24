@@ -4,13 +4,9 @@ import {
   ApprovalForAll as ApprovalForAllEvent,
   CollectionRoleGranted as CollectionRoleGrantedEvent,
   CollectionRoleRevoked as CollectionRoleRevokedEvent,
-  FleekNFA,
-  NewBuild as NewBuildEvent,
-  NewTokenDescription as NewTokenDescriptionEvent,
-  NewTokenENS as NewTokenENSEvent,
-  NewTokenExternalURL as NewTokenExternalURLEvent,
-  NewTokenLogo as NewTokenLogoEvent,
-  NewTokenName as NewTokenNameEvent,
+  MetadataUpdate as MetadataUpdateEvent,
+  MetadataUpdate1 as MetadataUpdateEvent1,
+  MetadataUpdate2 as MetadataUpdateEvent2,
   TokenRoleGranted as TokenRoleGrantedEvent,
   TokenRoleRevoked as TokenRoleRevokedEvent,
   Transfer as TransferEvent,
@@ -25,13 +21,8 @@ import {
   CollectionRoleRevoked,
   Controller,
   GitRepository as GitRepositoryEntity,
-  NewBuild,
+  MetadataUpdate,
   NewMint,
-  NewTokenDescription,
-  NewTokenENS,
-  NewTokenExternalURL,
-  NewTokenLogo,
-  NewTokenName,
   Owner,
   Token,
   TokenRoleGranted,
@@ -155,7 +146,6 @@ export function handleCollectionRoleRevoked(
     store.remove('CollectionOwner', event.params.toAddress.toHexString());
   }
 }
-
 export function handleNewMint(event: NewMintEvent): void {
   let newMintEntity = new NewMint(
     event.transaction.hash.concatI32(event.logIndex.toI32())
@@ -169,8 +159,8 @@ export function handleNewMint(event: NewMintEvent): void {
   let commitHash = event.params.commitHash;
   let logo = event.params.logo;
   let color = event.params.color;
-  let accessPointAutoApprovalSettings =
-    event.params.accessPointAutoApprovalSettings;
+  let accessPointAutoApproval =
+    event.params.accessPointAutoApproval;
   let tokenId = event.params.tokenId;
   let ownerAddress = event.params.owner;
 
@@ -183,8 +173,8 @@ export function handleNewMint(event: NewMintEvent): void {
   newMintEntity.gitRepository = gitRepository;
   newMintEntity.logo = logo;
   newMintEntity.color = color;
-  newMintEntity.accessPointAutoApprovalSettings =
-    accessPointAutoApprovalSettings;
+  newMintEntity.accessPointAutoApproval =
+    accessPointAutoApproval;
   newMintEntity.triggeredBy = event.params.minter;
   newMintEntity.tokenOwner = ownerAddress;
   newMintEntity.blockNumber = event.block.number;
@@ -224,7 +214,7 @@ export function handleNewMint(event: NewMintEvent): void {
   token.commitHash = commitHash;
   token.logo = logo;
   token.color = color;
-  token.accessPointAutoApprovalSettings = accessPointAutoApprovalSettings;
+  token.accessPointAutoApproval = accessPointAutoApproval;
   token.owner = ownerAddress;
   token.mintTransaction = event.transaction.hash.concatI32(
     event.logIndex.toI32()
@@ -239,98 +229,108 @@ export function handleNewMint(event: NewMintEvent): void {
   token.save();
 }
 
-export function handleNewBuild(event: NewBuildEvent): void {
-  let entity = new NewBuild(
+export function handleMetadataUpdateWithStringValue(event: MetadataUpdateEvent): void {
+  /** 
+   * Metadata handled here:
+   * setTokenExternalURL
+   * setTokenENS
+   * setTokenName
+   * setTokenDescription
+   * setTokenLogo
+   * */
+  let entity = new MetadataUpdate(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.tokenId;
-  entity.commitHash = event.params.commitHash.toString();
-  entity.triggeredBy = event.params.triggeredBy;
 
+  entity.tokenId = event.params._tokenId;
+  entity.key = event.params.key;
+  entity.stringValue = event.params.value;
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  // UPDATE TOKEN
+  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
+
+  if (token) {
+    if (event.params.key == 'externalURL') {
+      token.externalURL = event.params.value;
+    } else if (event.params.key == 'ENS') {
+      token.ENS = event.params.value;
+    } else if (event.params.key == 'name') {
+      token.name = event.params.value;
+    } else if (event.params.key == 'description') {
+      token.description = event.params.value;
+    } else {
+      // logo
+      token.logo = event.params.value;
+    }   
+    token.save();
+  }
 }
 
-export function handleNewTokenDescription(
-  event: NewTokenDescriptionEvent
-): void {
-  let entity = new NewTokenDescription(
+export function handleMetadataUpdateWithDoubleStringValue(event: MetadataUpdateEvent2): void {
+  /**
+   * setTokenBuild
+   */
+  let entity = new MetadataUpdate(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.tokenId;
-  entity.description = event.params.description.toString();
-  entity.triggeredBy = event.params.triggeredBy;
 
+  entity.key = event.params.key;
+  entity.tokenId = event.params._tokenId;
+  entity.doubleStringValue = event.params.value;
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  // UPDATE TOKEN
+  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
+
+  if (token) {
+    if (event.params.key == 'build') {
+      let gitRepositoryEntity = GitRepositoryEntity.load(event.params.value[1]);
+      if (!gitRepositoryEntity) {
+        // Create a new gitRepository entity
+        gitRepositoryEntity = new GitRepositoryEntity(event.params.value[1]);
+      }
+      token.commitHash = event.params.value[0];
+      token.gitRepository = event.params.value[1];
+      token.save();
+      gitRepositoryEntity.save();
+    }  
+  }
 }
 
-export function handleNewTokenENS(event: NewTokenENSEvent): void {
-  let entity = new NewTokenENS(
+export function handleMetadataUpdateWithIntValue(event: MetadataUpdateEvent1): void {
+  /**
+   * setTokenColor
+   */
+  let entity = new MetadataUpdate(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.token = event.params.tokenId;
-  entity.ENS = event.params.ENS.toString();
-  entity.triggeredBy = event.params.triggeredBy;
 
+  entity.key = event.params.key;
+  entity.tokenId = event.params._tokenId;
+  entity.uint24Value = event.params.value;
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
-}
 
-export function handleNewTokenExternalURL(
-  event: NewTokenExternalURLEvent
-): void {
-  let entity = new NewTokenExternalURL(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.token = event.params.tokenId;
-  entity.externalURL = event.params.externalURL.toString();
-  entity.triggeredBy = event.params.triggeredBy;
+  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
 
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
-}
-
-export function handleNewTokenLogo(event: NewTokenLogoEvent): void {
-  let entity = new NewTokenLogo(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.token = event.params.tokenId;
-  entity.logo = event.params.logo.toString();
-  entity.triggeredBy = event.params.triggeredBy;
-
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
-}
-
-export function handleNewTokenName(event: NewTokenNameEvent): void {
-  let entity = new NewTokenName(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.token = event.params.tokenId;
-  entity.name = event.params.name.toString();
-  entity.triggeredBy = event.params.triggeredBy;
-
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
+  if (token) {
+    if (event.params.key == 'color') {
+      token.color = event.params.value;
+    }
+    token.save();
+  }
 }
 
 export function handleTokenRoleGranted(event: TokenRoleGrantedEvent): void {

@@ -67,6 +67,7 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base, APConstants {
     function test_increaseAccessPointScore() public {
         string memory accessPointName = "accesspoint.com";
         CuT.addAccessPoint(tokenId, accessPointName);
+
         APConstants.assertAccessPointJSON(
             accessPointName,
             "0",
