@@ -52,6 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vitejs/plugin-react": "2.2.0",
+    "alchemy-sdk": "^2.4.3",
     "autoprefixer": "^10.4.13",
     "babel-loader": "^8.3.0",
     "buffer": "^6.0.3",

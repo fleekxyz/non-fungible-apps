@@ -1,6 +1,15 @@
 import { JsonRpcProvider, Networkish } from '@ethersproject/providers';
 import { ethers } from 'ethers';
 import * as Contracts from './contracts';
+import { env } from '@/constants';
+import { Alchemy, Network } from 'alchemy-sdk';
+
+const config = {
+  apiKey: env.alchemy.id,
+  network: Network.ETH_MAINNET,
+};
+
+const alchemy = new Alchemy(config);
 
 export const Ethereum: Ethereum.Core = {
   defaultNetwork: 'https://rpc-mumbai.maticvigil.com', // TODO: make it environment variable
@@ -20,6 +29,16 @@ export const Ethereum: Ethereum.Core = {
 
     return new ethers.Contract(contract.address, contract.abi, provider);
   },
+
+  getEnsName(address) {
+    return alchemy.nft
+      .getNftsForOwner(address, {
+        contractAddresses: [env.ensContractAddress],
+      })
+      .then((ensList) => {
+        return ensList.ownedNfts.map((nft) => nft.title);
+      });
+  },
 };
 
 export namespace Ethereum {
@@ -36,5 +55,7 @@ export namespace Ethereum {
       contractName: keyof typeof Contracts,
       providerName?: Providers
     ) => ethers.Contract;
+
+    getEnsName: (address: string) => Promise<string[]>;
   };
 }

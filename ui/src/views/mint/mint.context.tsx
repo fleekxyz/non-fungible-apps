@@ -13,7 +13,7 @@ export type MintContext = {
   appDescription: string;
   appLogo: string;
   logoColor: string;
-  ens: DropdownItem;
+  ens: ComboboxItem;
   domain: string;
   verifyNFA: boolean;
   sucessMint: boolean | undefined;
@@ -26,7 +26,7 @@ export type MintContext = {
   setAppDescription: (description: string) => void;
   setAppLogo: (logo: string) => void;
   setLogoColor: (color: string) => void;
-  setEns: (ens: DropdownItem) => void;
+  setEns: (ens: ComboboxItem) => void;
   setDomain: (domain: string) => void;
   setVerifyNFA: (verify: boolean) => void;
   setSucessMint: (sucess: boolean) => void;
@@ -56,7 +56,7 @@ export abstract class Mint {
     const [appDescription, setAppDescription] = useState('');
     const [appLogo, setAppLogo] = useState('');
     const [logoColor, setLogoColor] = useState('');
-    const [ens, setEns] = useState({} as DropdownItem);
+    const [ens, setEns] = useState({} as ComboboxItem);
     const [domain, setDomain] = useState('');
     const [verifyNFA, setVerifyNFA] = useState(true);
 

@@ -3,6 +3,7 @@ export const env = Object.freeze({
     id: import.meta.env.VITE_ALCHEMY_API_KEY || '',
     appName: import.meta.env.VITE_ALCHEMY_APP_NAME || '',
   },
+  ensContractAddress: import.meta.env.VITE_ENS_ADDRESS || '',
   firebase: {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
