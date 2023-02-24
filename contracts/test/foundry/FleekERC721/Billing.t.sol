@@ -137,7 +137,7 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
         assertEq(address(this).balance, value + balanceBefore);
     }
 
-    function testFuzz_shouldWithdrawAllContractFundsAfterPaybaleCall(uint8 iterations) public {
+    function testFuzz_shouldWithdrawAllContractFundsAfterPayableCall(uint8 iterations) public {
         // this test is going to add access points up to 256 times and then withdraw all funds
         uint256 balanceBefore = address(this).balance;
         address randomAddress = address(1);
