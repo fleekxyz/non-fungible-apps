@@ -8,17 +8,28 @@ import {
   VerifyNFAField,
 } from './fields';
 import { MintCardHeader } from '../mint-card';
-import { useAccount } from 'wagmi';
+import { validateEnsField } from './form.validations';
+import { useState } from 'react';
 
 export const FormStep = () => {
-  const { address } = useAccount();
   const { prevStep, nextStep } = Stepper.useContext();
-  const { appName, appDescription, domain } = Mint.useContext();
+  const { appName, appDescription, domain, ens, setEnsError } =
+    Mint.useContext();
+  const [loading, setLoading] = useState(false);
 
-  //TODO remove once it's integrated with mint function
-  console.log('address', address);
   const handlePrevStep = () => {
     prevStep();
+  };
+
+  const handleNextStep = async () => {
+    //validate fields
+    setLoading(true);
+    if (ens !== '') {
+      const isValid = await validateEnsField(ens, setEnsError);
+      setLoading(false);
+      if (!isValid) return;
+    }
+    nextStep();
   };
 
   return (
@@ -41,7 +52,8 @@ export const FormStep = () => {
             disabled={!appName || !appDescription || !domain}
             colorScheme="blue"
             variant="solid"
-            onClick={nextStep}
+            onClick={handleNextStep}
+            isLoading={loading}
           >
             Continue
           </Button>

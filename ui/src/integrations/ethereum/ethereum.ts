@@ -39,6 +39,17 @@ export const Ethereum: Ethereum.Core = {
         return ensList.ownedNfts.map((nft) => nft.title);
       });
   },
+
+  async validateEnsName(name) {
+    const provider = new ethers.providers.JsonRpcProvider(
+      'https://eth.llamarpc.com'
+    );
+
+    const isValid = await provider.resolveName(name);
+
+    if (isValid === null) return false;
+    return true;
+  },
 };
 
 export namespace Ethereum {
@@ -57,5 +68,7 @@ export namespace Ethereum {
     ) => ethers.Contract;
 
     getEnsName: (address: string) => Promise<string[]>;
+
+    validateEnsName: (name: string) => Promise<boolean>;
   };
 }

@@ -1,34 +1,22 @@
-import { Combobox, Dropdown, DropdownItem, Form } from '@/components';
-import { useAppDispatch } from '@/store';
-import { ensActions, useEnsStore } from '@/store/features/ens/ens-slice';
+import { Form } from '@/components';
 import { Mint } from '@/views/mint/mint.context';
-import { useAccount } from 'wagmi';
 
 export const EnsField = () => {
-  const { ens, setEns } = Mint.useContext();
-  const { state, ensNames } = useEnsStore();
-  const dispatch = useAppDispatch();
-  const { address } = useAccount();
+  const { ens, ensError, setEns } = Mint.useContext();
 
-  if (state === 'idle' && address) {
-    dispatch(ensActions.fetchEnsNamesThunk(address));
-  }
-
-  const handleEnsChange = (item: DropdownItem) => {
-    setEns(item);
+  const handleEnsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEns(event.target.value);
   };
 
   return (
     <Form.Field css={{ flex: 1 }}>
       <Form.Label>ENS</Form.Label>
-      <Combobox
-        items={ensNames.map((ens) => ({
-          label: ens,
-          value: ens,
-        }))}
-        selectedValue={ens}
+      <Form.Input
+        value={ens}
         onChange={handleEnsChange}
+        aria-invalid={!!ensError}
       />
+      {ensError && <Form.Error>{ensError}</Form.Error>}
     </Form.Field>
   );
 };

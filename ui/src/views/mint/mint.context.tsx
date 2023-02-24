@@ -13,10 +13,11 @@ export type MintContext = {
   appDescription: string;
   appLogo: string;
   logoColor: string;
-  ens: ComboboxItem;
+  ens: string;
   domain: string;
   verifyNFA: boolean;
   sucessMint: boolean | undefined;
+  ensError: string;
   setGithubStep: (step: number) => void;
   setSelectedUserOrg: (userOrg: ComboboxItem) => void;
   setRepositoryName: (repo: Repository) => void;
@@ -26,10 +27,11 @@ export type MintContext = {
   setAppDescription: (description: string) => void;
   setAppLogo: (logo: string) => void;
   setLogoColor: (color: string) => void;
-  setEns: (ens: ComboboxItem) => void;
+  setEns: (ens: string) => void;
   setDomain: (domain: string) => void;
   setVerifyNFA: (verify: boolean) => void;
   setSucessMint: (sucess: boolean) => void;
+  setEnsError: (error: string) => void;
 };
 
 const [MintProvider, useContext] = createContext<MintContext>({
@@ -56,9 +58,12 @@ export abstract class Mint {
     const [appDescription, setAppDescription] = useState('');
     const [appLogo, setAppLogo] = useState('');
     const [logoColor, setLogoColor] = useState('');
-    const [ens, setEns] = useState({} as ComboboxItem);
+    const [ens, setEns] = useState('');
     const [domain, setDomain] = useState('');
     const [verifyNFA, setVerifyNFA] = useState(true);
+
+    //Field validations
+    const [ensError, setEnsError] = useState<string>('');
 
     //Mint state
     //true means it's minted
@@ -87,6 +92,7 @@ export abstract class Mint {
           domain,
           verifyNFA,
           sucessMint,
+          ensError,
           setSelectedUserOrg,
           setGithubStep,
           setRepositoryName,
@@ -100,6 +106,7 @@ export abstract class Mint {
           setDomain,
           setVerifyNFA,
           setSucessMint,
+          setEnsError,
         }}
       >
         {children}
