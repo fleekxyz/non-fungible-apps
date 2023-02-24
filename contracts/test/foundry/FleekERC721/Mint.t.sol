@@ -93,7 +93,6 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             color,
             autoApprovalAp
         );
-
         assertEq(tokenId, 0);
         assertEq(CuT.ownerOf(tokenId), to);
     }

@@ -22,6 +22,20 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     using FleekStrings for string;
     using FleekStrings for uint24;
 
+    event NewMint(
+        uint256 indexed tokenId,
+        string name,
+        string description,
+        string externalURL,
+        string ENS,
+        string commitHash,
+        string gitRepository,
+        string logo,
+        uint24 color,
+        bool accessPointAutoApproval,
+        address indexed minter,
+        address indexed owner
+    );
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
@@ -29,7 +43,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
 
-    event ChangeAccessPointAutoApproval(uint256 indexed token, bool indexed settings, address indexed triggeredBy);
+    event ChangeAccessPointAutoApproval(
+        uint256 indexed token,
+        bool indexed settings,
+        address indexed triggeredBy
+    );
 
     event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
 
@@ -166,6 +184,20 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         app.currentBuild = 0;
         app.builds[0] = Build(commitHash, gitRepository);
 
+        emit NewMint(
+            tokenId,
+            name,
+            description,
+            externalURL,
+            ENS,
+            commitHash,
+            gitRepository,
+            logo,
+            color,
+            accessPointAutoApproval,
+            msg.sender,
+            to
+        );
         return tokenId;
     }
 
