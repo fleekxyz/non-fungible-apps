@@ -1,4 +1,3 @@
-specVersion: 0.0.5
 schema:
   file: ./schema.graphql
 dataSources:
@@ -16,18 +15,21 @@ dataSources:
       entities:
         - Approval
         - ApprovalForAll
-        - CollectionRoleGranted
-        - CollectionRoleRevoked
         - MetadataUpdate
         - NewMint
-        - TokenRoleGranted
-        - TokenRoleRevoked
         - Transfer
         - Token
         - Owner
         - Controller
         - CollectionOwner
         - GithubRepository
+        - AccessPoint
+        - NewAccessPoint
+        - ChangeAccessPointCreationStatus
+        - ChangeAccessPointScore
+        - ChangeAccessPointNameVerify
+        - ChangeAccessPointContentVerify
+        - ChangeAccessPointAutoApproval
       abis:
         - name: FleekNFA
           file: ../contracts/artifacts/contracts/FleekERC721.sol/FleekERC721.json
@@ -42,16 +44,21 @@ dataSources:
           handler: handleMetadataUpdateWithDoubleStringValue
         - event: MetadataUpdate(indexed uint256,string,uint24,indexed address)
           handler: handleMetadataUpdateWithIntValue
-        - event: CollectionRoleGranted(indexed uint8,indexed address,address)
-          handler: handleCollectionRoleGranted
-        - event: CollectionRoleRevoked(indexed uint8,indexed address,address)
-          handler: handleCollectionRoleRevoked
         - event: NewMint(indexed uint256,string,string,string,string,string,string,string,uint24,bool,indexed address,indexed address)
           handler: handleNewMint
-        - event: TokenRoleGranted(indexed uint256,indexed uint8,indexed address,address)
-          handler: handleTokenRoleGranted
-        - event: TokenRoleRevoked(indexed uint256,indexed uint8,indexed address,address)
-          handler: handleTokenRoleRevoked
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: ChangeAccessPointAutoApproval(indexed uint256,indexed bool,indexed address)
+          handler: handleChangeAccessPointAutoApproval
+        - event: ChangeAccessPointContentVerify(string,uint256,indexed bool,indexed address)
+          handler: handleChangeAccessPointContentVerify
+        - event: ChangeAccessPointNameVerify(string,uint256,indexed bool,indexed address)
+          handler: handleChangeAccessPointNameVerify
+        - event: ChangeAccessPointScore(string,indexed uint256,uint256,indexed address)
+          handler: handleChangeAccessPointScore
+        - event: ChangeAccessPointCreationStatus(string,uint256,uint8,indexed address)
+          handler: handleChangeAccessPointCreationStatus
+        - event: NewAccessPoint(string,indexed uint256,indexed address)
+          handler: handleNewAccessPoint
       file: ./src/fleek-nfa.ts
+specVersion: 0.0.5

@@ -42,7 +42,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
 
     event ChangeAccessPointAutoApproval(
         uint256 indexed token,
-        bool indexed settings,
+        bool indexed value,
         address indexed triggeredBy
     );
 
@@ -60,7 +60,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         bool indexed verified,
         address indexed triggeredBy
     );
-    event ChangeAccessPointStatus(
+    event ChangeAccessPointCreationStatus(
         string apName,
         uint256 tokenId,
         AccessPointCreationStatus status,
@@ -468,11 +468,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
                 AccessPointCreationStatus.APPROVED
             );
 
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
+            emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
         } else {
             // Auto Approval is off. Should wait for approval.
             _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender, AccessPointCreationStatus.DRAFT);
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.DRAFT, msg.sender);
+            emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.DRAFT, msg.sender);
         }
     }
 
@@ -506,11 +506,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         if (approved) {
             // Approval
             accessPoint.status = AccessPointCreationStatus.APPROVED;
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
+            emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
         } else {
             // Not Approved
             accessPoint.status = AccessPointCreationStatus.REJECTED;
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.REJECTED, msg.sender);
+            emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.REJECTED, msg.sender);
         }
     }
 
@@ -531,7 +531,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
         _accessPoints[apName].status = AccessPointCreationStatus.REMOVED;
         uint256 tokenId = _accessPoints[apName].tokenId;
-        emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.REMOVED, msg.sender);
+        emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.REMOVED, msg.sender);
         emit RemoveAccessPoint(apName, tokenId, msg.sender);
     }
 

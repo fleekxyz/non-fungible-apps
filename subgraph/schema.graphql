@@ -18,26 +18,6 @@ type ApprovalForAll @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type CollectionRoleGranted @entity(immutable: true) {
-  id: Bytes!
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CollectionRoleRevoked @entity(immutable: true) {
-  id: Bytes!
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
 type NewMint @entity(immutable: true) {
   id: Bytes!
   tokenId: BigInt! # uint256
@@ -70,28 +50,6 @@ type MetadataUpdate @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type TokenRoleGranted @entity(immutable: true) {
-  id: Bytes!
-  tokenId: BigInt! # uint256
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type TokenRoleRevoked @entity(immutable: true) {
-  id: Bytes!
-  tokenId: BigInt! # uint256
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
 type Transfer @entity(immutable: true) {
   id: Bytes!
   from: Bytes! # address
@@ -118,11 +76,13 @@ type Token @entity {
   controllers: [Controller!]
   gitRepository: GitRepository!
   commitHash: String!
+  accessPoints: [AccessPoint!] @derivedFrom(field: "token")
 }
 
 type Owner @entity {
   id: Bytes! # address
   tokens: [Token!] @derivedFrom(field: "owner")
+  accessPoints: [AccessPoint!] @derivedFrom(field: "owner")
 }
 
 type Controller @entity {
@@ -145,4 +105,14 @@ type CollectionOwner @entity {
 type GitRepository @entity {
   id: String! # transaction hash of the first transaction this repository appeared in
   tokens: [Token!] @derivedFrom(field: "gitRepository")
+}
+
+type AccessPoint @entity {
+  id: String! # AP Name
+  token: Token!
+  score: BigInt!
+  contentVerified: Boolean!
+  nameVerified: Boolean!
+  owner: Owner!
+  status: String!
 }
