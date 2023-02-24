@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.7;
 
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 error MustHaveCollectionRole(uint8 role);
@@ -11,8 +10,6 @@ error MustHaveAtLeastOneOwner();
 error RoleAlreadySet();
 
 contract FleekAccessControl is Initializable {
-    using Counters for Counters.Counter;
-
     /**
      * @dev All available collection roles.
      */
@@ -57,7 +54,7 @@ contract FleekAccessControl is Initializable {
      * @dev _collectionRolesCounter[role] is the number of addresses that have the role.
      * This is prevent Owner role to go to 0.
      */
-    mapping(CollectionRoles => Counters.Counter) private _collectionRolesCounter;
+    mapping(CollectionRoles => uint256) private _collectionRolesCounter;
 
     /**
      * @dev _collectionRoles[role][address] is the mapping of addresses that have the role.
@@ -69,7 +66,7 @@ contract FleekAccessControl is Initializable {
      * The version is incremented every time the token roles are cleared.
      * Should be incremented every token transfer.
      */
-    mapping(uint256 => Counters.Counter) private _tokenRolesVersion;
+    mapping(uint256 => uint256) private _tokenRolesVersion;
 
     /**
      * @dev _tokenRoles[tokenId][version][role][address] is the mapping of addresses that have the role.
@@ -108,7 +105,7 @@ contract FleekAccessControl is Initializable {
      * @dev Returns `True` if a certain address has the token role.
      */
     function hasTokenRole(uint256 tokenId, TokenRoles role, address account) public view returns (bool) {
-        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        uint256 currentVersion = _tokenRolesVersion[tokenId];
         return _tokenRoles[tokenId][currentVersion][role][account];
     }
 
@@ -119,7 +116,7 @@ contract FleekAccessControl is Initializable {
         if (hasCollectionRole(role, account)) revert RoleAlreadySet();
 
         _collectionRoles[role][account] = true;
-        _collectionRolesCounter[role].increment();
+        _collectionRolesCounter[role] += 1;
 
         emit CollectionRoleChanged(role, account, true, msg.sender);
     }
@@ -129,11 +126,10 @@ contract FleekAccessControl is Initializable {
      */
     function _revokeCollectionRole(CollectionRoles role, address account) internal {
         if (!hasCollectionRole(role, account)) revert RoleAlreadySet();
-        if (role == CollectionRoles.Owner && _collectionRolesCounter[role].current() == 1)
-            revert MustHaveAtLeastOneOwner();
+        if (role == CollectionRoles.Owner && _collectionRolesCounter[role] == 1) revert MustHaveAtLeastOneOwner();
 
         _collectionRoles[role][account] = false;
-        _collectionRolesCounter[role].decrement();
+        _collectionRolesCounter[role] -= 1;
 
         emit CollectionRoleChanged(role, account, false, msg.sender);
     }
@@ -144,7 +140,7 @@ contract FleekAccessControl is Initializable {
     function _grantTokenRole(uint256 tokenId, TokenRoles role, address account) internal {
         if (hasTokenRole(tokenId, role, account)) revert RoleAlreadySet();
 
-        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        uint256 currentVersion = _tokenRolesVersion[tokenId];
         _tokenRoles[tokenId][currentVersion][role][account] = true;
 
         emit TokenRoleChanged(tokenId, role, account, true, msg.sender);
@@ -156,18 +152,19 @@ contract FleekAccessControl is Initializable {
     function _revokeTokenRole(uint256 tokenId, TokenRoles role, address account) internal {
         if (!hasTokenRole(tokenId, role, account)) revert RoleAlreadySet();
 
-        uint256 currentVersion = _tokenRolesVersion[tokenId].current();
+        uint256 currentVersion = _tokenRolesVersion[tokenId];
         _tokenRoles[tokenId][currentVersion][role][account] = false;
 
         emit TokenRoleChanged(tokenId, role, account, false, msg.sender);
     }
 
     /**
-     * @dev Clears all token roles for a certain tokenId and grants the owner role to a new address.
-     * Should only be used for transferring tokens.
+     * @dev This empty reserved space is put in place to allow future versions to add new
+     * variables without shifting down storage in the inheritance chain.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
      */
     function _clearTokenRoles(uint256 tokenId) internal {
-        _tokenRolesVersion[tokenId].increment();
+        _tokenRolesVersion[tokenId] += 1;
         emit TokenRolesCleared(tokenId, msg.sender);
     }
 
