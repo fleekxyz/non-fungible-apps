@@ -1,6 +1,6 @@
-import { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import { Combobox as ComboboxLib, Transition } from '@headlessui/react';
-import { Icon, IconName } from '@/components/core/icon';
+import { Icon } from '@/components/core/icon';
 import { Flex } from '@/components/layout';
 
 type ComboboxInputProps = {
@@ -53,7 +53,7 @@ const ComboboxOption = ({ option }: ComboboxOptionProps) => (
     {({ selected, active }) => (
       <Flex css={{ justifyContent: 'space-between' }}>
         <Flex css={{ flexDirection: 'row' }}>
-          {option.icon && <Icon name={option.icon} css={{ mr: '$2' }} />}
+          {option.icon}
           <span className={`${active ? 'text-slate12' : 'text-slate11'}`}>
             {option.label}
           </span>
@@ -75,7 +75,7 @@ export const NoResults = ({ css }: { css?: string }) => (
 export type ComboboxItem = {
   value: string;
   label: string;
-  icon?: IconName;
+  icon?: React.ReactNode;
 };
 
 export type ComboboxProps = {

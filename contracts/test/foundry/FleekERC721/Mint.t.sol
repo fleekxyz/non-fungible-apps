@@ -35,11 +35,29 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             "94e8ba38568aea4fb277a37a4c472d94a6ce880a",
             "https://github.com/a-different/repository",
             TestConstants.LOGO_1,
-            0x654321
+            0x654321,
+            false
         );
 
         assertEq(firstMint, 0);
         assertEq(secondMint, 1);
+    }
+
+    function test_mintWithAutoApprovalAPsOn() public {
+        uint256 mint = CuT.mint(
+            address(12),
+            "Different App Name",
+            "This is a different description for another app.",
+            "https://fleek.xyz",
+            "fleek.eth",
+            "94e8ba38568aea4fb277a37a4c472d94a6ce880a",
+            "https://github.com/a-different/repository",
+            TestConstants.LOGO_1,
+            0x654321,
+            true
+        );
+
+        assertEq(mint, 0);
     }
 
     function test_balanceOfDeployerAfterAndBeforeMinting() public {
@@ -59,11 +77,22 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
-        uint24 color
+        uint24 color,
+        bool autoApprovalAp
     ) public {
         vm.assume(to != address(0));
-        uint256 tokenId = CuT.mint(to, appName, description, externalURL, ens, commitHash, gitRepository, logo, color);
-
+        uint256 tokenId = CuT.mint(
+            to,
+            appName,
+            description,
+            externalURL,
+            ens,
+            commitHash,
+            gitRepository,
+            logo,
+            color,
+            autoApprovalAp
+        );
         assertEq(tokenId, 0);
         assertEq(CuT.ownerOf(tokenId), to);
     }
