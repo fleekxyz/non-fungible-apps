@@ -18,26 +18,6 @@ type ApprovalForAll @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type CollectionRoleGranted @entity(immutable: true) {
-  id: Bytes!
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CollectionRoleRevoked @entity(immutable: true) {
-  id: Bytes!
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
 type NewMint @entity(immutable: true) {
   id: Bytes!
   tokenId: BigInt! # uint256
@@ -65,28 +45,6 @@ type MetadataUpdate @entity(immutable: true) {
   uint24Value: Int
   doubleStringValue: [String!]!
   byAddress: Bytes!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type TokenRoleGranted @entity(immutable: true) {
-  id: Bytes!
-  tokenId: BigInt! # uint256
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type TokenRoleRevoked @entity(immutable: true) {
-  id: Bytes!
-  tokenId: BigInt! # uint256
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

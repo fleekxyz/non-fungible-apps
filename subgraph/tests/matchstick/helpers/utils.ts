@@ -3,31 +3,13 @@ import { ethereum, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
-  CollectionRoleGranted as CollectionRoleGrantedEvent,
-  CollectionRoleRevoked as CollectionRoleRevokedEvent,
-  NewBuild as NewBuildEvent,
-  NewTokenDescription as NewTokenDescriptionEvent,
-  NewTokenENS as NewTokenENSEvent,
-  NewTokenExternalURL as NewTokenExternalURLEvent,
-  NewTokenLogo as NewTokenLogoEvent,
-  NewTokenName as NewTokenNameEvent,
-  TokenRoleGranted as TokenRoleGrantedEvent,
-  TokenRoleRevoked as TokenRoleRevokedEvent,
   Transfer as TransferEvent,
+  NewMint as NewMintEvent
 } from '../../../generated/FleekNFA/FleekNFA';
 import {
   handleApproval,
   handleApprovalForAll,
-  handleCollectionRoleGranted,
-  handleCollectionRoleRevoked,
-  handleNewBuild,
-  handleNewTokenDescription,
-  handleNewTokenENS,
-  handleNewTokenExternalURL,
-  handleNewTokenLogo,
-  handleNewTokenName,
-  handleTokenRoleGranted,
-  handleTokenRoleRevoked,
+  handleNewMint,
   handleTransfer,
 } from '../../../src/fleek-nfa';
 
@@ -86,324 +68,6 @@ export function createApprovalForAllEvent(
   return approvalForAllEvent;
 }
 
-export function createCollectionRoleGrantedEvent(
-  event_count: i32,
-  role: i32,
-  toAddress: Address,
-  byAddress: Address
-): CollectionRoleGrantedEvent {
-  let collectionRoleGrantedEvent = changetype<CollectionRoleGrantedEvent>(
-    newMockEvent()
-  );
-
-  collectionRoleGrantedEvent.parameters = new Array();
-
-  collectionRoleGrantedEvent.parameters.push(
-    new ethereum.EventParam(
-      'role',
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(role))
-    )
-  );
-  collectionRoleGrantedEvent.parameters.push(
-    new ethereum.EventParam('toAddress', ethereum.Value.fromAddress(toAddress))
-  );
-  collectionRoleGrantedEvent.parameters.push(
-    new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
-  );
-
-  collectionRoleGrantedEvent.transaction.hash = Bytes.fromI32(event_count);
-  collectionRoleGrantedEvent.logIndex = new BigInt(event_count);
-
-  return collectionRoleGrantedEvent;
-}
-
-export function createCollectionRoleRevokedEvent(
-  event_count: i32,
-  role: i32,
-  toAddress: Address,
-  byAddress: Address
-): CollectionRoleRevokedEvent {
-  let collectionRoleRevokedEvent = changetype<CollectionRoleRevokedEvent>(
-    newMockEvent()
-  );
-
-  collectionRoleRevokedEvent.parameters = new Array();
-
-  collectionRoleRevokedEvent.parameters.push(
-    new ethereum.EventParam(
-      'role',
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(role))
-    )
-  );
-  collectionRoleRevokedEvent.parameters.push(
-    new ethereum.EventParam('toAddress', ethereum.Value.fromAddress(toAddress))
-  );
-  collectionRoleRevokedEvent.parameters.push(
-    new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
-  );
-
-  collectionRoleRevokedEvent.transaction.hash = Bytes.fromI32(event_count);
-  collectionRoleRevokedEvent.logIndex = new BigInt(event_count);
-
-  return collectionRoleRevokedEvent;
-}
-
-export function createNewBuildEvent(
-  event_count: i32,
-  token: BigInt,
-  commitHash: string,
-  triggeredBy: Address
-): NewBuildEvent {
-  let newBuildEvent = changetype<NewBuildEvent>(newMockEvent());
-
-  newBuildEvent.parameters = new Array();
-
-  newBuildEvent.parameters.push(
-    new ethereum.EventParam('token', ethereum.Value.fromUnsignedBigInt(token))
-  );
-  newBuildEvent.parameters.push(
-    new ethereum.EventParam('commitHash', ethereum.Value.fromString(commitHash))
-  );
-  newBuildEvent.parameters.push(
-    new ethereum.EventParam(
-      'triggeredBy',
-      ethereum.Value.fromAddress(triggeredBy)
-    )
-  );
-
-  newBuildEvent.transaction.hash = Bytes.fromI32(event_count);
-  newBuildEvent.logIndex = new BigInt(event_count);
-
-  return newBuildEvent;
-}
-
-export function createNewTokenDescriptionEvent(
-  event_count: i32,
-  token: BigInt,
-  description: string,
-  triggeredBy: Address
-): NewTokenDescriptionEvent {
-  let newTokenDescriptionEvent = changetype<NewTokenDescriptionEvent>(
-    newMockEvent()
-  );
-
-  newTokenDescriptionEvent.parameters = new Array();
-
-  newTokenDescriptionEvent.parameters.push(
-    new ethereum.EventParam('token', ethereum.Value.fromUnsignedBigInt(token))
-  );
-  newTokenDescriptionEvent.parameters.push(
-    new ethereum.EventParam(
-      'description',
-      ethereum.Value.fromString(description)
-    )
-  );
-  newTokenDescriptionEvent.parameters.push(
-    new ethereum.EventParam(
-      'triggeredBy',
-      ethereum.Value.fromAddress(triggeredBy)
-    )
-  );
-
-  newTokenDescriptionEvent.transaction.hash = Bytes.fromI32(event_count);
-  newTokenDescriptionEvent.logIndex = new BigInt(event_count);
-
-  return newTokenDescriptionEvent;
-}
-
-export function createNewTokenENSEvent(
-  event_count: i32,
-  token: BigInt,
-  ENS: string,
-  triggeredBy: Address
-): NewTokenENSEvent {
-  let newTokenEnsEvent = changetype<NewTokenENSEvent>(newMockEvent());
-
-  newTokenEnsEvent.parameters = new Array();
-
-  newTokenEnsEvent.parameters.push(
-    new ethereum.EventParam('token', ethereum.Value.fromUnsignedBigInt(token))
-  );
-  newTokenEnsEvent.parameters.push(
-    new ethereum.EventParam('ENS', ethereum.Value.fromString(ENS))
-  );
-  newTokenEnsEvent.parameters.push(
-    new ethereum.EventParam(
-      'triggeredBy',
-      ethereum.Value.fromAddress(triggeredBy)
-    )
-  );
-
-  newTokenEnsEvent.transaction.hash = Bytes.fromI32(event_count);
-  newTokenEnsEvent.logIndex = new BigInt(event_count);
-
-  return newTokenEnsEvent;
-}
-
-export function createNewTokenExternalURLEvent(
-  event_count: i32,
-  token: BigInt,
-  externalURL: string,
-  triggeredBy: Address
-): NewTokenExternalURLEvent {
-  let newTokenExternalUrlEvent = changetype<NewTokenExternalURLEvent>(
-    newMockEvent()
-  );
-
-  newTokenExternalUrlEvent.parameters = new Array();
-
-  newTokenExternalUrlEvent.parameters.push(
-    new ethereum.EventParam('token', ethereum.Value.fromUnsignedBigInt(token))
-  );
-  newTokenExternalUrlEvent.parameters.push(
-    new ethereum.EventParam(
-      'externalURL',
-      ethereum.Value.fromString(externalURL)
-    )
-  );
-  newTokenExternalUrlEvent.parameters.push(
-    new ethereum.EventParam(
-      'triggeredBy',
-      ethereum.Value.fromAddress(triggeredBy)
-    )
-  );
-
-  newTokenExternalUrlEvent.transaction.hash = Bytes.fromI32(event_count);
-  newTokenExternalUrlEvent.logIndex = new BigInt(event_count);
-
-  return newTokenExternalUrlEvent;
-}
-
-export function createNewTokenImageEvent(
-  event_count: i32,
-  token: BigInt,
-  image: string,
-  triggeredBy: Address
-): NewTokenImageEvent {
-  let newTokenImageEvent = changetype<NewTokenImageEvent>(newMockEvent());
-
-  newTokenImageEvent.parameters = new Array();
-
-  newTokenImageEvent.parameters.push(
-    new ethereum.EventParam('token', ethereum.Value.fromUnsignedBigInt(token))
-  );
-  newTokenImageEvent.parameters.push(
-    new ethereum.EventParam('image', ethereum.Value.fromString(image))
-  );
-  newTokenImageEvent.parameters.push(
-    new ethereum.EventParam(
-      'triggeredBy',
-      ethereum.Value.fromAddress(triggeredBy)
-    )
-  );
-
-  newTokenImageEvent.transaction.hash = Bytes.fromI32(event_count);
-  newTokenImageEvent.logIndex = new BigInt(event_count);
-
-  return newTokenImageEvent;
-}
-
-export function createNewTokenNameEvent(
-  event_count: i32,
-  token: BigInt,
-  name: string,
-  triggeredBy: Address
-): NewTokenNameEvent {
-  let newTokenNameEvent = changetype<NewTokenNameEvent>(newMockEvent());
-
-  newTokenNameEvent.parameters = new Array();
-
-  newTokenNameEvent.parameters.push(
-    new ethereum.EventParam('token', ethereum.Value.fromUnsignedBigInt(token))
-  );
-  newTokenNameEvent.parameters.push(
-    new ethereum.EventParam('name', ethereum.Value.fromString(name))
-  );
-  newTokenNameEvent.parameters.push(
-    new ethereum.EventParam(
-      'triggeredBy',
-      ethereum.Value.fromAddress(triggeredBy)
-    )
-  );
-
-  newTokenNameEvent.transaction.hash = Bytes.fromI32(event_count);
-  newTokenNameEvent.logIndex = new BigInt(event_count);
-
-  return newTokenNameEvent;
-}
-
-export function createTokenRoleGrantedEvent(
-  event_count: i32,
-  tokenId: BigInt,
-  role: i32,
-  toAddress: Address,
-  byAddress: Address
-): TokenRoleGrantedEvent {
-  let tokenRoleGrantedEvent = changetype<TokenRoleGrantedEvent>(newMockEvent());
-
-  tokenRoleGrantedEvent.parameters = new Array();
-
-  tokenRoleGrantedEvent.parameters.push(
-    new ethereum.EventParam(
-      'tokenId',
-      ethereum.Value.fromUnsignedBigInt(tokenId)
-    )
-  );
-  tokenRoleGrantedEvent.parameters.push(
-    new ethereum.EventParam(
-      'role',
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(role))
-    )
-  );
-  tokenRoleGrantedEvent.parameters.push(
-    new ethereum.EventParam('toAddress', ethereum.Value.fromAddress(toAddress))
-  );
-  tokenRoleGrantedEvent.parameters.push(
-    new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
-  );
-
-  tokenRoleGrantedEvent.transaction.hash = Bytes.fromI32(event_count);
-  tokenRoleGrantedEvent.logIndex = new BigInt(event_count);
-
-  return tokenRoleGrantedEvent;
-}
-
-export function createTokenRoleRevokedEvent(
-  event_count: i32,
-  tokenId: BigInt,
-  role: i32,
-  toAddress: Address,
-  byAddress: Address
-): TokenRoleRevokedEvent {
-  let tokenRoleRevokedEvent = changetype<TokenRoleRevokedEvent>(newMockEvent());
-
-  tokenRoleRevokedEvent.parameters = new Array();
-
-  tokenRoleRevokedEvent.parameters.push(
-    new ethereum.EventParam(
-      'tokenId',
-      ethereum.Value.fromUnsignedBigInt(tokenId)
-    )
-  );
-  tokenRoleRevokedEvent.parameters.push(
-    new ethereum.EventParam(
-      'role',
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(role))
-    )
-  );
-  tokenRoleRevokedEvent.parameters.push(
-    new ethereum.EventParam('toAddress', ethereum.Value.fromAddress(toAddress))
-  );
-  tokenRoleRevokedEvent.parameters.push(
-    new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
-  );
-
-  tokenRoleRevokedEvent.transaction.hash = Bytes.fromI32(event_count);
-  tokenRoleRevokedEvent.logIndex = new BigInt(event_count);
-
-  return tokenRoleRevokedEvent;
-}
-
 export function createTransferEvent(
   event_count: i32,
   from: Address,
@@ -433,6 +97,89 @@ export function createTransferEvent(
   return transferEvent;
 }
 
+export function createNewMintEvent(
+  event_count: i32,
+  to: Address,
+  tokenId: BigInt
+): NewMintEvent {
+  let newMintEvent = changetype<NewMintEvent>(newMockEvent());
+
+  newMintEvent.parameters = new Array();
+
+  newMintEvent.parameters.push(
+    new ethereum.EventParam('owner', ethereum.Value.fromAddress(to))
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam('minter', ethereum.Value.fromAddress(to))
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam(
+      'tokenId',
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    )
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam(
+      'name',
+      ethereum.Value.fromString('name')
+    )
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam(
+      'description',
+      ethereum.Value.fromString('description')
+    )
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam(
+      'externalURL',
+      ethereum.Value.fromString('externalurl')
+    )
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam(
+      'ENS',
+      ethereum.Value.fromString('ens')
+    )
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam(
+      'gitRepository',
+      ethereum.Value.fromString('repo')
+    )
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam(
+      'commitHash',
+      ethereum.Value.fromString('hash')
+    )
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam(
+      'logo',
+      ethereum.Value.fromString('logo')
+    )
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam(
+      'color',
+      ethereum.Value.fromI32(1234)
+    )
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam(
+      'accessPointAutoApproval',
+      ethereum.Value.fromBoolean(true)
+    )
+  );
+
+  newMintEvent.transaction.hash = Bytes.fromI32(event_count);
+  newMintEvent.logIndex = new BigInt(event_count);
+
+  return newMintEvent;
+}
+
+
 export const CONTRACT: Address = Address.fromString(
   '0x0000000000000000000000000000000000000000'
 );
@@ -452,83 +199,21 @@ export function handleTransfers(events: TransferEvent[]): void {
   });
 }
 
-export function handleNewTokenNames(events: NewTokenNameEvent[]): void {
-  events.forEach((event) => {
-    handleNewTokenName(event);
-  });
-}
-
-export function handleNewTokenDescriptions(
-  events: NewTokenDescriptionEvent[]
-): void {
-  events.forEach((event) => {
-    handleNewTokenDescription(event);
-  });
-}
-
-export function handleNewTokenENSAddresses(events: NewTokenENSEvent[]): void {
-  events.forEach((event) => {
-    handleNewTokenENS(event);
-  });
-}
-
-export function handleNewTokenExternalURLs(
-  events: NewTokenExternalURLEvent[]
-): void {
-  events.forEach((event) => {
-    handleNewTokenExternalURL(event);
-  });
-}
-
-export function handleNewBuilds(events: NewBuildEvent[]): void {
-  events.forEach((event) => {
-    handleNewBuild(event);
-  });
-}
-
-export function handleNewTokenLogos(events: NewTokenLogoEvent[]): void {
-  events.forEach((event) => {
-    handleNewTokenLogo(event);
-  });
-}
-
 export function handleApprovals(events: ApprovalEvent[]): void {
   events.forEach((event) => {
     handleApproval(event);
   });
 }
 
+export function handleNewMints(events: NewMintEvent[]): void {
+  events.forEach((event) => {
+    handleNewMint(event);
+  });
+}
+
 export function handleApprovalForAlls(events: ApprovalForAllEvent[]): void {
   events.forEach((event) => {
     handleApprovalForAll(event);
-  });
-}
-
-export function handleCollectionRoleGranteds(
-  events: CollectionRoleGrantedEvent[]
-): void {
-  events.forEach((event) => {
-    handleCollectionRoleGranted(event);
-  });
-}
-
-export function handleCollectionRoleRevokeds(
-  events: CollectionRoleRevokedEvent[]
-): void {
-  events.forEach((event) => {
-    handleCollectionRoleRevoked(event);
-  });
-}
-
-export function handleTokenRoleGranteds(events: TokenRoleGrantedEvent[]): void {
-  events.forEach((event) => {
-    handleTokenRoleGranted(event);
-  });
-}
-
-export function handleTokenRoleRevokeds(events: TokenRoleRevokedEvent[]): void {
-  events.forEach((event) => {
-    handleTokenRoleRevoked(event);
   });
 }
 

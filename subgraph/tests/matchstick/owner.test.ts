@@ -9,11 +9,29 @@ import {
     log,
   } from 'matchstick-as/assembly/index';
   import { BigInt } from '@graphprotocol/graph-ts';
-import { CONTRACT, createTransferEvent, handleTransfers, makeEventId, TOKEN_OWNER_ONE, TOKEN_OWNER_TWO } from './helpers/utils';
-import { Transfer } from '../../generated/FleekNFA/FleekNFA';
+import { CONTRACT, createNewMintEvent, createTransferEvent, handleNewMints, handleTransfers, makeEventId, TOKEN_OWNER_ONE, TOKEN_OWNER_TWO } from './helpers/utils';
+import { NewMint, Transfer } from '../../generated/FleekNFA/FleekNFA';
 
 describe('Owner tests', () => {
     beforeAll(() => {
+      // NEW MINTS
+      let newMints: NewMint[] = [];
+      newMints.push(
+        createNewMintEvent(0, TOKEN_OWNER_ONE, BigInt.fromI32(0))
+      );
+      newMints.push(
+        createNewMintEvent(1, TOKEN_OWNER_TWO, BigInt.fromI32(1))
+      );
+      newMints.push(
+        createNewMintEvent(2, TOKEN_OWNER_ONE, BigInt.fromI32(2))
+      );
+      newMints.push(
+        createNewMintEvent(3, TOKEN_OWNER_ONE, BigInt.fromI32(3))
+      );
+      newMints.push(
+        createNewMintEvent(4, TOKEN_OWNER_TWO, BigInt.fromI32(4))
+      );
+      handleNewMints(newMints);
       // TRANSFERS
       let transfers: Transfer[] = [];
       transfers.push(
