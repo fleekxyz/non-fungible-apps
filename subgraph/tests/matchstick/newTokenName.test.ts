@@ -8,19 +8,16 @@ import {
     logStore,
     log,
   } from 'matchstick-as/assembly/index';
-  import { BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { CONTRACT, createNewTokenNameEvent, createTransferEvent, handleNewTokenNames, handleTransfers, makeEventId, TOKEN_OWNER_ONE, TOKEN_OWNER_TWO } from './helpers/utils';
-import { NewTokenName, Transfer } from '../../generated/FleekNFA/FleekNFA';
+  import { BigInt } from '@graphprotocol/graph-ts';
+import { createNewTokenNameEvent, handleNewTokenNames, makeEventId, TOKEN_OWNER_ONE, TOKEN_OWNER_TWO } from './helpers/utils';
+import { NewTokenName } from '../../generated/FleekNFA/FleekNFA';
 
-describe('Describe entity assertions', () => {
+describe('New Token Name tests', () => {
     beforeAll(() => {
-        describe('Describe entity assertions', () => {
-            beforeAll(() => {
-          
-              // NEW TOKEN NAME EVENTS
-              let newTokenNames: NewTokenName[] = [];
-              newTokenNames.push(
-                createNewTokenNameEvent(
+      // NEW TOKEN NAME EVENTS
+      let newTokenNames: NewTokenName[] = [];
+      newTokenNames.push(
+      createNewTokenNameEvent(
                   0,
                   BigInt.fromI32(0),
                   'Token Zero New Name',
@@ -74,54 +71,47 @@ describe('Describe entity assertions', () => {
       clearStore();
     });
   
-    describe('Transfers', () => {
-      test('Check the number of transfers to be valid', () => {
-        assert.entityCount('Transfer', 7);
+    describe('New Token Name Events', () => {
+      test('Check the number of NewTokenName to be valid', () => {
+        assert.entityCount('NewTokenName', 6);
       });
-      test('Check the `from` and `to` fields of each transfer to be equal to expected values', () => {
+      test('Check the `name` and `triggeredBy` fields of each new token name event to be equal to expected values', () => {
         assert.fieldEquals(
-          'Transfer',
+          'NewTokenName',
           makeEventId(0),
-          'to',
-          '0x2000000000000000000000000000000000000002'
+          'name',
+          'Token Zero New Name'
         );
         assert.fieldEquals(
-          'Transfer',
+          'NewTokenName',
           makeEventId(1),
-          'to',
-          '0x3000000000000000000000000000000000000003'
+          'name',
+          'Token One New Name'
         );
         assert.fieldEquals(
-          'Transfer',
+          'NewTokenName',
           makeEventId(2),
-          'to',
-          '0x2000000000000000000000000000000000000002'
+          'name',
+          'Token Two New Name'
         );
         assert.fieldEquals(
-          'Transfer',
+          'NewTokenName',
           makeEventId(3),
-          'to',
-          '0x2000000000000000000000000000000000000002'
+          'name',
+          'Token Three New Name'
         );
         assert.fieldEquals(
-          'Transfer',
+          'NewTokenName',
           makeEventId(4),
-          'to',
-          '0x2000000000000000000000000000000000000002'
+          'name',
+          'Token Four New Name'
         );
         assert.fieldEquals(
-          'Transfer',
+          'NewTokenName',
           makeEventId(5),
-          'to',
-          '0x3000000000000000000000000000000000000003'
-        );
-        assert.fieldEquals(
-          'Transfer',
-          makeEventId(6),
-          'to',
-          '0x3000000000000000000000000000000000000003'
+          'name',
+          'Token Zero New Name By New Owner'
         );
       });
-    });
+    });  
 });
-    })});

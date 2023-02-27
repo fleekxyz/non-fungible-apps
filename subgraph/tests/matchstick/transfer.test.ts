@@ -12,7 +12,7 @@ import {
 import { CONTRACT, createTransferEvent, handleTransfers, makeEventId, TOKEN_OWNER_ONE, TOKEN_OWNER_TWO } from './helpers/utils';
 import { Transfer } from '../../generated/FleekNFA/FleekNFA';
 
-describe('Transfer Assertions', () => {
+describe('Transfer tests', () => {
     beforeAll(() => {
       // TRANSFERS
       let transfers: Transfer[] = [];
