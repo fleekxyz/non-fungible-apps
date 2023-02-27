@@ -55,7 +55,7 @@ const main = async () => {
   let deployResult;
 
   try {
-    throw new Error('No proxy address found');
+    if (!proxyAddress) throw new Error('No proxy address found');
     console.log(`Trying to upgrade proxy contract at: "${proxyAddress}"`);
     deployResult = await upgrades.upgradeProxy(
       proxyAddress,
