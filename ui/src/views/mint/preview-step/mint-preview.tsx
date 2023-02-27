@@ -1,12 +1,40 @@
 import { Icon, IconButton, Stepper } from '@/components';
+import { useTransactionCost } from '@/hooks';
 import { Mint } from '@/views/mint/mint.context';
+import { ethers } from 'ethers';
+import { useMemo } from 'react';
 import { NftCard } from '../nft-card';
 
 export const MintPreview = () => {
   const { prevStep } = Stepper.useContext();
-  const { setSucessMint } = Mint.useContext();
+  const {
+    prepare: { status: prepareStatus, data: prepareData },
+    write: { status: writeStatus, write },
+    transaction: { status: transactionStatus },
+  } = Mint.useTransactionContext();
+
+  const [cost, currency, isCostLoading] = useTransactionCost(
+    prepareData?.request.value,
+    prepareData?.request.gasLimit
+  );
 
   //TODO handle error when minting
+
+  const message = useMemo(() => {
+    if (isCostLoading || prepareStatus === 'loading')
+      return 'Calculating cost...';
+
+    const formattedCost = ethers.utils.formatEther(cost).slice(0, 9);
+    return `Minting this NFA will cost ${formattedCost} ${currency}.`;
+  }, [prepareData, isCostLoading, prepareStatus]);
+
+  const isLoading = useMemo(
+    () =>
+      [prepareStatus, writeStatus, transactionStatus].some(
+        (status) => status === 'loading'
+      ),
+    [prepareStatus, writeStatus, transactionStatus]
+  );
 
   return (
     <NftCard
@@ -29,11 +57,10 @@ export const MintPreview = () => {
           icon={<Icon name="info" />}
         />
       }
-      message="Minting this NFA will cost 0.0008 MATIC."
+      message={message}
       buttonText="Mint NFA"
-      onClick={() => {
-        setSucessMint(true);
-      }}
+      onClick={write!}
+      isLoading={isLoading}
     />
   );
 };

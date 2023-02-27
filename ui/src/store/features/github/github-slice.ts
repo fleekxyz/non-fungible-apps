@@ -2,13 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
 import * as asyncThunk from './async-thunk';
-import { ComboboxItem, DropdownItem } from '@/components';
+import { DropdownItem } from '@/components';
 import { UserData } from './github-client';
-
-export type Repository = {
-  name: string;
-  url: string;
-};
 
 export namespace GithubState {
   export type Token = string;
@@ -24,6 +19,11 @@ export namespace GithubState {
   export type QueryLoading = 'idle' | 'loading' | 'failed' | 'success';
 
   export type UserAndOrganizations = Array<UserData>;
+
+  export type Repository = {
+    name: string;
+    url: string;
+  };
 
   export type Repositories = Array<Repository>;
 
@@ -65,9 +65,9 @@ export const githubSlice = createSlice({
       state.token = '';
       state.state = action.payload;
     },
-    setRepositoires: (
+    setRepositories: (
       state,
-      action: PayloadAction<GithubState.Repositoires>
+      action: PayloadAction<GithubState.Repositories>
     ) => {
       state.repositories = action.payload;
       state.queryLoading = 'success';
