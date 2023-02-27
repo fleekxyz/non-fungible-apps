@@ -1,12 +1,9 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { initializeWallet } from './store';
 import { themeGlobals } from '@/theme/globals';
 import { Home, Mint } from './views';
 import { SVGTestScreen } from './views/svg-test'; // TODO: remove when done
 import { ConnectKitButton } from 'connectkit';
 import { MintTest } from './views/mint-test';
-
-initializeWallet();
 
 export const App = () => {
   themeGlobals();
