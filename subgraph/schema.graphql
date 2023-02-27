@@ -31,7 +31,7 @@ type NewMint @entity(immutable: true) {
   color: Int!
   accessPointAutoApproval: Boolean!
   triggeredBy: Bytes! # address
-  tokenOwner: Owner! # address 
+  tokenOwner: TokenOwner! # address 
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -71,33 +71,30 @@ type Token @entity {
   logo: String!
   color: Int!
   accessPointAutoApproval: Boolean!
-  owner: Owner!
+  tokenOwner: TokenOwner!
   mintedBy: Bytes!
-  controllers: [Controller!]
+  tokenControllers: [TokenController!]
   gitRepository: GitRepository!
   commitHash: String!
 }
 
-type Owner @entity {
+type TokenOwner @entity {
   id: Bytes! # address
-  tokens: [Token!] @derivedFrom(field: "owner")
+  tokens: [Token!] @derivedFrom(field: "tokenOwner")
 }
 
-type Controller @entity {
+type TokenController @entity {
   id: Bytes! # address
-  tokens: [Token!] @derivedFrom(field: "controllers")
+  tokens: [Token!] @derivedFrom(field: "tokenControllers")
 }
 type Collection @entity {
   id: Bytes! #address
   deployer: Bytes! #address
-  transactionHash: Bytes! #transaction hash
-  owners: [CollectionOwner!]
 }
 
 type CollectionOwner @entity {
   id: Bytes! # address
   accessGrantedBy: Bytes! #address
-  transactionHash: Bytes!
 }
 
 type GitRepository @entity {

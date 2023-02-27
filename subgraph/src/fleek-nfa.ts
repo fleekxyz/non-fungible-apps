@@ -7,19 +7,21 @@ import {
   MetadataUpdate2 as MetadataUpdateEvent2,
   Transfer as TransferEvent,
   NewMint as NewMintEvent,
+  TokenRoleChanged as TokenRoleChangedEvent,
+  CollectionRoleChanged as CollectionRoleChangedEvent,
+  Initialized as InitializedEvent
 } from '../generated/FleekNFA/FleekNFA';
 import {
   Approval,
   ApprovalForAll,
   Collection,
-  CollectionOwner,
-  Controller,
   GitRepository as GitRepositoryEntity,
   MetadataUpdate,
   NewMint,
-  Owner,
+  TokenOwner,
   Token,
   Transfer,
+  CollectionOwner,
 } from '../generated/schema';
 
 export function handleApproval(event: ApprovalEvent): void {
@@ -52,92 +54,6 @@ export function handleApprovalForAll(event: ApprovalForAllEvent): void {
   entity.save();
 }
 
-export function handleCollectionRoleGranted(
-  event: CollectionRoleGrantedEvent
-): void {
-  let entity = new CollectionRoleGranted(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.role = event.params.role;
-  entity.toAddress = event.params.toAddress;
-  entity.byAddress = event.params.byAddress;
-
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
-
-  if (event.params.role === 0) {
-    // Role 0 => Owner [Probably going to change this after the ACL refactor.]
-    // Should create a new CollectionOwner entity with the address from the parameters.
-    // If it already is a collection owner, should log a warning.
-
-    let collectionOwner = CollectionOwner.load(event.params.toAddress);
-
-    if (collectionOwner) {
-      // Collection Owner already exists.
-      // Print warning log message.
-      log.warning(
-        'Although Address {} is already a collection owner, a CollectionRoleGranted event was emitted that indicated the address was granted the same role, again.',
-        [event.params.toAddress.toHexString()]
-      );
-    } else {
-      // Create a new collection owner entity and assign the values
-      collectionOwner = new CollectionOwner(event.params.toAddress);
-      collectionOwner.accessGrantedBy = event.params.byAddress;
-      collectionOwner.transactionHash = event.transaction.hash;
-
-      // Log the new CollectionOwner entity creation.
-      log.info('Created a new collection owner entity with address {}.', [
-        event.params.toAddress.toHexString(),
-      ]);
-
-      // Save the collection owner.
-      collectionOwner.save();
-    }
-
-    if (event.params.byAddress === event.params.toAddress) {
-      // This is the contract creation transaction.
-      log.warning('This is the contract creation transaction.', []);
-      if (event.receipt) {
-        let receipt = event.receipt as ethereum.TransactionReceipt;
-        log.warning('Contract address is: {}', [
-          receipt.contractAddress.toHexString(),
-        ]);
-        let collection = new Collection(receipt.contractAddress);
-        collection.deployer = event.params.byAddress;
-        collection.transactionHash = event.transaction.hash;
-        collection.owners = [event.params.toAddress];
-        collection.save();
-      }
-    }
-  }
-}
-
-export function handleCollectionRoleRevoked(
-  event: CollectionRoleRevokedEvent
-): void {
-  let entity = new CollectionRoleRevoked(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.role = event.params.role;
-  entity.toAddress = event.params.toAddress;
-  entity.byAddress = event.params.byAddress;
-
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
-
-  if (event.params.role === 0) {
-    // Role 0 => Owner [Probably going to change this after the ACL refactor.]
-    // Should remove the CollectionOwner entity.
-
-    store.remove('CollectionOwner', event.params.toAddress.toHexString());
-  }
-}
 export function handleNewMint(event: NewMintEvent): void {
   let newMintEntity = new NewMint(
     event.transaction.hash.concatI32(event.logIndex.toI32())
@@ -174,14 +90,14 @@ export function handleNewMint(event: NewMintEvent): void {
 
   // Create Token, Owner, and Controller entities
 
-  let owner = Owner.load(ownerAddress);
+  let owner = TokenOwner.load(ownerAddress);
   let controller = Controller.load(ownerAddress);
   let gitRepositoryEntity = GitRepositoryEntity.load(gitRepository);
   let token = new Token(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
 
   if (!owner) {
     // Create a new owner entity
-    owner = new Owner(ownerAddress);
+    owner = new TokenOwner(ownerAddress);
   }
 
   if (!controller) {
@@ -205,12 +121,12 @@ export function handleNewMint(event: NewMintEvent): void {
   token.logo = logo;
   token.color = color;
   token.accessPointAutoApproval = accessPointAutoApproval;
-  token.owner = ownerAddress;
+  token.tokenOwner = ownerAddress;
   token.mintTransaction = event.transaction.hash.concatI32(
     event.logIndex.toI32()
   );
   token.mintedBy = event.params.minter;
-  token.controllers = [ownerAddress];
+  token.tokenControllers = [ownerAddress];
 
   // Save entities
   owner.save();
@@ -335,106 +251,82 @@ export function handleMetadataUpdateWithIntValue(
   }
 }
 
-export function handleTokenRoleGranted(event: TokenRoleGrantedEvent): void {
-  let entity = new TokenRoleGranted(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.tokenId = event.params.tokenId;
-  entity.role = event.params.role;
-  entity.toAddress = event.params.toAddress;
-  entity.byAddress = event.params.byAddress;
+export function handleInitialized(event: InitializedEvent): void {
+    // This is the contract creation transaction.
+    log.warning('This is the contract creation transaction.', []);
+    if (event.receipt) {
+      let receipt = event.receipt as ethereum.TransactionReceipt;
+      log.warning('Contract address is: {}', [
+        receipt.contractAddress.toHexString(),
+      ]);
+      let collection = new Collection(receipt.contractAddress);
+      collection.deployer = event.transaction.from;
+      collection.save();
 
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
-
-  if (event.params.role === 1) {
-    // This is a new controller being added to a token.
-    // First we add the controller to the token's list of controllers.
-    // Then we create a new controller entity.
-
-    let token = Token.load(
-      Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId))
-    );
-    let controller = Controller.load(event.params.toAddress);
-
-    if (!controller) {
-      // Create a new controller entity
-      controller = new Controller(event.params.toAddress);
+      // add owner
+      let owner = new CollectionOwner(event.transaction.from);
+      owner.accessGrantedBy = event.transaction.from;
+      owner.save();
     }
+}
 
-    if (token !== null) {
-      let token_controllers = token.controllers;
-      if (!token_controllers) {
-        token_controllers = [];
-      }
-      token_controllers.push(event.params.toAddress);
-      token.controllers = token_controllers;
+export function handleCollectionRoleChanged(event: CollectionRoleChangedEvent): void {
+  let toAddress = event.params.toAddress;
+  let byAddress = event.params.byAddress;
+  let role = event.params.role;
+  let status = event.params.status;
+  
+  if (role == 0) {
+    // Owner role
+    if (status) {
+      // granted
+      let owner = new CollectionOwner(toAddress);
+      owner.accessGrantedBy = byAddress;
+      owner.save();
     } else {
-      log.error(
-        'Handling controller access granted event for tokenId {}. THE TOKEN DOES NOT EXIST. FAILED TO UPDATE THE TOKEN ENTITY.',
-        [event.params.tokenId.toHexString()]
-      );
-      return;
+      // revoked
+      store.remove('CollectionOwner', toAddress.toHexString());
     }
-
-    controller.save();
-    token.save();
+  } else {
+    log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [role.toString(), byAddress.toHexString(), toAddress.toHexString()]);
   }
 }
 
-export function handleTokenRoleRevoked(event: TokenRoleRevokedEvent): void {
-  let entity = new TokenRoleRevoked(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.tokenId = event.params.tokenId;
-  entity.role = event.params.role;
-  entity.toAddress = event.params.toAddress;
-  entity.byAddress = event.params.byAddress;
+export function handleTokenRoleChanged(event: TokenRoleChangedEvent): void {
+  let tokenId = event.params.tokenId;
+  let toAddress = event.params.toAddress;
+  let byAddress = event.params.byAddress;
+  let role = event.params.role;
+  let status = event.params.status;
+  
+  // load token
+  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
+  if (!token) {
+    log.error('Token not found. TokenId: {}', [tokenId.toString()]);
+    return;
+  } 
 
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
-
-  if (event.params.role === 1) {
-    // This is a controller being removed from a token.
-
-    // Load the token with the tokenId.
-    let token = Token.load(
-      Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId))
-    );
-
-    // Check if the token entity exists.
-    if (token !== null) {
-      // get the list of controllers.
-      let token_controllers = token.controllers;
-      if (!token_controllers) {
-        token_controllers = [];
-      }
-
+  if (role == 0) {
+    // Controller role
+    // get the list of controllers.
+    let token_controllers = token.tokenControllers;
+    if (!token_controllers) {
+      token_controllers = [];
+    }
+    if (status) {
+      // granted
+      token_controllers.push(toAddress);
+    } else {
+      // revoked
       // remove address from the controllers list
       const index = token_controllers.indexOf(event.params.toAddress, 0);
       if (index > -1) {
         token_controllers.splice(index, 1);
       }
-
-      // assign the new controllers list
-      token.controllers = token_controllers;
-    } else {
-      // the token does not exist
-      log.error(
-        'Handling controller access revoked event for tokenId {}. THE TOKEN DOES NOT EXIST. FAILED TO UPDATE THE TOKEN ENTITY.',
-        [event.params.tokenId.toHexString()]
-      );
-      return;
     }
-
-    // save the token data
-    token.save();
+    token.tokenControllers = token_controllers;
+  } else {
+    log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [role.toString(), byAddress.toHexString(), toAddress.toHexString()]);
   }
 }
 
@@ -455,11 +347,11 @@ export function handleTransfer(event: TransferEvent): void {
   let token: Token | null;
 
   let owner_address = event.params.to;
-  let owner = Owner.load(owner_address);
+  let owner = TokenOwner.load(owner_address);
 
   if (!owner) {
     // Create a new owner entity
-    owner = new Owner(owner_address);
+    owner = new TokenOwner(owner_address);
   }
 
   if (parseInt(event.params.from.toHexString()) !== 0) {
@@ -472,7 +364,7 @@ export function handleTransfer(event: TransferEvent): void {
 
     if (token) {
       // Entity exists
-      token.owner = owner_address;
+      token.tokenOwner = owner_address;
 
       // Save both entities
       owner.save();
