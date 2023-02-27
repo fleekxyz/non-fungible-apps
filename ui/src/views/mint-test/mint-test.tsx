@@ -4,6 +4,12 @@ import { EthereumHooks } from '@/integrations';
 import { ConnectKitButton } from 'connectkit';
 import { useAccount } from 'wagmi';
 
+/**
+ * This is an example about how to use the EthereumHooks to create a context for a contract method
+ *
+ * TODO: this view must be removed before releasing the app
+ */
+
 // We first create a context for a selected contract method
 const [MintProvider, useMintContext] =
   EthereumHooks.createFleekERC721WriteContext('mint');
