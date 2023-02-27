@@ -27,9 +27,9 @@ export const RepoBranchCommitFields = () => {
     }
   }, [queryLoading, dispatch]);
 
-  const handleBranchChange = (dorpdownOption: DropdownItem) => {
-    setBranchName(dorpdownOption);
-    setCommitHash(dorpdownOption.value);
+  const handleBranchChange = (dropdownOption: DropdownItem) => {
+    setBranchName(dropdownOption);
+    setCommitHash(dropdownOption.value);
   };
 
   const handleCommitHashChange = (e: React.ChangeEvent<HTMLInputElement>) => {

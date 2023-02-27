@@ -1,7 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { before } from 'mocha';
-import { TestConstants, Fixtures } from '../helpers';
+import { TestConstants, Fixtures, Errors } from '../helpers';
 const { AccessPointStatus } = TestConstants;
 
 describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
@@ -54,7 +53,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
 
     await expect(
       contract.getAccessPointJSON('accesspoint.com')
-    ).to.be.revertedWith('FleekERC721: invalid AP');
+    ).to.be.revertedWithCustomError(contract, Errors.AccessPointNotExistent);
   });
 
   it('should increase the AP score', async () => {
@@ -126,7 +125,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
 
     await expect(
       contract.connect(otherAccount).removeAccessPoint('accesspoint.com')
-    ).to.be.revertedWith('FleekERC721: must be AP owner');
+    ).to.be.revertedWithCustomError(contract, Errors.MustBeAccessPointOwner);
   });
 
   it('should not be allowed to add the same AP more than once', async () => {
@@ -136,7 +135,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
 
     await expect(
       contract.addAccessPoint(tokenId, 'accesspoint.com')
-    ).to.be.revertedWith('FleekERC721: AP already exists');
+    ).to.be.revertedWithCustomError(contract, Errors.AccessPointAlreadyExists);
   });
 
   it('should change "contentVerified" to true', async () => {
@@ -204,10 +203,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
   it('should token owner be able to change the auto approval settings to on', async () => {
     const { contract, tokenId, owner } = fixture;
 
-
-    await contract
-      .connect(owner)
-      .setAccessPointAutoApproval(tokenId, true);
+    await contract.connect(owner).setAccessPointAutoApproval(tokenId, true);
 
     await contract.addAccessPoint(tokenId, 'accesspoint.com');
 

@@ -72,8 +72,7 @@ export function handleNewMint(event: NewMintEvent): void {
   let commitHash = event.params.commitHash;
   let logo = event.params.logo;
   let color = event.params.color;
-  let accessPointAutoApproval =
-    event.params.accessPointAutoApproval;
+  let accessPointAutoApproval = event.params.accessPointAutoApproval;
   let tokenId = event.params.tokenId;
   let ownerAddress = event.params.owner;
 
@@ -86,8 +85,7 @@ export function handleNewMint(event: NewMintEvent): void {
   newMintEntity.gitRepository = gitRepository;
   newMintEntity.logo = logo;
   newMintEntity.color = color;
-  newMintEntity.accessPointAutoApproval =
-    accessPointAutoApproval;
+  newMintEntity.accessPointAutoApproval = accessPointAutoApproval;
   newMintEntity.triggeredBy = event.params.minter;
   newMintEntity.tokenOwner = ownerAddress;
   newMintEntity.blockNumber = event.block.number;
@@ -142,8 +140,10 @@ export function handleNewMint(event: NewMintEvent): void {
   token.save();
 }
 
-export function handleMetadataUpdateWithStringValue(event: MetadataUpdateEvent): void {
-  /** 
+export function handleMetadataUpdateWithStringValue(
+  event: MetadataUpdateEvent
+): void {
+  /**
    * Metadata handled here:
    * setTokenExternalURL
    * setTokenENS
@@ -165,7 +165,9 @@ export function handleMetadataUpdateWithStringValue(event: MetadataUpdateEvent):
   entity.save();
 
   // UPDATE TOKEN
-  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
+  let token = Token.load(
+    Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
+  );
 
   if (token) {
     if (event.params.key == 'externalURL') {
@@ -179,12 +181,14 @@ export function handleMetadataUpdateWithStringValue(event: MetadataUpdateEvent):
     } else {
       // logo
       token.logo = event.params.value;
-    }   
+    }
     token.save();
   }
 }
 
-export function handleMetadataUpdateWithDoubleStringValue(event: MetadataUpdateEvent2): void {
+export function handleMetadataUpdateWithDoubleStringValue(
+  event: MetadataUpdateEvent2
+): void {
   /**
    * setTokenBuild
    */
@@ -202,7 +206,9 @@ export function handleMetadataUpdateWithDoubleStringValue(event: MetadataUpdateE
   entity.save();
 
   // UPDATE TOKEN
-  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
+  let token = Token.load(
+    Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
+  );
 
   if (token) {
     if (event.params.key == 'build') {
@@ -215,11 +221,13 @@ export function handleMetadataUpdateWithDoubleStringValue(event: MetadataUpdateE
       token.gitRepository = event.params.value[1];
       token.save();
       gitRepositoryEntity.save();
-    }  
+    }
   }
 }
 
-export function handleMetadataUpdateWithIntValue(event: MetadataUpdateEvent1): void {
+export function handleMetadataUpdateWithIntValue(
+  event: MetadataUpdateEvent1
+): void {
   /**
    * setTokenColor
    */
@@ -236,7 +244,9 @@ export function handleMetadataUpdateWithIntValue(event: MetadataUpdateEvent1): v
 
   entity.save();
 
-  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
+  let token = Token.load(
+    Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
+  );
 
   if (token) {
     if (event.params.key == 'color') {
