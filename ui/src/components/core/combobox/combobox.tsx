@@ -77,7 +77,7 @@ const ComboboxOption = ({ option }: ComboboxOptionProps) => (
           <span
             className={`${active ? 'text-slate12' : 'text-slate11'} ${
               option.icon ? 'max-w-70' : 'max-w-full'
-            }whitespace-nowrap text-ellipsis overflow-hidden`}
+            } whitespace-nowrap text-ellipsis overflow-hidden`}
           >
             {option.label}
           </span>
