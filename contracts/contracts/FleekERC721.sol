@@ -15,6 +15,8 @@ error AccessPointScoreCannotBeLower();
 error MustBeAccessPointOwner();
 error MustBeTokenOwner(uint256 tokenId);
 error ThereIsNoTokenMinted();
+error InvalidTokenIdForAccessPoint();
+error AccessPointCreationStatusAlreadySet();
 
 contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, FleekPausable {
     using Strings for uint256;
@@ -494,14 +496,8 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         bool approved
     ) public requireTokenOwner(tokenId) {
         AccessPoint storage accessPoint = _accessPoints[apName];
-        require(
-            accessPoint.tokenId == tokenId,
-            "FleekERC721: the passed tokenId is not the same as the access point's tokenId."
-        );
-        require(
-            accessPoint.status == AccessPointCreationStatus.DRAFT,
-            "FleekERC721: the access point creation status has been set before."
-        );
+        if (accessPoint.tokenId != tokenId) revert InvalidTokenIdForAccessPoint();
+        if (accessPoint.status != AccessPointCreationStatus.DRAFT) revert AccessPointCreationStatusAlreadySet();
 
         if (approved) {
             // Approval
