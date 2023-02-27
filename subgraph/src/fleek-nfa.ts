@@ -2,13 +2,9 @@ import { Address, Bytes, log, store, ethereum } from '@graphprotocol/graph-ts';
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
-  CollectionRoleGranted as CollectionRoleGrantedEvent,
-  CollectionRoleRevoked as CollectionRoleRevokedEvent,
   MetadataUpdate as MetadataUpdateEvent,
   MetadataUpdate1 as MetadataUpdateEvent1,
   MetadataUpdate2 as MetadataUpdateEvent2,
-  TokenRoleGranted as TokenRoleGrantedEvent,
-  TokenRoleRevoked as TokenRoleRevokedEvent,
   Transfer as TransferEvent,
   NewMint as NewMintEvent,
 } from '../generated/FleekNFA/FleekNFA';
@@ -17,16 +13,12 @@ import {
   ApprovalForAll,
   Collection,
   CollectionOwner,
-  CollectionRoleGranted,
-  CollectionRoleRevoked,
   Controller,
   GitRepository as GitRepositoryEntity,
   MetadataUpdate,
   NewMint,
   Owner,
   Token,
-  TokenRoleGranted,
-  TokenRoleRevoked,
   Transfer,
 } from '../generated/schema';
 

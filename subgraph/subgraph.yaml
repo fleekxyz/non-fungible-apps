@@ -16,12 +16,8 @@ dataSources:
       entities:
         - Approval
         - ApprovalForAll
-        - CollectionRoleGranted
-        - CollectionRoleRevoked
         - MetadataUpdate
         - NewMint
-        - TokenRoleGranted
-        - TokenRoleRevoked
         - Transfer
         - Token
         - Owner
@@ -42,16 +38,8 @@ dataSources:
           handler: handleMetadataUpdateWithDoubleStringValue
         - event: MetadataUpdate(indexed uint256,string,uint24,indexed address)
           handler: handleMetadataUpdateWithIntValue
-        - event: CollectionRoleGranted(indexed uint8,indexed address,address)
-          handler: handleCollectionRoleGranted
-        - event: CollectionRoleRevoked(indexed uint8,indexed address,address)
-          handler: handleCollectionRoleRevoked
         - event: NewMint(indexed uint256,string,string,string,string,string,string,string,uint24,bool,indexed address,indexed address)
           handler: handleNewMint
-        - event: TokenRoleGranted(indexed uint256,indexed uint8,indexed address,address)
-          handler: handleTokenRoleGranted
-        - event: TokenRoleRevoked(indexed uint256,indexed uint8,indexed address,address)
-          handler: handleTokenRoleRevoked
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/fleek-nfa.ts
