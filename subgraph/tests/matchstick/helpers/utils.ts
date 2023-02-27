@@ -107,12 +107,6 @@ export function createNewMintEvent(
   newMintEvent.parameters = new Array();
 
   newMintEvent.parameters.push(
-    new ethereum.EventParam('owner', ethereum.Value.fromAddress(to))
-  );
-  newMintEvent.parameters.push(
-    new ethereum.EventParam('minter', ethereum.Value.fromAddress(to))
-  );
-  newMintEvent.parameters.push(
     new ethereum.EventParam(
       'tokenId',
       ethereum.Value.fromUnsignedBigInt(tokenId)
@@ -144,14 +138,14 @@ export function createNewMintEvent(
   );
   newMintEvent.parameters.push(
     new ethereum.EventParam(
-      'gitRepository',
-      ethereum.Value.fromString('repo')
+      'commitHash',
+      ethereum.Value.fromString('hash')
     )
   );
   newMintEvent.parameters.push(
     new ethereum.EventParam(
-      'commitHash',
-      ethereum.Value.fromString('hash')
+      'gitRepository',
+      ethereum.Value.fromString('repo')
     )
   );
   newMintEvent.parameters.push(
@@ -171,6 +165,12 @@ export function createNewMintEvent(
       'accessPointAutoApproval',
       ethereum.Value.fromBoolean(true)
     )
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam('minter', ethereum.Value.fromAddress(to))
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam('owner', ethereum.Value.fromAddress(to))
   );
 
   newMintEvent.transaction.hash = Bytes.fromI32(event_count);

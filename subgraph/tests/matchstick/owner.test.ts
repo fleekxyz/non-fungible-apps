@@ -66,7 +66,7 @@ describe('Owner tests', () => {
         )
       );
       handleTransfers(transfers);
-      logStore();
+      //logStore();
     });
   
     afterAll(() => {
