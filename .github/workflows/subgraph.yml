@@ -4,10 +4,6 @@ on:
   pull_request:
     branches:    
       - main
-      - develop
-  push:
-    paths:
-      - 'subgraph/**'
 
 jobs:
 

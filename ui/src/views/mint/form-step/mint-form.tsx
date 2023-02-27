@@ -8,14 +8,22 @@ import {
   VerifyNFAField,
 } from './fields';
 import { MintCardHeader } from '../mint-card';
+import { useAccount } from 'wagmi';
 
 export const FormStep = () => {
+  const { address } = useAccount();
   const { prevStep, nextStep } = Stepper.useContext();
   const { appName, appDescription, domain } = Mint.useContext();
 
+  //TODO remove once it's integrated with mint function
+  console.log('address', address);
+  const handlePrevStep = () => {
+    prevStep();
+  };
+
   return (
     <Card.Container css={{ width: '$107h' }}>
-      <MintCardHeader title="NFA Details" onClickBack={prevStep} />
+      <MintCardHeader title="NFA Details" onClickBack={handlePrevStep} />
       <Card.Body>
         <Grid
           css={{

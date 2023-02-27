@@ -3,11 +3,12 @@ import { MintCardHeader } from '@/views/mint/mint-card';
 import { Mint } from '@/views/mint/mint.context';
 
 export const RepoConfigurationHeader = () => {
-  const { setGithubStep, setRepositoryConfig } = Mint.useContext();
+  const { setGithubStep, setBranchName, setCommitHash } = Mint.useContext();
 
   const handlePrevStepClick = () => {
     setGithubStep(2);
-    setRepositoryConfig({} as DropdownItem, '');
+    setBranchName({} as DropdownItem);
+    setCommitHash('');
   };
 
   return (
