@@ -1,29 +1,37 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
-
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
-import builtins from 'rollup-plugin-node-builtins';
+import EslintGlobalsPolyfills from '@esbuild-plugins/node-globals-polyfill';
+import EslintModulePolyfills from '@esbuild-plugins/node-modules-polyfill';
+import rollupNodePolyfill from 'rollup-plugin-polyfill-node';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [tsconfigPaths(), react()],
+
   optimizeDeps: {
     esbuildOptions: {
-      target: 'es2020',
-      supported: { bigint: true },
-      plugins: [NodeModulesPolyfillPlugin()],
+      // Node.js global to browser globalThis
+      define: {
+        global: 'globalThis',
+      },
+
+      // Enable esbuild polyfill plugins
+      plugins: [
+        EslintGlobalsPolyfills({
+          buffer: true,
+          process: true,
+        }),
+        EslintModulePolyfills(),
+      ],
     },
   },
   build: {
-    target: 'es2020',
     rollupOptions: {
       plugins: [
         // Enable rollup polyfills plugin
         // used during production bundling
-        builtins(),
-        rollupNodePolyFill(),
+        rollupNodePolyfill(),
       ],
     },
   },
