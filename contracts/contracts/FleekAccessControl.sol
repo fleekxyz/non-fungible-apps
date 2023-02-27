@@ -10,7 +10,6 @@ error MustHaveAtLeastOneOwner();
 error RoleAlreadySet();
 
 contract FleekAccessControl is Initializable {
-
     /**
      * @dev All available collection roles.
      */
@@ -127,8 +126,7 @@ contract FleekAccessControl is Initializable {
      */
     function _revokeCollectionRole(CollectionRoles role, address account) internal {
         if (!hasCollectionRole(role, account)) revert RoleAlreadySet();
-        if (role == CollectionRoles.Owner && _collectionRolesCounter[role] == 1)
-            revert MustHaveAtLeastOneOwner();
+        if (role == CollectionRoles.Owner && _collectionRolesCounter[role] == 1) revert MustHaveAtLeastOneOwner();
 
         _collectionRoles[role][account] = false;
         _collectionRolesCounter[role] -= 1;

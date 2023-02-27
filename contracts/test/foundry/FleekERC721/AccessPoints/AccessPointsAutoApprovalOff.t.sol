@@ -6,7 +6,7 @@ import "../TestBase.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {FleekAccessControl} from "contracts/FleekAccessControl.sol";
 import "../../../../contracts/FleekERC721.sol";
-import './ApBase.sol';
+import "./ApBase.sol";
 
 contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base, APConstants {
     using Strings for address;
@@ -37,7 +37,7 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base, APConstants {
         string memory accessPointName = "accesspoint.com";
         CuT.addAccessPoint(tokenId, accessPointName);
         CuT.removeAccessPoint(accessPointName);
- 
+
         APConstants.assertAccessPointJSON(
             accessPointName,
             "0",

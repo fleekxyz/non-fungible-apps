@@ -9,8 +9,14 @@ import "./FleekAccessControl.sol";
 import "./util/FleekStrings.sol";
 import "./FleekPausable.sol";
 
+error AccessPointNotExistent();
+error AccessPointAlreadyExists();
+error AccessPointScoreCannotBeLower();
+error MustBeAccessPointOwner();
 error MustBeTokenOwner(uint256 tokenId);
 error ThereIsNoTokenMinted();
+error InvalidTokenIdForAccessPoint();
+error AccessPointCreationStatusAlreadySet();
 
 contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, FleekPausable {
     using Strings for uint256;
@@ -40,11 +46,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
 
-    event ChangeAccessPointAutoApproval(
-        uint256 indexed token,
-        bool indexed settings,
-        address indexed triggeredBy
-    );
+    event ChangeAccessPointAutoApproval(uint256 indexed token, bool indexed settings, address indexed triggeredBy);
 
     event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
 
@@ -132,7 +134,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * @dev Checks if the AccessPoint exists.
      */
     modifier requireAP(string memory apName) {
-        require(_accessPoints[apName].owner != address(0), "FleekERC721: invalid AP");
+        if (_accessPoints[apName].owner == address(0)) revert AccessPointNotExistent();
         _;
     }
 
@@ -161,7 +163,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     ) public payable requireCollectionRole(CollectionRoles.Owner) returns (uint256) {
         uint256 tokenId = _appIds;
         _mint(to, tokenId);
-        
+
         _appIds += 1;
 
         App storage app = _apps[tokenId];
@@ -453,7 +455,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function addAccessPoint(uint256 tokenId, string memory apName) public payable whenNotPaused {
         // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
         _requireMinted(tokenId);
-        require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
+        if (_accessPoints[apName].owner != address(0)) revert AccessPointAlreadyExists();
 
         emit NewAccessPoint(apName, tokenId, msg.sender);
 
@@ -494,14 +496,8 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         bool approved
     ) public requireTokenOwner(tokenId) {
         AccessPoint storage accessPoint = _accessPoints[apName];
-        require(
-            accessPoint.tokenId == tokenId,
-            "FleekERC721: the passed tokenId is not the same as the access point's tokenId."
-        );
-        require(
-            accessPoint.status == AccessPointCreationStatus.DRAFT,
-            "FleekERC721: the access point creation status has been set before."
-        );
+        if (accessPoint.tokenId != tokenId) revert InvalidTokenIdForAccessPoint();
+        if (accessPoint.status != AccessPointCreationStatus.DRAFT) revert AccessPointCreationStatusAlreadySet();
 
         if (approved) {
             // Approval
@@ -528,7 +524,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      *
      */
     function removeAccessPoint(string memory apName) public whenNotPaused requireAP(apName) {
-        require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
+        if (msg.sender != _accessPoints[apName].owner) revert MustBeAccessPointOwner();
         _accessPoints[apName].status = AccessPointCreationStatus.REMOVED;
         uint256 tokenId = _accessPoints[apName].tokenId;
         emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.REMOVED, msg.sender);
@@ -587,7 +583,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      *
      */
     function decreaseAccessPointScore(string memory apName) public requireAP(apName) {
-        require(_accessPoints[apName].score > 0, "FleekERC721: score cant be lower");
+        if (_accessPoints[apName].score == 0) revert AccessPointScoreCannotBeLower();
         _accessPoints[apName].score--;
         emit ChangeAccessPointScore(apName, _accessPoints[apName].tokenId, _accessPoints[apName].score, msg.sender);
     }
