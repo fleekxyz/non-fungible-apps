@@ -92,6 +92,7 @@ export function handleNewMint(event: NewMintEvent): void {
   newMintEntity.blockTimestamp = event.block.timestamp;
   newMintEntity.transactionHash = event.transaction.hash;
   newMintEntity.save();
+  log.error('{}', [tokenId.toString()]);
 
   // Create Token, Owner, and Controller entities
 

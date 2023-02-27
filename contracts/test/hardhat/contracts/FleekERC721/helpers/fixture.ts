@@ -16,11 +16,13 @@ export abstract class Fixtures {
     const Contract = await ethers.getContractFactory('FleekERC721', {
       libraries,
     });
+
     const contract = await upgrades.deployProxy(
       Contract,
       [
         TestConstants.CollectionParams.name,
         TestConstants.CollectionParams.symbol,
+        [], // Initial Billings
       ],
       {
         unsafeAllow: ['external-library-linking'],

@@ -8,6 +8,7 @@ const { getProxyAddress, proxyStore } = require('./utils/proxy-store');
 const ARGUMENTS = [
   'FleekNFAs', // Collection name
   'FLKNFA', // Collection symbol
+  [], // Billing values
 ];
 
 // --- Script Settings ---
