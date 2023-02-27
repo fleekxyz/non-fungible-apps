@@ -24,7 +24,7 @@ contract Test_FleekERC721_Deploy is Test_FleekERC721_Base {
 
     function testFuzz_nameAndSymbol(string memory _name, string memory _symbol) public {
         CuT = new FleekERC721();
-        CuT.initialize(_name, _symbol);
+        CuT.initialize(_name, _symbol, new uint256[](0));
 
         assertEq(CuT.name(), _name);
         assertEq(CuT.symbol(), _symbol);
