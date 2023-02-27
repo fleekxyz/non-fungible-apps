@@ -43,6 +43,7 @@ export const UserOrgsCombobox = () => {
       )}
       selectedValue={selectedUserOrg}
       onChange={handleUserOrgChange}
+      leftIcon="github"
     />
   );
 };

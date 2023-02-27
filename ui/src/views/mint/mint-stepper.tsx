@@ -15,14 +15,14 @@ export const MintStepper = () => {
       <Stepper.Root initialStep={1}>
         <Stepper.Container>
           <Stepper.Step>
-            <MintStep header="Connect GitHub and select repository">
-              <GithubStep />
+            <MintStep header="Connect your Ethereum Wallet to mint an NFA">
+              <WalletStep />
             </MintStep>
           </Stepper.Step>
 
           <Stepper.Step>
-            <MintStep header="Connect your Ethereum Wallet to mint an NFA">
-              <WalletStep />
+            <MintStep header="Connect GitHub and select repository">
+              <GithubStep />
             </MintStep>
           </Stepper.Step>
 
