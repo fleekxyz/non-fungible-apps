@@ -24,7 +24,6 @@ dataSources:
         - CollectionOwner
         - GithubRepository
         - AccessPoint
-        - NewAccessPoint
         - ChangeAccessPointCreationStatus
         - ChangeAccessPointScore
         - ChangeAccessPointNameVerify
