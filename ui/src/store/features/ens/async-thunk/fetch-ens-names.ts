@@ -12,7 +12,9 @@ export const fetchEnsNamesThunk = createAsyncThunk<void, `0x${string}`>(
       dispatch(ensActions.setState('loading'));
 
       //fetch ens names for received addresses
-      const ensList = await Ethereum.getEnsName(address);
+      const ensList = await Ethereum.getEnsName(
+        '0xbd6bbe64bf841b81fc5a6e2b760029e316f2783b'
+      );
 
       dispatch(ensActions.setEnsNames(ensList));
     } catch (error) {
