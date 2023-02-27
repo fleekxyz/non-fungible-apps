@@ -71,46 +71,46 @@ describe('New Token ENS tests', () => {
       clearStore();
     });
   
-    describe('New Token Description Events', () => {
-        test('Check the number of NewTokenDescription events to be valid', () => {
-          assert.entityCount('NewTokenDescription', 6);
+    describe('New Token ENS Assertions', () => {
+        test('Check the number of NewTokenENS events to be valid', () => {
+          assert.entityCount('NewTokenENS', 6);
         });
-        test('Check the `description` and `triggeredBy` fields of each new token name event to be equal to expected values', () => {
+        test('Check the `description` and `triggeredBy` fields of each new token ens event to be equal to expected values', () => {
           assert.fieldEquals(
-            'NewTokenDescription',
+            'NewTokenENS',
             makeEventId(0),
-            'description',
-            'New Token Zero Description'
+            'ENS',
+            'New_Token_Zero_ENS'
           );
           assert.fieldEquals(
-            'NewTokenDescription',
+            'NewTokenENS',
             makeEventId(1),
-            'description',
-            'New Token One Description'
+            'ENS',
+            'New_Token_One_ENS'
           );
           assert.fieldEquals(
-            'NewTokenDescription',
+            'NewTokenENS',
             makeEventId(2),
-            'description',
-            'New Token Two Description'
+            'ENS',
+            'New_Token_Two_ENS'
           );
           assert.fieldEquals(
-            'NewTokenDescription',
+            'NewTokenENS',
             makeEventId(3),
-            'description',
-            'New Token Three Description'
+            'ENS',
+            'New_Token_Three_ENS'
           );
           assert.fieldEquals(
-            'NewTokenDescription',
+            'NewTokenENS',
             makeEventId(4),
-            'description',
-            'New Token Four Description'
+            'ENS',
+            'New_Token_Four_ENS'
           );
           assert.fieldEquals(
-            'NewTokenDescription',
+            'NewTokenENS',
             makeEventId(5),
-            'description',
-            'New Token Five Description By New Owner'
+            'ENS',
+            'New_Token_Five_ENS'
           );
         });
       });    
