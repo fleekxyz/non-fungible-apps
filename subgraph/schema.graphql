@@ -94,11 +94,6 @@ type Controller @entity {
   tokens: [Token!] @derivedFrom(field: "controllers")
 }
 
-type Collection @entity {
-  id: Bytes! #address
-  deployer: Bytes! #address
-}
-
 type GitRepository @entity {
   id: String! # transaction hash of the first transaction this repository appeared in
   tokens: [Token!] @derivedFrom(field: "gitRepository")

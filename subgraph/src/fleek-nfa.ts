@@ -25,9 +25,7 @@ import {
   AccessPoint,
   Approval,
   ApprovalForAll,
-  Collection,
   Owner,
-  Controller,
   GitRepository as GitRepositoryEntity,
   MetadataUpdate,
   NewMint,
@@ -264,10 +262,7 @@ export function handleInitialized(event: InitializedEvent): void {
       log.warning('Contract address is: {}', [
         receipt.contractAddress.toHexString(),
       ]);
-      let collection = new Collection(receipt.contractAddress);
-      collection.deployer = event.transaction.from;
-      collection.save();
-
+ 
       // add owner
       let owner = new Owner(event.transaction.from);
       owner.collection = true;
