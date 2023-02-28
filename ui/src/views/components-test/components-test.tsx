@@ -26,24 +26,25 @@ export const ComponentsTest = () => {
       css={{
         flexDirection: 'column',
         margin: '100px',
-        width: '175px',
+
         justifyContent: 'center',
         gap: '10px',
       }}
     >
       <h1>Components Test</h1>
-      <p>Check the console for the output.</p>
-      <Combobox
-        items={itemsCombobox}
-        selectedValue={selectedValue}
-        onChange={handleComboboxChange}
-      />
-      <Combobox
-        items={itemsCombobox}
-        selectedValue={selectedValueAutocomplete}
-        onChange={handleComboboxChangeAutocomplete}
-        withAutocomplete
-      />
+      <Flex css={{ width: '400px', gap: '$2' }}>
+        <Combobox
+          items={itemsCombobox}
+          selectedValue={selectedValue}
+          onChange={handleComboboxChange}
+        />
+        <Combobox
+          items={itemsCombobox}
+          selectedValue={selectedValueAutocomplete}
+          onChange={handleComboboxChangeAutocomplete}
+          withAutocomplete
+        />
+      </Flex>
     </Flex>
   );
 };
