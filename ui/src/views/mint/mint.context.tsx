@@ -10,6 +10,7 @@ export type MintContext = {
   branchName: DropdownItem; //get value from DropdownItem to mint
   commitHash: string;
   githubStep: number;
+  nfaStep: number;
   appName: string;
   appDescription: string;
   appLogo: string;
@@ -18,6 +19,7 @@ export type MintContext = {
   domain: string;
   verifyNFA: boolean;
   setGithubStep: (step: number) => void;
+  setNfaStep: (step: number) => void;
   setSelectedUserOrg: (userOrg: ComboboxItem) => void;
   setRepositoryName: (repo: GithubState.Repository) => void;
   setBranchName: (branch: DropdownItem) => void;
@@ -55,6 +57,7 @@ export abstract class Mint {
     const [githubStep, setGithubStepContext] = useState(1);
 
     //NFA Details
+    const [nfaStep, setNfaStep] = useState(1);
     const [appName, setAppName] = useState('');
     const [appDescription, setAppDescription] = useState('');
     const [appLogo, setAppLogo] = useState('');
@@ -77,6 +80,7 @@ export abstract class Mint {
           branchName,
           commitHash,
           githubStep,
+          nfaStep,
           appName,
           appDescription,
           appLogo,
@@ -86,6 +90,7 @@ export abstract class Mint {
           verifyNFA,
           setSelectedUserOrg,
           setGithubStep,
+          setNfaStep,
           setRepositoryName,
           setBranchName,
           setCommitHash,
