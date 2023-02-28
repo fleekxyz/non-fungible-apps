@@ -40,6 +40,7 @@ export const Ethereum: Ethereum.Core = {
       });
   },
 
+  //TODO remove if we're not gonna validate ens on the client side
   async validateEnsName(name) {
     const provider = new ethers.providers.JsonRpcProvider(
       'https://eth.llamarpc.com'
