@@ -17,7 +17,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
     const { contract, owner, tokenId } = fixture;
 
     await expect(contract.addAccessPoint(tokenId, 'random.com'))
-      .to.emit(contract, 'ChangeAccessPointStatus')
+      .to.emit(contract, 'ChangeAccessPointCreationStatus')
       .withArgs(
         'random.com',
         tokenId,

@@ -44,6 +44,7 @@ type MetadataUpdate @entity(immutable: true) {
   stringValue: String
   uint24Value: Int
   doubleStringValue: [String!]!
+  booleanValue: Boolean
   byAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -76,11 +77,13 @@ type Token @entity {
   controllers: [Controller!]
   gitRepository: GitRepository!
   commitHash: String!
+  accessPoints: [AccessPoint!] @derivedFrom(field: "token")
 }
 
 type Owner @entity {
   id: Bytes! # address
   tokens: [Token!] @derivedFrom(field: "owner")
+  accessPoints: [AccessPoint!] @derivedFrom(field: "owner")
 }
 
 type Controller @entity {
@@ -103,4 +106,14 @@ type CollectionOwner @entity {
 type GitRepository @entity {
   id: String! # transaction hash of the first transaction this repository appeared in
   tokens: [Token!] @derivedFrom(field: "gitRepository")
+}
+
+type AccessPoint @entity {
+  id: String! # AP Name
+  token: Token!
+  score: BigInt!
+  contentVerified: Boolean!
+  nameVerified: Boolean!
+  owner: Owner!
+  creationStatus: String!
 }

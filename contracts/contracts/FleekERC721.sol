@@ -43,11 +43,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, bool value, address indexed triggeredBy);
+
 
     event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
-
-    event ChangeAccessPointAutoApproval(uint256 indexed token, bool indexed settings, address indexed triggeredBy);
 
     event ChangeAccessPointScore(string apName, uint256 indexed tokenId, uint256 score, address indexed triggeredBy);
 
@@ -63,7 +63,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         bool indexed verified,
         address indexed triggeredBy
     );
-    event ChangeAccessPointStatus(
+    event ChangeAccessPointCreationStatus(
         string apName,
         uint256 tokenId,
         AccessPointCreationStatus status,
@@ -291,7 +291,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     /**
      * @dev Updates the `accessPointAutoApproval` settings on minted `tokenId`.
      *
-     * May emit a {ChangeAccessPointAutoApproval} event.
+     * May emit a {MetadataUpdate} event.
      *
      * Requirements:
      *
@@ -305,7 +305,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     ) public virtual requireTokenOwner(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].accessPointAutoApproval = _apAutoApproval;
-        emit ChangeAccessPointAutoApproval(tokenId, _apAutoApproval, msg.sender);
+        emit MetadataUpdate(tokenId, 'accessPointAutoApproval', _apAutoApproval, msg.sender);
     }
 
     /**
@@ -479,11 +479,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
                 AccessPointCreationStatus.APPROVED
             );
 
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
+            emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
         } else {
             // Auto Approval is off. Should wait for approval.
             _accessPoints[apName] = AccessPoint(tokenId, 0, false, false, msg.sender, AccessPointCreationStatus.DRAFT);
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.DRAFT, msg.sender);
+            emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.DRAFT, msg.sender);
         }
     }
 
@@ -511,11 +511,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         if (approved) {
             // Approval
             accessPoint.status = AccessPointCreationStatus.APPROVED;
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
+            emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.APPROVED, msg.sender);
         } else {
             // Not Approved
             accessPoint.status = AccessPointCreationStatus.REJECTED;
-            emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.REJECTED, msg.sender);
+            emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.REJECTED, msg.sender);
         }
     }
 
@@ -536,7 +536,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         if (msg.sender != _accessPoints[apName].owner) revert MustBeAccessPointOwner();
         _accessPoints[apName].status = AccessPointCreationStatus.REMOVED;
         uint256 tokenId = _accessPoints[apName].tokenId;
-        emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.REMOVED, msg.sender);
+        emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.REMOVED, msg.sender);
         emit RemoveAccessPoint(apName, tokenId, msg.sender);
     }
 
