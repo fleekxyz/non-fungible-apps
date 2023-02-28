@@ -20,19 +20,19 @@ abstract contract Test_FleekERC721_Assertions is Test {
     }
 
     function expectRevertWithAPAlreadyExists() public {
-        vm.expectRevert("FleekERC721: AP already exists");
+        vm.expectRevert(AccessPointAlreadyExists.selector);
     }
 
     function expectRevertWithMustBeAPOwner() public {
-        vm.expectRevert("FleekERC721: must be AP owner");
+        vm.expectRevert(MustBeAccessPointOwner.selector);
     }
 
     function expectRevertWithInvalidAP() public {
-        vm.expectRevert("FleekERC721: invalid AP");
+        vm.expectRevert(AccessPointNotExistent.selector);
     }
 
     function expectRevertWithMinimalScore() public {
-        vm.expectRevert("FleekERC721: score cant be lower");
+        vm.expectRevert(AccessPointScoreCannotBeLower.selector);
     }
 
     function expectRevertWithInvalidTokenId() public {
@@ -46,7 +46,7 @@ abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
 
     function baseSetUp() internal {
         CuT = new FleekERC721();
-        CuT.initialize("Test Contract", "FLKAPS");
+        CuT.initialize("Test Contract", "FLKAPS", new uint256[](0));
         deployer = address(this);
     }
 

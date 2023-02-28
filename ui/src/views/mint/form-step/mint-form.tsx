@@ -8,33 +8,50 @@ import {
   VerifyNFAField,
 } from './fields';
 import { MintCardHeader } from '../mint-card';
-import { validateEnsField } from './form.validations';
-import { useState } from 'react';
+import { useAccount } from 'wagmi';
+import { parseColorToNumber } from './form.utils';
 
 export const FormStep = () => {
   const { prevStep, nextStep } = Stepper.useContext();
-  const { appName, appDescription, domain, ens, setEnsError } =
-    Mint.useContext();
-  const [loading, setLoading] = useState(false);
+  const { address } = useAccount();
 
-  const handlePrevStep = () => {
-    prevStep();
-  };
+  const {
+    appName,
+    appDescription,
+    domain,
+    appLogo,
+    branchName,
+    commitHash,
+    ens,
+    logoColor,
+    repositoryName,
+    verifyNFA,
+  } = Mint.useContext();
+  const { setArgs } = Mint.useTransactionContext();
 
-  const handleNextStep = async () => {
-    //validate fields
-    setLoading(true);
-    if (ens !== '') {
-      const isValid = await validateEnsField(ens, setEnsError);
-      setLoading(false);
-      if (!isValid) return;
-    }
+  const handleNextStep = () => {
+    if (!address) return console.log('No address was found');
+    // TODO: we need to make sure all values are correct before
+    // setting the args otherwise mint may fail
+    setArgs([
+      address,
+      appName,
+      appDescription,
+      domain,
+      ens.value,
+      commitHash,
+      `${repositoryName.url}/tree/${branchName.label}`,
+      appLogo,
+      parseColorToNumber(logoColor),
+      verifyNFA,
+    ]);
+
     nextStep();
   };
 
   return (
     <Card.Container css={{ width: '$107h' }}>
-      <MintCardHeader title="NFA Details" onClickBack={handlePrevStep} />
+      <MintCardHeader title="NFA Details" onClickBack={prevStep} />
       <Card.Body>
         <Grid
           css={{
@@ -53,7 +70,6 @@ export const FormStep = () => {
             colorScheme="blue"
             variant="solid"
             onClick={handleNextStep}
-            isLoading={loading}
           >
             Continue
           </Button>

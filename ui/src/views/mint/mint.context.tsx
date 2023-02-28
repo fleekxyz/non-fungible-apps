@@ -1,11 +1,12 @@
 import { ComboboxItem, DropdownItem } from '@/components';
-import { Repository } from '@/store';
+import { GithubState } from '@/store';
+import { EthereumHooks } from '@/integrations';
 import { createContext } from '@/utils';
 import { useState } from 'react';
 
 export type MintContext = {
   selectedUserOrg: ComboboxItem;
-  repositoryName: Repository;
+  repositoryName: GithubState.Repository;
   branchName: DropdownItem; //get value from DropdownItem to mint
   commitHash: string;
   githubStep: number;
@@ -16,11 +17,10 @@ export type MintContext = {
   ens: ComboboxItem;
   domain: string;
   verifyNFA: boolean;
-  sucessMint: boolean | undefined;
   ensError: string;
   setGithubStep: (step: number) => void;
   setSelectedUserOrg: (userOrg: ComboboxItem) => void;
-  setRepositoryName: (repo: Repository) => void;
+  setRepositoryName: (repo: GithubState.Repository) => void;
   setBranchName: (branch: DropdownItem) => void;
   setCommitHash: (hash: string) => void;
   setAppName: (name: string) => void;
@@ -30,7 +30,6 @@ export type MintContext = {
   setEns: (ens: ComboboxItem) => void;
   setDomain: (domain: string) => void;
   setVerifyNFA: (verify: boolean) => void;
-  setSucessMint: (sucess: boolean) => void;
   setEnsError: (error: string) => void;
 };
 
@@ -40,15 +39,19 @@ const [MintProvider, useContext] = createContext<MintContext>({
   providerName: 'Mint.Provider',
 });
 
+const [TransactionProvider, useTransactionContext] =
+  EthereumHooks.createFleekERC721WriteContext('mint');
+
 export abstract class Mint {
   static readonly useContext = useContext;
+
+  static readonly useTransactionContext = useTransactionContext;
 
   static readonly Provider: React.FC<Mint.ProviderProps> = ({ children }) => {
     //Github Connection
     const [selectedUserOrg, setSelectedUserOrg] = useState({} as ComboboxItem);
-    const [repositoryName, setRepositoryName] = useState<Repository>(
-      {} as Repository
-    );
+    const [repositoryName, setRepositoryName] =
+      useState<GithubState.Repository>({} as GithubState.Repository);
     const [branchName, setBranchName] = useState({} as DropdownItem);
     const [commitHash, setCommitHash] = useState('');
     const [githubStep, setGithubStepContext] = useState(1);
@@ -64,11 +67,6 @@ export abstract class Mint {
 
     //Field validations
     const [ensError, setEnsError] = useState<string>('');
-
-    //Mint state
-    //true means it's minted
-    //false means it's not minted yet
-    const [sucessMint, setSucessMint] = useState<boolean>(false);
 
     const setGithubStep = (step: number): void => {
       if (step > 0 && step <= 3) {
@@ -91,7 +89,6 @@ export abstract class Mint {
           ens,
           domain,
           verifyNFA,
-          sucessMint,
           ensError,
           setSelectedUserOrg,
           setGithubStep,
@@ -105,11 +102,21 @@ export abstract class Mint {
           setEns,
           setDomain,
           setVerifyNFA,
-          setSucessMint,
           setEnsError,
         }}
       >
-        {children}
+        <TransactionProvider
+          config={{
+            transaction: {
+              onSuccess: (data) => {
+                console.log('Successfully minted! what now?', data);
+                alert('transaction hash: ' + data.transactionHash);
+              },
+            },
+          }}
+        >
+          {children}
+        </TransactionProvider>
       </MintProvider>
     );
   };

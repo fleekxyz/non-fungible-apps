@@ -6,10 +6,7 @@ async function main() {
   // Verify the contract after deploying
   await hre.run('verify:verify', {
     address: address,
-    constructorArguments: [
-      'FleekNFA', // Collection name
-      'FLKNFA', // Collection symbol
-    ],
+    constructorArguments: [],
   });
 }
 // Call the main function and catch if there is any error

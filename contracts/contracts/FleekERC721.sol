@@ -3,24 +3,43 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./FleekAccessControl.sol";
+import "./FleekBilling.sol";
 import "./util/FleekStrings.sol";
 import "./FleekPausable.sol";
 
+error AccessPointNotExistent();
+error AccessPointAlreadyExists();
+error AccessPointScoreCannotBeLower();
+error MustBeAccessPointOwner();
 error MustBeTokenOwner(uint256 tokenId);
 error ThereIsNoTokenMinted();
+error InvalidTokenIdForAccessPoint();
+error AccessPointCreationStatusAlreadySet();
 
-contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, FleekPausable {
+contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, FleekPausable, FleekBilling {
     using Strings for uint256;
-    using Counters for Counters.Counter;
     using FleekStrings for FleekERC721.App;
     using FleekStrings for FleekERC721.AccessPoint;
     using FleekStrings for string;
     using FleekStrings for uint24;
 
+    event NewMint(
+        uint256 indexed tokenId,
+        string name,
+        string description,
+        string externalURL,
+        string ENS,
+        string commitHash,
+        string gitRepository,
+        string logo,
+        uint24 color,
+        bool accessPointAutoApproval,
+        address indexed minter,
+        address indexed owner
+    );
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
@@ -98,16 +117,21 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         AccessPointCreationStatus status;
     }
 
-    Counters.Counter private _appIds;
+    uint256 private _appIds;
     mapping(uint256 => App) private _apps;
     mapping(string => AccessPoint) private _accessPoints;
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
-    function initialize(string memory _name, string memory _symbol) public initializer {
+    function initialize(
+        string memory _name,
+        string memory _symbol,
+        uint256[] memory initialBillings
+    ) public initializer {
         __ERC721_init(_name, _symbol);
         __FleekAccessControl_init();
+        __FleekBilling_init(initialBillings);
         __FleekPausable_init();
     }
 
@@ -115,7 +139,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * @dev Checks if the AccessPoint exists.
      */
     modifier requireAP(string memory apName) {
-        require(_accessPoints[apName].owner != address(0), "FleekERC721: invalid AP");
+        if (_accessPoints[apName].owner == address(0)) revert AccessPointNotExistent();
         _;
     }
 
@@ -127,6 +151,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the caller must have ``collectionOwner``'s admin role.
+     * - billing for the minting may be applied.
      * - the contract must be not paused.
      *
      */
@@ -141,10 +166,11 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         string memory logo,
         uint24 color,
         bool accessPointAutoApproval
-    ) public payable requireCollectionRole(CollectionRoles.Owner) returns (uint256) {
-        uint256 tokenId = _appIds.current();
+    ) public payable requirePayment(Billing.Mint) requireCollectionRole(CollectionRoles.Owner) returns (uint256) {
+        uint256 tokenId = _appIds;
         _mint(to, tokenId);
-        _appIds.increment();
+
+        _appIds += 1;
 
         App storage app = _apps[tokenId];
         app.name = name;
@@ -158,7 +184,20 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
         app.builds[0] = Build(commitHash, gitRepository);
-
+        emit NewMint(
+            tokenId,
+            name,
+            description,
+            externalURL,
+            ENS,
+            commitHash,
+            gitRepository,
+            logo,
+            color,
+            accessPointAutoApproval,
+            msg.sender,
+            to
+        );
         return tokenId;
     }
 
@@ -207,7 +246,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * @dev Returns the last minted tokenId.
      */
     function getLastTokenId() public view virtual returns (uint256) {
-        uint256 current = _appIds.current();
+        uint256 current = _appIds;
         if (current == 0) revert ThereIsNoTokenMinted();
         return current - 1;
     }
@@ -415,14 +454,17 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the tokenId must be minted and valid.
+     * - billing for add acess point may be applied.
      * - the contract must be not paused.
      *
-     * IMPORTANT: The payment is not set yet
      */
-    function addAccessPoint(uint256 tokenId, string memory apName) public payable whenNotPaused {
+    function addAccessPoint(
+        uint256 tokenId,
+        string memory apName
+    ) public payable whenNotPaused requirePayment(Billing.AddAccessPoint) {
         // require(msg.value == 0.1 ether, "You need to pay at least 0.1 ETH"); // TODO: define a minimum price
         _requireMinted(tokenId);
-        require(_accessPoints[apName].owner == address(0), "FleekERC721: AP already exists");
+        if (_accessPoints[apName].owner != address(0)) revert AccessPointAlreadyExists();
 
         emit NewAccessPoint(apName, tokenId, msg.sender);
 
@@ -463,14 +505,8 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         bool approved
     ) public requireTokenOwner(tokenId) {
         AccessPoint storage accessPoint = _accessPoints[apName];
-        require(
-            accessPoint.tokenId == tokenId,
-            "FleekERC721: the passed tokenId is not the same as the access point's tokenId."
-        );
-        require(
-            accessPoint.status == AccessPointCreationStatus.DRAFT,
-            "FleekERC721: the access point creation status has been set before."
-        );
+        if (accessPoint.tokenId != tokenId) revert InvalidTokenIdForAccessPoint();
+        if (accessPoint.status != AccessPointCreationStatus.DRAFT) revert AccessPointCreationStatusAlreadySet();
 
         if (approved) {
             // Approval
@@ -497,7 +533,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      *
      */
     function removeAccessPoint(string memory apName) public whenNotPaused requireAP(apName) {
-        require(msg.sender == _accessPoints[apName].owner, "FleekERC721: must be AP owner");
+        if (msg.sender != _accessPoints[apName].owner) revert MustBeAccessPointOwner();
         _accessPoints[apName].status = AccessPointCreationStatus.REMOVED;
         uint256 tokenId = _accessPoints[apName].tokenId;
         emit ChangeAccessPointStatus(apName, tokenId, AccessPointCreationStatus.REMOVED, msg.sender);
@@ -556,7 +592,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      *
      */
     function decreaseAccessPointScore(string memory apName) public requireAP(apName) {
-        require(_accessPoints[apName].score > 0, "FleekERC721: score cant be lower");
+        if (_accessPoints[apName].score == 0) revert AccessPointScoreCannotBeLower();
         _accessPoints[apName].score--;
         emit ChangeAccessPointScore(apName, _accessPoints[apName].tokenId, _accessPoints[apName].score, msg.sender);
     }
@@ -772,5 +808,45 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      */
     function setPausable(bool pausable) public requireCollectionRole(CollectionRoles.Owner) {
         _setPausable(pausable);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+        BILLING
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Modifier to require billing with a given key.
+     */
+    modifier requirePayment(Billing key) {
+        _requirePayment(key);
+        _;
+    }
+
+    /**
+     * @dev Sets the billing value for a given key.
+     *
+     * May emit a {BillingChanged} event.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `collectionOwner` role.
+     *
+     */
+    function setBilling(Billing key, uint256 value) public requireCollectionRole(CollectionRoles.Owner) {
+        _setBilling(key, value);
+    }
+
+    /**
+     * @dev Withdraws all the funds from contract.
+     *
+     * May emmit a {Withdrawn} event.
+     *
+     * Requirements:
+     *
+     * - the sender must have the `collectionOwner` role.
+     *
+     */
+    function withdraw() public requireCollectionRole(CollectionRoles.Owner) {
+        _withdraw();
     }
 }

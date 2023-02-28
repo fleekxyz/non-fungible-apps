@@ -18,103 +18,33 @@ type ApprovalForAll @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type CollectionRoleGranted @entity(immutable: true) {
+type NewMint @entity(immutable: true) {
   id: Bytes!
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CollectionRoleRevoked @entity(immutable: true) {
-  id: Bytes!
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NewBuild @entity(immutable: true) {
-  id: Bytes!
-  token: BigInt! # uint256
+  tokenId: BigInt! # uint256
+  name: String!
+  description: String!
+  externalURL: String!
+  ENS: String!
   commitHash: String! # string
+  gitRepository: String! # string
+  logo: String!
+  color: Int!
+  accessPointAutoApproval: Boolean!
   triggeredBy: Bytes! # address
+  tokenOwner: Owner! # address 
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type NewTokenDescription @entity(immutable: true) {
+type MetadataUpdate @entity(immutable: true) {
   id: Bytes!
-  token: BigInt! # uint256
-  description: String! # string
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NewTokenENS @entity(immutable: true) {
-  id: Bytes!
-  token: BigInt! # uint256
-  ENS: String! # string
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NewTokenExternalURL @entity(immutable: true) {
-  id: Bytes!
-  token: BigInt! # uint256
-  externalURL: String! # string
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NewTokenLogo @entity(immutable: true) {
-  id: Bytes!
-  token: BigInt! # uint256
-  logo: String! # string
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NewTokenName @entity(immutable: true) {
-  id: Bytes!
-  token: BigInt! # uint256
-  name: String! # string
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type TokenRoleGranted @entity(immutable: true) {
-  id: Bytes!
-  tokenId: BigInt! # uint256
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type TokenRoleRevoked @entity(immutable: true) {
-  id: Bytes!
-  tokenId: BigInt! # uint256
-  role: Int! # uint8
-  toAddress: Bytes! # address
-  byAddress: Bytes! # address
+  tokenId: BigInt!
+  key: String!
+  stringValue: String
+  uint24Value: Int
+  doubleStringValue: [String!]!
+  byAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -132,20 +62,29 @@ type Transfer @entity(immutable: true) {
 
 type Token @entity {
   id: Bytes! # Token ID
-  mint_transaction_hash: Bytes!
+  mintTransaction: NewMint!
   tokenId: BigInt! # uint256
+  name: String!
+  description: String!
+  externalURL: String!
+  ENS: String!
+  logo: String!
+  color: Int!
+  accessPointAutoApproval: Boolean!
   owner: Owner!
-  minted_by: Bytes!
+  mintedBy: Bytes!
   controllers: [Controller!]
+  gitRepository: GitRepository!
+  commitHash: String!
 }
 
 type Owner @entity {
-  id: Bytes! #address
+  id: Bytes! # address
   tokens: [Token!] @derivedFrom(field: "owner")
 }
 
 type Controller @entity {
-  id: Bytes! #address
+  id: Bytes! # address
   tokens: [Token!] @derivedFrom(field: "controllers")
 }
 type Collection @entity {
@@ -159,4 +98,9 @@ type CollectionOwner @entity {
   id: Bytes! # address
   accessGrantedBy: Bytes! #address
   transactionHash: Bytes!
+}
+
+type GitRepository @entity {
+  id: String! # transaction hash of the first transaction this repository appeared in
+  tokens: [Token!] @derivedFrom(field: "gitRepository")
 }

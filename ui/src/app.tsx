@@ -1,11 +1,9 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { initializeWallet } from './store';
 import { themeGlobals } from '@/theme/globals';
 import { ComponentsTest, Home, Mint } from './views';
 import { SVGTestScreen } from './views/svg-test'; // TODO: remove when done
 import { ConnectKitButton } from 'connectkit';
-
-initializeWallet();
+import { MintTest } from './views/mint-test';
 
 export const App = () => {
   themeGlobals();
@@ -22,6 +20,7 @@ export const App = () => {
           <Route path="/svg" element={<SVGTestScreen />} />
           {/** TODO remove for release */}
           <Route path="/components-test" element={<ComponentsTest />} />
+          <Route path="/mint-test" element={<MintTest />} />
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </BrowserRouter>
