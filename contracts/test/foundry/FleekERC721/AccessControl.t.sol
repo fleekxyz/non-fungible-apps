@@ -3,6 +3,7 @@
 pragma solidity ^0.8.17;
 
 import "./TestBase.sol";
+import {FleekBilling} from "contracts/FleekBilling.sol";
 import "contracts/FleekAccessControl.sol";
 
 contract Test_FleekERC721_AccessControlAssertions is Test {
@@ -17,10 +18,10 @@ contract Test_FleekERC721_AccessControlAssertions is Test {
 
 contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC721_AccessControlAssertions {
     uint256 internal tokenId;
-    address internal collectionOwner = address(1);
-    address internal tokenOwner = address(3);
-    address internal tokenController = address(4);
-    address internal anyAddress = address(5);
+    address internal collectionOwner = address(100);
+    address internal tokenOwner = address(200);
+    address internal tokenController = address(300);
+    address internal anyAddress = address(400);
 
     function setUp() public {
         baseSetUp();
@@ -356,6 +357,56 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
         vm.prank(tokenOwner);
         CuT.burn(tokenId);
     }
+
+    function test_setBilling() public {
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        CuT.setBilling(FleekBilling.Billing.Mint, 1 ether);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.setBilling(FleekBilling.Billing.Mint, 2 ether);
+
+        // TokenController
+        vm.prank(tokenController);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.setBilling(FleekBilling.Billing.Mint, 2 ether);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.setBilling(FleekBilling.Billing.Mint, 2 ether);
+    }
+
+    function test_withdraw() public {
+        // ColletionOwner
+        vm.deal(address(CuT), 1 ether);
+        vm.prank(collectionOwner);
+        CuT.withdraw();
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.withdraw();
+
+        // TokenController
+        vm.prank(tokenController);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.withdraw();
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
+        CuT.withdraw();
+    }
+
+    /**
+     * @dev `receive` and `fallback` are required for test contract receive ETH
+     */
+    receive() external payable {}
+
+    fallback() external payable {}
 
     function test_pauseAndUnpause() public {
         // ColletionOwner

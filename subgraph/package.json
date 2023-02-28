@@ -8,7 +8,7 @@
     "remove-local": "graph remove --node http://localhost:8020/ FleekNFA",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 FleekNFA",
     "test": "graph test",
-    "regenerate": "cd ../contracts && yarn && yarn compile && cd ../subgraph && yarn codegen"
+    "compile": "cd ../contracts && yarn && yarn compile && cd ../subgraph && yarn codegen"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.37.2",

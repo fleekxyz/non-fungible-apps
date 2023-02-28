@@ -1,27 +1,38 @@
-import { Address, Bytes, log, store, ethereum } from '@graphprotocol/graph-ts';
+import { Address, Bytes, log, store, ethereum, BigInt } from '@graphprotocol/graph-ts';
+
+// Event Imports [based on the yaml config]
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
   MetadataUpdate as MetadataUpdateEvent,
   MetadataUpdate1 as MetadataUpdateEvent1,
   MetadataUpdate2 as MetadataUpdateEvent2,
+  TokenRoleChanged as TokenRoleChangedEvent,
+  MetadataUpdate3 as MetadataUpdateEvent3,
+  CollectionRoleChanged as CollectionRoleChangedEvent,
+  Initialized as InitializedEvent,
   Transfer as TransferEvent,
   NewMint as NewMintEvent,
-  TokenRoleChanged as TokenRoleChangedEvent,
-  CollectionRoleChanged as CollectionRoleChangedEvent,
-  Initialized as InitializedEvent
+  ChangeAccessPointCreationStatus as ChangeAccessPointCreationStatusEvent,
+  ChangeAccessPointScore as ChangeAccessPointCreationScoreEvent,
+  NewAccessPoint as NewAccessPointEvent,
+  ChangeAccessPointNameVerify as ChangeAccessPointNameVerifyEvent,
+  ChangeAccessPointContentVerify as ChangeAccessPointContentVerifyEvent,
 } from '../generated/FleekNFA/FleekNFA';
+
+// Entity Imports [based on the schema]
 import {
+  AccessPoint,
   Approval,
   ApprovalForAll,
   Collection,
+  Owner,
+  Controller,
   GitRepository as GitRepositoryEntity,
   MetadataUpdate,
   NewMint,
-  TokenOwner,
   Token,
   Transfer,
-  CollectionOwner,
 } from '../generated/schema';
 
 export function handleApproval(event: ApprovalEvent): void {
@@ -82,27 +93,22 @@ export function handleNewMint(event: NewMintEvent): void {
   newMintEntity.color = color;
   newMintEntity.accessPointAutoApproval = accessPointAutoApproval;
   newMintEntity.triggeredBy = event.params.minter;
-  newMintEntity.tokenOwner = ownerAddress;
+  newMintEntity.owner = ownerAddress;
   newMintEntity.blockNumber = event.block.number;
   newMintEntity.blockTimestamp = event.block.timestamp;
   newMintEntity.transactionHash = event.transaction.hash;
   newMintEntity.save();
+  log.error('{}', [tokenId.toString()]);
 
   // Create Token, Owner, and Controller entities
 
-  let owner = TokenOwner.load(ownerAddress);
-  let controller = Controller.load(ownerAddress);
+  let owner = Owner.load(ownerAddress);
   let gitRepositoryEntity = GitRepositoryEntity.load(gitRepository);
   let token = new Token(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
 
   if (!owner) {
     // Create a new owner entity
-    owner = new TokenOwner(ownerAddress);
-  }
-
-  if (!controller) {
-    // Create a new controller entity
-    controller = new Controller(ownerAddress);
+    owner = new Owner(ownerAddress);
   }
 
   if (!gitRepositoryEntity) {
@@ -121,16 +127,15 @@ export function handleNewMint(event: NewMintEvent): void {
   token.logo = logo;
   token.color = color;
   token.accessPointAutoApproval = accessPointAutoApproval;
-  token.tokenOwner = ownerAddress;
+  token.owner = ownerAddress;
   token.mintTransaction = event.transaction.hash.concatI32(
     event.logIndex.toI32()
   );
   token.mintedBy = event.params.minter;
-  token.tokenControllers = [ownerAddress];
+  token.controllers = [ownerAddress];
 
   // Save entities
   owner.save();
-  controller.save();
   gitRepositoryEntity.save();
   token.save();
 }
@@ -264,8 +269,8 @@ export function handleInitialized(event: InitializedEvent): void {
       collection.save();
 
       // add owner
-      let owner = new CollectionOwner(event.transaction.from);
-      owner.accessGrantedBy = event.transaction.from;
+      let owner = new Owner(event.transaction.from);
+      owner.collection = true;
       owner.save();
     }
 }
@@ -280,12 +285,21 @@ export function handleCollectionRoleChanged(event: CollectionRoleChangedEvent): 
     // Owner role
     if (status) {
       // granted
-      let owner = new CollectionOwner(toAddress);
-      owner.accessGrantedBy = byAddress;
+      let owner = Owner.load(toAddress);
+      if (!owner) {
+        owner = new Owner(toAddress);
+      }
+      owner.collection = true;
       owner.save();
     } else {
       // revoked
-      store.remove('CollectionOwner', toAddress.toHexString());
+      let owner = Owner.load(toAddress);
+      if (!owner) {
+        log.error('Owner entity not found. Role: {}, byAddress: {}, toAddress: {}', [role.toString(), byAddress.toHexString(), toAddress.toHexString()]);
+        return;
+      }
+      owner.collection = false;
+      owner.save();
     }
   } else {
     log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [role.toString(), byAddress.toHexString(), toAddress.toHexString()]);
@@ -309,7 +323,7 @@ export function handleTokenRoleChanged(event: TokenRoleChangedEvent): void {
   if (role == 0) {
     // Controller role
     // get the list of controllers.
-    let token_controllers = token.tokenControllers;
+    let token_controllers = token.controllers;
     if (!token_controllers) {
       token_controllers = [];
     }
@@ -324,9 +338,36 @@ export function handleTokenRoleChanged(event: TokenRoleChangedEvent): void {
         token_controllers.splice(index, 1);
       }
     }
-    token.tokenControllers = token_controllers;
+    token.controllers = token_controllers;
   } else {
     log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [role.toString(), byAddress.toHexString(), toAddress.toHexString()]);
+  }
+}
+
+export function handleMetadataUpdateWithBooleanValue(event: MetadataUpdateEvent3): void {
+  /**
+   * accessPointAutoApproval
+   */
+  let entity = new MetadataUpdate(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
+
+  entity.key = event.params.key;
+  entity.tokenId = event.params._tokenId;
+  entity.booleanValue = event.params.value;
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
+
+  entity.save();
+
+  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
+
+  if (token) {
+    if (event.params.key == 'accessPointAutoApproval') {
+      token.accessPointAutoApproval = event.params.value;
+    }
+    token.save();
   }
 }
 
@@ -347,11 +388,11 @@ export function handleTransfer(event: TransferEvent): void {
   let token: Token | null;
 
   let owner_address = event.params.to;
-  let owner = TokenOwner.load(owner_address);
+  let owner = Owner.load(owner_address);
 
   if (!owner) {
     // Create a new owner entity
-    owner = new TokenOwner(owner_address);
+    owner = new Owner(owner_address);
   }
 
   if (parseInt(event.params.from.toHexString()) !== 0) {
@@ -364,7 +405,7 @@ export function handleTransfer(event: TransferEvent): void {
 
     if (token) {
       // Entity exists
-      token.tokenOwner = owner_address;
+      token.owner = owner_address;
 
       // Save both entities
       owner.save();
@@ -373,5 +414,111 @@ export function handleTransfer(event: TransferEvent): void {
       // Entity does not exist
       log.error('Unknown token was transferred.', []);
     }
+  }
+}
+
+
+/**
+   * This handler will create and load entities in the following order:
+   * - AccessPoint [create]
+   * - Owner [load / create]
+   * Note to discuss later: Should a `NewAccessPoint` entity be also created and defined?
+   */
+ export function handleNewAccessPoint(event: NewAccessPointEvent): void {
+  // Create an AccessPoint entity
+  let accessPointEntity = new AccessPoint(event.params.apName);
+  accessPointEntity.score = BigInt.fromU32(0);
+  accessPointEntity.contentVerified = false;
+  accessPointEntity.nameVerified = false;
+  accessPointEntity.creationStatus = 'DRAFT'; // Since a `ChangeAccessPointCreationStatus` event is emitted instantly after `NewAccessPoint`, the status will be updated in that handler.
+  accessPointEntity.owner = event.params.owner;
+  accessPointEntity.token = Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId));
+
+  // Load / Create an Owner entity
+  let ownerEntity = Owner.load(event.params.owner);
+
+  if (!ownerEntity) {
+    // Create a new owner entity
+    ownerEntity = new Owner(event.params.owner);
+  }
+
+  // Save entities.
+  accessPointEntity.save();
+  ownerEntity.save();
+}
+
+/**
+ * This handler will update the status of an access point entity.
+ */
+export function handleChangeAccessPointCreationStatus(event: ChangeAccessPointCreationStatusEvent): void {
+  // Load the AccessPoint entity
+  let accessPointEntity = AccessPoint.load(event.params.apName);
+  let status = event.params.status;
+
+  if (accessPointEntity) {
+    if (status == 0) {
+      accessPointEntity.creationStatus = 'DRAFT';
+    } else if (status == 1) {
+      accessPointEntity.creationStatus = 'APPROVED';
+    } else if (status == 2) {
+      accessPointEntity.creationStatus = 'REJECTED';
+    } else if (status == 3) {
+      accessPointEntity.creationStatus = 'REMOVED';
+    } else {
+      // Unknown status
+      log.error('Unable to handle ChangeAccessPointCreationStatus. Unknown status. Status: {}, AccessPoint: {}', [status.toString(), event.params.apName]);
+    }
+    accessPointEntity.save();
+  } else {
+    // Unknown access point
+    log.error('Unable to handle ChangeAccessPointCreationStatus. Unknown access point. Status: {}, AccessPoint: {}', [status.toString(), event.params.apName]);
+  }
+}
+
+/**
+ * This handler will update the score of an access point entity.
+ */
+ export function handleChangeAccessPointScore(event: ChangeAccessPointCreationScoreEvent): void {
+  // Load the AccessPoint entity
+  let accessPointEntity = AccessPoint.load(event.params.apName);
+
+  if (accessPointEntity) {
+    accessPointEntity.score = event.params.score;
+    accessPointEntity.save();
+  } else {
+    // Unknown access point
+    log.error('Unable to handle ChangeAccessPointScore. Unknown access point. Score: {}, AccessPoint: {}', [event.params.score.toString(), event.params.apName]);
+  }
+}
+
+/**
+ * This handler will update the nameVerified field of an access point entity.
+ */
+ export function handleChangeAccessPointNameVerify(event: ChangeAccessPointNameVerifyEvent): void {
+  // Load the AccessPoint entity
+  let accessPointEntity = AccessPoint.load(event.params.apName);
+
+  if (accessPointEntity) {
+    accessPointEntity.nameVerified = event.params.verified;
+    accessPointEntity.save();
+  } else {
+    // Unknown access point
+    log.error('Unable to handle ChangeAccessPointNameVerify. Unknown access point. Verified: {}, AccessPoint: {}', [event.params.verified.toString(), event.params.apName]);
+  }
+}
+
+/**
+ * This handler will update the contentVerified field of an access point entity.
+ */
+ export function handleChangeAccessPointContentVerify(event: ChangeAccessPointContentVerifyEvent): void {
+  // Load the AccessPoint entity
+  let accessPointEntity = AccessPoint.load(event.params.apName);
+
+  if (accessPointEntity) {
+    accessPointEntity.contentVerified = event.params.verified;
+    accessPointEntity.save();
+  } else {
+    // Unknown access point
+    log.error('Unable to handle ChangeAccessPointContentVerify. Unknown access point. Verified: {}, AccessPoint: {}', [event.params.verified.toString(), event.params.apName]);
   }
 }
