@@ -45,7 +45,6 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, bool value, address indexed triggeredBy);
 
-
     event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
 
@@ -305,7 +304,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     ) public virtual requireTokenOwner(tokenId) {
         _requireMinted(tokenId);
         _apps[tokenId].accessPointAutoApproval = _apAutoApproval;
-        emit MetadataUpdate(tokenId, 'accessPointAutoApproval', _apAutoApproval, msg.sender);
+        emit MetadataUpdate(tokenId, "accessPointAutoApproval", _apAutoApproval, msg.sender);
     }
 
     /**
@@ -605,13 +604,13 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the AP must exist.
-     * - the sender must have the token controller role.
+     * - the sender must have collection verifier role.
      *
      */
     function setAccessPointContentVerify(
         string memory apName,
         bool verified
-    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, TokenRoles.Controller) {
+    ) public requireAP(apName) requireCollectionRole(CollectionRoles.Verifier) {
         _accessPoints[apName].contentVerified = verified;
         emit ChangeAccessPointContentVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
@@ -624,13 +623,13 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the AP must exist.
-     * - the sender must have the token controller role.
+     * - the sender must have collection verifier role.
      *
      */
     function setAccessPointNameVerify(
         string memory apName,
         bool verified
-    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, TokenRoles.Controller) {
+    ) public requireAP(apName) requireCollectionRole(CollectionRoles.Verifier) {
         _accessPoints[apName].nameVerified = verified;
         emit ChangeAccessPointNameVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
