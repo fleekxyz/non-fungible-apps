@@ -127,29 +127,9 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
     }
 
     function test_mint() public {
-        address randomAddress = address(99);
-
-        // CollectionOwner
-        vm.startPrank(collectionOwner);
-        mintDefault(randomAddress);
-        vm.stopPrank();
-
-        // TokenOwner
-        vm.startPrank(tokenOwner);
-        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
-        mintDefault(randomAddress);
-        vm.stopPrank();
-
-        // TokenController
-        vm.startPrank(tokenController);
-        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
-        mintDefault(randomAddress);
-        vm.stopPrank();
-
-        // AnyAddress
+        // Anyone can mint
         vm.startPrank(anyAddress);
-        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
-        mintDefault(randomAddress);
+        mintDefault(address(99));
         vm.stopPrank();
     }
 
