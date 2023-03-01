@@ -3,7 +3,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import { TestConstants, Fixtures, Errors } from '../helpers';
-const { AccessPointStatus, CollectionRoles } = TestConstants;
+const { AccessPointStatus } = TestConstants;
 
 describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.withMint>>;
@@ -141,13 +141,11 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
   });
 
   it('should change "contentVerified" to true', async () => {
-    const { contract, tokenId, verifier } = fixture;
+    const { contract, tokenId } = fixture;
 
     await contract.addAccessPoint(tokenId, 'accesspoint.com');
 
-    await contract
-      .connect(verifier)
-      .setAccessPointContentVerify('accesspoint.com', true);
+    await contract.setAccessPointContentVerify('accesspoint.com', true);
 
     const ap = await contract.getAccessPointJSON('accesspoint.com');
     const parsedAp = JSON.parse(ap);
@@ -156,7 +154,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
   });
 
   it('should change "contentVerified" to false', async () => {
-    const { contract, tokenId, verifier } = fixture;
+    const { contract, tokenId } = fixture;
 
     await contract.addAccessPoint(tokenId, 'accesspoint.com');
 
@@ -164,12 +162,8 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
     const beforeParsedAp = JSON.parse(beforeAp);
     expect(beforeParsedAp.contentVerified).to.be.false;
 
-    await contract
-      .connect(verifier)
-      .setAccessPointContentVerify('accesspoint.com', true);
-    await contract
-      .connect(verifier)
-      .setAccessPointContentVerify('accesspoint.com', false);
+    await contract.setAccessPointContentVerify('accesspoint.com', true);
+    await contract.setAccessPointContentVerify('accesspoint.com', false);
 
     const ap = await contract.getAccessPointJSON('accesspoint.com');
     const parsedAp = JSON.parse(ap);
@@ -178,13 +172,11 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
   });
 
   it('should change "nameVerified" to true', async () => {
-    const { contract, tokenId, verifier } = fixture;
+    const { contract, tokenId } = fixture;
 
     await contract.addAccessPoint(tokenId, 'accesspoint.com');
 
-    await contract
-      .connect(verifier)
-      .setAccessPointNameVerify('accesspoint.com', true);
+    await contract.setAccessPointNameVerify('accesspoint.com', true);
 
     const ap = await contract.getAccessPointJSON('accesspoint.com');
     const parsedAp = JSON.parse(ap);
@@ -193,7 +185,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
   });
 
   it('should change "nameVerified" to false', async () => {
-    const { contract, tokenId, verifier } = fixture;
+    const { contract, tokenId } = fixture;
 
     await contract.addAccessPoint(tokenId, 'accesspoint.com');
 
@@ -201,12 +193,8 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
     const beforeParsedAp = JSON.parse(beforeAp);
     expect(beforeParsedAp.nameVerified).to.be.false;
 
-    await contract
-      .connect(verifier)
-      .setAccessPointNameVerify('accesspoint.com', true);
-    await contract
-      .connect(verifier)
-      .setAccessPointNameVerify('accesspoint.com', false);
+    await contract.setAccessPointNameVerify('accesspoint.com', true);
+    await contract.setAccessPointNameVerify('accesspoint.com', false);
 
     const ap = await contract.getAccessPointJSON('accesspoint.com');
     const parsedAp = JSON.parse(ap);

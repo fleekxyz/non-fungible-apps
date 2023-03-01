@@ -131,11 +131,9 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
   });
 
   it('should change "contentVerified" to true', async () => {
-    const { contract, verifier } = fixture;
+    const { contract } = fixture;
 
-    await contract
-      .connect(verifier)
-      .setAccessPointContentVerify(DefaultAP, true);
+    await contract.setAccessPointContentVerify(DefaultAP, true);
 
     const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
@@ -144,18 +142,14 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
   });
 
   it('should change "contentVerified" to false', async () => {
-    const { contract, verifier } = fixture;
+    const { contract } = fixture;
 
     const beforeAp = await contract.getAccessPointJSON(DefaultAP);
     const beforeParsedAp = JSON.parse(beforeAp);
     expect(beforeParsedAp.contentVerified).to.be.false;
 
-    await contract
-      .connect(verifier)
-      .setAccessPointContentVerify(DefaultAP, true);
-    await contract
-      .connect(verifier)
-      .setAccessPointContentVerify(DefaultAP, false);
+    await contract.setAccessPointContentVerify(DefaultAP, true);
+    await contract.setAccessPointContentVerify(DefaultAP, false);
 
     const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
@@ -164,9 +158,9 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
   });
 
   it('should change "nameVerified" to true', async () => {
-    const { contract, verifier } = fixture;
+    const { contract } = fixture;
 
-    await contract.connect(verifier).setAccessPointNameVerify(DefaultAP, true);
+    await contract.setAccessPointNameVerify(DefaultAP, true);
 
     const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);
@@ -175,14 +169,14 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
   });
 
   it('should change "nameVerified" to false', async () => {
-    const { contract, verifier } = fixture;
+    const { contract } = fixture;
 
     const beforeAp = await contract.getAccessPointJSON(DefaultAP);
     const beforeParsedAp = JSON.parse(beforeAp);
     expect(beforeParsedAp.nameVerified).to.be.false;
 
-    await contract.connect(verifier).setAccessPointNameVerify(DefaultAP, true);
-    await contract.connect(verifier).setAccessPointNameVerify(DefaultAP, false);
+    await contract.setAccessPointNameVerify(DefaultAP, true);
+    await contract.setAccessPointNameVerify(DefaultAP, false);
 
     const ap = await contract.getAccessPointJSON(DefaultAP);
     const parsedAp = JSON.parse(ap);

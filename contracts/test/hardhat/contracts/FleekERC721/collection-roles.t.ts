@@ -177,7 +177,7 @@ describe('FleekERC721.CollectionRoles', () => {
   });
 
   it('should not be able to verify access point if not verifier', async () => {
-    const { owner, contract } = fixture;
+    const { owner, contract, otherAccount } = fixture;
 
     await contract.mint(
       owner.address,
@@ -194,11 +194,19 @@ describe('FleekERC721.CollectionRoles', () => {
 
     await contract.addAccessPoint(0, 'random.com');
 
-    await expect(contract.setAccessPointContentVerify('random.com', true))
+    await expect(
+      contract
+        .connect(otherAccount)
+        .setAccessPointContentVerify('random.com', true)
+    )
       .to.be.revertedWithCustomError(contract, Errors.MustHaveCollectionRole)
       .withArgs(CollectionRoles.Verifier);
 
-    await expect(contract.setAccessPointNameVerify('random.com', true))
+    await expect(
+      contract
+        .connect(otherAccount)
+        .setAccessPointNameVerify('random.com', true)
+    )
       .to.be.revertedWithCustomError(contract, Errors.MustHaveCollectionRole)
       .withArgs(CollectionRoles.Verifier);
   });
