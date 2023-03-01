@@ -79,6 +79,7 @@ contract FleekAccessControl is Initializable {
      */
     function __FleekAccessControl_init() internal onlyInitializing {
         _grantCollectionRole(CollectionRoles.Owner, msg.sender);
+        _grantCollectionRole(CollectionRoles.Verifier, msg.sender);
     }
 
     /**
