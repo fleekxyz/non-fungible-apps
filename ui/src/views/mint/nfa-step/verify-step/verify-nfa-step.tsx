@@ -16,11 +16,12 @@ export const VerifyNFAStep = () => {
       <Card.Body>
         <Flex css={{ flexDirection: 'column', gap: '$6' }}>
           <Text css={{ color: '$slate11', fontSize: '$sm' }}>
-            {/* TODO define text */}
             Below you can allow Fleek to be added as a controller to your NFA.
-            This will.... dolor sit amet, consectetur adipiscing elit. Aliquam
-            cursus eget orci nec tristique. Cras iaculis orci ipsum, a
-            condimentum nulla semper.
+            This will allow Fleek to automatically verify your NFA and update
+            builds and other metadata. It will not allow Fleek to transfer or
+            burn your NFT. You can change this setting later on your NFA but
+            adding it now will save you a transaction in the future. We
+            recommend it so that your users can get verified NFAs.
           </Text>
           <Card.Text
             css={{
