@@ -14,7 +14,8 @@ contract FleekAccessControl is Initializable {
      * @dev All available collection roles.
      */
     enum CollectionRoles {
-        Owner
+        Owner,
+        Verifier
     }
 
     /**
