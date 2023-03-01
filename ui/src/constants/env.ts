@@ -12,4 +12,7 @@ export const env = Object.freeze({
     appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || '',
   },
+  apollo: {
+    uri: import.meta.env.VITE_GRAPHQL_URI || '',
+  },
 });
