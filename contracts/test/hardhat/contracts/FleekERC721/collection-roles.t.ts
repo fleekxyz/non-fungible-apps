@@ -175,4 +175,31 @@ describe('FleekERC721.CollectionRoles', () => {
       contract.revokeCollectionRole(CollectionRoles.Owner, owner.address)
     ).to.be.revertedWithCustomError(contract, Errors.MustHaveAtLeastOneOwner);
   });
+
+  it('should not be able to verify access point if not verifier', async () => {
+    const { owner, contract } = fixture;
+
+    await contract.mint(
+      owner.address,
+      TestConstants.MintParams.name,
+      TestConstants.MintParams.description,
+      TestConstants.MintParams.externalUrl,
+      TestConstants.MintParams.ens,
+      TestConstants.MintParams.commitHash,
+      TestConstants.MintParams.gitRepository,
+      TestConstants.MintParams.logo,
+      TestConstants.MintParams.color,
+      TestConstants.MintParams.accessPointAutoApprovalSettings
+    );
+
+    await contract.addAccessPoint(0, 'random.com');
+
+    await expect(contract.setAccessPointContentVerify('random.com', true))
+      .to.be.revertedWithCustomError(contract, Errors.MustHaveCollectionRole)
+      .withArgs(CollectionRoles.Verifier);
+
+    await expect(contract.setAccessPointNameVerify('random.com', true))
+      .to.be.revertedWithCustomError(contract, Errors.MustHaveCollectionRole)
+      .withArgs(CollectionRoles.Verifier);
+  });
 });

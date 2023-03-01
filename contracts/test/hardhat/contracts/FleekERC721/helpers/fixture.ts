@@ -6,7 +6,7 @@ export abstract class Fixtures {
 
   static async default() {
     // Contracts are deployed using the first signer/account by default
-    const [owner, otherAccount] = await ethers.getSigners();
+    const [owner, otherAccount, verifier] = await ethers.getSigners();
 
     const libraries = {
       FleekSVG: (await (await ethers.getContractFactory('FleekSVG')).deploy())
@@ -29,7 +29,12 @@ export abstract class Fixtures {
       }
     );
 
-    return { owner, otherAccount, contract };
+    await contract.grantCollectionRole(
+      TestConstants.CollectionRoles.Verifier,
+      verifier.address
+    );
+
+    return { owner, otherAccount, contract, verifier };
   }
 
   static async withMint() {
