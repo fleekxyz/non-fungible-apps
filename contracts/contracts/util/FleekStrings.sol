@@ -6,6 +6,7 @@ import "../FleekERC721.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "./FleekSVG.sol";
+import "../IERCX.sol";
 
 library FleekStrings {
     using Strings for uint256;
@@ -32,7 +33,7 @@ library FleekStrings {
      * @dev Converts FleekERC721.App to a JSON string.
      * It requires to receive owner address as a parameter.
      */
-    function toString(FleekERC721.App storage app, address owner) internal view returns (string memory) {
+    function toString(IERCX.Token storage app, address owner) internal view returns (string memory) {
         // prettier-ignore
         return string(abi.encodePacked(
             '{',
@@ -41,7 +42,7 @@ library FleekStrings {
                 '"owner":"', uint160(owner).toHexString(20), '",',
                 '"external_url":"', app.externalURL, '",',
                 '"image":"', FleekSVG.generateBase64(app.name, app.ENS, app.logo, app.color.toColorString()), '",',
-                '"access_point_auto_approval":',app.accessPointAutoApproval.toString(),',',
+                // '"access_point_auto_approval":',app.accessPointAutoApproval.toString(),',',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',
