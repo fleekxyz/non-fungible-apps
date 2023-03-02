@@ -26,3 +26,12 @@ query lastFiveMints {
   }
 }
 
+query lastTenMints($skip: Int!) {
+  newMints(first: 10, skip: $skip, orderDirection: desc, orderBy: tokenId) {
+    id
+    tokenId
+    description
+    name
+  }
+}
+

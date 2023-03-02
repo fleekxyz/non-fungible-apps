@@ -2665,6 +2665,13 @@ export async function getMeshOptions(): Promise<GetMeshOptions> {
           },
           location: 'LastFiveMintsDocument.graphql',
         },
+        {
+          document: LastTenMintsDocument,
+          get rawSDL() {
+            return printWithCache(LastTenMintsDocument);
+          },
+          location: 'LastTenMintsDocument.graphql',
+        },
       ];
     },
     fetchFn,
@@ -2727,6 +2734,14 @@ export type lastFiveMintsQuery = {
   transfers: Array<Pick<Transfer, 'id' | 'tokenId' | 'to'>>;
 };
 
+export type lastTenMintsQueryVariables = Exact<{
+  skip: Scalars['Int'];
+}>;
+
+export type lastTenMintsQuery = {
+  newMints: Array<Pick<NewMint, 'id' | 'tokenId' | 'description' | 'name'>>;
+};
+
 export const firstFiveMintsByUserDocument = gql`
   query firstFiveMintsByUser {
     transfers(
@@ -2757,6 +2772,16 @@ export const lastFiveMintsDocument = gql`
     }
   }
 ` as unknown as DocumentNode<lastFiveMintsQuery, lastFiveMintsQueryVariables>;
+export const lastTenMintsDocument = gql`
+  query lastTenMints($skip: Int!) {
+    newMints(first: 10, skip: $skip, orderDirection: desc, orderBy: tokenId) {
+      id
+      tokenId
+      description
+      name
+    }
+  }
+` as unknown as DocumentNode<lastTenMintsQuery, lastTenMintsQueryVariables>;
 
 export type Requester<C = {}, E = unknown> = <R, V>(
   doc: DocumentNode,
@@ -2787,6 +2812,16 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
         variables,
         options
       ) as Promise<lastFiveMintsQuery>;
+    },
+    lastTenMints(
+      variables: lastTenMintsQueryVariables,
+      options?: C
+    ): Promise<lastTenMintsQuery> {
+      return requester<lastTenMintsQuery, lastTenMintsQueryVariables>(
+        lastTenMintsDocument,
+        variables,
+        options
+      ) as Promise<lastTenMintsQuery>;
     },
   };
 }
