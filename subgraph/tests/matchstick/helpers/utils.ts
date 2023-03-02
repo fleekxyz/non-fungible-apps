@@ -5,11 +5,13 @@ import {
   ApprovalForAll as ApprovalForAllEvent,
   Transfer as TransferEvent,
   NewMint as NewMintEvent,
-  NewAccessPoint
+  NewAccessPoint,
+  ChangeAccessPointCreationStatus
 } from '../../../generated/FleekNFA/FleekNFA';
 import {
   handleApproval,
   handleApprovalForAll,
+  handleChangeAccessPointCreationStatus,
   handleNewAccessPoint,
   handleNewMint,
   handleTransfer,
@@ -193,16 +195,18 @@ export function createNewAccessPointEvent(
 
   newAccessPoint.parameters.push(
     new ethereum.EventParam(
-      'tokenId',
-      ethereum.Value.fromUnsignedBigInt(tokenId)
-    )
-  );
-  newAccessPoint.parameters.push(
-    new ethereum.EventParam(
       'apName',
       ethereum.Value.fromString(apName.toString())
     )
   );
+
+  newAccessPoint.parameters.push(
+    new ethereum.EventParam(
+      'tokenId',
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    )
+  );
+
   newAccessPoint.parameters.push(
     new ethereum.EventParam(
       'owner',
@@ -214,6 +218,51 @@ export function createNewAccessPointEvent(
   newAccessPoint.logIndex = new BigInt(event_count);
 
   return newAccessPoint;
+}
+
+export function createNewChangeAccessPointCreationStatus(
+  event_count: i32,
+  apName: string,
+  tokenId: BigInt,
+  status: i32,
+  triggeredBy: Address
+): ChangeAccessPointCreationStatus {
+  let changeAccessPointCreationStatus = changetype<ChangeAccessPointCreationStatus>(newMockEvent());
+
+  changeAccessPointCreationStatus.parameters = new Array();
+
+  changeAccessPointCreationStatus.parameters.push(
+    new ethereum.EventParam(
+      'apName',
+      ethereum.Value.fromString(apName.toString())
+    )
+  );
+
+  changeAccessPointCreationStatus.parameters.push(
+    new ethereum.EventParam(
+      'tokenId',
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    )
+  );
+  
+  changeAccessPointCreationStatus.parameters.push(
+    new ethereum.EventParam(
+      'creationStatus',
+      ethereum.Value.fromI32(status)
+    )
+  );
+
+  changeAccessPointCreationStatus.parameters.push(
+    new ethereum.EventParam(
+      'triggeredBy',
+      ethereum.Value.fromAddress(triggeredBy)
+    )
+  );
+
+  changeAccessPointCreationStatus.transaction.hash = Bytes.fromI32(event_count);
+  changeAccessPointCreationStatus.logIndex = new BigInt(event_count);
+
+  return changeAccessPointCreationStatus;
 }
 
 
@@ -257,6 +306,12 @@ export function handleApprovalForAlls(events: ApprovalForAllEvent[]): void {
 export function handleNewAccessPoints(events: NewAccessPoint[]): void {
   events.forEach((event) => {
     handleNewAccessPoint(event);
+  });
+}
+
+export function handleChangeAccessPointCreationStatusList(events: ChangeAccessPointCreationStatus[]): void {
+  events.forEach((event) => {
+    handleChangeAccessPointCreationStatus(event);
   });
 }
 
