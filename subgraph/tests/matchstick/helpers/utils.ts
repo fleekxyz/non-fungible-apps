@@ -6,12 +6,14 @@ import {
   Transfer as TransferEvent,
   NewMint as NewMintEvent,
   NewAccessPoint,
-  ChangeAccessPointCreationStatus
+  ChangeAccessPointCreationStatus,
+  ChangeAccessPointNameVerify
 } from '../../../generated/FleekNFA/FleekNFA';
 import {
   handleApproval,
   handleApprovalForAll,
   handleChangeAccessPointCreationStatus,
+  handleChangeAccessPointNameVerify,
   handleNewAccessPoint,
   handleNewMint,
   handleTransfer,
@@ -265,6 +267,51 @@ export function createNewChangeAccessPointCreationStatus(
   return changeAccessPointCreationStatus;
 }
 
+export function createNewChangeAccessPointNameVerify(
+  event_count: i32,
+  apName: string,
+  tokenId: BigInt,
+  verified: boolean,
+  triggeredBy: Address
+): ChangeAccessPointNameVerify {
+  let changeAccessPointNameVerify = changetype<ChangeAccessPointNameVerify>(newMockEvent());
+
+  changeAccessPointNameVerify.parameters = new Array();
+
+  changeAccessPointNameVerify.parameters.push(
+    new ethereum.EventParam(
+      'apName',
+      ethereum.Value.fromString(apName.toString())
+    )
+  );
+
+  changeAccessPointNameVerify.parameters.push(
+    new ethereum.EventParam(
+      'tokenId',
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    )
+  );
+  
+  changeAccessPointNameVerify.parameters.push(
+    new ethereum.EventParam(
+      'verified',
+      ethereum.Value.fromBoolean(verified)
+    )
+  );
+
+  changeAccessPointNameVerify.parameters.push(
+    new ethereum.EventParam(
+      'triggeredBy',
+      ethereum.Value.fromAddress(triggeredBy)
+    )
+  );
+
+  changeAccessPointNameVerify.transaction.hash = Bytes.fromI32(event_count);
+  changeAccessPointNameVerify.logIndex = new BigInt(event_count);
+
+  return changeAccessPointNameVerify;
+}
+
 
 export const CONTRACT: Address = Address.fromString(
   '0x0000000000000000000000000000000000000000'
@@ -312,6 +359,12 @@ export function handleNewAccessPoints(events: NewAccessPoint[]): void {
 export function handleChangeAccessPointCreationStatusList(events: ChangeAccessPointCreationStatus[]): void {
   events.forEach((event) => {
     handleChangeAccessPointCreationStatus(event);
+  });
+}
+
+export function handleChangeAccessPointNameVerifies(events: ChangeAccessPointNameVerify[]): void {
+  events.forEach((event) => {
+    handleChangeAccessPointNameVerify(event);
   });
 }
 
