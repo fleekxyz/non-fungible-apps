@@ -18,8 +18,6 @@ import {
   AccessPoint,
   Approval,
   ApprovalForAll,
-  Collection,
-  CollectionOwner,
   Controller,
   GitRepository as GitRepositoryEntity,
   MetadataUpdate,
@@ -87,7 +85,7 @@ export function handleNewMint(event: NewMintEvent): void {
   newMintEntity.color = color;
   newMintEntity.accessPointAutoApproval = accessPointAutoApproval;
   newMintEntity.triggeredBy = event.params.minter;
-  newMintEntity.tokenOwner = ownerAddress;
+  newMintEntity.owner = ownerAddress;
   newMintEntity.blockNumber = event.block.number;
   newMintEntity.blockTimestamp = event.block.timestamp;
   newMintEntity.transactionHash = event.transaction.hash;
@@ -343,7 +341,7 @@ export function handleTransfer(event: TransferEvent): void {
   accessPointEntity.score = BigInt.fromU32(0);
   accessPointEntity.contentVerified = false;
   accessPointEntity.nameVerified = false;
-  accessPointEntity.status = 'DRAFT'; // Since a `ChangeAccessPointCreationStatus` event is emitted instantly after `NewAccessPoint`, the status will be updated in that handler.
+  accessPointEntity.creationStatus = 'DRAFT'; // Since a `ChangeAccessPointCreationStatus` event is emitted instantly after `NewAccessPoint`, the status will be updated in that handler.
   accessPointEntity.owner = event.params.owner;
   accessPointEntity.token = Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId));
 
@@ -370,13 +368,13 @@ export function handleChangeAccessPointCreationStatus(event: ChangeAccessPointCr
 
   if (accessPointEntity) {
     if (status == 0) {
-      accessPointEntity.status = 'DRAFT';
+      accessPointEntity.creationStatus = 'DRAFT';
     } else if (status == 1) {
-      accessPointEntity.status = 'APPROVED';
+      accessPointEntity.creationStatus = 'APPROVED';
     } else if (status == 2) {
-      accessPointEntity.status = 'REJECTED';
+      accessPointEntity.creationStatus = 'REJECTED';
     } else if (status == 3) {
-      accessPointEntity.status = 'REMOVED';
+      accessPointEntity.creationStatus = 'REMOVED';
     } else {
       // Unknown status
       log.error('Unable to handle ChangeAccessPointCreationStatus. Unknown status. Status: {}, AccessPoint: {}', [status.toString(), event.params.apName]);
