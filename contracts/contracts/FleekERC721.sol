@@ -39,7 +39,6 @@ contract FleekERC721 is
         string gitRepository,
         string logo,
         uint24 color,
-        // bool accessPointAutoApproval,
         address indexed minter,
         address indexed owner
     );
@@ -110,7 +109,6 @@ contract FleekERC721 is
             gitRepository,
             logo,
             color,
-            // accessPointAutoApproval,
             msg.sender,
             to
         );
