@@ -47,7 +47,7 @@ export const GithubRepositoryConnection: React.FC = () => {
 
   const { setGithubStep, setSelectedUserOrg } = Mint.useContext();
 
-  const debounce = useDebounce(
+  const setSearchValueDebounced = useDebounce(
     (event: React.ChangeEvent<HTMLInputElement>) =>
       setSearchValue(event.target.value),
     500
@@ -55,7 +55,7 @@ export const GithubRepositoryConnection: React.FC = () => {
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
-    debounce(event);
+    setSearchValueDebounced(event);
   };
 
   const handlePrevStepClick = () => {

@@ -12,6 +12,7 @@ const config = {
 const alchemy = new Alchemy(config);
 
 export const Ethereum: Ethereum.Core = {
+  //TODO remove
   defaultNetwork: 'https://rpc-mumbai.maticvigil.com', // TODO: make it environment variable
 
   provider: {
@@ -30,26 +31,21 @@ export const Ethereum: Ethereum.Core = {
     return new ethers.Contract(contract.address, contract.abi, provider);
   },
 
-  getEnsName(address) {
-    return alchemy.nft
-      .getNftsForOwner(address, {
-        contractAddresses: [env.ensContractAddress],
-      })
-      .then((ensList) => {
-        return ensList.ownedNfts.map((nft) => nft.title);
-      });
+  async getEnsName(address) {
+    const ensAddresses = await alchemy.nft.getNftsForOwner(address, {
+      contractAddresses: [env.ens.contractAddress],
+    });
+
+    return ensAddresses.ownedNfts.map((nft) => nft.title);
   },
 
   //TODO remove if we're not gonna validate ens on the client side
   async validateEnsName(name) {
     const provider = new ethers.providers.JsonRpcProvider(
-      'https://eth.llamarpc.com'
+      env.ens.validationEnsURL
     );
 
-    const isValid = await provider.resolveName(name);
-
-    if (isValid === null) return false;
-    return true;
+    return Boolean(await provider.resolveName(name));
   },
 };
 

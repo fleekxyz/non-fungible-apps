@@ -4,6 +4,7 @@ import { Icon, IconName } from '@/components/core/icon';
 import { Flex } from '@/components/layout';
 import { useDebounce } from '@/hooks/use-debounce';
 import { Separator } from '../separator.styles';
+import { cleanString } from './combobox.utils';
 
 type ComboboxInputProps = {
   /**
@@ -173,11 +174,8 @@ export const Combobox: React.FC<ComboboxProps> = ({
         handleComboboxChange({} as ComboboxItem);
       }
     } else {
-      const filteredValues = items.filter((person) =>
-        person.label
-          .toLowerCase()
-          .replace(/\s+/g, '')
-          .startsWith(searchValue.toLowerCase().replace(/\s+/g, ''))
+      const filteredValues = items.filter((item) =>
+        cleanString(item.label).startsWith(cleanString(searchValue))
       );
 
       if (withAutocomplete && filteredValues.length === 0) {
