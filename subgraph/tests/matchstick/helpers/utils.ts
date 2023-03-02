@@ -4,11 +4,13 @@ import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
   Transfer as TransferEvent,
-  NewMint as NewMintEvent
+  NewMint as NewMintEvent,
+  NewAccessPoint
 } from '../../../generated/FleekNFA/FleekNFA';
 import {
   handleApproval,
   handleApprovalForAll,
+  handleNewAccessPoint,
   handleNewMint,
   handleTransfer,
 } from '../../../src/fleek-nfa';
@@ -179,6 +181,41 @@ export function createNewMintEvent(
   return newMintEvent;
 }
 
+export function createNewAccessPointEvent(
+  event_count: i32,
+  apName: string,
+  tokenId: BigInt,
+  owner: Address
+): NewAccessPoint {
+  let newAccessPoint = changetype<NewAccessPoint>(newMockEvent());
+
+  newAccessPoint.parameters = new Array();
+
+  newAccessPoint.parameters.push(
+    new ethereum.EventParam(
+      'tokenId',
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    )
+  );
+  newAccessPoint.parameters.push(
+    new ethereum.EventParam(
+      'apName',
+      ethereum.Value.fromString(apName.toString())
+    )
+  );
+  newAccessPoint.parameters.push(
+    new ethereum.EventParam(
+      'owner',
+      ethereum.Value.fromAddress(owner)
+    )
+  );
+
+  newAccessPoint.transaction.hash = Bytes.fromI32(event_count);
+  newAccessPoint.logIndex = new BigInt(event_count);
+
+  return newAccessPoint;
+}
+
 
 export const CONTRACT: Address = Address.fromString(
   '0x0000000000000000000000000000000000000000'
@@ -214,6 +251,12 @@ export function handleNewMints(events: NewMintEvent[]): void {
 export function handleApprovalForAlls(events: ApprovalForAllEvent[]): void {
   events.forEach((event) => {
     handleApprovalForAll(event);
+  });
+}
+
+export function handleNewAccessPoints(events: NewAccessPoint[]): void {
+  events.forEach((event) => {
+    handleNewAccessPoint(event);
   });
 }
 
