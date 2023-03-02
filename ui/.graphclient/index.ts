@@ -2652,25 +2652,18 @@ export async function getMeshOptions(): Promise<GetMeshOptions> {
     get documents() {
       return [
         {
-          document: FirstFiveMintsByUserDocument,
-          get rawSDL() {
-            return printWithCache(FirstFiveMintsByUserDocument);
-          },
-          location: 'FirstFiveMintsByUserDocument.graphql',
-        },
-        {
-          document: LastFiveMintsDocument,
-          get rawSDL() {
-            return printWithCache(LastFiveMintsDocument);
-          },
-          location: 'LastFiveMintsDocument.graphql',
-        },
-        {
           document: LastTenMintsDocument,
           get rawSDL() {
             return printWithCache(LastTenMintsDocument);
           },
           location: 'LastTenMintsDocument.graphql',
+        },
+        {
+          document: TotalTokensDocument,
+          get rawSDL() {
+            return printWithCache(TotalTokensDocument);
+          },
+          location: 'TotalTokensDocument.graphql',
         },
       ];
     },
@@ -2720,61 +2713,21 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
     sdkRequester$.then((sdkRequester) => sdkRequester(...args))
   );
 }
-export type firstFiveMintsByUserQueryVariables = Exact<{
-  [key: string]: never;
-}>;
-
-export type firstFiveMintsByUserQuery = {
-  transfers: Array<Pick<Transfer, 'id' | 'tokenId'>>;
-};
-
-export type lastFiveMintsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type lastFiveMintsQuery = {
-  transfers: Array<Pick<Transfer, 'id' | 'tokenId' | 'to'>>;
-};
-
 export type lastTenMintsQueryVariables = Exact<{
-  skip: Scalars['Int'];
+  skip?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type lastTenMintsQuery = {
   newMints: Array<Pick<NewMint, 'id' | 'tokenId' | 'description' | 'name'>>;
 };
 
-export const firstFiveMintsByUserDocument = gql`
-  query firstFiveMintsByUser {
-    transfers(
-      where: {
-        from: "0x0000000000000000000000000000000000000000"
-        to: "0xd4997d0facc83231b9f26a8b2155b4869e99946f"
-      }
-      first: 5
-    ) {
-      id
-      tokenId
-    }
-  }
-` as unknown as DocumentNode<
-  firstFiveMintsByUserQuery,
-  firstFiveMintsByUserQueryVariables
->;
-export const lastFiveMintsDocument = gql`
-  query lastFiveMints {
-    transfers(
-      where: { from: "0x0000000000000000000000000000000000000000" }
-      first: 5
-      orderDirection: desc
-    ) {
-      id
-      tokenId
-      to
-    }
-  }
-` as unknown as DocumentNode<lastFiveMintsQuery, lastFiveMintsQueryVariables>;
+export type totalTokensQueryVariables = Exact<{ [key: string]: never }>;
+
+export type totalTokensQuery = { tokens: Array<Pick<Token, 'id'>> };
+
 export const lastTenMintsDocument = gql`
-  query lastTenMints($skip: Int!) {
-    newMints(first: 10, skip: $skip, orderDirection: desc, orderBy: tokenId) {
+  query lastTenMints($skip: Int) {
+    newMints(first: 2, skip: $skip, orderDirection: desc, orderBy: tokenId) {
       id
       tokenId
       description
@@ -2782,6 +2735,13 @@ export const lastTenMintsDocument = gql`
     }
   }
 ` as unknown as DocumentNode<lastTenMintsQuery, lastTenMintsQueryVariables>;
+export const totalTokensDocument = gql`
+  query totalTokens {
+    tokens {
+      id
+    }
+  }
+` as unknown as DocumentNode<totalTokensQuery, totalTokensQueryVariables>;
 
 export type Requester<C = {}, E = unknown> = <R, V>(
   doc: DocumentNode,
@@ -2790,31 +2750,8 @@ export type Requester<C = {}, E = unknown> = <R, V>(
 ) => Promise<R> | AsyncIterable<R>;
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    firstFiveMintsByUser(
-      variables?: firstFiveMintsByUserQueryVariables,
-      options?: C
-    ): Promise<firstFiveMintsByUserQuery> {
-      return requester<
-        firstFiveMintsByUserQuery,
-        firstFiveMintsByUserQueryVariables
-      >(
-        firstFiveMintsByUserDocument,
-        variables,
-        options
-      ) as Promise<firstFiveMintsByUserQuery>;
-    },
-    lastFiveMints(
-      variables?: lastFiveMintsQueryVariables,
-      options?: C
-    ): Promise<lastFiveMintsQuery> {
-      return requester<lastFiveMintsQuery, lastFiveMintsQueryVariables>(
-        lastFiveMintsDocument,
-        variables,
-        options
-      ) as Promise<lastFiveMintsQuery>;
-    },
     lastTenMints(
-      variables: lastTenMintsQueryVariables,
+      variables?: lastTenMintsQueryVariables,
       options?: C
     ): Promise<lastTenMintsQuery> {
       return requester<lastTenMintsQuery, lastTenMintsQueryVariables>(
@@ -2822,6 +2759,16 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
         variables,
         options
       ) as Promise<lastTenMintsQuery>;
+    },
+    totalTokens(
+      variables?: totalTokensQueryVariables,
+      options?: C
+    ): Promise<totalTokensQuery> {
+      return requester<totalTokensQuery, totalTokensQueryVariables>(
+        totalTokensDocument,
+        variables,
+        options
+      ) as Promise<totalTokensQuery>;
     },
   };
 }

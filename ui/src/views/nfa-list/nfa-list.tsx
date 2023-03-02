@@ -1,42 +1,73 @@
-import { lastTenMintsDocument } from '@/../.graphclient';
+import { lastTenMintsDocument, totalTokensDocument } from '@/../.graphclient';
 import { Button, Card, Flex, NoResults } from '@/components';
 import { FleekERC721 } from '@/integrations/ethereum/contracts';
 import { useQuery } from '@apollo/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+const pageSize = 2; //Set this size to test pagination
 
 export const NFAList = () => {
-  const [pageNumber, setPageNumber] = useState(0);
-  const result = useQuery(lastTenMintsDocument, {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const {
+    data: totalTokens,
+    loading: loadingTotalTokens,
+    error: errorTotalTokens,
+  } = useQuery(totalTokensDocument);
+
+  const {
+    data: dataMintedTokens,
+    loading: loadingMintedTokens,
+    error: errorMintedTokens,
+  } = useQuery(lastTenMintsDocument, {
     variables: {
-      skip: pageNumber * 10,
+      //first page is 0
+      skip: pageNumber > 0 ? (pageNumber - 1) * pageSize : pageNumber,
     },
   });
 
-  const { data, loading, error } = result;
+  useEffect(() => {
+    if (totalTokens && totalTokens.tokens.length > 0) {
+      setTotalPages(Math.ceil(totalTokens.tokens.length / pageSize));
+    }
+  });
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (loadingMintedTokens || loadingTotalTokens) return <div>Loading...</div>; //TODO handle loading
+  if (errorMintedTokens || errorTotalTokens) return <div>Error</div>; //TODO handle error
 
   const handlePreviousPage = () => {
-    if (pageNumber > 0) {
-      setPageNumber(pageNumber - 1);
+    if (pageNumber > 1) {
+      setPageNumber((prevState) => prevState - 1);
     }
   };
 
   const handleNextPage = () => {
-    setPageNumber(pageNumber + 1);
+    if (pageNumber + 1 <= totalPages)
+      setPageNumber((prevState) => prevState + 1);
   };
 
   return (
     <Flex css={{ flexDirection: 'column', margin: '$5', gap: '$2' }}>
       <Flex css={{ gap: '$2' }}>
-        <span>page: {pageNumber + 1}</span>
-        <Button onClick={handlePreviousPage}>Previous page</Button>
-        <Button onClick={handleNextPage}>Next page</Button>
+        {/* TODO this will be remove when we have pagination component */}
+        <span>
+          page: {pageNumber}/{totalPages}
+        </span>
+
+        <Button
+          onClick={handlePreviousPage}
+          disabled={!(pageNumber >= totalPages)}
+        >
+          Previous page
+        </Button>
+        <Button onClick={handleNextPage} disabled={!(pageNumber < totalPages)}>
+          Next page
+        </Button>
       </Flex>
       <Flex css={{ gap: '$2' }}>
-        {data && data.newMints.length > 0 ? (
-          data.newMints.map((mint) => (
+        {dataMintedTokens && dataMintedTokens.newMints.length > 0 ? (
+          dataMintedTokens.newMints.map((mint) => (
             <Card.Container key={mint.tokenId}>
               <Card.Heading title={mint.name} />
               <Card.Body>
