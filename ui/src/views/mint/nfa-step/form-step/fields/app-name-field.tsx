@@ -1,5 +1,5 @@
 import { Form } from '@/components';
-import { Mint } from '../../mint.context';
+import { Mint } from '../../../mint.context';
 
 export const AppNameField = () => {
   const { appName, setAppName } = Mint.useContext();

@@ -161,6 +161,7 @@ export const StyledButton = styled('button', {
   verticalAlign: 'middle',
   userSelect: 'none',
   fontWeight: '$normal',
+  width: 'auto',
   '&:disabled': {
     cursor: 'not-allowed',
     opacity: '0.4',

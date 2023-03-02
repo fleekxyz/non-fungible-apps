@@ -119,10 +119,7 @@ export function createNewMintEvent(
     )
   );
   newMintEvent.parameters.push(
-    new ethereum.EventParam(
-      'name',
-      ethereum.Value.fromString('name')
-    )
+    new ethereum.EventParam('name', ethereum.Value.fromString('name'))
   );
   newMintEvent.parameters.push(
     new ethereum.EventParam(
@@ -137,34 +134,19 @@ export function createNewMintEvent(
     )
   );
   newMintEvent.parameters.push(
-    new ethereum.EventParam(
-      'ENS',
-      ethereum.Value.fromString('ens')
-    )
+    new ethereum.EventParam('ENS', ethereum.Value.fromString('ens'))
   );
   newMintEvent.parameters.push(
-    new ethereum.EventParam(
-      'commitHash',
-      ethereum.Value.fromString('hash')
-    )
+    new ethereum.EventParam('commitHash', ethereum.Value.fromString('hash'))
   );
   newMintEvent.parameters.push(
-    new ethereum.EventParam(
-      'gitRepository',
-      ethereum.Value.fromString('repo')
-    )
+    new ethereum.EventParam('gitRepository', ethereum.Value.fromString('repo'))
   );
   newMintEvent.parameters.push(
-    new ethereum.EventParam(
-      'logo',
-      ethereum.Value.fromString('logo')
-    )
+    new ethereum.EventParam('logo', ethereum.Value.fromString('logo'))
   );
   newMintEvent.parameters.push(
-    new ethereum.EventParam(
-      'color',
-      ethereum.Value.fromI32(1234)
-    )
+    new ethereum.EventParam('color', ethereum.Value.fromI32(1234))
   );
   newMintEvent.parameters.push(
     new ethereum.EventParam(
@@ -311,7 +293,6 @@ export function createNewChangeAccessPointNameVerify(
 
   return changeAccessPointNameVerify;
 }
-
 
 export const CONTRACT: Address = Address.fromString(
   '0x0000000000000000000000000000000000000000'

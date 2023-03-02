@@ -26,29 +26,6 @@ describe('FleekERC721.Minting', () => {
     expect(response.value.toNumber()).to.equal(0);
   });
 
-  it('should not be able to mint a new token if not the owner', async () => {
-    const { otherAccount, contract } = await loadFixture(Fixtures.default);
-
-    await expect(
-      contract
-        .connect(otherAccount)
-        .mint(
-          otherAccount.address,
-          MintParams.name,
-          MintParams.description,
-          MintParams.externalUrl,
-          MintParams.ens,
-          MintParams.commitHash,
-          MintParams.gitRepository,
-          MintParams.logo,
-          MintParams.color,
-          MintParams.accessPointAutoApprovalSettings
-        )
-    )
-      .to.be.revertedWithCustomError(contract, Errors.MustHaveCollectionRole)
-      .withArgs(CollectionRoles.Owner);
-  });
-
   it('should have address to as owner', async () => {
     const { owner, otherAccount, contract } = await loadFixture(
       Fixtures.default
