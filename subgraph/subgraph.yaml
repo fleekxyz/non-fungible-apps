@@ -37,6 +37,7 @@ dataSources:
           handler: handleApproval
         - event: ApprovalForAll(indexed address,indexed address,bool)
           handler: handleApprovalForAll
+        # Token Events
         - event: MetadataUpdate(indexed uint256,string,string,indexed address)
           handler: handleMetadataUpdateWithStringValue
         - event: MetadataUpdate(indexed uint256,string,string[2],indexed address)
@@ -49,6 +50,7 @@ dataSources:
           handler: handleNewMint
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+          # Access Point Events
         - event: ChangeAccessPointContentVerify(string,uint256,indexed bool,indexed address)
           handler: handleChangeAccessPointContentVerify
         - event: ChangeAccessPointNameVerify(string,uint256,indexed bool,indexed address)
