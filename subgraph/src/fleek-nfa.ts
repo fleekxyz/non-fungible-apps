@@ -33,6 +33,14 @@ import {
   Transfer,
 } from '../generated/schema';
 
+enum CollectionRoles {
+  Owner,
+};
+
+enum TokenRoles {
+  Controller,
+};
+
 export function handleApproval(event: ApprovalEvent): void {
   let entity = new Approval(
     event.transaction.hash.concatI32(event.logIndex.toI32())
@@ -276,7 +284,7 @@ export function handleCollectionRoleChanged(event: CollectionRoleChangedEvent): 
   let role = event.params.role;
   let status = event.params.status;
   
-  if (role == 0) {
+  if (role === CollectionRoles.Owner) {
     // Owner role
     if (status) {
       // granted
@@ -315,7 +323,7 @@ export function handleTokenRoleChanged(event: TokenRoleChangedEvent): void {
     return;
   } 
 
-  if (role == 0) {
+  if (role === TokenRoles.Controller) {
     // Controller role
     // get the list of controllers.
     let token_controllers = token.controllers;
@@ -451,18 +459,24 @@ export function handleChangeAccessPointCreationStatus(event: ChangeAccessPointCr
   let status = event.params.status;
 
   if (accessPointEntity) {
-    if (status == 0) {
-      accessPointEntity.creationStatus = 'DRAFT';
-    } else if (status == 1) {
-      accessPointEntity.creationStatus = 'APPROVED';
-    } else if (status == 2) {
-      accessPointEntity.creationStatus = 'REJECTED';
-    } else if (status == 3) {
-      accessPointEntity.creationStatus = 'REMOVED';
-    } else {
-      // Unknown status
-      log.error('Unable to handle ChangeAccessPointCreationStatus. Unknown status. Status: {}, AccessPoint: {}', [status.toString(), event.params.apName]);
+    switch (status) {
+      case 0:
+        accessPointEntity.creationStatus = 'DRAFT';
+        break;
+      case 1:
+        accessPointEntity.creationStatus = 'APPROVED';
+        break;
+      case 2:
+        accessPointEntity.creationStatus = 'REJECTED';
+        break;
+      case 3:
+        accessPointEntity.creationStatus = 'REMOVED';
+        break;
+      default:
+        // Unknown status
+        log.error('Unable to handle ChangeAccessPointCreationStatus. Unknown status. Status: {}, AccessPoint: {}', [status.toString(), event.params.apName]);
     }
+
     accessPointEntity.save();
   } else {
     // Unknown access point
