@@ -1,6 +1,15 @@
 import { Ethereum } from '../ethereum';
 
+enum Billing {
+  Mint,
+  AddAccessPoint,
+}
+
 export const FleekERC721 = {
+  Enums: {
+    Billing,
+  },
+
   async mint(
     params: FleekERC721.MintParams,
     provider: Ethereum.Providers
@@ -36,8 +45,15 @@ export const FleekERC721 = {
   },
 
   async lastTokenId(): Promise<number> {
-    // TODO: fetch last token id
-    return 7;
+    const contract = Ethereum.getContract('FleekERC721');
+
+    return contract.getLastTokenId();
+  },
+
+  async getBilling(key: keyof typeof Billing): Promise<string> {
+    const contract = Ethereum.getContract('FleekERC721');
+
+    return (await contract.getBilling(this.Enums.Billing[key])).toString();
   },
 };
 
