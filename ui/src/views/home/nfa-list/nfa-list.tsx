@@ -3,6 +3,7 @@ import { Button, Card, Flex, NoResults } from '@/components';
 import { FleekERC721 } from '@/integrations/ethereum/contracts';
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const pageSize = 2; //Set this size to test pagination
 
@@ -70,13 +71,14 @@ export const NFAList = () => {
           dataMintedTokens.newMints.map((mint) => (
             <Card.Container key={mint.tokenId}>
               <Card.Heading title={mint.name} />
-              <Card.Body>
+              <Card.Body css={{ display: 'flex', flexDirection: 'column' }}>
                 <a
                   target="_blank"
                   href={`https://testnets.opensea.io/assets/mumbai/${FleekERC721.address}/${mint.tokenId}`}
                 >
                   <u>Open NFA on Opensea</u>
                 </a>
+                <Link to={`/create-ap/${mint.tokenId}`}>Create AP</Link>
               </Card.Body>
             </Card.Container>
           ))

@@ -1,6 +1,6 @@
 import { Flex } from '@/components';
 import { Link } from 'react-router-dom';
-import { NFAList } from '../nfa-list/nfa-list';
+import { NFAList } from './nfa-list/nfa-list';
 
 export const Home = () => {
   return (
