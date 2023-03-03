@@ -1,10 +1,11 @@
 import { ComboboxItem, DropdownItem } from '@/components';
-import { GithubState } from '@/store';
+import { GithubState, useFleekERC721Billing } from '@/store';
 import { EthereumHooks } from '@/integrations';
 import { createContext } from '@/utils';
 import { useState } from 'react';
 
 export type MintContext = {
+  billing: string | undefined;
   selectedUserOrg: ComboboxItem;
   repositoryName: GithubState.Repository;
   branchName: DropdownItem; //get value from DropdownItem to mint
@@ -65,6 +66,7 @@ export abstract class Mint {
     const [ens, setEns] = useState({} as DropdownItem);
     const [domain, setDomain] = useState('');
     const [verifyNFA, setVerifyNFA] = useState(true);
+    const [billing] = useFleekERC721Billing('Mint');
 
     const setGithubStep = (step: number): void => {
       if (step > 0 && step <= 3) {
@@ -75,6 +77,7 @@ export abstract class Mint {
     return (
       <MintProvider
         value={{
+          billing,
           selectedUserOrg,
           repositoryName,
           branchName,
