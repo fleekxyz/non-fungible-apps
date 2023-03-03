@@ -14,6 +14,7 @@ export const MintFormStep = () => {
   const { address } = useAccount();
   const { nextStep } = Stepper.useContext();
   const {
+    billing,
     appName,
     appDescription,
     domain,
@@ -43,6 +44,7 @@ export const MintFormStep = () => {
       appLogo,
       parseColorToNumber(logoColor),
       verifyNFA,
+      { value: billing },
     ]);
 
     nextStep();
