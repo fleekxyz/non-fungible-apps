@@ -9,7 +9,7 @@ export const DomainField = () => {
   };
   return (
     <Form.Field css={{ flex: 1 }}>
-      <Form.Label>Domain</Form.Label>
+      <Form.Label isRequired>Domain</Form.Label>
       <Form.Input
         placeholder="mydomain.com"
         value={domain}
