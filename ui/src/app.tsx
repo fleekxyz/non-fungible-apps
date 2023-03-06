@@ -1,9 +1,10 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { themeGlobals } from '@/theme/globals';
-import { Home, Mint } from './views';
+import { ComponentsTest, Home, Mint } from './views';
 import { SVGTestScreen } from './views/svg-test'; // TODO: remove when done
 import { ConnectKitButton } from 'connectkit';
 import { MintTest } from './views/mint-test';
+import { ToastProvider } from './components';
 
 export const App = () => {
   themeGlobals();
@@ -14,10 +15,13 @@ export const App = () => {
         <ConnectKitButton />
       </div>
       <BrowserRouter>
+        <ToastProvider />
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/mint" element={<Mint />} />
           <Route path="/svg" element={<SVGTestScreen />} />
+          {/** TODO remove for release */}
+          <Route path="/components-test" element={<ComponentsTest />} />
           <Route path="/mint-test" element={<MintTest />} />
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
