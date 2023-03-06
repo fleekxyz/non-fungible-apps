@@ -1,6 +1,6 @@
 import { Button, Card, Flex, Stepper } from '@/components';
 import { Mint } from '@/views/mint/mint.context';
-import { RepoRow } from '../github-repository-selection';
+import { RepoRow } from '../repository-row';
 import { RepoBranchCommitFields } from './repo-branch-commit-fields';
 
 export const RepoConfigurationBody = () => {
