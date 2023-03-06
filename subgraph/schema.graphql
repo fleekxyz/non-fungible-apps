@@ -31,7 +31,7 @@ type NewMint @entity(immutable: true) {
   color: Int!
   accessPointAutoApproval: Boolean!
   triggeredBy: Bytes! # address
-  tokenOwner: Owner! # address 
+  owner: Owner! # address 
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -44,6 +44,7 @@ type MetadataUpdate @entity(immutable: true) {
   stringValue: String
   uint24Value: Int
   doubleStringValue: [String!]!
+  booleanValue: Boolean
   byAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -76,31 +77,34 @@ type Token @entity {
   controllers: [Controller!]
   gitRepository: GitRepository!
   commitHash: String!
+  accessPoints: [AccessPoint!] @derivedFrom(field: "token")
 }
 
+# Owner entity for collection, access points, and tokens
 type Owner @entity {
   id: Bytes! # address
   tokens: [Token!] @derivedFrom(field: "owner")
+  accessPoints: [AccessPoint!] @derivedFrom(field: "owner")
+  collection: Boolean!
 }
 
+# Controller entity for tokens
 type Controller @entity {
   id: Bytes! # address
   tokens: [Token!] @derivedFrom(field: "controllers")
-}
-type Collection @entity {
-  id: Bytes! #address
-  deployer: Bytes! #address
-  transactionHash: Bytes! #transaction hash
-  owners: [CollectionOwner!]
-}
-
-type CollectionOwner @entity {
-  id: Bytes! # address
-  accessGrantedBy: Bytes! #address
-  transactionHash: Bytes!
 }
 
 type GitRepository @entity {
   id: String! # transaction hash of the first transaction this repository appeared in
   tokens: [Token!] @derivedFrom(field: "gitRepository")
+}
+
+type AccessPoint @entity {
+  id: String! # AP Name
+  token: Token!
+  score: BigInt!
+  contentVerified: Boolean!
+  nameVerified: Boolean!
+  owner: Owner!
+  creationStatus: String!
 }

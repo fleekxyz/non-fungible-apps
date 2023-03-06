@@ -1,20 +1,18 @@
 import { Button, Card, Grid, Stepper } from '@/components';
-import { Mint } from '../mint.context';
+import { Mint } from '../../mint.context';
 import {
   LogoField,
   AppDescriptionField,
   AppNameField,
   EnsDomainField,
-  VerifyNFAField,
 } from './fields';
-import { MintCardHeader } from '../mint-card';
+import { MintCardHeader } from '../../mint-card';
 import { useAccount } from 'wagmi';
 import { parseColorToNumber } from './form.utils';
 
-export const FormStep = () => {
-  const { prevStep, nextStep } = Stepper.useContext();
+export const MintFormStep = () => {
   const { address } = useAccount();
-
+  const { nextStep } = Stepper.useContext();
   const {
     appName,
     appDescription,
@@ -26,6 +24,7 @@ export const FormStep = () => {
     logoColor,
     repositoryName,
     verifyNFA,
+    setNfaStep,
   } = Mint.useContext();
   const { setArgs } = Mint.useTransactionContext();
 
@@ -49,9 +48,13 @@ export const FormStep = () => {
     nextStep();
   };
 
+  const handlePrevStep = () => {
+    setNfaStep(1);
+  };
+
   return (
     <Card.Container css={{ width: '$107h' }}>
-      <MintCardHeader title="NFA Details" onClickBack={prevStep} />
+      <MintCardHeader title="NFA Details" onClickBack={handlePrevStep} />
       <Card.Body>
         <Grid
           css={{
@@ -63,7 +66,6 @@ export const FormStep = () => {
             <AppDescriptionField />
             <LogoField />
             <EnsDomainField />
-            <VerifyNFAField />
           </Grid>
           <Button
             disabled={!appName || !appDescription || !domain}

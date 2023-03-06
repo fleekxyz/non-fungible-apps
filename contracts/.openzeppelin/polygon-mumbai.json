@@ -29,6 +29,11 @@
       "address": "0x11Cd77Eac1a0883DE9435B5586474903A2a084cD",
       "txHash": "0x5166318336c9e0bef146562d58e01ddbb937a61b721aca6b24d41b0a189fde39",
       "kind": "transparent"
+    },
+    {
+      "address": "0x550Ee47Fa9E0B81c1b9C394FeE62Fe699a955519",
+      "txHash": "0x7076aaf31e50c5f9ddc4aeb1025c8b41e753ee99cc0d15ac5ac26395f04326e3",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -6539,6 +6544,430 @@
               {
                 "label": "members",
                 "type": "t_array(t_address)dyn_storage",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint24": {
+            "label": "uint24",
+            "numberOfBytes": "3"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    },
+    "185ebe4c7108bb878e61aa9ca7bf5e8738cb39efc72aa2191dafdd8a74421a34": {
+      "address": "0x9e4A318C788e0097A24146Fe7041a0CD93939D56",
+      "txHash": "0xa7c1909a3a0d5d46a1cdd9f75b16661d7278ee1b1a1734b5cb61a3be691f5788",
+      "layout": {
+        "solcVersion": "0.8.12",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC165Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:41"
+          },
+          {
+            "label": "_name",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_string_storage",
+            "contract": "ERC721Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:25"
+          },
+          {
+            "label": "_symbol",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_string_storage",
+            "contract": "ERC721Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:28"
+          },
+          {
+            "label": "_owners",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_mapping(t_uint256,t_address)",
+            "contract": "ERC721Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:31"
+          },
+          {
+            "label": "_balances",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ERC721Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:34"
+          },
+          {
+            "label": "_tokenApprovals",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_mapping(t_uint256,t_address)",
+            "contract": "ERC721Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:37"
+          },
+          {
+            "label": "_operatorApprovals",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
+            "contract": "ERC721Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:40"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "107",
+            "type": "t_array(t_uint256)44_storage",
+            "contract": "ERC721Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:514"
+          },
+          {
+            "label": "_collectionRolesCounter",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_mapping(t_enum(CollectionRoles)3829,t_uint256)",
+            "contract": "FleekAccessControl",
+            "src": "contracts/FleekAccessControl.sol:58"
+          },
+          {
+            "label": "_collectionRoles",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_mapping(t_enum(CollectionRoles)3829,t_mapping(t_address,t_bool))",
+            "contract": "FleekAccessControl",
+            "src": "contracts/FleekAccessControl.sol:63"
+          },
+          {
+            "label": "_tokenRolesVersion",
+            "offset": 0,
+            "slot": "153",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "FleekAccessControl",
+            "src": "contracts/FleekAccessControl.sol:70"
+          },
+          {
+            "label": "_tokenRoles",
+            "offset": 0,
+            "slot": "154",
+            "type": "t_mapping(t_uint256,t_mapping(t_uint256,t_mapping(t_enum(TokenRoles)3831,t_mapping(t_address,t_bool))))",
+            "contract": "FleekAccessControl",
+            "src": "contracts/FleekAccessControl.sol:75"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "155",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "FleekAccessControl",
+            "src": "contracts/FleekAccessControl.sol:178"
+          },
+          {
+            "label": "_paused",
+            "offset": 0,
+            "slot": "204",
+            "type": "t_bool",
+            "contract": "FleekPausable",
+            "src": "contracts/FleekPausable.sol:23"
+          },
+          {
+            "label": "_canPause",
+            "offset": 1,
+            "slot": "204",
+            "type": "t_bool",
+            "contract": "FleekPausable",
+            "src": "contracts/FleekPausable.sol:24"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "205",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "FleekPausable",
+            "src": "contracts/FleekPausable.sol:133"
+          },
+          {
+            "label": "_appIds",
+            "offset": 0,
+            "slot": "254",
+            "type": "t_uint256",
+            "contract": "FleekERC721",
+            "src": "contracts/FleekERC721.sol:113"
+          },
+          {
+            "label": "_apps",
+            "offset": 0,
+            "slot": "255",
+            "type": "t_mapping(t_uint256,t_struct(App)4408_storage)",
+            "contract": "FleekERC721",
+            "src": "contracts/FleekERC721.sol:114"
+          },
+          {
+            "label": "_accessPoints",
+            "offset": 0,
+            "slot": "256",
+            "type": "t_mapping(t_string_memory_ptr,t_struct(AccessPoint)4432_storage)",
+            "contract": "FleekERC721",
+            "src": "contracts/FleekERC721.sol:115"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)44_storage": {
+            "label": "uint256[44]",
+            "numberOfBytes": "1408"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_enum(AccessPointCreationStatus)4418": {
+            "label": "enum FleekERC721.AccessPointCreationStatus",
+            "members": [
+              "DRAFT",
+              "APPROVED",
+              "REJECTED",
+              "REMOVED"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_enum(CollectionRoles)3829": {
+            "label": "enum FleekAccessControl.CollectionRoles",
+            "members": [
+              "Owner"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_enum(TokenRoles)3831": {
+            "label": "enum FleekAccessControl.TokenRoles",
+            "members": [
+              "Controller"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+            "label": "mapping(address => mapping(address => bool))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_enum(CollectionRoles)3829,t_mapping(t_address,t_bool))": {
+            "label": "mapping(enum FleekAccessControl.CollectionRoles => mapping(address => bool))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_enum(CollectionRoles)3829,t_uint256)": {
+            "label": "mapping(enum FleekAccessControl.CollectionRoles => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_enum(TokenRoles)3831,t_mapping(t_address,t_bool))": {
+            "label": "mapping(enum FleekAccessControl.TokenRoles => mapping(address => bool))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_string_memory_ptr,t_struct(AccessPoint)4432_storage)": {
+            "label": "mapping(string => struct FleekERC721.AccessPoint)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_address)": {
+            "label": "mapping(uint256 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_mapping(t_enum(TokenRoles)3831,t_mapping(t_address,t_bool)))": {
+            "label": "mapping(uint256 => mapping(enum FleekAccessControl.TokenRoles => mapping(address => bool)))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint256,t_mapping(t_enum(TokenRoles)3831,t_mapping(t_address,t_bool))))": {
+            "label": "mapping(uint256 => mapping(uint256 => mapping(enum FleekAccessControl.TokenRoles => mapping(address => bool))))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(App)4408_storage)": {
+            "label": "mapping(uint256 => struct FleekERC721.App)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(Build)4413_storage)": {
+            "label": "mapping(uint256 => struct FleekERC721.Build)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_string_memory_ptr": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(AccessPoint)4432_storage": {
+            "label": "struct FleekERC721.AccessPoint",
+            "members": [
+              {
+                "label": "tokenId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "score",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "contentVerified",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "nameVerified",
+                "type": "t_bool",
+                "offset": 1,
+                "slot": "2"
+              },
+              {
+                "label": "owner",
+                "type": "t_address",
+                "offset": 2,
+                "slot": "2"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(AccessPointCreationStatus)4418",
+                "offset": 22,
+                "slot": "2"
+              }
+            ],
+            "numberOfBytes": "96"
+          },
+          "t_struct(App)4408_storage": {
+            "label": "struct FleekERC721.App",
+            "members": [
+              {
+                "label": "name",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "description",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "externalURL",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "ENS",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "currentBuild",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "builds",
+                "type": "t_mapping(t_uint256,t_struct(Build)4413_storage)",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "logo",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "color",
+                "type": "t_uint24",
+                "offset": 0,
+                "slot": "7"
+              },
+              {
+                "label": "accessPointAutoApproval",
+                "type": "t_bool",
+                "offset": 3,
+                "slot": "7"
+              }
+            ],
+            "numberOfBytes": "256"
+          },
+          "t_struct(Build)4413_storage": {
+            "label": "struct FleekERC721.Build",
+            "members": [
+              {
+                "label": "commitHash",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "gitRepository",
+                "type": "t_string_storage",
                 "offset": 0,
                 "slot": "1"
               }

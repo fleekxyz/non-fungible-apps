@@ -2,7 +2,7 @@ import { Card, Flex } from '@/components';
 import { useRef } from 'react';
 // @ts-ignore
 import ColorThief from 'colorthief';
-import { Mint } from '../../../mint.context';
+import { Mint } from '../../../../mint.context';
 
 export const ColorPicker = () => {
   const { appLogo, logoColor, setLogoColor } = Mint.useContext();
