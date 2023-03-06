@@ -1,4 +1,4 @@
-import { DropdownItem } from '@/components';
+import { ComboboxItem } from '@/components';
 import { githubActions, RootState } from '@/store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { GithubClient } from '../github-client';
@@ -22,7 +22,7 @@ export const fetchBranchesThunk = createAsyncThunk<void, FetchBranches>(
 
       const branches = await githubClient.fetchBranches(owner, repository);
 
-      dispatch(githubActions.setBranches(branches as DropdownItem[]));
+      dispatch(githubActions.setBranches(branches as ComboboxItem[]));
     } catch (error) {
       console.log(error);
       dispatch(githubActions.setQueryState('failed'));

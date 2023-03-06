@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
 import * as asyncThunk from './async-thunk';
-import { DropdownItem } from '@/components';
+import { ComboboxItem } from '@/components';
 import { UserData } from './github-client';
 
 export namespace GithubState {
@@ -27,7 +27,7 @@ export namespace GithubState {
 
   export type Repositories = Array<Repository>;
 
-  export type Branches = Array<DropdownItem>;
+  export type Branches = Array<ComboboxItem>;
 }
 
 export interface GithubState {

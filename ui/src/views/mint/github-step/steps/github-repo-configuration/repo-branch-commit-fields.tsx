@@ -1,7 +1,7 @@
-import { Dropdown, DropdownItem, Flex, Form, Spinner } from '@/components';
+import { useEffect } from 'react';
+import { Combobox, ComboboxItem, Flex, Form, Spinner } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-import { useEffect } from 'react';
 
 export const RepoBranchCommitFields = () => {
   const { queryLoading, branches } = useGithubStore();
@@ -27,7 +27,20 @@ export const RepoBranchCommitFields = () => {
     }
   }, [queryLoading, dispatch]);
 
-  const handleBranchChange = (dropdownOption: DropdownItem) => {
+  useEffect(() => {
+    if (queryLoading === 'success' && branches.length > 0) {
+      const mainBranch = branches.find(
+        (branch) =>
+          branch.label.startsWith('master') || branch.label.startsWith('main')
+      );
+      if (mainBranch) {
+        setBranchName(mainBranch);
+        setCommitHash(mainBranch.value);
+      }
+    }
+  }, [queryLoading, branches]);
+
+  const handleBranchChange = (dropdownOption: ComboboxItem) => {
     setBranchName(dropdownOption);
     setCommitHash(dropdownOption.value);
   };
@@ -54,7 +67,8 @@ export const RepoBranchCommitFields = () => {
     <>
       <Form.Field>
         <Form.Label>Git Branch</Form.Label>
-        <Dropdown
+        <Combobox
+          // TODO replace left icon with branch icon
           items={branches}
           selectedValue={branchName}
           onChange={handleBranchChange}
