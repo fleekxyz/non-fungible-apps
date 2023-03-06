@@ -14,7 +14,7 @@ const ComboboxInput = ({
   handleInputChange,
   handleInputClick,
 }: ComboboxInputProps) => (
-  <div className="relative w-full cursor-default ">
+  <div className="relative w-full  ">
     <Icon
       name="search"
       size="sm"
@@ -27,8 +27,10 @@ const ComboboxInput = ({
     />
     <ComboboxLib.Input
       placeholder="Search"
-      className={`w-full border-solid border border-slate7 h-11  py-3 pl-8 pr-10 text-sm bg-transparent leading-5 text-slate11 outline-none ${
-        open ? 'border-b-0 rounded-t-xl bg-black border-slate6' : 'rounded-xl'
+      className={`w-full  border-solid border border-slate7 h-11  py-3 pl-8 pr-10 text-sm bg-transparent leading-5 text-slate11 outline-none ${
+        open
+          ? 'border-b-0 rounded-t-xl bg-black border-slate6 cursor-default'
+          : 'rounded-xl cursor-pointer'
       }`}
       displayValue={(selectedValue: ComboboxItem) => selectedValue.label}
       onChange={handleInputChange}
