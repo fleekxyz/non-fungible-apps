@@ -41,14 +41,14 @@ export const GithubRepositoryConnection: React.FC = () => {
   };
 
   return (
-    <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pb: '$0h' }}>
+    <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pr: '$3h' }}>
       <MintCardHeader
         title="Select Repository"
         onClickBack={handlePrevStepClick}
       />
       <Card.Body css={{ pt: '$4' }}>
         <Grid css={{ rowGap: '$2' }}>
-          <Flex css={{ gap: '$4' }}>
+          <Flex css={{ gap: '$4', pr: '$3h' }}>
             <UserOrgsCombobox />
             <Input
               leftIcon="search"

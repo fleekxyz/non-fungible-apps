@@ -39,6 +39,7 @@ export const RepositoriesList = ({ searchValue }: RepositoriesListProps) => {
         overflowX: 'hidden',
         overflowY: 'scroll',
         flexDirection: 'column',
+        pr: '$3h',
       }}
     >
       {filteredRepositories.length > 0 ? (
