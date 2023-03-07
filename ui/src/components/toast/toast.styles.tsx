@@ -97,6 +97,8 @@ export abstract class ToastStyles {
     left: '50%',
     transform: 'translate(-50%)',
     display: 'flex',
+    flexDirection: 'column',
+    gap: '$4',
   });
 
   static readonly Layout = styled(Flex, {

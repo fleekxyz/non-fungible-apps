@@ -63,7 +63,7 @@ export const ToastProvider: React.FC = () => {
   const { toasts } = useToastsState();
 
   return (
-    <ToastStyles.Provider duration={1000} swipeDirection="down">
+    <ToastStyles.Provider duration={3000} swipeDirection="down">
       {toasts.map((toast) => (
         <Toast key={toast.id} {...toast} />
       ))}
