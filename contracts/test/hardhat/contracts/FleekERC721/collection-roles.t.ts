@@ -177,10 +177,10 @@ describe('FleekERC721.CollectionRoles', () => {
   });
 
   it('should not be able to verify access point if not verifier', async () => {
-    const { owner, contract, otherAccount } = fixture;
+    const { contract, otherAccount } = fixture;
 
     await contract.mint(
-      owner.address,
+      otherAccount.address,
       TestConstants.MintParams.name,
       TestConstants.MintParams.description,
       TestConstants.MintParams.externalUrl,
