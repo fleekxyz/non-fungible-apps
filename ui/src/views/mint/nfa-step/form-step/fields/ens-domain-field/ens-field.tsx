@@ -1,37 +1,35 @@
-import { Dropdown, DropdownItem, Form } from '@/components';
+import { Combobox, ComboboxItem, Form } from '@/components';
+import { ensActions, useAppDispatch, useEnsStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-
-// TODO remove after integration with wallet
-const ensList: DropdownItem[] = [
-  {
-    value: 'fleek.eth',
-    label: 'fleek.eth',
-  },
-  {
-    value: 'ens.eth',
-    label: 'ens.eth',
-  },
-  {
-    value: 'cami.eth',
-    label: 'cami.eth',
-  },
-];
+import { useAccount } from 'wagmi';
 
 export const EnsField = () => {
-  const { ens, setEns } = Mint.useContext();
+  const { ens, ensError, setEns } = Mint.useContext();
+  const { state, ensNames } = useEnsStore();
+  const dispatch = useAppDispatch();
+  const { address } = useAccount();
 
-  const handleEnsChange = (item: DropdownItem) => {
+  if (state === 'idle' && address) {
+    dispatch(ensActions.fetchEnsNamesThunk(address));
+  }
+
+  const handleEnsChange = (item: ComboboxItem) => {
     setEns(item);
   };
 
   return (
     <Form.Field css={{ flex: 1 }}>
       <Form.Label>ENS</Form.Label>
-      <Dropdown
-        items={ensList}
+      <Combobox
+        items={ensNames.map((ens) => ({
+          label: ens,
+          value: ens,
+        }))}
         selectedValue={ens}
         onChange={handleEnsChange}
+        withAutocomplete
       />
+      {ensError && <Form.Error>{ensError}</Form.Error>}
     </Form.Field>
   );
 };

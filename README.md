@@ -8,7 +8,7 @@
 
 This is the landing point for Fleek's initiative to implement infrastructure as Solidity contracts.
 
-The vision is to have this on Ethereum Mainnet so there is flexibility in terms of which chains to work with. And we can create a network of smart contracts that represent the different parts of your stack. We had previously targeted Polygon but have changed it to Ethereum Mainnet for better interoperability and the security that mainnet provides.
+The vision is to have this on Ethereum Mainnet. We can create a network of smart contracts that represent the different parts of your stack. We had previously targeted Polygon but have changed it to Ethereum Mainnet for better interoperability and the security that mainnet provides.
 
 The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloudformation manifests that will enable us to develop use cases on top like community hosting.
 
