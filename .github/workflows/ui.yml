@@ -29,7 +29,8 @@ jobs:
 
       - name: Install Dependencies
         run: yarn --ignore-scripts
-
+- name: Create .graphclient folder
+        run: yarn graphclient build
       - name: Audit
         run: yarn audit --groups dependencies
 
