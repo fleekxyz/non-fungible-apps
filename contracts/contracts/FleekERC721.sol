@@ -165,7 +165,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         string memory logo,
         uint24 color,
         bool accessPointAutoApproval
-    ) public payable requirePayment(Billing.Mint) requireCollectionRole(CollectionRoles.Owner) returns (uint256) {
+    ) public payable requirePayment(Billing.Mint) returns (uint256) {
         uint256 tokenId = _appIds;
         _mint(to, tokenId);
 
