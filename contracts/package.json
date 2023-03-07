@@ -9,8 +9,8 @@
     "test:hardhat": "hardhat test",
     "format": "prettier --write \"./**/*.{js,json,sol,ts}\"",
     "node:hardhat": "hardhat node",
-    "deploy:hardhat": "hardhat run scripts/deploy.js --network hardhat",
-    "deploy:mumbai": "hardhat run scripts/deploy.js --network mumbai",
+    "deploy:hardhat": "hardhat deploy --network hardhat",
+    "deploy:mumbai": "hardhat deploy --network mumbai",
     "compile": "hardhat compile",
     "verify:mumbai": "npx hardhat run ./scripts/verify-polyscan.js --network mumbai"
   },
