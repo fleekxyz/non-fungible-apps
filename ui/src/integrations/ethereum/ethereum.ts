@@ -1,8 +1,18 @@
 import { JsonRpcProvider, Networkish } from '@ethersproject/providers';
 import { ethers } from 'ethers';
 import * as Contracts from './contracts';
+import { env } from '@/constants';
+import { Alchemy, Network } from 'alchemy-sdk';
+
+const config = {
+  apiKey: env.alchemy.id,
+  network: Network.ETH_MAINNET,
+};
+
+const alchemy = new Alchemy(config);
 
 export const Ethereum: Ethereum.Core = {
+  //TODO remove
   defaultNetwork: 'https://rpc-mumbai.maticvigil.com', // TODO: make it environment variable
 
   provider: {
@@ -20,6 +30,23 @@ export const Ethereum: Ethereum.Core = {
 
     return new ethers.Contract(contract.address, contract.abi, provider);
   },
+
+  async getEnsName(address) {
+    const ensAddresses = await alchemy.nft.getNftsForOwner(address, {
+      contractAddresses: [env.ens.contractAddress],
+    });
+
+    return ensAddresses.ownedNfts.map((nft) => nft.title);
+  },
+
+  //TODO remove if we're not gonna validate ens on the client side
+  async validateEnsName(name) {
+    const provider = new ethers.providers.JsonRpcProvider(
+      env.ens.validationEnsURL
+    );
+
+    return Boolean(await provider.resolveName(name));
+  },
 };
 
 export namespace Ethereum {
@@ -36,5 +63,9 @@ export namespace Ethereum {
       contractName: keyof typeof Contracts,
       providerName?: Providers
     ) => ethers.Contract;
+
+    getEnsName: (address: string) => Promise<string[]>;
+
+    validateEnsName: (name: string) => Promise<boolean>;
   };
 }

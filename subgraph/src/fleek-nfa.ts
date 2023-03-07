@@ -1,4 +1,11 @@
-import { Address, Bytes, log, store, ethereum, BigInt } from '@graphprotocol/graph-ts';
+import {
+  Address,
+  Bytes,
+  log,
+  store,
+  ethereum,
+  BigInt,
+} from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]
 import {
@@ -35,11 +42,11 @@ import {
 
 enum CollectionRoles {
   Owner,
-};
+}
 
 enum TokenRoles {
   Controller,
-};
+}
 
 export function handleApproval(event: ApprovalEvent): void {
   let entity = new Approval(
@@ -263,27 +270,29 @@ export function handleMetadataUpdateWithIntValue(
 }
 
 export function handleInitialized(event: InitializedEvent): void {
-    // This is the contract creation transaction.
-    log.warning('This is the contract creation transaction.', []);
-    if (event.receipt) {
-      let receipt = event.receipt as ethereum.TransactionReceipt;
-      log.warning('Contract address is: {}', [
-        receipt.contractAddress.toHexString(),
-      ]);
- 
-      // add owner
-      let owner = new Owner(event.transaction.from);
-      owner.collection = true;
-      owner.save();
-    }
+  // This is the contract creation transaction.
+  log.warning('This is the contract creation transaction.', []);
+  if (event.receipt) {
+    let receipt = event.receipt as ethereum.TransactionReceipt;
+    log.warning('Contract address is: {}', [
+      receipt.contractAddress.toHexString(),
+    ]);
+
+    // add owner
+    let owner = new Owner(event.transaction.from);
+    owner.collection = true;
+    owner.save();
+  }
 }
 
-export function handleCollectionRoleChanged(event: CollectionRoleChangedEvent): void {
+export function handleCollectionRoleChanged(
+  event: CollectionRoleChangedEvent
+): void {
   let toAddress = event.params.toAddress;
   let byAddress = event.params.byAddress;
   let role = event.params.role;
   let status = event.params.status;
-  
+
   if (role === CollectionRoles.Owner) {
     // Owner role
     if (status) {
@@ -298,14 +307,21 @@ export function handleCollectionRoleChanged(event: CollectionRoleChangedEvent): 
       // revoked
       let owner = Owner.load(toAddress);
       if (!owner) {
-        log.error('Owner entity not found. Role: {}, byAddress: {}, toAddress: {}', [role.toString(), byAddress.toHexString(), toAddress.toHexString()]);
+        log.error(
+          'Owner entity not found. Role: {}, byAddress: {}, toAddress: {}',
+          [role.toString(), byAddress.toHexString(), toAddress.toHexString()]
+        );
         return;
       }
       owner.collection = false;
       owner.save();
     }
   } else {
-    log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [role.toString(), byAddress.toHexString(), toAddress.toHexString()]);
+    log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [
+      role.toString(),
+      byAddress.toHexString(),
+      toAddress.toHexString(),
+    ]);
   }
 }
 
@@ -315,13 +331,13 @@ export function handleTokenRoleChanged(event: TokenRoleChangedEvent): void {
   let byAddress = event.params.byAddress;
   let role = event.params.role;
   let status = event.params.status;
-  
+
   // load token
   let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
   if (!token) {
     log.error('Token not found. TokenId: {}', [tokenId.toString()]);
     return;
-  } 
+  }
 
   if (role === TokenRoles.Controller) {
     // Controller role
@@ -343,11 +359,17 @@ export function handleTokenRoleChanged(event: TokenRoleChangedEvent): void {
     }
     token.controllers = token_controllers;
   } else {
-    log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [role.toString(), byAddress.toHexString(), toAddress.toHexString()]);
+    log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [
+      role.toString(),
+      byAddress.toHexString(),
+      toAddress.toHexString(),
+    ]);
   }
 }
 
-export function handleMetadataUpdateWithBooleanValue(event: MetadataUpdateEvent3): void {
+export function handleMetadataUpdateWithBooleanValue(
+  event: MetadataUpdateEvent3
+): void {
   /**
    * accessPointAutoApproval
    */
@@ -364,7 +386,9 @@ export function handleMetadataUpdateWithBooleanValue(event: MetadataUpdateEvent3
 
   entity.save();
 
-  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId)));
+  let token = Token.load(
+    Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
+  );
 
   if (token) {
     if (event.params.key == 'accessPointAutoApproval') {
@@ -420,14 +444,13 @@ export function handleTransfer(event: TransferEvent): void {
   }
 }
 
-
 /**
-   * This handler will create and load entities in the following order:
-   * - AccessPoint [create]
-   * - Owner [load / create]
-   * Note to discuss later: Should a `NewAccessPoint` entity be also created and defined?
-   */
- export function handleNewAccessPoint(event: NewAccessPointEvent): void {
+ * This handler will create and load entities in the following order:
+ * - AccessPoint [create]
+ * - Owner [load / create]
+ * Note to discuss later: Should a `NewAccessPoint` entity be also created and defined?
+ */
+export function handleNewAccessPoint(event: NewAccessPointEvent): void {
   // Create an AccessPoint entity
   let accessPointEntity = new AccessPoint(event.params.apName);
   accessPointEntity.score = BigInt.fromU32(0);
@@ -435,7 +458,9 @@ export function handleTransfer(event: TransferEvent): void {
   accessPointEntity.nameVerified = false;
   accessPointEntity.creationStatus = 'DRAFT'; // Since a `ChangeAccessPointCreationStatus` event is emitted instantly after `NewAccessPoint`, the status will be updated in that handler.
   accessPointEntity.owner = event.params.owner;
-  accessPointEntity.token = Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId));
+  accessPointEntity.token = Bytes.fromByteArray(
+    Bytes.fromBigInt(event.params.tokenId)
+  );
 
   // Load / Create an Owner entity
   let ownerEntity = Owner.load(event.params.owner);
@@ -453,7 +478,9 @@ export function handleTransfer(event: TransferEvent): void {
 /**
  * This handler will update the status of an access point entity.
  */
-export function handleChangeAccessPointCreationStatus(event: ChangeAccessPointCreationStatusEvent): void {
+export function handleChangeAccessPointCreationStatus(
+  event: ChangeAccessPointCreationStatusEvent
+): void {
   // Load the AccessPoint entity
   let accessPointEntity = AccessPoint.load(event.params.apName);
   let status = event.params.status;
@@ -474,20 +501,28 @@ export function handleChangeAccessPointCreationStatus(event: ChangeAccessPointCr
         break;
       default:
         // Unknown status
-        log.error('Unable to handle ChangeAccessPointCreationStatus. Unknown status. Status: {}, AccessPoint: {}', [status.toString(), event.params.apName]);
+        log.error(
+          'Unable to handle ChangeAccessPointCreationStatus. Unknown status. Status: {}, AccessPoint: {}',
+          [status.toString(), event.params.apName]
+        );
     }
 
     accessPointEntity.save();
   } else {
     // Unknown access point
-    log.error('Unable to handle ChangeAccessPointCreationStatus. Unknown access point. Status: {}, AccessPoint: {}', [status.toString(), event.params.apName]);
+    log.error(
+      'Unable to handle ChangeAccessPointCreationStatus. Unknown access point. Status: {}, AccessPoint: {}',
+      [status.toString(), event.params.apName]
+    );
   }
 }
 
 /**
  * This handler will update the score of an access point entity.
  */
- export function handleChangeAccessPointScore(event: ChangeAccessPointCreationScoreEvent): void {
+export function handleChangeAccessPointScore(
+  event: ChangeAccessPointCreationScoreEvent
+): void {
   // Load the AccessPoint entity
   let accessPointEntity = AccessPoint.load(event.params.apName);
 
@@ -496,14 +531,19 @@ export function handleChangeAccessPointCreationStatus(event: ChangeAccessPointCr
     accessPointEntity.save();
   } else {
     // Unknown access point
-    log.error('Unable to handle ChangeAccessPointScore. Unknown access point. Score: {}, AccessPoint: {}', [event.params.score.toString(), event.params.apName]);
+    log.error(
+      'Unable to handle ChangeAccessPointScore. Unknown access point. Score: {}, AccessPoint: {}',
+      [event.params.score.toString(), event.params.apName]
+    );
   }
 }
 
 /**
  * This handler will update the nameVerified field of an access point entity.
  */
- export function handleChangeAccessPointNameVerify(event: ChangeAccessPointNameVerifyEvent): void {
+export function handleChangeAccessPointNameVerify(
+  event: ChangeAccessPointNameVerifyEvent
+): void {
   // Load the AccessPoint entity
   let accessPointEntity = AccessPoint.load(event.params.apName);
 
@@ -512,14 +552,19 @@ export function handleChangeAccessPointCreationStatus(event: ChangeAccessPointCr
     accessPointEntity.save();
   } else {
     // Unknown access point
-    log.error('Unable to handle ChangeAccessPointNameVerify. Unknown access point. Verified: {}, AccessPoint: {}', [event.params.verified.toString(), event.params.apName]);
+    log.error(
+      'Unable to handle ChangeAccessPointNameVerify. Unknown access point. Verified: {}, AccessPoint: {}',
+      [event.params.verified.toString(), event.params.apName]
+    );
   }
 }
 
 /**
  * This handler will update the contentVerified field of an access point entity.
  */
- export function handleChangeAccessPointContentVerify(event: ChangeAccessPointContentVerifyEvent): void {
+export function handleChangeAccessPointContentVerify(
+  event: ChangeAccessPointContentVerifyEvent
+): void {
   // Load the AccessPoint entity
   let accessPointEntity = AccessPoint.load(event.params.apName);
 
@@ -528,6 +573,9 @@ export function handleChangeAccessPointCreationStatus(event: ChangeAccessPointCr
     accessPointEntity.save();
   } else {
     // Unknown access point
-    log.error('Unable to handle ChangeAccessPointContentVerify. Unknown access point. Verified: {}, AccessPoint: {}', [event.params.verified.toString(), event.params.apName]);
+    log.error(
+      'Unable to handle ChangeAccessPointContentVerify. Unknown access point. Verified: {}, AccessPoint: {}',
+      [event.params.verified.toString(), event.params.apName]
+    );
   }
 }
