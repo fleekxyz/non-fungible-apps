@@ -10,14 +10,17 @@ export type MintContext = {
   branchName: DropdownItem; //get value from DropdownItem to mint
   commitHash: string;
   githubStep: number;
+  nfaStep: number;
   appName: string;
   appDescription: string;
   appLogo: string;
   logoColor: string;
-  ens: DropdownItem;
+  ens: ComboboxItem;
   domain: string;
   verifyNFA: boolean;
+  ensError: string;
   setGithubStep: (step: number) => void;
+  setNfaStep: (step: number) => void;
   setSelectedUserOrg: (userOrg: ComboboxItem) => void;
   setRepositoryName: (repo: GithubState.Repository) => void;
   setBranchName: (branch: DropdownItem) => void;
@@ -26,9 +29,10 @@ export type MintContext = {
   setAppDescription: (description: string) => void;
   setAppLogo: (logo: string) => void;
   setLogoColor: (color: string) => void;
-  setEns: (ens: DropdownItem) => void;
+  setEns: (ens: ComboboxItem) => void;
   setDomain: (domain: string) => void;
   setVerifyNFA: (verify: boolean) => void;
+  setEnsError: (error: string) => void;
 };
 
 const [MintProvider, useContext] = createContext<MintContext>({
@@ -55,13 +59,17 @@ export abstract class Mint {
     const [githubStep, setGithubStepContext] = useState(1);
 
     //NFA Details
+    const [nfaStep, setNfaStep] = useState(1);
     const [appName, setAppName] = useState('');
     const [appDescription, setAppDescription] = useState('');
     const [appLogo, setAppLogo] = useState('');
     const [logoColor, setLogoColor] = useState('');
-    const [ens, setEns] = useState({} as DropdownItem);
+    const [ens, setEns] = useState({} as ComboboxItem);
     const [domain, setDomain] = useState('');
     const [verifyNFA, setVerifyNFA] = useState(true);
+
+    //Field validations
+    const [ensError, setEnsError] = useState<string>('');
 
     const setGithubStep = (step: number): void => {
       if (step > 0 && step <= 3) {
@@ -77,6 +85,7 @@ export abstract class Mint {
           branchName,
           commitHash,
           githubStep,
+          nfaStep,
           appName,
           appDescription,
           appLogo,
@@ -84,8 +93,10 @@ export abstract class Mint {
           ens,
           domain,
           verifyNFA,
+          ensError,
           setSelectedUserOrg,
           setGithubStep,
+          setNfaStep,
           setRepositoryName,
           setBranchName,
           setCommitHash,
@@ -96,6 +107,7 @@ export abstract class Mint {
           setEns,
           setDomain,
           setVerifyNFA,
+          setEnsError,
         }}
       >
         <TransactionProvider
