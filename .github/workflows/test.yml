@@ -2,7 +2,7 @@ name: Tests
 
 on:
   pull_request:
-    branches:    
+    branches:
       - main
       - develop
 
@@ -63,6 +63,9 @@ jobs:
 
       - name: Install Dependencies
         run: yarn --ignore-scripts
+
+      - name: Create .graphclient
+        run: yarn graphclient build
 
       - name: Audit
         run: yarn audit --groups dependencies
