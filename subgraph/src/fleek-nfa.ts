@@ -399,18 +399,21 @@ export function handleMetadataUpdateWithBooleanValue(
 }
 
 export function handleTransfer(event: TransferEvent): void {
-  let entity = new Transfer(
+  let transfer = new Transfer(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
-  entity.from = event.params.from;
-  entity.to = event.params.to;
-  entity.tokenId = event.params.tokenId;
+  
+  const TokenId = event.params.tokenId;
+  
+  transfer.from = event.params.from;
+  transfer.to = event.params.to;
+  transfer.tokenId = TokenId;
 
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
+  transfer.blockNumber = event.block.number;
+  transfer.blockTimestamp = event.block.timestamp;
+  transfer.transactionHash = event.transaction.hash;
 
-  entity.save();
+  transfer.save();
 
   let token: Token | null;
 
@@ -423,23 +426,29 @@ export function handleTransfer(event: TransferEvent): void {
   }
 
   if (parseInt(event.params.from.toHexString()) !== 0) {
-    // Transfer
-
-    // Load the Token by using its TokenId
-    token = Token.load(
-      Bytes.fromByteArray(Bytes.fromBigInt(event.params.tokenId))
-    );
-
-    if (token) {
-      // Entity exists
-      token.owner = owner_address;
-
-      // Save both entities
-      owner.save();
-      token.save();
+    if (parseInt(event.params.to.toHexString()) === 0) {
+      // Burn
+      // Remove the entity from storage
+      // Its controllers and owner will be affected.
+      store.remove('Token', TokenId.toString());
     } else {
-      // Entity does not exist
-      log.error('Unknown token was transferred.', []);
+      // Transfer
+      // Load the Token by using its TokenId
+      token = Token.load(
+        Bytes.fromByteArray(Bytes.fromBigInt(TokenId))
+      );
+
+      if (token) {
+        // Entity exists
+        token.owner = owner_address;
+
+        // Save both entities
+        owner.save();
+        token.save();
+      } else {
+        // Entity does not exist
+        log.error('Unknown token was transferred.', []);
+      }
     }
   }
 }
