@@ -1,9 +1,10 @@
 import { Card, ComboboxItem, Flex, Grid, Icon, Spinner } from '@/components';
 import { Input } from '@/components/core/input';
+import { useDebounce } from '@/hooks/use-debounce';
 import { useGithubStore } from '@/store';
 import { MintCardHeader } from '@/views/mint/mint-card';
 import { Mint } from '@/views/mint/mint.context';
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { RepositoriesList } from './repositories-list';
 import { UserOrgsCombobox } from './users-orgs-combobox';
 
@@ -46,14 +47,15 @@ export const GithubRepositoryConnection: React.FC = () => {
 
   const { setGithubStep, setSelectedUserOrg } = Mint.useContext();
 
-  const timeOutRef = useRef<NodeJS.Timeout>();
+  const setSearchValueDebounced = useDebounce(
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      setSearchValue(event.target.value),
+    500
+  );
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
-    timeOutRef.current && clearTimeout(timeOutRef.current);
-    timeOutRef.current = setTimeout(() => {
-      setSearchValue(event.target.value);
-    }, 500);
+    setSearchValueDebounced(event);
   };
 
   const handlePrevStepClick = () => {
@@ -73,7 +75,7 @@ export const GithubRepositoryConnection: React.FC = () => {
             <UserOrgsCombobox />
             <Input
               leftIcon="search"
-              placeholder="Search"
+              placeholder="Search repo"
               onChange={handleSearchChange}
             />
           </Flex>

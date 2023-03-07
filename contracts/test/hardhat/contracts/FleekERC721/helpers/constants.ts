@@ -1,6 +1,7 @@
 export const TestConstants = Object.freeze({
   CollectionRoles: {
     Owner: 0,
+    Verifier: 1,
   },
   TokenRoles: {
     Controller: 0,
