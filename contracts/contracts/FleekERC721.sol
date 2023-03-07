@@ -15,6 +15,7 @@ error AccessPointAlreadyExists();
 error AccessPointScoreCannotBeLower();
 error MustBeAccessPointOwner();
 error MustBeTokenOwner(uint256 tokenId);
+error MustBeTokenVerifier(uint256 tokenId);
 error ThereIsNoTokenMinted();
 error InvalidTokenIdForAccessPoint();
 error AccessPointCreationStatusAlreadySet();
@@ -119,6 +120,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     uint256 private _appIds;
     mapping(uint256 => App) private _apps;
     mapping(string => AccessPoint) private _accessPoints;
+    mapping(uint256 => address) private _tokenVerifier;
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -139,6 +141,14 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      */
     modifier requireAP(string memory apName) {
         if (_accessPoints[apName].owner == address(0)) revert AccessPointNotExistent();
+        _;
+    }
+
+    /**
+     * @dev Checks if caller is the verifier of the token.
+     */
+    modifier requireTokenVerifier(uint256 tokenId) {
+        if (_tokenVerifier[tokenId] != msg.sender) revert MustBeTokenVerifier(tokenId);
         _;
     }
 
@@ -610,7 +620,12 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setAccessPointContentVerify(
         string memory apName,
         bool verified
-    ) public requireAP(apName) requireCollectionRole(CollectionRoles.Verifier) {
+    )
+        public
+        requireAP(apName)
+        requireCollectionRole(CollectionRoles.Verifier)
+        requireTokenVerifier(_accessPoints[apName].tokenId)
+    {
         _accessPoints[apName].contentVerified = verified;
         emit ChangeAccessPointContentVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
@@ -629,7 +644,12 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     function setAccessPointNameVerify(
         string memory apName,
         bool verified
-    ) public requireAP(apName) requireCollectionRole(CollectionRoles.Verifier) {
+    )
+        public
+        requireAP(apName)
+        requireCollectionRole(CollectionRoles.Verifier)
+        requireTokenVerifier(_accessPoints[apName].tokenId)
+    {
         _accessPoints[apName].nameVerified = verified;
         emit ChangeAccessPointNameVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
@@ -673,6 +693,13 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         if (bytes(_apps[tokenId].externalURL).length != 0) {
             delete _apps[tokenId];
         }
+    }
+
+    function setTokenVerifier(uint256 tokenId, address verifier) public virtual requireTokenOwner(tokenId) {
+        if (!hasCollectionRole(CollectionRoles.Verifier, verifier))
+            revert MustHaveCollectionRole(uint8(CollectionRoles.Verifier));
+        _requireMinted(tokenId);
+        _tokenVerifier[tokenId] = verifier;
     }
 
     /*//////////////////////////////////////////////////////////////
