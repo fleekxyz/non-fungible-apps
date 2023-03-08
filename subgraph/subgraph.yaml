@@ -19,9 +19,10 @@ dataSources:
         - NewMint
         - Transfer
         - Token
-        - Owner
-        - Controller
+        - TokenOwner
+        - TokenController
         - CollectionOwner
+        - Collection
         - GithubRepository
         - AccessPoint
         - ChangeAccessPointCreationStatus
@@ -49,6 +50,14 @@ dataSources:
           handler: handleNewMint
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: TokenRoleChanged(indexed uint256,indexed uint8,indexed address,bool,address)
+          handler: handleTokenRoleChanged
+        - event: TokenRolesCleared(indexed uint256,address)
+          handler: handleTokenRolesCleared
+        - event: CollectionRoleChanged(indexed uint8,indexed address,bool,address)
+          handler: handleCollectionRoleChanged
+        - event: Initialized(uint8)
+          handler: handleInitialized
         - event: ChangeAccessPointContentVerify(string,uint256,indexed bool,indexed address)
           handler: handleChangeAccessPointContentVerify
         - event: ChangeAccessPointNameVerify(string,uint256,indexed bool,indexed address)

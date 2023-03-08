@@ -16,8 +16,6 @@ export const fetchRepositoriesThunk = createAsyncThunk(
 
       const repositories = await githubClient.fetchRepos(url);
 
-      console.log(repositories);
-
       dispatch(
         githubActions.setRepositories(
           repositories.map((repo: any) => ({
