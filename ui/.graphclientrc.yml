@@ -3,7 +3,7 @@ sources:
   - name: FleekNFA
     handler:
       graphql:
-        endpoint: https://api.thegraph.com/subgraphs/name/emperororokusaki/flk-test-subgraph
+        endpoint: https://api.thegraph.com/subgraphs/name/emperororokusaki/flk-test-subgraph #replace for nfa subgraph
 
 documents:
   - ./queries.graphql

@@ -1,5 +1,10 @@
-query lastTenMints($skip: Int) {
-  newMints(first: 2, skip: $skip, orderDirection: desc, orderBy: tokenId) {
+query lastMintsPaginated($pageSize: Int, $skip: Int) {
+  newMints(
+    first: $pageSize
+    skip: $skip
+    orderDirection: desc
+    orderBy: tokenId
+  ) {
     id
     tokenId
     description
