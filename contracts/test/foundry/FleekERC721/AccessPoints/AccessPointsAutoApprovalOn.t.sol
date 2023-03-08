@@ -178,6 +178,7 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base, APConstants {
         vm.stopPrank();
 
         CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Verifier, randomAddress);
+        CuT.setTokenVerifier(tokenId, randomAddress);
 
         vm.startPrank(randomAddress);
         CuT.setAccessPointNameVerify(accessPointName, true);
