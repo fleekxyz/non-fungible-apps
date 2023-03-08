@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { themeGlobals } from '@/theme/globals';
 import { ComponentsTest, Home, Mint } from './views';
 import { SVGTestScreen } from './views/svg-test'; // TODO: remove when done
@@ -14,7 +14,7 @@ export const App = () => {
         {/* TODO remove after adding NavBar */}
         <ConnectKitButton />
       </div>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/mint" element={<Mint />} />
@@ -25,7 +25,7 @@ export const App = () => {
           <Route path="/mint-test" element={<MintTest />} />
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 };
