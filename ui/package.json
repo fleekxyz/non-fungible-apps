@@ -8,6 +8,7 @@
     "dev:css": "tailwindcss -o ./tailwind.css --watch && yarn dev",
     "build": "vite build",
     "preview": "vite preview",
+    "prod": "yarn build && npx serve dist -s",
     "storybook": "export SET NODE_OPTIONS=--openssl-legacy-provider && start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
