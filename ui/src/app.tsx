@@ -4,6 +4,7 @@ import { ComponentsTest, Home, Mint } from './views';
 import { SVGTestScreen } from './views/svg-test'; // TODO: remove when done
 import { ConnectKitButton } from 'connectkit';
 import { MintTest } from './views/mint-test';
+import { CreateAP } from './views/access-point';
 
 export const App = () => {
   themeGlobals();
@@ -18,6 +19,7 @@ export const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/mint" element={<Mint />} />
           <Route path="/svg" element={<SVGTestScreen />} />
+          <Route path="/create-ap/:id" element={<CreateAP />} />
           {/** TODO remove for release */}
           <Route path="/components-test" element={<ComponentsTest />} />
           <Route path="/mint-test" element={<MintTest />} />
