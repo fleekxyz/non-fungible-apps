@@ -1,17 +1,20 @@
-name: Subgraph
+name: UI
 
 on:
   pull_request:
     branches:    
       - main
+      - develop
+    paths:
+      - 'ui/**'
 
 jobs:
-  test-subgraph:
+  test-ui:
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: subgraph
+        working-directory: ui
 
     strategy:
       matrix:
@@ -24,17 +27,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Compile contracts to get access to the ABI
-        run: cd ../contracts && yarn && yarn compile && cd ../subgraph
-
-      - name: Install dependencies
+      - name: Install Dependencies
         run: yarn --ignore-scripts
+      - name: Create .graphclient folder
+        run: yarn graphclient build
+      - name: Audit
+        run: yarn audit --groups dependencies
 
-      - name: Run codegen
-        run: yarn codegen
-
-      - name: Build Subgraph
+      - name: Build
         run: yarn build
-
-      - name: Test Subgraph
-        run: yarn test

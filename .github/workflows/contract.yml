@@ -1,0 +1,46 @@
+name: Contract
+
+on:
+  pull_request:
+    branches:    
+      - main
+      - develop
+    paths:
+      - 'contracts/**'
+
+jobs:
+  test-contracts:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: contracts
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install Dependencies
+        run: yarn --ignore-scripts
+
+      - name: Audit
+        run: yarn audit --groups dependencies
+
+      - name: Compile
+        run: yarn compile
+
+      - name: Run Test
+        run: yarn test
