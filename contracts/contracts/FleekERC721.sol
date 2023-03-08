@@ -45,6 +45,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, bool value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, address value, address indexed triggeredBy);
 
     event NewAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
     event RemoveAccessPoint(string apName, uint256 indexed tokenId, address indexed owner);
@@ -174,7 +175,8 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         string memory gitRepository,
         string memory logo,
         uint24 color,
-        bool accessPointAutoApproval
+        bool accessPointAutoApproval,
+        address verifier
     ) public payable requirePayment(Billing.Mint) returns (uint256) {
         uint256 tokenId = _appIds;
         _mint(to, tokenId);
@@ -189,6 +191,7 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         app.logo = logo;
         app.color = color;
         app.accessPointAutoApproval = accessPointAutoApproval;
+        _tokenVerifier[tokenId] = verifier;
 
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
@@ -695,11 +698,38 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
         }
     }
 
-    function setTokenVerifier(uint256 tokenId, address verifier) public virtual requireTokenOwner(tokenId) {
+    /**
+     * @dev Sets an address as verifier of a token.
+     * The verifier must have `CollectionRoles.Verifier` role.
+     *
+     * May emit a {MetadataUpdate} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must be the owner of the token.
+     * - the verifier must have `CollectionRoles.Verifier` role.
+     *
+     */
+    function setTokenVerifier(uint256 tokenId, address verifier) public requireTokenOwner(tokenId) {
         if (!hasCollectionRole(CollectionRoles.Verifier, verifier))
             revert MustHaveCollectionRole(uint8(CollectionRoles.Verifier));
         _requireMinted(tokenId);
         _tokenVerifier[tokenId] = verifier;
+        emit MetadataUpdate(tokenId, "verifier", verifier, msg.sender);
+    }
+
+    /**
+     * @dev Returns the verifier of a token.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     *
+     */
+    function getTokenVerifier(uint256 tokenId) public view returns (address) {
+        _requireMinted(tokenId);
+        return _tokenVerifier[tokenId];
     }
 
     /*//////////////////////////////////////////////////////////////
