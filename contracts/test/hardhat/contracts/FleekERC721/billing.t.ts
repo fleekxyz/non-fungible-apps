@@ -23,6 +23,7 @@ describe('FleekERC721.Billing', () => {
       MintParams.logo,
       MintParams.color,
       MintParams.accessPointAutoApprovalSettings,
+      owner.address,
       { value }
     );
   };

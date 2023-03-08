@@ -19,7 +19,8 @@ describe('FleekERC721.Minting', () => {
       MintParams.gitRepository,
       MintParams.logo,
       MintParams.color,
-      MintParams.accessPointAutoApprovalSettings
+      MintParams.accessPointAutoApprovalSettings,
+      owner.address
     );
 
     expect(response.value).to.be.instanceOf(ethers.BigNumber);
@@ -41,7 +42,8 @@ describe('FleekERC721.Minting', () => {
       MintParams.gitRepository,
       MintParams.logo,
       MintParams.color,
-      MintParams.accessPointAutoApprovalSettings
+      MintParams.accessPointAutoApprovalSettings,
+      owner.address
     );
 
     const tokenId = response.value.toNumber();

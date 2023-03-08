@@ -177,7 +177,7 @@ describe('FleekERC721.CollectionRoles', () => {
   });
 
   it('should not be able to verify access point if not verifier', async () => {
-    const { contract, otherAccount } = fixture;
+    const { contract, otherAccount, owner } = fixture;
 
     await contract.mint(
       otherAccount.address,
@@ -189,7 +189,8 @@ describe('FleekERC721.CollectionRoles', () => {
       TestConstants.MintParams.gitRepository,
       TestConstants.MintParams.logo,
       TestConstants.MintParams.color,
-      TestConstants.MintParams.accessPointAutoApprovalSettings
+      TestConstants.MintParams.accessPointAutoApprovalSettings,
+      owner.address
     );
 
     await contract.addAccessPoint(0, 'random.com');

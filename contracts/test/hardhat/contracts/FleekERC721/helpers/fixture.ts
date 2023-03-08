@@ -45,7 +45,8 @@ export abstract class Fixtures {
       TestConstants.MintParams.gitRepository,
       TestConstants.MintParams.logo,
       TestConstants.MintParams.color,
-      TestConstants.MintParams.accessPointAutoApprovalSettings
+      TestConstants.MintParams.accessPointAutoApprovalSettings,
+      fromDefault.owner.address
     );
 
     const tokenId = response.value.toNumber();
