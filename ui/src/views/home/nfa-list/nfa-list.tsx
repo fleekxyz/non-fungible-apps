@@ -1,11 +1,11 @@
-import { lastTenMintsDocument, totalTokensDocument } from '@/../.graphclient';
+import { lastMintsPaginatedDocument, totalTokensDocument } from '@/graphclient';
 import { Button, Card, Flex, NoResults } from '@/components';
 import { FleekERC721 } from '@/integrations/ethereum/contracts';
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const pageSize = 2; //Set this size to test pagination
+const pageSize = 10; //Set this size to test pagination
 
 export const NFAList = () => {
   const [pageNumber, setPageNumber] = useState(1);
@@ -21,9 +21,10 @@ export const NFAList = () => {
     data: dataMintedTokens,
     loading: loadingMintedTokens,
     error: errorMintedTokens,
-  } = useQuery(lastTenMintsDocument, {
+  } = useQuery(lastMintsPaginatedDocument, {
     variables: {
       //first page is 0
+      pageSize,
       skip: pageNumber > 0 ? (pageNumber - 1) * pageSize : pageNumber,
     },
   });
@@ -32,7 +33,7 @@ export const NFAList = () => {
     if (totalTokens && totalTokens.tokens.length > 0) {
       setTotalPages(Math.ceil(totalTokens.tokens.length / pageSize));
     }
-  });
+  }, [totalTokens]);
 
   if (loadingMintedTokens || loadingTotalTokens) return <div>Loading...</div>; //TODO handle loading
   if (errorMintedTokens || errorTotalTokens) return <div>Error</div>; //TODO handle error
@@ -52,17 +53,15 @@ export const NFAList = () => {
     <Flex css={{ flexDirection: 'column', margin: '$5', gap: '$2' }}>
       <Flex css={{ gap: '$2' }}>
         {/* TODO this will be remove when we have pagination component */}
+        <span>items per page: {pageSize}</span>
         <span>
           page: {pageNumber}/{totalPages}
         </span>
 
-        <Button
-          onClick={handlePreviousPage}
-          disabled={!(pageNumber >= totalPages)}
-        >
+        <Button onClick={handlePreviousPage} disabled={pageNumber === 1}>
           Previous page
         </Button>
-        <Button onClick={handleNextPage} disabled={!(pageNumber < totalPages)}>
+        <Button onClick={handleNextPage} disabled={pageNumber === totalPages}>
           Next page
         </Button>
       </Flex>
