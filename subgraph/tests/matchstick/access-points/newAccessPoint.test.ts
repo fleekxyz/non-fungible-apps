@@ -7,7 +7,7 @@ import {
     afterAll,
   } from 'matchstick-as/assembly/index';
   import { BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { createNewAccessPointEvent, handleNewAccessPoints, makeEventId, TOKEN_OWNER_ONE, TOKEN_OWNER_TWO } from '../helpers/utils';
+import { createNewAccessPointEvent, handleNewAccessPoints, makeEventId, USER_ONE, USER_TWO } from '../helpers/utils';
 import { NewAccessPoint } from '../../../generated/FleekNFA/FleekNFA';
 
 describe('New Access Point tests', () => {
@@ -15,17 +15,17 @@ describe('New Access Point tests', () => {
       // New Access Points
       let newAccessPoints: NewAccessPoint[] = [];
 
-      // Token Owner One has two access points: one for tokenId 0 and one for tokenId 1
+      // User One has two access points: one for tokenId 0 and one for tokenId 1
       newAccessPoints.push(
-        createNewAccessPointEvent(0, 'firstAP', BigInt.fromI32(0), TOKEN_OWNER_ONE)
+        createNewAccessPointEvent(0, 'firstAP', BigInt.fromI32(0), USER_ONE)
       );
       newAccessPoints.push(
-        createNewAccessPointEvent(1, 'secondAP', BigInt.fromI32(1), TOKEN_OWNER_ONE)
+        createNewAccessPointEvent(1, 'secondAP', BigInt.fromI32(1), USER_ONE)
       );
 
-      // Token Owner Two has one access point for tokenId 0
+      // User Two has one access point for tokenId 0
       newAccessPoints.push(
-        createNewAccessPointEvent(2, 'thirdAP', BigInt.fromI32(0), TOKEN_OWNER_TWO)
+        createNewAccessPointEvent(2, 'thirdAP', BigInt.fromI32(0), USER_TWO)
       );
       handleNewAccessPoints(newAccessPoints);
     });
@@ -86,19 +86,19 @@ describe('New Access Point tests', () => {
                 'NewAccessPoint',
                 makeEventId(0),
                 'owner',
-                TOKEN_OWNER_ONE.toString()
+                USER_ONE.toString()
             );
             assert.fieldEquals(
                 'NewAccessPoint',
                 makeEventId(1),
                 'owner',
-                TOKEN_OWNER_ONE.toString()
+                USER_ONE.toString()
             );
             assert.fieldEquals(
                 'NewAccessPoint',
                 makeEventId(2),
                 'owner',
-                TOKEN_OWNER_TWO.toString()
+                USER_TWO.toString()
             );
         });
 

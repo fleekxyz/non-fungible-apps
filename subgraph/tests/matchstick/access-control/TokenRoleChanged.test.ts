@@ -7,7 +7,7 @@ import {
   afterAll,
 } from 'matchstick-as/assembly/index';
 import { BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { createNewTokenRoleChanged, handleTokenRoleChangedList, makeEventId, TOKEN_OWNER_ONE, TOKEN_OWNER_TWO } from '../helpers/utils';
+import { createNewTokenRoleChanged, handleTokenRoleChangedList, makeEventId, USER_ONE, USER_TWO } from '../helpers/utils';
 import { TokenRoleChanged } from '../../../generated/FleekNFA/FleekNFA';
 
 describe('Token Role Changed tests', () => {
@@ -16,15 +16,15 @@ describe('Token Role Changed tests', () => {
     let tokenRoleChangedList: TokenRoleChanged[] = [];
 
     tokenRoleChangedList.push(
-      createNewTokenRoleChanged(0, BigInt.fromI32(0), 0, TOKEN_OWNER_ONE, true, TOKEN_OWNER_TWO) // Token Owner Two gives Token Owner One controller access to TokenId 0
+      createNewTokenRoleChanged(0, BigInt.fromI32(0), 0, USER_ONE, true, USER_TWO) // User Two gives User One controller access to TokenId 0
     );
 
     tokenRoleChangedList.push(
-      createNewTokenRoleChanged(1, BigInt.fromI32(1), 0, TOKEN_OWNER_TWO, true, TOKEN_OWNER_ONE) // Token Owner One gives Token Owner Two controller access to TokenId 1
+      createNewTokenRoleChanged(1, BigInt.fromI32(1), 0, USER_TWO, true, USER_ONE) // User One gives User Two controller access to TokenId 1
     );
 
     tokenRoleChangedList.push(
-      createNewTokenRoleChanged(2, BigInt.fromI32(0), 0, TOKEN_OWNER_ONE, false, TOKEN_OWNER_TWO) // Token Owner Two revokes the controller access of Token Owner One to tokenId 0
+      createNewTokenRoleChanged(2, BigInt.fromI32(0), 0, USER_ONE, false, USER_TWO) // User Two revokes the controller access of User One to tokenId 0
     );
 
 
@@ -82,19 +82,19 @@ describe('Token Role Changed tests', () => {
         'TokenRoleChanged',
         makeEventId(0),
         'toAddress',
-        TOKEN_OWNER_ONE.toString()
+        USER_ONE.toString()
       );
       assert.fieldEquals(
         'TokenRoleChanged',
         makeEventId(1),
         'toAddress',
-        TOKEN_OWNER_TWO.toString()
+        USER_TWO.toString()
       );
       assert.fieldEquals(
         'TokenRoleChanged',
         makeEventId(2),
         'toAddress',
-        TOKEN_OWNER_ONE.toString()
+        USER_ONE.toString()
       );
     });
 
@@ -103,19 +103,19 @@ describe('Token Role Changed tests', () => {
         'TokenRoleChanged',
         makeEventId(0),
         'byAddress',
-        TOKEN_OWNER_TWO.toString()
+        USER_TWO.toString()
       );
       assert.fieldEquals(
         'TokenRoleChanged',
         makeEventId(1),
         'byAddress',
-        TOKEN_OWNER_ONE.toString()
+        USER_ONE.toString()
       );
       assert.fieldEquals(
         'TokenRoleChanged',
         makeEventId(2),
         'byAddress',
-        TOKEN_OWNER_TWO.toString()
+        USER_TWO.toString()
       );
     });
 

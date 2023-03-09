@@ -7,7 +7,7 @@ import {
     afterAll,
   } from 'matchstick-as/assembly/index';
   import { BigInt } from '@graphprotocol/graph-ts';
-import { createNewAccessPointEvent, createNewChangeAccessPointNameVerify, handleChangeAccessPointNameVerifies, handleNewAccessPoints, TOKEN_OWNER_ONE, TOKEN_OWNER_TWO } from '../helpers/utils';
+import { createNewAccessPointEvent, createNewChangeAccessPointNameVerify, handleChangeAccessPointNameVerifies, handleNewAccessPoints, USER_ONE, USER_TWO } from '../helpers/utils';
 import { ChangeAccessPointNameVerify, NewAccessPoint } from '../../../generated/FleekNFA/FleekNFA';
 
 describe('Change Access Point Name Verify tests', () => {
@@ -15,17 +15,17 @@ describe('Change Access Point Name Verify tests', () => {
       // New Access Points
       let newAccessPoints: NewAccessPoint[] = [];
 
-      // Token Owner One has two access points: one for tokenId 0 and one for tokenId 1
+      // User One has two access points: one for tokenId 0 and one for tokenId 1
       newAccessPoints.push(
-        createNewAccessPointEvent(0, 'firstAP', BigInt.fromI32(0), TOKEN_OWNER_ONE)
+        createNewAccessPointEvent(0, 'firstAP', BigInt.fromI32(0), USER_ONE)
       );
       newAccessPoints.push(
-        createNewAccessPointEvent(1, 'secondAP', BigInt.fromI32(1), TOKEN_OWNER_ONE)
+        createNewAccessPointEvent(1, 'secondAP', BigInt.fromI32(1), USER_ONE)
       );
 
-      // Token Owner Two has one access point for tokenId 0
+      // User Two has one access point for tokenId 0
       newAccessPoints.push(
-        createNewAccessPointEvent(2, 'thirdAP', BigInt.fromI32(0), TOKEN_OWNER_TWO)
+        createNewAccessPointEvent(2, 'thirdAP', BigInt.fromI32(0), USER_TWO)
       );
       handleNewAccessPoints(newAccessPoints);
     });
@@ -61,14 +61,14 @@ describe('Change Access Point Name Verify tests', () => {
           let changeAccessPointNameVerifies: ChangeAccessPointNameVerify[] = [];
           
           changeAccessPointNameVerifies.push(
-              createNewChangeAccessPointNameVerify(0, 'firstAP', BigInt.fromI32(0), true, TOKEN_OWNER_ONE)
+              createNewChangeAccessPointNameVerify(0, 'firstAP', BigInt.fromI32(0), true, USER_ONE)
           );
           changeAccessPointNameVerifies.push(
-            createNewChangeAccessPointNameVerify(0, 'secondAP', BigInt.fromI32(1), true, TOKEN_OWNER_ONE)
+            createNewChangeAccessPointNameVerify(0, 'secondAP', BigInt.fromI32(1), true, USER_ONE)
           );
 
           changeAccessPointNameVerifies.push(
-            createNewChangeAccessPointNameVerify(0, 'thirdAP', BigInt.fromI32(0), true, TOKEN_OWNER_TWO)
+            createNewChangeAccessPointNameVerify(0, 'thirdAP', BigInt.fromI32(0), true, USER_TWO)
           );
             
           handleChangeAccessPointNameVerifies(changeAccessPointNameVerifies);

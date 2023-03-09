@@ -433,10 +433,10 @@ export const CONTRACT: Address = Address.fromString(
 export const CONTRACT_OWNER: Address = Address.fromString(
   '0x1000000000000000000000000000000000000001'
 );
-export const TOKEN_OWNER_ONE: Address = Address.fromString(
+export const USER_ONE: Address = Address.fromString(
   '0x2000000000000000000000000000000000000002'
 );
-export const TOKEN_OWNER_TWO: Address = Address.fromString(
+export const USER_TWO: Address = Address.fromString(
   '0x3000000000000000000000000000000000000003'
 );
 

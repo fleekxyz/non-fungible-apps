@@ -7,7 +7,7 @@ import {
     afterAll,
   } from 'matchstick-as/assembly/index';
   import { BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { createNewAccessPointEvent, createNewChangeAccessPointCreationStatus, handleChangeAccessPointCreationStatusList, handleNewAccessPoints, makeEventId, TOKEN_OWNER_ONE, TOKEN_OWNER_TWO } from '../helpers/utils';
+import { createNewAccessPointEvent, createNewChangeAccessPointCreationStatus, handleChangeAccessPointCreationStatusList, handleNewAccessPoints, makeEventId, USER_ONE, USER_TWO } from '../helpers/utils';
 import { ChangeAccessPointCreationStatus, NewAccessPoint } from '../../../generated/FleekNFA/FleekNFA';
 
 describe('Change Access Point Creation Status tests', () => {
@@ -15,17 +15,17 @@ describe('Change Access Point Creation Status tests', () => {
       // New Access Points
       let newAccessPoints: NewAccessPoint[] = [];
 
-      // Token Owner One has two access points: one for tokenId 0 and one for tokenId 1
+      // User One has two access points: one for tokenId 0 and one for tokenId 1
       newAccessPoints.push(
-        createNewAccessPointEvent(0, 'firstAP', BigInt.fromI32(0), TOKEN_OWNER_ONE)
+        createNewAccessPointEvent(0, 'firstAP', BigInt.fromI32(0), USER_ONE)
       );
       newAccessPoints.push(
-        createNewAccessPointEvent(1, 'secondAP', BigInt.fromI32(1), TOKEN_OWNER_ONE)
+        createNewAccessPointEvent(1, 'secondAP', BigInt.fromI32(1), USER_ONE)
       );
 
-      // Token Owner Two has one access point for tokenId 0
+      // User Two has one access point for tokenId 0
       newAccessPoints.push(
-        createNewAccessPointEvent(2, 'thirdAP', BigInt.fromI32(0), TOKEN_OWNER_TWO)
+        createNewAccessPointEvent(2, 'thirdAP', BigInt.fromI32(0), USER_TWO)
       );
       handleNewAccessPoints(newAccessPoints);
     });
@@ -60,17 +60,17 @@ describe('Change Access Point Creation Status tests', () => {
           // New Access Points
           let changeAccessPointCreationStatusList: ChangeAccessPointCreationStatus[] = [];
           
-          // Token Owner One has two access points: one for tokenId 0 and one for tokenId 1
+          // User One has two access points: one for tokenId 0 and one for tokenId 1
           changeAccessPointCreationStatusList.push(
-              createNewChangeAccessPointCreationStatus(0, 'firstAP', BigInt.fromI32(0), 1, TOKEN_OWNER_ONE)
+              createNewChangeAccessPointCreationStatus(0, 'firstAP', BigInt.fromI32(0), 1, USER_ONE)
           );
           changeAccessPointCreationStatusList.push(
-            createNewChangeAccessPointCreationStatus(0, 'secondAP', BigInt.fromI32(1), 1, TOKEN_OWNER_ONE)
+            createNewChangeAccessPointCreationStatus(0, 'secondAP', BigInt.fromI32(1), 1, USER_ONE)
           );
 
-            // Token Owner Two has one access point for tokenId 0
+            // User Two has one access point for tokenId 0
             changeAccessPointCreationStatusList.push(
-                createNewChangeAccessPointCreationStatus(0, 'thirdAP', BigInt.fromI32(0), 1, TOKEN_OWNER_TWO)
+                createNewChangeAccessPointCreationStatus(0, 'thirdAP', BigInt.fromI32(0), 1, USER_TWO)
             );
             
             handleChangeAccessPointCreationStatusList(changeAccessPointCreationStatusList);

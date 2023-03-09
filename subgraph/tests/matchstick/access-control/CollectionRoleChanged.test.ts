@@ -7,7 +7,7 @@ import {
   afterAll,
 } from 'matchstick-as/assembly/index';
 import { BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { createNewCollectionRoleChanged, handleCollectionRoleChangedList, makeEventId, TOKEN_OWNER_ONE, TOKEN_OWNER_TWO } from '../helpers/utils';
+import { createNewCollectionRoleChanged, handleCollectionRoleChangedList, makeEventId, USER_ONE, USER_TWO } from '../helpers/utils';
 import { CollectionRoleChanged } from '../../../generated/FleekNFA/FleekNFA';
 
 describe('Collection Role Changed tests', () => {
@@ -16,11 +16,11 @@ describe('Collection Role Changed tests', () => {
     let collectionRoleChangedList: CollectionRoleChanged[] = [];
 
     collectionRoleChangedList.push(
-      createNewCollectionRoleChanged(0, 0, TOKEN_OWNER_ONE, true, TOKEN_OWNER_TWO) // Token Owner Two grants collection owner access to Token Owner One 
+      createNewCollectionRoleChanged(0, 0, USER_ONE, true, USER_TWO) // User Two grants collection owner access to User One 
     );
 
     collectionRoleChangedList.push(
-      createNewCollectionRoleChanged(2, 0, TOKEN_OWNER_ONE, false, TOKEN_OWNER_TWO) // Token Owner Two revokes the owner access of Token Owner One to the collection
+      createNewCollectionRoleChanged(2, 0, USER_ONE, false, USER_TWO) // User Two revokes the owner access of User One to the collection
     );
 
 
@@ -52,13 +52,13 @@ describe('Collection Role Changed tests', () => {
         'CollectionRoleChanged',
         makeEventId(0),
         'toAddress',
-        TOKEN_OWNER_ONE.toString()
+        USER_ONE.toString()
       );
       assert.fieldEquals(
         'CollectionRoleChanged',
         makeEventId(2),
         'toAddress',
-        TOKEN_OWNER_ONE.toString()
+        USER_ONE.toString()
       );
     });
 
@@ -67,13 +67,13 @@ describe('Collection Role Changed tests', () => {
         'CollectionRoleChanged',
         makeEventId(0),
         'byAddress',
-        TOKEN_OWNER_TWO.toString()
+        USER_TWO.toString()
       );
       assert.fieldEquals(
         'CollectionRoleChanged',
         makeEventId(2),
         'byAddress',
-        TOKEN_OWNER_TWO.toString()
+        USER_TWO.toString()
       );
     });
 
