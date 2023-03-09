@@ -8,7 +8,7 @@ const { styled, keyframes } = dripStitches;
 export abstract class ToastStyles {
   static readonly Provider = ToastLib.Provider;
 
-  static readonly DismissTimeout = 100;
+  static readonly DismissTimeout = 200;
 
   static readonly ViewportPadding = '$md';
 
@@ -17,13 +17,9 @@ export abstract class ToastStyles {
       '0%': { opacity: 1 },
       '100%': { opacity: 0 },
     }),
-    slideIn: keyframes({
-      from: { transform: `translateX(calc(100% + ${this.ViewportPadding}))` },
-      to: { transform: 'translateX(0)' },
-    }),
-    swipeOut: keyframes({
-      from: { transform: 'translateX(var(--radix-toast-swipe-end-x))' },
-      to: { transform: `translateX(calc(100% + ${this.ViewportPadding}))` },
+    show: keyframes({
+      '0%': { opacity: 0 },
+      '100%': { opacity: 1 },
     }),
   };
 
@@ -50,20 +46,10 @@ export abstract class ToastStyles {
 
     '@media (prefers-reduced-motion: no-preference)': {
       '&[data-state="open"]': {
-        animation: `${this.KeyFrames.slideIn} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
+        animation: `${this.KeyFrames.show} 750ms `,
       },
       '&[data-state="closed"]': {
         animation: `${this.KeyFrames.hide} ${this.DismissTimeout}ms ease-in`,
-      },
-      '&[data-swipe="move"]': {
-        transform: 'translateX(var(--radix-toast-swipe-move-x))',
-      },
-      '&[data-swipe="cancel"]': {
-        transform: 'translateX(0)',
-        transition: 'transform 200ms ease-out',
-      },
-      '&[data-swipe="end"]': {
-        animation: `${this.KeyFrames.swipeOut} 100ms ease-out`,
       },
     },
   });
