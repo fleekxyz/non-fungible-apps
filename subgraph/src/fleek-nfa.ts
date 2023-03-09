@@ -25,6 +25,7 @@ import {
   NewAccessPoint as NewAccessPointEvent,
   ChangeAccessPointNameVerify as ChangeAccessPointNameVerifyEvent,
   ChangeAccessPointContentVerify as ChangeAccessPointContentVerifyEvent,
+  TokenRolesCleared as TokenRolesClearedEvent
 } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
@@ -32,6 +33,7 @@ import {
   AccessPoint,
   Approval,
   ApprovalForAll,
+  Controller,
   Owner,
   GitRepository as GitRepositoryEntity,
   MetadataUpdate,
@@ -285,6 +287,24 @@ export function handleInitialized(event: InitializedEvent): void {
   }
 }
 
+export function handleTokenRolesCleared(event: TokenRolesClearedEvent): void {
+  let tokenId = event.params.tokenId;
+  let byAddress = event.params.byAddress;
+
+  // load token
+  let token = Token.load(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
+  if (!token) {
+    log.error('Token not found. TokenId: {}', [tokenId.toString()]);
+    return;
+  }
+
+  // get the list of controllers.
+  let token_controllers = token.controllers;
+  token_controllers = [];
+  token.controllers = token_controllers;
+  token.save();
+}
+
 export function handleCollectionRoleChanged(
   event: CollectionRoleChangedEvent
 ): void {
@@ -358,6 +378,7 @@ export function handleTokenRoleChanged(event: TokenRoleChangedEvent): void {
       }
     }
     token.controllers = token_controllers;
+    token.save();
   } else {
     log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [
       role.toString(),
