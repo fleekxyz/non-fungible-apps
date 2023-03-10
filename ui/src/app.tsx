@@ -4,6 +4,7 @@ import { ComponentsTest, Home, Mint } from './views';
 import { SVGTestScreen } from './views/svg-test'; // TODO: remove when done
 import { ConnectKitButton } from 'connectkit';
 import { MintTest } from './views/mint-test';
+import { ToastProvider } from './components';
 import { CreateAP } from './views/access-point';
 
 export const App = () => {
@@ -14,6 +15,7 @@ export const App = () => {
         {/* TODO remove after adding NavBar */}
         <ConnectKitButton />
       </div>
+      <ToastProvider />
       <HashRouter>
         <Routes>
           <Route path="/home" element={<Home />} />
