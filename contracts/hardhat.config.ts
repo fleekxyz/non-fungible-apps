@@ -8,6 +8,8 @@ import 'hardhat-contract-sizer';
 import '@openzeppelin/hardhat-upgrades';
 import * as dotenv from 'dotenv';
 import { HardhatUserConfig } from 'hardhat/types';
+import { task, types } from 'hardhat/config';
+import deploy from './scripts/deploy';
 
 dotenv.config();
 
@@ -65,3 +67,16 @@ const config: HardhatUserConfig = {
 };
 
 export default config;
+
+// npx hardhat deploy --network mumbai --new-proxy-instance --name "FleekNFAs" --symbol "FLKNFA" --billing "[10000, 20000]"
+task('deploy', 'Deploy the contracts')
+  .addFlag('newProxyInstance', 'Force to deploy a new proxy instance')
+  .addOptionalParam('name', 'The collection name', 'FleekNFAs', types.string)
+  .addOptionalParam('symbol', 'The collection symbol', 'FLKNFA', types.string)
+  .addOptionalParam(
+    'billing',
+    'The billing values in an array of numbers like "[10000, 20000]"',
+    [],
+    types.json
+  )
+  .setAction(deploy);

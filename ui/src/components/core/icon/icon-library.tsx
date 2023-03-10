@@ -8,18 +8,24 @@ import { IoCloudUploadSharp } from '@react-icons/all-files/io5/IoCloudUploadShar
 import { MetamaskIcon, EthereumIcon } from './custom';
 import { IoCheckmarkCircleSharp } from '@react-icons/all-files/io5/IoCheckmarkCircleSharp';
 import { AiOutlineTwitter } from '@react-icons/all-files/ai/AiOutlineTwitter';
+import { ErrorIcon } from './custom/error';
+import { IoClose } from '@react-icons/all-files/io5/IoClose';
+import { AiFillCheckCircle } from '@react-icons/all-files/ai/AiFillCheckCircle';
 
 export const IconLibrary = Object.freeze({
   back: IoArrowBackCircleSharp,
   check: AiOutlineCheck,
   'check-circle': IoCheckmarkCircleSharp,
   'chevron-down': AiOutlineDown,
+  close: IoClose,
+  error: ErrorIcon,
   ethereum: EthereumIcon,
   github: IoLogoGithub,
   info: IoInformationCircleSharp,
   upload: IoCloudUploadSharp,
   metamask: MetamaskIcon, //remove if not used
   search: BiSearch,
+  success: AiFillCheckCircle,
   twitter: AiOutlineTwitter,
 });
 

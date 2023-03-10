@@ -16,8 +16,8 @@ import {
   handleNewMints,
   handleTransfers,
   makeEventId,
-  TOKEN_OWNER_ONE,
-  TOKEN_OWNER_TWO,
+  USER_ONE,
+  USER_TWO,
 } from './helpers/utils';
 import { NewMint, Transfer } from '../../generated/FleekNFA/FleekNFA';
 
@@ -25,42 +25,42 @@ describe('Owner tests', () => {
   beforeAll(() => {
     // NEW MINTS
     let newMints: NewMint[] = [];
-    newMints.push(createNewMintEvent(0, TOKEN_OWNER_ONE, BigInt.fromI32(0)));
-    newMints.push(createNewMintEvent(1, TOKEN_OWNER_TWO, BigInt.fromI32(1)));
-    newMints.push(createNewMintEvent(2, TOKEN_OWNER_ONE, BigInt.fromI32(2)));
-    newMints.push(createNewMintEvent(3, TOKEN_OWNER_ONE, BigInt.fromI32(3)));
-    newMints.push(createNewMintEvent(4, TOKEN_OWNER_TWO, BigInt.fromI32(4)));
+    newMints.push(createNewMintEvent(0, USER_ONE, BigInt.fromI32(0)));
+    newMints.push(createNewMintEvent(1, USER_TWO, BigInt.fromI32(1)));
+    newMints.push(createNewMintEvent(2, USER_ONE, BigInt.fromI32(2)));
+    newMints.push(createNewMintEvent(3, USER_ONE, BigInt.fromI32(3)));
+    newMints.push(createNewMintEvent(4, USER_TWO, BigInt.fromI32(4)));
     handleNewMints(newMints);
     // TRANSFERS
     let transfers: Transfer[] = [];
     transfers.push(
-      createTransferEvent(0, CONTRACT, TOKEN_OWNER_ONE, BigInt.fromI32(0))
+      createTransferEvent(0, CONTRACT, USER_ONE, BigInt.fromI32(0))
     );
     transfers.push(
-      createTransferEvent(1, CONTRACT, TOKEN_OWNER_TWO, BigInt.fromI32(1))
+      createTransferEvent(1, CONTRACT, USER_TWO, BigInt.fromI32(1))
     );
     transfers.push(
-      createTransferEvent(2, CONTRACT, TOKEN_OWNER_ONE, BigInt.fromI32(2))
+      createTransferEvent(2, CONTRACT, USER_ONE, BigInt.fromI32(2))
     );
     transfers.push(
-      createTransferEvent(3, CONTRACT, TOKEN_OWNER_ONE, BigInt.fromI32(3))
+      createTransferEvent(3, CONTRACT, USER_ONE, BigInt.fromI32(3))
     );
     transfers.push(
       createTransferEvent(
         4,
-        TOKEN_OWNER_TWO,
-        TOKEN_OWNER_ONE,
+        USER_TWO,
+        USER_ONE,
         BigInt.fromI32(1)
       )
     );
     transfers.push(
-      createTransferEvent(5, CONTRACT, TOKEN_OWNER_TWO, BigInt.fromI32(4))
+      createTransferEvent(5, CONTRACT, USER_TWO, BigInt.fromI32(4))
     );
     transfers.push(
       createTransferEvent(
         6,
-        TOKEN_OWNER_ONE,
-        TOKEN_OWNER_TWO,
+        USER_ONE,
+        USER_TWO,
         BigInt.fromI32(0)
       )
     );
@@ -129,15 +129,15 @@ describe('Owner tests', () => {
     test('Check the existence of owners in store', () => {
       assert.fieldEquals(
         'Owner',
-        TOKEN_OWNER_ONE.toHexString(),
+        USER_ONE.toHexString(),
         'id',
-        TOKEN_OWNER_ONE.toHexString()
+        USER_ONE.toHexString()
       );
       assert.fieldEquals(
         'Owner',
-        TOKEN_OWNER_TWO.toHexString(),
+        USER_TWO.toHexString(),
         'id',
-        TOKEN_OWNER_TWO.toHexString()
+        USER_TWO.toHexString()
       );
     });
   });
