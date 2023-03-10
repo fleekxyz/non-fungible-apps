@@ -527,12 +527,12 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the AP must exist.
-     * - must be called by the AP owner.
+     * - must be called by the AP owner OR the token owner.
      * - the contract must be not paused.
      *
      */
     function removeAccessPoint(string memory apName) public whenNotPaused requireAP(apName) {
-        if (msg.sender != _accessPoints[apName].owner) revert MustBeAccessPointOwner();
+        if (msg.sender != _accessPoints[apName].owner || ownerOf(_accessPoints[apName].tokenId) != msg.sender) revert MustBeAccessPointOwner();
         _accessPoints[apName].status = AccessPointCreationStatus.REMOVED;
         uint256 tokenId = _accessPoints[apName].tokenId;
         emit ChangeAccessPointCreationStatus(apName, tokenId, AccessPointCreationStatus.REMOVED, msg.sender);
