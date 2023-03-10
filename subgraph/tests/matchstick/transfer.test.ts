@@ -14,8 +14,8 @@ import {
   createTransferEvent,
   handleTransfers,
   makeEventId,
-  TOKEN_OWNER_ONE,
-  TOKEN_OWNER_TWO,
+  USER_ONE,
+  USER_TWO,
 } from './helpers/utils';
 import { Transfer } from '../../generated/FleekNFA/FleekNFA';
 
@@ -24,35 +24,25 @@ describe('Transfer tests', () => {
     // TRANSFERS
     let transfers: Transfer[] = [];
     transfers.push(
-      createTransferEvent(0, CONTRACT, TOKEN_OWNER_ONE, BigInt.fromI32(0))
+      createTransferEvent(0, CONTRACT, USER_ONE, BigInt.fromI32(0))
     );
     transfers.push(
-      createTransferEvent(1, CONTRACT, TOKEN_OWNER_TWO, BigInt.fromI32(1))
+      createTransferEvent(1, CONTRACT, USER_TWO, BigInt.fromI32(1))
     );
     transfers.push(
-      createTransferEvent(2, CONTRACT, TOKEN_OWNER_ONE, BigInt.fromI32(2))
+      createTransferEvent(2, CONTRACT, USER_ONE, BigInt.fromI32(2))
     );
     transfers.push(
-      createTransferEvent(3, CONTRACT, TOKEN_OWNER_ONE, BigInt.fromI32(3))
+      createTransferEvent(3, CONTRACT, USER_ONE, BigInt.fromI32(3))
     );
     transfers.push(
-      createTransferEvent(
-        4,
-        TOKEN_OWNER_TWO,
-        TOKEN_OWNER_ONE,
-        BigInt.fromI32(1)
-      )
+      createTransferEvent(4, USER_TWO, USER_ONE, BigInt.fromI32(1))
     );
     transfers.push(
-      createTransferEvent(5, CONTRACT, TOKEN_OWNER_TWO, BigInt.fromI32(4))
+      createTransferEvent(5, CONTRACT, USER_TWO, BigInt.fromI32(4))
     );
     transfers.push(
-      createTransferEvent(
-        6,
-        TOKEN_OWNER_ONE,
-        TOKEN_OWNER_TWO,
-        BigInt.fromI32(0)
-      )
+      createTransferEvent(6, USER_ONE, USER_TWO, BigInt.fromI32(0))
     );
     handleTransfers(transfers);
     // logStore();
