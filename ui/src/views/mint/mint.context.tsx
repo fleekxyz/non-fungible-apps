@@ -113,21 +113,6 @@ export abstract class Mint {
       >
         <TransactionProvider
           config={{
-            prepare: {
-              onError(error) {
-                try {
-                  const errorCode = (error as any).error?.data.data;
-                  const errorData =
-                    Ethereum.getContract('FleekERC721').interface.parseError(
-                      errorCode
-                    );
-
-                  console.log(JSON.stringify(errorData, null, 2));
-                } catch (e) {
-                  console.log('Not possible to parse error', e);
-                }
-              },
-            },
             transaction: {
               onSuccess: (data) => {
                 console.log('Successfully minted! what now?', data);

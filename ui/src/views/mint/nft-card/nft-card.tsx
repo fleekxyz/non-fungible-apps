@@ -9,7 +9,7 @@ type NftCardProps = {
   message: string;
   buttonText: string;
   leftIconButton?: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   isLoading: boolean;
 };
 
@@ -53,7 +53,7 @@ export const NftCard: React.FC<NftCardProps> = ({
             onClick={onClick}
             leftIcon={leftIconButton}
             isLoading={isLoading}
-            isDisabled={isLoading}
+            isDisabled={isLoading || !onClick}
           >
             {buttonText}
           </Button>
