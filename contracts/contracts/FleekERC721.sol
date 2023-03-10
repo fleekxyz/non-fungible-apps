@@ -150,9 +150,10 @@ contract FleekERC721 is
         _requireMinted(tokenId);
         address owner = ownerOf(tokenId);
         bool accessPointAutoApproval = _getAccessPointAutoApproval(tokenId);
+        bool verified = _tokenVerified[tokenId];
         Token storage app = _apps[tokenId];
 
-        return string(abi.encodePacked(_baseURI(), app.toString(owner, accessPointAutoApproval).toBase64()));
+        return string(abi.encodePacked(_baseURI(), app.toString(owner, accessPointAutoApproval, verified).toBase64()));
     }
 
     /**
