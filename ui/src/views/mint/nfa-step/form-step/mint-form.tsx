@@ -9,6 +9,7 @@ import {
 import { MintCardHeader } from '../../mint-card';
 import { useAccount } from 'wagmi';
 import { parseColorToNumber } from './form.utils';
+import { AppLog } from '@/utils';
 
 export const MintFormStep = () => {
   const { address } = useAccount();
@@ -29,7 +30,10 @@ export const MintFormStep = () => {
   const { setArgs } = Mint.useTransactionContext();
 
   const handleNextStep = () => {
-    if (!address) return console.log('No address was found');
+    if (!address) {
+      AppLog.errorToast('No address found. Please connect your wallet.');
+      return;
+    }
     // TODO: we need to make sure all values are correct before
     // setting the args otherwise mint may fail
     setArgs([

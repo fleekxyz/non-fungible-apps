@@ -3,6 +3,7 @@ import { env } from '@/constants';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GithubAuthProvider } from 'firebase/auth';
 import { githubActions, RootState } from '@/store';
+import { AppLog } from '@/utils';
 
 const GithubScopes = ['repo', 'read:org', 'read:user', 'public_repo', 'user'];
 
@@ -43,8 +44,8 @@ export const login = createAsyncThunk(
         throw Error('Invalid response type');
       }
     } catch (error) {
-      console.log('Could not connect to GitHub', error);
-      dispatch(githubActions.setState('disconnected'));
+      AppLog.errorToast('Github login failed. Please try again later.');
+      dispatch(githubActions.setState('failed'));
     }
   }
 );

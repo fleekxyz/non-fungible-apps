@@ -9,6 +9,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:react/jsx-runtime', //since react 17 React will no longer need to be in scope when you use JSX
   ],
   overrides: [],
   parser: '@typescript-eslint/parser',
@@ -26,8 +27,6 @@ module.exports = {
     ],
     '@typescript-eslint/no-namespace': 'off',
     'simple-import-sort/imports': 2,
-    '@typescript-eslint/explicit-function-return-type': 'off',
     'no-console': 'error',
-    'unused-imports/no-unused-imports-ts': 'error',
   },
 };

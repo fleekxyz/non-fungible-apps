@@ -85,6 +85,7 @@ export abstract class ToastStyles {
     display: 'flex',
     flexDirection: 'column',
     gap: '$4',
+    zIndex: 4,
   });
 
   static readonly Layout = styled(Flex, {

@@ -1,7 +1,7 @@
 import { ComboboxItem, DropdownItem } from '@/components';
 import { GithubState } from '@/store';
 import { EthereumHooks } from '@/integrations';
-import { createContext } from '@/utils';
+import { AppLog, createContext } from '@/utils';
 import { useState } from 'react';
 
 export type MintContext = {
@@ -114,7 +114,7 @@ export abstract class Mint {
           config={{
             transaction: {
               onSuccess: (data) => {
-                console.log('Successfully minted! what now?', data);
+                AppLog.successToast('Successfully minted!');
                 alert('transaction hash: ' + data.transactionHash);
               },
             },
