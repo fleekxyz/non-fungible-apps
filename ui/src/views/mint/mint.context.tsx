@@ -1,8 +1,9 @@
-import { ComboboxItem, DropdownItem } from '@/components';
-import { GithubState } from '@/store';
-import { EthereumHooks } from '@/integrations';
-import { createContext } from '@/utils';
 import { useState } from 'react';
+
+import { ComboboxItem, DropdownItem } from '@/components';
+import { EthereumHooks } from '@/integrations';
+import { GithubState } from '@/store';
+import { createContext, pushToast } from '@/utils';
 
 export type MintContext = {
   selectedUserOrg: ComboboxItem;
@@ -19,6 +20,7 @@ export type MintContext = {
   domain: string;
   verifyNFA: boolean;
   ensError: string;
+  mintSuccess: boolean;
   setGithubStep: (step: number) => void;
   setNfaStep: (step: number) => void;
   setSelectedUserOrg: (userOrg: ComboboxItem) => void;
@@ -71,6 +73,8 @@ export abstract class Mint {
     //Field validations
     const [ensError, setEnsError] = useState<string>('');
 
+    const [mintSuccess, setMintSuccess] = useState(false);
+
     const setGithubStep = (step: number): void => {
       if (step > 0 && step <= 3) {
         setGithubStepContext(step);
@@ -94,6 +98,7 @@ export abstract class Mint {
           domain,
           verifyNFA,
           ensError,
+          mintSuccess,
           setSelectedUserOrg,
           setGithubStep,
           setNfaStep,
@@ -114,8 +119,15 @@ export abstract class Mint {
           config={{
             transaction: {
               onSuccess: (data) => {
-                console.log('Successfully minted! what now?', data);
-                alert('transaction hash: ' + data.transactionHash);
+                // AppLog.info('Transaction hash: ' + data);
+                pushToast('success', 'Successfully minted!', {
+                  onDismiss: () => setMintSuccess(true),
+                  duration: 2000,
+                });
+              },
+              onError: (error) => {
+                // AppLog.errorToast(error.message);
+                pushToast('error', error.message);
               },
             },
           }}
