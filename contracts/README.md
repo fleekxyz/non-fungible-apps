@@ -3,6 +3,7 @@
 ## Folder Structure
 
 Inside contracts you are going to find:
+
 - [contracts](./contracts): all the developed contracts
 - [deployments](./deployments): resultant ABI and info for deployments (each network will have a nested folder)
 - [lib](./lib): external modules used by Foundry
@@ -23,7 +24,7 @@ The contracts present in this project are based in [Solidity](https://github.com
 
 > ⚠️ Before starting developing make sure you Solidity, Node.js and yarn correctly installed in your environment
 
-Also, make sure you run `yarn` at the root directory to get some required tools.  The rest of these steps assume you are in the [contracts folder](./).
+Also, make sure you run `yarn` at the root directory to get some required tools. The rest of these steps assume you are in the [contracts folder](./).
 
 Follow the steps:
 
@@ -152,6 +153,23 @@ $ yarn deploy:mumbai
 ```
 
 to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful. To reach more in-depth information about how to deploy contract checkout [this guide](https://wiki.polygon.technology/docs/develop/alchemy).
+
+### **Deploy arguments**
+
+For any of the deploy scripts above you are able to input arguments to change the date sent during the deployment. They are:
+
+| Argument             | Description                               | Example                    | Default   |
+| -------------------- | ----------------------------------------- | -------------------------- | --------- |
+| --new-proxy-instance | Force to deploy a new proxy instance      | --new-proxy-instance       | false     |
+| --name               | The collection name                       | --name "Fleek NFAs"        | FleekNFAs |
+| --symbol             | The collection symbol                     | --symbol "FKNFA"           | FLKNFA    |
+| --billing            | The billing values in an array of numbers | --billing "[10000, 20000]" | []        |
+
+Appending all of them together would be like:
+
+```
+$ yarn deploy:hardhat --new-proxy-instance --name "Fleek NFAs" --symbol "FKNFA" --billing "[10000, 20000]"
+```
 
 <!-- TODO: add this section after the mainnet setup is done and tested
 **Polygon main-net**

@@ -604,13 +604,13 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the AP must exist.
-     * - the sender must have the token controller role.
+     * - the sender must have collection verifier role.
      *
      */
     function setAccessPointContentVerify(
         string memory apName,
         bool verified
-    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, TokenRoles.Controller) {
+    ) public requireAP(apName) requireCollectionRole(CollectionRoles.Verifier) {
         _accessPoints[apName].contentVerified = verified;
         emit ChangeAccessPointContentVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }
@@ -623,13 +623,13 @@ contract FleekERC721 is Initializable, ERC721Upgradeable, FleekAccessControl, Fl
      * Requirements:
      *
      * - the AP must exist.
-     * - the sender must have the token controller role.
+     * - the sender must have collection verifier role.
      *
      */
     function setAccessPointNameVerify(
         string memory apName,
         bool verified
-    ) public requireAP(apName) requireTokenRole(_accessPoints[apName].tokenId, TokenRoles.Controller) {
+    ) public requireAP(apName) requireCollectionRole(CollectionRoles.Verifier) {
         _accessPoints[apName].nameVerified = verified;
         emit ChangeAccessPointNameVerify(apName, _accessPoints[apName].tokenId, verified, msg.sender);
     }

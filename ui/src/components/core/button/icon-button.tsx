@@ -29,7 +29,7 @@ export interface IconButtonProps extends BaseButtonProps {
   'aria-label': string;
 }
 
-export const IconButton = forwardRef<IconButtonProps, 'button'>(
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   function IconButton(props, ref) {
     const {
       icon,

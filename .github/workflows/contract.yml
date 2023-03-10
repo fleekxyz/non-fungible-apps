@@ -1,10 +1,12 @@
-name: Tests
+name: Contract
 
 on:
   pull_request:
     branches:    
       - main
       - develop
+    paths:
+      - 'contracts/**'
 
 jobs:
   test-contracts:
@@ -42,30 +44,3 @@ jobs:
 
       - name: Run Test
         run: yarn test
-
-  test-ui:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ui
-
-    strategy:
-      matrix:
-        node-version: [18.x]
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install Dependencies
-        run: yarn --ignore-scripts
-
-      - name: Audit
-        run: yarn audit --groups dependencies
-
-      - name: Build
-        run: yarn build
