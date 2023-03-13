@@ -30,6 +30,7 @@ export const MintPreview = () => {
     // TODO: better UI for prepare errors
     if (prepareError) {
       const parsedError = FleekERC721.parseError(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (prepareError as any).error?.data.data
       );
       if (parsedError.isIdentified) {

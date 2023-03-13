@@ -1,5 +1,6 @@
-import { Combobox, ComboboxItem, Flex } from '@/components';
 import { useState } from 'react';
+
+import { Combobox, ComboboxItem, Flex } from '@/components';
 
 const itemsCombobox = [
   { label: 'Item 1', value: 'item-1' },

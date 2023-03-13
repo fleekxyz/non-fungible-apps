@@ -21,7 +21,7 @@ export const fetchRepositoriesThunk = createAsyncThunk(
 
       dispatch(
         githubActions.setRepositories(
-          repositories.map((repo: any) => ({
+          repositories.map((repo: unknown) => ({
             name: repo.name,
             url: repo.html_url,
           }))

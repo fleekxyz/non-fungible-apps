@@ -159,6 +159,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
     ) {
       setAutocompleteItems([selectedValue]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValue]);
 
   useEffect(() => {

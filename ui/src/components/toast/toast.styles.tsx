@@ -1,5 +1,7 @@
-import { dripStitches } from '@/theme';
 import * as ToastLib from '@radix-ui/react-toast';
+
+import { dripStitches } from '@/theme';
+
 import { Icon, IconButton } from '../core';
 import { Flex } from '../layout';
 

@@ -34,8 +34,8 @@ const mockDetail = {
   ],
 };
 
-export const fetchSiteDetail = async (tokenId: string) => {
-  return new Promise((resolved, reject) => {
+export const fetchSiteDetail = async () => {
+  return new Promise((resolved) => {
     setTimeout(() => {
       resolved({
         data: { ...mockDetail, externalUrl: mockDetail.external_url },
