@@ -17,9 +17,9 @@ export const AppNameField = () => {
         value={appName}
         onChange={handleAppNameChange}
       />
-      <Form.Label css={{ textAlign: 'right' }}>
+      <Form.MaxLength>
         {appName.length}/{maxCharacters}
-      </Form.Label>
+      </Form.MaxLength>
     </Form.Field>
   );
 };

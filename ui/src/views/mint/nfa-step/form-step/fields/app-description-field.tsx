@@ -22,9 +22,9 @@ export const AppDescriptionField = () => {
         value={appDescription}
         onChange={handleAppDescriptionChange}
       />
-      <Form.Label css={{ textAlign: 'right' }}>
+      <Form.MaxLength>
         {appDescription.length}/{maxCharacters}
-      </Form.Label>
+      </Form.MaxLength>
     </Form.Field>
   );
 };
