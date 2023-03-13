@@ -1,39 +1,60 @@
-import React, { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { Combobox as ComboboxLib, Transition } from '@headlessui/react';
-import { Icon } from '@/components/core/icon';
+import { Icon, IconName } from '@/components/core/icon';
 import { Flex } from '@/components/layout';
+import { useDebounce } from '@/hooks/use-debounce';
+import { Separator } from '../separator.styles';
+import { cleanString } from './combobox.utils';
 
 type ComboboxInputProps = {
+  /**
+   * If it's true, the list of options will be displayed
+   */
   open: boolean;
+  /**
+   * Name of the left icon to display in the input
+   */
+  leftIcon: IconName;
+  /**
+   * Function to handle the input change
+   */
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  /**
+   * Function to handle the input click. When the user clicks on the input, the list of options will be displayed
+   */
   handleInputClick: () => void;
 };
 
 const ComboboxInput = ({
   open,
+  leftIcon,
   handleInputChange,
   handleInputClick,
 }: ComboboxInputProps) => (
   <div className="relative w-full cursor-default ">
     <Icon
-      name="search"
+      name={leftIcon}
       size="sm"
       css={{
         position: 'absolute',
         left: '$3',
-        top: '0.9375rem',
+        top: '$3',
+        fontSize: '$xl',
         color: 'slate8',
       }}
     />
     <ComboboxLib.Input
       placeholder="Search"
-      className={`w-full border-solid border border-slate7 h-11  py-3 pl-8 pr-10 text-sm bg-transparent leading-5 text-slate11 outline-none ${
+      className={`w-full border-solid border border-slate7 h-11  py-3 pl-10 pr-10 text-sm bg-transparent leading-5 text-slate11 outline-none ${
         open ? 'border-b-0 rounded-t-xl bg-black border-slate6' : 'rounded-xl'
       }`}
       displayValue={(selectedValue: ComboboxItem) => selectedValue.label}
       onChange={handleInputChange}
       onClick={handleInputClick}
     />
+    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+      <Icon name="chevron-down" css={{ fontSize: '$xs' }} />
+    </span>
   </div>
 );
 
@@ -52,9 +73,13 @@ const ComboboxOption = ({ option }: ComboboxOptionProps) => (
   >
     {({ selected, active }) => (
       <Flex css={{ justifyContent: 'space-between' }}>
-        <Flex css={{ flexDirection: 'row' }}>
+        <Flex css={{ flexDirection: 'row', maxWidth: '95%' }}>
           {option.icon}
-          <span className={`${active ? 'text-slate12' : 'text-slate11'}`}>
+          <span
+            className={`${active ? 'text-slate12' : 'text-slate11'} ${
+              option.icon ? 'max-w-70' : 'max-w-full'
+            } whitespace-nowrap text-ellipsis overflow-hidden`}
+          >
             {option.label}
           </span>
         </Flex>
@@ -73,38 +98,97 @@ export const NoResults = ({ css }: { css?: string }) => (
 );
 
 export type ComboboxItem = {
+  /**
+   * The key of the item.
+   */
   value: string;
+  /**
+   * The label to display of the item.
+   */
   label: string;
+  /**
+   * Optional icon to display on the left of the item.
+   */
   icon?: React.ReactNode;
 };
 
 export type ComboboxProps = {
+  /**
+   * List of items to be displayed in the combobox.
+   */
   items: ComboboxItem[];
+  /**
+   * The selected value of the combobox.
+   */
   selectedValue: ComboboxItem | undefined;
+  /**
+   * If true, the combobox will add the input if it doesn't exist in the list of items.
+   */
+  withAutocomplete?: boolean;
+  /**
+   * Name of the left icon to display in the input. Defualt is "search".
+   */
+  leftIcon?: IconName;
+  /**
+   * Callback when the selected value changes.
+   */
   onChange(option: ComboboxItem): void;
 };
 
 export const Combobox: React.FC<ComboboxProps> = ({
   items,
   selectedValue = { value: '', label: '' },
+  withAutocomplete = false,
+  leftIcon = 'search',
   onChange,
 }) => {
-  const [query, setQuery] = useState('');
+  const [filteredItems, setFilteredItems] = useState<ComboboxItem[]>([]);
+  const [autocompleteItems, setAutocompleteItems] = useState<ComboboxItem[]>(
+    []
+  );
+
+  useEffect(() => {
+    // If the selected value doesn't exist in the list of items, we add it
+    if (
+      items.filter((item) => item === selectedValue).length === 0 &&
+      selectedValue.value !== undefined &&
+      autocompleteItems.length === 0 &&
+      withAutocomplete
+    ) {
+      setAutocompleteItems([selectedValue]);
+    }
+  }, [selectedValue]);
+
+  useEffect(() => {
+    setFilteredItems(items);
+  }, [items]);
 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const filteredItems =
-    query === ''
-      ? items
-      : items.filter((person) =>
-          person.label
-            .toLowerCase()
-            .replace(/\s+/g, '')
-            .includes(query.toLowerCase().replace(/\s+/g, ''))
-        );
+  const handleSearch = useDebounce((searchValue: string) => {
+    if (searchValue === '') {
+      setFilteredItems(items);
+
+      if (withAutocomplete) {
+        setAutocompleteItems([]);
+        handleComboboxChange({} as ComboboxItem);
+      }
+    } else {
+      const filteredValues = items.filter((item) =>
+        cleanString(item.label).startsWith(cleanString(searchValue))
+      );
+
+      if (withAutocomplete && filteredValues.length === 0) {
+        // If the search value doesn't exist in the list of items, we add it
+        setAutocompleteItems([{ value: searchValue, label: searchValue }]);
+      }
+      setFilteredItems(filteredValues);
+    }
+  }, 200);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    event.stopPropagation();
+    handleSearch(event.target.value);
   };
 
   const handleInputClick = () => {
@@ -116,7 +200,11 @@ export const Combobox: React.FC<ComboboxProps> = ({
   };
 
   const handleLeaveTransition = () => {
-    setQuery('');
+    setFilteredItems(items);
+    if (selectedValue.value === undefined && withAutocomplete) {
+      setAutocompleteItems([]);
+      handleComboboxChange({} as ComboboxItem);
+    }
   };
 
   return (
@@ -131,6 +219,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
             handleInputChange={handleInputChange}
             handleInputClick={handleInputClick}
             open={open}
+            leftIcon={leftIcon}
           />
           <ComboboxLib.Button ref={buttonRef} className="hidden" />
 
@@ -144,12 +233,25 @@ export const Combobox: React.FC<ComboboxProps> = ({
             afterLeave={handleLeaveTransition}
           >
             <ComboboxLib.Options className="absolute max-h-60 w-full z-10 overflow-auto rounded-b-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
-              {filteredItems.length === 0 && query !== '' ? (
+              {[...autocompleteItems, ...filteredItems].length === 0 ||
+              filteredItems === undefined ? (
                 <NoResults />
               ) : (
-                filteredItems.map((option: ComboboxItem) => {
-                  return <ComboboxOption key={option.value} option={option} />;
-                })
+                <>
+                  {autocompleteItems.length > 0 && <span>Create new</span>}
+                  {autocompleteItems.map((autocompleteOption: ComboboxItem) => (
+                    <ComboboxOption
+                      key={autocompleteOption.value}
+                      option={autocompleteOption}
+                    />
+                  ))}
+                  {autocompleteItems.length > 0 && filteredItems.length > 0 && (
+                    <Separator css={{ mb: '$2' }} />
+                  )}
+                  {filteredItems.map((option: ComboboxItem) => (
+                    <ComboboxOption key={option.value} option={option} />
+                  ))}
+                </>
               )}
             </ComboboxLib.Options>
           </Transition>

@@ -6,7 +6,6 @@ on:
       - main
 
 jobs:
-
   test-subgraph:
     runs-on: ubuntu-latest
 

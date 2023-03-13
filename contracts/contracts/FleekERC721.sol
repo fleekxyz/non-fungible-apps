@@ -494,7 +494,7 @@ contract FleekERC721 is
     function setAccessPointContentVerify(
         string memory apName,
         bool verified
-    ) public requireTokenRole(_getAccessPointTokenId(apName), TokenRoles.Controller) {
+    ) public requireCollectionRole(CollectionRoles.Verifier) {
         _setAccessPointContentVerify(apName, verified);
     }
 
@@ -512,7 +512,7 @@ contract FleekERC721 is
     function setAccessPointNameVerify(
         string memory apName,
         bool verified
-    ) public requireTokenRole(_getAccessPointTokenId(apName), TokenRoles.Controller) {
+    ) public requireCollectionRole(CollectionRoles.Verifier) {
         _setAccessPointNameVerify(apName, verified);
     }
 

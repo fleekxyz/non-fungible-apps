@@ -1,6 +1,11 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures, Errors } from './helpers';
+import {
+  TestConstants,
+  Fixtures,
+  Errors,
+  OverloadedFunctions,
+} from './helpers';
 
 const { CollectionRoles } = TestConstants;
 
@@ -174,5 +179,39 @@ describe('FleekERC721.CollectionRoles', () => {
     await expect(
       contract.revokeCollectionRole(CollectionRoles.Owner, owner.address)
     ).to.be.revertedWithCustomError(contract, Errors.MustHaveAtLeastOneOwner);
+  });
+
+  it('should not be able to verify access point if not verifier', async () => {
+    const { contract, otherAccount } = fixture;
+
+    await contract[OverloadedFunctions.Mint.Default](
+      otherAccount.address,
+      TestConstants.MintParams.name,
+      TestConstants.MintParams.description,
+      TestConstants.MintParams.externalUrl,
+      TestConstants.MintParams.ens,
+      TestConstants.MintParams.commitHash,
+      TestConstants.MintParams.gitRepository,
+      TestConstants.MintParams.logo,
+      TestConstants.MintParams.color
+    );
+
+    await contract.addAccessPoint(0, 'random.com');
+
+    await expect(
+      contract
+        .connect(otherAccount)
+        .setAccessPointContentVerify('random.com', true)
+    )
+      .to.be.revertedWithCustomError(contract, Errors.MustHaveCollectionRole)
+      .withArgs(CollectionRoles.Verifier);
+
+    await expect(
+      contract
+        .connect(otherAccount)
+        .setAccessPointNameVerify('random.com', true)
+    )
+      .to.be.revertedWithCustomError(contract, Errors.MustHaveCollectionRole)
+      .withArgs(CollectionRoles.Verifier);
   });
 });
