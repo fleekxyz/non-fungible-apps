@@ -9,6 +9,8 @@ export abstract class NavBarStyles {
     right: 0,
     display: 'flex',
     alignItems: 'center',
+    backgroundColor: 'black',
+    zIndex: '$sticky',
   });
 
   static readonly Content = styled('div', {
