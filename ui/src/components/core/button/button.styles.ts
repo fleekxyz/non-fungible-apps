@@ -130,17 +130,6 @@ const getButtonCompoundVariant = ({
         '&:focus, &:active': {
           backgroundColor: `$${color}3`,
         },
-
-        '&:disabled': {
-          backgroundColor: `initial`,
-          '&:hover': {
-            color: `$${color}11`,
-            backgroundColor: `initial`,
-          },
-          '& img, & svg': {
-            filter: 'grayscale(100%)',
-          },
-        },
       };
 
     default:
