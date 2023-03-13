@@ -28,7 +28,6 @@ export const Repository = ({ repository, index, length }: RepositoryProps) => {
             colorScheme="blue"
             variant="outline"
             css={{ py: '$1', height: '$5', borderRadius: '$md' }}
-            // onClick={}
           >
             Use for NFA
           </Button>
