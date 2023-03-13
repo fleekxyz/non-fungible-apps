@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ComboboxItem, DropdownItem } from '@/components';
 import { EthereumHooks } from '@/integrations';
 import { GithubState, useFleekERC721Billing } from '@/store';
-import { createContext } from '@/utils';
+import { AppLog, createContext } from '@/utils';
 
 export type MintContext = {
   billing: string | undefined;
@@ -118,7 +118,7 @@ export abstract class Mint {
           config={{
             transaction: {
               onSuccess: (data) => {
-                console.log('Successfully minted! what now?', data);
+                AppLog.successToast('Successfully minted!');
                 alert('transaction hash: ' + data.transactionHash);
               },
             },

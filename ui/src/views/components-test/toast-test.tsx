@@ -1,7 +1,9 @@
 import { Button, Flex } from '@/components';
 import { pushToast } from '@/utils';
+import { useNavigate } from 'react-router-dom';
 
 export const ToastTest = () => {
+  const navigate = useNavigate();
   return (
     <Flex css={{ margin: '$22', gap: '$5' }}>
       <h1>ToastTest</h1>
@@ -18,6 +20,16 @@ export const ToastTest = () => {
         }}
       >
         Toggle Succes Toast
+      </Button>
+
+      <Button
+        onClick={() => {
+          pushToast('success', 'Message sent successfully!', {
+            onDismiss: () => navigate('/home'),
+          });
+        }}
+      >
+        Toggle Succes Toast Dismiss
       </Button>
     </Flex>
   );

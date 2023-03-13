@@ -8,7 +8,7 @@ import { UserData } from './github-client';
 export namespace GithubState {
   export type Token = string;
 
-  export type State = 'disconnected' | 'loading' | 'connected';
+  export type State = 'disconnected' | 'loading' | 'connected' | 'failed';
 
   export type QueryUserAndOrganizations =
     | 'idle'
