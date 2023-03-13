@@ -8,9 +8,11 @@ import { Mint } from './mint.context';
 import { NftMinted } from './nft-minted';
 
 export const MintStepper = () => {
-  const { mintSuccess } = Mint.useContext();
+  const {
+    transaction: { isSuccess },
+  } = Mint.useTransactionContext();
 
-  if (!mintSuccess) {
+  if (!isSuccess) {
     return (
       <Stepper.Root initialStep={1}>
         <Stepper.Container>

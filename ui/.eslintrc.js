@@ -26,8 +26,6 @@ module.exports = {
     ],
     '@typescript-eslint/no-namespace': 'off',
     'simple-import-sort/imports': 2,
-    '@typescript-eslint/explicit-function-return-type': 'off',
     'no-console': 'error',
-    'unused-imports/no-unused-imports-ts': 'error',
   },
 };

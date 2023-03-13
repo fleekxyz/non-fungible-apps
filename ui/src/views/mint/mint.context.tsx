@@ -20,7 +20,6 @@ export type MintContext = {
   domain: string;
   verifyNFA: boolean;
   ensError: string;
-  mintSuccess: boolean;
   setGithubStep: (step: number) => void;
   setNfaStep: (step: number) => void;
   setSelectedUserOrg: (userOrg: ComboboxItem) => void;
@@ -73,8 +72,6 @@ export abstract class Mint {
     //Field validations
     const [ensError, setEnsError] = useState<string>('');
 
-    const [mintSuccess, setMintSuccess] = useState(false);
-
     const setGithubStep = (step: number): void => {
       if (step > 0 && step <= 3) {
         setGithubStepContext(step);
@@ -98,7 +95,6 @@ export abstract class Mint {
           domain,
           verifyNFA,
           ensError,
-          mintSuccess,
           setSelectedUserOrg,
           setGithubStep,
           setNfaStep,
