@@ -1,11 +1,12 @@
 import { Icon } from '@/components';
+import { env } from '@/constants';
 import { useNavigate } from 'react-router-dom';
 import { NftCard } from './nft-card';
 
 export const NftMinted = () => {
   const navigate = useNavigate();
   const handleButtonClick = () => {
-    window.open('https://twitter.com/share?ref_src=twsrc%5Etfw', '_blank'); //TODO replace with twitter share
+    window.open(env.twitter.url, '_blank'); //TODO replace with twitter share
     navigate('/home');
   };
 

@@ -1,5 +1,6 @@
 import { ethers, upgrades } from 'hardhat';
 import { TestConstants } from './constants';
+import { OverloadedFunctions } from './overloaded-functions';
 
 export abstract class Fixtures {
   static async paused() {}
@@ -35,7 +36,9 @@ export abstract class Fixtures {
   static async withMint() {
     const fromDefault = await Fixtures.default();
 
-    const response = await fromDefault.contract.mint(
+    const response = await fromDefault.contract[
+      OverloadedFunctions.Mint.Default
+    ](
       fromDefault.owner.address,
       TestConstants.MintParams.name,
       TestConstants.MintParams.description,
@@ -44,8 +47,7 @@ export abstract class Fixtures {
       TestConstants.MintParams.commitHash,
       TestConstants.MintParams.gitRepository,
       TestConstants.MintParams.logo,
-      TestConstants.MintParams.color,
-      TestConstants.MintParams.accessPointAutoApprovalSettings
+      TestConstants.MintParams.color
     );
 
     const tokenId = response.value.toNumber();
