@@ -1,7 +1,7 @@
 import { Button, Separator } from '@/components';
 import { githubActions, GithubState, useAppDispatch } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-import { RepoRow } from './github-repository-selection';
+import { RepoRow } from '../repository-row';
 
 type RepositoryProps = {
   repository: GithubState.Repository;
@@ -21,13 +21,13 @@ export const Repository = ({ repository, index, length }: RepositoryProps) => {
   return (
     <>
       <RepoRow
+        onClick={handleSelectRepo}
         repo={repository.name}
         button={
           <Button
             colorScheme="blue"
             variant="outline"
             css={{ py: '$1', height: '$5', borderRadius: '$md' }}
-            onClick={handleSelectRepo}
           >
             Use for NFA
           </Button>

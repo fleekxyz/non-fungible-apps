@@ -20,27 +20,6 @@ export const Loading = () => (
   </Flex>
 );
 
-type RepoRowProps = {
-  repo: string;
-  button: React.ReactNode;
-} & React.ComponentProps<typeof Flex>;
-
-export const RepoRow = forwardRef<HTMLDivElement, RepoRowProps>(
-  ({ repo, button, ...props }, ref) => (
-    <Flex
-      {...props}
-      ref={ref}
-      css={{ justifyContent: 'space-between', my: '$4', ...props.css }}
-    >
-      <Flex css={{ alignItems: 'center' }}>
-        <Icon name="github" css={{ fontSize: '$2xl', mr: '$2' }} />
-        <span>{repo}</span>
-      </Flex>
-      {button}
-    </Flex>
-  )
-);
-
 export const GithubRepositoryConnection: React.FC = () => {
   const { queryLoading, queryUserAndOrganizations } = useGithubStore();
   const [searchValue, setSearchValue] = useState('');
@@ -64,14 +43,14 @@ export const GithubRepositoryConnection: React.FC = () => {
   };
 
   return (
-    <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pb: '$0h' }}>
+    <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pr: '$3h' }}>
       <MintCardHeader
         title="Select Repository"
         onClickBack={handlePrevStepClick}
       />
       <Card.Body css={{ pt: '$4' }}>
         <Grid css={{ rowGap: '$2' }}>
-          <Flex css={{ gap: '$4' }}>
+          <Flex css={{ gap: '$4', pr: '$3h' }}>
             <UserOrgsCombobox />
             <Input
               leftIcon="search"

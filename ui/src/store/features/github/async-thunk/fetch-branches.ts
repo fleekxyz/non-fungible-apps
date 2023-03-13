@@ -1,4 +1,4 @@
-import { DropdownItem } from '@/components';
+import { ComboboxItem } from '@/components';
 import { githubActions, RootState } from '@/store';
 import { AppLog } from '@/utils';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -23,7 +23,7 @@ export const fetchBranchesThunk = createAsyncThunk<void, FetchBranches>(
 
       const branches = await githubClient.fetchBranches(owner, repository);
 
-      dispatch(githubActions.setBranches(branches as DropdownItem[]));
+      dispatch(githubActions.setBranches(branches as ComboboxItem[]));
     } catch (error) {
       AppLog.errorToast(
         'We have a problem trying to get your branches. Please try again later.'

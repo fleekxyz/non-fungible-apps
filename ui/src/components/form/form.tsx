@@ -14,11 +14,22 @@ export abstract class Form {
   );
 
   static readonly Label = forwardRef<HTMLLabelElement, Form.LabelProps>(
-    ({ children, ...props }, ref) => (
+    ({ children, isRequired, ...props }, ref) => (
       <FormStyles.Label ref={ref} {...props}>
-        {children}
+        {children}{' '}
+        {isRequired && <FormStyles.RequiredLabel>*</FormStyles.RequiredLabel>}
       </FormStyles.Label>
     )
+  );
+
+  static readonly MaxLength = forwardRef<HTMLLabelElement, Form.LabelProps>(
+    ({ children, ...props }, ref) => {
+      return (
+        <FormStyles.MaxLength ref={ref} {...props}>
+          {children}
+        </FormStyles.MaxLength>
+      );
+    }
   );
 
   static readonly Error = forwardRef<HTMLDivElement, Form.ErrorProps>(
@@ -55,7 +66,9 @@ export namespace Form {
     children: React.ReactNode;
   } & React.ComponentProps<typeof FormStyles.Field>;
 
-  export type LabelProps = React.ComponentProps<typeof FormStyles.Label>;
+  export type LabelProps = { isRequired?: boolean } & React.ComponentProps<
+    typeof FormStyles.Label
+  >;
 
   export type ErrorProps = React.ComponentProps<typeof FormStyles.ErrorMessage>;
 

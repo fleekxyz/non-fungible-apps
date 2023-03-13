@@ -11,9 +11,11 @@ import { AiOutlineTwitter } from '@react-icons/all-files/ai/AiOutlineTwitter';
 import { ErrorIcon } from './custom/error';
 import { IoClose } from '@react-icons/all-files/io5/IoClose';
 import { AiFillCheckCircle } from '@react-icons/all-files/ai/AiFillCheckCircle';
+import { BiGitBranch } from '@react-icons/all-files/bi/BiGitBranch';
 
 export const IconLibrary = Object.freeze({
   back: IoArrowBackCircleSharp,
+  branch: BiGitBranch,
   check: AiOutlineCheck,
   'check-circle': IoCheckmarkCircleSharp,
   'chevron-down': AiOutlineDown,

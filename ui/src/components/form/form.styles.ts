@@ -33,6 +33,15 @@ export abstract class FormStyles {
     },
   });
 
+  static readonly RequiredLabel = styled('span', {
+    color: '$red11',
+  });
+
+  static readonly MaxLength = styled(FormStyles.Label, {
+    textAlign: 'right',
+    mt: '$1h',
+  });
+
   static readonly ErrorMessage = styled('span', {
     color: '$red11',
     fontSize: '0.625rem',

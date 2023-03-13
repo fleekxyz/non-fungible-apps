@@ -1,6 +1,8 @@
 import { Form } from '@/components';
 import { Mint } from '../../../mint.context';
 
+const maxCharacters = 100;
+
 export const AppNameField = () => {
   const { appName, setAppName } = Mint.useContext();
 
@@ -9,12 +11,15 @@ export const AppNameField = () => {
   };
   return (
     <Form.Field>
-      <Form.Label>Name</Form.Label>
+      <Form.Label isRequired>Name</Form.Label>
       <Form.Input
         placeholder="Your app name"
         value={appName}
         onChange={handleAppNameChange}
       />
+      <Form.MaxLength>
+        {appName.length}/{maxCharacters}
+      </Form.MaxLength>
     </Form.Field>
   );
 };

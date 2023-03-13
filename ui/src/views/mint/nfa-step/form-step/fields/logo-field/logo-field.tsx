@@ -27,7 +27,7 @@ export const LogoField = () => {
   return (
     <Flex css={{ width: '$full', gap: '$4h', alignItems: 'flex-start' }}>
       <Form.Field>
-        <Form.Label>Logo</Form.Label>
+        <Form.Label isRequired>Logo</Form.Label>
         <Form.LogoFileInput value={appLogo} onChange={handleFileChange} />
         {errorMessage && <Form.Error>{errorMessage}</Form.Error>}
       </Form.Field>
