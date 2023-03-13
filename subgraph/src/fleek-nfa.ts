@@ -25,7 +25,7 @@ import {
   NewAccessPoint as NewAccessPointEvent,
   ChangeAccessPointNameVerify as ChangeAccessPointNameVerifyEvent,
   ChangeAccessPointContentVerify as ChangeAccessPointContentVerifyEvent,
-  TokenRolesCleared as TokenRolesClearedEvent
+  TokenRolesCleared as TokenRolesClearedEvent,
 } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]

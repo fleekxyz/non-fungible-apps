@@ -36,23 +36,13 @@ describe('Transfer tests', () => {
       createTransferEvent(3, CONTRACT, USER_ONE, BigInt.fromI32(3))
     );
     transfers.push(
-      createTransferEvent(
-        4,
-        USER_TWO,
-        USER_ONE,
-        BigInt.fromI32(1)
-      )
+      createTransferEvent(4, USER_TWO, USER_ONE, BigInt.fromI32(1))
     );
     transfers.push(
       createTransferEvent(5, CONTRACT, USER_TWO, BigInt.fromI32(4))
     );
     transfers.push(
-      createTransferEvent(
-        6,
-        USER_ONE,
-        USER_TWO,
-        BigInt.fromI32(0)
-      )
+      createTransferEvent(6, USER_ONE, USER_TWO, BigInt.fromI32(0))
     );
     handleTransfers(transfers);
     // logStore();

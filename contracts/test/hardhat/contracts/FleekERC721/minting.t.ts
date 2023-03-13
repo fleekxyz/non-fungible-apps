@@ -1,15 +1,15 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures, Errors } from './helpers';
+import { TestConstants, Fixtures, OverloadedFunctions } from './helpers';
 import { ethers } from 'hardhat';
 
-const { MintParams, CollectionRoles } = TestConstants;
+const { MintParams } = TestConstants;
 
 describe('FleekERC721.Minting', () => {
   it('should be able to mint a new token', async () => {
     const { owner, contract } = await loadFixture(Fixtures.default);
 
-    const response = await contract.mint(
+    const response = await contract[OverloadedFunctions.Mint.Default](
       owner.address,
       MintParams.name,
       MintParams.description,
@@ -18,8 +18,7 @@ describe('FleekERC721.Minting', () => {
       MintParams.commitHash,
       MintParams.gitRepository,
       MintParams.logo,
-      MintParams.color,
-      MintParams.accessPointAutoApprovalSettings
+      MintParams.color
     );
 
     expect(response.value).to.be.instanceOf(ethers.BigNumber);
@@ -31,7 +30,7 @@ describe('FleekERC721.Minting', () => {
       Fixtures.default
     );
 
-    const response = await contract.mint(
+    const response = await contract[OverloadedFunctions.Mint.Default](
       owner.address,
       MintParams.name,
       MintParams.description,
@@ -40,8 +39,7 @@ describe('FleekERC721.Minting', () => {
       MintParams.commitHash,
       MintParams.gitRepository,
       MintParams.logo,
-      MintParams.color,
-      MintParams.accessPointAutoApprovalSettings
+      MintParams.color
     );
 
     const tokenId = response.value.toNumber();

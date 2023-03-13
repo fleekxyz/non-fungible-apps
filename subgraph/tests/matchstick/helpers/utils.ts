@@ -10,7 +10,7 @@ import {
   ChangeAccessPointNameVerify,
   TokenRoleChanged,
   CollectionRoleChanged,
-  TokenRolesCleared
+  TokenRolesCleared,
 } from '../../../generated/FleekNFA/FleekNFA';
 import {
   handleApproval,
@@ -198,10 +198,7 @@ export function createNewAccessPointEvent(
   );
 
   newAccessPoint.parameters.push(
-    new ethereum.EventParam(
-      'owner',
-      ethereum.Value.fromAddress(owner)
-    )
+    new ethereum.EventParam('owner', ethereum.Value.fromAddress(owner))
   );
 
   newAccessPoint.transaction.hash = Bytes.fromI32(event_count);
@@ -217,7 +214,8 @@ export function createNewChangeAccessPointCreationStatus(
   status: i32,
   triggeredBy: Address
 ): ChangeAccessPointCreationStatus {
-  let changeAccessPointCreationStatus = changetype<ChangeAccessPointCreationStatus>(newMockEvent());
+  let changeAccessPointCreationStatus =
+    changetype<ChangeAccessPointCreationStatus>(newMockEvent());
 
   changeAccessPointCreationStatus.parameters = new Array();
 
@@ -236,10 +234,7 @@ export function createNewChangeAccessPointCreationStatus(
   );
 
   changeAccessPointCreationStatus.parameters.push(
-    new ethereum.EventParam(
-      'creationStatus',
-      ethereum.Value.fromI32(status)
-    )
+    new ethereum.EventParam('creationStatus', ethereum.Value.fromI32(status))
   );
 
   changeAccessPointCreationStatus.parameters.push(
@@ -262,7 +257,9 @@ export function createNewChangeAccessPointNameVerify(
   verified: boolean,
   triggeredBy: Address
 ): ChangeAccessPointNameVerify {
-  let changeAccessPointNameVerify = changetype<ChangeAccessPointNameVerify>(newMockEvent());
+  let changeAccessPointNameVerify = changetype<ChangeAccessPointNameVerify>(
+    newMockEvent()
+  );
 
   changeAccessPointNameVerify.parameters = new Array();
 
@@ -281,10 +278,7 @@ export function createNewChangeAccessPointNameVerify(
   );
 
   changeAccessPointNameVerify.parameters.push(
-    new ethereum.EventParam(
-      'verified',
-      ethereum.Value.fromBoolean(verified)
-    )
+    new ethereum.EventParam('verified', ethereum.Value.fromBoolean(verified))
   );
 
   changeAccessPointNameVerify.parameters.push(
@@ -320,31 +314,19 @@ export function createNewTokenRoleChanged(
   );
 
   tokenRoleChanged.parameters.push(
-    new ethereum.EventParam(
-      'role',
-      ethereum.Value.fromI32(role)
-    )
+    new ethereum.EventParam('role', ethereum.Value.fromI32(role))
   );
 
   tokenRoleChanged.parameters.push(
-    new ethereum.EventParam(
-      'toAddress',
-      ethereum.Value.fromAddress(toAddress)
-    )
+    new ethereum.EventParam('toAddress', ethereum.Value.fromAddress(toAddress))
   );
 
   tokenRoleChanged.parameters.push(
-    new ethereum.EventParam(
-      'status',
-      ethereum.Value.fromBoolean(status)
-    )
+    new ethereum.EventParam('status', ethereum.Value.fromBoolean(status))
   );
 
   tokenRoleChanged.parameters.push(
-    new ethereum.EventParam(
-      'byAddress',
-      ethereum.Value.fromAddress(byAddress)
-    )
+    new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
   );
 
   tokenRoleChanged.transaction.hash = Bytes.fromI32(event_count);
@@ -365,31 +347,19 @@ export function createNewCollectionRoleChanged(
   collectionRoleChanged.parameters = new Array();
 
   collectionRoleChanged.parameters.push(
-    new ethereum.EventParam(
-      'role',
-      ethereum.Value.fromI32(role)
-    )
+    new ethereum.EventParam('role', ethereum.Value.fromI32(role))
   );
 
   collectionRoleChanged.parameters.push(
-    new ethereum.EventParam(
-      'toAddress',
-      ethereum.Value.fromAddress(toAddress)
-    )
+    new ethereum.EventParam('toAddress', ethereum.Value.fromAddress(toAddress))
   );
 
   collectionRoleChanged.parameters.push(
-    new ethereum.EventParam(
-      'status',
-      ethereum.Value.fromBoolean(status)
-    )
+    new ethereum.EventParam('status', ethereum.Value.fromBoolean(status))
   );
 
   collectionRoleChanged.parameters.push(
-    new ethereum.EventParam(
-      'byAddress',
-      ethereum.Value.fromAddress(byAddress)
-    )
+    new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
   );
 
   collectionRoleChanged.transaction.hash = Bytes.fromI32(event_count);
@@ -400,8 +370,8 @@ export function createNewCollectionRoleChanged(
 
 export function createNewTokenRolesCleared(
   event_count: i32,
-    tokenId: BigInt,
-    byAddress: Address
+  tokenId: BigInt,
+  byAddress: Address
 ): TokenRolesCleared {
   let tokenRolesCleared = changetype<TokenRolesCleared>(newMockEvent());
 
@@ -415,10 +385,7 @@ export function createNewTokenRolesCleared(
   );
 
   tokenRolesCleared.parameters.push(
-    new ethereum.EventParam(
-      'byAddress',
-      ethereum.Value.fromAddress(byAddress)
-    )
+    new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
   );
 
   tokenRolesCleared.transaction.hash = Bytes.fromI32(event_count);
@@ -470,13 +437,17 @@ export function handleNewAccessPoints(events: NewAccessPoint[]): void {
   });
 }
 
-export function handleChangeAccessPointCreationStatusList(events: ChangeAccessPointCreationStatus[]): void {
+export function handleChangeAccessPointCreationStatusList(
+  events: ChangeAccessPointCreationStatus[]
+): void {
   events.forEach((event) => {
     handleChangeAccessPointCreationStatus(event);
   });
 }
 
-export function handleChangeAccessPointNameVerifies(events: ChangeAccessPointNameVerify[]): void {
+export function handleChangeAccessPointNameVerifies(
+  events: ChangeAccessPointNameVerify[]
+): void {
   events.forEach((event) => {
     handleChangeAccessPointNameVerify(event);
   });
@@ -488,7 +459,9 @@ export function handleTokenRoleChangedList(events: TokenRoleChanged[]): void {
   });
 }
 
-export function handleCollectionRoleChangedList(events: CollectionRoleChanged[]): void {
+export function handleCollectionRoleChangedList(
+  events: CollectionRoleChanged[]
+): void {
   events.forEach((event) => {
     handleCollectionRoleChanged(event);
   });
