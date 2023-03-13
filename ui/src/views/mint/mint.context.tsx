@@ -1,8 +1,9 @@
-import { ComboboxItem, DropdownItem } from '@/components';
-import { GithubState } from '@/store';
-import { EthereumHooks } from '@/integrations';
-import { createContext } from '@/utils';
 import { useState } from 'react';
+
+import { ComboboxItem, DropdownItem } from '@/components';
+import { Ethereum, EthereumHooks } from '@/integrations';
+import { GithubState } from '@/store';
+import { createContext } from '@/utils';
 
 export type MintContext = {
   selectedUserOrg: ComboboxItem;
