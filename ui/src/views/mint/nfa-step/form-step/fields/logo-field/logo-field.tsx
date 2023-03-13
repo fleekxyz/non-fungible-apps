@@ -17,9 +17,6 @@ export const LogoField = () => {
         const fileBase64 = await fileToBase64(file);
         setAppLogo(fileBase64);
         setErrorMessage(null);
-
-        // To send to the contract the logo needs to be a base64 string
-        AppLog.info('Sending to contract:', fileBase64);
       } else {
         setAppLogo('');
         setLogoColor('');

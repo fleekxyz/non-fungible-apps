@@ -23,5 +23,5 @@
     "isolatedModules": true,
     "types": ["vite/client"]
   },
-  "include": ["./src", "./.graphclient", "./*.ts"]
+  "include": ["./src", "./.graphclient", "./*.ts", "./tailwind.config.js"]
 }
