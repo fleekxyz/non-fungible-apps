@@ -23,6 +23,7 @@ export namespace GithubState {
   export type Repository = {
     name: string;
     url: string;
+    defaultBranch: string;
   };
 
   export type Repositories = Array<Repository>;

@@ -29,13 +29,14 @@ export const RepoBranchCommitFields = () => {
 
   useEffect(() => {
     if (queryLoading === 'success' && branches.length > 0) {
-      const mainBranch = branches.find(
+      const defaultBranch = branches.find(
         (branch) =>
-          branch.label.startsWith('master') || branch.label.startsWith('main')
+          branch.label.toLowerCase() ===
+          repositoryName.defaultBranch.toLowerCase()
       );
-      if (mainBranch) {
-        setBranchName(mainBranch);
-        setCommitHash(mainBranch.value);
+      if (defaultBranch) {
+        setBranchName(defaultBranch);
+        setCommitHash(defaultBranch.value);
       }
     }
   }, [queryLoading, branches]);
@@ -68,7 +69,7 @@ export const RepoBranchCommitFields = () => {
       <Form.Field>
         <Form.Label>Git Branch</Form.Label>
         <Combobox
-          // TODO replace left icon with branch icon
+          leftIcon="branch"
           items={branches}
           selectedValue={branchName}
           onChange={handleBranchChange}

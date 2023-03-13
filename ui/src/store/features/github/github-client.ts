@@ -1,5 +1,6 @@
 import { DropdownItem } from '@/components';
 import { Octokit } from 'octokit';
+import { GithubState } from './github-slice';
 
 export type UserData = {
   value: string;
@@ -50,7 +51,14 @@ export class GithubClient {
         },
       }).then((res) => res.json());
 
-      return repos;
+      return repos.map(
+        (repo: any) =>
+          ({
+            name: repo.name,
+            url: repo.html_url,
+            defaultBranch: repo.default_branch,
+          } as GithubState.Repository)
+      );
     } catch (error) {
       return error;
     }
