@@ -1,4 +1,5 @@
 import { Icon } from '@/components';
+
 import { NftCard } from './nft-card';
 
 export const NftMinted = () => {

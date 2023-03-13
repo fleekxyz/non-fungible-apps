@@ -1,7 +1,8 @@
 import React, { forwardRef } from 'react';
+
 import { IconName } from '../icon';
-import { StyledInputFile } from './input-file';
 import { InputIconStyled, InputStyled, TextareaStyled } from './input.styles';
+import { StyledInputFile } from './input-file';
 
 export const Textarea = TextareaStyled;
 
@@ -27,3 +28,5 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
+
+Input.displayName = 'Input';

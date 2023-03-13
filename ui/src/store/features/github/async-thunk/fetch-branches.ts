@@ -1,6 +1,9 @@
+/* eslint-disable no-console */
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { DropdownItem } from '@/components';
 import { githubActions, RootState } from '@/store';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { GithubClient } from '../github-client';
 
 type FetchBranches = {

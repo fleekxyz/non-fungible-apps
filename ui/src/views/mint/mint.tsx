@@ -1,6 +1,7 @@
 import { Flex } from '@/components';
-import { MintStepper } from './mint-stepper';
+
 import { Mint as MintContext } from './mint.context';
+import { MintStepper } from './mint-stepper';
 
 export const Mint = () => (
   <Flex

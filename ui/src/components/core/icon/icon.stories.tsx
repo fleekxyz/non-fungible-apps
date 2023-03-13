@@ -1,6 +1,7 @@
-import { Icon } from './icon';
 import { styled } from '@stitches/react';
+
 import { Flex } from '../../layout';
+import { Icon } from './icon';
 
 export default {
   title: 'Components/Icons',

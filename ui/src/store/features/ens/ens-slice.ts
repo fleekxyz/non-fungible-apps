@@ -1,5 +1,7 @@
-import { RootState, useAppSelector } from '@/store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { RootState, useAppSelector } from '@/store';
+
 import * as asyncThunk from './async-thunk';
 
 export namespace EnsState {

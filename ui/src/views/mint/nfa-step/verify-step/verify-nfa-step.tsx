@@ -1,6 +1,7 @@
 import { Button, Card, Flex, Stepper, Switch, Text } from '@/components';
-import { MintCardHeader } from '../../mint-card';
+
 import { Mint } from '../../mint.context';
+import { MintCardHeader } from '../../mint-card';
 
 export const VerifyNFAStep = () => {
   const { prevStep } = Stepper.useContext();

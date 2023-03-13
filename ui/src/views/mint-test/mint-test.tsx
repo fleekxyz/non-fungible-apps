@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
+import { ConnectKitButton } from 'connectkit';
+import { useAccount } from 'wagmi';
+
 import { Button, Flex } from '@/components';
 import { Separator } from '@/components/core/separator.styles';
 import { EthereumHooks } from '@/integrations';
-import { ConnectKitButton } from 'connectkit';
-import { useAccount } from 'wagmi';
 
 /**
  * This is an example about how to use the EthereumHooks to create a context for a contract method

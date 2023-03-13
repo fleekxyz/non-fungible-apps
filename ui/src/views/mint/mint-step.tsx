@@ -36,7 +36,10 @@ type MintStepProps = {
   header: string;
 };
 
-export const MintStep: React.FC<MintStepProps> = ({ children, header }) => {
+export const MintStep: React.FC<MintStepProps> = ({
+  children,
+  header,
+}: MintStepProps) => {
   return (
     <Container>
       <StepperIndicatorContainer>

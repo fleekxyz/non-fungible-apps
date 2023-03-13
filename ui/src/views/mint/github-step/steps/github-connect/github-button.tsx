@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
+import { useCallback } from 'react';
+
 import { Button, Icon } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-import { useCallback } from 'react';
 
 export const GithubButton = () => {
   const { state } = useGithubStore();
@@ -15,7 +17,7 @@ export const GithubButton = () => {
         //TODO show toast with error message
         console.log(error);
       });
-  }, [dispatch]);
+  }, [dispatch, setGithubStep]);
 
   return (
     <Button

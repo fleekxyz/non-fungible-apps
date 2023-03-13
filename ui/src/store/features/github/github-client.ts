@@ -1,5 +1,6 @@
-import { DropdownItem } from '@/components';
 import { Octokit } from 'octokit';
+
+import { DropdownItem } from '@/components';
 
 export type UserData = {
   value: string;

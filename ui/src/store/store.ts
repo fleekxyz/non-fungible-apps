@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
+
+import ensReducer from './features/ens/ens-slice';
 import githubReducer from './features/github/github-slice';
 import toastsReducer from './features/toasts/toasts-slice';
-import ensReducer from './features/ens/ens-slice';
 
 export const store = configureStore({
   reducer: {

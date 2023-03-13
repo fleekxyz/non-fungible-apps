@@ -1,6 +1,7 @@
-import { Flex } from '../../layout';
-import { dripStitches } from '../../../theme';
 import { forwardRef, useRef } from 'react';
+
+import { dripStitches } from '../../../theme';
+import { Flex } from '../../layout';
 import { Icon } from '../icon';
 
 const { styled } = dripStitches;
@@ -66,3 +67,5 @@ export const StyledInputFile = forwardRef<HTMLDivElement, InputFileProps>(
     );
   }
 );
+
+StyledInputFile.displayName = 'StyledInputFile';

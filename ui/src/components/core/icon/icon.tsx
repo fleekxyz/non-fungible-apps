@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+
 import { IconStyles } from './icon.styles';
 import { IconLibrary, IconName, IconType } from './icon-library';
 

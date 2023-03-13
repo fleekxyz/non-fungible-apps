@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import { useState } from 'react';
 
 import { ComboboxItem, DropdownItem } from '@/components';
-import { Ethereum, EthereumHooks } from '@/integrations';
+import { EthereumHooks } from '@/integrations';
 import { GithubState } from '@/store';
 import { createContext } from '@/utils';
 

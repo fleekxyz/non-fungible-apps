@@ -1,13 +1,16 @@
+/* eslint-disable no-console */
+import { useAccount } from 'wagmi';
+
 import { Button, Card, Grid, Stepper } from '@/components';
+
 import { Mint } from '../../mint.context';
+import { MintCardHeader } from '../../mint-card';
 import {
-  LogoField,
   AppDescriptionField,
   AppNameField,
   EnsDomainField,
+  LogoField,
 } from './fields';
-import { MintCardHeader } from '../../mint-card';
-import { useAccount } from 'wagmi';
 import { parseColorToNumber } from './form.utils';
 
 export const MintFormStep = () => {

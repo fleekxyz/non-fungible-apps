@@ -1,7 +1,8 @@
-import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { Icon } from '@/components/core/icon';
+import { Fragment } from 'react';
+
 import { Flex } from '@/components';
+import { Icon } from '@/components/core/icon';
 
 type DropdownOptionProps = {
   option: DropdownItem;
@@ -84,7 +85,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   items,
   selectedValue,
   onChange,
-}) => {
+}: DropdownProps) => {
   const handleDropdownChange = (option: DropdownItem) => {
     onChange(option);
   };

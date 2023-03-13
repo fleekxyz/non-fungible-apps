@@ -1,11 +1,13 @@
-import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { themeGlobals } from '@/theme/globals';
-import { ComponentsTest, Home, Mint } from './views';
-import { SVGTestScreen } from './views/svg-test'; // TODO: remove when done
 import { ConnectKitButton } from 'connectkit';
-import { MintTest } from './views/mint-test';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
+
+import { themeGlobals } from '@/theme/globals';
+
 import { ToastProvider } from './components';
+import { ComponentsTest, Home, Mint } from './views';
 import { CreateAP } from './views/access-point';
+import { MintTest } from './views/mint-test';
+import { SVGTestScreen } from './views/svg-test'; // TODO: remove when done
 
 export const App = () => {
   themeGlobals();

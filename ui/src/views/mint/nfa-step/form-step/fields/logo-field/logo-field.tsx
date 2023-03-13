@@ -1,6 +1,9 @@
-import { Flex, Form } from '@/components';
+/* eslint-disable no-console */
 import { useState } from 'react';
-import { Mint } from '../../../../mint.context';
+
+import { Flex, Form } from '@/components';
+import { Mint } from '@/views/mint/mint.context';
+
 import { fileToBase64, validateFileSize } from '../../form.utils';
 import { ColorPicker } from './color-picker';
 

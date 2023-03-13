@@ -1,8 +1,10 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { Combobox as ComboboxLib, Transition } from '@headlessui/react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+
 import { Icon, IconName } from '@/components/core/icon';
 import { Flex } from '@/components/layout';
 import { useDebounce } from '@/hooks/use-debounce';
+
 import { Separator } from '../separator.styles';
 import { cleanString } from './combobox.utils';
 

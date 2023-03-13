@@ -4,7 +4,6 @@ import type { ConfigType } from '@stitches/react/types/config';
 
 import { allToNegative } from '../utils';
 import {
-  colors,
   darkColors,
   media as libMedia,
   radii,

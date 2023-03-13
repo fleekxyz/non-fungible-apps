@@ -1,4 +1,5 @@
 import { Card, Grid, Icon, IconButton } from '@/components';
+
 import { ConnectWalletButton } from './connect-wallet-button';
 
 export const WalletStep = () => {

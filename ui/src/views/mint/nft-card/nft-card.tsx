@@ -1,4 +1,5 @@
 import { Button, Card, Grid } from '@/components';
+
 import { Mint } from '../mint.context';
 import { SVGPreview } from './svg-preview';
 
@@ -22,7 +23,7 @@ export const NftCard: React.FC<NftCardProps> = ({
   leftIconButton,
   onClick,
   isLoading,
-}) => {
+}: NftCardProps) => {
   const size = '26.5rem';
   const { appLogo, logoColor, appName, ens } = Mint.useContext();
 

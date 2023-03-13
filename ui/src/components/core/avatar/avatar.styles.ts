@@ -1,5 +1,6 @@
-import { dripStitches } from '@/theme';
 import * as Avatar from '@radix-ui/react-avatar';
+
+import { dripStitches } from '@/theme';
 
 const { styled } = dripStitches;
 

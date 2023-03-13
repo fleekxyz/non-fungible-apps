@@ -1,10 +1,12 @@
+import React, { forwardRef, useState } from 'react';
+
 import { Card, ComboboxItem, Flex, Grid, Icon, Spinner } from '@/components';
 import { Input } from '@/components/core/input';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useGithubStore } from '@/store';
-import { MintCardHeader } from '@/views/mint/mint-card';
 import { Mint } from '@/views/mint/mint.context';
-import React, { forwardRef, useState } from 'react';
+import { MintCardHeader } from '@/views/mint/mint-card';
+
 import { RepositoriesList } from './repositories-list';
 import { UserOrgsCombobox } from './users-orgs-combobox';
 
@@ -30,6 +32,7 @@ export const RepoRow = forwardRef<HTMLDivElement, RepoRowProps>(
     <Flex
       {...props}
       ref={ref}
+      // eslint-disable-next-line react/prop-types
       css={{ justifyContent: 'space-between', my: '$4', ...props.css }}
     >
       <Flex css={{ alignItems: 'center' }}>
@@ -40,6 +43,8 @@ export const RepoRow = forwardRef<HTMLDivElement, RepoRowProps>(
     </Flex>
   )
 );
+
+RepoRow.displayName = 'RepoRow';
 
 export const GithubRepositoryConnection: React.FC = () => {
   const { queryLoading, queryUserAndOrganizations } = useGithubStore();

@@ -1,9 +1,11 @@
+import { ethers } from 'ethers';
+import { useMemo } from 'react';
+
 import { Icon, IconButton, Stepper } from '@/components';
 import { useTransactionCost } from '@/hooks';
 import { FleekERC721 } from '@/integrations';
 import { Mint } from '@/views/mint/mint.context';
-import { ethers } from 'ethers';
-import { useMemo } from 'react';
+
 import { NftCard } from '../nft-card';
 
 export const MintPreview = () => {
@@ -39,6 +41,7 @@ export const MintPreview = () => {
 
     const formattedCost = ethers.utils.formatEther(cost).slice(0, 9);
     return `Minting this NFA will cost ${formattedCost} ${currency}.`;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prepareData, isCostLoading, prepareStatus]);
 
   const isLoading = useMemo(

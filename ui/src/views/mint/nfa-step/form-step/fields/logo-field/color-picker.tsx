@@ -1,13 +1,16 @@
-import { Card, Flex } from '@/components';
-import { useRef } from 'react';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import ColorThief from 'colorthief';
-import { Mint } from '../../../../mint.context';
+import { useRef } from 'react';
+
+import { Card, Flex } from '@/components';
+import { Mint } from '@/views/mint/mint.context';
 
 export const ColorPicker = () => {
   const { appLogo, logoColor, setLogoColor } = Mint.useContext();
   const imageRef = useRef<HTMLImageElement>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleLogoLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const colorArray = new ColorThief().getColor(imageRef.current);
     const hexColor = `#${colorArray

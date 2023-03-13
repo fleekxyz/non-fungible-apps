@@ -1,14 +1,16 @@
+import type { Abi as AbiType } from 'abitype';
+import { useState } from 'react';
 import {
   Address,
   useContractWrite,
   usePrepareContractWrite,
-  useWaitForTransaction,
   UsePrepareContractWriteConfig,
+  useWaitForTransaction,
 } from 'wagmi';
-import type { Abi as AbiType } from 'abitype';
-import { FleekERC721 } from '../contracts';
+
 import { createContext } from '@/utils';
-import { useState } from 'react';
+
+import { FleekERC721 } from '../contracts';
 
 /**
  * This is a factory to create context factories for contracts write.
@@ -130,6 +132,7 @@ export namespace EthereumHooks {
 
     export interface ProviderConfig<TFunctionName extends string> {
       prepare?: Omit<
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         UsePrepareContractWriteConfig<any, TFunctionName>,
         'address' | 'abi' | 'functionName' | 'args'
       >;

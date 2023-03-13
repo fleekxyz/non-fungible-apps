@@ -1,6 +1,9 @@
 import { useRef } from 'react';
 
-export const useDebounce = <A extends any[], F extends (...args: A) => void>(
+export const useDebounce = <
+  A extends unknown[],
+  F extends (...args: A) => void
+>(
   f: F,
   t = 500
 ) => {

@@ -1,6 +1,8 @@
-import { ComboboxItem } from '@/components';
-import { RootState } from '@/store';
+/* eslint-disable no-console */
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { RootState } from '@/store';
+
 import { GithubClient, UserData } from '../github-client';
 import { githubActions } from '../github-slice';
 

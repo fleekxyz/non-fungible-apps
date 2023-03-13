@@ -1,6 +1,6 @@
 import { Button } from '../../core';
-import { Stepper } from './stepper';
 import { Flex } from '../../layout';
+import { Stepper } from './stepper';
 
 export default {
   title: 'Components/Layout/Stepper',

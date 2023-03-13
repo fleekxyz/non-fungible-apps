@@ -1,7 +1,9 @@
 import { useEffect, useMemo } from 'react';
+
 import { Flex, NoResults } from '@/components';
-import { Mint } from '@/views/mint/mint.context';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
+import { Mint } from '@/views/mint/mint.context';
+
 import { Repository } from './repository';
 
 type RepositoriesListProps = {

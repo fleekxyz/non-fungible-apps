@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
+
 import { Dropdown, DropdownItem, Flex, Form, Spinner } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-import { useEffect } from 'react';
 
 export const RepoBranchCommitFields = () => {
   const { queryLoading, branches } = useGithubStore();
@@ -25,7 +26,7 @@ export const RepoBranchCommitFields = () => {
         })
       );
     }
-  }, [queryLoading, dispatch]);
+  }, [queryLoading, dispatch, selectedUserOrg.label, repositoryName.name]);
 
   const handleBranchChange = (dropdownOption: DropdownItem) => {
     setBranchName(dropdownOption);

@@ -1,7 +1,8 @@
+import { useAccount } from 'wagmi';
+
 import { Combobox, ComboboxItem, Form } from '@/components';
 import { ensActions, useAppDispatch, useEnsStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-import { useAccount } from 'wagmi';
 
 export const EnsField = () => {
   const { ens, ensError, setEns } = Mint.useContext();

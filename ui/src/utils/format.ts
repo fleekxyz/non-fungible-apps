@@ -10,4 +10,3 @@ export const getRepoAndCommit = (url: string) => {
 export const contractAddress = (address: string): string => {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };
-

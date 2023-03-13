@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
+
 import { Avatar, Combobox, ComboboxItem } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-import { useEffect } from 'react';
 
 export const UserOrgsCombobox = () => {
   const { queryUserAndOrganizations, userAndOrganizations } = useGithubStore();
@@ -29,7 +30,12 @@ export const UserOrgsCombobox = () => {
       //SET first user
       setSelectedUserOrg(userAndOrganizations[0]);
     }
-  }, [queryUserAndOrganizations]);
+  }, [
+    queryUserAndOrganizations,
+    selectedUserOrg.value,
+    setSelectedUserOrg,
+    userAndOrganizations,
+  ]);
 
   return (
     <Combobox

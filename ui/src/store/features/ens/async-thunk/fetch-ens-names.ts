@@ -1,6 +1,9 @@
+/* eslint-disable no-console */
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { Ethereum } from '@/integrations';
 import { RootState } from '@/store';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { ensActions } from '../ens-slice';
 
 export const fetchEnsNamesThunk = createAsyncThunk<void, `0x${string}`>(

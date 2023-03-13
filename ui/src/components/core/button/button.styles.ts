@@ -1,5 +1,6 @@
-import { dripStitches } from '../../../theme';
 import { CSS } from '@stitches/react';
+
+import { dripStitches } from '../../../theme';
 
 type StyledButtonProps = React.ComponentProps<typeof StyledButton>;
 export interface ButtonProps extends StyledButtonProps {

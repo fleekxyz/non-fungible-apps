@@ -1,7 +1,8 @@
+import { forwardRef } from 'react';
+
 import { ButtonProps, StyledButton } from './button.styles';
 import { ButtonContent } from './button-content';
 import { ButtonSpinner } from './button-spinner';
-import { forwardRef } from 'react';
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
@@ -76,3 +77,5 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
+
+Button.displayName = 'Button';

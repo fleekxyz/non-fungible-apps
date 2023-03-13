@@ -1,6 +1,6 @@
 import { DropdownItem } from '@/components';
-import { MintCardHeader } from '@/views/mint/mint-card';
 import { Mint } from '@/views/mint/mint.context';
+import { MintCardHeader } from '@/views/mint/mint-card';
 
 export const RepoConfigurationHeader = () => {
   const { setGithubStep, setBranchName, setCommitHash } = Mint.useContext();

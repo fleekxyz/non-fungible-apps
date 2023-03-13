@@ -1,5 +1,6 @@
-import { Button, Icon, Stepper } from '@/components';
 import { ConnectKitButton } from 'connectkit';
+
+import { Button, Icon, Stepper } from '@/components';
 
 export const ConnectWalletButton = () => {
   const { nextStep } = Stepper.useContext();

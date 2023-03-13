@@ -1,8 +1,8 @@
+import { dripStitches } from '../../../theme';
 import { Flex } from '../../layout';
+import { Icon as IconComponent } from '../icon';
 import { Button } from './button';
 import { IconButton } from './icon-button';
-import { Icon as IconComponent } from '../icon';
-import { dripStitches } from '../../../theme';
 
 export default {
   title: 'Components/Button',
