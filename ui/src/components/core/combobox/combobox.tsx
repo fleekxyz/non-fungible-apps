@@ -31,7 +31,7 @@ const ComboboxInput = ({
   handleInputChange,
   handleInputClick,
 }: ComboboxInputProps) => (
-  <div className="relative w-full  ">
+  <div className="relative w-full">
     <Icon
       name={leftIcon}
       size="sm"
