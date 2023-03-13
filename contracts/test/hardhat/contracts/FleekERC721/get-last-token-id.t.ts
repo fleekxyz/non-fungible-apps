@@ -1,15 +1,17 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures, Errors } from './helpers';
-import { ethers } from 'hardhat';
-
-const { MintParams, Roles } = TestConstants;
+import {
+  TestConstants,
+  Fixtures,
+  Errors,
+  OverloadedFunctions,
+} from './helpers';
 
 describe('FleekERC721.GetLastTokenId', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.default>>;
 
   const mint = async () => {
-    const response = await fixture.contract.mint(
+    const response = await fixture.contract[OverloadedFunctions.Mint.Default](
       fixture.owner.address,
       TestConstants.MintParams.name,
       TestConstants.MintParams.description,
@@ -18,8 +20,7 @@ describe('FleekERC721.GetLastTokenId', () => {
       TestConstants.MintParams.commitHash,
       TestConstants.MintParams.gitRepository,
       TestConstants.MintParams.logo,
-      TestConstants.MintParams.color,
-      false
+      TestConstants.MintParams.color
     );
 
     return response;

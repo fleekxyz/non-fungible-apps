@@ -5,6 +5,11 @@ import {
 import { BytesLike } from 'ethers';
 import { Ethereum } from '../ethereum';
 
+enum Billing {
+  Mint,
+  AddAccessPoint,
+}
+
 enum CollectionRoles {
   Owner,
   Verifier,
@@ -16,6 +21,12 @@ enum TokenRoles {
 
 export const FleekERC721 = {
   contract: Ethereum.getContract('FleekERC721'),
+
+  Enums: {
+    Billing,
+    CollectionRoles,
+    TokenRoles,
+  },
 
   async mint(
     params: FleekERC721.MintParams,
@@ -36,9 +47,7 @@ export const FleekERC721 = {
   },
 
   async tokenMetadata(tokenId: number): Promise<FleekERC721.Metadata> {
-    const contract = Ethereum.getContract('FleekERC721');
-
-    const response = await contract.tokenURI(Number(tokenId));
+    const response = await this.contract.tokenURI(Number(tokenId));
 
     const parsed = JSON.parse(
       Buffer.from(response.slice(29), 'base64')
@@ -50,8 +59,15 @@ export const FleekERC721 = {
   },
 
   async lastTokenId(): Promise<number> {
-    // TODO: fetch last token id
-    return 7;
+    const contract = Ethereum.getContract('FleekERC721');
+
+    return contract.getLastTokenId();
+  },
+
+  async getBilling(key: keyof typeof Billing): Promise<string> {
+    const contract = Ethereum.getContract('FleekERC721');
+
+    return (await contract.getBilling(this.Enums.Billing[key])).toString();
   },
 
   parseError(error: BytesLike): FleekERC721.TransactionError {

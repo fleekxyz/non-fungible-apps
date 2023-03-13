@@ -2,10 +2,11 @@ import { useState } from 'react';
 
 import { ComboboxItem, DropdownItem } from '@/components';
 import { EthereumHooks } from '@/integrations';
-import { GithubState } from '@/store';
+import { GithubState, useFleekERC721Billing } from '@/store';
 import { AppLog, createContext } from '@/utils';
 
 export type MintContext = {
+  billing: string | undefined;
   selectedUserOrg: ComboboxItem;
   repositoryName: GithubState.Repository;
   branchName: DropdownItem; //get value from DropdownItem to mint
@@ -68,6 +69,7 @@ export abstract class Mint {
     const [ens, setEns] = useState({} as ComboboxItem);
     const [domain, setDomain] = useState('');
     const [verifyNFA, setVerifyNFA] = useState(true);
+    const [billing] = useFleekERC721Billing('Mint');
 
     //Field validations
     const [ensError, setEnsError] = useState<string>('');
@@ -81,6 +83,7 @@ export abstract class Mint {
     return (
       <MintProvider
         value={{
+          billing,
           selectedUserOrg,
           repositoryName,
           branchName,
