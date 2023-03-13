@@ -5,6 +5,7 @@ import { ConnectKitButton } from 'connectkit';
 import { MintTest } from './views/mint-test';
 import { ToastProvider } from './components';
 import { CreateAP } from './views/access-point';
+import { NavBar } from './components/layout/nav-bar/nav-bar';
 
 export const App = () => {
   themeGlobals();
@@ -12,10 +13,11 @@ export const App = () => {
     <>
       <div style={{ position: 'absolute', top: '1.25rem', left: '1.25rem' }}>
         {/* TODO remove after adding NavBar */}
-        <ConnectKitButton />
+        {/* <ConnectKitButton /> */}
       </div>
       <ToastProvider />
       <HashRouter>
+        <NavBar />
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/mint" element={<Mint />} />
