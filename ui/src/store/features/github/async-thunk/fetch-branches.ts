@@ -1,5 +1,6 @@
 import { DropdownItem } from '@/components';
 import { githubActions, RootState } from '@/store';
+import { AppLog } from '@/utils';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { GithubClient } from '../github-client';
 
@@ -24,7 +25,9 @@ export const fetchBranchesThunk = createAsyncThunk<void, FetchBranches>(
 
       dispatch(githubActions.setBranches(branches as DropdownItem[]));
     } catch (error) {
-      console.log(error);
+      AppLog.errorToast(
+        'We have a problem trying to get your branches. Please try again later.'
+      );
       dispatch(githubActions.setQueryState('failed'));
     }
   }

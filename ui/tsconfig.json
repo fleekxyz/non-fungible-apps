@@ -7,7 +7,9 @@
     "rootDirs": ["src"],
     "baseUrl": "src",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["*"],
+      "@/graphclient": ["../.graphclient"],
+      "@/graphclient/*": ["../.graphclient/*"]
     },
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
@@ -21,5 +23,5 @@
     "isolatedModules": true,
     "types": ["vite/client"]
   },
-  "include": ["./src", "./*.ts"]
+  "include": ["./src", "./.graphclient", "./*.ts", "./tailwind.config.js"]
 }

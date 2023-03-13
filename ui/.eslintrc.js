@@ -4,19 +4,16 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    'eslint:recommended',
+    '../.eslintrc.js',
     'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
     'plugin:react-hooks/recommended',
   ],
-  overrides: [],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'simple-import-sort'],
+  plugins: ['react', 'simple-import-sort'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': [
       'error',
@@ -26,8 +23,7 @@ module.exports = {
     ],
     '@typescript-eslint/no-namespace': 'off',
     'simple-import-sort/imports': 2,
-    '@typescript-eslint/explicit-function-return-type': 'off',
     'no-console': 'error',
-    'unused-imports/no-unused-imports-ts': 'error',
+    'react/react-in-jsx-scope': 'off',
   },
 };

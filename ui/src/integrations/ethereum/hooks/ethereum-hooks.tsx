@@ -19,7 +19,10 @@ const createWriteContractContext = <
   TAbi extends EthereumHooks.Abi,
   TArgumentsMap extends EthereumHooks.WriteContext.ArgumentsMap,
   TFunctionName extends keyof TArgumentsMap & string,
-  TFunctionArguments extends TArgumentsMap[TFunctionName]
+  TFunctionArguments extends [
+    ...TArgumentsMap[TFunctionName],
+    EthereumHooks.WriteContext.SettingsParam
+  ]
 >(
   address: string,
   abi: TAbi,
@@ -89,7 +92,10 @@ export const EthereumHooks = {
    */
   createFleekERC721WriteContext: <
     TFunctionName extends keyof ArgumentsMaps.FleekERC721 & string,
-    TFunctionArguments extends ArgumentsMaps.FleekERC721[TFunctionName]
+    TFunctionArguments extends [
+      ...ArgumentsMaps.FleekERC721[TFunctionName],
+      EthereumHooks.WriteContext.SettingsParam
+    ]
   >(
     functionName: TFunctionName
   ) => {
@@ -115,7 +121,10 @@ export namespace EthereumHooks {
       TAbi extends Abi,
       TArgumentsMap extends ArgumentsMap,
       TFunctionName extends keyof TArgumentsMap & string,
-      TFunctionArguments extends TArgumentsMap[TFunctionName]
+      TFunctionArguments extends [
+        ...TArgumentsMap[TFunctionName],
+        EthereumHooks.WriteContext.SettingsParam
+      ]
     > {
       functionName: TFunctionName;
       prepare: ReturnType<
@@ -147,6 +156,8 @@ export namespace EthereumHooks {
       children?: React.ReactNode | React.ReactNode[];
       config?: ProviderConfig<TFunctionName>;
     }
+
+    export type SettingsParam = { value?: string };
   }
 }
 

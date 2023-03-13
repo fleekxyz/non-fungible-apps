@@ -1,5 +1,6 @@
 import { Icon, IconButton, Stepper } from '@/components';
 import { useTransactionCost } from '@/hooks';
+import { FleekERC721 } from '@/integrations';
 import { Mint } from '@/views/mint/mint.context';
 import { ethers } from 'ethers';
 import { useMemo } from 'react';
@@ -8,7 +9,7 @@ import { NftCard } from '../nft-card';
 export const MintPreview = () => {
   const { prevStep } = Stepper.useContext();
   const {
-    prepare: { status: prepareStatus, data: prepareData },
+    prepare: { status: prepareStatus, data: prepareData, error: prepareError },
     write: { status: writeStatus, write },
     transaction: { status: transactionStatus },
   } = Mint.useTransactionContext();
@@ -23,6 +24,18 @@ export const MintPreview = () => {
   const message = useMemo(() => {
     if (isCostLoading || prepareStatus === 'loading')
       return 'Calculating cost...';
+
+    // TODO: better UI for prepare errors
+    if (prepareError) {
+      const parsedError = FleekERC721.parseError(
+        (prepareError as any).error?.data.data
+      );
+      if (parsedError.isIdentified) {
+        return parsedError.message;
+      }
+
+      return 'An error occurred while preparing the transaction';
+    }
 
     const formattedCost = ethers.utils.formatEther(cost).slice(0, 9);
     return `Minting this NFA will cost ${formattedCost} ${currency}.`;
@@ -59,7 +72,7 @@ export const MintPreview = () => {
       }
       message={message}
       buttonText="Mint NFA"
-      onClick={write!}
+      onClick={write}
       isLoading={isLoading}
     />
   );

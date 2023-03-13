@@ -1,5 +1,6 @@
 import { ComboboxItem } from '@/components';
 import { RootState } from '@/store';
+import { AppLog } from '@/utils';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { GithubClient, UserData } from '../github-client';
 import { githubActions } from '../github-slice';
@@ -36,7 +37,7 @@ export const fetchUserAndOrgsThunk = createAsyncThunk(
 
       dispatch(githubActions.setUserAndOrgs(comboboxItems));
     } catch (error) {
-      console.log(error);
+      AppLog.errorToast('We have a problem. Please try again later.');
       dispatch(githubActions.setQueryState('failed'));
     }
   }
