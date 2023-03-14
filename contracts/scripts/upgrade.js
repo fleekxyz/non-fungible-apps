@@ -1,4 +1,4 @@
-// npx hardhat run scripts/upgrade.js --network mumbai
+// npx hardhat run scripts/upgrade.js --network sepolia
 const { getContract } = require('./util');
 
 // TODO: make this arguments

@@ -11,8 +11,10 @@
     "node:hardhat": "hardhat node",
     "deploy:hardhat": "hardhat deploy --network hardhat",
     "deploy:mumbai": "hardhat deploy --network mumbai",
+    "deploy:sepolia": "hardhat deploy --network sepolia",
     "compile": "hardhat compile",
-    "verify:mumbai": "npx hardhat run ./scripts/verify-polyscan.js --network mumbai"
+    "verify:mumbai": "npx hardhat run ./scripts/verify-contracts.js --network mumbai",
+    "verify:sepolia": "npx hardhat run ./scripts/verify-contracts.js --network sepolia"
   },
   "repository": {
     "type": "git",

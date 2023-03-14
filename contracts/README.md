@@ -140,7 +140,7 @@ $ yarn deploy:hardhat
 
 If the execution is successful, you will see the contract address on your screen.
 
-### **Polygon Mumbai Testnet**
+### **Ethereum Sepolia Testnet**
 
 To deploy the contract on the testnet, you have to first export your wallet's private key and update the `.env.example` file at the root directory of this repository.
 
@@ -149,10 +149,10 @@ The [.env.example](./.env.example) file needs to be renamed to `.env` before con
 After updating the `.env` file, you can run:
 
 ```
-$ yarn deploy:mumbai
+$ yarn deploy:sepolia
 ```
 
-to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful. To reach more in-depth information about how to deploy contract checkout [this guide](https://wiki.polygon.technology/docs/develop/alchemy).
+to deploy the contract on the testnet. Please note that your wallet needs to hold enough Sepolia Ether for the deployment to be successful. To reach more in-depth information about how to deploy contract checkout [this guide](TODO: find url for faucuet/instructions for sep).
 
 ### **Deploy arguments**
 
@@ -172,9 +172,9 @@ $ yarn deploy:hardhat --new-proxy-instance --name "Fleek NFAs" --symbol "FKNFA" 
 ```
 
 <!-- TODO: add this section after the mainnet setup is done and tested
-**Polygon main-net**
+**Ethereum main-net**
 
-To deploy the contract on the testnet, you have to first export your wallet's private key and update the `.env.example` file at the root directory of this repository.
+To deploy the contract on the mainnet, you have to first export your wallet's private key and update the `.env.example` file at the root directory of this repository.
 
 The [.env.example](./.env.example) file needs to be renamed to `.env` before continuing. Make sure you are using your private API URL, if you have one.
 
@@ -184,12 +184,12 @@ After updating the `.env` file, you can run:
 yarn deploy:mainnet
 ```
 
-to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful.
+to deploy the contract on the testnet. Please note that your wallet needs to hold enough Ether for the deployment to be successful.
 -->
 
 ## ▶️ Interaction scripts
 
-Right away, in the [scripts](./scripts/) folder you are able to see some scripts that will help you to interact with deployed contracts. By default you are able to select `localhost`, `hardhat` or `mumbai` network name predefined on [hardhat.config.ts](./hardhat.config.ts). The scripts will be using the deployment information stored in the [deployments](./deployments/) folder. You should have a nested folder for each of the networks you have deployed it. The scripts needs be run using the Hardhat environment following the pattern:
+Right away, in the [scripts](./scripts/) folder you are able to see some scripts that will help you to interact with deployed contracts. By default you are able to select `localhost`, `hardhat` or `sepolia` network name predefined on [hardhat.config.ts](./hardhat.config.ts). The scripts will be using the deployment information stored in the [deployments](./deployments/) folder. You should have a nested folder for each of the networks you have deployed it. The scripts needs be run using the Hardhat environment following the pattern:
 
 ```bash
 # Replace <script_name> with the selected script
