@@ -12,7 +12,6 @@ export const MintStepper = () => {
     transaction: { isSuccess },
   } = Mint.useTransactionContext();
 
-  console.log('isSuccess', isSuccess);
 
   if (!isSuccess) {
     return (
