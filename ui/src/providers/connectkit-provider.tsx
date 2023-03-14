@@ -1,5 +1,5 @@
 import { WagmiConfig, createClient } from 'wagmi';
-import { polygonMumbai } from 'wagmi/chains';
+import { sepolia } from 'wagmi/chains';
 import {
   ConnectKitProvider as ConnectKitProviderLib,
   getDefaultClient,
@@ -7,7 +7,7 @@ import {
 import { env } from '@/constants';
 
 const alchemyId = env.alchemy.id;
-const chains = [polygonMumbai];
+const chains = [sepolia];
 
 const wagmiClient = createClient(
   getDefaultClient({

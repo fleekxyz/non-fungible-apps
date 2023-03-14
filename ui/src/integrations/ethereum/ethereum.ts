@@ -12,8 +12,7 @@ const config = {
 const alchemy = new Alchemy(config);
 
 export const Ethereum: Ethereum.Core = {
-  //TODO remove
-  defaultNetwork: 'https://rpc-mumbai.maticvigil.com', // TODO: make it environment variable
+  defaultNetwork: `https://eth-sepolia.g.alchemy.com/v2/${apiKey}`, // TODO: make it environment variable
 
   provider: {
     metamask:

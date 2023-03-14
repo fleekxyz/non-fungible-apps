@@ -36,7 +36,7 @@ export const MintStepper = () => {
           </Stepper.Step>
 
           <Stepper.Step>
-            <MintStep header="Review your NFA and mint it on Polygon">
+            <MintStep header="Review your NFA and mint it on Ethereum">
               <MintPreview />
             </MintStep>
           </Stepper.Step>
