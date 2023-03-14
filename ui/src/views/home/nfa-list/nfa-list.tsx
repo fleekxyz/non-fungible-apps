@@ -1,9 +1,11 @@
-import { lastMintsPaginatedDocument, totalTokensDocument } from '@/graphclient';
-import { Button, Card, Flex, NoResults } from '@/components';
-import { FleekERC721 } from '@/integrations/ethereum/contracts';
+/* eslint-disable react/react-in-jsx-scope */
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import { Button, Card, Flex, NoResults } from '@/components';
+import { lastMintsPaginatedDocument, totalTokensDocument } from '@/graphclient';
+import { FleekERC721 } from '@/integrations/ethereum/contracts';
 
 const pageSize = 10; //Set this size to test pagination
 
@@ -65,15 +67,19 @@ export const NFAList = () => {
           Next page
         </Button>
       </Flex>
-      <Flex css={{ gap: '$2' }}>
+      <div>
         {dataMintedTokens && dataMintedTokens.newMints.length > 0 ? (
           dataMintedTokens.newMints.map((mint) => (
-            <Card.Container key={mint.tokenId}>
+            <Card.Container
+              key={mint.tokenId}
+              css={{ display: 'inline-block', m: '$2' }}
+            >
               <Card.Heading title={mint.name} />
               <Card.Body css={{ display: 'flex', flexDirection: 'column' }}>
                 <a
                   target="_blank"
                   href={`https://testnets.opensea.io/assets/mumbai/${FleekERC721.address}/${mint.tokenId}`}
+                  rel="noreferrer"
                 >
                   <u>Open NFA on Opensea</u>
                 </a>
@@ -84,7 +90,7 @@ export const NFAList = () => {
         ) : (
           <NoResults />
         )}
-      </Flex>
+      </div>
     </Flex>
   );
 };
