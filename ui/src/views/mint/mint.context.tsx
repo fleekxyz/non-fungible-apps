@@ -118,7 +118,7 @@ export abstract class Mint {
           config={{
             transaction: {
               onSuccess: (data) => {
-                AppLog.info('Transaction hash: ' + data);
+                AppLog.info('Transaction:', data);
               },
               onError: (error) => {
                 AppLog.errorToast(error.message);
