@@ -4,7 +4,7 @@ import { NFAList } from './nfa-list/nfa-list';
 
 export const Home = () => {
   return (
-    <Flex css={{ flexDirection: 'column', margin: '$40' }}>
+    <Flex css={{ flexDirection: 'column', my: '$10' }}>
       <h1>Home</h1>
       <Link to="/mint">
         <u>Mint NFA!</u>

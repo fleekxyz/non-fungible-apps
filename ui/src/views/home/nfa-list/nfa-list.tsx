@@ -65,10 +65,13 @@ export const NFAList = () => {
           Next page
         </Button>
       </Flex>
-      <Flex css={{ gap: '$2' }}>
+      <div>
         {dataMintedTokens && dataMintedTokens.newMints.length > 0 ? (
           dataMintedTokens.newMints.map((mint) => (
-            <Card.Container key={mint.tokenId}>
+            <Card.Container
+              key={mint.tokenId}
+              css={{ display: 'inline-block', m: '$2' }}
+            >
               <Card.Heading title={mint.name} />
               <Card.Body css={{ display: 'flex', flexDirection: 'column' }}>
                 <a
@@ -84,7 +87,7 @@ export const NFAList = () => {
         ) : (
           <NoResults />
         )}
-      </Flex>
+      </div>
     </Flex>
   );
 };
