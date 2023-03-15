@@ -13,7 +13,7 @@ export abstract class PageStyles {
     minHeight: '85vh',
     maxWidth: '$7xl',
     margin: '0 auto',
-    padding: '$lg',
+    padding: '$10',
     display: 'grid',
   });
 }
