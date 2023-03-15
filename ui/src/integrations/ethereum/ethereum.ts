@@ -12,7 +12,7 @@ const config = {
 const alchemy = new Alchemy(config);
 
 export const Ethereum: Ethereum.Core = {
-  defaultNetwork: `https://eth-sepolia.g.alchemy.com/v2/${apiKey}`, // TODO: make it environment variable
+  defaultNetwork: env.sepolia.rpc, // TODO: make it environment variable
 
   provider: {
     metamask:
