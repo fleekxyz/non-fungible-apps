@@ -5,8 +5,7 @@ import { Mint as MintContext } from './mint.context';
 export const Mint = () => (
   <Flex
     css={{
-      height: '100%',
-      flexDirection: 'column',
+      flexGrow: 1,
       justifyContent: 'center',
       alignItems: 'center',
     }}

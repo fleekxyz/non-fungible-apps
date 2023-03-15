@@ -42,6 +42,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           ...(ownProps?.css || {}),
         }}
         {...ownProps}
+        as={ownProps.as || 'button'}
       >
         {isLoading && spinnerPlacement === 'start' && (
           <ButtonSpinner

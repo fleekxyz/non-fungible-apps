@@ -63,6 +63,10 @@ export interface ButtonProps extends StyledButtonProps {
    * @default "start"
    */
   spinnerPlacement?: 'start' | 'end';
+  /**
+   * The HTML element to render as (e.g. `"button"`).
+   */
+  as?: string | React.ComponentType<any>;
 }
 
 export type ButtonColor = 'gray' | 'blue';

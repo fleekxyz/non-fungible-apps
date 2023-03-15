@@ -6,7 +6,6 @@ export const themeGlobals = globalCss({
     padding: 0,
     color: '#ECEDEE',
     backgroundColor: 'black',
-    marginTop: '-50px', // TODO remove
 
     fontFamily: 'Manrope',
 

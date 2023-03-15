@@ -1,4 +1,5 @@
 import { dripStitches } from '@/theme';
+import { Flex } from '../flex.styles';
 
 const { styled } = dripStitches;
 export abstract class NavBarStyles {
@@ -11,14 +12,19 @@ export abstract class NavBarStyles {
     alignItems: 'center',
     backgroundColor: 'black',
     zIndex: '$sticky',
+    height: '$22',
   });
 
   static readonly Content = styled('div', {
     display: 'flex',
     width: '100%',
-    maxWidth: '1280px',
-    margin: 'auto',
+    maxWidth: '$7xl',
+    margin: '0 auto',
     alignItems: 'center',
-    padding: '$5',
+    padding: '$6',
+  });
+
+  static readonly Navigation = styled(Flex, {
+    gap: '$10',
   });
 }
