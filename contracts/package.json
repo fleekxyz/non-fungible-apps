@@ -11,8 +11,10 @@
     "node:hardhat": "hardhat node",
     "deploy:hardhat": "hardhat deploy --network hardhat",
     "deploy:mumbai": "hardhat deploy --network mumbai",
+    "deploy:goerli": "hardhat deploy --network goerli",
     "compile": "hardhat compile",
-    "verify:mumbai": "npx hardhat run ./scripts/verify-polyscan.js --network mumbai"
+    "verify:mumbai": "npx hardhat run ./scripts/verify-polyscan.js --network mumbai",
+    "verify:goerli": "npx hardhat run ./scripts/verify-polyscan.js --network goerli"
   },
   "repository": {
     "type": "git",

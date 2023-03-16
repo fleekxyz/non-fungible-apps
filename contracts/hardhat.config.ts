@@ -14,10 +14,12 @@ import deploy from './scripts/deploy';
 dotenv.config();
 
 const {
-  API_URL = 'https://polygon-mainnet.alchemyapi.io/v2/your-api-key',
+  POLYGON_API_URL,
+  ETH_GOERLI_API_URL,
   PRIVATE_KEY,
   REPORT_GAS,
   POLYGONSCAN_KEY,
+  ETHERSCAN_KEY
 } = process.env;
 
 const config: HardhatUserConfig = {
@@ -27,9 +29,15 @@ const config: HardhatUserConfig = {
       chainId: 31337,
     },
     mumbai: {
-      url: API_URL,
+      url: POLYGON_API_URL,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 80001,
+    },
+    goerli: {
+      url: ETH_GOERLI_API_URL,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      chainId: 5,
+      gasPrice: 40000
     },
   },
   gasReporter: {
@@ -62,6 +70,7 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       polygonMumbai: POLYGONSCAN_KEY,
+      goerli: ETHERSCAN_KEY
     },
   },
 };
