@@ -448,10 +448,26 @@ contract FleekERC721 is
      * - the sender must have `CollectionRoles.Verifier` role.
      *
      */
-    function setTokenVerified(uint256 tokenId, bool verified) public requireTokenVerifier(tokenId) {
+    function setTokenVerified(
+        uint256 tokenId,
+        bool verified
+    ) public requireCollectionRole(CollectionRoles.Verifier) requireTokenVerifier(tokenId) {
         _requireMinted(tokenId);
         _tokenVerified[tokenId] = verified;
         emit MetadataUpdate(tokenId, "verified", verified, msg.sender);
+    }
+
+    /**
+     * @dev Returns the verification status of a token.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     *
+     */
+    function isTokenVerified(uint256 tokenId) public view returns (bool) {
+        _requireMinted(tokenId);
+        return _tokenVerified[tokenId];
     }
 
     /*//////////////////////////////////////////////////////////////
