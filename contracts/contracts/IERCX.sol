@@ -52,21 +52,6 @@ interface IERCX {
     }
 
     /**
-     * @dev Mints a token and returns a tokenId.
-     */
-    function mint(
-        address to,
-        string memory name,
-        string memory description,
-        string memory externalURL,
-        string memory ENS,
-        string memory commitHash,
-        string memory gitRepository,
-        string memory logo,
-        uint24 color
-    ) external payable returns (uint256);
-
-    /**
      * @dev Sets a minted token's external URL.
      */
     function setTokenExternalURL(uint256 tokenId, string memory _tokenExternalURL) external;

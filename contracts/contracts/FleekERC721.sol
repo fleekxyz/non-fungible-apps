@@ -13,6 +13,7 @@ import "./util/FleekStrings.sol";
 import "./IERCX.sol";
 
 error MustBeTokenOwner(uint256 tokenId);
+error MustBeTokenVerifier(uint256 tokenId);
 error ThereIsNoTokenMinted();
 
 contract FleekERC721 is
@@ -43,8 +44,11 @@ contract FleekERC721 is
         address indexed owner
     );
 
+    event MetadataUpdate(uint256 indexed _tokenId, string key, address value, address indexed triggeredBy);
+
     uint256 private _appIds;
     mapping(uint256 => Token) private _apps;
+    mapping(uint256 => address) private _tokenVerifier;
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -58,6 +62,14 @@ contract FleekERC721 is
         __FleekAccessControl_init();
         __FleekBilling_init(initialBillings);
         __FleekPausable_init();
+    }
+
+    /**
+     * @dev Checks if caller is the verifier of the token.
+     */
+    modifier requireTokenVerifier(uint256 tokenId) {
+        if (_tokenVerifier[tokenId] != msg.sender) revert MustBeTokenVerifier(tokenId);
+        _;
     }
 
     /**
@@ -81,7 +93,9 @@ contract FleekERC721 is
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
-        uint24 color
+        uint24 color,
+        bool accessPointAutoApproval,
+        address verifier
     ) public payable requirePayment(Billing.Mint) returns (uint256) {
         uint256 tokenId = _appIds;
         _mint(to, tokenId);
@@ -99,6 +113,7 @@ contract FleekERC721 is
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
         app.builds[0] = Build(commitHash, gitRepository);
+
         emit NewMint(
             tokenId,
             name,
@@ -112,6 +127,10 @@ contract FleekERC721 is
             msg.sender,
             to
         );
+
+        _tokenVerifier[tokenId] = verifier;
+        _setAccessPointAutoApproval(tokenId, accessPointAutoApproval);
+
         return tokenId;
     }
 
@@ -380,29 +399,43 @@ contract FleekERC721 is
         }
     }
 
+    /**
+     * @dev Sets an address as verifier of a token.
+     * The verifier must have `CollectionRoles.Verifier` role.
+     *
+     * May emit a {MetadataUpdate} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must be the owner of the token.
+     * - the verifier must have `CollectionRoles.Verifier` role.
+     *
+     */
+    function setTokenVerifier(uint256 tokenId, address verifier) public requireTokenOwner(tokenId) {
+        if (!hasCollectionRole(CollectionRoles.Verifier, verifier))
+            revert MustHaveCollectionRole(uint8(CollectionRoles.Verifier));
+        _requireMinted(tokenId);
+        _tokenVerifier[tokenId] = verifier;
+        emit MetadataUpdate(tokenId, "verifier", verifier, msg.sender);
+    }
+
+    /**
+     * @dev Returns the verifier of a token.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     *
+     */
+    function getTokenVerifier(uint256 tokenId) public view returns (address) {
+        _requireMinted(tokenId);
+        return _tokenVerifier[tokenId];
+    }
+
     /*//////////////////////////////////////////////////////////////
         ACCESS POINTS
     //////////////////////////////////////////////////////////////*/
-
-    /**
-     * @dev Mints with access auto approval setting
-     */
-    function mint(
-        address to,
-        string memory name,
-        string memory description,
-        string memory externalURL,
-        string memory ENS,
-        string memory commitHash,
-        string memory gitRepository,
-        string memory logo,
-        uint24 color,
-        bool accessPointAutoApproval
-    ) public payable returns (uint256) {
-        uint256 tokenId = mint(to, name, description, externalURL, ENS, commitHash, gitRepository, logo, color);
-        _setAccessPointAutoApproval(tokenId, accessPointAutoApproval);
-        return tokenId;
-    }
 
     /**
      * @dev Add a new AccessPoint register for an app token.
@@ -494,7 +527,7 @@ contract FleekERC721 is
     function setAccessPointContentVerify(
         string memory apName,
         bool verified
-    ) public requireCollectionRole(CollectionRoles.Verifier) {
+    ) public requireCollectionRole(CollectionRoles.Verifier) requireTokenVerifier(_getAccessPointTokenId(apName)) {
         _setAccessPointContentVerify(apName, verified);
     }
 
@@ -512,7 +545,7 @@ contract FleekERC721 is
     function setAccessPointNameVerify(
         string memory apName,
         bool verified
-    ) public requireCollectionRole(CollectionRoles.Verifier) {
+    ) public requireCollectionRole(CollectionRoles.Verifier) requireTokenVerifier(_getAccessPointTokenId(apName)) {
         _setAccessPointNameVerify(apName, verified);
     }
 

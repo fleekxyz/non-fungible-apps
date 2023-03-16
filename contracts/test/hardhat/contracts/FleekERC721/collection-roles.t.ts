@@ -1,11 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import {
-  TestConstants,
-  Fixtures,
-  Errors,
-  OverloadedFunctions,
-} from './helpers';
+import { TestConstants, Fixtures, Errors } from './helpers';
 
 const { CollectionRoles } = TestConstants;
 
@@ -182,9 +177,9 @@ describe('FleekERC721.CollectionRoles', () => {
   });
 
   it('should not be able to verify access point if not verifier', async () => {
-    const { contract, otherAccount } = fixture;
+    const { contract, otherAccount, owner } = fixture;
 
-    await contract[OverloadedFunctions.Mint.Default](
+    await contract.mint(
       otherAccount.address,
       TestConstants.MintParams.name,
       TestConstants.MintParams.description,
@@ -193,7 +188,9 @@ describe('FleekERC721.CollectionRoles', () => {
       TestConstants.MintParams.commitHash,
       TestConstants.MintParams.gitRepository,
       TestConstants.MintParams.logo,
-      TestConstants.MintParams.color
+      TestConstants.MintParams.color,
+      TestConstants.MintParams.accessPointAutoApprovalSettings,
+      owner.address
     );
 
     await contract.addAccessPoint(0, 'random.com');

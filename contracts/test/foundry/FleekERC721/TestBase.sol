@@ -61,7 +61,8 @@ abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
             TestConstants.APP_GIT_REPOSITORY,
             TestConstants.LOGO_0,
             TestConstants.APP_COLOR,
-            false // Auto Approval Is OFF
+            false, // Auto Approval Is OFF
+            deployer
         );
 
         return mint;
