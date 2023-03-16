@@ -1,6 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures, OverloadedFunctions } from './helpers';
+import { TestConstants, Fixtures } from './helpers';
 import { ethers } from 'hardhat';
 
 const { MintParams } = TestConstants;
@@ -9,7 +9,7 @@ describe('FleekERC721.Minting', () => {
   it('should be able to mint a new token', async () => {
     const { owner, contract } = await loadFixture(Fixtures.default);
 
-    const response = await contract[OverloadedFunctions.Mint.Default](
+    const response = await contract.mint(
       owner.address,
       MintParams.name,
       MintParams.description,
@@ -32,7 +32,7 @@ describe('FleekERC721.Minting', () => {
       Fixtures.default
     );
 
-    const response = await contract[OverloadedFunctions.Mint.Default](
+    const response = await contract.mint(
       owner.address,
       MintParams.name,
       MintParams.description,

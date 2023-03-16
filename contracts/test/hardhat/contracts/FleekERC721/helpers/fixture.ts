@@ -1,10 +1,7 @@
 import { ethers, upgrades } from 'hardhat';
 import { TestConstants } from './constants';
-import { OverloadedFunctions } from './overloaded-functions';
 
 export abstract class Fixtures {
-  static async paused() {}
-
   static async default() {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
@@ -36,9 +33,7 @@ export abstract class Fixtures {
   static async withMint() {
     const fromDefault = await Fixtures.default();
 
-    const response = await fromDefault.contract[
-      OverloadedFunctions.Mint.Default
-    ](
+    const response = await fromDefault.contract.mint(
       fromDefault.owner.address,
       TestConstants.MintParams.name,
       TestConstants.MintParams.description,
