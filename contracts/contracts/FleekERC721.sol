@@ -93,7 +93,9 @@ contract FleekERC721 is
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
-        uint24 color
+        uint24 color,
+        bool accessPointAutoApproval,
+        address verifier
     ) public payable requirePayment(Billing.Mint) returns (uint256) {
         uint256 tokenId = _appIds;
         _mint(to, tokenId);
@@ -111,6 +113,7 @@ contract FleekERC721 is
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
         app.builds[0] = Build(commitHash, gitRepository);
+
         emit NewMint(
             tokenId,
             name,
@@ -124,26 +127,6 @@ contract FleekERC721 is
             msg.sender,
             to
         );
-        return tokenId;
-    }
-
-    /**
-     * @dev Mints with access auto approval setting
-     */
-    function mint(
-        address to,
-        string memory name,
-        string memory description,
-        string memory externalURL,
-        string memory ENS,
-        string memory commitHash,
-        string memory gitRepository,
-        string memory logo,
-        uint24 color,
-        bool accessPointAutoApproval,
-        address verifier
-    ) public payable returns (uint256) {
-        uint256 tokenId = mint(to, name, description, externalURL, ENS, commitHash, gitRepository, logo, color);
 
         _tokenVerifier[tokenId] = verifier;
         _setAccessPointAutoApproval(tokenId, accessPointAutoApproval);
