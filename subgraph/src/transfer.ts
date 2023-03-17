@@ -1,6 +1,7 @@
 import {
     Bytes,
     log,
+    store
 } from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]

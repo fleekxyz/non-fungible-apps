@@ -46,6 +46,8 @@ export function handleNewAccessPoint(event: NewAccessPointEvent): void {
         if (!ownerEntity) {
                 // Create a new owner entity
                 ownerEntity = new Owner(event.params.owner);
+                // Since no CollectionRoleChanged event was emitted before for this address, we can set `collection` to false.
+                ownerEntity.collection = false;
         }
 
         // Save entities.
