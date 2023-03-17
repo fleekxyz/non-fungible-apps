@@ -14,13 +14,14 @@ import deploy from './scripts/deploy';
 dotenv.config();
 
 const {
-  POLYGON_API_URL = 'https://polygon-mainnet.alchemyapi.io/v2/your-api-key',
-  ETH_MAIN_API_URL = 'https://ethereum-mainnet.alchemyapi.io/v2/your-api-key', // TODO:test
-  ETH_SEPOLIA_API_URL = 'https://ethereum-sepolia.alchemyapi.io/v2/your-api-key', // TODO:test
+  POLYGON_API_URL,
+  ETH_MAIN_API_URL,
+  ETH_SEPOLIA_API_URL,
   PRIVATE_KEY,
   REPORT_GAS,
   POLYGONSCAN_KEY,
   ETHERSCAN_KEY,
+  SEPOLIA_ETHERSCAN_KEY
 } = process.env;
 
 const config: HardhatUserConfig = {
@@ -76,6 +77,7 @@ const config: HardhatUserConfig = {
     apiKey: {
       polygonMumbai: POLYGONSCAN_KEY,
       ethereumMainnet: ETHERSCAN_KEY,
+      sepolia: SEPOLIA_ETHERSCAN_KEY,
     },
   },
 };
