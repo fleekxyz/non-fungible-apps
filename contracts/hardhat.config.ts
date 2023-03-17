@@ -17,7 +17,7 @@ const {
   API_URL = 'https://polygon-mainnet.alchemyapi.io/v2/your-api-key',
   PRIVATE_KEY,
   REPORT_GAS,
-  POLYGONSCAN_KEY,
+  ETHERSCAN_API_KEY,
 } = process.env;
 
 const config: HardhatUserConfig = {
@@ -30,6 +30,11 @@ const config: HardhatUserConfig = {
       url: API_URL,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 80001,
+    },
+    goerli: {
+      url: API_URL,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      chainId: 5,
     },
   },
   gasReporter: {
@@ -60,9 +65,10 @@ const config: HardhatUserConfig = {
     timeout: 200000, // 200 seconds max for running tests
   },
   etherscan: {
-    apiKey: {
-      polygonMumbai: POLYGONSCAN_KEY,
-    },
+    // apiKey: {
+    //   polygonMumbai: POLYGONSCAN_KEY,
+    // },
+    apiKey: ETHERSCAN_API_KEY,
   },
 };
 
