@@ -1,4 +1,4 @@
-import { Button, Card, Grid, Stepper } from '@/components';
+import { Button, Card, Form, Grid, Stepper } from '@/components';
 import { Mint } from '../../mint.context';
 import {
   LogoField,
@@ -10,21 +10,37 @@ import { MintCardHeader } from '../../mint-card';
 import { useAccount } from 'wagmi';
 import { parseColorToNumber } from './form.utils';
 import { AppLog } from '@/utils';
+import { useMintFormContext } from './mint-form.context';
 
 export const MintFormStep = () => {
+  const {
+    form: {
+      appName: {
+        value: [appName],
+      },
+      appDescription: {
+        value: [appDescription],
+      },
+      appLogo: {
+        value: [appLogo],
+      },
+      ens: {
+        value: [ens],
+      },
+      domainURL: {
+        value: [domainURL],
+      },
+      isValid: [isValid, setIsValid],
+    },
+  } = useMintFormContext();
   const { address } = useAccount();
   const { nextStep } = Stepper.useContext();
   const {
     billing,
-    appName,
-    appDescription,
-    domain,
-    appLogo,
     branchName,
     commitHash,
-    ens,
-    logoColor,
     repositoryName,
+    logoColor,
     verifyNFA,
     setNfaStep,
   } = Mint.useContext();
@@ -41,8 +57,8 @@ export const MintFormStep = () => {
       address,
       appName,
       appDescription,
-      domain,
-      ens.value,
+      domainURL,
+      ens,
       commitHash,
       `${repositoryName.url}/tree/${branchName.label}`,
       appLogo,
@@ -67,14 +83,16 @@ export const MintFormStep = () => {
             rowGap: '$6',
           }}
         >
-          <Grid css={{ rowGap: '$4' }}>
-            <AppNameField />
-            <AppDescriptionField />
-            <LogoField />
-            <EnsDomainField />
-          </Grid>
+          <Form.Root onValidationChange={setIsValid}>
+            <Grid css={{ rowGap: '$4' }}>
+              <AppNameField />
+              <AppDescriptionField />
+              <LogoField />
+              <EnsDomainField />
+            </Grid>
+          </Form.Root>
           <Button
-            disabled={!appName || !appDescription || !domain}
+            disabled={!isValid}
             colorScheme="blue"
             variant="solid"
             onClick={handleNextStep}

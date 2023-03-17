@@ -1,5 +1,6 @@
 import { Avatar, Combobox, ComboboxItem } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
+import { AppLog } from '@/utils';
 import { Mint } from '@/views/mint/mint.context';
 import { useEffect } from 'react';
 
@@ -7,7 +8,8 @@ export const UserOrgsCombobox = () => {
   const { queryUserAndOrganizations, userAndOrganizations } = useGithubStore();
   const dispatch = useAppDispatch();
 
-  const { selectedUserOrg, setSelectedUserOrg } = Mint.useContext();
+  const { selectedUserOrg, setSelectedUserOrg, setRepositoryOwner } =
+    Mint.useContext();
 
   useEffect(() => {
     if (queryUserAndOrganizations === 'idle') {
@@ -15,21 +17,30 @@ export const UserOrgsCombobox = () => {
     }
   }, [dispatch, queryUserAndOrganizations]);
 
-  const handleUserOrgChange = (item: ComboboxItem) => {
-    dispatch(githubActions.fetchRepositoriesThunk(item.value));
-    setSelectedUserOrg(item);
+  const handleUserOrgChange = (item: string) => {
+    const ownerRepository = userAndOrganizations.find(
+      (org) => org.value === item
+    )?.label;
+    if (ownerRepository) {
+      setRepositoryOwner(ownerRepository);
+      dispatch(githubActions.fetchRepositoriesThunk(item));
+      setSelectedUserOrg(item);
+    } else {
+      AppLog.errorToast('Error selecting user/org. Try again');
+    }
   };
 
   useEffect(() => {
     if (
       queryUserAndOrganizations === 'success' &&
-      selectedUserOrg.value === undefined &&
+      selectedUserOrg === '' &&
       userAndOrganizations.length > 0
     ) {
       //SET first user
-      setSelectedUserOrg(userAndOrganizations[0]);
+      setSelectedUserOrg(userAndOrganizations[0].value);
+      setRepositoryOwner(userAndOrganizations[0].label);
     }
-  }, [queryUserAndOrganizations]);
+  }, [queryUserAndOrganizations, selectedUserOrg, userAndOrganizations]);
 
   return (
     <Combobox

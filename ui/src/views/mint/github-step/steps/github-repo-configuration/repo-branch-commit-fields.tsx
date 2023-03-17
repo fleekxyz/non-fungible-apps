@@ -1,26 +1,23 @@
 import { useEffect } from 'react';
-import { Combobox, ComboboxItem, Flex, Form, Spinner } from '@/components';
+import { Flex, Form, Spinner } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
+import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
 
 export const RepoBranchCommitFields = () => {
   const { queryLoading, branches } = useGithubStore();
   const dispatch = useAppDispatch();
-
   const {
-    repositoryName,
-    selectedUserOrg,
-    branchName,
-    commitHash,
-    setBranchName,
-    setCommitHash,
-  } = Mint.useContext();
+    form: { gitBranch, gitCommit },
+  } = useMintFormContext();
+
+  const { repositoryName, repositoryOwner } = Mint.useContext();
 
   useEffect(() => {
     if (queryLoading === 'idle') {
       dispatch(
         githubActions.fetchBranchesThunk({
-          owner: selectedUserOrg.label,
+          owner: repositoryOwner,
           repository: repositoryName.name,
         })
       );
@@ -35,20 +32,11 @@ export const RepoBranchCommitFields = () => {
           repositoryName.defaultBranch.toLowerCase()
       );
       if (defaultBranch) {
-        setBranchName(defaultBranch);
-        setCommitHash(defaultBranch.value);
+        // setBranchName(defaultBranch);
+        // setCommitHash(defaultBranch.value);
       }
     }
   }, [queryLoading, branches]);
-
-  const handleBranchChange = (dropdownOption: ComboboxItem) => {
-    setBranchName(dropdownOption);
-    setCommitHash(dropdownOption.value);
-  };
-
-  const handleCommitHashChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCommitHash(e.target.value);
-  };
 
   if (queryLoading === 'loading') {
     return (
@@ -66,22 +54,14 @@ export const RepoBranchCommitFields = () => {
 
   return (
     <>
-      <Form.Field>
+      <Form.Field context={gitBranch}>
         <Form.Label>Git Branch</Form.Label>
-        <Combobox
-          leftIcon="branch"
-          items={branches}
-          selectedValue={branchName}
-          onChange={handleBranchChange}
-        />
+        <Form.Combobox leftIcon="branch" items={branches} />
       </Form.Field>
-      <Form.Field>
+      <Form.Field context={gitCommit}>
         <Form.Label>Git Commit</Form.Label>
-        <Form.Input
-          placeholder="Select branch to get last commit"
-          value={commitHash}
-          onChange={handleCommitHashChange}
-        />
+        <Form.Input placeholder="Select branch to get last commit" />
+        <Form.Overline />
       </Form.Field>
     </>
   );

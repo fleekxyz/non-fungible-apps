@@ -29,15 +29,17 @@ export const RepoConfigurationBody = () => {
             </Button>
           }
         />
-        <RepoBranchCommitFields />
-        <Button
-          disabled={!branchName.value || !commitHash}
-          colorScheme="blue"
-          variant="solid"
-          onClick={handleContinueClick}
-        >
-          Continue
-        </Button>
+        <Form.Root onValidationChange={setIsValid}>
+          <RepoBranchCommitFields />
+          <Button
+            disabled={!branchName.value || !commitHash}
+            colorScheme="blue"
+            variant="solid"
+            onClick={handleContinueClick}
+          >
+            Continue
+          </Button>
+        </Form.Root>
       </Flex>
     </Card.Body>
   );

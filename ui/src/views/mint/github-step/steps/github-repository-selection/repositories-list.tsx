@@ -23,8 +23,8 @@ export const RepositoriesList = ({ searchValue }: RepositoriesListProps) => {
   }, [searchValue, repositories]);
 
   useEffect(() => {
-    if (queryLoading === 'idle' && selectedUserOrg.value) {
-      dispatch(githubActions.fetchRepositoriesThunk(selectedUserOrg.value));
+    if (queryLoading === 'idle' && selectedUserOrg) {
+      dispatch(githubActions.fetchRepositoriesThunk(selectedUserOrg));
     }
   }, [queryLoading, dispatch, selectedUserOrg]);
 

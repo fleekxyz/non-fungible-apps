@@ -3,9 +3,17 @@ import { useRef } from 'react';
 // @ts-ignore
 import ColorThief from 'colorthief';
 import { Mint } from '../../../../mint.context';
+import { useMintFormContext } from '../../mint-form.context';
 
 export const ColorPicker = () => {
-  const { appLogo, logoColor, setLogoColor } = Mint.useContext();
+  const {
+    form: {
+      appLogo: {
+        value: [appLogo],
+      },
+    },
+  } = useMintFormContext();
+  const { logoColor, setLogoColor } = Mint.useContext();
   const imageRef = useRef<HTMLImageElement>(null);
 
   const handleLogoLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {

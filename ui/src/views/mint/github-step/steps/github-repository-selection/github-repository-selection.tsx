@@ -1,10 +1,10 @@
-import { Card, ComboboxItem, Flex, Grid, Icon, Spinner } from '@/components';
+import { Card, Flex, Grid, Spinner } from '@/components';
 import { Input } from '@/components/core/input';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useGithubStore } from '@/store';
 import { MintCardHeader } from '@/views/mint/mint-card';
 import { Mint } from '@/views/mint/mint.context';
-import React, { forwardRef, useState } from 'react';
+import React, { useState } from 'react';
 import { RepositoriesList } from './repositories-list';
 import { UserOrgsCombobox } from './users-orgs-combobox';
 
@@ -39,7 +39,7 @@ export const GithubRepositoryConnection: React.FC = () => {
 
   const handlePrevStepClick = () => {
     setGithubStep(1);
-    setSelectedUserOrg({} as ComboboxItem);
+    setSelectedUserOrg('');
   };
 
   return (
