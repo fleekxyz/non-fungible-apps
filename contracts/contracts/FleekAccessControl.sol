@@ -14,7 +14,8 @@ contract FleekAccessControl is Initializable {
      * @dev All available collection roles.
      */
     enum CollectionRoles {
-        Owner
+        Owner,
+        Verifier
     }
 
     /**
@@ -78,6 +79,7 @@ contract FleekAccessControl is Initializable {
      */
     function __FleekAccessControl_init() internal onlyInitializing {
         _grantCollectionRole(CollectionRoles.Owner, msg.sender);
+        _grantCollectionRole(CollectionRoles.Verifier, msg.sender);
     }
 
     /**

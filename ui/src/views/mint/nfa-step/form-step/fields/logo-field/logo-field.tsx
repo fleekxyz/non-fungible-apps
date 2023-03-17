@@ -1,4 +1,5 @@
 import { Flex, Form } from '@/components';
+import { AppLog } from '@/utils';
 import { useState } from 'react';
 import { Mint } from '../../../../mint.context';
 import { fileToBase64, validateFileSize } from '../../form.utils';
@@ -16,9 +17,6 @@ export const LogoField = () => {
         const fileBase64 = await fileToBase64(file);
         setAppLogo(fileBase64);
         setErrorMessage(null);
-        //TODO remove console.log
-        // To send to the contract the logo needs to be a base64 string
-        console.log('Sending to contract:', fileBase64);
       } else {
         setAppLogo('');
         setLogoColor('');
@@ -29,7 +27,7 @@ export const LogoField = () => {
   return (
     <Flex css={{ width: '$full', gap: '$4h', alignItems: 'flex-start' }}>
       <Form.Field>
-        <Form.Label>Logo</Form.Label>
+        <Form.Label isRequired>Logo</Form.Label>
         <Form.LogoFileInput value={appLogo} onChange={handleFileChange} />
         {errorMessage && <Form.Error>{errorMessage}</Form.Error>}
       </Form.Field>

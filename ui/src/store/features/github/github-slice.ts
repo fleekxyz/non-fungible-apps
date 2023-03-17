@@ -2,13 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
 import * as asyncThunk from './async-thunk';
-import { DropdownItem } from '@/components';
+import { ComboboxItem } from '@/components';
 import { UserData } from './github-client';
 
 export namespace GithubState {
   export type Token = string;
 
-  export type State = 'disconnected' | 'loading' | 'connected';
+  export type State = 'disconnected' | 'loading' | 'connected' | 'failed';
 
   export type QueryUserAndOrganizations =
     | 'idle'
@@ -23,11 +23,12 @@ export namespace GithubState {
   export type Repository = {
     name: string;
     url: string;
+    defaultBranch: string;
   };
 
   export type Repositories = Array<Repository>;
 
-  export type Branches = Array<DropdownItem>;
+  export type Branches = Array<ComboboxItem>;
 }
 
 export interface GithubState {

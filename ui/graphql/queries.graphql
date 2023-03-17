@@ -1,0 +1,20 @@
+query lastMintsPaginated($pageSize: Int, $skip: Int) {
+  newMints(
+    first: $pageSize
+    skip: $skip
+    orderDirection: desc
+    orderBy: tokenId
+  ) {
+    id
+    tokenId
+    description
+    name
+  }
+}
+
+query totalTokens {
+  tokens {
+    id
+  }
+}
+

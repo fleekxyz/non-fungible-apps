@@ -36,7 +36,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             "https://github.com/a-different/repository",
             TestConstants.LOGO_1,
             0x654321,
-            false
+            false,
+            deployer
         );
 
         assertEq(firstMint, 0);
@@ -54,7 +55,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             "https://github.com/a-different/repository",
             TestConstants.LOGO_1,
             0x654321,
-            true
+            true,
+            deployer
         );
 
         assertEq(mint, 0);
@@ -91,7 +93,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             gitRepository,
             logo,
             color,
-            autoApprovalAp
+            autoApprovalAp,
+            deployer
         );
         assertEq(tokenId, 0);
         assertEq(CuT.ownerOf(tokenId), to);

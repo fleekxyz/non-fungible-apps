@@ -169,13 +169,22 @@ contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base, APConstants {
         CuT.addAccessPoint(tokenId, accessPointName);
 
         vm.startPrank(randomAddress);
-        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
         CuT.setAccessPointNameVerify(accessPointName, true);
-        expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
         CuT.setAccessPointContentVerify(accessPointName, true);
         vm.stopPrank();
 
-        CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, randomAddress);
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Verifier, randomAddress);
+
+        vm.startPrank(randomAddress);
+        expectRevertWithMustBeTokenVerifier(tokenId);
+        CuT.setAccessPointNameVerify(accessPointName, true);
+        expectRevertWithMustBeTokenVerifier(tokenId);
+        CuT.setAccessPointContentVerify(accessPointName, true);
+        vm.stopPrank();
+
+        CuT.setTokenVerifier(tokenId, randomAddress);
 
         vm.startPrank(randomAddress);
         CuT.setAccessPointNameVerify(accessPointName, true);

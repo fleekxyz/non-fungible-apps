@@ -1,4 +1,6 @@
+/* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: ['./src/**/*.tsx'],
   theme: {
@@ -17,6 +19,9 @@ module.exports = {
       },
       borderRadius: {
         xhl: '1.25rem',
+      },
+      maxWidth: {
+        70: '70%',
       },
       space: {
         '1h': '0.375rem',

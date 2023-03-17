@@ -23,11 +23,20 @@ To run the UI localy follow the steps:
    ```bash
    $ yarn
    ```
+
+   This also will generate the `.graphclient` folder. Every time you do a change on the queries files, you'll have to build again that folder, to do it run:
+
+   ```bash
+   $ yarn graphclient build
+   ```
+
 3. To use ConnecKit is neccessary get an [Alchemy ID](https://alchemy.com/), so create an App and get the credentials. Then set the following .env file
+
    ```bash
    VITE_ALCHEMY_API_KEY
    VITE_ALCHEMY_APP_NAME
    ```
+
    Also, you'll need to set up your firebase cretendials to make work the github login. Add to the .env file the following variables
 
    ```bash

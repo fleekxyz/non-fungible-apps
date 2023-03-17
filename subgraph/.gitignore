@@ -3,3 +3,4 @@ build
 generated
 abis
 examples/query/.graphclient
+tests/matchstick/.bin

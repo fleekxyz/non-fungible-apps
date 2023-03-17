@@ -1,6 +1,7 @@
 import { Button, Flex } from '@/components';
 import { Separator } from '@/components/core/separator.styles';
 import { EthereumHooks } from '@/integrations';
+import { AppLog } from '@/utils';
 import { ConnectKitButton } from 'connectkit';
 import { useAccount } from 'wagmi';
 
@@ -180,19 +181,19 @@ export const MintTest: React.FC = () => {
         // We can setup callbacks for every stage of the process in this config
         prepare: {
           onSuccess: (data) => {
-            console.log('Prepared', data);
+            AppLog.info('Prepared', data);
           },
         },
 
         write: {
           onSuccess: (data) => {
-            console.log('Mint sent', data);
+            AppLog.info('Mint sent', data);
           },
         },
 
         transaction: {
           onSuccess: (data) => {
-            console.log('Transaction success', data);
+            AppLog.info('Transaction success', data);
           },
         },
       }}

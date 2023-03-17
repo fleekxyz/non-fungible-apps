@@ -52,8 +52,10 @@ type DropdownButtonProps = {
 
 const DropdownButton = ({ selectedValue, open }: DropdownButtonProps) => (
   <Listbox.Button
-    className={`relative w-full cursor-default  bg-transparent border-solid border border-slate7  py-3 pl-3.5 pr-10 h-11 text-left focus:outline-none sm:text-sm ${
-      open ? 'border-b-0 rounded-t-xl bg-black border-slate6' : 'rounded-xl'
+    className={`relative w-full cursor-default border-solid border border-slate7  py-3 pl-3.5 pr-10 h-11 text-left focus:outline-none sm:text-sm ${
+      open
+        ? 'border-b-0 rounded-t-xl bg-black border-slate6'
+        : 'rounded-xl bg-transparent'
     }`}
   >
     <span

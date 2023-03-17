@@ -1,9 +1,9 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures, Errors } from './helpers';
+import { TestConstants, Fixtures } from './helpers';
 import { ethers } from 'hardhat';
 
-const { MintParams, CollectionRoles } = TestConstants;
+const { MintParams } = TestConstants;
 
 describe('FleekERC721.Minting', () => {
   it('should be able to mint a new token', async () => {
@@ -19,7 +19,8 @@ describe('FleekERC721.Minting', () => {
       MintParams.gitRepository,
       MintParams.logo,
       MintParams.color,
-      MintParams.accessPointAutoApprovalSettings
+      MintParams.accessPointAutoApprovalSettings,
+      owner.address
     );
 
     expect(response.value).to.be.instanceOf(ethers.BigNumber);
@@ -41,7 +42,8 @@ describe('FleekERC721.Minting', () => {
       MintParams.gitRepository,
       MintParams.logo,
       MintParams.color,
-      MintParams.accessPointAutoApprovalSettings
+      MintParams.accessPointAutoApprovalSettings,
+      owner.address
     );
 
     const tokenId = response.value.toNumber();

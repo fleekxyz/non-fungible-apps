@@ -1,10 +1,12 @@
-import { ComboboxItem, DropdownItem } from '@/components';
-import { GithubState } from '@/store';
-import { EthereumHooks } from '@/integrations';
-import { createContext } from '@/utils';
 import { useState } from 'react';
 
+import { ComboboxItem, DropdownItem } from '@/components';
+import { EthereumHooks } from '@/integrations';
+import { AppLog, createContext } from '@/utils';
+import { GithubState, useFleekERC721Billing } from '@/store';
+
 export type MintContext = {
+  billing: string | undefined;
   selectedUserOrg: ComboboxItem;
   repositoryName: GithubState.Repository;
   branchName: DropdownItem; //get value from DropdownItem to mint
@@ -15,9 +17,10 @@ export type MintContext = {
   appDescription: string;
   appLogo: string;
   logoColor: string;
-  ens: DropdownItem;
+  ens: ComboboxItem;
   domain: string;
   verifyNFA: boolean;
+  ensError: string;
   setGithubStep: (step: number) => void;
   setNfaStep: (step: number) => void;
   setSelectedUserOrg: (userOrg: ComboboxItem) => void;
@@ -28,9 +31,10 @@ export type MintContext = {
   setAppDescription: (description: string) => void;
   setAppLogo: (logo: string) => void;
   setLogoColor: (color: string) => void;
-  setEns: (ens: DropdownItem) => void;
+  setEns: (ens: ComboboxItem) => void;
   setDomain: (domain: string) => void;
   setVerifyNFA: (verify: boolean) => void;
+  setEnsError: (error: string) => void;
 };
 
 const [MintProvider, useContext] = createContext<MintContext>({
@@ -62,9 +66,13 @@ export abstract class Mint {
     const [appDescription, setAppDescription] = useState('');
     const [appLogo, setAppLogo] = useState('');
     const [logoColor, setLogoColor] = useState('');
-    const [ens, setEns] = useState({} as DropdownItem);
+    const [ens, setEns] = useState({} as ComboboxItem);
     const [domain, setDomain] = useState('');
     const [verifyNFA, setVerifyNFA] = useState(true);
+    const [billing] = useFleekERC721Billing('Mint');
+
+    //Field validations
+    const [ensError, setEnsError] = useState<string>('');
 
     const setGithubStep = (step: number): void => {
       if (step > 0 && step <= 3) {
@@ -75,6 +83,7 @@ export abstract class Mint {
     return (
       <MintProvider
         value={{
+          billing,
           selectedUserOrg,
           repositoryName,
           branchName,
@@ -88,6 +97,7 @@ export abstract class Mint {
           ens,
           domain,
           verifyNFA,
+          ensError,
           setSelectedUserOrg,
           setGithubStep,
           setNfaStep,
@@ -101,14 +111,17 @@ export abstract class Mint {
           setEns,
           setDomain,
           setVerifyNFA,
+          setEnsError,
         }}
       >
         <TransactionProvider
           config={{
             transaction: {
               onSuccess: (data) => {
-                console.log('Successfully minted! what now?', data);
-                alert('transaction hash: ' + data.transactionHash);
+                AppLog.info('Transaction:', data);
+              },
+              onError: (error) => {
+                AppLog.errorToast(error.message);
               },
             },
           }}

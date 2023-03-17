@@ -2,8 +2,6 @@ import { ethers, upgrades } from 'hardhat';
 import { TestConstants } from './constants';
 
 export abstract class Fixtures {
-  static async paused() {}
-
   static async default() {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
@@ -45,7 +43,8 @@ export abstract class Fixtures {
       TestConstants.MintParams.gitRepository,
       TestConstants.MintParams.logo,
       TestConstants.MintParams.color,
-      TestConstants.MintParams.accessPointAutoApprovalSettings
+      TestConstants.MintParams.accessPointAutoApprovalSettings,
+      fromDefault.owner.address
     );
 
     const tokenId = response.value.toNumber();
