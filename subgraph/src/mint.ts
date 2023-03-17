@@ -53,8 +53,17 @@ export function handleNewMint(event: NewMintEvent): void {
     newMintEntity.save();
     log.error('{}', [tokenId.toString()]);
 
-    // Create Token
+    // Create Token, Owner, and Controller entities
+
+    let owner = Owner.load(ownerAddress);
     let token = new Token(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
+
+    if (!owner) {
+        // Create a new owner entity
+        owner = new Owner(ownerAddress);
+        // Since no CollectionRoleChanged event was emitted before for this address, we can set `collection` to false.
+        owner.collection = false;
+    }
 
     // Populate Token with data from the event
     token.tokenId = tokenId;
@@ -75,6 +84,7 @@ export function handleNewMint(event: NewMintEvent): void {
     token.mintedBy = event.params.minter;
     token.controllers = [ownerAddress];
 
-    // Save entity
+    // Save entities
+    owner.save();
     token.save();
 }
