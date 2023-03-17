@@ -32,6 +32,7 @@ export function handleNewMint(event: NewMintEvent): void {
     let accessPointAutoApproval = event.params.accessPointAutoApproval;
     let tokenId = event.params.tokenId;
     let ownerAddress = event.params.owner;
+    let verifierAddress = event.params.verifier;
 
     newMintEntity.tokenId = tokenId;
     newMintEntity.name = name;
@@ -45,27 +46,15 @@ export function handleNewMint(event: NewMintEvent): void {
     newMintEntity.accessPointAutoApproval = accessPointAutoApproval;
     newMintEntity.triggeredBy = event.params.minter;
     newMintEntity.owner = ownerAddress;
+    newMintEntity.verifier = verifierAddress;
     newMintEntity.blockNumber = event.block.number;
     newMintEntity.blockTimestamp = event.block.timestamp;
     newMintEntity.transactionHash = event.transaction.hash;
     newMintEntity.save();
     log.error('{}', [tokenId.toString()]);
 
-    // Create Token, Owner, and Controller entities
-
-    let owner = Owner.load(ownerAddress);
-    let gitRepositoryEntity = GitRepositoryEntity.load(gitRepository);
+    // Create Token
     let token = new Token(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
-
-    if (!owner) {
-        // Create a new owner entity
-        owner = new Owner(ownerAddress);
-    }
-
-    if (!gitRepositoryEntity) {
-        // Create a new gitRepository entity
-        gitRepositoryEntity = new GitRepositoryEntity(gitRepository);
-    }
 
     // Populate Token with data from the event
     token.tokenId = tokenId;
@@ -79,14 +68,13 @@ export function handleNewMint(event: NewMintEvent): void {
     token.color = color;
     token.accessPointAutoApproval = accessPointAutoApproval;
     token.owner = ownerAddress;
+    token.verifier = verifierAddress;
     token.mintTransaction = event.transaction.hash.concatI32(
         event.logIndex.toI32()
     );
     token.mintedBy = event.params.minter;
     token.controllers = [ownerAddress];
 
-    // Save entities
-    owner.save();
-    gitRepositoryEntity.save();
+    // Save entity
     token.save();
 }

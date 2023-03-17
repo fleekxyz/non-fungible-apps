@@ -32,6 +32,7 @@ type NewMint @entity(immutable: true) {
   accessPointAutoApproval: Boolean!
   triggeredBy: Bytes! # address
   owner: Owner! # address 
+  verifier: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -78,6 +79,7 @@ type Token @entity {
   gitRepository: GitRepository!
   commitHash: String!
   accessPoints: [AccessPoint!] @derivedFrom(field: "token")
+  verifier: Verifier! # Address
 }
 
 # Owner entity for collection, access points, and tokens
@@ -92,6 +94,12 @@ type Owner @entity {
 type Controller @entity {
   id: Bytes! # address
   tokens: [Token!] @derivedFrom(field: "controllers")
+}
+
+# Verifier entity for tokens
+type Verifier @entity {
+  id: Bytes! # address
+  tokens: [Token!] @derivedFrom(field: "verifier")
 }
 
 type GitRepository @entity {

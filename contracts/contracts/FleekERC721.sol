@@ -40,8 +40,10 @@ contract FleekERC721 is
         string gitRepository,
         string logo,
         uint24 color,
+        bool accessPointAutoApproval,
         address indexed minter,
-        address indexed owner
+        address indexed owner,
+        address verifier
     );
 
     event MetadataUpdate(uint256 indexed _tokenId, string key, address value, address indexed triggeredBy);
@@ -124,8 +126,10 @@ contract FleekERC721 is
             gitRepository,
             logo,
             color,
+            accessPointAutoApproval,
             msg.sender,
-            to
+            to,
+            verifier
         );
 
         _tokenVerifier[tokenId] = verifier;
