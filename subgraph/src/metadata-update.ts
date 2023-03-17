@@ -6,6 +6,7 @@ import {
     MetadataUpdate1 as MetadataUpdateEvent1,
     MetadataUpdate2 as MetadataUpdateEvent2,
     MetadataUpdate3 as MetadataUpdateEvent3,
+    MetadataUpdate4 as MetadataUpdateEvent4,
 } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
@@ -16,7 +17,7 @@ import {
 } from '../generated/schema';
 
 export function handleMetadataUpdateWithStringValue(
-    event: MetadataUpdateEvent
+    event: MetadataUpdateEvent1
 ): void {
     /**
      * Metadata handled here:
@@ -62,7 +63,7 @@ export function handleMetadataUpdateWithStringValue(
 }
 
 export function handleMetadataUpdateWithDoubleStringValue(
-    event: MetadataUpdateEvent2
+    event: MetadataUpdateEvent3
 ): void {
     /**
      * setTokenBuild
@@ -101,7 +102,7 @@ export function handleMetadataUpdateWithDoubleStringValue(
 }
 
 export function handleMetadataUpdateWithIntValue(
-    event: MetadataUpdateEvent1
+    event: MetadataUpdateEvent2
 ): void {
     /**
      * setTokenColor
@@ -132,7 +133,7 @@ export function handleMetadataUpdateWithIntValue(
 }
 
 export function handleMetadataUpdateWithBooleanValue(
-    event: MetadataUpdateEvent3
+    event: MetadataUpdateEvent4
 ): void {
     /**
      * accessPointAutoApproval
