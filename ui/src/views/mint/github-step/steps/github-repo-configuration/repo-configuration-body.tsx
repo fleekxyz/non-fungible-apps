@@ -1,10 +1,16 @@
-import { Button, Card, Flex, Stepper } from '@/components';
+import { Button, Card, Flex, Form, Stepper } from '@/components';
 import { Mint } from '@/views/mint/mint.context';
+import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
 import { RepoRow } from '../repository-row';
 import { RepoBranchCommitFields } from './repo-branch-commit-fields';
 
 export const RepoConfigurationBody = () => {
-  const { repositoryName, branchName, commitHash } = Mint.useContext();
+  const {
+    form: {
+      isValid: [isValid, setIsValid],
+    },
+  } = useMintFormContext();
+  const { repositoryName } = Mint.useContext();
 
   const { nextStep } = Stepper.useContext();
 
@@ -32,7 +38,7 @@ export const RepoConfigurationBody = () => {
         <Form.Root onValidationChange={setIsValid}>
           <RepoBranchCommitFields />
           <Button
-            disabled={!branchName.value || !commitHash}
+            disabled={!isValid}
             colorScheme="blue"
             variant="solid"
             onClick={handleContinueClick}

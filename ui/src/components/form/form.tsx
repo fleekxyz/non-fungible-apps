@@ -1,7 +1,7 @@
 import { hasValidator } from '@/utils';
 import { fileToBase64 } from '@/views/mint/nfa-step/form-step/form.utils';
 import React, { forwardRef, useMemo, useState } from 'react';
-import { Combobox, ComboboxItem } from '../core';
+import { Combobox } from '../core';
 import { Input, LogoFileInput, Textarea } from '../core/input';
 import {
   FormFieldContext,

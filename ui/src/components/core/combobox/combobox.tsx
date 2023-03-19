@@ -54,7 +54,7 @@ const ComboboxInput = ({
       className={`w-full  border-solid border border-slate7 h-11  py-3 px-10 text-sm leading-5 text-slate11 outline-none ${
         open
           ? 'border-b-0 rounded-t-xl bg-black border-slate6'
-          : 'rounded-xl bg-transparent'
+          : 'rounded-xl bg-transparent cursor-pointer'
       }`}
       displayValue={(selectedValue: ComboboxItem) => selectedValue.label}
       onChange={handleInputChange}
