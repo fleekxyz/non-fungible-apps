@@ -1,7 +1,8 @@
-import { dripStitches } from '../../../theme';
 import { CSS } from '@stitches/react';
 
-type StyledButtonProps = React.ComponentProps<typeof StyledButton>;
+import { dripStitches } from '../../../theme';
+
+type StyledButtonProps = React.ComponentPropsWithRef<typeof StyledButton>;
 export interface ButtonProps extends StyledButtonProps {
   /**
    * If `true`, the button will show a spinner.
@@ -63,10 +64,6 @@ export interface ButtonProps extends StyledButtonProps {
    * @default "start"
    */
   spinnerPlacement?: 'start' | 'end';
-  /**
-   * The HTML element to render as (e.g. `"button"`).
-   */
-  as?: string | React.ComponentType<any>;
 }
 
 export type ButtonColor = 'gray' | 'blue';

@@ -1,9 +1,10 @@
+import { forwardStyledRef } from '@/theme';
+
 import { ButtonProps, StyledButton } from './button.styles';
 import { ButtonContent } from './button-content';
 import { ButtonSpinner } from './button-spinner';
-import { forwardRef } from 'react';
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
     const {
       isActive,
@@ -42,7 +43,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           ...(ownProps?.css || {}),
         }}
         {...ownProps}
-        as={ownProps.as || 'button'}
       >
         {isLoading && spinnerPlacement === 'start' && (
           <ButtonSpinner

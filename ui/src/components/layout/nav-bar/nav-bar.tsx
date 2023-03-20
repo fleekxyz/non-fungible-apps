@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
+
 import { Button } from '@/components/core';
 import { Logo } from '@/components/logo/logo';
-import { Link } from 'react-router-dom';
+
 import { ConnectWalletButton } from './connect-wallet-button';
 import { NavBarStyles as Styles } from './nav-bar.styles';
 
@@ -10,11 +12,11 @@ export const NavBar: React.FC = () => {
       <Styles.Content>
         <Logo />
         <Styles.Navigation>
-          <Button variant="link" color="gray">
-            <Link to="/">Home</Link>
+          <Button as={Link} to="/" variant="link" color="gray">
+            Home
           </Button>
-          <Button variant="link" color="gray">
-            <Link to="/mint">Create</Link>
+          <Button as={Link} to="/mint" variant="link" color="gray">
+            Mint
           </Button>
           <ConnectWalletButton />
         </Styles.Navigation>
