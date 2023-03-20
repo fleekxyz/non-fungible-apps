@@ -11,13 +11,13 @@ import {
   ErrorIcon,
   FleekName,
   BetaTag,
+  FleekLogo,
 } from './custom';
 import { IoCheckmarkCircleSharp } from '@react-icons/all-files/io5/IoCheckmarkCircleSharp';
 import { AiOutlineTwitter } from '@react-icons/all-files/ai/AiOutlineTwitter';
 import { IoClose } from '@react-icons/all-files/io5/IoClose';
 import { AiFillCheckCircle } from '@react-icons/all-files/ai/AiFillCheckCircle';
 import { BiGitBranch } from '@react-icons/all-files/bi/BiGitBranch';
-import { FleekLogo } from './custom/fleek-logo-icon';
 
 export const IconLibrary = Object.freeze({
   back: IoArrowBackCircleSharp,
