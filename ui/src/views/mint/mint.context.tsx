@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { DropdownItem } from '@/components';
+import { ComboboxItem } from '@/components';
 import { EthereumHooks } from '@/integrations';
 import { AppLog, createContext } from '@/utils';
 import { GithubState, useFleekERC721Billing } from '@/store';
@@ -10,7 +10,7 @@ export type MintContext = {
   selectedUserOrg: string;
   repositoryName: GithubState.Repository;
   repositoryOwner: string;
-  branchName: DropdownItem; //get value from DropdownItem to mint
+  branchName: ComboboxItem; //get value from DropdownItem to mint
   commitHash: string;
   githubStep: number;
   nfaStep: number;
@@ -21,7 +21,7 @@ export type MintContext = {
   setSelectedUserOrg: (userOrgValue: string) => void;
   setRepositoryName: (repo: GithubState.Repository) => void;
   setRepositoryOwner: (owner: string) => void;
-  setBranchName: (branch: DropdownItem) => void;
+  setBranchName: (branch: ComboboxItem) => void;
   setCommitHash: (hash: string) => void;
   setLogoColor: (color: string) => void;
   setVerifyNFA: (verify: boolean) => void;
@@ -47,9 +47,9 @@ export abstract class Mint {
     const [repositoryName, setRepositoryName] =
       useState<GithubState.Repository>({} as GithubState.Repository);
     const [repositoryOwner, setRepositoryOwner] = useState('');
-    const [branchName, setBranchName] = useState({} as DropdownItem);
+    const [branchName, setBranchName] = useState({} as ComboboxItem);
     const [commitHash, setCommitHash] = useState('');
-    const [githubStep, setGithubStepContext] = useState(1);
+    const [githubStep, setGithubStepContext] = useState(3);
 
     //NFA Details
     const [nfaStep, setNfaStep] = useState(1);

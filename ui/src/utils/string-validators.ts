@@ -8,7 +8,10 @@ type StringValidatorWithParams<T> = (args: T) => StringValidator & { args: T };
 
 const required: StringValidator = {
   name: 'required',
-  validate: (value = '') => value.length > 0,
+  validate: (value = '') => {
+    debugger;
+    return value.length > 0;
+  },
   message: 'This field is required',
 };
 

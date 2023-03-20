@@ -46,6 +46,19 @@ export const MintFormStep = () => {
   } = Mint.useContext();
   const { setArgs } = Mint.useTransactionContext();
 
+  console.log(
+    address,
+    appName,
+    appDescription,
+    domainURL,
+    ens,
+    commitHash,
+    `${repositoryName.url}/tree/${branchName.label}`,
+    appLogo,
+    parseColorToNumber(logoColor),
+    verifyNFA
+  );
+
   const handleNextStep = () => {
     if (!address) {
       AppLog.errorToast('No address found. Please connect your wallet.');

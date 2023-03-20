@@ -41,6 +41,7 @@ export const useMintFormContextInit = (): MintFormContext => ({
     ]),
     appLogo: useFormField('appLogo', [
       StringValidators.maxFileSize(DEFAULT_MAX_FILE_SIZE),
+      StringValidators.required,
     ]),
     domainURL: useFormField('domainURL', [
       StringValidators.required,
