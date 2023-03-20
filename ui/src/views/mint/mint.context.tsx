@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ComboboxItem, DropdownItem } from '@/components';
+import { DropdownItem } from '@/components';
 import { EthereumHooks } from '@/integrations';
 import { AppLog, createContext } from '@/utils';
 import { GithubState, useFleekERC721Billing } from '@/store';
