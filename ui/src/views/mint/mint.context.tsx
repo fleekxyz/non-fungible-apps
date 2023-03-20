@@ -49,7 +49,7 @@ export abstract class Mint {
     const [repositoryOwner, setRepositoryOwner] = useState('');
     const [branchName, setBranchName] = useState({} as ComboboxItem);
     const [commitHash, setCommitHash] = useState('');
-    const [githubStep, setGithubStepContext] = useState(3);
+    const [githubStep, setGithubStepContext] = useState(1);
 
     //NFA Details
     const [nfaStep, setNfaStep] = useState(1);
