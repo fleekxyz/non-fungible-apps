@@ -1,8 +1,44 @@
 import { useEffect } from 'react';
 import { Flex, Form, Spinner } from '@/components';
-import { githubActions, useAppDispatch, useGithubStore } from '@/store';
+import {
+  githubActions,
+  GithubState,
+  useAppDispatch,
+  useGithubStore,
+} from '@/store';
 import { Mint } from '@/views/mint/mint.context';
 import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
+import { useFormFieldContext } from '@/components/form/form-field.context';
+
+const BranchField = () => {
+  const { queryLoading, branches } = useGithubStore();
+  const { repositoryName } = Mint.useContext();
+  const {
+    value: [, setValue],
+  } = useFormFieldContext();
+
+  useEffect(() => {
+    if (queryLoading === 'success' && branches.length > 0) {
+      const defaultBranch = branches.find(
+        (branch) =>
+          branch.label.toLowerCase() ===
+          repositoryName.defaultBranch.toLowerCase()
+      );
+      if (defaultBranch) {
+        setValue(defaultBranch.value);
+        // setBranchName(defaultBranch);
+        // setCommitHash(defaultBranch.value);
+      }
+    }
+  }, [queryLoading, branches]);
+
+  return (
+    <>
+      <Form.Label>Git Branch</Form.Label>
+      <Form.Combobox leftIcon="branch" items={branches} />
+    </>
+  );
+};
 
 export const RepoBranchCommitFields = () => {
   const { queryLoading, branches } = useGithubStore();
@@ -24,20 +60,6 @@ export const RepoBranchCommitFields = () => {
     }
   }, [queryLoading, dispatch]);
 
-  useEffect(() => {
-    if (queryLoading === 'success' && branches.length > 0) {
-      const defaultBranch = branches.find(
-        (branch) =>
-          branch.label.toLowerCase() ===
-          repositoryName.defaultBranch.toLowerCase()
-      );
-      if (defaultBranch) {
-        // setBranchName(defaultBranch);
-        // setCommitHash(defaultBranch.value);
-      }
-    }
-  }, [queryLoading, branches]);
-
   if (queryLoading === 'loading') {
     return (
       <Flex
@@ -55,8 +77,7 @@ export const RepoBranchCommitFields = () => {
   return (
     <>
       <Form.Field context={gitBranch}>
-        <Form.Label>Git Branch</Form.Label>
-        <Form.Combobox leftIcon="branch" items={branches} />
+        <BranchField />
       </Form.Field>
       <Form.Field context={gitCommit}>
         <Form.Label>Git Commit</Form.Label>
