@@ -1,6 +1,11 @@
 import { useParams } from 'react-router-dom';
+import { CreateAPForm } from './create-ap-form';
+import { AP } from './create-ap.context';
 
 export const CreateAP = () => {
-  const { id } = useParams();
-  return <>Token to create AP:{id}</>;
+  return (
+    <AP.Provider>
+      <CreateAPForm />
+    </AP.Provider>
+  );
 };
