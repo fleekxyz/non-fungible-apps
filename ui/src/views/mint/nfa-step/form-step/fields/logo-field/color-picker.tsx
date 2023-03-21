@@ -24,12 +24,15 @@ export const ColorPicker = () => {
   return (
     <Card.Text css={{ height: '$22', mt: '$6' }}>
       <div className="relative">
-        <Flex css={{ gap: '$3h' }}>
+        <Flex css={{ gap: '$3h', alignItems: 'center' }}>
           <span>Primary Color</span>
           {/* TODO crate color picker component */}
           <Button
             leftIcon={
-              <Icon name="square" css={{ color: `${logoColor || 'FFFFFF'}` }} />
+              <Icon
+                name="square"
+                css={{ color: `${logoColor || '#000000'}` }}
+              />
             }
             rightIcon={
               <Icon name="chevron-down" css={{ fontSize: '0.625rem' }} />
@@ -43,11 +46,11 @@ export const ColorPicker = () => {
             }}
             onClick={handleColorPickerClick}
           >
-            {logoColor.toUpperCase() || '#FFFFFF'}
+            {logoColor.toUpperCase() || '#000000'}
           </Button>
           <input
             ref={inputColorRef}
-            className="absolute right-14 top-0h"
+            className="absolute right-16"
             type="color"
             value={logoColor}
             onChange={(e) => setLogoColor(e.target.value)}
