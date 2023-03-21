@@ -25,6 +25,8 @@
   },
   "homepage": "https://github.com/fleekxyz/non-fungible-apps#readme",
   "devDependencies": {
+    "@ensdomains/ens-contracts": "^0.0.20",
+    "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.7",
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
