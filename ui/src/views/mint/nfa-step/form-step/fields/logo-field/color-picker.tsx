@@ -47,7 +47,7 @@ export const ColorPicker = () => {
           </Button>
           <input
             ref={inputColorRef}
-            className="absolute right-16 top-0h"
+            className="absolute right-14 top-0h"
             type="color"
             value={logoColor}
             onChange={(e) => setLogoColor(e.target.value)}
