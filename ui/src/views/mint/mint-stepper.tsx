@@ -12,10 +12,9 @@ export const MintStepper = () => {
     transaction: { isSuccess },
   } = Mint.useTransactionContext();
 
-
   if (!isSuccess) {
     return (
-      <Stepper.Root initialStep={1}>
+      <Stepper.Root initialStep={3}>
         <Stepper.Container>
           <Stepper.Step>
             <MintStep header="Connect your Ethereum Wallet to mint an NFA">

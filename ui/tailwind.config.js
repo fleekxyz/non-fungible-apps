@@ -26,6 +26,9 @@ module.exports = {
       space: {
         '1h': '0.375rem',
       },
+      zIndex: {
+        '0h': '0.065rem',
+      },
     },
   },
   plugins: [],

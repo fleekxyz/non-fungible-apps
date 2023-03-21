@@ -23,32 +23,38 @@ export const ColorPicker = () => {
 
   return (
     <Card.Text css={{ height: '$22', mt: '$6' }}>
-      <Flex css={{ gap: '$3h' }}>
-        <span>Primary Color</span>
-        {/* TODO crate color picker component */}
-        <Button
-          leftIcon={<Icon name="square" css={{ color: '#FFFFFF' }} />}
-          rightIcon={
-            <Icon name="chevron-down" css={{ fontSize: '0.625rem' }} />
-          }
-          css={{
-            py: '$1',
-            height: '$5',
-            borderRadius: '$md',
-            color: '$slate12',
-          }}
-          onClick={handleColorPickerClick}
-        >
-          #FFFFFF
-        </Button>
-        <input
-          ref={inputColorRef}
-          className="hidden relative"
-          type="color"
-          value={logoColor}
-          onChange={(e) => setLogoColor(e.target.value)}
-        />
-      </Flex>
+      <div className="relative">
+        <Flex css={{ gap: '$3h' }}>
+          <span>Primary Color</span>
+          {/* TODO crate color picker component */}
+          <Button
+            leftIcon={
+              <Icon name="square" css={{ color: `${logoColor || 'FFFFFF'}` }} />
+            }
+            rightIcon={
+              <Icon name="chevron-down" css={{ fontSize: '0.625rem' }} />
+            }
+            css={{
+              py: '$1',
+              height: '$5',
+              borderRadius: '$md',
+              color: '$slate12',
+              zIndex: '$dropdown',
+            }}
+            onClick={handleColorPickerClick}
+          >
+            {logoColor.toUpperCase() || '#FFFFFF'}
+          </Button>
+          <input
+            ref={inputColorRef}
+            className="absolute right-16 top-0h"
+            type="color"
+            value={logoColor}
+            onChange={(e) => setLogoColor(e.target.value)}
+          />
+        </Flex>
+      </div>
+
       <img
         className="hidden"
         src={appLogo}
