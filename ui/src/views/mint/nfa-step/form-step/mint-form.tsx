@@ -30,34 +30,20 @@ export const MintFormStep = () => {
       domainURL: {
         value: [domainURL],
       },
-      isValid: [isValid, setIsValid],
+      gitCommit: {
+        value: [gitCommit],
+      },
+      gitBranch: {
+        value: [gitBranch],
+      },
+      isValid: [isValid],
     },
   } = useMintFormContext();
   const { address } = useAccount();
   const { nextStep } = Stepper.useContext();
-  const {
-    billing,
-    branchName,
-    commitHash,
-    repositoryName,
-    logoColor,
-    verifyNFA,
-    setNfaStep,
-  } = Mint.useContext();
+  const { billing, repositoryName, logoColor, verifyNFA, setNfaStep } =
+    Mint.useContext();
   const { setArgs } = Mint.useTransactionContext();
-
-  console.log(
-    address,
-    appName,
-    appDescription,
-    domainURL,
-    ens,
-    commitHash,
-    `${repositoryName.url}/tree/${branchName.label}`,
-    appLogo,
-    parseColorToNumber(logoColor),
-    verifyNFA
-  );
 
   const handleNextStep = () => {
     if (!address) {
@@ -72,8 +58,8 @@ export const MintFormStep = () => {
       appDescription,
       domainURL,
       ens,
-      commitHash,
-      `${repositoryName.url}/tree/${branchName.label}`,
+      gitCommit,
+      `${repositoryName.url}/tree/${gitBranch}`,
       appLogo,
       parseColorToNumber(logoColor),
       verifyNFA,
@@ -96,14 +82,14 @@ export const MintFormStep = () => {
             rowGap: '$6',
           }}
         >
-          <Form.Root onValidationChange={setIsValid}>
-            <Grid css={{ rowGap: '$4' }}>
-              <AppNameField />
-              <AppDescriptionField />
-              <LogoField />
-              <EnsDomainField />
-            </Grid>
-          </Form.Root>
+          {/* <Form.Root onValidationChange={setIsValid}> */}
+          <Grid css={{ rowGap: '$4' }}>
+            <AppNameField />
+            <AppDescriptionField />
+            <LogoField />
+            <EnsDomainField />
+          </Grid>
+          {/* </Form.Root> */}
           <Button
             disabled={!isValid}
             colorScheme="blue"

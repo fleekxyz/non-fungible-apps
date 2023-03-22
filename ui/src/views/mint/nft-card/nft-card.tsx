@@ -1,4 +1,5 @@
 import { Button, Card, Grid } from '@/components';
+import { Mint } from '../mint.context';
 import { useMintFormContext } from '../nfa-step/form-step';
 import { SVGPreview } from './svg-preview';
 
@@ -32,14 +33,14 @@ export const NftCard: React.FC<NftCardProps> = ({
       appLogo: {
         value: [appLogo],
       },
-      logoColor: {
-        value: [logoColor],
-      },
+
       ens: {
         value: [ens],
       },
     },
   } = useMintFormContext();
+
+  const { logoColor } = Mint.useContext();
 
   return (
     <Card.Container css={{ width: '$107h', p: '$0' }}>

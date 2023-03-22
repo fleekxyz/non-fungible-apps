@@ -1,5 +1,4 @@
 import { ComboboxItem } from '@/components';
-import { fetchMintedSites } from '@/mocks';
 import { githubActions, RootState } from '@/store';
 import { AppLog } from '@/utils';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -22,7 +21,7 @@ export const fetchBranchesThunk = createAsyncThunk<void, FetchBranches>(
 
       const githubClient = new GithubClient(token);
 
-      const branches = await fetchMintedSites(); //githubClient.fetchBranches(owner, repository);
+      const branches = await githubClient.fetchBranches(owner, repository);
 
       dispatch(githubActions.setBranches(branches as ComboboxItem[]));
     } catch (error) {

@@ -1,33 +1,21 @@
 import { Button, Card, Flex, Form, Stepper } from '@/components';
-import { useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
 import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
 import { RepoRow } from '../../repository-row';
 import { RepoBranchCommitFields } from './repo-branch-commit-fields';
 
 export const RepoConfigurationBody = () => {
-  const { branches } = useGithubStore();
   const {
     form: {
       isValid: [isValid, setIsValid],
-      gitCommit: {
-        value: [gitCommit],
-      },
-      gitBranch: {
-        value: [gitBranch],
-      },
     },
   } = useMintFormContext();
-  const { repositoryName, setBranchName } = Mint.useContext();
+
+  const { repositoryName } = Mint.useContext();
 
   const { nextStep } = Stepper.useContext();
 
-  console.log('gitCommit', gitCommit);
-  console.log('gitBranch', gitBranch);
-
   const handleContinueClick = () => {
-    const branchLabel = branches.find((branch) => branch.value === gitBranch); //TOOD find way to save the combobox item on context
-    setBranchName({ value: gitBranch, label: branchLabel?.label || '' });
     nextStep();
   };
 
@@ -48,17 +36,17 @@ export const RepoConfigurationBody = () => {
             </Button>
           }
         />
-        <Form.Root onValidationChange={setIsValid}>
-          <RepoBranchCommitFields />
-          <Button
-            disabled={!isValid}
-            colorScheme="blue"
-            variant="solid"
-            onClick={handleContinueClick}
-          >
-            Continue
-          </Button>
-        </Form.Root>
+        {/* <Form.Root onValidationChange={setIsValid}> */}
+        <RepoBranchCommitFields />
+        <Button
+          disabled={!isValid}
+          colorScheme="blue"
+          variant="solid"
+          onClick={handleContinueClick}
+        >
+          Continue
+        </Button>
+        {/* </Form.Root> */}
       </Flex>
     </Card.Body>
   );

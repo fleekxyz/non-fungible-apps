@@ -1,7 +1,7 @@
 import { hasValidator } from '@/utils';
 import { fileToBase64 } from '@/views/mint/nfa-step/form-step/form.utils';
 import React, { forwardRef, useMemo, useState } from 'react';
-import { Combobox } from '../core';
+import { Combobox, ComboboxItem } from '../core';
 import { Input, LogoFileInput, Textarea } from '../core/input';
 import {
   FormFieldContext,
@@ -105,6 +105,7 @@ export abstract class Form {
       const isValid = useFormFieldValidatorValue(id, validators, value);
 
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (props.onChange) props.onChange(e);
         setValue(e.target.value);
       };
 
@@ -134,24 +135,35 @@ export abstract class Form {
         validationEnabled: [validationEnabled, setValidationEnabled],
       } = useFormFieldContext();
 
+      const comboboxValue = useMemo(() => {
+        // if it's with autocomplete maybe won't be on the items list
+        const item = props.items.find((item) => item.label === value);
+        if (props.withAutocomplete && !item && value !== '') {
+          //return the selected value if the item doesn't exist
+          return { label: value, value: value };
+        }
+        return item;
+      }, [value]);
+
       const isValid = useFormFieldValidatorValue(id, validators, value);
 
-      const handleComboboxChange = (value: string) => {
-        setValue(value);
+      const handleComboboxChange = (option: ComboboxItem) => {
+        if (props.onChange) props.onChange(option);
+        setValue(option.label);
       };
 
       const handleComboboxBlur = () => {
         setValidationEnabled(true);
       };
 
-      //TODO: add aria-invalid and onBlur
-
       return (
         <Combobox
           ref={ref}
           {...props}
           onChange={handleComboboxChange}
-          selectedValue={value}
+          selectedValue={comboboxValue || ({} as ComboboxItem)}
+          // onBlur={handleComboboxBlur}
+          // error={validationEnabled && !isValid}
         />
       );
     }
@@ -236,10 +248,7 @@ export namespace Form {
 
   export type ErrorProps = React.ComponentProps<typeof FormStyles.ErrorMessage>;
 
-  export type InputProps = Omit<
-    React.ComponentProps<typeof Input>,
-    'value' | 'onChange' | 'error'
-  >;
+  export type InputProps = Omit<React.ComponentProps<typeof Input>, 'error'>;
 
   export type TextareaProps = Omit<
     React.ComponentProps<typeof Textarea>,
@@ -248,7 +257,7 @@ export namespace Form {
 
   export type ComboboxProps = Omit<
     React.ComponentProps<typeof Combobox>,
-    'onChange' | 'error' | 'selectedValue'
+    'error' | 'selectedValue'
   >;
 
   export type LogoFileInputProps = Omit<

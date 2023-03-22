@@ -8,8 +8,7 @@ export const UserOrgsCombobox = () => {
   const { queryUserAndOrganizations, userAndOrganizations } = useGithubStore();
   const dispatch = useAppDispatch();
 
-  const { selectedUserOrg, setSelectedUserOrg, setRepositoryOwner } =
-    Mint.useContext();
+  const { selectedUserOrg, setSelectedUserOrg } = Mint.useContext();
 
   useEffect(() => {
     if (queryUserAndOrganizations === 'idle') {
@@ -17,13 +16,9 @@ export const UserOrgsCombobox = () => {
     }
   }, [dispatch, queryUserAndOrganizations]);
 
-  const handleUserOrgChange = (item: string) => {
-    const ownerRepository = userAndOrganizations.find(
-      (org) => org.value === item
-    )?.label;
-    if (ownerRepository) {
-      setRepositoryOwner(ownerRepository);
-      dispatch(githubActions.fetchRepositoriesThunk(item));
+  const handleUserOrgChange = (item: ComboboxItem) => {
+    if (item) {
+      dispatch(githubActions.fetchRepositoriesThunk(item.value));
       setSelectedUserOrg(item);
     } else {
       AppLog.errorToast('Error selecting user/org. Try again');
@@ -33,12 +28,11 @@ export const UserOrgsCombobox = () => {
   useEffect(() => {
     if (
       queryUserAndOrganizations === 'success' &&
-      selectedUserOrg === '' &&
+      selectedUserOrg.value === undefined &&
       userAndOrganizations.length > 0
     ) {
       //SET first user
-      setSelectedUserOrg(userAndOrganizations[0].value);
-      setRepositoryOwner(userAndOrganizations[0].label);
+      setSelectedUserOrg(userAndOrganizations[0]);
     }
   }, [queryUserAndOrganizations, selectedUserOrg, userAndOrganizations]);
 

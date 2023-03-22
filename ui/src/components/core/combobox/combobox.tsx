@@ -29,6 +29,14 @@ type ComboboxInputProps = {
    * Function to handle the input click. When the user clicks on the input, the list of options will be displayed
    */
   handleInputClick: () => void;
+  /**
+   * Function to handle the input blur
+   */
+  onBlur?: () => void;
+  /**
+   * Value to indicate it's invalid
+   */
+  error?: boolean;
 };
 
 const ComboboxInput = ({
@@ -36,6 +44,8 @@ const ComboboxInput = ({
   leftIcon,
   handleInputChange,
   handleInputClick,
+  onBlur,
+  error,
 }: ComboboxInputProps) => (
   <div className="relative w-full">
     <Icon
@@ -54,11 +64,12 @@ const ComboboxInput = ({
       className={`w-full  border-solid border border-slate7 h-11  py-3 px-10 text-sm leading-5 text-slate11 outline-none ${
         open
           ? 'border-b-0 rounded-t-xl bg-black border-slate6'
-          : 'rounded-xl bg-transparent cursor-pointer'
+          : `rounded-xl bg-transparent cursor-pointer ${error && 'border-red9'}`
       }`}
       displayValue={(selectedValue: ComboboxItem) => selectedValue.label}
       onChange={handleInputChange}
       onClick={handleInputClick}
+      onBlur={onBlur}
     />
     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
       <Icon name="chevron-down" css={{ fontSize: '$xs' }} />
@@ -128,7 +139,7 @@ export type ComboboxProps = {
   /**
    * The selected value of the combobox.
    */
-  selectedValue: string | undefined;
+  selectedValue: ComboboxItem | undefined;
   /**
    * If true, the combobox will add the input if it doesn't exist in the list of items.
    */
@@ -140,17 +151,30 @@ export type ComboboxProps = {
   /**
    * Callback when the selected value changes.
    */
-  onChange(option: string): void;
+  onChange: (option: ComboboxItem) => void;
+  /**
+   * Function to handle the input blur
+   */
+  onBlur?: () => void;
+  /**
+   * Value to indicate it's invalid
+   */
+  error?: boolean;
 };
 
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
-  ({
-    items,
-    selectedValue = '',
-    withAutocomplete = false,
-    leftIcon = 'search',
-    onChange,
-  }) => {
+  (
+    {
+      items,
+      selectedValue = { value: '', label: '' },
+      withAutocomplete = false,
+      leftIcon = 'search',
+      onChange,
+      onBlur,
+      error = false,
+    },
+    ref
+  ) => {
     const [filteredItems, setFilteredItems] = useState<ComboboxItem[]>([]);
     const [autocompleteItems, setAutocompleteItems] = useState<ComboboxItem[]>(
       []
@@ -159,12 +183,12 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
     useEffect(() => {
       // If the selected value doesn't exist in the list of items, we add it
       if (
-        items.filter((item) => item.value === selectedValue).length === 0 &&
-        selectedValue !== '' &&
+        items.filter((item) => item === selectedValue).length === 0 &&
+        selectedValue.value !== undefined &&
         autocompleteItems.length === 0 &&
         withAutocomplete
       ) {
-        setAutocompleteItems([{ value: selectedValue, label: selectedValue }]);
+        setAutocompleteItems([selectedValue]);
       }
     }, [selectedValue]);
 
@@ -205,50 +229,20 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
     };
 
     const handleComboboxChange = (optionSelected: ComboboxItem) => {
-      onChange(optionSelected.value);
+      onChange(optionSelected);
     };
 
     const handleLeaveTransition = () => {
       setFilteredItems(items);
-      if (selectedValue === '' && withAutocomplete) {
+      if (selectedValue.value === undefined && withAutocomplete) {
         setAutocompleteItems([]);
         handleComboboxChange({} as ComboboxItem);
       }
     };
 
-    const getComboboxValue = (): ComboboxItem => {
-      if (selectedValue !== '') {
-        if (withAutocomplete) {
-          //look for the selected value in the autocomplete items list and the items list
-          const autocompleteItem = autocompleteItems.find(
-            (item) => item.value === selectedValue
-          );
-          if (autocompleteItem) {
-            //if the selected value is in the autocomplete items list, we return it
-            return autocompleteItem;
-          } else {
-            //if the selected value is not in the autocomplete items list, we look for it in the items list
-            const item = items.find((item) => item.value === selectedValue);
-            if (item) {
-              //if the selected value is in the items list, we return it
-              return item;
-            }
-          }
-        } else {
-          //if the selected value is not in the autocomplete items list, we look for it in the items list
-          const item = items.find((item) => item.value === selectedValue);
-          if (item) {
-            //if the selected value is in the items list, we return it
-            return item;
-          }
-        }
-      }
-      return { value: '', label: '' };
-    };
-
     return (
       <ComboboxLib
-        value={getComboboxValue()}
+        value={selectedValue}
         by="value"
         onChange={handleComboboxChange}
       >
@@ -259,6 +253,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
               handleInputClick={handleInputClick}
               open={open}
               leftIcon={leftIcon}
+              onBlur={onBlur}
+              error={error}
             />
             <ComboboxLib.Button ref={buttonRef} className="hidden" />
 

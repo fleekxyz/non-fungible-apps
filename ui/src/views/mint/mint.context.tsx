@@ -7,22 +7,16 @@ import { GithubState, useFleekERC721Billing } from '@/store';
 
 export type MintContext = {
   billing: string | undefined;
-  selectedUserOrg: string;
+  selectedUserOrg: ComboboxItem;
   repositoryName: GithubState.Repository;
-  repositoryOwner: string;
-  branchName: ComboboxItem; //get value from DropdownItem to mint
-  commitHash: string;
   githubStep: number;
   nfaStep: number;
   logoColor: string;
   verifyNFA: boolean;
   setGithubStep: (step: number) => void;
   setNfaStep: (step: number) => void;
-  setSelectedUserOrg: (userOrgValue: string) => void;
+  setSelectedUserOrg: (userOrgValue: ComboboxItem) => void;
   setRepositoryName: (repo: GithubState.Repository) => void;
-  setRepositoryOwner: (owner: string) => void;
-  setBranchName: (branch: ComboboxItem) => void;
-  setCommitHash: (hash: string) => void;
   setLogoColor: (color: string) => void;
   setVerifyNFA: (verify: boolean) => void;
 };
@@ -43,12 +37,9 @@ export abstract class Mint {
 
   static readonly Provider: React.FC<Mint.ProviderProps> = ({ children }) => {
     //Github Connection
-    const [selectedUserOrg, setSelectedUserOrg] = useState('');
+    const [selectedUserOrg, setSelectedUserOrg] = useState({} as ComboboxItem);
     const [repositoryName, setRepositoryName] =
       useState<GithubState.Repository>({} as GithubState.Repository);
-    const [repositoryOwner, setRepositoryOwner] = useState('');
-    const [branchName, setBranchName] = useState({} as ComboboxItem);
-    const [commitHash, setCommitHash] = useState('');
     const [githubStep, setGithubStepContext] = useState(1);
 
     //NFA Details
@@ -69,9 +60,6 @@ export abstract class Mint {
           billing,
           selectedUserOrg,
           repositoryName,
-          repositoryOwner,
-          branchName,
-          commitHash,
           githubStep,
           nfaStep,
           logoColor,
@@ -80,9 +68,6 @@ export abstract class Mint {
           setGithubStep,
           setNfaStep,
           setRepositoryName,
-          setRepositoryOwner,
-          setBranchName,
-          setCommitHash,
           setLogoColor,
           setVerifyNFA,
         }}

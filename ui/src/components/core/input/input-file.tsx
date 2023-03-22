@@ -1,4 +1,3 @@
-import { dripStitches } from '../../../theme';
 import { forwardRef, useRef } from 'react';
 import { Icon } from '../icon';
 import { InputFileStyles as S } from './input-file.styles';
