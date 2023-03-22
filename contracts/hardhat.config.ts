@@ -18,6 +18,7 @@ const {
   PRIVATE_KEY,
   REPORT_GAS,
   POLYGONSCAN_KEY,
+  MAINNET_API_KEY,
 } = process.env;
 
 const config: HardhatUserConfig = {
@@ -25,6 +26,12 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       chainId: 31337,
+      forking: MAINNET_API_KEY
+        ? {
+            url: MAINNET_API_KEY,
+            blockNumber: 16876149,
+          }
+        : undefined,
     },
     mumbai: {
       url: API_URL,
