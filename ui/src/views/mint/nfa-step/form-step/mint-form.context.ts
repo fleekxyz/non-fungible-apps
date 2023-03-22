@@ -38,6 +38,7 @@ export const useMintFormContextInit = (): MintFormContext => ({
     appDescription: useFormField('appDescription', [
       StringValidators.required,
       StringValidators.maxLength(250),
+      StringValidators.hasSpecialCharacters,
     ]),
     appLogo: useFormField('appLogo', [
       StringValidators.maxFileSize(DEFAULT_MAX_FILE_SIZE),

@@ -47,12 +47,25 @@ const maxFileSize: StringValidatorWithParams<number> = (maxSize: number) => ({
   args: maxSize,
 });
 
+const hasSpecialCharacters: StringValidator = {
+  name: 'specialCharacters',
+  validate: (value = '') => {
+    if (value !== '') {
+      const regex = /[!@#$%^&*()?":{}|<>`/]/;
+      return !regex.test(value);
+    }
+    return true;
+  },
+  message: 'This field has special characters',
+};
+
 export const StringValidators = {
   required,
   maxLength,
   isUrl,
   isEns,
   maxFileSize,
+  hasSpecialCharacters,
 };
 
 export const hasValidator = <

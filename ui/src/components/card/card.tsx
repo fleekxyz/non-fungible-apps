@@ -15,9 +15,9 @@ export abstract class Card {
   );
 
   static readonly Heading = forwardRef<HTMLHeadingElement, Card.HeadingProps>(
-    ({ title, leftIcon, rightIcon, ...props }, ref) => {
+    ({ title, leftIcon, rightIcon, css, ...props }, ref) => {
       return (
-        <Flex css={{ justifyContent: 'space-between' }}>
+        <Flex css={{ justifyContent: 'space-between', ...css }}>
           <Flex>
             {leftIcon}
             <CardStyles.Heading ref={ref} {...props}>
@@ -58,6 +58,7 @@ export namespace Card {
 
   export type HeadingProps = {
     title: string;
+    css: React.CSSProperties;
     leftIcon?: React.ReactNode;
     rightIcon?: React.ReactNode;
   } & React.ComponentProps<typeof CardStyles.Heading>;
