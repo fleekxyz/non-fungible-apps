@@ -2,44 +2,26 @@
 
 pragma solidity ^0.8.7;
 
-import "@ensdomains/ens-contracts/contracts/registry/ENS.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {ENS} from "@ensdomains/ens-contracts/contracts/registry/ENS.sol";
+import {Resolver} from "@ensdomains/ens-contracts/contracts/resolvers/Resolver.sol";
 
-// import "@ensdomains/ens-contracts/contracts/resolvers/Resolver.sol";
+error MustBeENSOwner();
 
-contract FleekENS {
-    // uint256 public immutable FLEEK_COIN_TYPE = 0x80009876;
-    bytes32 public immutable FLEEK_NFA_SUBDOMAIN = keccak256("nfa");
-
-    ENS ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
-
-    // function resolve(bytes32 node) public view returns (address) {
-    //     Resolver resolver = _getResolverFor(node);
-    //     return resolver.addr(node);
-    // }
+abstract contract FleekENS is Initializable {
+    ENS internal constant _ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
 
     /**
-    WARN: Forward the call to ENS or Resolver will not work due to wrong signature
-
-    function setENSPermissionByAddr(bytes32 node, bytes calldata to) public {
-        Resolver resolver = _getResolverFor(node);
-        resolver.setAddr(node, FLEEK_COIN_TYPE, to);
-    }
-
-    function setENSPermission(bytes32 node, address owner) public returns (bytes32) {
-        return ens.setSubnodeOwner(node, FLEEK_NFA_SUBDOMAIN, owner);
-    }
+     * @dev Reverts if the sender is not the owner of the ENS node.
      */
-
-    function checkENSPermission(bytes32 node) public view returns (bool) {
-        // check if the node is owned by the sender
-        if (ens.owner(node) == msg.sender) return true;
-
-        // check by subdomain
-        bytes32 subdomain = keccak256(abi.encodePacked(node, FLEEK_NFA_SUBDOMAIN));
-        return ens.owner(subdomain) == msg.sender;
+    function _requireENSOwner(string memory name) internal view {
+        if (_ens.owner(keccak256(abi.encodePacked(name))) != msg.sender) revert MustBeENSOwner();
     }
 
-    // function _getResolverFor(bytes32 node) private view returns (Resolver) {
-    //     return Resolver(ens.resolver(node));
-    // }
+    /**
+     * @dev This empty reserved space is put in place to allow future versions to add new
+     * variables without shifting down storage in the inheritance chain.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
+    uint256[49] private __gap;
 }

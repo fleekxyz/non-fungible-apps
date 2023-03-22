@@ -9,6 +9,7 @@ import "./FleekAccessControl.sol";
 import "./FleekBilling.sol";
 import "./FleekPausable.sol";
 import "./FleekAccessPoints.sol";
+import "./FleekENS.sol";
 import "./util/FleekStrings.sol";
 import "./IERCX.sol";
 
@@ -23,7 +24,8 @@ contract FleekERC721 is
     FleekAccessControl,
     FleekPausable,
     FleekBilling,
-    FleekAccessPoints
+    FleekAccessPoints,
+    FleekENS
 {
     using Strings for uint256;
     using FleekStrings for FleekERC721.Token;
@@ -91,7 +93,7 @@ contract FleekERC721 is
         string memory name,
         string memory description,
         string memory externalURL,
-        string memory ENS,
+        string memory ens,
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
@@ -99,6 +101,7 @@ contract FleekERC721 is
         bool accessPointAutoApproval,
         address verifier
     ) public payable requirePayment(Billing.Mint) returns (uint256) {
+        _requireENSOwner(ens);
         uint256 tokenId = _appIds;
         _mint(to, tokenId);
 
@@ -108,7 +111,7 @@ contract FleekERC721 is
         app.name = name;
         app.description = description;
         app.externalURL = externalURL;
-        app.ENS = ENS;
+        app.ENS = ens;
         app.logo = logo;
         app.color = color;
 
@@ -121,7 +124,7 @@ contract FleekERC721 is
             name,
             description,
             externalURL,
-            ENS,
+            ens,
             commitHash,
             gitRepository,
             logo,
