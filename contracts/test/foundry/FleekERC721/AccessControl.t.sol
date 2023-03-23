@@ -162,6 +162,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
 
     function test_mint() public {
         // Anyone can mint
+        transferENS(TestConstants.APP_ENS, anyAddress);
         vm.startPrank(anyAddress);
         mintDefault(address(99));
         vm.stopPrank();
@@ -201,7 +202,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
     }
 
     function test_setTokenENS() public {
-        string memory ens = "ens";
+        string memory ens = "ens.eth";
 
         // ColletionOwner
         vm.prank(collectionOwner);
@@ -214,10 +215,12 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
         CuT.setTokenENS(tokenId, ens);
 
         // TokenOwner
+        transferENS(ens, tokenOwner);
         vm.prank(tokenOwner);
         CuT.setTokenENS(tokenId, ens);
 
         // TokenController
+        transferENS(ens, tokenController);
         vm.prank(tokenController);
         CuT.setTokenENS(tokenId, ens);
 

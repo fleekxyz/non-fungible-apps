@@ -4,8 +4,8 @@
   "description": "",
   "private": "false",
   "scripts": {
-    "test": "hardhat test && forge test --via-ir",
-    "test:foundry": "forge test --via-ir -vvv",
+    "test": "yarn test:hardhat && yarn test:foundry",
+    "test:foundry": "forge test -vvv --fork-url mainnet --fork-block-number 16876149",
     "test:hardhat": "hardhat test",
     "format": "prettier --write \"./**/*.{js,json,sol,ts}\"",
     "node:hardhat": "hardhat node",

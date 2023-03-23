@@ -14,11 +14,11 @@ library FleekENS {
     /**
      * @dev Reverts if the sender is not the owner of the ENS node.
      */
-    function requireENSOwner(string calldata name) internal view {
+    function requireENSOwner(string calldata name) public view {
         if (_ens.owner(namehash(bytes(name), 0)) != msg.sender) revert MustBeENSOwner();
     }
 
-    function namehash(bytes calldata name, uint256 index) private pure returns (bytes32) {
+    function namehash(bytes calldata name, uint256 index) public view returns (bytes32) {
         for (uint256 i = index; i < name.length; i++) {
             if (name[i] == ".") {
                 return keccak256(abi.encodePacked(namehash(name, i + 1), keccak256(name[index:i])));

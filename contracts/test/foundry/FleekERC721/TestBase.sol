@@ -41,13 +41,25 @@ abstract contract Test_FleekERC721_Assertions is Test {
 }
 
 abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
+    using FleekENS for bytes;
+
     FleekERC721 internal CuT; // Contract Under Test
     address internal deployer;
+    ENS internal constant _ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
 
     function baseSetUp() internal {
         CuT = new FleekERC721();
         CuT.initialize("Test Contract", "FLKAPS", new uint256[](0));
         deployer = address(this);
+        transferENS(TestConstants.APP_ENS, deployer);
+    }
+
+    function transferENS(string memory ens, address newOwner) public {
+        bytes32 node = bytes(ens).namehash(0);
+        address ensOwner = _ens.owner(node);
+        vm.deal(ensOwner, 100000000000);
+        vm.prank(ensOwner);
+        _ens.setOwner(node, newOwner);
     }
 
     function mintDefault(address to) internal returns (uint256) {

@@ -26,6 +26,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
 
     function test_mintTwoTokensForTwoAddresses() public {
         uint256 firstMint = mintDefault(deployer);
+
+        transferENS("fleek.eth", deployer);
         uint256 secondMint = CuT.mint(
             address(12),
             "Different App Name",
@@ -45,6 +47,7 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
     }
 
     function test_mintWithAutoApprovalAPsOn() public {
+        transferENS("fleek.eth", deployer);
         uint256 mint = CuT.mint(
             address(12),
             "Different App Name",
@@ -83,6 +86,7 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
         bool autoApprovalAp
     ) public {
         vm.assume(to != address(0));
+        transferENS(ens, deployer);
         uint256 tokenId = CuT.mint(
             to,
             appName,
