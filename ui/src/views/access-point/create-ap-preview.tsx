@@ -46,7 +46,7 @@ export const CreateAPPreview = () => {
     }
 
     const formattedCost = ethers.utils.formatEther(cost).slice(0, 9);
-    return `Minting this NFA will cost ${formattedCost} ${currency}.`;
+    return `Creating this Access Point will cost ${formattedCost} ${currency}.`;
   }, [prepareData, isCostLoading, prepareStatus]);
 
   const isLoading = useMemo(
