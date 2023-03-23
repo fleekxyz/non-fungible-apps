@@ -1,5 +1,4 @@
-import { Stepper } from '@/components';
-import { MintStep } from '../mint/mint-step';
+import { Step, Stepper } from '@/components';
 import { WalletStep } from '../mint/wallet-step';
 import { CreateAPForm } from './create-ap-form';
 import { CreateAPPreview } from './create-ap-preview';
@@ -9,21 +8,21 @@ export const CreateApStepper = () => {
     <Stepper.Root initialStep={1}>
       <Stepper.Container>
         <Stepper.Step>
-          <MintStep header="Connect your Ethereum Wallet to create Access Point">
+          <Step header="Connect your Ethereum Wallet to create Access Point">
             <WalletStep />
-          </MintStep>
+          </Step>
         </Stepper.Step>
 
         <Stepper.Step>
-          <MintStep header="Set Access Point">
+          <Step header="Set Access Point">
             <CreateAPForm />
-          </MintStep>
+          </Step>
         </Stepper.Step>
 
         <Stepper.Step>
-          <MintStep header="Create Access Point">
+          <Step header="Create Access Point">
             <CreateAPPreview />
-          </MintStep>
+          </Step>
         </Stepper.Step>
       </Stepper.Container>
     </Stepper.Root>
