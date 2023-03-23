@@ -5,6 +5,7 @@ pragma solidity ^0.8.17;
 import "forge-std/Test.sol";
 import "contracts/FleekERC721.sol";
 import {TestConstants} from "./Constants.sol";
+import {Utils} from "./Utils.sol";
 
 abstract contract Test_FleekERC721_Assertions is Test {
     function expectRevertWithTokenRole(uint256 tokenId, FleekAccessControl.TokenRoles role) public {
@@ -41,8 +42,6 @@ abstract contract Test_FleekERC721_Assertions is Test {
 }
 
 abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
-    using FleekENS for bytes;
-
     FleekERC721 internal CuT; // Contract Under Test
     address internal deployer;
     ENS internal constant _ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
@@ -55,7 +54,7 @@ abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
     }
 
     function transferENS(string memory ens, address newOwner) public {
-        bytes32 node = bytes(ens).namehash(0);
+        bytes32 node = Utils.namehash(bytes(ens), 0);
         address ensOwner = _ens.owner(node);
         vm.deal(ensOwner, 100000000000);
         vm.prank(ensOwner);

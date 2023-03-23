@@ -92,7 +92,7 @@ contract FleekERC721 is
         string memory name,
         string memory description,
         string memory externalURL,
-        string memory ens,
+        string calldata ens,
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
