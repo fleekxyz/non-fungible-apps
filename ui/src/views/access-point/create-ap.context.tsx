@@ -1,13 +1,14 @@
+import { ComboboxItem } from '@/components';
 import { EthereumHooks } from '@/integrations';
 import { useFleekERC721Billing } from '@/store';
-import { AppLog, createContext } from '@/utils';
+import { AppLog, createContext, pushToast } from '@/utils';
 import { useState } from 'react';
 
 export type APContext = {
   billing: string | undefined;
-  tokenId: number;
+  token: ComboboxItem;
   appName: string;
-  setTokenId: (id: number) => void;
+  setToken: (token: ComboboxItem) => void;
   setAppName: (name: string) => void;
 };
 
@@ -18,7 +19,7 @@ const [APProvider, useContext] = createContext<APContext>({
 });
 
 const [TransactionProvider, useTransactionContext] =
-  EthereumHooks.createFleekERC721WriteContext('createAP');
+  EthereumHooks.createFleekERC721WriteContext('addAccessPoint');
 
 export abstract class AP {
   static readonly useContext = useContext;
@@ -27,14 +28,14 @@ export abstract class AP {
 
   static readonly Provider: React.FC<AP.ProviderProps> = ({ children }) => {
     const [billing] = useFleekERC721Billing('AddAccessPoint');
-    const [tokenId, setTokenId] = useState<number>(0);
+    const [token, setToken] = useState<ComboboxItem>({} as ComboboxItem);
     const [appName, setAppName] = useState<string>('');
 
     const value = {
       billing,
-      tokenId,
+      token,
       appName,
-      setTokenId,
+      setToken,
       setAppName,
     };
 
@@ -45,6 +46,7 @@ export abstract class AP {
             transaction: {
               onSuccess: (data) => {
                 AppLog.info('Transaction:', data);
+                pushToast('success', 'Your transaction was successful!');
               },
               onError: (error) => {
                 AppLog.errorToast(error.message);

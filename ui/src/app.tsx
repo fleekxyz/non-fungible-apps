@@ -19,6 +19,7 @@ export const App = () => {
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/mint" element={<Mint />} />
+          <Route path="/create-ap" element={<CreateAP />} />
           <Route path="/create-ap/:id" element={<CreateAP />} />
           {/** TODO remove for release */}
           <Route path="/components-test" element={<ComponentsTest />} />

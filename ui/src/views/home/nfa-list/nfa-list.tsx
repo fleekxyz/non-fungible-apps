@@ -83,7 +83,9 @@ export const NFAList = () => {
                 >
                   <u>Open NFA on Opensea</u>
                 </a>
-                <Link to={`/create-ap/${mint.tokenId}`}>Create AP</Link>
+                <Link to={`/create-ap/${mint.tokenId}?name=${mint.name}`}>
+                  Create AP
+                </Link>
               </Card.Body>
             </Card.Container>
           ))

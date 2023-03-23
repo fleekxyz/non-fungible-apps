@@ -18,3 +18,10 @@ query totalTokens {
   }
 }
 
+query NFAs {
+  tokens {
+    id
+    name
+  }
+}
+
