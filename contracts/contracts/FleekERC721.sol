@@ -9,7 +9,7 @@ import "./FleekAccessControl.sol";
 import "./FleekBilling.sol";
 import "./FleekPausable.sol";
 import "./FleekAccessPoints.sol";
-import "./FleekENS.sol";
+import "./util/FleekENS.sol";
 import "./util/FleekStrings.sol";
 import "./IERCX.sol";
 

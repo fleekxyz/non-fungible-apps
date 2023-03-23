@@ -54,7 +54,7 @@ abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
     }
 
     function transferENS(string memory ens, address newOwner) public {
-        bytes32 node = Utils.namehash(bytes(ens), 0);
+        bytes32 node = Utils.namehash(ens);
         address ensOwner = _ens.owner(node);
         vm.deal(ensOwner, 100000000000);
         vm.prank(ensOwner);
