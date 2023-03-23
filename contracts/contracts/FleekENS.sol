@@ -8,20 +8,22 @@ import {Resolver} from "@ensdomains/ens-contracts/contracts/resolvers/Resolver.s
 
 error MustBeENSOwner();
 
-abstract contract FleekENS is Initializable {
+library FleekENS {
     ENS internal constant _ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
 
     /**
      * @dev Reverts if the sender is not the owner of the ENS node.
      */
-    function _requireENSOwner(string memory name) internal view {
-        if (_ens.owner(keccak256(abi.encodePacked(name))) != msg.sender) revert MustBeENSOwner();
+    function requireENSOwner(string calldata name) internal view {
+        if (_ens.owner(namehash(bytes(name), 0)) != msg.sender) revert MustBeENSOwner();
     }
 
-    /**
-     * @dev This empty reserved space is put in place to allow future versions to add new
-     * variables without shifting down storage in the inheritance chain.
-     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
-     */
-    uint256[49] private __gap;
+    function namehash(bytes calldata name, uint256 index) private pure returns (bytes32) {
+        for (uint256 i = index; i < name.length; i++) {
+            if (name[i] == ".") {
+                return keccak256(abi.encodePacked(namehash(name, i + 1), keccak256(name[index:i])));
+            }
+        }
+        return keccak256(abi.encodePacked(bytes32(0x0), keccak256(name[index:name.length])));
+    }
 }

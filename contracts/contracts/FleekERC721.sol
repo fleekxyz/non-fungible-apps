@@ -24,8 +24,7 @@ contract FleekERC721 is
     FleekAccessControl,
     FleekPausable,
     FleekBilling,
-    FleekAccessPoints,
-    FleekENS
+    FleekAccessPoints
 {
     using Strings for uint256;
     using FleekStrings for FleekERC721.Token;
@@ -93,7 +92,7 @@ contract FleekERC721 is
         string memory name,
         string memory description,
         string memory externalURL,
-        string memory ens,
+        string calldata ens,
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
@@ -101,7 +100,7 @@ contract FleekERC721 is
         bool accessPointAutoApproval,
         address verifier
     ) public payable requirePayment(Billing.Mint) returns (uint256) {
-        _requireENSOwner(ens);
+        FleekENS.requireENSOwner(ens);
         uint256 tokenId = _appIds;
         _mint(to, tokenId);
 

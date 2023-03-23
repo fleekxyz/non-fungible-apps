@@ -26,7 +26,7 @@
 //   return { owner, otherAccount, contract, ens };
 // };
 
-// describe('FleekENS', () => {
+// describe.only('FleekENS', () => {
 //   let fixture: Awaited<ReturnType<typeof baseFixture>>;
 
 //   beforeEach(async () => {
@@ -37,36 +37,42 @@
 //     const { contract, ens } = fixture;
 //     const node = getNode('zoruka.eth');
 
-//     const ensOwner = await ethers.getImpersonatedSigner(await ens.owner(node));
+//     console.log(node, await ens.owner(node));
 
-//     const isOwner = await contract.connect(ensOwner).isENSNodeOwner(node);
+//     // const ensOwner = await ethers.getImpersonatedSigner(await ens.owner(node));
 
-//     expect(isOwner).to.be.true;
+//     // const isOwner = await contract.connect(ensOwner).isENSNodeOwner(node);
+
+//     // expect(isOwner).to.be.true;
+//     console.log(
+//       'test',
+//       await contract.namehash(ethers.utils.toUtf8Bytes('zoruka.eth'))
+//     );
 //   });
 
-//   it('should check permission for subnode', async () => {
-//     const { contract, otherAccount, ens } = fixture;
-//     const node = getNode('zoruka.eth');
+//   // it('should check permission for subnode', async () => {
+//   //   const { contract, otherAccount, ens } = fixture;
+//   //   const node = getNode('zoruka.eth');
 
-//     const ensOwner = await ethers.getImpersonatedSigner(await ens.owner(node));
+//   //   const ensOwner = await ethers.getImpersonatedSigner(await ens.owner(node));
 
-//     await otherAccount.sendTransaction({
-//       to: ensOwner.address,
-//       value: ethers.utils.parseEther('100'),
-//     });
+//   //   await otherAccount.sendTransaction({
+//   //     to: ensOwner.address,
+//   //     value: ethers.utils.parseEther('100'),
+//   //   });
 
-//     await ens
-//       .connect(ensOwner)
-//       .setSubnodeOwner(node, getHash('nfa'), otherAccount.address);
+//   //   await ens
+//   //     .connect(ensOwner)
+//   //     .setSubnodeOwner(node, getHash('nfa'), otherAccount.address);
 
-//     const subnode = getNode('nfa.zoruka.eth');
+//   //   const subnode = getNode('nfa.zoruka.eth');
 
-//     const isSubnodeOwner = await contract
-//       .connect(otherAccount)
-//       .isENSNodeOwner(subnode);
+//   //   const isSubnodeOwner = await contract
+//   //     .connect(otherAccount)
+//   //     .isENSNodeOwner(subnode);
 
-//     expect(isSubnodeOwner).to.be.true;
+//   //   expect(isSubnodeOwner).to.be.true;
 
-//     expect(await contract.connect(ensOwner).isENSNodeOwner(subnode)).to.be.true;
-//   });
+//   //   expect(await contract.connect(ensOwner).isENSNodeOwner(subnode)).to.be.true;
+//   // });
 // });
