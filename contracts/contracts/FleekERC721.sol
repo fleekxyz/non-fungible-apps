@@ -261,8 +261,9 @@ contract FleekERC721 is
      */
     function setTokenENS(
         uint256 tokenId,
-        string memory _tokenENS
+        string calldata _tokenENS
     ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
+        FleekENS.requireENSOwner(_tokenENS);
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
         emit MetadataUpdate(tokenId, "ENS", _tokenENS, msg.sender);
