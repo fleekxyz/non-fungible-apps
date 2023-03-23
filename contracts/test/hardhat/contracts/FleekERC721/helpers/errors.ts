@@ -14,4 +14,5 @@ export const Errors = Object.freeze({
   PausableIsSetTo: 'PausableIsSetTo',
   ThereIsNoTokenMinted: 'ThereIsNoTokenMinted',
   RequiredPayment: 'RequiredPayment',
+  MustBeENSOwner: 'MustBeENSOwner',
 });
