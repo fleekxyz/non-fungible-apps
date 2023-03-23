@@ -19,6 +19,7 @@ const {
   REPORT_GAS,
   POLYGONSCAN_KEY,
   MAINNET_API_KEY,
+  COINMARKETCAP_KEY,
 } = process.env;
 
 const config: HardhatUserConfig = {
@@ -42,9 +43,9 @@ const config: HardhatUserConfig = {
   gasReporter: {
     enabled: REPORT_GAS === 'true' || false,
     currency: 'USD',
-    outputFile: 'gas-report.txt',
+    outputFile: 'gas-report',
     noColors: true,
-    // coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+    coinmarketcap: COINMARKETCAP_KEY,
   },
   contractSizer: {
     runOnCompile: false,
