@@ -26,8 +26,6 @@ export const transferENSNode = async (name: string, to: SignerWithAddress) => {
 
   const ensNode = getENSNode(name);
 
-  console.log('before', await ens.owner(ensNode));
-
   const ensOwner = await ethers.getImpersonatedSigner(await ens.owner(ensNode));
 
   await to.sendTransaction({
@@ -36,6 +34,4 @@ export const transferENSNode = async (name: string, to: SignerWithAddress) => {
   });
 
   await ens.connect(ensOwner).setOwner(ensNode, to.address);
-
-  console.log('after', await ens.owner(ensNode));
 };
