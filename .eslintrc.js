@@ -12,6 +12,7 @@ module.exports = {
       './ui/tsconfig.json',
       './subgraph/tsconfig.json',
       './subgraph/tsconfig.tools.json',
+      './serverless/tsconfig.json',
     ],
   },
   plugins: ['@typescript-eslint', 'prettier'],
