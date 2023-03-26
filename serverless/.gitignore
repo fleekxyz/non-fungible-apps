@@ -7,3 +7,6 @@ jspm_packages
 
 # esbuild directories
 .esbuild
+
+# output
+dist

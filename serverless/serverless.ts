@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { submitBuildInfo } from '@functions/submitBuildInfo';
+import { submitBuildInfo } from '@functions/builds';
 
 const serverlessConfiguration: AWS = {
   service: 'nfa-serverless',

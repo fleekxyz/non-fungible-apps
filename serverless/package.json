@@ -13,6 +13,7 @@
     "@serverless/typescript": "^3.27.0",
     "@types/aws-lambda": "^8.10.114",
     "@types/node": "^18.15.5",
+    "@types/uuid": "^9.0.1",
     "esbuild": "^0.17.12",
     "json-schema-to-ts": "^2.7.2",
     "serverless": "^3.28.1",

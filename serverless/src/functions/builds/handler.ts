@@ -9,6 +9,7 @@ export const submitBuildInfo = middyfy(
     try {
       const id = v4();
       const buildInfo = {
+        event,
         buildId: id,
         createdAt: new Date().toISOString(),
       };
