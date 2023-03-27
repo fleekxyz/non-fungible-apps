@@ -2,10 +2,10 @@ import { IoLogoGithub } from '@react-icons/all-files/io5/IoLogoGithub';
 import { IoArrowBackCircleSharp } from '@react-icons/all-files/io5/IoArrowBackCircleSharp';
 import { IoInformationCircleSharp } from '@react-icons/all-files/io5/IoInformationCircleSharp';
 import { AiOutlineCheck } from '@react-icons/all-files/ai/AiOutlineCheck';
-import { AiOutlineDown } from '@react-icons/all-files/ai/AiOutlineDown';
 import { BiSearch } from '@react-icons/all-files/bi/BiSearch';
 import { IoCloudUploadSharp } from '@react-icons/all-files/io5/IoCloudUploadSharp';
 import {
+  ChevronDownIcon,
   MetamaskIcon,
   EthereumIcon,
   ErrorIcon,
@@ -18,6 +18,7 @@ import { AiOutlineTwitter } from '@react-icons/all-files/ai/AiOutlineTwitter';
 import { IoClose } from '@react-icons/all-files/io5/IoClose';
 import { AiFillCheckCircle } from '@react-icons/all-files/ai/AiFillCheckCircle';
 import { BiGitBranch } from '@react-icons/all-files/bi/BiGitBranch';
+import { BsFillSquareFill } from '@react-icons/all-files/bs/BsFillSquareFill';
 
 export const IconLibrary = Object.freeze({
   back: IoArrowBackCircleSharp,
@@ -25,7 +26,7 @@ export const IconLibrary = Object.freeze({
   branch: BiGitBranch,
   check: AiOutlineCheck,
   'check-circle': IoCheckmarkCircleSharp,
-  'chevron-down': AiOutlineDown,
+  'chevron-down': ChevronDownIcon,
   close: IoClose,
   error: ErrorIcon,
   ethereum: EthereumIcon,
@@ -36,6 +37,7 @@ export const IconLibrary = Object.freeze({
   upload: IoCloudUploadSharp,
   metamask: MetamaskIcon, //remove if not used
   search: BiSearch,
+  square: BsFillSquareFill,
   success: AiFillCheckCircle,
   twitter: AiOutlineTwitter,
 });
