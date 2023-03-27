@@ -2,18 +2,19 @@ import { Card, Flex } from '@/components';
 import { useRef } from 'react';
 // @ts-ignore
 import ColorThief from 'colorthief';
-import { Mint } from '../../../../mint.context';
-import { useMintFormContext } from '../../mint-form.context';
 
-export const ColorPicker = () => {
-  const {
-    form: {
-      appLogo: {
-        value: [appLogo],
-      },
-    },
-  } = useMintFormContext();
-  const { logoColor, setLogoColor } = Mint.useContext();
+export type ColorPickerProps = {
+  logoColor: string;
+  setLogoColor: (color: string) => void;
+  logo: string;
+} & React.HTMLAttributes<HTMLInputElement>;
+
+export const ColorPicker: React.FC<ColorPickerProps> = ({
+  logoColor,
+  logo,
+  setLogoColor,
+  onBlur,
+}) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
   const handleLogoLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -24,6 +25,10 @@ export const ColorPicker = () => {
     setLogoColor(hexColor);
   };
 
+  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLogoColor(e.target.value);
+  };
+
   return (
     <Card.Text css={{ height: '$22', mt: '$6' }}>
       <Flex css={{ gap: '$3h' }}>
@@ -32,12 +37,13 @@ export const ColorPicker = () => {
         <input
           type="color"
           value={logoColor}
-          onChange={(e) => setLogoColor(e.target.value)}
+          onChange={handleColorChange}
+          onBlur={onBlur}
         />
       </Flex>
       <img
         className="hidden"
-        src={appLogo}
+        src={logo}
         ref={imageRef}
         onLoad={handleLogoLoad}
         style={{ width: '50px', height: '50px' }}

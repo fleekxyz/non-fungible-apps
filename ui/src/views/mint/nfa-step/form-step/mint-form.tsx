@@ -36,13 +36,15 @@ export const MintFormStep = () => {
       gitBranch: {
         value: [gitBranch],
       },
+      logoColor: {
+        value: [logoColor],
+      },
       isValid: [isValid],
     },
   } = useMintFormContext();
   const { address } = useAccount();
   const { nextStep } = Stepper.useContext();
-  const { billing, repositoryName, logoColor, verifyNFA, setNfaStep } =
-    Mint.useContext();
+  const { billing, repositoryName, verifyNFA, setNfaStep } = Mint.useContext();
   const { setArgs } = Mint.useTransactionContext();
 
   const handleNextStep = () => {
@@ -50,7 +52,6 @@ export const MintFormStep = () => {
       AppLog.errorToast('No address found. Please connect your wallet.');
       return;
     }
-    // TODO: we need to make sure all values are correct before
     // setting the args otherwise mint may fail
     setArgs([
       address,
@@ -82,14 +83,12 @@ export const MintFormStep = () => {
             rowGap: '$6',
           }}
         >
-          {/* <Form.Root onValidationChange={setIsValid}> */}
           <Grid css={{ rowGap: '$4' }}>
             <AppNameField />
             <AppDescriptionField />
             <LogoField />
             <EnsDomainField />
           </Grid>
-          {/* </Form.Root> */}
           <Button
             disabled={!isValid}
             colorScheme="blue"

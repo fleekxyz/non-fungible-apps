@@ -14,6 +14,7 @@ export type MintFormContext = {
     appName: FormField;
     appDescription: FormField;
     appLogo: FormField;
+    logoColor: FormField;
     ens: FormField;
     domainURL: FormField;
     isValid: ReactState<boolean>;
@@ -44,6 +45,11 @@ export const useMintFormContextInit = (): MintFormContext => ({
       StringValidators.maxFileSize(DEFAULT_MAX_FILE_SIZE),
       StringValidators.required,
     ]),
+    logoColor: useFormField(
+      'logoColor',
+      [StringValidators.required],
+      '#000000'
+    ),
     domainURL: useFormField('domainURL', [
       StringValidators.required,
       StringValidators.isUrl,

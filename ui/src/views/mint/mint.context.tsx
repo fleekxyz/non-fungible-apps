@@ -11,13 +11,11 @@ export type MintContext = {
   repositoryName: GithubState.Repository;
   githubStep: number;
   nfaStep: number;
-  logoColor: string;
   verifyNFA: boolean;
   setGithubStep: (step: number) => void;
   setNfaStep: (step: number) => void;
   setSelectedUserOrg: (userOrgValue: ComboboxItem) => void;
   setRepositoryName: (repo: GithubState.Repository) => void;
-  setLogoColor: (color: string) => void;
   setVerifyNFA: (verify: boolean) => void;
 };
 
@@ -44,7 +42,6 @@ export abstract class Mint {
 
     //NFA Details
     const [nfaStep, setNfaStep] = useState(1);
-    const [logoColor, setLogoColor] = useState('');
     const [verifyNFA, setVerifyNFA] = useState(true);
     const [billing] = useFleekERC721Billing('Mint');
 
@@ -62,13 +59,11 @@ export abstract class Mint {
           repositoryName,
           githubStep,
           nfaStep,
-          logoColor,
           verifyNFA,
           setSelectedUserOrg,
           setGithubStep,
           setNfaStep,
           setRepositoryName,
-          setLogoColor,
           setVerifyNFA,
         }}
       >

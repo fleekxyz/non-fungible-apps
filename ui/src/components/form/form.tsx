@@ -1,7 +1,7 @@
 import { hasValidator } from '@/utils';
 import { fileToBase64 } from '@/views/mint/nfa-step/form-step/form.utils';
 import React, { forwardRef, useMemo, useState } from 'react';
-import { Combobox, ComboboxItem } from '../core';
+import { ColorPicker, Combobox, ComboboxItem } from '../core';
 import { Input, LogoFileInput, Textarea } from '../core/input';
 import {
   FormFieldContext,
@@ -109,7 +109,10 @@ export abstract class Form {
         setValue(e.target.value);
       };
 
-      const handleInputBlur = () => {
+      const handleInputBlur = (
+        e: React.FocusEvent<HTMLInputElement, Element>
+      ) => {
+        if (props.onBlur) props.onBlur(e);
         setValidationEnabled(true);
       };
 
@@ -162,12 +165,40 @@ export abstract class Form {
           {...props}
           onChange={handleComboboxChange}
           selectedValue={comboboxValue || ({} as ComboboxItem)}
-          // onBlur={handleComboboxBlur}
-          // error={validationEnabled && !isValid}
+          onBlur={handleComboboxBlur}
+          error={validationEnabled && !isValid}
         />
       );
     }
   );
+
+  static readonly ColorPicker = ({
+    logo,
+    setLogoColor,
+  }: Form.ColorPickerProps) => {
+    const {
+      value: [value, setValue],
+      validationEnabled: [, setValidationEnabled],
+    } = useFormFieldContext();
+
+    const handleColorChange = (color: string) => {
+      if (setLogoColor) setLogoColor(color);
+      setValue(color);
+    };
+
+    const handleInputBlur = () => {
+      setValidationEnabled(true);
+    };
+
+    return (
+      <ColorPicker
+        logo={logo}
+        logoColor={value}
+        setLogoColor={handleColorChange}
+        onBlur={handleInputBlur}
+      />
+    );
+  };
 
   static readonly Textarea = forwardRef<
     HTMLTextAreaElement,
@@ -263,5 +294,12 @@ export namespace Form {
   export type LogoFileInputProps = Omit<
     React.ComponentProps<typeof LogoFileInput>,
     'value' | 'onChange'
+  >;
+
+  export type ColorPickerProps = {
+    setLogoColor?: (color: string) => void;
+  } & Omit<
+    React.ComponentProps<typeof ColorPicker>,
+    'setLogoColor' | 'logoColor'
   >;
 }

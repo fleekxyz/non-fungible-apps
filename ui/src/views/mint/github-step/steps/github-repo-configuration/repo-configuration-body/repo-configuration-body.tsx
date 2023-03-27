@@ -7,7 +7,7 @@ import { RepoBranchCommitFields } from './repo-branch-commit-fields';
 export const RepoConfigurationBody = () => {
   const {
     form: {
-      isValid: [isValid, setIsValid],
+      isValid: [isValid],
     },
   } = useMintFormContext();
 
@@ -36,7 +36,6 @@ export const RepoConfigurationBody = () => {
             </Button>
           }
         />
-        {/* <Form.Root onValidationChange={setIsValid}> */}
         <RepoBranchCommitFields />
         <Button
           disabled={!isValid}
@@ -46,7 +45,6 @@ export const RepoConfigurationBody = () => {
         >
           Continue
         </Button>
-        {/* </Form.Root> */}
       </Flex>
     </Card.Body>
   );

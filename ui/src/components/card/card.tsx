@@ -1,4 +1,3 @@
-import { Octokit } from 'octokit';
 import React, { forwardRef } from 'react';
 import { Flex } from '../layout';
 import { CardStyles } from './card.styles';
@@ -58,7 +57,7 @@ export namespace Card {
 
   export type HeadingProps = {
     title: string;
-    css: React.CSSProperties;
+    css?: React.CSSProperties;
     leftIcon?: React.ReactNode;
     rightIcon?: React.ReactNode;
   } & React.ComponentProps<typeof CardStyles.Heading>;

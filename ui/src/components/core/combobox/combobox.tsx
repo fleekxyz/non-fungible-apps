@@ -22,28 +22,16 @@ type ComboboxInputProps = {
    */
   leftIcon: IconName;
   /**
-   * Function to handle the input change
-   */
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  /**
-   * Function to handle the input click. When the user clicks on the input, the list of options will be displayed
-   */
-  handleInputClick: () => void;
-  /**
-   * Function to handle the input blur
-   */
-  onBlur?: () => void;
-  /**
    * Value to indicate it's invalid
    */
   error?: boolean;
-};
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
 const ComboboxInput = ({
   open,
   leftIcon,
-  handleInputChange,
-  handleInputClick,
+  onChange,
+  onClick,
   onBlur,
   error,
 }: ComboboxInputProps) => (
@@ -61,14 +49,16 @@ const ComboboxInput = ({
     />
     <ComboboxLib.Input
       placeholder="Search"
-      className={`w-full  border-solid border border-slate7 h-11  py-3 px-10 text-sm leading-5 text-slate11 outline-none ${
+      className={`w-full  border-solid border  h-11  py-3 px-10 text-sm leading-5 text-slate11 outline-none ${
         open
           ? 'border-b-0 rounded-t-xl bg-black border-slate6'
-          : `rounded-xl bg-transparent cursor-pointer ${error && 'border-red9'}`
+          : `rounded-xl bg-transparent cursor-pointer ${
+              error ? 'border-red9' : 'border-slate7'
+            }`
       }`}
       displayValue={(selectedValue: ComboboxItem) => selectedValue.label}
-      onChange={handleInputChange}
-      onClick={handleInputClick}
+      onChange={onChange}
+      onClick={onClick}
       onBlur={onBlur}
     />
     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
@@ -179,6 +169,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
     const [autocompleteItems, setAutocompleteItems] = useState<ComboboxItem[]>(
       []
     );
+    console.log('error', error);
 
     useEffect(() => {
       // If the selected value doesn't exist in the list of items, we add it
@@ -249,8 +240,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
         {({ open }) => (
           <div className="relative">
             <ComboboxInput
-              handleInputChange={handleInputChange}
-              handleInputClick={handleInputClick}
+              onChange={handleInputChange}
+              onClick={handleInputClick}
               open={open}
               leftIcon={leftIcon}
               onBlur={onBlur}
