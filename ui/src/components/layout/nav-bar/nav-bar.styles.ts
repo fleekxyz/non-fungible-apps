@@ -26,5 +26,7 @@ export abstract class NavBarStyles {
 
   static readonly Navigation = styled(Flex, {
     gap: '$10',
+    flexGrow: 4,
+    justifyContent: 'center',
   });
 }

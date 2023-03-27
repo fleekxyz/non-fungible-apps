@@ -11,15 +11,19 @@ export const NavBar: React.FC = () => {
     <Styles.Container>
       <Styles.Content>
         <Logo />
+
         <Styles.Navigation>
           <Button as={Link} to="/" variant="link" color="gray">
-            Home
+            Explore
           </Button>
           <Button as={Link} to="/mint" variant="link" color="gray">
-            Mint
+            Create
           </Button>
-          <ConnectWalletButton />
+          <Button as={Link} to="/" variant="link" color="gray">
+            Learn
+          </Button>
         </Styles.Navigation>
+        <ConnectWalletButton />
       </Styles.Content>
     </Styles.Container>
   );
