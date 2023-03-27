@@ -1,12 +1,11 @@
 service: nfa-serverless
-version: 3
+frameworkVersion: '3'
 
 plugins:
  - serverless-esbuild
-# - serverless-offline
 
 provider:
-    name: aws,
+    name: aws
     runtime: nodejs18.x
     stage: ${opt:stage, 'prd'}
     region: ${opt:region, 'us-west-2'}
@@ -21,21 +20,19 @@ provider:
 custom:
   esbuild:
     bundle: true
-    minify: true
+    minify: false
     sourcemap: false
     exclude: 
       - 'aws-sdk'
     target: 'node18'
-    define:
-      - 'require.resolve': undefined
     platform: 'node'
     concurrency: 10
 
 functions:
   submitBuildInfo:
-    handler: dist/src/handlers/builds/handler.submitBuildInfo
+    handler: dist/src/functions/builds/handler.submitBuildInfo
     events:
       - http:
-        path: build
-        method: post
-        cors: true
+          path: build
+          method: post
+          cors: true
