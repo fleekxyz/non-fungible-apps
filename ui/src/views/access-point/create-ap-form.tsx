@@ -1,3 +1,4 @@
+import { getNFADocument } from '@/../.graphclient';
 import {
   Button,
   Card,
@@ -7,35 +8,42 @@ import {
   IconButton,
   Stepper,
 } from '@/components';
+import { useQuery } from '@apollo/client';
+import { ethers } from 'ethers';
 import { useEffect } from 'react';
-import { useLocation, useParams, useSearchParams } from 'react-router-dom';
-import { AP } from './create-ap.context';
+import { useParams } from 'react-router-dom';
+import { CreateAccessPoint } from './create-ap.context';
 import { NfaPicker } from './nfa-picker';
 
-export const CreateAPForm = () => {
+export const CreateAccessPointForm = () => {
   const { id } = useParams();
-  const { search } = useLocation();
-  const [searchParams] = useSearchParams(search);
 
   const { nextStep, prevStep } = Stepper.useContext();
-  const { token, appName, billing, setAppName, setToken } = AP.useContext();
-  const { setArgs } = AP.useTransactionContext();
+  const { nfa, appName, billing, setAppName, setNfa } =
+    CreateAccessPoint.useContext();
+  const { setArgs } = CreateAccessPoint.useTransactionContext();
+
+  const { data: nfaData } = useQuery(getNFADocument, {
+    skip: id === undefined,
+    variables: {
+      id: ethers.utils.hexlify(Number(id)),
+    },
+  });
 
   useEffect(() => {
-    const name = searchParams.get('name');
-    if (id !== undefined && name) {
-      //set value to context
-      setToken({ value: id, label: name });
+    if (nfaData && nfaData.token && id) {
+      const { name } = nfaData.token;
+      setNfa({ value: id, label: name });
     }
-  }, [id, searchParams]);
+  }, [nfaData, id]);
 
   const handleAppNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAppName(e.target.value);
   };
 
   const handleContinueClick = () => {
-    if (token && appName) {
-      setArgs([token.value, appName, { value: billing }]);
+    if (nfa && appName) {
+      setArgs([Number(nfa.value), appName, { value: billing }]);
       nextStep();
     }
   };
@@ -43,7 +51,7 @@ export const CreateAPForm = () => {
   return (
     <Card.Container css={{ width: '$107h' }}>
       <Card.Heading
-        title={`Create Access Point ${token.label || ''}`}
+        title={`Create Access Point`}
         leftIcon={
           <IconButton
             aria-label="Add"
@@ -75,7 +83,8 @@ export const CreateAPForm = () => {
             <Form.Input value={appName} onChange={handleAppNameChange} />
           </Form.Field>
           <Button
-            disabled={!appName || !token}
+            // TODO add form field validation
+            disabled={!appName || !nfa}
             colorScheme="blue"
             variant="solid"
             onClick={handleContinueClick}

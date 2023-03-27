@@ -179,9 +179,9 @@ export namespace ArgumentsMaps {
       boolean // bool accessPointAutoApproval
     ];
 
-    createAP: [
+    addAccessPoint: [
       number, // tokenId
-      string // appName DNS or ENS url
+      string // access point DNS
     ];
 
     /**

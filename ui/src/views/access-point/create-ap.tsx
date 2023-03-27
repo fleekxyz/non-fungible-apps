@@ -1,5 +1,5 @@
 import { Flex } from '@/components';
-import { AP } from './create-ap.context';
+import { CreateAccessPoint } from './create-ap.context';
 import { CreateApStepper } from './create-ap.stepper';
 
 export const CreateAP = () => {
@@ -12,9 +12,9 @@ export const CreateAP = () => {
         alignItems: 'center',
       }}
     >
-      <AP.Provider>
+      <CreateAccessPoint.Provider>
         <CreateApStepper />
-      </AP.Provider>
+      </CreateAccessPoint.Provider>
     </Flex>
   );
 };

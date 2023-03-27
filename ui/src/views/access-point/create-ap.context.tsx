@@ -4,43 +4,45 @@ import { useFleekERC721Billing } from '@/store';
 import { AppLog, createContext, pushToast } from '@/utils';
 import { useState } from 'react';
 
-export type APContext = {
+export type AccessPointContext = {
   billing: string | undefined;
-  token: ComboboxItem;
+  nfa: ComboboxItem;
   appName: string;
-  setToken: (token: ComboboxItem) => void;
+  setNfa: (nfa: ComboboxItem) => void;
   setAppName: (name: string) => void;
 };
 
-const [APProvider, useContext] = createContext<APContext>({
-  name: 'AP.Context',
-  hookName: 'AP.useContext',
-  providerName: 'AP.Provider',
+const [CreateAPProvider, useContext] = createContext<AccessPointContext>({
+  name: 'CreateAPProvider.Context',
+  hookName: 'CreateAPProvider.useContext',
+  providerName: 'CreateAPProvider.Provider',
 });
 
 const [TransactionProvider, useTransactionContext] =
   EthereumHooks.createFleekERC721WriteContext('addAccessPoint');
 
-export abstract class AP {
+export abstract class CreateAccessPoint {
   static readonly useContext = useContext;
 
   static readonly useTransactionContext = useTransactionContext;
 
-  static readonly Provider: React.FC<AP.ProviderProps> = ({ children }) => {
+  static readonly Provider: React.FC<CreateAccessPoint.ProviderProps> = ({
+    children,
+  }) => {
     const [billing] = useFleekERC721Billing('AddAccessPoint');
-    const [token, setToken] = useState<ComboboxItem>({} as ComboboxItem);
+    const [nfa, setNfa] = useState<ComboboxItem>({} as ComboboxItem);
     const [appName, setAppName] = useState<string>('');
 
     const value = {
       billing,
-      token,
+      nfa,
       appName,
-      setToken,
+      setNfa,
       setAppName,
     };
 
     return (
-      <APProvider value={value}>
+      <CreateAPProvider value={value}>
         <TransactionProvider
           config={{
             transaction: {
@@ -56,12 +58,12 @@ export abstract class AP {
         >
           {children}
         </TransactionProvider>
-      </APProvider>
+      </CreateAPProvider>
     );
   };
 }
 
-export namespace AP {
+export namespace CreateAccessPoint {
   export type ProviderProps = {
     children: React.ReactNode;
   };

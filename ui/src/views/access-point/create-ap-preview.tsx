@@ -7,20 +7,20 @@ import {
   IconButton,
   Stepper,
 } from '@/components';
-import { AP } from './create-ap.context';
 import { useTransactionCost } from '@/hooks';
 import { FleekERC721 } from '@/integrations';
 import { useMemo } from 'react';
 import { ethers } from 'ethers';
+import { CreateAccessPoint } from './create-ap.context';
 
-export const CreateAPPreview = () => {
+export const CreateAccessPointPreview = () => {
   const { prevStep } = Stepper.useContext();
   const {
     prepare: { status: prepareStatus, data: prepareData, error: prepareError },
     write: { status: writeStatus, write },
     transaction: { status: transactionStatus },
-  } = AP.useTransactionContext();
-  const { appName, token } = AP.useContext();
+  } = CreateAccessPoint.useTransactionContext();
+  const { appName, nfa } = CreateAccessPoint.useContext();
 
   const [cost, currency, isCostLoading] = useTransactionCost(
     prepareData?.request.value,
@@ -60,7 +60,7 @@ export const CreateAPPreview = () => {
   return (
     <Card.Container css={{ width: '$107h' }}>
       <Card.Heading
-        title={`Create Access Point token ${token.label}`}
+        title={`Create Access Point ${nfa.label || ''}`}
         leftIcon={
           <IconButton
             aria-label="Add"
@@ -87,7 +87,7 @@ export const CreateAPPreview = () => {
           }}
         >
           <Form.Field>
-            <Form.Label>Token: {token.value}</Form.Label>
+            <Form.Label>NFA: {nfa.value}</Form.Label>
           </Form.Field>
           <Form.Field>
             <Form.Label>{appName}</Form.Label>
@@ -96,7 +96,7 @@ export const CreateAPPreview = () => {
             <Form.Label>{message}</Form.Label>
           </Form.Field>
           <Button
-            disabled={!appName || !token}
+            disabled={!appName || !nfa}
             colorScheme="blue"
             variant="solid"
             onClick={write}

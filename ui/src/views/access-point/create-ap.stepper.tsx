@@ -1,7 +1,7 @@
 import { Step, Stepper } from '@/components';
 import { WalletStep } from '../mint/wallet-step';
-import { CreateAPForm } from './create-ap-form';
-import { CreateAPPreview } from './create-ap-preview';
+import { CreateAccessPointForm } from './create-ap-form';
+import { CreateAccessPointPreview } from './create-ap-preview';
 
 export const CreateApStepper = () => {
   return (
@@ -15,13 +15,13 @@ export const CreateApStepper = () => {
 
         <Stepper.Step>
           <Step header="Set Access Point">
-            <CreateAPForm />
+            <CreateAccessPointForm />
           </Step>
         </Stepper.Step>
 
         <Stepper.Step>
           <Step header="Create Access Point">
-            <CreateAPPreview />
+            <CreateAccessPointPreview />
           </Step>
         </Stepper.Step>
       </Stepper.Container>

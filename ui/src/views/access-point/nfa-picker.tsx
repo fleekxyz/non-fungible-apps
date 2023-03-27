@@ -1,12 +1,13 @@
 import { Combobox, ComboboxItem } from '@/components';
-import { NFAsDocument } from '@/graphclient';
+import { getLatestNFAsDocument } from '@/graphclient';
 import { AppLog } from '@/utils';
 import { useQuery } from '@apollo/client';
-import { AP } from './create-ap.context';
+import { useMemo } from 'react';
+import { CreateAccessPoint } from './create-ap.context';
 
 export const NfaPicker = () => {
-  const { token, setToken } = AP.useContext();
-  const { data, loading, error } = useQuery(NFAsDocument);
+  const { nfa, setNfa } = CreateAccessPoint.useContext();
+  const { data, loading, error } = useQuery(getLatestNFAsDocument);
 
   if (loading) return <div>Loading...</div>;
   if (error) {
@@ -14,20 +15,18 @@ export const NfaPicker = () => {
   }
 
   const handleNfaChange = (item: ComboboxItem) => {
-    setToken(item);
+    setNfa(item);
   };
+
+  const items = useMemo(() => {
+    return data
+      ? data.tokens.map(
+          (nfa) => ({ value: nfa.id, label: nfa.name } as ComboboxItem)
+        )
+      : [];
+  }, [data]);
+
   return (
-    <Combobox
-      items={
-        data
-          ? data.tokens.map(
-              (token) =>
-                ({ value: token.id, label: token.name } as ComboboxItem)
-            )
-          : []
-      }
-      selectedValue={token}
-      onChange={handleNfaChange}
-    />
+    <Combobox items={items} selectedValue={nfa} onChange={handleNfaChange} />
   );
 };
