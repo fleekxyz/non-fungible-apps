@@ -53,6 +53,18 @@ contract FleekERC721 is
     mapping(uint256 => address) private _tokenVerifier;
 
     /**
+     * @dev This constructor sets the state of implementation contract to paused
+     * and disable initializers, not allowing interactions with the implementation
+     * contracts.
+     */
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _setPausable(true);
+        _pause();
+        _disableInitializers();
+    }
+
+    /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
     function initialize(
