@@ -14,7 +14,7 @@ export const MintStepper = () => {
 
   if (!isSuccess) {
     return (
-      <Stepper.Root initialStep={3}>
+      <Stepper.Root initialStep={1}>
         <Stepper.Container>
           <Stepper.Step>
             <MintStep header="Connect your Ethereum Wallet to mint an NFA">
