@@ -1,4 +1,5 @@
-import { Button, Flex } from '@/components';
+import { Button } from '@/components';
+import { Link } from 'react-router-dom';
 import { Header as HS } from './header.styles';
 export const Header = () => (
   <HS.Container>
@@ -6,15 +7,16 @@ export const Header = () => (
       <HS.GrayText>
         Created with a focus on decentralizing your applications,
       </HS.GrayText>
-      <HS.WhiteText>NFAs are the only thing you need.</HS.WhiteText>
+      <HS.WhiteText> NFAs are the only thing you need.</HS.WhiteText>
     </HS.Text>
-    <Flex>
-      <Button colorScheme="blue" variant="ghost">
+    <HS.ButtonContainer>
+      <Button as={Link} to="/mint" colorScheme="blue" variant="outline">
         Create an NFA
       </Button>
-      <Button colorScheme="gray" variant="ghost">
+      {/* TODO replace with create ap route */}
+      <Button as={Link} to="/" colorScheme="gray" variant="outline">
         Host an Access Point
       </Button>
-    </Flex>
+    </HS.ButtonContainer>
   </HS.Container>
 );

@@ -22,4 +22,8 @@ export abstract class Header {
   static readonly WhiteText = styled('span', {
     color: '$slate12',
   });
+
+  static readonly ButtonContainer = styled(Flex, {
+    gap: '$3',
+  });
 }

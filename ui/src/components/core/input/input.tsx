@@ -21,7 +21,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <InputStyled
           {...props}
           ref={ref}
-          css={{ ...(leftIcon && { pl: '$10' }) }}
+          css={{ ...(leftIcon && { pl: '$10' }), ...(props?.css || {}) }}
         />
       </div>
     );
