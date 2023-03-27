@@ -46,7 +46,7 @@ abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
 
     function deployUninitialized() internal returns (FleekERC721) {
         FleekERC721 _contract = new FleekERC721();
-        vm.store(address(_contract), bytes32(uint256(0)), bytes32(0)); // Overrides `_initialized` and `_initializing` states
+        vm.store(address(_contract), bytes32(0), bytes32(0)); // Overrides `_initialized` and `_initializing` states
         return _contract;
     }
 
