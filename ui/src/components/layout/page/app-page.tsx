@@ -1,3 +1,4 @@
+import { NavBar } from '@/components';
 import { PageStyles as PS } from './page.styles';
 
 export type AppPageProps = {
@@ -7,6 +8,7 @@ export type AppPageProps = {
 export const AppPage: React.FC<AppPageProps> = ({ children }: AppPageProps) => {
   return (
     <PS.Container>
+      <NavBar />
       <PS.Content as="main">{children}</PS.Content>
     </PS.Container>
   );
