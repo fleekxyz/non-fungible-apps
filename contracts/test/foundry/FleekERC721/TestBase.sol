@@ -44,8 +44,15 @@ abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
     FleekERC721 internal CuT; // Contract Under Test
     address internal deployer;
 
+    function deployUninitialized() internal returns (FleekERC721) {
+        FleekERC721 _contract = new FleekERC721();
+        vm.store(address(_contract), bytes32(uint256(0)), bytes32(0)); // Overrides `_initialized` and `_initializing` states
+        return _contract;
+    }
+
     function baseSetUp() internal {
-        CuT = new FleekERC721();
+        vm.prank(address(CuT));
+        CuT = deployUninitialized();
         CuT.initialize("Test Contract", "FLKAPS", new uint256[](0));
         deployer = address(this);
     }
