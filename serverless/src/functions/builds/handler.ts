@@ -1,12 +1,16 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayEvent, Context, APIGatewayProxyResult } from 'aws-lambda';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 
 import { v4 } from 'uuid';
 
 export const submitBuildInfo = middyfy(
-  async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  async (
+    event: APIGatewayEvent,
+    context: Context
+  ): Promise<APIGatewayProxyResult> => {
     try {
+      console.log('context: ', context.identity);
       const id = v4();
       const buildInfo = {
         event,
