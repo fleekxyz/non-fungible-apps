@@ -2,11 +2,6 @@ import { FormField, useFormField } from '@/components';
 import { createContext, StringValidators } from '@/utils';
 import { useState } from 'react';
 
-/**
- * The file size must be capped to a size that the contract can handle
- */
-const DEFAULT_MAX_FILE_SIZE = 10; // in KB
-
 export type MintFormContext = {
   form: {
     gitBranch: FormField;
@@ -42,7 +37,7 @@ export const useMintFormContextInit = (): MintFormContext => ({
       StringValidators.hasSpecialCharacters,
     ]),
     appLogo: useFormField('appLogo', [
-      StringValidators.maxFileSize(DEFAULT_MAX_FILE_SIZE),
+      StringValidators.maxFileSize(10), // in KB
       StringValidators.required,
     ]),
     logoColor: useFormField(
