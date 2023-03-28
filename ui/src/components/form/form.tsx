@@ -212,11 +212,17 @@ export abstract class Form {
     } = useFormFieldContext();
     const isValid = useFormFieldValidatorValue(id, validators, value);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleTextareaChange = (
+      e: React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+      if (props.onChange) props.onChange(e);
       setValue(e.target.value);
     };
 
-    const handleInputBlur = () => {
+    const handleTextareaBlur = (
+      e: React.FocusEvent<HTMLTextAreaElement, Element>
+    ) => {
+      if (props.onBlur) props.onBlur(e);
       setValidationEnabled(true);
     };
 
@@ -225,9 +231,9 @@ export abstract class Form {
         ref={ref}
         {...props}
         value={value}
-        onChange={handleInputChange}
+        onChange={handleTextareaChange}
         aria-invalid={validationEnabled && !isValid}
-        onBlur={handleInputBlur}
+        onBlur={handleTextareaBlur}
       />
     );
   });
@@ -283,7 +289,7 @@ export namespace Form {
 
   export type TextareaProps = Omit<
     React.ComponentProps<typeof Textarea>,
-    'value' | 'onChange' | 'error'
+    'value' | 'error'
   >;
 
   export type ComboboxProps = Omit<
