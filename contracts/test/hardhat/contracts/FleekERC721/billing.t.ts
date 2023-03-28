@@ -1,12 +1,7 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
-import {
-  Fixtures,
-  TestConstants,
-  Errors,
-  OverloadedFunctions,
-} from './helpers';
+import { Fixtures, TestConstants, Errors } from './helpers';
 
 const { Billing, MintParams } = TestConstants;
 
@@ -17,7 +12,7 @@ describe('FleekERC721.Billing', () => {
 
   const mint = (value?: any) => {
     const { contract, owner } = fixture;
-    return contract[OverloadedFunctions.Mint.Default](
+    return contract.mint(
       owner.address,
       MintParams.name,
       MintParams.description,
@@ -27,6 +22,8 @@ describe('FleekERC721.Billing', () => {
       MintParams.gitRepository,
       MintParams.logo,
       MintParams.color,
+      MintParams.accessPointAutoApprovalSettings,
+      owner.address,
       { value }
     );
   };

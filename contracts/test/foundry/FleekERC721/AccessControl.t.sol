@@ -34,8 +34,10 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
         // Mint to tokenOwner to set tokenOwner
         mintDefault(tokenOwner);
         // Set tokenController to minted token
-        vm.prank(tokenOwner);
+        vm.startPrank(tokenOwner);
         CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, tokenController);
+        CuT.setTokenVerifier(tokenId, collectionVerifier);
+        vm.stopPrank();
     }
 
     function test_setUp() public {

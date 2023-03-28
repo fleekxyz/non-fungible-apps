@@ -10,7 +10,6 @@ import {
   ChangeAccessPointNameVerify,
   TokenRoleChanged,
   CollectionRoleChanged,
-  TokenRolesCleared,
 } from '../../../generated/FleekNFA/FleekNFA';
 import {
   handleApproval,
@@ -22,7 +21,6 @@ import {
   handleTransfer,
   handleTokenRoleChanged,
   handleCollectionRoleChanged,
-  handleTokenRolesCleared,
 } from '../../../src/fleek-nfa';
 
 export function createApprovalEvent(
@@ -165,6 +163,9 @@ export function createNewMintEvent(
   );
   newMintEvent.parameters.push(
     new ethereum.EventParam('owner', ethereum.Value.fromAddress(to))
+  );
+  newMintEvent.parameters.push(
+    new ethereum.EventParam('verifier', ethereum.Value.fromAddress(to))
   );
 
   newMintEvent.transaction.hash = Bytes.fromI32(event_count);
@@ -368,32 +369,6 @@ export function createNewCollectionRoleChanged(
   return collectionRoleChanged;
 }
 
-export function createNewTokenRolesCleared(
-  event_count: i32,
-  tokenId: BigInt,
-  byAddress: Address
-): TokenRolesCleared {
-  let tokenRolesCleared = changetype<TokenRolesCleared>(newMockEvent());
-
-  tokenRolesCleared.parameters = new Array();
-
-  tokenRolesCleared.parameters.push(
-    new ethereum.EventParam(
-      'tokenId',
-      ethereum.Value.fromUnsignedBigInt(tokenId)
-    )
-  );
-
-  tokenRolesCleared.parameters.push(
-    new ethereum.EventParam('byAddress', ethereum.Value.fromAddress(byAddress))
-  );
-
-  tokenRolesCleared.transaction.hash = Bytes.fromI32(event_count);
-  tokenRolesCleared.logIndex = new BigInt(event_count);
-
-  return tokenRolesCleared;
-}
-
 export const CONTRACT: Address = Address.fromString(
   '0x0000000000000000000000000000000000000000'
 );
@@ -464,12 +439,6 @@ export function handleCollectionRoleChangedList(
 ): void {
   events.forEach((event) => {
     handleCollectionRoleChanged(event);
-  });
-}
-
-export function handleTokenRolesClearedList(events: TokenRolesCleared[]): void {
-  events.forEach((event) => {
-    handleTokenRolesCleared(event);
   });
 }
 

@@ -16,16 +16,19 @@ export const StyledInputFile = forwardRef<HTMLDivElement, InputFileProps>(
       onChange(e);
     };
 
+    const handleInputClick = () => {
+      inputFileRef.current?.click();
+    };
+
     return (
       <>
-        <S.Container onClick={() => inputFileRef.current?.click()}>
+        <S.Container onClick={handleInputClick}>
           {file !== '' ? (
             <img className="absolute w-14 h-14" src={file} alt="logo" />
           ) : (
             <Icon name="upload" size="md" css={{ position: 'absolute' }} />
           )}
           <S.Border {...props} ref={ref} />
-
           <input
             type="file"
             className="hidden"
