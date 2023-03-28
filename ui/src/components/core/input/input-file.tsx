@@ -34,6 +34,10 @@ export const StyledInputFile = forwardRef<HTMLDivElement, InputFileProps>(
       onChange(e);
     };
 
+    const handleInputClick = () => {
+      inputFileRef.current?.click();
+    };
+
     return (
       <>
         <Flex
@@ -45,7 +49,7 @@ export const StyledInputFile = forwardRef<HTMLDivElement, InputFileProps>(
           }}
           ref={ref}
           {...props}
-          onClick={() => inputFileRef.current?.click()}
+          onClick={handleInputClick}
         >
           {file !== '' ? (
             <img className="absolute w-14 h-14" src={file} alt="logo" />
