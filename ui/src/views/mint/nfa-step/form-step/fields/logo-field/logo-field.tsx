@@ -1,37 +1,26 @@
 import { Flex, Form } from '@/components';
-import { AppLog } from '@/utils';
-import { useState } from 'react';
-import { Mint } from '../../../../mint.context';
-import { fileToBase64, validateFileSize } from '../../form.utils';
-import { ColorPicker } from './color-picker';
+import { useMintFormContext } from '../../mint-form.context';
 
 export const LogoField = () => {
-  const { appLogo, setAppLogo, setLogoColor } = Mint.useContext();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const {
+    form: { appLogo: appLogoContext, logoColor: logoColorContext },
+  } = useMintFormContext();
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const {
+    value: [appLogo],
+  } = appLogoContext;
 
-    if (file) {
-      if (validateFileSize(file)) {
-        const fileBase64 = await fileToBase64(file);
-        setAppLogo(fileBase64);
-        setErrorMessage(null);
-      } else {
-        setAppLogo('');
-        setLogoColor('');
-        setErrorMessage('File size is too big');
-      }
-    }
-  };
   return (
     <Flex css={{ width: '$full', gap: '$4h', alignItems: 'flex-start' }}>
-      <Form.Field>
-        <Form.Label isRequired>Logo</Form.Label>
-        <Form.LogoFileInput value={appLogo} onChange={handleFileChange} />
-        {errorMessage && <Form.Error>{errorMessage}</Form.Error>}
+      <Form.Field context={appLogoContext}>
+        <Form.Label>Logo</Form.Label>
+        <Form.LogoFileInput />
+        <Form.Overline />
       </Form.Field>
-      <ColorPicker />
+      <Form.Field context={logoColorContext} css={{ flexGrow: 1 }}>
+        <Form.ColorPicker logo={appLogo} />
+        <Form.Overline />
+      </Form.Field>
     </Flex>
   );
 };

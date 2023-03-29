@@ -1,10 +1,18 @@
-import { Card, ComboboxItem, Flex, Grid, Icon, Spinner } from '@/components';
+import {
+  Card,
+  ComboboxItem,
+  Flex,
+  Grid,
+  Icon,
+  IconButton,
+  Spinner,
+} from '@/components';
 import { Input } from '@/components/core/input';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useGithubStore } from '@/store';
 import { MintCardHeader } from '@/views/mint/mint-card';
 import { Mint } from '@/views/mint/mint.context';
-import React, { forwardRef, useState } from 'react';
+import React, { useState } from 'react';
 import { RepositoriesList } from './repositories-list';
 import { UserOrgsCombobox } from './users-orgs-combobox';
 
@@ -44,9 +52,27 @@ export const GithubRepositoryConnection: React.FC = () => {
 
   return (
     <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pr: '$3h' }}>
-      <MintCardHeader
+      <Card.Heading
         title="Select Repository"
-        onClickBack={handlePrevStepClick}
+        css={{ pr: '$3h' }}
+        leftIcon={
+          <IconButton
+            aria-label="back"
+            colorScheme="gray"
+            variant="link"
+            icon={<Icon name="back" />}
+            css={{ mr: '$2' }}
+            onClick={handlePrevStepClick}
+          />
+        }
+        rightIcon={
+          <IconButton
+            aria-label="info"
+            colorScheme="gray"
+            variant="link"
+            icon={<Icon name="info" />}
+          />
+        }
       />
       <Card.Body css={{ pt: '$4' }}>
         <Grid css={{ rowGap: '$2' }}>

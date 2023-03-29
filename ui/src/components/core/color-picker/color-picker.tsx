@@ -2,10 +2,19 @@ import { Button, Card, Flex, Icon } from '@/components';
 import { useRef } from 'react';
 // @ts-ignore
 import ColorThief from 'colorthief';
-import { Mint } from '../../../../mint.context';
 
-export const ColorPicker = () => {
-  const { appLogo, logoColor, setLogoColor } = Mint.useContext();
+export type ColorPickerProps = {
+  logoColor: string;
+  setLogoColor: (color: string) => void;
+  logo: string;
+} & React.HTMLAttributes<HTMLInputElement>;
+
+export const ColorPicker: React.FC<ColorPickerProps> = ({
+  logoColor,
+  logo,
+  setLogoColor,
+  onBlur,
+}) => {
   const inputColorRef = useRef<HTMLInputElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -15,6 +24,10 @@ export const ColorPicker = () => {
       .map((c: number) => c.toString(16).padStart(2, '0'))
       .join('')}`;
     setLogoColor(hexColor);
+  };
+
+  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLogoColor(e.target.value);
   };
 
   const handleColorPickerClick = () => {
@@ -43,6 +56,7 @@ export const ColorPicker = () => {
               borderRadius: '$md',
               color: '$slate12',
               zIndex: '$dropdown',
+              minWidth: '$28',
             }}
             onClick={handleColorPickerClick}
           >
@@ -53,14 +67,14 @@ export const ColorPicker = () => {
             className="absolute right-16"
             type="color"
             value={logoColor}
-            onChange={(e) => setLogoColor(e.target.value)}
+            onChange={handleColorChange}
           />
         </Flex>
       </div>
 
       <img
         className="hidden"
-        src={appLogo}
+        src={logo}
         ref={imageRef}
         onLoad={handleLogoLoad}
         style={{ width: '50px', height: '50px' }}

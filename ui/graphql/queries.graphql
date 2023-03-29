@@ -18,3 +18,12 @@ query totalTokens {
   }
 }
 
+# query to get the ens name of an address
+query getENSNames($address: ID!) {
+  account(id: $address) {
+    domains {
+      name
+    }
+  }
+}
+

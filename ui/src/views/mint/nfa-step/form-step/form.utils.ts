@@ -1,16 +1,3 @@
-//TODO create env variable
-const DEFAULT_MAX_FILE_SIZE = 10; // in KB
-
-/**
- * The file size must be capped to a size that the contract can handle
- */
-export const validateFileSize = (
-  file: File,
-  maxSize = DEFAULT_MAX_FILE_SIZE
-): boolean => {
-  return file.size <= 1024 * maxSize;
-};
-
 /**
  * Converts the File from the input to a base64 string.
  */
