@@ -292,9 +292,11 @@ export namespace Form {
     'value' | 'error'
   >;
 
-  export type ComboboxProps = Omit<
+  export type ComboboxProps = {
+    onChange?: (option: ComboboxItem) => void;
+  } & Omit<
     React.ComponentProps<typeof Combobox>,
-    'error' | 'selectedValue'
+    'error' | 'selectedValue' | 'onChange'
   >;
 
   export type LogoFileInputProps = Omit<

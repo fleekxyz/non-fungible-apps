@@ -169,7 +169,6 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
     const [autocompleteItems, setAutocompleteItems] = useState<ComboboxItem[]>(
       []
     );
-    console.log('error', error);
 
     useEffect(() => {
       // If the selected value doesn't exist in the list of items, we add it

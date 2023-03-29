@@ -49,7 +49,7 @@ export const useMintFormContextInit = (): MintFormContext => ({
       StringValidators.required,
       StringValidators.isUrl,
     ]),
-    ens: useFormField('ens', [StringValidators.required]),
+    ens: useFormField('ens', [], ''),
     isValid: useState(false),
   },
 });
