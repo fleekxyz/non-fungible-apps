@@ -21,7 +21,7 @@ provider:
 custom:
   esbuild:
     bundle: true
-    minify: false
+    minify: true
     sourcemap: false
     exclude: 
       - 'aws-sdk'
@@ -31,7 +31,7 @@ custom:
 
 functions:
   submitBuildInfo:
-    handler: dist/src/functions/builds/handler.submitBuildInfo
+    handler: dist/functions/builds/handler.submitBuildInfo
     events:
       - http:
           path: build
