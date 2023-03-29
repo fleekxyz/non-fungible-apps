@@ -8,6 +8,7 @@ import {
   IconButton,
   Stepper,
 } from '@/components';
+import { AppLog } from '@/utils';
 import { useQuery } from '@apollo/client';
 import { ethers } from 'ethers';
 import { useEffect } from 'react';
@@ -23,7 +24,7 @@ export const CreateAccessPointForm = () => {
     CreateAccessPoint.useContext();
   const { setArgs } = CreateAccessPoint.useTransactionContext();
 
-  const { data: nfaData } = useQuery(getNFADocument, {
+  const { data: nfaData, error: nfaError } = useQuery(getNFADocument, {
     skip: id === undefined,
     variables: {
       id: ethers.utils.hexlify(Number(id)),
@@ -31,9 +32,17 @@ export const CreateAccessPointForm = () => {
   });
 
   useEffect(() => {
+    if (nfaError) {
+      AppLog.errorToast('Error fetching NFA');
+    }
+  }, [nfaError]);
+
+  useEffect(() => {
     if (nfaData && nfaData.token && id) {
       const { name } = nfaData.token;
       setNfa({ value: id, label: name });
+    } else {
+      AppLog.errorToast("We couldn't find the NFA you are looking for");
     }
   }, [nfaData, id]);
 
