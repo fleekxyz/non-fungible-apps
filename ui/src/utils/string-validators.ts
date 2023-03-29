@@ -57,7 +57,6 @@ export const StringValidators = {
   required,
   maxLength,
   isUrl,
-  isEns,
   maxFileSize,
   hasSpecialCharacters,
 };
