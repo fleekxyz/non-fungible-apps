@@ -39,6 +39,9 @@ jobs:
       - name: Audit
         run: yarn audit --groups dependencies
 
+      - name: Copy and rename the .env.example file
+        run: cp .env.example .env
+
       - name: Compile
         run: yarn compile
 
