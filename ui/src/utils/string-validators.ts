@@ -31,12 +31,6 @@ const isUrl: StringValidator = {
   message: 'Is not a valid URL',
 };
 
-const isEns: StringValidator = {
-  name: 'isEns',
-  validate: (value = '') => value.endsWith('.eth'),
-  message: 'Is not a valid ENS',
-};
-
 const maxFileSize: StringValidatorWithParams<number> = (maxSize: number) => ({
   name: 'maxFileSize',
   validate: (value = '') => {
