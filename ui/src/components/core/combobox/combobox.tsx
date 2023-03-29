@@ -5,7 +5,11 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Combobox as ComboboxLib, Transition } from '@headlessui/react';
+import {
+  Combobox as ComboboxLib,
+  ComboboxInputProps as ComboboxLibInputProps,
+  Transition,
+} from '@headlessui/react';
 import { Icon, IconName } from '@/components/core/icon';
 import { Flex } from '@/components/layout';
 import { useDebounce } from '@/hooks/use-debounce';
@@ -25,15 +29,13 @@ type ComboboxInputProps = {
    * Value to indicate it's invalid
    */
   error?: boolean;
-} & React.InputHTMLAttributes<HTMLInputElement>;
+} & ComboboxLibInputProps<'input', ComboboxItem>;
 
 const ComboboxInput = ({
   open,
   leftIcon,
-  onChange,
-  onClick,
-  onBlur,
   error,
+  ...props
 }: ComboboxInputProps) => (
   <div className="relative w-full">
     <Icon
@@ -57,9 +59,7 @@ const ComboboxInput = ({
             }`
       }`}
       displayValue={(selectedValue: ComboboxItem) => selectedValue.label}
-      onChange={onChange}
-      onClick={onClick}
-      onBlur={onBlur}
+      {...props}
     />
     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
       <Icon name="chevron-down" css={{ fontSize: '$xs' }} />
