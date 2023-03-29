@@ -14,10 +14,13 @@ import deploy from './scripts/deploy';
 dotenv.config();
 
 const {
-  API_URL = 'https://polygon-mainnet.alchemyapi.io/v2/your-api-key',
   PRIVATE_KEY,
   REPORT_GAS,
   ETHERSCAN_API_KEY,
+  POLYGON_API_URL,
+  ETH_MAIN_API_URL,
+  ETH_SEPOLIA_API_URL,
+  ETH_GOERLI_API_URL
 } = process.env;
 
 const config: HardhatUserConfig = {
@@ -27,14 +30,24 @@ const config: HardhatUserConfig = {
       chainId: 31337,
     },
     mumbai: {
-      url: API_URL,
+      url: POLYGON_API_URL,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 80001,
     },
     goerli: {
-      url: API_URL,
+      url: ETH_GOERLI_API_URL,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 5,
+    },
+    sepolia: {
+      url: ETH_SEPOLIA_API_URL,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      chainId: 11155111,
+    },
+    mainnet: {
+      url: ETH_MAIN_API_URL,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      chainId: 1,
     },
   },
   gasReporter: {
@@ -74,7 +87,7 @@ const config: HardhatUserConfig = {
 
 export default config;
 
-// npx hardhat deploy --network mumbai --new-proxy-instance --name "FleekNFAs" --symbol "FLKNFA" --billing "[10000, 20000]"
+// npx hardhat deploy --network mumbai/sepolia/goerli --new-proxy-instance --name "FleekNFAs" --symbol "FLKNFA" --billing "[10000, 20000]"
 task('deploy', 'Deploy the contracts')
   .addFlag('newProxyInstance', 'Force to deploy a new proxy instance')
   .addOptionalParam('name', 'The collection name', 'FleekNFAs', types.string)

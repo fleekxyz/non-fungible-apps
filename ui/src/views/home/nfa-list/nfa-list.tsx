@@ -78,7 +78,8 @@ export const NFAList = () => {
               <Card.Body css={{ display: 'flex', flexDirection: 'column' }}>
                 <a
                   target="_blank"
-                  href={`https://testnets.opensea.io/assets/mumbai/${FleekERC721.address}/${mint.tokenId}`}
+                  // TODO: make base url come from env var
+                  href={`https://testnets.opensea.io/assets/goerli/${FleekERC721.address}/${mint.tokenId}`}
                   rel="noreferrer"
                 >
                   <u>Open NFA on Opensea</u>
