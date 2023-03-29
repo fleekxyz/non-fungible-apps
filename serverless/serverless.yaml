@@ -2,7 +2,8 @@ service: nfa-serverless
 frameworkVersion: '3'
 
 plugins:
- - serverless-esbuild
+  - serverless-esbuild
+  - serverless-offline
 
 provider:
     name: aws

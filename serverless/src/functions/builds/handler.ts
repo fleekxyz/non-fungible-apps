@@ -10,7 +10,6 @@ export const submitBuildInfo = middyfy(
     context: Context
   ): Promise<APIGatewayProxyResult> => {
     try {
-      console.log('context: ', context.identity);
       const id = v4();
       const buildInfo = {
         event,
