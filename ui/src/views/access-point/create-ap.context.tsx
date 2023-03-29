@@ -51,7 +51,9 @@ export abstract class CreateAccessPoint {
                 pushToast('success', 'Your transaction was successful!');
               },
               onError: (error) => {
-                AppLog.errorToast(error.message);
+                AppLog.errorToast(
+                  'There was an error trying to create the Access Point. Please try again'
+                );
               },
             },
           }}
