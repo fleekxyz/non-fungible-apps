@@ -15,6 +15,19 @@ module.exports = {
       './serverless/tsconfig.json',
     ],
   },
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ['@typescript-eslint', 'prettier', 'filenames-simple'],
   root: true,
+  overrides: [
+    {
+      files: ['*.ts'],
+      rules: {
+        'filenames-simple/naming-convention': [
+          'error',
+          {
+            rule: 'kebab-case',
+          },
+        ],
+      },
+    },
+  ],
 };

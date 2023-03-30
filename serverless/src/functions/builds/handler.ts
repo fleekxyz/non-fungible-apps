@@ -1,6 +1,5 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { formatJSONResponse } from '@libs/apiGateway';
-// import { middyfy } from '@libs/lambda';
+import { formatJSONResponse } from '@libs/api-gateway';
 
 import { v4 } from 'uuid';
 
