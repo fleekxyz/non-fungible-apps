@@ -42,6 +42,15 @@ export abstract class FormStyles {
     mt: '$1h',
   });
 
+  static readonly Overline = styled('div', {
+    display: 'flex',
+    justifyContent: 'space-between',
+  });
+
+  static readonly OverlineErrors = styled(Flex, {
+    flexDirection: 'column',
+  });
+
   static readonly ErrorMessage = styled('span', {
     color: '$red11',
     fontSize: '0.625rem',

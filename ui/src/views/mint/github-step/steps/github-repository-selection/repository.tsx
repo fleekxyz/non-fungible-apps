@@ -1,6 +1,7 @@
 import { Button, Separator } from '@/components';
 import { githubActions, GithubState, useAppDispatch } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
+import { useCallback } from 'react';
 import { RepoRow } from '../repository-row';
 
 type RepositoryProps = {
@@ -13,11 +14,12 @@ export const Repository = ({ repository, index, length }: RepositoryProps) => {
 
   const dispatch = useAppDispatch();
 
-  const handleSelectRepo = () => {
+  const handleSelectRepo = useCallback(() => {
     setRepositoryName(repository);
     setGithubStep(3);
     dispatch(githubActions.setQueryState('idle'));
-  };
+  }, [dispatch]);
+
   return (
     <>
       <RepoRow
