@@ -1,6 +1,7 @@
 import {
   Button,
   Card,
+  Flex,
   Form,
   Grid,
   Icon,
@@ -12,6 +13,7 @@ import { FleekERC721 } from '@/integrations';
 import { useMemo } from 'react';
 import { ethers } from 'ethers';
 import { CreateAccessPoint } from './create-ap.context';
+import { useAccessPointFormContext } from './create-ap.form.context';
 
 export const CreateAccessPointPreview = () => {
   const { prevStep } = Stepper.useContext();
@@ -20,20 +22,24 @@ export const CreateAccessPointPreview = () => {
     write: { status: writeStatus, write },
     transaction: { status: transactionStatus },
   } = CreateAccessPoint.useTransactionContext();
-  const { appName, nfa } = CreateAccessPoint.useContext();
+  const {
+    form: {
+      appName: {
+        value: [appName],
+      },
+    },
+  } = useAccessPointFormContext();
+  const { nfa } = CreateAccessPoint.useContext();
 
   const [cost, currency, isCostLoading] = useTransactionCost(
     prepareData?.request.value,
     prepareData?.request.gasLimit
   );
 
-  //TODO handle error when minting
-
   const message = useMemo(() => {
     if (isCostLoading || prepareStatus === 'loading')
       return 'Calculating cost...';
 
-    // TODO: better UI for prepare errors
     if (prepareError) {
       const parsedError = FleekERC721.parseError(
         (prepareError as any).error?.data.data
@@ -86,17 +92,13 @@ export const CreateAccessPointPreview = () => {
             rowGap: '$6',
           }}
         >
-          <Form.Field>
-            <Form.Label>NFA: {nfa.value}</Form.Label>
-          </Form.Field>
-          <Form.Field>
-            <Form.Label>{appName}</Form.Label>
-          </Form.Field>
-          <Form.Field>
-            <Form.Label>{message}</Form.Label>
-          </Form.Field>
+          <Flex>
+            <span>NFA: {nfa.value}</span>
+            <span>{appName}</span>
+            <span className="text-slate11 text-sm">{message}</span>
+          </Flex>
           <Button
-            disabled={!appName || !nfa}
+            disabled={!!prepareError || !nfa}
             colorScheme="blue"
             variant="solid"
             onClick={write}

@@ -9,11 +9,6 @@ export const NfaPicker = () => {
   const { nfa, setNfa } = CreateAccessPoint.useContext();
   const { data, loading, error } = useQuery(getLatestNFAsDocument);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) {
-    AppLog.errorToast('Error loading NFA list');
-  }
-
   const handleNfaChange = (item: ComboboxItem) => {
     setNfa(item);
   };
@@ -25,6 +20,12 @@ export const NfaPicker = () => {
         )
       : [];
   }, [data]);
+
+  if (loading) return <div>Loading...</div>;
+
+  if (error) {
+    AppLog.errorToast('Error loading NFA list');
+  }
 
   return (
     <Combobox items={items} selectedValue={nfa} onChange={handleNfaChange} />

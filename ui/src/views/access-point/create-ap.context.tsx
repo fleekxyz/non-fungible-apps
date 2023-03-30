@@ -7,9 +7,7 @@ import { useState } from 'react';
 export type AccessPointContext = {
   billing: string | undefined;
   nfa: ComboboxItem;
-  appName: string;
   setNfa: (nfa: ComboboxItem) => void;
-  setAppName: (name: string) => void;
 };
 
 const [CreateAPProvider, useContext] = createContext<AccessPointContext>({
@@ -31,14 +29,11 @@ export abstract class CreateAccessPoint {
   }) => {
     const [billing] = useFleekERC721Billing('AddAccessPoint');
     const [nfa, setNfa] = useState<ComboboxItem>({} as ComboboxItem);
-    const [appName, setAppName] = useState<string>('');
 
     const value = {
       billing,
       nfa,
-      appName,
       setNfa,
-      setAppName,
     };
 
     return (
