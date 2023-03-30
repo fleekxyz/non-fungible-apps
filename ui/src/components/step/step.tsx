@@ -31,12 +31,12 @@ const Container = ({ children }: MintStepContainerProps) => (
   </Flex>
 );
 
-type MintStepProps = {
+type StepProps = {
   children: React.ReactNode;
   header: string;
 };
 
-export const MintStep: React.FC<MintStepProps> = ({ children, header }) => {
+export const Step: React.FC<StepProps> = ({ children, header }) => {
   return (
     <Container>
       <StepperIndicatorContainer>

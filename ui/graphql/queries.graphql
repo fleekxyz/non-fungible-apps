@@ -1,5 +1,5 @@
-query lastMintsPaginated($pageSize: Int, $skip: Int) {
-  newMints(
+query lastNFAsPaginated($pageSize: Int, $skip: Int) {
+  tokens(
     first: $pageSize
     skip: $skip
     orderDirection: desc
@@ -15,6 +15,29 @@ query lastMintsPaginated($pageSize: Int, $skip: Int) {
 query totalTokens {
   tokens {
     id
+  }
+}
+
+query getLatestNFAs {
+  tokens {
+    id
+    name
+  }
+}
+
+query getNFA($id: ID!) {
+  token(id: $id) {
+    tokenId
+    name
+  }
+}
+
+# query to get the ens name of an address
+query getENSNames($address: ID!) {
+  account(id: $address) {
+    domains {
+      name
+    }
   }
 }
 

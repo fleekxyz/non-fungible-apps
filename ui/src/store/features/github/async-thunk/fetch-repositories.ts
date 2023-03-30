@@ -1,4 +1,5 @@
 import { githubActions, RootState } from '@/store';
+import { AppLog } from '@/utils';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { GithubClient } from '../github-client';
 
@@ -18,7 +19,7 @@ export const fetchRepositoriesThunk = createAsyncThunk(
 
       dispatch(githubActions.setRepositories(repositories));
     } catch (error) {
-      console.log(error);
+      AppLog.errorToast('Failed to fetch repositories. Please try again.');
       dispatch(githubActions.setQueryState('failed'));
     }
   }

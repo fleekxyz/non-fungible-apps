@@ -24,6 +24,7 @@ module.exports = {
         green4: 'rgba(17, 49, 35, 1)',
         green11: 'rgba(76, 195, 138, 1)',
         red4: 'rgba(72, 26, 29, 1)',
+        red9: 'rgba(229, 72, 77, 1)',
         red11: 'rgba(255, 99, 105, 1)',
       },
       borderRadius: {

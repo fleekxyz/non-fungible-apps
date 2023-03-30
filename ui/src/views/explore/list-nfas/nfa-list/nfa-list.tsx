@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button, Card, Flex, NoResults } from '@/components';
-import { lastMintsPaginatedDocument, totalTokensDocument } from '@/graphclient';
+import { lastNFAsPaginatedDocument, totalTokensDocument } from '@/graphclient';
 import { FleekERC721 } from '@/integrations/ethereum/contracts';
 
 const pageSize = 10; //Set this size to test pagination
@@ -23,7 +23,7 @@ export const NFAList = () => {
     data: dataMintedTokens,
     loading: loadingMintedTokens,
     error: errorMintedTokens,
-  } = useQuery(lastMintsPaginatedDocument, {
+  } = useQuery(lastNFAsPaginatedDocument, {
     variables: {
       //first page is 0
       pageSize,
@@ -68,8 +68,8 @@ export const NFAList = () => {
         </Button>
       </Flex>
       <div>
-        {dataMintedTokens && dataMintedTokens.newMints.length > 0 ? (
-          dataMintedTokens.newMints.map((mint) => (
+        {dataMintedTokens && dataMintedTokens.tokens.length > 0 ? (
+          dataMintedTokens.tokens.map((mint) => (
             <Card.Container
               key={mint.tokenId}
               css={{ display: 'inline-block', m: '$2' }}

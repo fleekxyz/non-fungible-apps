@@ -1,30 +1,19 @@
 import { Form } from '@/components';
-import { Mint } from '../../../mint.context';
-
-const maxCharacters = 250;
+import { useMintFormContext } from '../mint-form.context';
 
 export const AppDescriptionField = () => {
-  const { appDescription, setAppDescription } = Mint.useContext();
-
-  const handleAppDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    if (e.target.value.length > maxCharacters) return;
-    setAppDescription(e.target.value);
-  };
+  const {
+    form: { appDescription },
+  } = useMintFormContext();
 
   return (
-    <Form.Field>
-      <Form.Label isRequired>Description</Form.Label>
+    <Form.Field context={appDescription}>
+      <Form.Label>Description</Form.Label>
       <Form.Textarea
         placeholder="Add information about your project here."
         css={{ height: 'auto' }}
-        value={appDescription}
-        onChange={handleAppDescriptionChange}
       />
-      <Form.MaxLength>
-        {appDescription.length}/{maxCharacters}
-      </Form.MaxLength>
+      <Form.Overline />
     </Form.Field>
   );
 };

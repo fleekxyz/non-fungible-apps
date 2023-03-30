@@ -1,5 +1,6 @@
 import { Avatar, Combobox, ComboboxItem } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
+import { AppLog } from '@/utils';
 import { Mint } from '@/views/mint/mint.context';
 import { useEffect } from 'react';
 
@@ -16,8 +17,12 @@ export const UserOrgsCombobox = () => {
   }, [dispatch, queryUserAndOrganizations]);
 
   const handleUserOrgChange = (item: ComboboxItem) => {
-    dispatch(githubActions.fetchRepositoriesThunk(item.value));
-    setSelectedUserOrg(item);
+    if (item) {
+      dispatch(githubActions.fetchRepositoriesThunk(item.value));
+      setSelectedUserOrg(item);
+    } else {
+      AppLog.errorToast('Error selecting user/org. Try again');
+    }
   };
 
   useEffect(() => {
@@ -29,7 +34,7 @@ export const UserOrgsCombobox = () => {
       //SET first user
       setSelectedUserOrg(userAndOrganizations[0]);
     }
-  }, [queryUserAndOrganizations]);
+  }, [queryUserAndOrganizations, selectedUserOrg, userAndOrganizations]);
 
   return (
     <Combobox

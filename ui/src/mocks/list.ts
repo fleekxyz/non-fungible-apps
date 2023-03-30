@@ -1,3 +1,6 @@
+import { ComboboxItem } from '@/components';
+import { GithubState } from '@/store';
+
 const listSites = [
   {
     tokenId: 1,
@@ -26,12 +29,16 @@ const listSites = [
   },
 ];
 
-export const fetchMintedSites = async () => {
+const listBranches: ComboboxItem[] = [
+  { value: '4573495837458934', label: 'main' },
+  { value: '293857439857348', label: 'develop' },
+  { value: '12344', label: 'feat/nabvar' },
+];
+
+export const fetchMintedSites = async (): Promise<ComboboxItem[]> => {
   return new Promise((resolved) => {
     setTimeout(() => {
-      resolved({
-        listSites,
-      });
+      resolved(listBranches);
     }, 2500);
   });
 };
