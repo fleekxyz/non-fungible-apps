@@ -179,6 +179,11 @@ export namespace ArgumentsMaps {
       boolean // bool accessPointAutoApproval
     ];
 
+    addAccessPoint: [
+      number, // tokenId
+      string // access point DNS
+    ];
+
     /**
      * TODO: Add other functions arguments as they are needed.
      */

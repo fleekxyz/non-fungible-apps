@@ -1,7 +1,6 @@
-import { Form, Stepper } from '@/components';
+import { Form, Stepper, Step } from '@/components';
 import { MintPreview } from './preview-step/mint-preview';
 import { GithubStep } from './github-step';
-import { MintStep } from './mint-step';
 import { WalletStep } from './wallet-step';
 import { NFAStep } from './nfa-step';
 import { Mint } from './mint.context';
@@ -24,27 +23,27 @@ export const MintStepper = () => {
         <Form.Root onValidationChange={setIsValid}>
           <Stepper.Container>
             <Stepper.Step>
-              <MintStep header="Connect your Ethereum Wallet to mint an NFA">
+              <Step header="Connect your Ethereum Wallet to mint an NFA">
                 <WalletStep />
-              </MintStep>
+              </Step>
             </Stepper.Step>
 
             <Stepper.Step>
-              <MintStep header="Connect GitHub and select repository">
+              <Step header="Connect GitHub and select repository">
                 <GithubStep />
-              </MintStep>
+              </Step>
             </Stepper.Step>
 
             <Stepper.Step>
-              <MintStep header="Finalize a few key things for your NFA">
+              <Step header="Finalize a few key things for your NFA">
                 <NFAStep />
-              </MintStep>
+              </Step>
             </Stepper.Step>
 
             <Stepper.Step>
-              <MintStep header="Review your NFA and mint it on Polygon">
+              <Step header="Review your NFA and mint it on Polygon">
                 <MintPreview />
-              </MintStep>
+              </Step>
             </Stepper.Step>
           </Stepper.Container>
         </Form.Root>
