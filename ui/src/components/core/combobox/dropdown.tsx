@@ -170,7 +170,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             leaveTo="opacity-0"
           >
             <Listbox.Options
-              className={`absolute mt-1 max-h-32 ${width} z-10 overflow-auto rounded-xl bg-black px-3 pt-2 border-solid  border-slate6  border text-base focus:outline-none sm:text-sm`}
+              className={`absolute mt-1 max-h-32 ${width} right-0 z-10 overflow-auto rounded-xl bg-black px-3 pt-2 border-solid  border-slate6  border text-base focus:outline-none sm:text-sm`}
             >
               {items.map((option: DropdownItem) => (
                 <DropdownOption key={option.value} option={option} />
