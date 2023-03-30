@@ -11,11 +11,8 @@ import { CreateAccessPoint } from './create-ap.context';
 
 export const CreateAccessPointFormBody = () => {
   const { id } = useParams();
-  const { setNfa } = CreateAccessPoint.useContext();
-
   const { nextStep } = Stepper.useContext();
-
-  const { nfa, billing } = CreateAccessPoint.useContext();
+  const { nfa, setNfa, billing } = CreateAccessPoint.useContext();
   const { setArgs } = CreateAccessPoint.useTransactionContext();
 
   const {
