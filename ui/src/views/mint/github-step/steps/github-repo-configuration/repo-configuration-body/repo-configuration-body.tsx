@@ -20,6 +20,8 @@ export const RepoConfigurationBody: React.FC = () => {
     nextStep();
   };
 
+  console.log('isValid', isValid);
+
   return (
     <Card.Body css={{ pt: '$2' }}>
       <Flex css={{ rowGap: '$6', flexDirection: 'column' }}>

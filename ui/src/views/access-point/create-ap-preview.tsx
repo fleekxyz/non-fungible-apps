@@ -95,7 +95,7 @@ export const CreateAccessPointPreview: React.FC = () => {
             rowGap: '$6',
           }}
         >
-          <Flex>
+          <Flex css={{ flexDirection: 'column' }}>
             <span>NFA: {nfa.value}</span>
             <span>{appName}</span>
             <span className="text-slate11 text-sm">{message}</span>

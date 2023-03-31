@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Abi as AbiType } from 'abitype';
 import { useState } from 'react';
 import {
@@ -17,6 +18,8 @@ import { FleekERC721 } from '../contracts';
  * It should be used inside other context factories specific for each
  * contract.
  */
+// TODO: Fix this eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const createWriteContractContext = <
   TAbi extends EthereumHooks.Abi,
   TArgumentsMap extends EthereumHooks.WriteContext.ArgumentsMap,
@@ -46,7 +49,7 @@ const createWriteContractContext = <
     providerName,
   });
 
-  const Provider = ({
+  const Provider: React.FC = ({
     children,
     config: {
       prepare: prepareConfig = {},
