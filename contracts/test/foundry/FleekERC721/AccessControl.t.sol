@@ -594,6 +594,61 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
         CuT.setPausable(true);
     }
 
+    function test_setTokenVerifier() public {
+        address otherVerifier = address(0x1234);
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Verifier, otherVerifier);
+
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.setTokenVerifier(tokenId, otherVerifier);
+
+        // CollectionVerifier
+        vm.prank(collectionVerifier);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.setTokenVerifier(tokenId, otherVerifier);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.setTokenVerifier(tokenId, otherVerifier);
+
+        // TokenController
+        vm.prank(tokenController);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.setTokenVerifier(tokenId, collectionVerifier);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.setTokenVerifier(tokenId, collectionVerifier);
+    }
+
+    function test_setTokenVerified() public {
+        // CollectionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+        CuT.setTokenVerified(tokenId, true);
+
+        // CollectionVerifier
+        vm.prank(collectionVerifier);
+        CuT.setTokenVerified(tokenId, true);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+        CuT.setTokenVerified(tokenId, false);
+
+        // TokenController
+        vm.prank(tokenController);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+        CuT.setTokenVerified(tokenId, false);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+        CuT.setTokenVerified(tokenId, false);
+    }
+
     function test_cannotHaveLessThanOneCollectionOwner() public {
         CuT.revokeCollectionRole(FleekAccessControl.CollectionRoles.Owner, collectionOwner);
         expectRevertWithMustHaveAtLeastOneOwner();
