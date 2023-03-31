@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
+import { To } from 'react-router-dom';
 
+import { lastNFAsPaginatedQuery } from '@/graphclient';
 import { forwardStyledRef } from '@/theme';
+import { SVGPreview } from '@/views/mint/nft-card/svg-preview';
 
 import { Flex } from '../layout';
 import { NFACardStyles as S } from './nfa-card.styles';
-
-type NFACardProps = React.ComponentPropsWithRef<typeof S.Container> & {
-  data: any;
-};
 
 type BadgeProps = {
   verified: boolean;
@@ -22,22 +21,54 @@ const Badge: React.FC<BadgeProps> = ({ verified }: BadgeProps) => {
   return <S.Badge verified={verified}>{text}</S.Badge>;
 };
 
+export type NFACardProps = Omit<
+  React.ComponentPropsWithRef<typeof S.Container>,
+  'to'
+> & {
+  data: lastNFAsPaginatedQuery['tokens'][0];
+  to?: To;
+};
+
 export const NFACard: React.FC<NFACardProps> = forwardStyledRef<
-  HTMLDivElement,
+  HTMLAnchorElement,
   NFACardProps
->(({ data, ...props }, ref) => {
+  // TODO: Set default path to NFA page
+>(({ data, to = `/create-ap/${data.tokenId}`, ...props }, ref) => {
+  const { name, color, ENS, logo, accessPoints } = data;
+
+  const apCounter = useMemo(() => accessPoints?.length ?? 0, [accessPoints]);
+
+  const parsedColor = useMemo(
+    () => `#${('000000' + color.toString(16)).slice(-6)}`,
+    [color]
+  );
+
   return (
-    <S.Container ref={ref} {...props}>
-      <S.Preview />
+    <S.Container ref={ref} to={to} {...props}>
+      <SVGPreview
+        size="100%"
+        name={name}
+        color={parsedColor}
+        logo={logo}
+        ens={ENS}
+      />
 
       <S.Body>
-        <Flex css={{ gap: '0.5rem', justifyContent: 'space-between' }}>
-          <S.Title>{data.title}</S.Title>
-          <Badge verified={data.verified} />
+        <Flex
+          css={{
+            gap: '$2',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          {/* TODO: treat names bigger than space in layout when designs are done */}
+          <S.Title>{data.name}</S.Title>
+          {/* TODO: set correct value when it gets available on contract side */}
+          <Badge verified={Math.random() > 0.5} />
         </Flex>
 
-        <Flex css={{ gap: '0.25rem' }}>
-          <S.Content highlight>{data.accessPoints}</S.Content>
+        <Flex css={{ gap: '$1' }}>
+          <S.Content highlight>{apCounter}</S.Content>
           <S.Content>Access Points</S.Content>
         </Flex>
       </S.Body>
