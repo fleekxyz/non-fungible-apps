@@ -52,7 +52,7 @@ export const NFAList = () => {
   };
 
   return (
-    <Flex css={{ flexDirection: 'column', my: '$5', gap: '$2' }}>
+    <Flex css={{ flexDirection: 'column', gap: '$2' }}>
       <Flex css={{ gap: '$2' }}>
         {/* TODO this will be remove when we have pagination component */}
         <span>items per page: {pageSize}</span>

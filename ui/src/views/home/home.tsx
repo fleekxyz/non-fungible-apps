@@ -1,6 +1,5 @@
 import { Flex } from '@/components';
 import { Link } from 'react-router-dom';
-import { NFAList } from './nfa-list/nfa-list';
 
 export const Home = () => {
   return (
@@ -9,7 +8,6 @@ export const Home = () => {
       <Link to="/mint">
         <u>Mint NFA!</u>
       </Link>
-      <NFAList />
     </Flex>
   );
 };
