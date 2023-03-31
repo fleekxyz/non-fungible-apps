@@ -3,6 +3,7 @@ export const Errors = Object.freeze({
   AccessPointAlreadyExists: 'AccessPointAlreadyExists',
   AccessPointScoreCannotBeLower: 'AccessPointScoreCannotBeLower',
   MustBeAccessPointOwner: 'MustBeAccessPointOwner',
+  MustBeTokenVerifier: 'MustBeTokenVerifier',
   MustHaveCollectionRole: 'MustHaveCollectionRole',
   MustHaveTokenRole: 'MustHaveTokenRole',
   MustHaveAtLeastOneOwner: 'MustHaveAtLeastOneOwner',
