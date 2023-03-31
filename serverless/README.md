@@ -8,7 +8,7 @@ This sub-project of NFAs requires Node 18.  Specifically, this has been tested w
 
 After cloning the repo, ensure you run `yarn` in the root directory. After that, `cd` into the `serverless` directory and alsy run `yarn`.
 
-If you are deploying, make sure you have your AWS credentials set to environment variables or have setup AWS credentials using the AWS CLI.
+If you are deploying, make sure you have your AWS credentials set to environment variables or have setup AWS credentials using the AWS CLI.  Please refer to the official AWS documentation [here](https://www.serverless.com/framework/docs/providers/aws/guide/credentials/) to see all the ways to set these credentials. 
 
 Basically, these values need to be set:
 ```
@@ -17,7 +17,7 @@ export AWS_SECRET_ACCESS_KEY=value
 export AWS_SESSION_TOKEN=value
 ```
 
-You can get these from the main screen after logging in.
+You can get these from the main screen after logging in. 
 
 ### Running and Testing
 
