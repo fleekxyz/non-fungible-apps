@@ -1,10 +1,11 @@
-import React from 'react';
 import {
   ApolloClient,
-  InMemoryCache,
   ApolloProvider as Provider,
+  InMemoryCache,
 } from '@apollo/client';
 import { GraphApolloLink } from '@graphprotocol/client-apollo';
+import React from 'react';
+
 import * as GraphClient from '@/graphclient';
 
 const client = new ApolloClient({

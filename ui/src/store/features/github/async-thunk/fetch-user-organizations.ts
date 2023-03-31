@@ -1,7 +1,8 @@
-import { ComboboxItem } from '@/components';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { RootState } from '@/store';
 import { AppLog } from '@/utils';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { GithubClient, UserData } from '../github-client';
 import { githubActions } from '../github-slice';
 

@@ -1,8 +1,10 @@
-import { Flex } from '@/components';
 import { Link } from 'react-router-dom';
+
+import { Flex } from '@/components';
+
 import { NFAList } from './nfa-list/nfa-list';
 
-export const Home = () => {
+export const Home: React.FC = () => {
   return (
     <Flex css={{ flexDirection: 'column' }}>
       <h1>Home</h1>

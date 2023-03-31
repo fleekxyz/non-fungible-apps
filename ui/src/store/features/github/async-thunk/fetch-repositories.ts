@@ -1,6 +1,8 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { githubActions, RootState } from '@/store';
 import { AppLog } from '@/utils';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { GithubClient } from '../github-client';
 
 export const fetchRepositoriesThunk = createAsyncThunk(

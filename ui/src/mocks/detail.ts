@@ -34,8 +34,9 @@ const mockDetail = {
   ],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type
 export const fetchSiteDetail = async (tokenId: string) => {
-  return new Promise((resolved, reject) => {
+  return new Promise((resolved) => {
     setTimeout(() => {
       resolved({
         data: { ...mockDetail, externalUrl: mockDetail.external_url },

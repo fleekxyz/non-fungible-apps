@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ComboboxItem } from '@/components';
-import { GithubState } from '@/store';
 
 const listSites = [
   {

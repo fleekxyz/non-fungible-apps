@@ -1,12 +1,13 @@
 import { Button, Card, Flex, Stepper, Switch, Text } from '@/components';
-import { MintCardHeader } from '../../mint-card';
-import { Mint } from '../../mint.context';
 
-export const VerifyNFAStep = () => {
+import { Mint } from '../../mint.context';
+import { MintCardHeader } from '../../mint-card';
+
+export const VerifyNFAStep: React.FC = () => {
   const { prevStep } = Stepper.useContext();
   const { verifyNFA, setVerifyNFA, setNfaStep } = Mint.useContext();
 
-  const handleNextStep = () => {
+  const handleNextStep = (): void => {
     setNfaStep(2);
   };
 

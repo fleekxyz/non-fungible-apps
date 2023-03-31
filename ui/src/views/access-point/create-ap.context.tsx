@@ -1,8 +1,9 @@
+import { useState } from 'react';
+
 import { ComboboxItem } from '@/components';
 import { EthereumHooks } from '@/integrations';
 import { useFleekERC721Billing } from '@/store';
 import { AppLog, createContext, pushToast } from '@/utils';
-import { useState } from 'react';
 
 export type AccessPointContext = {
   billing: string | undefined;
@@ -45,6 +46,7 @@ export abstract class CreateAccessPoint {
                 AppLog.info('Transaction:', data);
                 pushToast('success', 'Your transaction was successful!');
               },
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               onError: (error) => {
                 AppLog.errorToast(
                   'There was an error trying to create the Access Point. Please try again'

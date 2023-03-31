@@ -1,19 +1,22 @@
+/* eslint-disable react/display-name */
+import React, { forwardRef, useMemo, useState } from 'react';
+
 import { hasValidator } from '@/utils';
 import { fileToBase64 } from '@/views/mint/nfa-step/form-step/form.utils';
-import React, { forwardRef, useMemo, useState } from 'react';
+
 import { ColorPicker, Combobox, ComboboxItem } from '../core';
 import { Input, LogoFileInput, Textarea } from '../core/input';
-import {
-  FormFieldContext,
-  FormFieldProvider,
-  useFormFieldContext,
-} from './form-field.context';
 import {
   FormProvider,
   useFormContext,
   useFormFieldValidatorValue,
 } from './form.context';
 import { FormStyles } from './form.styles';
+import {
+  FormFieldContext,
+  FormFieldProvider,
+  useFormFieldContext,
+} from './form-field.context';
 
 export abstract class Form {
   static readonly Root = FormProvider;
@@ -104,14 +107,16 @@ export abstract class Form {
       } = useFormFieldContext();
       const isValid = useFormFieldValidatorValue(id, validators, value);
 
-      const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+      ): void => {
         if (props.onChange) props.onChange(e);
         setValue(e.target.value);
       };
 
       const handleInputBlur = (
         e: React.FocusEvent<HTMLInputElement, Element>
-      ) => {
+      ): void => {
         if (props.onBlur) props.onBlur(e);
         setValidationEnabled(true);
       };
@@ -146,16 +151,16 @@ export abstract class Form {
           return { label: value, value: value };
         }
         return item;
-      }, [value]);
+      }, [props.items, props.withAutocomplete, value]);
 
       const isValid = useFormFieldValidatorValue(id, validators, value);
 
-      const handleComboboxChange = (option: ComboboxItem) => {
+      const handleComboboxChange = (option: ComboboxItem): void => {
         if (props.onChange) props.onChange(option);
         setValue(option.label);
       };
 
-      const handleComboboxBlur = () => {
+      const handleComboboxBlur = (): void => {
         setValidationEnabled(true);
       };
 
@@ -172,7 +177,7 @@ export abstract class Form {
     }
   );
 
-  static readonly ColorPicker = ({
+  static readonly ColorPicker: React.FC<Form.ColorPickerProps> = ({
     logo,
     setLogoColor,
   }: Form.ColorPickerProps) => {
@@ -181,12 +186,12 @@ export abstract class Form {
       validationEnabled: [, setValidationEnabled],
     } = useFormFieldContext();
 
-    const handleColorChange = (color: string) => {
+    const handleColorChange = (color: string): void => {
       if (setLogoColor) setLogoColor(color);
       setValue(color);
     };
 
-    const handleInputBlur = () => {
+    const handleInputBlur = (): void => {
       setValidationEnabled(true);
     };
 
@@ -214,14 +219,14 @@ export abstract class Form {
 
     const handleTextareaChange = (
       e: React.ChangeEvent<HTMLTextAreaElement>
-    ) => {
+    ): void => {
       if (props.onChange) props.onChange(e);
       setValue(e.target.value);
     };
 
     const handleTextareaBlur = (
       e: React.FocusEvent<HTMLTextAreaElement, Element>
-    ) => {
+    ): void => {
       if (props.onBlur) props.onBlur(e);
       setValidationEnabled(true);
     };
@@ -253,7 +258,7 @@ export abstract class Form {
 
     const handleFileInputChange = async (
       e: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    ): void => {
       const file = e.target.files?.[0];
       if (file) {
         //Convert to string base64 to send to contract

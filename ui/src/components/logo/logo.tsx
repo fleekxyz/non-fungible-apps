@@ -1,8 +1,9 @@
-import { Icon } from '../core/icon';
 import { useNavigate } from 'react-router-dom';
+
+import { Icon } from '../core/icon';
 import { LogoStyles as LS } from './logo.styles';
 
-export const Logo = () => {
+export const Logo: React.FC = () => {
   const navigate = useNavigate();
   return (
     <LS.Container onClick={() => navigate('/home')}>

@@ -1,10 +1,12 @@
-import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
+
 import { themeGlobals } from '@/theme/globals';
+
+import { AppPage, ToastProvider } from './components';
 import { ComponentsTest, CreateAP, Home, Mint } from './views';
 import { MintTest } from './views/mint-test';
-import { AppPage, ToastProvider } from './components';
 
-export const App = () => {
+export const App: React.FC = () => {
   themeGlobals();
   return (
     <>
