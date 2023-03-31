@@ -1,6 +1,7 @@
 import { Button } from '@/components';
 import { Link } from 'react-router-dom';
 import { Header as HS } from './header.styles';
+
 export const Header = () => (
   <HS.Container>
     <HS.Text>
@@ -14,7 +15,7 @@ export const Header = () => (
         Create an NFA
       </Button>
       {/* TODO replace with create ap route */}
-      <Button as={Link} to="/" colorScheme="gray" variant="outline">
+      <Button as={Link} to="/create-ap" colorScheme="gray" variant="outline">
         Host an Access Point
       </Button>
     </HS.ButtonContainer>
