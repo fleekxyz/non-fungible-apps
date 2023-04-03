@@ -1,4 +1,4 @@
-export const getRepoAndCommit = (url: string) => {
+export const getRepoAndCommit = (url: string): object => {
   //TODO validate is a github url
   url = url.replace('/commit', '');
   const lastIndexSlash = url.lastIndexOf('/');
@@ -10,4 +10,3 @@ export const getRepoAndCommit = (url: string) => {
 export const contractAddress = (address: string): string => {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };
-

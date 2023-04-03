@@ -1,13 +1,14 @@
+import { useQuery } from '@apollo/client';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useAccount } from 'wagmi';
+
 import { getENSNamesDocument } from '@/../.graphclient';
 import { ComboboxItem, Form } from '@/components';
 import { AppLog } from '@/utils';
-import { useQuery } from '@apollo/client';
-import { useCallback, useEffect, useMemo } from 'react';
 
-import { useAccount } from 'wagmi';
 import { useMintFormContext } from '../../mint-form.context';
 
-export const EnsField = () => {
+export const EnsField: React.FC = () => {
   const { address } = useAccount();
   const { data, error } = useQuery(getENSNamesDocument, {
     variables: {
@@ -24,7 +25,7 @@ export const EnsField = () => {
     AppLog.errorToast(
       'There was an error trying to get your ENS names. Please try again later.'
     );
-  }, [AppLog]);
+  }, []);
 
   useEffect(() => {
     if (error) {

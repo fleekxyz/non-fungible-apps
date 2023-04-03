@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { env } from '@/constants';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GithubAuthProvider } from 'firebase/auth';
+import { getAuth, GithubAuthProvider, signInWithPopup } from 'firebase/auth';
+
+import { env } from '@/constants';
 import { githubActions, RootState } from '@/store';
 import { AppLog } from '@/utils';
 

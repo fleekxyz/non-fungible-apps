@@ -1,5 +1,6 @@
-import { createContext, StringValidator } from '@/utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { createContext, StringValidator } from '@/utils';
 
 export type FormValidations = { [key: string]: StringValidator[] };
 
@@ -58,6 +59,7 @@ export const useFormFieldValidator = (
       }
 
       setValidations((prev) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [id]: toBeRemoved, ...rest } = prev;
         return rest;
       });

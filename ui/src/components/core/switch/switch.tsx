@@ -1,5 +1,5 @@
-import React from 'react';
 import { Switch as SwitchComponent } from '@headlessui/react';
+import React from 'react';
 
 type SwitchProps = {
   checked: boolean;

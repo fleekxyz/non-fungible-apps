@@ -1,7 +1,8 @@
 import { Form } from '@/components';
+
 import { useMintFormContext } from '../mint-form.context';
 
-export const AppNameField = () => {
+export const AppNameField: React.FC = () => {
   const {
     form: { appName },
   } = useMintFormContext();

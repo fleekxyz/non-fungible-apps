@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type StringValidator = {
   name: string;
   message: string;
@@ -25,7 +26,7 @@ const isUrl: StringValidator = {
   name: 'isUrl',
   validate: (value = '') => {
     const regex =
-      /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+      /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
     return regex.test(value);
   },
   message: 'Is not a valid URL',

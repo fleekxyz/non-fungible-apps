@@ -1,15 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
-import { Button, Card, Flex, NFACard, NoResults } from '@/components';
+import { Button, Flex, NFACard, NoResults } from '@/components';
 import { lastNFAsPaginatedDocument, totalTokensDocument } from '@/graphclient';
-import { FleekERC721 } from '@/integrations/ethereum/contracts';
 
 const pageSize = 10; //Set this size to test pagination
 
-export const NFAList = () => {
+export const NFAList: React.FC = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -40,13 +38,13 @@ export const NFAList = () => {
   if (loadingMintedTokens || loadingTotalTokens) return <div>Loading...</div>; //TODO handle loading
   if (errorMintedTokens || errorTotalTokens) return <div>Error</div>; //TODO handle error
 
-  const handlePreviousPage = () => {
+  const handlePreviousPage = (): void => {
     if (pageNumber > 1) {
       setPageNumber((prevState) => prevState - 1);
     }
   };
 
-  const handleNextPage = () => {
+  const handleNextPage = (): void => {
     if (pageNumber + 1 <= totalPages)
       setPageNumber((prevState) => prevState + 1);
   };

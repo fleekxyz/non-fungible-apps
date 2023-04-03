@@ -1,13 +1,14 @@
-import { Form, Stepper, Step } from '@/components';
-import { MintPreview } from './preview-step/mint-preview';
-import { GithubStep } from './github-step';
-import { WalletStep } from './wallet-step';
-import { NFAStep } from './nfa-step';
-import { Mint } from './mint.context';
-import { NftMinted } from './nft-minted';
-import { useMintFormContext } from './nfa-step/form-step';
+import { Form, Step, Stepper } from '@/components';
 
-export const MintStepper = () => {
+import { GithubStep } from './github-step';
+import { Mint } from './mint.context';
+import { NFAStep } from './nfa-step';
+import { useMintFormContext } from './nfa-step/form-step';
+import { NftMinted } from './nft-minted';
+import { MintPreview } from './preview-step/mint-preview';
+import { WalletStep } from './wallet-step';
+
+export const MintStepper: React.FC = () => {
   const {
     transaction: { isSuccess },
   } = Mint.useTransactionContext();

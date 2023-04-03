@@ -1,10 +1,11 @@
-import { Button, Card, Flex, Form, Stepper } from '@/components';
+import { Button, Card, Flex, Stepper } from '@/components';
 import { Mint } from '@/views/mint/mint.context';
 import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
+
 import { RepoRow } from '../../repository-row';
 import { RepoBranchCommitFields } from './repo-branch-commit-fields';
 
-export const RepoConfigurationBody = () => {
+export const RepoConfigurationBody: React.FC = () => {
   const {
     form: {
       isValid: [isValid],
@@ -15,7 +16,7 @@ export const RepoConfigurationBody = () => {
 
   const { nextStep } = Stepper.useContext();
 
-  const handleContinueClick = () => {
+  const handleContinueClick = (): void => {
     nextStep();
   };
 

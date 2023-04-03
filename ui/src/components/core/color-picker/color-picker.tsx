@@ -1,7 +1,9 @@
-import { Button, Card, Flex, Icon } from '@/components';
-import { useRef } from 'react';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import ColorThief from 'colorthief';
+import { useRef } from 'react';
+
+import { Button, Card, Flex, Icon } from '@/components';
 
 export type ColorPickerProps = {
   logoColor: string;
@@ -13,12 +15,12 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
   logoColor,
   logo,
   setLogoColor,
-  onBlur,
-}) => {
+}: ColorPickerProps) => {
   const inputColorRef = useRef<HTMLInputElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const handleLogoLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleLogoLoad = (e: React.SyntheticEvent<HTMLImageElement>): void => {
     const colorArray = new ColorThief().getColor(imageRef.current);
     const hexColor = `#${colorArray
       .map((c: number) => c.toString(16).padStart(2, '0'))
@@ -26,11 +28,11 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
     setLogoColor(hexColor);
   };
 
-  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setLogoColor(e.target.value);
   };
 
-  const handleColorPickerClick = () => {
+  const handleColorPickerClick = (): void => {
     inputColorRef.current?.click();
   };
 

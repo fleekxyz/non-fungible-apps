@@ -1,5 +1,6 @@
-import { Flex, Icon } from '@/components';
 import { forwardRef } from 'react';
+
+import { Flex, Icon } from '@/components';
 
 type RepoRowProps = {
   repo: string;
@@ -26,3 +27,5 @@ export const RepoRow = forwardRef<HTMLDivElement, RepoRowProps>(
     </Flex>
   )
 );
+
+RepoRow.displayName = 'RepoRow';

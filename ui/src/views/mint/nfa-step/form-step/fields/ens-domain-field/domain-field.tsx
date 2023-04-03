@@ -1,8 +1,8 @@
 import { Form } from '@/components';
-import { Mint } from '@/views/mint/mint.context';
+
 import { useMintFormContext } from '../../mint-form.context';
 
-export const DomainField = () => {
+export const DomainField: React.FC = () => {
   const {
     form: { domainURL },
   } = useMintFormContext();

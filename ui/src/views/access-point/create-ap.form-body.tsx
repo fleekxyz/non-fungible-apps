@@ -1,15 +1,17 @@
-import { Button, Flex, Form, Spinner, Stepper } from '@/components';
-import { AppLog } from '@/utils';
 import { useQuery } from '@apollo/client';
 import { ethers } from 'ethers';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { Button, Flex, Form, Spinner, Stepper } from '@/components';
+import { getNFADocument } from '@/graphclient';
+import { AppLog } from '@/utils';
+
+import { CreateAccessPoint } from './create-ap.context';
 import { useAccessPointFormContext } from './create-ap.form.context';
 import { NfaPicker } from './nfa-picker';
-import { getNFADocument } from '@/graphclient';
-import { CreateAccessPoint } from './create-ap.context';
 
-export const CreateAccessPointFormBody = () => {
+export const CreateAccessPointFormBody: React.FC = () => {
   const { id } = useParams();
   const { nextStep } = Stepper.useContext();
   const { nfa, setNfa, billing } = CreateAccessPoint.useContext();
@@ -54,7 +56,7 @@ export const CreateAccessPointFormBody = () => {
         AppLog.errorToast("We couldn't find the NFA you are looking for");
       }
     }
-  }, [nfaData, id]);
+  }, [nfaData, id, setNfa]);
 
   if (nfaLoading) {
     return (
@@ -70,7 +72,7 @@ export const CreateAccessPointFormBody = () => {
     );
   }
 
-  const handleContinueClick = () => {
+  const handleContinueClick = (): void => {
     if (nfa && appName) {
       setArgs([Number(nfa.value), appName, { value: billing }]);
       nextStep();

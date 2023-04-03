@@ -4,7 +4,7 @@ type StepperIndicatorContainerProps = {
   children: React.ReactNode;
 };
 
-const StepperIndicatorContainer = ({
+const StepperIndicatorContainer: React.FC<StepperIndicatorContainerProps> = ({
   children,
 }: StepperIndicatorContainerProps) => {
   return (
@@ -25,7 +25,9 @@ type MintStepContainerProps = {
   children: React.ReactNode;
 };
 
-const Container = ({ children }: MintStepContainerProps) => (
+const Container: React.FC<MintStepContainerProps> = ({
+  children,
+}: MintStepContainerProps) => (
   <Flex css={{ flexDirection: 'row', justifyContent: 'center' }}>
     {children}
   </Flex>
@@ -36,7 +38,7 @@ type StepProps = {
   header: string;
 };
 
-export const Step: React.FC<StepProps> = ({ children, header }) => {
+export const Step: React.FC<StepProps> = ({ children, header }: StepProps) => {
   return (
     <Container>
       <StepperIndicatorContainer>

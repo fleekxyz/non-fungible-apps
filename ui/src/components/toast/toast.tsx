@@ -1,10 +1,12 @@
+import { useCallback, useState } from 'react';
+
 import {
   toastsActions,
   ToastsState,
   useAppDispatch,
   useToastsState,
 } from '@/store';
-import { useCallback, useState } from 'react';
+
 import { Icon } from '../core';
 import { ToastStyles } from './toast.styles';
 
@@ -16,7 +18,7 @@ const Toast: React.FC<ToastProps> = ({
   message,
   onDismiss,
   duration = 3000,
-}) => {
+}: ToastProps) => {
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(true);
 

@@ -1,8 +1,10 @@
+import { ethers } from 'ethers';
+import { useMemo } from 'react';
+
 import {
   Button,
   Card,
   Flex,
-  Form,
   Grid,
   Icon,
   IconButton,
@@ -10,12 +12,11 @@ import {
 } from '@/components';
 import { useTransactionCost } from '@/hooks';
 import { FleekERC721 } from '@/integrations';
-import { useMemo } from 'react';
-import { ethers } from 'ethers';
+
 import { CreateAccessPoint } from './create-ap.context';
 import { useAccessPointFormContext } from './create-ap.form.context';
 
-export const CreateAccessPointPreview = () => {
+export const CreateAccessPointPreview: React.FC = () => {
   const { prevStep } = Stepper.useContext();
   const {
     prepare: { status: prepareStatus, data: prepareData, error: prepareError },
@@ -42,6 +43,7 @@ export const CreateAccessPointPreview = () => {
 
     if (prepareError) {
       const parsedError = FleekERC721.parseError(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (prepareError as any).error?.data.data
       );
       if (parsedError.isIdentified) {
@@ -53,6 +55,7 @@ export const CreateAccessPointPreview = () => {
 
     const formattedCost = ethers.utils.formatEther(cost).slice(0, 9);
     return `Creating this Access Point will cost ${formattedCost} ${currency}.`;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prepareData, isCostLoading, prepareStatus]);
 
   const isLoading = useMemo(
@@ -92,7 +95,7 @@ export const CreateAccessPointPreview = () => {
             rowGap: '$6',
           }}
         >
-          <Flex>
+          <Flex css={{ flexDirection: 'column' }}>
             <span>NFA: {nfa.value}</span>
             <span>{appName}</span>
             <span className="text-slate11 text-sm">{message}</span>
