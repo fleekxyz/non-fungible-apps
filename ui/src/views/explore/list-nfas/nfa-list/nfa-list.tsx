@@ -1,15 +1,18 @@
-/* eslint-disable react/react-in-jsx-scope */
 import { useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
 
-import { Button, Card, Flex, NFACard, NoResults } from '@/components';
+import {
+  Button,
+  Flex,
+  NFACard,
+  NFACardSkeleton,
+  NoResults,
+} from '@/components';
 import { lastNFAsPaginatedDocument, totalTokensDocument } from '@/graphclient';
-import { FleekERC721 } from '@/integrations/ethereum/contracts';
 
 const pageSize = 10; //Set this size to test pagination
 
-export const NFAList = () => {
+export const NFAList: React.FC = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -23,13 +26,21 @@ export const NFAList = () => {
     data: dataMintedTokens,
     loading: loadingMintedTokens,
     error: errorMintedTokens,
+    previousData,
   } = useQuery(lastNFAsPaginatedDocument, {
     variables: {
-      //first page is 0
       pageSize,
-      skip: pageNumber > 0 ? (pageNumber - 1) * pageSize : pageNumber,
+      skip: (pageNumber - 1) * pageSize,
     },
   });
+
+  const dataToShow = useMemo(() => {
+    if (!dataMintedTokens) {
+      if (!previousData) return [];
+      return previousData.tokens;
+    }
+    return dataMintedTokens.tokens;
+  }, [dataMintedTokens, previousData]);
 
   useEffect(() => {
     if (totalTokens && totalTokens.tokens.length > 0) {
@@ -37,19 +48,20 @@ export const NFAList = () => {
     }
   }, [totalTokens]);
 
-  if (loadingMintedTokens || loadingTotalTokens) return <div>Loading...</div>; //TODO handle loading
   if (errorMintedTokens || errorTotalTokens) return <div>Error</div>; //TODO handle error
 
-  const handlePreviousPage = () => {
+  const handlePreviousPage = (): void => {
     if (pageNumber > 1) {
       setPageNumber((prevState) => prevState - 1);
     }
   };
 
-  const handleNextPage = () => {
+  const handleNextPage = (): void => {
     if (pageNumber + 1 <= totalPages)
       setPageNumber((prevState) => prevState + 1);
   };
+
+  console.log('dataMintedTokens', dataToShow);
 
   return (
     <Flex css={{ flexDirection: 'column', gap: '$2' }}>
@@ -59,6 +71,7 @@ export const NFAList = () => {
         <span>
           page: {pageNumber}/{totalPages}
         </span>
+        <span>total items: {totalTokens?.tokens.length}</span>
 
         <Button onClick={handlePreviousPage} disabled={pageNumber === 1}>
           Previous page
@@ -68,13 +81,17 @@ export const NFAList = () => {
         </Button>
       </Flex>
       <Flex css={{ gap: '$6', flexWrap: 'wrap' }}>
-        {dataMintedTokens && dataMintedTokens.tokens.length > 0 ? (
-          dataMintedTokens.tokens.map((mint) => (
-            <NFACard data={mint} key={mint.id} />
-          ))
-        ) : (
-          <NoResults />
+        {dataToShow.length > 0 &&
+          dataToShow.map((token) => <NFACard data={token} key={token.id} />)}
+        {loadingMintedTokens && (
+          <>
+            <NFACardSkeleton />
+            <NFACardSkeleton />
+            <NFACardSkeleton />
+            <NFACardSkeleton />
+          </>
         )}
+        {!loadingMintedTokens && dataToShow.length === 0 && <NoResults />}
       </Flex>
     </Flex>
   );
