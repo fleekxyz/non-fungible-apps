@@ -32,7 +32,7 @@ export const NFACardStyles = {
     padding: '$3 $4',
     gap: '$2',
     borderTop: '1px solid $slate6',
-    backgroundColor: 'black', // TODO: are we going to add black as theme color?
+    backgroundColor: '$black', // TODO: are we going to add black as theme color?
   }),
   Badge: styled('span', {
     height: 'fit-content',
