@@ -1,16 +1,11 @@
 import { useQuery } from '@apollo/client';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import {
-  Button,
-  Flex,
-  NFACard,
-  NFACardSkeleton,
-  NoResults,
-} from '@/components';
+import { Flex, NFACard, NFACardSkeleton, NoResults } from '@/components';
 import { lastNFAsPaginatedDocument } from '@/graphclient';
+import { useWindowScrollEnd } from '@/hooks';
 
-const pageSize = 4; //Set this size to test pagination
+const pageSize = 10; //Set this size to test pagination
 
 const LoadingSkeletons: React.FC = () => (
   <>
@@ -36,7 +31,7 @@ export const NFAList: React.FC = () => {
       skip: pageNumber * pageSize,
     },
     onCompleted: (data) => {
-      if (data.tokens.length === tokens.length) setEndReached(true);
+      if (data.tokens.length - tokens.length < pageSize) setEndReached(true);
     },
   });
 
@@ -46,24 +41,27 @@ export const NFAList: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useWindowScrollEnd(() => {
+    if (isLoading || endReached) return;
+    setPageNumber((prevState) => prevState + 1);
+  });
+
   if (queryError) return <div>Error</div>; //TODO handle error
 
-  const handleNextPage = (): void => {
-    if (endReached) return;
-    setPageNumber((prevState) => prevState + 1);
-  };
-
   return (
-    <Flex css={{ flexDirection: 'column', gap: '$2' }}>
-      <span>page: {pageNumber}</span>
-      <Flex css={{ gap: '$2' }}>
-        <Button onClick={handleNextPage} disabled={endReached}>
-          Next page
-        </Button>
-      </Flex>
+    <Flex
+      css={{
+        flexDirection: 'column',
+        gap: '$2',
+        my: '$6',
+        minHeight: '50vh',
+        marginBottom: '30vh', // TODO: remove this if we add page footer
+      }}
+    >
       <Flex css={{ gap: '$6', flexWrap: 'wrap' }}>
-        {tokens.length > 0 &&
-          tokens.map((token) => <NFACard data={token} key={token.id} />)}
+        {tokens.map((token) => (
+          <NFACard data={token} key={token.id} />
+        ))}
         {isLoading && <LoadingSkeletons />}
         {!isLoading && tokens.length === 0 && <NoResults />}
       </Flex>
