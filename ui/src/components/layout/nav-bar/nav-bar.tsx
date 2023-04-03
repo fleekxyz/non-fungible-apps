@@ -13,7 +13,7 @@ export const NavBar: React.FC = () => {
         <Logo />
 
         <Styles.Navigation>
-          <Button as={Link} to="/" variant="link" color="gray">
+          <Button as={Link} to="/explore" variant="link" color="gray">
             Explore
           </Button>
           <Button as={Link} to="/mint" variant="link" color="gray">

@@ -38,6 +38,10 @@ abstract contract Test_FleekERC721_Assertions is Test {
     function expectRevertWithInvalidTokenId() public {
         vm.expectRevert("ERC721: invalid token ID");
     }
+
+    function expectRevertWithMustBeTokenVerifier(uint256 tokenId) public {
+        vm.expectRevert(abi.encodeWithSelector(MustBeTokenVerifier.selector, tokenId));
+    }
 }
 
 abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
