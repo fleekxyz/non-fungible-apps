@@ -81,7 +81,7 @@ export const NFACardStyles = {
   Skeleton: {
     Preview: styled(Skeleton, {
       width: '100%',
-      height: '14.6875rem',
+      height: 'calc(14.6875rem - 2px)',
     }),
 
     Title: styled(Skeleton, {
