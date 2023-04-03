@@ -10,23 +10,23 @@ export const LogoFileInput = StyledInputFile;
 
 type InputProps = {
   leftIcon?: IconName;
-} & React.ComponentProps<typeof InputStyled>;
+} & React.ComponentPropsWithRef<typeof InputStyled>;
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ leftIcon, ...props }, ref) => {
-    return (
-      <div className="relative">
-        {leftIcon && (
-          <InputIconStyled name={leftIcon} css={{ fontSize: '$lg' }} />
-        )}
-        <InputStyled
-          {...props}
-          ref={ref}
-          css={{ ...(leftIcon && { pl: '$10' }), ...(props?.css || {}) }}
-        />
-      </div>
-    );
-  }
-);
+export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+  const { leftIcon, ...ownProps } = props;
+
+  return (
+    <div className="relative">
+      {leftIcon && (
+        <InputIconStyled name={leftIcon} css={{ fontSize: '$lg' }} />
+      )}
+      <InputStyled
+        {...props}
+        ref={ref}
+        css={{ ...(leftIcon && { pl: '$10' }), ...(ownProps.css || {}) }}
+      />
+    </div>
+  );
+});
 
 Input.displayName = 'Input';

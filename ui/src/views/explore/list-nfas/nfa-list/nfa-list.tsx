@@ -1,11 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
-import { Button, Card, Flex, NFACard, NoResults } from '@/components';
+import { Button, Flex, NFACard, NoResults } from '@/components';
 import { lastNFAsPaginatedDocument, totalTokensDocument } from '@/graphclient';
-import { FleekERC721 } from '@/integrations/ethereum/contracts';
 
 const pageSize = 10; //Set this size to test pagination
 

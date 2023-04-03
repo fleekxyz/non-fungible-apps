@@ -59,6 +59,7 @@ export const useFormFieldValidator = (
       }
 
       setValidations((prev) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [id]: toBeRemoved, ...rest } = prev;
         return rest;
       });
