@@ -8,90 +8,64 @@ import {
   NFACardSkeleton,
   NoResults,
 } from '@/components';
-import { lastNFAsPaginatedDocument, totalTokensDocument } from '@/graphclient';
+import { lastNFAsPaginatedDocument } from '@/graphclient';
 
-const pageSize = 10; //Set this size to test pagination
+const pageSize = 4; //Set this size to test pagination
+
+const LoadingSkeletons: React.FC = () => (
+  <>
+    <NFACardSkeleton />
+    <NFACardSkeleton />
+    <NFACardSkeleton />
+    <NFACardSkeleton />
+  </>
+);
 
 export const NFAList: React.FC = () => {
-  const [pageNumber, setPageNumber] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [endReached, setEndReached] = useState(false);
 
   const {
-    data: totalTokens,
-    loading: loadingTotalTokens,
-    error: errorTotalTokens,
-  } = useQuery(totalTokensDocument);
-
-  const {
-    data: dataMintedTokens,
-    loading: loadingMintedTokens,
-    error: errorMintedTokens,
-    previousData,
+    data: { tokens } = { tokens: [] },
+    loading: isLoading,
+    error: queryError,
   } = useQuery(lastNFAsPaginatedDocument, {
+    fetchPolicy: 'cache-and-network',
     variables: {
       pageSize,
-      skip: (pageNumber - 1) * pageSize,
+      skip: pageNumber * pageSize,
+    },
+    onCompleted: (data) => {
+      if (data.tokens.length === tokens.length) setEndReached(true);
     },
   });
 
-  const dataToShow = useMemo(() => {
-    if (!dataMintedTokens) {
-      if (!previousData) return [];
-      return previousData.tokens;
-    }
-    return dataMintedTokens.tokens;
-  }, [dataMintedTokens, previousData]);
-
   useEffect(() => {
-    if (totalTokens && totalTokens.tokens.length > 0) {
-      setTotalPages(Math.ceil(totalTokens.tokens.length / pageSize));
-    }
-  }, [totalTokens]);
+    // Update page number when there are cached tokens
+    setPageNumber(Math.ceil(tokens.length / pageSize));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  if (errorMintedTokens || errorTotalTokens) return <div>Error</div>; //TODO handle error
-
-  const handlePreviousPage = (): void => {
-    if (pageNumber > 1) {
-      setPageNumber((prevState) => prevState - 1);
-    }
-  };
+  if (queryError) return <div>Error</div>; //TODO handle error
 
   const handleNextPage = (): void => {
-    if (pageNumber + 1 <= totalPages)
-      setPageNumber((prevState) => prevState + 1);
+    if (endReached) return;
+    setPageNumber((prevState) => prevState + 1);
   };
-
-  console.log('dataMintedTokens', dataToShow);
 
   return (
     <Flex css={{ flexDirection: 'column', gap: '$2' }}>
+      <span>page: {pageNumber}</span>
       <Flex css={{ gap: '$2' }}>
-        {/* TODO this will be remove when we have pagination component */}
-        <span>items per page: {pageSize}</span>
-        <span>
-          page: {pageNumber}/{totalPages}
-        </span>
-        <span>total items: {totalTokens?.tokens.length}</span>
-
-        <Button onClick={handlePreviousPage} disabled={pageNumber === 1}>
-          Previous page
-        </Button>
-        <Button onClick={handleNextPage} disabled={pageNumber === totalPages}>
+        <Button onClick={handleNextPage} disabled={endReached}>
           Next page
         </Button>
       </Flex>
       <Flex css={{ gap: '$6', flexWrap: 'wrap' }}>
-        {dataToShow.length > 0 &&
-          dataToShow.map((token) => <NFACard data={token} key={token.id} />)}
-        {loadingMintedTokens && (
-          <>
-            <NFACardSkeleton />
-            <NFACardSkeleton />
-            <NFACardSkeleton />
-            <NFACardSkeleton />
-          </>
-        )}
-        {!loadingMintedTokens && dataToShow.length === 0 && <NoResults />}
+        {tokens.length > 0 &&
+          tokens.map((token) => <NFACard data={token} key={token.id} />)}
+        {isLoading && <LoadingSkeletons />}
+        {!isLoading && tokens.length === 0 && <NoResults />}
       </Flex>
     </Flex>
   );

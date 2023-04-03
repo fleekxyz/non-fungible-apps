@@ -41,7 +41,7 @@ const client = new ApolloClient({
       Query: {
         fields: {
           tokens: {
-            keyArgs: false,
+            keyArgs: ['where'],
             merge: mergeByKey('id'),
           },
         },
