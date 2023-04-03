@@ -1,5 +1,6 @@
-import { Combobox, ComboboxItem, Flex } from '@/components';
 import { useState } from 'react';
+
+import { Combobox, Flex } from '@/components';
 
 const itemsCombobox = [
   { label: 'Item 1', value: 'item-1' },
@@ -7,16 +8,16 @@ const itemsCombobox = [
   { label: 'Item 3', value: 'item-3' },
 ];
 
-export const ComboboxTest = () => {
+export const ComboboxTest: React.FC = () => {
   const [selectedValue, setSelectedValue] = useState('');
   const [selectedValueAutocomplete, setSelectedValueAutocomplete] =
     useState('');
 
-  const handleComboboxChange = (value: string) => {
+  const handleComboboxChange = (value: string): void => {
     setSelectedValue(value);
   };
 
-  const handleComboboxChangeAutocomplete = (value: string) => {
+  const handleComboboxChangeAutocomplete = (value: string): void => {
     setSelectedValueAutocomplete(value);
   };
 

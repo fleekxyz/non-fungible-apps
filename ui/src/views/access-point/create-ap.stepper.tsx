@@ -1,10 +1,11 @@
 import { Form, Step, Stepper } from '@/components';
+
 import { WalletStep } from '../mint/wallet-step';
+import { useAccessPointFormContext } from './create-ap.form.context';
 import { CreateAccessPointForm } from './create-ap-form';
 import { CreateAccessPointPreview } from './create-ap-preview';
-import { useAccessPointFormContext } from './create-ap.form.context';
 
-export const CreateApStepper = () => {
+export const CreateApStepper: React.FC = () => {
   const {
     form: {
       isValid: [, setIsValid],

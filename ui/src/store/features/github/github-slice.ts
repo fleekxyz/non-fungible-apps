@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { ComboboxItem } from '@/components';
 import { RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
+
 import * as asyncThunk from './async-thunk';
-import { ComboboxItem } from '@/components';
 import { UserData } from './github-client';
 
 export namespace GithubState {

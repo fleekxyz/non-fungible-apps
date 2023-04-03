@@ -10,7 +10,7 @@ type ReactQueryProviderProps = {
 
 export const ReactQueryProvider: React.FC<ReactQueryProviderProps> = ({
   children,
-}) => {
+}: ReactQueryProviderProps) => {
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );

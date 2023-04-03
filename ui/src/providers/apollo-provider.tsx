@@ -10,6 +10,7 @@ import React from 'react';
 import * as GraphClient from '@/graphclient';
 
 // https://www.apollographql.com/docs/react/caching/cache-field-behavior/#merging-arrays-of-non-normalized-objects
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const mergeByKey =
   (key: string): FieldMergeFunction =>
   (existing: any[] = [], incoming: any[], { mergeObjects, readField }) => {
@@ -33,6 +34,7 @@ const mergeByKey =
     });
     return merged;
   };
+/** eslint-enable @typescript-eslint/no-explicit-any */
 
 const client = new ApolloClient({
   link: new GraphApolloLink(GraphClient),

@@ -1,7 +1,8 @@
 import { Flex, Form } from '@/components';
+
 import { useMintFormContext } from '../../mint-form.context';
 
-export const LogoField = () => {
+export const LogoField: React.FC = () => {
   const {
     form: { appLogo: appLogoContext, logoColor: logoColorContext },
   } = useMintFormContext();

@@ -1,6 +1,6 @@
 import { Button, Flex, Icon } from '@/components';
 
-export const ColorPickerTest = () => {
+export const ColorPickerTest: React.FC = () => {
   return (
     <Flex css={{ margin: '$22', gap: '$5', width: '$8' }}>
       <Button

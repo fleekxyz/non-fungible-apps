@@ -1,4 +1,5 @@
 import { dripStitches } from '@/theme';
+
 import { Icon } from '../icon';
 const { styled } = dripStitches;
 

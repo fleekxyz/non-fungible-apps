@@ -1,7 +1,8 @@
-import { Button, Flex, Icon } from '@/components';
-import { ConnectKitButton, Avatar } from 'connectkit';
+import { Avatar, ConnectKitButton } from 'connectkit';
 
-export const ConnectWalletButton = () => {
+import { Button, Flex } from '@/components';
+
+export const ConnectWalletButton: React.FC = () => {
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, show, truncatedAddress, address, ensName }) => {

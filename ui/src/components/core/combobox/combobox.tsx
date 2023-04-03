@@ -1,3 +1,8 @@
+import {
+  Combobox as ComboboxLib,
+  ComboboxInputProps as ComboboxLibInputProps,
+  Transition,
+} from '@headlessui/react';
 import React, {
   forwardRef,
   Fragment,
@@ -5,14 +10,11 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  Combobox as ComboboxLib,
-  ComboboxInputProps as ComboboxLibInputProps,
-  Transition,
-} from '@headlessui/react';
+
 import { Icon, IconName } from '@/components/core/icon';
 import { Flex } from '@/components/layout';
 import { useDebounce } from '@/hooks/use-debounce';
+
 import { Separator } from '../separator.styles';
 import { cleanString } from './combobox.utils';
 
@@ -31,7 +33,7 @@ type ComboboxInputProps = {
   error?: boolean;
 } & ComboboxLibInputProps<'input', ComboboxItem>;
 
-const ComboboxInput = ({
+const ComboboxInput: React.FC<ComboboxInputProps> = ({
   open,
   leftIcon,
   error,
@@ -71,7 +73,9 @@ type ComboboxOptionProps = {
   option: ComboboxItem;
 };
 
-const ComboboxOption = ({ option }: ComboboxOptionProps) => (
+const ComboboxOption: React.FC<ComboboxOptionProps> = ({
+  option,
+}: ComboboxOptionProps) => (
   <ComboboxLib.Option
     value={option}
     className={({ active }) =>
@@ -98,7 +102,7 @@ const ComboboxOption = ({ option }: ComboboxOptionProps) => (
   </ComboboxLib.Option>
 );
 
-export const NoResults = ({ css }: { css?: string }) => (
+export const NoResults: React.FC = ({ css }: { css?: string }) => (
   <div
     className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 ${css}`}
   >
@@ -153,18 +157,15 @@ export type ComboboxProps = {
 };
 
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
-  (
-    {
-      items,
-      selectedValue = { value: '', label: '' },
-      withAutocomplete = false,
-      leftIcon = 'search',
-      onChange,
-      onBlur,
-      error = false,
-    },
-    ref
-  ) => {
+  ({
+    items,
+    selectedValue = { value: '', label: '' },
+    withAutocomplete = false,
+    leftIcon = 'search',
+    onChange,
+    onBlur,
+    error = false,
+  }) => {
     const [filteredItems, setFilteredItems] = useState<ComboboxItem[]>([]);
     const [autocompleteItems, setAutocompleteItems] = useState<ComboboxItem[]>(
       []
@@ -180,7 +181,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
       ) {
         setAutocompleteItems([selectedValue]);
       }
-    }, [selectedValue]);
+    }, [autocompleteItems.length, items, selectedValue, withAutocomplete]);
 
     useEffect(() => {
       setFilteredItems(items);
@@ -209,20 +210,22 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
       }
     }, 200);
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (
+      event: React.ChangeEvent<HTMLInputElement>
+    ): void => {
       event.stopPropagation();
       handleSearch(event.target.value);
     };
 
-    const handleInputClick = () => {
+    const handleInputClick = (): void => {
       buttonRef.current?.click();
     };
 
-    const handleComboboxChange = (optionSelected: ComboboxItem) => {
+    const handleComboboxChange = (optionSelected: ComboboxItem): void => {
       onChange(optionSelected);
     };
 
-    const handleLeaveTransition = () => {
+    const handleLeaveTransition = (): void => {
       setFilteredItems(items);
       if (selectedValue.value === undefined && withAutocomplete) {
         setAutocompleteItems([]);
@@ -289,3 +292,5 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
     );
   }
 );
+
+Combobox.displayName = 'Combobox';

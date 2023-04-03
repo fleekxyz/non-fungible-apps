@@ -1,15 +1,17 @@
+import { useQuery } from '@apollo/client';
+import { useMemo } from 'react';
+
 import { Combobox, ComboboxItem } from '@/components';
 import { getLatestNFAsDocument } from '@/graphclient';
 import { AppLog } from '@/utils';
-import { useQuery } from '@apollo/client';
-import { useMemo } from 'react';
+
 import { CreateAccessPoint } from './create-ap.context';
 
-export const NfaPicker = () => {
+export const NfaPicker: React.FC = () => {
   const { nfa, setNfa } = CreateAccessPoint.useContext();
   const { data, loading, error } = useQuery(getLatestNFAsDocument);
 
-  const handleNfaChange = (item: ComboboxItem) => {
+  const handleNfaChange = (item: ComboboxItem): void => {
     setNfa(item);
   };
 

@@ -1,8 +1,10 @@
-import { Button } from '@/components';
 import { Link } from 'react-router-dom';
+
+import { Button } from '@/components';
+
 import { Header as HS } from './header.styles';
 
-export const Header = () => (
+export const Header: React.FC = () => (
   <HS.Container>
     <HS.Text>
       <HS.GrayText>

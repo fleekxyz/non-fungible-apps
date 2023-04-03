@@ -1,5 +1,7 @@
-import { DropdownItem } from '@/components';
 import { Octokit } from 'octokit';
+
+import { DropdownItem } from '@/components';
+
 import { GithubState } from './github-slice';
 
 export type UserData = {
@@ -43,25 +45,22 @@ export class GithubClient {
     });
   }
 
-  async fetchRepos(url: string) {
-    try {
-      const repos = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-        },
-      }).then((res) => res.json());
+  async fetchRepos(url: string): Promise<GithubState.Repository[]> {
+    const repos = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    }).then((res) => res.json());
 
-      return repos.map(
-        (repo: any) =>
-          ({
-            name: repo.name,
-            url: repo.html_url,
-            defaultBranch: repo.default_branch,
-          } as GithubState.Repository)
-      );
-    } catch (error) {
-      return error;
-    }
+    return repos.map(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (repo: any) =>
+        ({
+          name: repo.name,
+          url: repo.html_url,
+          defaultBranch: repo.default_branch,
+        } as GithubState.Repository)
+    );
   }
 
   async fetchBranches(owner: string, repo: string): Promise<DropdownItem[]> {

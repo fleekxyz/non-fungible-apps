@@ -1,4 +1,5 @@
 import { Flex } from '@/components';
+
 import { NFAList } from './nfa-list';
 import { ResultsSearch } from './results-search';
 

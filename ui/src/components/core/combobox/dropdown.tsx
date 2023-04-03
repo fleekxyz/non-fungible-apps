@@ -1,13 +1,16 @@
-import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { Icon } from '@/components/core/icon';
+import { Fragment } from 'react';
+
 import { Flex } from '@/components';
+import { Icon } from '@/components/core/icon';
 
 type DropdownOptionProps = {
   option: DropdownItem;
 };
 
-const DropdownOption = ({ option }: DropdownOptionProps) => (
+const DropdownOption: React.FC<DropdownOptionProps> = ({
+  option,
+}: DropdownOptionProps) => (
   <Listbox.Option
     className={({ active }) =>
       `relative cursor-default select-none py-2 px-3.5 text-slate11 rounded-xl mb-2 text-sm max-w-full ${
@@ -64,9 +67,8 @@ type DropdownButtonProps = {
   textColor?: string;
 };
 
-const DropdownButton = ({
+const DropdownButton: React.FC<DropdownButtonProps> = ({
   selectedValue,
-  open, //TODO maybe would be deprecated
   backgroundColor,
   textColor,
 }: DropdownButtonProps) => {
@@ -147,8 +149,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
   backgroundColor,
   textColor,
   optionsWidth,
-}) => {
-  const handleDropdownChange = (option: DropdownItem) => {
+}: DropdownProps) => {
+  const handleDropdownChange = (option: DropdownItem): void => {
     onChange(option);
   };
   const width = optionsWidth ? `w-${optionsWidth}` : 'w-full';

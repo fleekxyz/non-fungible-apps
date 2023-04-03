@@ -1,6 +1,7 @@
+import { useState } from 'react';
+
 import { FormField, useFormField } from '@/components';
 import { createContext, StringValidators } from '@/utils';
-import { useState } from 'react';
 
 export type MintFormContext = {
   form: {

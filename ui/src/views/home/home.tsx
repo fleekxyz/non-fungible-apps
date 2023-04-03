@@ -1,7 +1,8 @@
-import { Flex } from '@/components';
 import { Link } from 'react-router-dom';
 
-export const Home = () => {
+import { Flex } from '@/components';
+
+export const Home: React.FC = () => {
   return (
     <Flex css={{ flexDirection: 'column' }}>
       <h1>Home</h1>

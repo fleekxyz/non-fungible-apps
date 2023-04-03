@@ -1,4 +1,5 @@
 import { NavBar } from '@/components';
+
 import { PageStyles as PS } from './page.styles';
 
 export type AppPageProps = {

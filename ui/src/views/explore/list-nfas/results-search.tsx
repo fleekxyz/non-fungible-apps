@@ -1,5 +1,7 @@
-import { Dropdown, DropdownItem, Flex, Input } from '@/components';
 import { useState } from 'react';
+
+import { Dropdown, DropdownItem, Flex, Input } from '@/components';
+
 import { ResultsContainer, ResultsNumber, ResultsText } from './results.styles';
 
 const orderResults: DropdownItem[] = [
