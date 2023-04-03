@@ -2,10 +2,13 @@ import { useEffect } from 'react';
 
 import { useDebounce } from './use-debounce';
 
-export const useWindowScrollEnd = (callback: () => void): void => {
+export const useWindowScrollEnd = (
+  callback: () => void,
+  threshold = 0.3 // threshold used to recognize scroll end (30% of the remaining scroll)
+): void => {
   const debounced = useDebounce(() => {
     const { scrollHeight, scrollTop, offsetHeight } = document.documentElement;
-    if (scrollHeight - 100 > scrollTop + offsetHeight) return;
+    if (scrollHeight * (1 - threshold) > scrollTop + offsetHeight) return;
     callback();
   }, 100);
 
