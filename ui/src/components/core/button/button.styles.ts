@@ -1,7 +1,8 @@
-import { dripStitches } from '../../../theme';
 import { CSS } from '@stitches/react';
 
-type StyledButtonProps = React.ComponentProps<typeof StyledButton>;
+import { dripStitches } from '../../../theme';
+
+type StyledButtonProps = React.ComponentPropsWithRef<typeof StyledButton>;
 export interface ButtonProps extends StyledButtonProps {
   /**
    * If `true`, the button will show a spinner.

@@ -8,17 +8,16 @@ const itemsCombobox = [
 ];
 
 export const ComboboxTest = () => {
-  const [selectedValue, setSelectedValue] = useState({} as ComboboxItem);
-  const [selectedValueAutocomplete, setSelectedValueAutocomplete] = useState(
-    {} as ComboboxItem
-  );
+  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValueAutocomplete, setSelectedValueAutocomplete] =
+    useState('');
 
-  const handleComboboxChange = (item: ComboboxItem) => {
-    setSelectedValue(item);
+  const handleComboboxChange = (value: string) => {
+    setSelectedValue(value);
   };
 
-  const handleComboboxChangeAutocomplete = (item: ComboboxItem) => {
-    setSelectedValueAutocomplete(item);
+  const handleComboboxChangeAutocomplete = (value: string) => {
+    setSelectedValueAutocomplete(value);
   };
 
   return (

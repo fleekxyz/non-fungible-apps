@@ -1,9 +1,10 @@
 import { Icon, IconButton, Stepper } from '@/components';
 import { useTransactionCost } from '@/hooks';
 import { FleekERC721 } from '@/integrations';
+import { AppLog } from '@/utils';
 import { Mint } from '@/views/mint/mint.context';
 import { ethers } from 'ethers';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { NftCard } from '../nft-card';
 
 export const MintPreview = () => {
@@ -48,6 +49,17 @@ export const MintPreview = () => {
       ),
     [prepareStatus, writeStatus, transactionStatus]
   );
+
+  const error = useMemo(
+    () => [writeStatus, transactionStatus].some((status) => status === 'error'),
+    [writeStatus, transactionStatus]
+  );
+
+  useEffect(() => {
+    if (error) {
+      AppLog.errorToast('An error occurred while minting the NFA');
+    }
+  }, [error]);
 
   return (
     <NftCard

@@ -10,9 +10,7 @@
     "build": "yarn graphclient build && vite build",
     "postinstall": "graphclient build",
     "preview": "vite preview",
-    "prod": "yarn build && npx serve dist -s",
-    "storybook": "export SET NODE_OPTIONS=--openssl-legacy-provider && start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "prod": "yarn build && npx serve dist -s"
   },
   "author": "Fleek",
   "dependencies": {
@@ -44,15 +42,6 @@
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@graphprotocol/client-cli": "^2.2.19",
-    "@storybook/addon-actions": "^6.5.15",
-    "@storybook/addon-essentials": "^6.5.15",
-    "@storybook/addon-interactions": "^6.5.15",
-    "@storybook/addon-links": "^6.5.15",
-    "@storybook/addons": "^6.5.15",
-    "@storybook/builder-vite": "^0.2.7",
-    "@storybook/react": "^6.5.15",
-    "@storybook/testing-library": "^0.0.13",
-    "@storybook/theming": "^6.5.15",
     "@types/jest": "^29.2.3",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
@@ -72,7 +61,6 @@
     "prettier": "^2.8.0",
     "process": "^0.11.10",
     "react-query": "^3.39.2",
-    "storybook-dark-mode": "^2.0.5",
     "tailwindcss": "^3.2.4",
     "ts-loader": "^9.4.1",
     "typescript": "^4.9.3",

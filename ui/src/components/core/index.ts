@@ -6,3 +6,4 @@ export * from './avatar';
 export * from './separator.styles';
 export * from './text';
 export * from './switch';
+export * from './color-picker';
