@@ -15,7 +15,7 @@ const alchemy = new Alchemy(config);
 
 export const Ethereum: Ethereum.Core = {
   //TODO remove
-  defaultNetwork: env.goerli.rpc, // TODO: make it environment variable
+  defaultNetwork: env.goerli.rpc,
 
   provider: {
     metamask:
