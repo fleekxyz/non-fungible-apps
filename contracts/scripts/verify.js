@@ -1,4 +1,5 @@
 const { ethers } = require('hardhat');
+require('@nomiclabs/hardhat-etherscan');
 
 const networkName = hre.network.name;
 const { address } = require(`../deployments/${networkName}/FleekERC721.json`);
