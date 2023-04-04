@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 
 import { dripStitches } from '@/theme';
 
+import { Skeleton } from '../layout';
+
 const { styled } = dripStitches;
 
 export const NFACardStyles = {
@@ -75,4 +77,23 @@ export const NFACardStyles = {
       },
     },
   }),
+
+  Skeleton: {
+    Preview: styled(Skeleton, {
+      width: '100%',
+      height: 'calc(14.6875rem - 2px)',
+    }),
+
+    Title: styled(Skeleton, {
+      width: '100%',
+      height: 'calc(1.4 * $fontSizes$xl)',
+      borderRadius: '$lg',
+    }),
+
+    Content: styled(Skeleton, {
+      width: '100%',
+      height: 'calc(1.43 * $fontSizes$sm)',
+      borderRadius: '$lg',
+    }),
+  },
 };
