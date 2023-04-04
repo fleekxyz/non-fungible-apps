@@ -17,6 +17,7 @@ const LoadingSkeletons: React.FC = () => (
 );
 
 export const NFAList: React.FC = () => {
+  //add to Context
   const [pageNumber, setPageNumber] = useState(0);
   const [endReached, setEndReached] = useState(false);
 
