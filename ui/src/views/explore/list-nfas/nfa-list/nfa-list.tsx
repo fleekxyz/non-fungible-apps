@@ -1,9 +1,11 @@
 import { useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { Flex, NFACard, NFACardSkeleton, NoResults } from '@/components';
 import { lastNFAsPaginatedDocument } from '@/graphclient';
 import { useWindowScrollEnd } from '@/hooks';
+
+import { Explore } from '../../explore.context';
 
 const pageSize = 10; //Set this size to test pagination
 
@@ -18,9 +20,9 @@ const LoadingSkeletons: React.FC = () => (
 
 export const NFAList: React.FC = () => {
   //add to Context
-  const [pageNumber, setPageNumber] = useState(0);
-  const [endReached, setEndReached] = useState(false);
-
+  const { endReached, pageNumber, search, setPageNumber, setEndReached } =
+    Explore.useContext();
+  console.log('search', search);
   const {
     data: { tokens } = { tokens: [] },
     loading: isLoading,
@@ -29,7 +31,7 @@ export const NFAList: React.FC = () => {
     fetchPolicy: 'cache-and-network',
     variables: {
       pageSize,
-      skip: pageNumber * pageSize,
+      skip: pageNumber * pageSize, //skip is for the pagination
     },
     onCompleted: (data) => {
       if (data.tokens.length - tokens.length < pageSize) setEndReached(true);
@@ -43,8 +45,8 @@ export const NFAList: React.FC = () => {
   }, []);
 
   useWindowScrollEnd(() => {
-    if (isLoading || endReached) return;
-    setPageNumber((prevState) => prevState + 1);
+    if (isLoading || endReached || queryError) return;
+    setPageNumber((prevState: number) => prevState + 1);
   });
 
   if (queryError) return <div>Error</div>; //TODO handle error
