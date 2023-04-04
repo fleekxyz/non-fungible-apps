@@ -20,23 +20,13 @@ import { cleanString } from './combobox.utils';
 
 type ComboboxInputProps = {
   /**
-   * If it's true, the list of options will be displayed
-   */
-  open: boolean;
-  /**
    * Name of the left icon to display in the input
    */
   leftIcon: IconName;
-  /**
-   * Value to indicate it's invalid
-   */
-  error?: boolean;
 } & ComboboxLibInputProps<'input', ComboboxItem>;
 
 const ComboboxInput: React.FC<ComboboxInputProps> = ({
-  open,
   leftIcon,
-  error,
   ...props
 }: ComboboxInputProps) => (
   <div className="relative w-full">
@@ -53,19 +43,9 @@ const ComboboxInput: React.FC<ComboboxInputProps> = ({
     />
     <ComboboxLib.Input
       placeholder="Search"
-      className={`w-full  border-solid border  h-11  py-3 px-10 text-sm leading-5 text-slate11 outline-none ${
-        open
-          ? 'border-b-0 rounded-t-xl bg-black border-slate6'
-          : `rounded-xl bg-transparent cursor-pointer ${
-              error ? 'border-red9' : 'border-slate7'
-            }`
-      }`}
-      displayValue={(selectedValue: ComboboxItem) => selectedValue.label}
+      className={`w-full h-11 py-3 px-10 text-sm bg-transparent leading-5 text-slate11 outline-none `}
       {...props}
     />
-    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
-      <Icon name="chevron-down" css={{ fontSize: '$xs' }} />
-    </span>
   </div>
 );
 
@@ -187,8 +167,6 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
       setFilteredItems(items);
     }, [items]);
 
-    const buttonRef = useRef<HTMLButtonElement>(null);
-
     const handleSearch = useDebounce((searchValue: string) => {
       if (searchValue === '') {
         setFilteredItems(items);
@@ -217,10 +195,6 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
       handleSearch(event.target.value);
     };
 
-    const handleInputClick = (): void => {
-      buttonRef.current?.click();
-    };
-
     const handleComboboxChange = (optionSelected: ComboboxItem): void => {
       onChange(optionSelected);
     };
@@ -240,16 +214,33 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
         onChange={handleComboboxChange}
       >
         {({ open }) => (
-          <div className="relative">
-            <ComboboxInput
-              onChange={handleInputChange}
-              onClick={handleInputClick}
-              open={open}
-              leftIcon={leftIcon}
-              onBlur={onBlur}
-              error={error}
-            />
-            <ComboboxLib.Button ref={buttonRef} className="hidden" />
+          <div className="relative w-full">
+            <div className="relative w-full">
+              <Icon
+                name={leftIcon}
+                size="sm"
+                css={{
+                  position: 'absolute',
+                  left: '$3',
+                  top: '$3',
+                  fontSize: '$xl',
+                  color: 'slate8',
+                }}
+              />
+              <ComboboxLib.Button
+                className={`w-full border-solid border rounded-xl h-11  py-3 px-10 text-sm leading-5 text-slate11 outline-none ${
+                  error ? 'border-red9' : 'border-slate7'
+                }`}
+                onBlur={onBlur}
+              >
+                {selectedValue && selectedValue.label
+                  ? selectedValue.label
+                  : 'Search'}
+              </ComboboxLib.Button>
+              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                <Icon name="chevron-down" css={{ fontSize: '$xs' }} />
+              </span>
+            </div>
 
             <Transition
               show={open}
@@ -260,31 +251,39 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
               leaveTo="opacity-0"
               afterLeave={handleLeaveTransition}
             >
-              <ComboboxLib.Options className="absolute max-h-60 w-full z-10 overflow-auto rounded-b-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
-                {[...autocompleteItems, ...filteredItems].length === 0 ||
-                filteredItems === undefined ? (
-                  <NoResults />
-                ) : (
-                  <>
-                    {autocompleteItems.length > 0 && <span>Create new</span>}
-                    {autocompleteItems.map(
-                      (autocompleteOption: ComboboxItem) => (
-                        <ComboboxOption
-                          key={autocompleteOption.value}
-                          option={autocompleteOption}
-                        />
-                      )
-                    )}
-                    {autocompleteItems.length > 0 &&
-                      filteredItems.length > 0 && (
-                        <Separator css={{ mb: '$2' }} />
+              <div className="absolute max-h-60 mt-1 w-full z-10 overflow-auto rounded-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
+                <ComboboxInput
+                  onChange={handleInputChange}
+                  leftIcon={leftIcon}
+                  onBlur={onBlur}
+                />
+                <Separator />
+                <ComboboxLib.Options className="mt-1">
+                  {[...autocompleteItems, ...filteredItems].length === 0 ||
+                  filteredItems === undefined ? (
+                    <NoResults />
+                  ) : (
+                    <>
+                      {autocompleteItems.length > 0 && <span>Create new</span>}
+                      {autocompleteItems.map(
+                        (autocompleteOption: ComboboxItem) => (
+                          <ComboboxOption
+                            key={autocompleteOption.value}
+                            option={autocompleteOption}
+                          />
+                        )
                       )}
-                    {filteredItems.map((option: ComboboxItem) => (
-                      <ComboboxOption key={option.value} option={option} />
-                    ))}
-                  </>
-                )}
-              </ComboboxLib.Options>
+                      {autocompleteItems.length > 0 &&
+                        filteredItems.length > 0 && (
+                          <Separator css={{ mb: '$2' }} />
+                        )}
+                      {filteredItems.map((option: ComboboxItem) => (
+                        <ComboboxOption key={option.value} option={option} />
+                      ))}
+                    </>
+                  )}
+                </ComboboxLib.Options>
+              </div>
             </Transition>
           </div>
         )}
