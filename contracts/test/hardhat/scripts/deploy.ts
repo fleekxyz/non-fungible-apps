@@ -6,6 +6,7 @@ import deploy from '../../../scripts/deploy';
 import { getImplementationAddress } from '@openzeppelin/upgrades-core';
 import { Contract } from 'ethers';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
+import { Errors, TestConstants } from '../contracts/FleekERC721/helpers';
 
 const taskArgs = {
   newProxyInstance: false,
@@ -84,5 +85,25 @@ describe('Deploy', () => {
     expect(await proxy.hasCollectionRole(0, owner.address)).to.be.true;
     expect(await implementation.hasCollectionRole(0, owner.address)).to.be
       .false;
+  });
+
+  it('should not allow mint on implementation contract', async () => {
+    const { implementation, owner } = fixture;
+
+    await expect(
+      implementation.mint(
+        owner.address,
+        TestConstants.MintParams.name,
+        TestConstants.MintParams.description,
+        TestConstants.MintParams.externalUrl,
+        TestConstants.MintParams.ens,
+        TestConstants.MintParams.commitHash,
+        TestConstants.MintParams.gitRepository,
+        TestConstants.MintParams.logo,
+        TestConstants.MintParams.color,
+        TestConstants.MintParams.accessPointAutoApprovalSettings,
+        owner.address
+      )
+    ).to.be.revertedWithCustomError(implementation, Errors.ContractIsPaused);
   });
 });
