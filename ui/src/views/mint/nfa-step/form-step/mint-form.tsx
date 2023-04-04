@@ -1,18 +1,20 @@
-import { Button, Card, Form, Grid, Stepper } from '@/components';
+import { useAccount } from 'wagmi';
+
+import { Button, Card, Grid, Stepper } from '@/components';
+import { AppLog } from '@/utils';
+
 import { Mint } from '../../mint.context';
+import { MintCardHeader } from '../../mint-card';
 import {
-  LogoField,
   AppDescriptionField,
   AppNameField,
   EnsDomainField,
+  LogoField,
 } from './fields';
-import { MintCardHeader } from '../../mint-card';
-import { useAccount } from 'wagmi';
 import { parseColorToNumber } from './form.utils';
-import { AppLog } from '@/utils';
 import { useMintFormContext } from './mint-form.context';
 
-export const MintFormStep = () => {
+export const MintFormStep: React.FC = () => {
   const {
     form: {
       appName: {
@@ -47,7 +49,7 @@ export const MintFormStep = () => {
   const { billing, repositoryName, verifyNFA, setNfaStep } = Mint.useContext();
   const { setArgs } = Mint.useTransactionContext();
 
-  const handleNextStep = () => {
+  const handleNextStep = (): void => {
     if (!address) {
       AppLog.errorToast('No address found. Please connect your wallet.');
       return;
@@ -71,7 +73,7 @@ export const MintFormStep = () => {
     nextStep();
   };
 
-  const handlePrevStep = () => {
+  const handlePrevStep = (): void => {
     setNfaStep(1);
   };
 

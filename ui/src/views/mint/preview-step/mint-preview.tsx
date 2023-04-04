@@ -1,13 +1,15 @@
+import { ethers } from 'ethers';
+import { useEffect, useMemo } from 'react';
+
 import { Icon, IconButton, Stepper } from '@/components';
 import { useTransactionCost } from '@/hooks';
 import { FleekERC721 } from '@/integrations';
 import { AppLog } from '@/utils';
 import { Mint } from '@/views/mint/mint.context';
-import { ethers } from 'ethers';
-import { useEffect, useMemo } from 'react';
+
 import { NftCard } from '../nft-card';
 
-export const MintPreview = () => {
+export const MintPreview: React.FC = () => {
   const { prevStep } = Stepper.useContext();
   const {
     prepare: { status: prepareStatus, data: prepareData, error: prepareError },
@@ -29,6 +31,7 @@ export const MintPreview = () => {
     // TODO: better UI for prepare errors
     if (prepareError) {
       const parsedError = FleekERC721.parseError(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (prepareError as any).error?.data.data
       );
       if (parsedError.isIdentified) {
@@ -40,6 +43,7 @@ export const MintPreview = () => {
 
     const formattedCost = ethers.utils.formatEther(cost).slice(0, 9);
     return `Minting this NFA will cost ${formattedCost} ${currency}.`;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prepareData, isCostLoading, prepareStatus]);
 
   const isLoading = useMemo(

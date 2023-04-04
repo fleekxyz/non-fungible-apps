@@ -1,15 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
-import { Button, Card, Flex, NoResults } from '@/components';
+import { Button, Flex, NFACard, NoResults } from '@/components';
 import { lastNFAsPaginatedDocument, totalTokensDocument } from '@/graphclient';
-import { FleekERC721 } from '@/integrations/ethereum/contracts';
 
 const pageSize = 10; //Set this size to test pagination
 
-export const NFAList = () => {
+export const NFAList: React.FC = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -40,13 +38,13 @@ export const NFAList = () => {
   if (loadingMintedTokens || loadingTotalTokens) return <div>Loading...</div>; //TODO handle loading
   if (errorMintedTokens || errorTotalTokens) return <div>Error</div>; //TODO handle error
 
-  const handlePreviousPage = () => {
+  const handlePreviousPage = (): void => {
     if (pageNumber > 1) {
       setPageNumber((prevState) => prevState - 1);
     }
   };
 
-  const handleNextPage = () => {
+  const handleNextPage = (): void => {
     if (pageNumber + 1 <= totalPages)
       setPageNumber((prevState) => prevState + 1);
   };
@@ -67,31 +65,15 @@ export const NFAList = () => {
           Next page
         </Button>
       </Flex>
-      <div>
+      <Flex css={{ gap: '$6', flexWrap: 'wrap' }}>
         {dataMintedTokens && dataMintedTokens.tokens.length > 0 ? (
           dataMintedTokens.tokens.map((mint) => (
-            <Card.Container
-              key={mint.tokenId}
-              css={{ display: 'inline-block', m: '$2' }}
-            >
-              <Card.Heading title={mint.name} />
-              <Card.Body css={{ display: 'flex', flexDirection: 'column' }}>
-                <a
-                  target="_blank"
-                  // TODO: make base url come from env var
-                  href={`https://testnets.opensea.io/assets/goerli/${FleekERC721.address}/${mint.tokenId}`}
-                  rel="noreferrer"
-                >
-                  <u>Open NFA on Opensea</u>
-                </a>
-                <Link to={`/create-ap/${mint.tokenId}`}>Create AP</Link>
-              </Card.Body>
-            </Card.Container>
+            <NFACard data={mint} key={mint.id} />
           ))
         ) : (
           <NoResults />
         )}
-      </div>
+      </Flex>
     </Flex>
   );
 };

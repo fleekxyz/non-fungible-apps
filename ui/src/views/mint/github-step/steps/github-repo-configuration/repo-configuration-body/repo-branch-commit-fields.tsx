@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
+
 import { ComboboxItem, Flex, Form, Spinner } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
+import { AppLog } from '@/utils';
 import { Mint } from '@/views/mint/mint.context';
 import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
-import { AppLog } from '@/utils';
 
-export const RepoBranchCommitFields = () => {
+export const RepoBranchCommitFields: React.FC = () => {
   const { queryLoading, branches } = useGithubStore();
   const dispatch = useAppDispatch();
   const {
@@ -31,7 +32,7 @@ export const RepoBranchCommitFields = () => {
         })
       );
     }
-  }, [queryLoading, dispatch]);
+  }, [queryLoading, dispatch, selectedUserOrg.label, repositoryName.name]);
 
   useEffect(() => {
     try {
@@ -54,7 +55,14 @@ export const RepoBranchCommitFields = () => {
     } catch (error) {
       AppLog.errorToast('We had a problem. Try again');
     }
-  }, [queryLoading, branches]);
+  }, [
+    queryLoading,
+    branches,
+    repositoryName.defaultBranch,
+    gitBranch,
+    setGitBranch,
+    setGitCommit,
+  ]);
 
   if (queryLoading === 'loading') {
     return (
@@ -70,7 +78,7 @@ export const RepoBranchCommitFields = () => {
     );
   }
 
-  const handleBranchChange = (branch: ComboboxItem) => {
+  const handleBranchChange = (branch: ComboboxItem): void => {
     setGitBranch(branch.label);
     setGitCommit(branch.value);
   };

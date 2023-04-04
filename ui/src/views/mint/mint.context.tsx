@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { ComboboxItem } from '@/components';
 import { EthereumHooks } from '@/integrations';
-import { AppLog, createContext } from '@/utils';
 import { GithubState, useFleekERC721Billing } from '@/store';
+import { AppLog, createContext } from '@/utils';
 
 export type MintContext = {
   billing: string | undefined;

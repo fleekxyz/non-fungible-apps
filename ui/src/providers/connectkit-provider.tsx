@@ -1,9 +1,10 @@
-import { WagmiConfig, createClient } from 'wagmi';
-import { goerli } from 'wagmi/chains';
 import {
   ConnectKitProvider as ConnectKitProviderLib,
   getDefaultClient,
 } from 'connectkit';
+import { createClient, WagmiConfig } from 'wagmi';
+import { goerli } from 'wagmi/chains';
+
 import { env } from '@/constants';
 
 const alchemyId = env.alchemy.id;
@@ -23,7 +24,7 @@ type ConnectKitProviderProps = {
 
 export const ConnectkitProvider: React.FC<ConnectKitProviderProps> = ({
   children,
-}) => (
+}: ConnectKitProviderProps) => (
   <WagmiConfig client={wagmiClient}>
     <ConnectKitProviderLib>{children}</ConnectKitProviderLib>
   </WagmiConfig>

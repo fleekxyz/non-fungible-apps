@@ -1,4 +1,5 @@
 import { forwardRef, useRef } from 'react';
+
 import { Icon } from '../icon';
 import { InputFileStyles as S } from './input-file.styles';
 
@@ -8,15 +9,15 @@ type InputFileProps = {
 } & React.ComponentProps<typeof S.Border>;
 
 export const StyledInputFile = forwardRef<HTMLDivElement, InputFileProps>(
-  ({ value: file, onChange, css, ...props }, ref) => {
+  ({ value: file, onChange, ...props }, ref) => {
     const inputFileRef = useRef<HTMLInputElement>(null);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
       e.preventDefault();
       onChange(e);
     };
 
-    const handleInputClick = () => {
+    const handleInputClick = (): void => {
       inputFileRef.current?.click();
     };
 
@@ -41,3 +42,5 @@ export const StyledInputFile = forwardRef<HTMLDivElement, InputFileProps>(
     );
   }
 );
+
+StyledInputFile.displayName = 'StyledInputFile';

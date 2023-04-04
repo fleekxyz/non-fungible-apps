@@ -1,8 +1,9 @@
 import { Card, Grid, Icon, IconButton, Stepper } from '@/components';
+
 import { CreateAccessPoint } from './create-ap.context';
 import { CreateAccessPointFormBody } from './create-ap.form-body';
 
-export const CreateAccessPointForm = () => {
+export const CreateAccessPointForm: React.FC = () => {
   const { prevStep } = Stepper.useContext();
 
   const { nfa } = CreateAccessPoint.useContext();

@@ -1,8 +1,10 @@
 import { JsonRpcProvider, Networkish } from '@ethersproject/providers';
-import { ethers } from 'ethers';
-import * as Contracts from './contracts';
-import { env } from '@/constants';
 import { Alchemy, Network } from 'alchemy-sdk';
+import { ethers } from 'ethers';
+
+import { env } from '@/constants';
+
+import * as Contracts from './contracts';
 
 const config = {
   apiKey: env.alchemy.id,

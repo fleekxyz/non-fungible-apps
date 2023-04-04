@@ -8,7 +8,7 @@ type MintCardHeaderProps = {
 export const MintCardHeader: React.FC<MintCardHeaderProps> = ({
   title,
   onClickBack,
-}) => {
+}: MintCardHeaderProps) => {
   return (
     <Card.Heading
       title={title}

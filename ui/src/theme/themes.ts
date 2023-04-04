@@ -4,7 +4,6 @@ import type { ConfigType } from '@stitches/react/types/config';
 
 import { allToNegative } from '../utils';
 import {
-  colors,
   darkColors,
   media as libMedia,
   radii,
@@ -37,7 +36,7 @@ export const createDripStitches = <
   Utils extends {} = {}
 >(
   config?: CreateDripStitchesConfig<Prefix, Media, Theme, ThemeMap, Utils>
-) => {
+): object => {
   const { prefix, theme, themeMap, utils, media } = config || {};
 
   const _spacing = {

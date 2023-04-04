@@ -1,14 +1,18 @@
 import { useEffect, useMemo } from 'react';
+
 import { Flex, NoResults } from '@/components';
-import { Mint } from '@/views/mint/mint.context';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
+import { Mint } from '@/views/mint/mint.context';
+
 import { Repository } from './repository';
 
 type RepositoriesListProps = {
   searchValue: string;
 };
 
-export const RepositoriesList = ({ searchValue }: RepositoriesListProps) => {
+export const RepositoriesList: React.FC<RepositoriesListProps> = ({
+  searchValue,
+}: RepositoriesListProps) => {
   const { selectedUserOrg } = Mint.useContext();
   const { queryLoading, repositories } = useGithubStore();
   const dispatch = useAppDispatch();

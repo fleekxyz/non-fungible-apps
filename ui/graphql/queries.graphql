@@ -9,6 +9,12 @@ query lastNFAsPaginated($pageSize: Int, $skip: Int) {
     tokenId
     description
     name
+    ENS
+    color
+    logo
+    accessPoints {
+      id
+    }
   }
 }
 

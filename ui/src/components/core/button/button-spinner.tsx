@@ -1,6 +1,6 @@
-import { dripStitches } from '../../../theme'; //TODO replace with absolute path
 import React, { HTMLAttributes, useMemo } from 'react';
 
+import { dripStitches } from '../../../theme'; //TODO replace with absolute path
 import {
   ButtonSpinnerProps,
   StyledButtonSpinnerBox,

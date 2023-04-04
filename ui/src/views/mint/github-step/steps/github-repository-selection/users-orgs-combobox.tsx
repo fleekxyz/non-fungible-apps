@@ -1,10 +1,11 @@
+import { useEffect } from 'react';
+
 import { Avatar, Combobox, ComboboxItem } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { AppLog } from '@/utils';
 import { Mint } from '@/views/mint/mint.context';
-import { useEffect } from 'react';
 
-export const UserOrgsCombobox = () => {
+export const UserOrgsCombobox: React.FC = () => {
   const { queryUserAndOrganizations, userAndOrganizations } = useGithubStore();
   const dispatch = useAppDispatch();
 
@@ -16,7 +17,7 @@ export const UserOrgsCombobox = () => {
     }
   }, [dispatch, queryUserAndOrganizations]);
 
-  const handleUserOrgChange = (item: ComboboxItem) => {
+  const handleUserOrgChange = (item: ComboboxItem): void => {
     if (item) {
       dispatch(githubActions.fetchRepositoriesThunk(item.value));
       setSelectedUserOrg(item);
@@ -34,7 +35,12 @@ export const UserOrgsCombobox = () => {
       //SET first user
       setSelectedUserOrg(userAndOrganizations[0]);
     }
-  }, [queryUserAndOrganizations, selectedUserOrg, userAndOrganizations]);
+  }, [
+    queryUserAndOrganizations,
+    selectedUserOrg,
+    setSelectedUserOrg,
+    userAndOrganizations,
+  ]);
 
   return (
     <Combobox

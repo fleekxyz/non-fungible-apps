@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 import {
   Card,
   ComboboxItem,
@@ -10,13 +12,12 @@ import {
 import { Input } from '@/components/core/input';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useGithubStore } from '@/store';
-import { MintCardHeader } from '@/views/mint/mint-card';
 import { Mint } from '@/views/mint/mint.context';
-import React, { useState } from 'react';
+
 import { RepositoriesList } from './repositories-list';
 import { UserOrgsCombobox } from './users-orgs-combobox';
 
-export const Loading = () => (
+export const Loading: React.FC = () => (
   <Flex
     css={{
       justifyContent: 'center',
@@ -40,12 +41,14 @@ export const GithubRepositoryConnection: React.FC = () => {
     500
   );
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     event.stopPropagation();
     setSearchValueDebounced(event);
   };
 
-  const handlePrevStepClick = () => {
+  const handlePrevStepClick = (): void => {
     setGithubStep(1);
     setSelectedUserOrg({} as ComboboxItem);
   };

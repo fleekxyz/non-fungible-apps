@@ -1,7 +1,9 @@
+import { useCallback } from 'react';
+
 import { Button, Separator } from '@/components';
 import { githubActions, GithubState, useAppDispatch } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-import { useCallback } from 'react';
+
 import { RepoRow } from '../repository-row';
 
 type RepositoryProps = {
@@ -9,7 +11,11 @@ type RepositoryProps = {
   index: number;
   length: number;
 };
-export const Repository = ({ repository, index, length }: RepositoryProps) => {
+export const Repository: React.FC<RepositoryProps> = ({
+  repository,
+  index,
+  length,
+}: RepositoryProps) => {
   const { setGithubStep, setRepositoryName } = Mint.useContext();
 
   const dispatch = useAppDispatch();
@@ -18,7 +24,7 @@ export const Repository = ({ repository, index, length }: RepositoryProps) => {
     setRepositoryName(repository);
     setGithubStep(3);
     dispatch(githubActions.setQueryState('idle'));
-  }, [dispatch]);
+  }, [dispatch, repository, setGithubStep, setRepositoryName]);
 
   return (
     <>
