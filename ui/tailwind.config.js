@@ -3,10 +3,19 @@
 
 module.exports = {
   content: ['./src/**/*.tsx'],
+  safelist: [
+    {
+      pattern: /(bg|border|text)-(slate)(4|11|12)/,
+    },
+    {
+      pattern: /w-(0|[1-9][0-9]?|100)/,
+    },
+  ],
   theme: {
     extend: {
       colors: {
         //TODO if we're gonna have ligth mode we should add also the light colors cause tailwind doesn't have them
+        slate4: 'rgba(38, 41, 43, 1)',
         slate5: 'rgba(43, 47, 49, 1)',
         slate6: 'rgba(49, 53, 56, 1)',
         slate7: 'rgba(58, 63, 66, 1)',
@@ -15,6 +24,7 @@ module.exports = {
         green4: 'rgba(17, 49, 35, 1)',
         green11: 'rgba(76, 195, 138, 1)',
         red4: 'rgba(72, 26, 29, 1)',
+        red9: 'rgba(229, 72, 77, 1)',
         red11: 'rgba(255, 99, 105, 1)',
       },
       borderRadius: {

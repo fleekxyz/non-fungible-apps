@@ -1,13 +1,23 @@
-import { DropdownItem } from '@/components';
-import { MintCardHeader } from '@/views/mint/mint-card';
 import { Mint } from '@/views/mint/mint.context';
+import { MintCardHeader } from '@/views/mint/mint-card';
+import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
 
-export const RepoConfigurationHeader = () => {
-  const { setGithubStep, setBranchName, setCommitHash } = Mint.useContext();
+export const RepoConfigurationHeader: React.FC = () => {
+  const { setGithubStep } = Mint.useContext();
+  const {
+    form: {
+      gitBranch: {
+        value: [, setBranchName],
+      },
+      gitCommit: {
+        value: [, setCommitHash],
+      },
+    },
+  } = useMintFormContext();
 
-  const handlePrevStepClick = () => {
+  const handlePrevStepClick = (): void => {
     setGithubStep(2);
-    setBranchName({} as DropdownItem);
+    setBranchName('');
     setCommitHash('');
   };
 

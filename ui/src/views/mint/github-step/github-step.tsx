@@ -5,7 +5,7 @@ import {
   GithubRepositoryConnection,
 } from './steps';
 
-export const GithubStep = () => {
+export const GithubStep: React.FC = () => {
   const { githubStep } = Mint.useContext();
 
   switch (githubStep) {

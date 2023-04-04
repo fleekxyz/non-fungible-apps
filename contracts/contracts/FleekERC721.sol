@@ -52,6 +52,7 @@ contract FleekERC721 is
     uint256 private _appIds;
     mapping(uint256 => Token) private _apps;
     mapping(uint256 => address) private _tokenVerifier;
+    mapping(uint256 => bool) private _tokenVerified;
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -135,6 +136,7 @@ contract FleekERC721 is
         );
 
         _tokenVerifier[tokenId] = verifier;
+        _tokenVerified[tokenId] = false;
         _setAccessPointAutoApproval(tokenId, accessPointAutoApproval);
 
         return tokenId;
@@ -154,9 +156,10 @@ contract FleekERC721 is
         _requireMinted(tokenId);
         address owner = ownerOf(tokenId);
         bool accessPointAutoApproval = _getAccessPointAutoApproval(tokenId);
+        bool verified = _tokenVerified[tokenId];
         Token storage app = _apps[tokenId];
 
-        return string(abi.encodePacked(_baseURI(), app.toString(owner, accessPointAutoApproval).toBase64()));
+        return string(abi.encodePacked(_baseURI(), app.toString(owner, accessPointAutoApproval, verified).toBase64()));
     }
 
     /**
@@ -438,6 +441,40 @@ contract FleekERC721 is
     function getTokenVerifier(uint256 tokenId) public view returns (address) {
         _requireMinted(tokenId);
         return _tokenVerifier[tokenId];
+    }
+
+    /**
+     * @dev Sets the verification status of a token.
+     *
+     * May emit a {MetadataUpdate} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must be the token verifier.
+     * - the sender must have `CollectionRoles.Verifier` role.
+     *
+     */
+    function setTokenVerified(
+        uint256 tokenId,
+        bool verified
+    ) public requireCollectionRole(CollectionRoles.Verifier) requireTokenVerifier(tokenId) {
+        _requireMinted(tokenId);
+        _tokenVerified[tokenId] = verified;
+        emit MetadataUpdate(tokenId, "verified", verified, msg.sender);
+    }
+
+    /**
+     * @dev Returns the verification status of a token.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     *
+     */
+    function isTokenVerified(uint256 tokenId) public view returns (bool) {
+        _requireMinted(tokenId);
+        return _tokenVerified[tokenId];
     }
 
     /*//////////////////////////////////////////////////////////////
