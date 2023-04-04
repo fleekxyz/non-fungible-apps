@@ -14,9 +14,9 @@
     "deploy:sepolia": "hardhat deploy --network sepolia",
     "deploy:goerli": "hardhat deploy --network goerli",
     "compile": "hardhat compile",
-    "verify:mumbai": "npx hardhat run ./scripts/verify-polyscan.js --network mumbai",
-    "verify:goerli": "npx hardhat run ./scripts/verify.js --network goerli",
-    "verify:sepolia": "npx hardhat run ./scripts/verify-contracts.js --network sepolia"
+    "verify:mumbai": "npx hardhat run ./scripts/verify-contract.js --network mumbai",
+    "verify:goerli": "npx hardhat run ./scripts/verify-contract.js --network goerli",
+    "verify:sepolia": "npx hardhat run ./scripts/verify-contract.js --network sepolia"
   },
   "repository": {
     "type": "git",

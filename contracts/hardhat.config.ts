@@ -87,7 +87,7 @@ const config: HardhatUserConfig = {
 
 export default config;
 
-// npx hardhat deploy --network mumbai/sepolia/goerli --new-proxy-instance --name "FleekNFAs" --symbol "FLKNFA" --billing "[10000, 20000]"
+// npx hardhat deploy --network [mumbai | sepolia | goerli] --new-proxy-instance --name "FleekNFAs" --symbol "FLKNFA" --billing "[10000, 20000]"
 task('deploy', 'Deploy the contracts')
   .addFlag('newProxyInstance', 'Force to deploy a new proxy instance')
   .addOptionalParam('name', 'The collection name', 'FleekNFAs', types.string)

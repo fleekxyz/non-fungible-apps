@@ -14,7 +14,6 @@ const config = {
 const alchemy = new Alchemy(config);
 
 export const Ethereum: Ethereum.Core = {
-  //TODO remove
   defaultNetwork: env.goerli.rpc,
 
   provider: {

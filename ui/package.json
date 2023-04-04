@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Minimal UI for Fleek Non Fungible Apps",
   "main": "index.js",
-  "license": "TODO",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "dev:css": "tailwindcss -o ./tailwind.css --watch && yarn dev",
