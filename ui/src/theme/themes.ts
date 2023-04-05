@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { createStitches, DefaultThemeMap } from '@stitches/react';
 import type { ConfigType } from '@stitches/react/types/config';
 
@@ -28,6 +29,7 @@ export interface CreateDripStitchesConfig<
   themeMap?: ConfigType.ThemeMap<ThemeMap>;
   utils?: ConfigType.Utils<Utils>;
 }
+
 export const createDripStitches = <
   Prefix extends string = '',
   Media extends {} = {},
@@ -36,7 +38,7 @@ export const createDripStitches = <
   Utils extends {} = {}
 >(
   config?: CreateDripStitchesConfig<Prefix, Media, Theme, ThemeMap, Utils>
-): object => {
+) => {
   const { prefix, theme, themeMap, utils, media } = config || {};
 
   const _spacing = {
@@ -57,6 +59,7 @@ export const createDripStitches = <
     },
     theme: {
       colors: {
+        black: '#000000',
         ...darkColors, // TODO: replace with light colors once it's done the light mode
         ...(theme?.colors || {}),
       },
