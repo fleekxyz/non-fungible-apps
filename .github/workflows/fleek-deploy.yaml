@@ -15,7 +15,9 @@ jobs:
           node-version: 16
       - name: Install Fleek CLI
         run: npm i -g @fleekxyz/cli
+      - name: Install UI dependencies
+        run: cd ui && yarn
       - name: Build ui folder
-        run: cd ui && yarn build && cd ../
+        run: yarn build && cd ../
       - name: Build & deploy sites
         run: fleek sites deploy
