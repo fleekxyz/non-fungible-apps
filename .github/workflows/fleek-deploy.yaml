@@ -18,6 +18,6 @@ jobs:
       - name: Install UI dependencies
         run: cd ui && yarn
       - name: Build ui folder
-        run: yarn build && cd ../
+        run: cd ui && yarn build
       - name: Build & deploy sites
         run: fleek sites deploy
