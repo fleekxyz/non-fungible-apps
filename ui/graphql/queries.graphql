@@ -1,9 +1,10 @@
-query lastNFAsPaginated($pageSize: Int, $skip: Int) {
+query lastNFAsPaginated($pageSize: Int, $skip: Int, $searchValue: String) {
   tokens(
     first: $pageSize
     skip: $skip
     orderDirection: desc
     orderBy: tokenId
+    where: { name_contains_nocase: $searchValue }
   ) {
     id
     tokenId

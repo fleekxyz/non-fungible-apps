@@ -22,7 +22,7 @@ export const NFAList: React.FC = () => {
   //add to Context
   const { endReached, pageNumber, search, setPageNumber, setEndReached } =
     Explore.useContext();
-  console.log('search', search);
+
   const {
     data: { tokens } = { tokens: [] },
     loading: isLoading,
@@ -31,6 +31,7 @@ export const NFAList: React.FC = () => {
     fetchPolicy: 'cache-and-network',
     variables: {
       pageSize,
+      searchValue: search,
       skip: pageNumber * pageSize, //skip is for the pagination
     },
     onCompleted: (data) => {
