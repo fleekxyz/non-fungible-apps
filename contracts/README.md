@@ -176,7 +176,7 @@ Run:
 $ yarn deploy:goerli
 ```
 
-to deploy the contract on the testnet. Please note that your wallet needs to hold enough Goerli ETH for the deployment to be successful. To reach more in-depth information about how to deploy contract checkout [this guide](TODO: NEED TO FIND GUIDE FOR GOERLI).
+to deploy the contract on the testnet. Please note that your wallet needs to hold enough Goerli ETH for the deployment to be successful.
 
 ### **Deploy arguments**
 
