@@ -1,7 +1,7 @@
 import { Button, Card, Grid } from '@/components';
+import { NFAPreview } from '@/components';
 
 import { useMintFormContext } from '../nfa-step/form-step';
-import { SVGPreview } from './svg-preview';
 
 type NftCardProps = {
   title: string;
@@ -44,13 +44,13 @@ export const NftCard: React.FC<NftCardProps> = ({
 
   return (
     <Card.Container css={{ width: '$107h', p: '$0' }}>
-      <SVGPreview
+      <NFAPreview
         color={logoColor}
         logo={appLogo}
         name={appName}
         ens={ens}
         size={size}
-        css="rounded-t-xhl"
+        className="rounded-t-xhl"
       />
       <Card.Body css={{ p: '$7' }}>
         <Grid css={{ rowGap: '$6' }}>

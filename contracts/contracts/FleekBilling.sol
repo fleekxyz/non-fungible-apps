@@ -28,7 +28,7 @@ abstract contract FleekBilling is Initializable {
     /**
      * @dev Mapping of billing values.
      */
-    mapping(Billing => uint256) public _billings;
+    mapping(Billing => uint256) private _billings;
 
     /**
      * @dev Initializes the contract by setting default billing values.
