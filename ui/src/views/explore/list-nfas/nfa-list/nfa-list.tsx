@@ -42,7 +42,7 @@ export const NFAList: React.FC = () => {
   }, []);
 
   useWindowScrollEnd(() => {
-    if (isLoading || endReached) return;
+    if (isLoading || endReached || queryError) return;
     setPageNumber((prevState) => prevState + 1);
   });
 
