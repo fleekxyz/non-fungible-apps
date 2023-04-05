@@ -1,35 +1,37 @@
 import { useMemo } from 'react';
 
-type SVGPreviewProps = {
+import { dripStitches, forwardStyledRef } from '@/theme';
+
+const { styled } = dripStitches;
+
+const StyledSVG = styled('svg');
+
+export type NFAPreviewProps = Omit<
+  React.ComponentPropsWithRef<typeof StyledSVG>,
+  'width' | 'height' | 'xmlns' | 'viewBox'
+> & {
   color: string;
   logo: string;
   name: string;
   ens?: string;
-  css?: string;
   size: string;
 };
 
-/**
- * SVGPreview renders the NFA image based in the provided props.
- */
-export const SVGPreview: React.FC<SVGPreviewProps> = ({
-  color,
-  logo,
-  name,
-  ens = '',
-  css = '',
-  size,
-}: SVGPreviewProps) => {
+export const NFAPreview: React.FC<NFAPreviewProps> = forwardStyledRef<
+  SVGSVGElement,
+  NFAPreviewProps
+>(({ color, logo, name, ens = '', size, ...props }, ref) => {
   const colorId = useMemo(() => color.slice(1), [color]);
 
   return (
-    <svg
+    <StyledSVG
+      ref={ref}
       width={size}
       height={size}
       viewBox="0 0 1065 1065"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`${css}`}
+      {...props}
     >
       <rect width="1065" height="1065" fill="url(#background)" />
       <rect
@@ -136,7 +138,7 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
         height="167"
         transform="matrix(0.987827 0.155557 -0.255261 0.966872 444.117 524.17)"
         href={logo}
-        onError={(event) => (event.currentTarget.style.display = 'none')}
+        onErrorCapture={(event) => (event.currentTarget.style.display = 'none')}
       />
 
       <defs>
@@ -193,6 +195,6 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
           <stop stopColor={color} />
         </linearGradient>
       </defs>
-    </svg>
+    </StyledSVG>
   );
-};
+});
