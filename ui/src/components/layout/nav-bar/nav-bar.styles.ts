@@ -11,7 +11,7 @@ export abstract class NavBarStyles {
     right: 0,
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '$black',
     zIndex: '$sticky',
     height: '$22',
   });

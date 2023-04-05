@@ -59,6 +59,7 @@ export const createDripStitches = <
     },
     theme: {
       colors: {
+        black: '#000000',
         ...darkColors, // TODO: replace with light colors once it's done the light mode
         ...(theme?.colors || {}),
       },

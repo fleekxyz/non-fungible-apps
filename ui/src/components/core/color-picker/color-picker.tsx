@@ -44,10 +44,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
           {/* TODO crate color picker component */}
           <Button
             leftIcon={
-              <Icon
-                name="square"
-                css={{ color: `${logoColor || '#000000'}` }}
-              />
+              <Icon name="square" css={{ color: `${logoColor || '$black'}` }} />
             }
             rightIcon={
               <Icon name="chevron-down" css={{ fontSize: '0.625rem' }} />
