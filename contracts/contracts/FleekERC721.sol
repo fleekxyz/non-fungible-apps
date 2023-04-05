@@ -9,6 +9,7 @@ import "./FleekAccessControl.sol";
 import "./FleekBilling.sol";
 import "./FleekPausable.sol";
 import "./FleekAccessPoints.sol";
+import "./util/FleekENS.sol";
 import "./util/FleekStrings.sol";
 import "./IERCX.sol";
 
@@ -104,7 +105,7 @@ contract FleekERC721 is
         string memory name,
         string memory description,
         string memory externalURL,
-        string memory ENS,
+        string calldata ens,
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
@@ -112,6 +113,7 @@ contract FleekERC721 is
         bool accessPointAutoApproval,
         address verifier
     ) public payable requirePayment(Billing.Mint) returns (uint256) {
+        FleekENS.requireENSOwner(ens);
         uint256 tokenId = _appIds;
         _mint(to, tokenId);
 
@@ -121,7 +123,7 @@ contract FleekERC721 is
         app.name = name;
         app.description = description;
         app.externalURL = externalURL;
-        app.ENS = ENS;
+        app.ENS = ens;
         app.logo = logo;
         app.color = color;
 
@@ -134,7 +136,7 @@ contract FleekERC721 is
             name,
             description,
             externalURL,
-            ENS,
+            ens,
             commitHash,
             gitRepository,
             logo,
@@ -274,8 +276,9 @@ contract FleekERC721 is
      */
     function setTokenENS(
         uint256 tokenId,
-        string memory _tokenENS
+        string calldata _tokenENS
     ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
+        FleekENS.requireENSOwner(_tokenENS);
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
         emit MetadataUpdate(tokenId, "ENS", _tokenENS, msg.sender);
