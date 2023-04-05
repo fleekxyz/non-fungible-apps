@@ -1,10 +1,13 @@
 import { ethers, upgrades } from 'hardhat';
 import { TestConstants } from './constants';
+import { transferENSNode } from './utils';
 
 export abstract class Fixtures {
   static async default() {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
+
+    await transferENSNode(TestConstants.MintParams.ens, owner);
 
     const libraries = {
       FleekSVG: (await (await ethers.getContractFactory('FleekSVG')).deploy())

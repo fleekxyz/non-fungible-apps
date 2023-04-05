@@ -1,0 +1,39 @@
+service: nfa-serverless
+frameworkVersion: '3'
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+provider:
+    name: aws
+    runtime: nodejs18.x
+    stage: ${opt:stage, 'prd'}
+    region: ${opt:region, 'us-west-2'}
+    apiGateway:
+      minimumCompressionSize: 1024
+      shouldStartNameWithService: true
+    environment:
+      DEBUG: '*'
+      AWS_STAGE: ${self:provider.stage}
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+custom:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: false
+    exclude: 
+      - 'aws-sdk'
+    target: 'node18'
+    platform: 'node'
+    concurrency: 10
+
+functions:
+  submitBuildInfo:
+    handler: dist/functions/builds/handler.submitBuildInfo
+    events:
+      - http:
+          path: build
+          method: post
+          cors: true

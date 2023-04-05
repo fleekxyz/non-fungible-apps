@@ -1,3 +1,4 @@
+const { getImplementationAddress } = require('@openzeppelin/upgrades-core');
 const { writeFile } = require('./file');
 const { existsSync } = require('fs');
 const path = require('path');
@@ -38,9 +39,16 @@ const deployStore = async (network, contractName, contract) => {
   const { buildId, solcInput, abi, bytecode, metadata, storageLayout } =
     await getBuildData(contractName);
 
+  const implementationAddress = await getImplementationAddress(
+    hre.network.provider,
+    contract.address
+  );
+
   const data = {
+    buildId,
     timestamp: new Date().toLocaleString('en-US'),
     address: contract.address,
+    implementationAddress,
     transactionHash: contract.deployTransaction.hash,
     args: contract.deployTransaction.args,
     gasPrice: contract.deployTransaction.gasPrice.toNumber(),

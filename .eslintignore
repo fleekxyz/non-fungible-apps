@@ -17,3 +17,7 @@ subgraph/abis
 subgraph/build
 subgraph/generated
 subgraph/examples/query/.graphclient
+
+serverless/dist
+serverless/.serverless
+serverless/.esbuild

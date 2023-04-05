@@ -13,8 +13,8 @@ export const EnsField: React.FC = () => {
   const { data, error } = useQuery(getENSNamesDocument, {
     variables: {
       address: address?.toString() || '', //should skip if undefined
-      skip: address === undefined,
     },
+    skip: address === undefined,
   });
 
   const {
