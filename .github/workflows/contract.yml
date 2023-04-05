@@ -11,6 +11,8 @@ on:
 jobs:
   test-contracts:
     runs-on: ubuntu-latest
+    env:
+      MAINNET_API_KEY: ${{ secrets.MAINNET_API_KEY }}
 
     defaults:
       run:

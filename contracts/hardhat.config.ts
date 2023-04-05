@@ -21,6 +21,9 @@ const {
   ETH_MAIN_API_URL,
   ETH_SEPOLIA_API_URL,
   ETH_GOERLI_API_URL
+  POLYGONSCAN_KEY,
+  MAINNET_API_KEY,
+  COINMARKETCAP_KEY,
 } = process.env;
 
 const config: HardhatUserConfig = {
@@ -28,6 +31,12 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       chainId: 31337,
+      forking: MAINNET_API_KEY
+        ? {
+            url: MAINNET_API_KEY,
+            blockNumber: 16876149,
+          }
+        : undefined,
     },
     mumbai: {
       url: POLYGON_API_URL ? POLYGON_API_URL : "",
@@ -53,9 +62,9 @@ const config: HardhatUserConfig = {
   gasReporter: {
     enabled: REPORT_GAS === 'true' || false,
     currency: 'USD',
-    outputFile: 'gas-report.txt',
+    outputFile: 'gas-report',
     noColors: true,
-    // coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+    coinmarketcap: COINMARKETCAP_KEY,
   },
   contractSizer: {
     runOnCompile: false,

@@ -1855,6 +1855,15 @@
     lodash.get "4.4.2"
     tslib "^2.4.0"
 
+"@graphql-mesh/transform-rename@^0.14.22":
+  version "0.14.22"
+  resolved "https://registry.yarnpkg.com/@graphql-mesh/transform-rename/-/transform-rename-0.14.22.tgz#30d8a26938a37438dae7db5763d0650b07caad85"
+  integrity sha512-Tc7KYzIt9M3vHs1kMi+AqeFmSOpO7yN0ST4zqEkJNcFbFh7UKyCrIxc4Rk5ayUS+vDM6L65c3J8VpjsXzwLkzw==
+  dependencies:
+    "@graphql-tools/delegate" "9.0.28"
+    "@graphql-tools/wrap" "9.3.8"
+    graphql-scalars "^1.20.4"
+
 "@graphql-mesh/transform-type-merging@0.5.15":
   version "0.5.15"
   resolved "https://registry.yarnpkg.com/@graphql-mesh/transform-type-merging/-/transform-type-merging-0.5.15.tgz#ff180d25dd22642be972302c5d2c539f33992db5"
@@ -2161,7 +2170,7 @@
     tslib "^2.4.0"
     value-or-promise "1.0.12"
 
-"@graphql-tools/wrap@^9.3.6":
+"@graphql-tools/wrap@9.3.8", "@graphql-tools/wrap@^9.3.6":
   version "9.3.8"
   resolved "https://registry.yarnpkg.com/@graphql-tools/wrap/-/wrap-9.3.8.tgz#c6f53b7bc98cf3fa3d91e41be3b99254ae99b409"
   integrity sha512-MGsExYPiILMw4Qff7HcvE9MMSYdjb/tr5IQYJbxJIU4/TrBHox1/smne8HG+Bd7kmDlTTj7nU/Z8sxmoRd0hOQ==
@@ -6587,6 +6596,13 @@ graphql-import-node@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/graphql-import-node/-/graphql-import-node-0.0.5.tgz#caf76a6cece10858b14f27cce935655398fc1bf0"
   integrity sha512-OXbou9fqh9/Lm7vwXT0XoRN9J5+WCYKnbiTalgFDvkQERITRmcfncZs6aVABedd5B85yQU5EULS4a5pnbpuI0Q==
+
+graphql-scalars@^1.20.4:
+  version "1.21.3"
+  resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.21.3.tgz#21eb0b9349cc94ae62b40f40ebe87220d3a5f1b1"
+  integrity sha512-QLWw3BHmqHZMp9JeYmPpjq7JT9aw/H8TpwmWKJEuMSE3+O7Xe7TduQbOLFzbs1q9UxX6CVkc0O1JO/YfkP/pAw==
+  dependencies:
+    tslib "^2.5.0"
 
 graphql-tag@^2.11.0, graphql-tag@^2.12.6:
   version "2.12.6"

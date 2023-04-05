@@ -42,6 +42,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@graphprotocol/client-cli": "^2.2.19",
+    "@graphql-mesh/transform-rename": "^0.14.22",
     "@types/jest": "^29.2.3",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",

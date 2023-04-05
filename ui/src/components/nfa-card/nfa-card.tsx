@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { To } from 'react-router-dom';
 
+import { NFAPreview } from '@/components';
 import { lastNFAsPaginatedQuery } from '@/graphclient';
 import { forwardStyledRef } from '@/theme';
-import { SVGPreview } from '@/views/mint/nft-card/svg-preview';
 
 import { Flex } from '../layout';
 import { NFACardStyles as S } from './nfa-card.styles';
@@ -45,7 +45,7 @@ export const NFACard: React.FC<NFACardProps> = forwardStyledRef<
 
   return (
     <S.Container ref={ref} to={to} {...props}>
-      <SVGPreview
+      <NFAPreview
         size="100%"
         name={name}
         color={parsedColor}
