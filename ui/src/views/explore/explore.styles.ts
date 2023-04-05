@@ -1,7 +1,5 @@
 import { Flex } from '@/components';
-import { dripStitches } from '@/theme';
-
-const { styled } = dripStitches;
+import { styled } from '@/theme';
 
 export abstract class Explore {
   static readonly Container = styled(Flex, {
