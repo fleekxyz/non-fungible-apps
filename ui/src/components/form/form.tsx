@@ -134,48 +134,45 @@ export abstract class Form {
     }
   );
 
-  static readonly Combobox = forwardRef<HTMLInputElement, Form.ComboboxProps>(
-    (props, ref) => {
-      const {
-        id,
-        validators,
-        value: [value, setValue],
-        validationEnabled: [validationEnabled, setValidationEnabled],
-      } = useFormFieldContext();
+  static readonly Combobox: React.FC<Form.ComboboxProps> = (props) => {
+    const {
+      id,
+      validators,
+      value: [value, setValue],
+      validationEnabled: [validationEnabled, setValidationEnabled],
+    } = useFormFieldContext();
 
-      const comboboxValue = useMemo(() => {
-        // if it's with autocomplete maybe won't be on the items list
-        const item = props.items.find((item) => item.label === value);
-        if (props.withAutocomplete && !item && value !== '') {
-          //return the selected value if the item doesn't exist
-          return { label: value, value: value };
-        }
-        return item;
-      }, [props.items, props.withAutocomplete, value]);
+    const comboboxValue = useMemo(() => {
+      // if it's with autocomplete maybe won't be on the items list
+      const item = props.items.find((item) => item.label === value);
+      if (props.withAutocomplete && !item && value !== '') {
+        //return the selected value if the item doesn't exist
+        return { label: value, value: value };
+      }
+      return item;
+    }, [props.items, props.withAutocomplete, value]);
 
-      const isValid = useFormFieldValidatorValue(id, validators, value);
+    const isValid = useFormFieldValidatorValue(id, validators, value);
 
-      const handleComboboxChange = (option: ComboboxItem): void => {
-        if (props.onChange) props.onChange(option);
-        setValue(option.label);
-      };
+    const handleComboboxChange = (option: ComboboxItem): void => {
+      if (props.onChange) props.onChange(option);
+      setValue(option.label);
+    };
 
-      const handleComboboxBlur = (): void => {
-        setValidationEnabled(true);
-      };
+    const handleComboboxBlur = (): void => {
+      setValidationEnabled(true);
+    };
 
-      return (
-        <Combobox
-          ref={ref}
-          {...props}
-          onChange={handleComboboxChange}
-          selectedValue={comboboxValue || ({} as ComboboxItem)}
-          onBlur={handleComboboxBlur}
-          error={validationEnabled && !isValid}
-        />
-      );
-    }
-  );
+    return (
+      <Combobox
+        {...props}
+        onChange={handleComboboxChange}
+        selectedValue={comboboxValue || ({} as ComboboxItem)}
+        onBlur={handleComboboxBlur}
+        error={validationEnabled && !isValid}
+      />
+    );
+  };
 
   static readonly ColorPicker: React.FC<Form.ColorPickerProps> = ({
     logo,
