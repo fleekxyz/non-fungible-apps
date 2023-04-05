@@ -1,6 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures, parseTokenURI, Errors } from './helpers';
+import { TestConstants, Fixtures, Errors } from './helpers';
 
 const { TokenRoles } = TestConstants;
 
@@ -25,7 +25,7 @@ describe('FleekERC721.TokenRoles', () => {
   });
 
   it('should add a new controller', async () => {
-    const { contract, owner, otherAccount, tokenId } = fixture;
+    const { contract, otherAccount, tokenId } = fixture;
     await contract.grantTokenRole(
       tokenId,
       TokenRoles.Controller,
@@ -78,7 +78,7 @@ describe('FleekERC721.TokenRoles', () => {
   });
 
   it('should remove an added controller', async () => {
-    const { contract, owner, otherAccount, tokenId } = fixture;
+    const { contract, otherAccount, tokenId } = fixture;
     await contract.grantTokenRole(
       tokenId,
       TokenRoles.Controller,
@@ -134,7 +134,7 @@ describe('FleekERC721.TokenRoles', () => {
   });
 
   it('should not be able to remove address role', async () => {
-    const { contract, owner, otherAccount, tokenId } = fixture;
+    const { contract, otherAccount, tokenId } = fixture;
 
     await expect(
       contract

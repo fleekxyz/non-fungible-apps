@@ -1,4 +1,3 @@
-const { ethers } = require('hardhat');
 const { address } = require('../deployments/mumbai/FleekERC721.json');
 require('@nomiclabs/hardhat-etherscan');
 
