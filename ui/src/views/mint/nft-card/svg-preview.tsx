@@ -136,6 +136,7 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
         height="167"
         transform="matrix(0.987827 0.155557 -0.255261 0.966872 444.117 524.17)"
         href={logo}
+        onError={(event) => (event.currentTarget.style.display = 'none')}
       />
 
       <defs>
