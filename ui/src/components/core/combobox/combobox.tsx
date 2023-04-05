@@ -3,13 +3,7 @@ import {
   ComboboxInputProps as ComboboxLibInputProps,
   Transition,
 } from '@headlessui/react';
-import React, {
-  forwardRef,
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { forwardRef, Fragment, useEffect, useState } from 'react';
 
 import { Icon, IconName } from '@/components/core/icon';
 import { Flex } from '@/components/layout';
@@ -18,32 +12,26 @@ import { useDebounce } from '@/hooks/use-debounce';
 import { Separator } from '../separator.styles';
 import { cleanString } from './combobox.utils';
 
-type ComboboxInputProps = {
-  /**
-   * Name of the left icon to display in the input
-   */
-  leftIcon: IconName;
-} & ComboboxLibInputProps<'input', ComboboxItem>;
+type ComboboxInputProps = ComboboxLibInputProps<'input', ComboboxItem>;
 
 const ComboboxInput: React.FC<ComboboxInputProps> = ({
-  leftIcon,
   ...props
 }: ComboboxInputProps) => (
   <div className="relative w-full">
     <Icon
-      name={leftIcon}
+      name="search"
       size="sm"
       css={{
         position: 'absolute',
         left: '$3',
         top: '$3',
         fontSize: '$xl',
-        color: 'slate8',
+        color: '$slate8',
       }}
     />
     <ComboboxLib.Input
       placeholder="Search"
-      className={`w-full h-11 py-3 px-10 text-sm bg-transparent leading-5 text-slate11 outline-none `}
+      className={`w-full h-9 py-3 px-10 text-sm bg-transparent leading-5 text-slate11 outline-none `}
       {...props}
     />
   </div>
@@ -134,6 +122,7 @@ export type ComboboxProps = {
    * Value to indicate it's invalid
    */
   error?: boolean;
+  css?: string; //tailwind css
 };
 
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
@@ -145,6 +134,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
     onChange,
     onBlur,
     error = false,
+    css,
   }) => {
     const [filteredItems, setFilteredItems] = useState<ComboboxItem[]>([]);
     const [autocompleteItems, setAutocompleteItems] = useState<ComboboxItem[]>(
@@ -214,7 +204,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
         onChange={handleComboboxChange}
       >
         {({ open }) => (
-          <div className="relative w-full">
+          <div className={`relative w-full ${css ? css : ''}`}>
             <div className="relative w-full">
               <Icon
                 name={leftIcon}
@@ -228,7 +218,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
                 }}
               />
               <ComboboxLib.Button
-                className={`w-full border-solid border rounded-xl h-11  py-3 px-10 text-sm leading-5 text-slate11 outline-none ${
+                className={`w-full text-left border-solid border rounded-xl h-11  py-3 px-10 text-sm leading-5 text-slate11 outline-none ${
                   error ? 'border-red9' : 'border-slate7'
                 }`}
                 onBlur={onBlur}
@@ -251,12 +241,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(
               leaveTo="opacity-0"
               afterLeave={handleLeaveTransition}
             >
-              <div className="absolute max-h-60 mt-1 w-full z-10 overflow-auto rounded-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
-                <ComboboxInput
-                  onChange={handleInputChange}
-                  leftIcon={leftIcon}
-                  onBlur={onBlur}
-                />
+              <div className="absolute max-h-60 mt-2 w-full z-10 overflow-auto rounded-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
+                <ComboboxInput onChange={handleInputChange} onBlur={onBlur} />
                 <Separator />
                 <ComboboxLib.Options className="mt-1">
                   {[...autocompleteItems, ...filteredItems].length === 0 ||
