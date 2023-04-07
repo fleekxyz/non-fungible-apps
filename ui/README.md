@@ -12,6 +12,12 @@ You'll need to have [nodejs](https://nodejs.org/en/) and [YARN](https://classic.
 
 Also, don't forget to check the [Getting started section](https://github.com/fleekxyz/non-fungible-apps/wiki/%F0%9F%93%98-Getting-Started) on the wiki if you didn't do it yet, cause you need to configure your wallet to be able to mint a site.
 
+### Setting Contract Address and ABI
+
+The contract address and ABI is set by pointing `ui/src/integrations/ethereum/contracts/FleekERC721.json` to the file from the deployment outputs in the contract sub project.
+
+This can be a local deployment or a deployment on one of the networks.  This maintains consistency between the deployed contracts and the info in the UI configuration.
+
 ### 🖥️ Running
 
 To run the UI localy follow the steps:
