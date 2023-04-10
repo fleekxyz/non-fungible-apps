@@ -1,6 +1,4 @@
-import { dripStitches } from '../../theme'; //TODO replace with absolute path
-
-const { styled } = dripStitches;
+import { styled } from '@/theme';
 
 export const Grid = styled('div', {
   display: 'grid',

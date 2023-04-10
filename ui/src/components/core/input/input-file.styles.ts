@@ -1,7 +1,5 @@
 import { Flex } from '@/components/layout';
-import { dripStitches } from '@/theme';
-
-const { styled } = dripStitches;
+import { styled } from '@/theme';
 
 export abstract class InputFileStyles {
   static readonly Container = styled(Flex, {
