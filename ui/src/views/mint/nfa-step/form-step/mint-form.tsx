@@ -66,6 +66,7 @@ export const MintFormStep: React.FC = () => {
       appLogo,
       parseColorToNumber(logoColor),
       verifyNFA,
+      '0xdBb04e00D5ec8C9e3aeF811D315Ee7C147c5DBFD', //TODO remove hardcode
       { value: billing },
     ]);
 
