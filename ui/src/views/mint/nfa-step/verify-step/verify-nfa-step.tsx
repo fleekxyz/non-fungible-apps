@@ -1,11 +1,62 @@
-import { Button, Card, Flex, Stepper, Switch, Text } from '@/components';
+import { useState } from 'react';
+
+import {
+  Button,
+  Card,
+  Dropdown,
+  DropdownItem,
+  Flex,
+  Stepper,
+  Switch,
+  Text,
+} from '@/components';
 
 import { Mint } from '../../mint.context';
 import { MintCardHeader } from '../../mint-card';
+import { useMintFormContext } from '../form-step';
+
+const DropdownValuesMock = [
+  {
+    label: 'Fleek',
+    value: 'fleek',
+  },
+];
+
+const SelectVerifier: React.FC = () => {
+  const {
+    form: {
+      verifier: {
+        value: [, setValue],
+      },
+    },
+  } = useMintFormContext();
+
+  const [selectedItem, setSelectedItem] = useState<DropdownItem>();
+
+  const onChange = (selected: DropdownItem): void => {
+    setSelectedItem(selected);
+    setValue(selected.value);
+  };
+
+  return (
+    <Dropdown
+      items={DropdownValuesMock}
+      onChange={onChange}
+      selectedValue={selectedItem}
+    />
+  );
+};
 
 export const VerifyNFAStep: React.FC = () => {
   const { prevStep } = Stepper.useContext();
   const { verifyNFA, setVerifyNFA, setNfaStep } = Mint.useContext();
+  const {
+    form: {
+      verifier: {
+        value: [verifier],
+      },
+    },
+  } = useMintFormContext();
 
   const handleNextStep = (): void => {
     setNfaStep(2);
@@ -36,7 +87,13 @@ export const VerifyNFAStep: React.FC = () => {
             <Text css={{ color: '$slate12' }}>Verify NFA</Text>
             <Switch checked={verifyNFA} onChange={setVerifyNFA} />
           </Card.Text>
-          <Button colorScheme="blue" variant="solid" onClick={handleNextStep}>
+          <SelectVerifier />
+          <Button
+            colorScheme="blue"
+            variant="solid"
+            onClick={handleNextStep}
+            disabled={!verifier}
+          >
             Continue
           </Button>
         </Flex>
