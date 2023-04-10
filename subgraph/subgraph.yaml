@@ -3,11 +3,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: FleekNFA
-    network: mumbai
+    network: goerli
     source:
-      address: "0x37150709cFf366DeEaB836d05CAf49F4DA46Bb2E" # <- Proxy Contract
+      address: "0x8795608346Eb475E42e69F1281008AEAa522479D" # <- Proxy Contract
       abi: FleekNFA
-      startBlock: 32373064
+      startBlock: 8671990
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -32,7 +32,7 @@ dataSources:
         - ChangeAccessPointAutoApproval
       abis:
         - name: FleekNFA
-          file: ../contracts/artifacts/contracts/FleekERC721.sol/FleekERC721.json
+          file: ../contracts/deployments/goerli/FleekERC721.json
       eventHandlers:
         - event: Approval(indexed address,indexed address,indexed uint256)
           handler: handleApproval
