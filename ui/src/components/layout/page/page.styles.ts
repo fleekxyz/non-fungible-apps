@@ -1,6 +1,4 @@
-import { dripStitches } from '@/theme';
-
-const { styled } = dripStitches;
+import { styled } from '@/theme';
 
 export abstract class PageStyles {
   public static readonly Container = styled('div', {

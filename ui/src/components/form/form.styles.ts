@@ -1,7 +1,7 @@
-import { dripStitches } from '../../theme';
+import { styled } from '@/theme';
+
 import { Flex } from '../layout';
 
-const { styled } = dripStitches;
 export abstract class FormStyles {
   static readonly Field = styled(Flex, {
     flexDirection: 'column',

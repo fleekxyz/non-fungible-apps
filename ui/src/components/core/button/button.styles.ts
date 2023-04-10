@@ -1,6 +1,6 @@
 import { CSS } from '@stitches/react';
 
-import { dripStitches } from '../../../theme';
+import { styled } from '@/theme';
 
 type StyledButtonProps = React.ComponentPropsWithRef<typeof StyledButton>;
 export interface ButtonProps extends StyledButtonProps {
@@ -148,8 +148,6 @@ const getButtonCompoundVariant = ({
       return {};
   }
 };
-
-const { styled } = dripStitches;
 
 export const StyledButton = styled('button', {
   all: 'unset',

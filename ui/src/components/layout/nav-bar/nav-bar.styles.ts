@@ -1,8 +1,7 @@
-import { dripStitches } from '@/theme';
+import { styled } from '@/theme';
 
 import { Flex } from '../flex.styles';
 
-const { styled } = dripStitches;
 export abstract class NavBarStyles {
   static readonly Container = styled('header', {
     position: 'sticky',
@@ -11,7 +10,7 @@ export abstract class NavBarStyles {
     right: 0,
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '$black',
     zIndex: '$sticky',
     height: '$22',
   });

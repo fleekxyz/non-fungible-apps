@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 
-import { dripStitches } from '@/theme';
+import { styled } from '@/theme';
 
 import { Skeleton } from '../layout';
-
-const { styled } = dripStitches;
 
 export const NFACardStyles = {
   Container: styled(Link, {
@@ -34,7 +32,7 @@ export const NFACardStyles = {
     padding: '$3 $4',
     gap: '$2',
     borderTop: '1px solid $slate6',
-    backgroundColor: 'black', // TODO: are we going to add black as theme color?
+    backgroundColor: '$black',
   }),
   Badge: styled('span', {
     height: 'fit-content',

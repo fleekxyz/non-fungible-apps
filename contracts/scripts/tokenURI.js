@@ -1,4 +1,4 @@
-// npx hardhat run scripts/tokenURI.js --network mumbai
+// npx hardhat run scripts/tokenURI.js --network mumbai/sepolia/goerli
 const { getContract } = require('./util');
 
 // TODO: make this arguments

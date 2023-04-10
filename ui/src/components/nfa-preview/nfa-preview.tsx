@@ -1,38 +1,42 @@
-type SVGPreviewProps = {
+import { useMemo } from 'react';
+
+import { forwardStyledRef, styled } from '@/theme';
+
+const StyledSVG = styled('svg');
+
+export type NFAPreviewProps = Omit<
+  React.ComponentPropsWithRef<typeof StyledSVG>,
+  'width' | 'height' | 'xmlns' | 'viewBox'
+> & {
   color: string;
   logo: string;
   name: string;
   ens?: string;
-  css?: string;
   size: string;
 };
 
-/**
- * SVGPreview renders the NFA image based in the provided props.
- */
-export const SVGPreview: React.FC<SVGPreviewProps> = ({
-  color,
-  logo,
-  name,
-  ens = '',
-  css = '',
-  size,
-}: SVGPreviewProps) => {
+export const NFAPreview: React.FC<NFAPreviewProps> = forwardStyledRef<
+  SVGSVGElement,
+  NFAPreviewProps
+>(({ color, logo, name, ens = '', size, ...props }, ref) => {
+  const colorId = useMemo(() => color.slice(1), [color]);
+
   return (
-    <svg
+    <StyledSVG
+      ref={ref}
       width={size}
       height={size}
       viewBox="0 0 1065 1065"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`${css}`}
+      {...props}
     >
       <rect width="1065" height="1065" fill="url(#background)" />
       <rect
         opacity="0.2"
         width="1065"
         height="1065"
-        fill={`url(#${color}-background-radial)`}
+        fill={`url(#${colorId}-background-radial)`}
       />
 
       <g filter="url(#diskette-shadow)">
@@ -43,7 +47,7 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
       </g>
       <path
         d="M840.231 240.712L885.24 247.675C893.547 248.961 900.915 253.722 905.5 260.768L921.894 285.965C925.249 291.12 926.311 297.437 924.827 303.406L920.798 319.616L907.049 317.65L902.416 335.084L917.068 337.241L774.947 883.152C771.109 897.896 756.694 907.308 741.651 904.893L162.636 811.928C145.318 809.147 134.215 791.987 138.776 775.051L143.478 757.59L687.315 840.574L840.231 240.712Z"
-        fill={`url(#${color}-main)`}
+        fill={`url(#${colorId}-main)`}
       />
 
       <path
@@ -55,18 +59,18 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
       <path
         fillRule="evenodd"
         clipRule="evenodd"
-        stroke={`url(#${color}-main)`}
+        stroke={`url(#${colorId}-main)`}
         strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M319.847 161.502C310.356 160.007 300.674 166.326 298.221 175.616L138.724 779.758C136.271 789.048 141.977 797.79 151.468 799.285L740.061 891.973C749.553 893.467 759.235 887.148 761.687 877.858L902.405 344.854L889.158 342.768L898.872 305.972L912.119 308.059L913.733 301.946C914.837 297.762 914.309 293.476 912.251 289.927L893.484 257.569C891.153 253.549 887.063 250.823 882.221 250.061L828.205 241.554C822.224 240.613 815.869 242.783 811.427 247.284L805.686 253.103C804.205 254.603 802.087 255.326 800.093 255.013L783.611 252.417L734.3 439.196C731.439 450.035 720.143 457.407 709.07 455.663L328.847 395.788C317.774 394.045 311.117 383.845 313.978 373.007L366.528 173.962L366.533 173.941C367.234 171.24 365.572 168.702 362.81 168.267L319.847 161.502ZM369.392 174.414L368.652 177.217L316.843 373.458C314.39 382.748 320.096 391.49 329.587 392.985L709.81 452.86C719.301 454.354 728.983 448.035 731.436 438.745L780.747 251.966L783.245 242.504L783.985 239.701L369.392 174.414Z"
-        fill={`url(#${color}-diskette-gradient)`}
+        fill={`url(#${colorId}-diskette-gradient)`}
         fillOpacity="0.2"
       />
 
       <path
         d="M335.38 208.113C335.922 208.198 336.417 207.686 336.283 207.179L330.39 184.795C330.249 184.261 329.529 184.148 329.129 184.597L312.358 203.411C311.978 203.838 312.174 204.458 312.716 204.544L317.962 205.37C318.357 205.432 318.595 205.796 318.493 206.183L314.7 220.551C314.597 220.938 314.835 221.302 315.231 221.364L324.539 222.83C324.935 222.893 325.338 222.629 325.44 222.242L329.233 207.875C329.336 207.488 329.739 207.224 330.135 207.286L335.38 208.113Z"
-        fill={`url(#${color}-main)`}
+        fill={`url(#${colorId}-main)`}
       />
       <path
         d="M319.282 269.087C319.824 269.173 320.319 268.661 320.186 268.154L314.292 245.77C314.151 245.236 313.431 245.123 313.031 245.572L296.261 264.386C295.88 264.812 296.076 265.433 296.618 265.518L301.864 266.344C302.259 266.407 302.497 266.771 302.395 267.158L298.602 281.526C298.5 281.913 298.737 282.277 299.133 282.339L308.441 283.805C308.837 283.867 309.24 283.604 309.343 283.217L313.136 268.849C313.238 268.462 313.641 268.199 314.037 268.261L319.282 269.087Z"
@@ -80,7 +84,7 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
       />
 
       <path
-        stroke={`url(#${color}-main)`}
+        stroke={`url(#${colorId}-main)`}
         strokeWidth="6"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -92,12 +96,12 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
       <path
         fillRule="evenodd"
         clipRule="evenodd"
-        stroke={`url(#${color}-main)`}
+        stroke={`url(#${colorId}-main)`}
         strokeWidth="6"
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M787.589 237.349L460.354 185.818L406.325 390.469C403.872 399.759 409.578 408.501 419.069 409.996L711.934 456.114C721.425 457.609 731.107 451.29 733.56 442L787.589 237.349ZM660.269 245.01C655.523 244.263 650.682 247.423 649.456 252.068L607.386 411.418C606.16 416.063 609.013 420.434 613.759 421.181L682.499 432.006C687.245 432.753 692.086 429.594 693.312 424.949L735.382 265.599C736.608 260.954 733.755 256.583 729.01 255.835L660.269 245.01Z"
-        fill={`url(#${color}-main)`}
+        fill={`url(#${colorId}-main)`}
       />
 
       <path
@@ -132,6 +136,7 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
         height="167"
         transform="matrix(0.987827 0.155557 -0.255261 0.966872 444.117 524.17)"
         href={logo}
+        onErrorCapture={(event) => (event.currentTarget.style.display = 'none')}
       />
 
       <defs>
@@ -161,7 +166,7 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
           <stop offset="1" stopColor="#131313" />
         </linearGradient>
         <radialGradient
-          id={`${color}-background-radial`}
+          id={`${colorId}-background-radial`}
           cx="0"
           cy="0"
           r="1"
@@ -173,7 +178,7 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
         </radialGradient>
 
         <linearGradient
-          id={`${color}-diskette-gradient`}
+          id={`${colorId}-diskette-gradient`}
           x1="925.626"
           y1="256.896"
           x2="136.779"
@@ -184,10 +189,10 @@ export const SVGPreview: React.FC<SVGPreviewProps> = ({
           <stop offset="1" stopColor="#2C313F" />
         </linearGradient>
 
-        <linearGradient id={`${color}-main`}>
+        <linearGradient id={`${colorId}-main`}>
           <stop stopColor={color} />
         </linearGradient>
       </defs>
-    </svg>
+    </StyledSVG>
   );
-};
+});

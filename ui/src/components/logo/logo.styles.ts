@@ -1,8 +1,7 @@
-import { dripStitches } from '@/theme';
+import { styled } from '@/theme';
 
 import { Flex } from '../layout';
 
-const { styled } = dripStitches;
 export abstract class LogoStyles {
   static readonly Container = styled(Flex, {
     cursor: 'pointer',
