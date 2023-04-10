@@ -4,13 +4,7 @@ query lastNFAsPaginated($pageSize: Int, $skip: Int, $searchValue: String) {
     skip: $skip
     orderDirection: desc
     orderBy: tokenId
-    where: {
-      or: [
-        { name_contains_nocase: $searchValue }
-        { externalURL_contains_nocase: $searchValue }
-        { ENS_contains_nocase: $searchValue }
-      ]
-    }
+    where: { name_contains_nocase: $searchValue }
   ) {
     id
     tokenId

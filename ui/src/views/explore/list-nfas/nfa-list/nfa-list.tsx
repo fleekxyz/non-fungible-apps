@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Flex, NFACard, NFACardSkeleton, NoResults } from '@/components';
 import { lastNFAsPaginatedDocument } from '@/graphclient';
@@ -19,9 +19,9 @@ const LoadingSkeletons: React.FC = () => (
 );
 
 export const NFAList: React.FC = () => {
-  //add to Context
-  const { endReached, pageNumber, search, setPageNumber, setEndReached } =
+  const { endReached, pageNumber, search, setEndReached, setPageNumber } =
     Explore.useContext();
+  // const [pageNumber, setPageNumber] = useState(0); //This is for the pagination
 
   const {
     data: { tokens } = { tokens: [] },
@@ -47,7 +47,8 @@ export const NFAList: React.FC = () => {
 
   useWindowScrollEnd(() => {
     if (isLoading || endReached || queryError) return;
-    setPageNumber((prevState: number) => prevState + 1);
+    const newPageNumber = pageNumber + 1;
+    setPageNumber(newPageNumber);
   });
 
   if (queryError) return <div>Error</div>; //TODO handle error
