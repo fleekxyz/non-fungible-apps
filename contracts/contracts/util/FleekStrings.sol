@@ -36,7 +36,8 @@ library FleekStrings {
     function toString(
         IERCX.Token storage app,
         address owner,
-        bool accessPointAutoApproval
+        bool accessPointAutoApproval,
+        bool verified
     ) internal view returns (string memory) {
         // prettier-ignore
         return string(abi.encodePacked(
@@ -47,6 +48,7 @@ library FleekStrings {
                 '"external_url":"', app.externalURL, '",',
                 '"image":"', FleekSVG.generateBase64(app.name, app.ENS, app.logo, app.color.toColorString()), '",',
                 '"access_point_auto_approval":', accessPointAutoApproval.toString(),',',
+                '"verified":',verified.toString(),',',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
                     '{"trait_type": "Commit Hash", "value":"', app.builds[app.currentBuild].commitHash,'"},',

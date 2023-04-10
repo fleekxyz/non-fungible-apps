@@ -1,8 +1,20 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { Combobox as ComboboxLib, Transition } from '@headlessui/react';
+import {
+  Combobox as ComboboxLib,
+  ComboboxInputProps as ComboboxLibInputProps,
+  Transition,
+} from '@headlessui/react';
+import React, {
+  forwardRef,
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
 import { Icon, IconName } from '@/components/core/icon';
 import { Flex } from '@/components/layout';
 import { useDebounce } from '@/hooks/use-debounce';
+
 import { Separator } from '../separator.styles';
 import { cleanString } from './combobox.utils';
 
@@ -16,20 +28,16 @@ type ComboboxInputProps = {
    */
   leftIcon: IconName;
   /**
-   * Function to handle the input change
+   * Value to indicate it's invalid
    */
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  /**
-   * Function to handle the input click. When the user clicks on the input, the list of options will be displayed
-   */
-  handleInputClick: () => void;
-};
+  error?: boolean;
+} & ComboboxLibInputProps<'input', ComboboxItem>;
 
-const ComboboxInput = ({
+const ComboboxInput: React.FC<ComboboxInputProps> = ({
   open,
   leftIcon,
-  handleInputChange,
-  handleInputClick,
+  error,
+  ...props
 }: ComboboxInputProps) => (
   <div className="relative w-full">
     <Icon
@@ -45,14 +53,15 @@ const ComboboxInput = ({
     />
     <ComboboxLib.Input
       placeholder="Search"
-      className={`w-full  border-solid border border-slate7 h-11  py-3 px-10 text-sm bg-transparent leading-5 text-slate11 outline-none ${
+      className={`w-full  border-solid border  h-11  py-3 px-10 text-sm leading-5 text-slate11 outline-none ${
         open
           ? 'border-b-0 rounded-t-xl bg-black border-slate6'
-          : 'rounded-xl bg-transparent'
+          : `rounded-xl bg-transparent cursor-pointer ${
+              error ? 'border-red9' : 'border-slate7'
+            }`
       }`}
       displayValue={(selectedValue: ComboboxItem) => selectedValue.label}
-      onChange={handleInputChange}
-      onClick={handleInputClick}
+      {...props}
     />
     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
       <Icon name="chevron-down" css={{ fontSize: '$xs' }} />
@@ -64,7 +73,9 @@ type ComboboxOptionProps = {
   option: ComboboxItem;
 };
 
-const ComboboxOption = ({ option }: ComboboxOptionProps) => (
+const ComboboxOption: React.FC<ComboboxOptionProps> = ({
+  option,
+}: ComboboxOptionProps) => (
   <ComboboxLib.Option
     value={option}
     className={({ active }) =>
@@ -91,7 +102,7 @@ const ComboboxOption = ({ option }: ComboboxOptionProps) => (
   </ComboboxLib.Option>
 );
 
-export const NoResults = ({ css }: { css?: string }) => (
+export const NoResults: React.FC = ({ css }: { css?: string }) => (
   <div
     className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 ${css}`}
   >
@@ -134,7 +145,15 @@ export type ComboboxProps = {
   /**
    * Callback when the selected value changes.
    */
-  onChange(option: ComboboxItem): void;
+  onChange: (option: ComboboxItem) => void;
+  /**
+   * Function to handle the input blur
+   */
+  onBlur?: () => void;
+  /**
+   * Value to indicate it's invalid
+   */
+  error?: boolean;
 };
 
 export const Combobox: React.FC<ComboboxProps> = ({
@@ -143,6 +162,8 @@ export const Combobox: React.FC<ComboboxProps> = ({
   withAutocomplete = false,
   leftIcon = 'search',
   onChange,
+  onBlur,
+  error = false,
 }) => {
   const [filteredItems, setFilteredItems] = useState<ComboboxItem[]>([]);
   const [autocompleteItems, setAutocompleteItems] = useState<ComboboxItem[]>(
@@ -159,7 +180,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
     ) {
       setAutocompleteItems([selectedValue]);
     }
-  }, [selectedValue]);
+  }, [autocompleteItems.length, items, selectedValue, withAutocomplete]);
 
   useEffect(() => {
     setFilteredItems(items);
@@ -188,20 +209,22 @@ export const Combobox: React.FC<ComboboxProps> = ({
     }
   }, 200);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     event.stopPropagation();
     handleSearch(event.target.value);
   };
 
-  const handleInputClick = () => {
+  const handleInputClick = (): void => {
     buttonRef.current?.click();
   };
 
-  const handleComboboxChange = (option: ComboboxItem) => {
-    onChange(option);
+  const handleComboboxChange = (optionSelected: ComboboxItem): void => {
+    onChange(optionSelected);
   };
 
-  const handleLeaveTransition = () => {
+  const handleLeaveTransition = (): void => {
     setFilteredItems(items);
     if (selectedValue.value === undefined && withAutocomplete) {
       setAutocompleteItems([]);
@@ -218,10 +241,12 @@ export const Combobox: React.FC<ComboboxProps> = ({
       {({ open }) => (
         <div className="relative">
           <ComboboxInput
-            handleInputChange={handleInputChange}
-            handleInputClick={handleInputClick}
+            onChange={handleInputChange}
+            onClick={handleInputClick}
             open={open}
             leftIcon={leftIcon}
+            onBlur={onBlur}
+            error={error}
           />
           <ComboboxLib.Button ref={buttonRef} className="hidden" />
 
@@ -262,3 +287,5 @@ export const Combobox: React.FC<ComboboxProps> = ({
     </ComboboxLib>
   );
 };
+
+Combobox.displayName = 'Combobox';

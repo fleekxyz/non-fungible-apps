@@ -3,6 +3,7 @@ export const Errors = Object.freeze({
   AccessPointAlreadyExists: 'AccessPointAlreadyExists',
   AccessPointScoreCannotBeLower: 'AccessPointScoreCannotBeLower',
   MustBeAccessPointOwner: 'MustBeAccessPointOwner',
+  MustBeTokenVerifier: 'MustBeTokenVerifier',
   MustHaveCollectionRole: 'MustHaveCollectionRole',
   MustHaveTokenRole: 'MustHaveTokenRole',
   MustHaveAtLeastOneOwner: 'MustHaveAtLeastOneOwner',
@@ -14,4 +15,5 @@ export const Errors = Object.freeze({
   PausableIsSetTo: 'PausableIsSetTo',
   ThereIsNoTokenMinted: 'ThereIsNoTokenMinted',
   RequiredPayment: 'RequiredPayment',
+  MustBeENSOwner: 'MustBeENSOwner',
 });

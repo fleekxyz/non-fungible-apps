@@ -7,7 +7,9 @@ type ProviderProps = {
   children: React.ReactNode;
 };
 
-export const Providers: React.FC<ProviderProps> = ({ children }) => {
+export const Providers: React.FC<ProviderProps> = ({
+  children,
+}: ProviderProps) => {
   return (
     <ReduxProvider>
       <ReactQueryProvider>

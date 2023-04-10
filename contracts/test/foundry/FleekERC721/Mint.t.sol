@@ -26,6 +26,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
 
     function test_mintTwoTokensForTwoAddresses() public {
         uint256 firstMint = mintDefault(deployer);
+
+        transferENS("fleek.eth", deployer);
         uint256 secondMint = CuT.mint(
             address(12),
             "Different App Name",
@@ -36,7 +38,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             "https://github.com/a-different/repository",
             TestConstants.LOGO_1,
             0x654321,
-            false
+            false,
+            deployer
         );
 
         assertEq(firstMint, 0);
@@ -44,6 +47,7 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
     }
 
     function test_mintWithAutoApprovalAPsOn() public {
+        transferENS("fleek.eth", deployer);
         uint256 mint = CuT.mint(
             address(12),
             "Different App Name",
@@ -54,7 +58,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             "https://github.com/a-different/repository",
             TestConstants.LOGO_1,
             0x654321,
-            true
+            true,
+            deployer
         );
 
         assertEq(mint, 0);
@@ -81,6 +86,7 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
         bool autoApprovalAp
     ) public {
         vm.assume(to != address(0));
+        transferENS(ens, deployer);
         uint256 tokenId = CuT.mint(
             to,
             appName,
@@ -91,7 +97,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             gitRepository,
             logo,
             color,
-            autoApprovalAp
+            autoApprovalAp,
+            deployer
         );
         assertEq(tokenId, 0);
         assertEq(CuT.ownerOf(tokenId), to);

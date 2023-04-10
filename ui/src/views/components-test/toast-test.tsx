@@ -1,8 +1,9 @@
-import { Button, Flex } from '@/components';
-import { pushToast } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 
-export const ToastTest = () => {
+import { Button, Flex } from '@/components';
+import { pushToast } from '@/utils';
+
+export const ToastTest: React.FC = () => {
   const navigate = useNavigate();
   return (
     <Flex css={{ margin: '$22', gap: '$5' }}>

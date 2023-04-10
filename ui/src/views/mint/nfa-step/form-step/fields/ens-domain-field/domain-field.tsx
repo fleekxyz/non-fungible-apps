@@ -1,20 +1,16 @@
 import { Form } from '@/components';
-import { Mint } from '@/views/mint/mint.context';
 
-export const DomainField = () => {
-  const { domain, setDomain } = Mint.useContext();
+import { useMintFormContext } from '../../mint-form.context';
 
-  const handleDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDomain(e.target.value);
-  };
+export const DomainField: React.FC = () => {
+  const {
+    form: { domainURL },
+  } = useMintFormContext();
   return (
-    <Form.Field css={{ flex: 1 }}>
-      <Form.Label isRequired>Domain</Form.Label>
-      <Form.Input
-        placeholder="mydomain.com"
-        value={domain}
-        onChange={handleDomainChange}
-      />
+    <Form.Field context={domainURL} css={{ flex: 1 }}>
+      <Form.Label>Domain</Form.Label>
+      <Form.Input placeholder="mydomain.com" />
+      <Form.Overline />
     </Form.Field>
   );
 };

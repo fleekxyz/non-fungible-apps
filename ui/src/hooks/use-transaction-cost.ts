@@ -1,6 +1,6 @@
-import { useFeeData, useNetwork } from 'wagmi';
 import { ethers } from 'ethers';
 import { useMemo } from 'react';
+import { useFeeData, useNetwork } from 'wagmi';
 
 export const useTransactionCost = (
   value = ethers.BigNumber.from(0),

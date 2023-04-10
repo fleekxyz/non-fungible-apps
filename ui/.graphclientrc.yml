@@ -5,6 +5,17 @@ sources:
       graphql:
         endpoint: https://api.thegraph.com/subgraphs/name/emperororokusaki/flk-test-subgraph #replace for nfa subgraph
 
+  - name: ENS
+    handler:
+      graphql:
+        endpoint: https://api.thegraph.com/subgraphs/name/ensdomains/ens
+    transforms:
+      - rename:
+          - from:
+              type: Transfer
+            to:
+              type: ENSTransfer
+
 documents:
   - ./graphql/*.graphql
 

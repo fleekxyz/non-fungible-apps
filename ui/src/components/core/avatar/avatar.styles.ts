@@ -1,7 +1,6 @@
-import { dripStitches } from '@/theme';
 import * as Avatar from '@radix-ui/react-avatar';
 
-const { styled } = dripStitches;
+import { styled } from '@/theme';
 
 export abstract class AvatarStyles {
   static readonly Root = styled(Avatar.Root, {

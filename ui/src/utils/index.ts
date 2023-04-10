@@ -4,3 +4,4 @@ export * from './object';
 export * from './context';
 export * from './toast';
 export * from './log';
+export * from './string-validators';

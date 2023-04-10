@@ -1,4 +1,4 @@
-// npx hardhat run scripts/mint.js --network mumbai
+// npx hardhat run scripts/mint.js --network mumbai/sepolia/goerli
 const { getContract } = require('./util');
 const { getSVGBase64, getSVGColor } = require('./utils/read-svg');
 const path = require('path');
@@ -80,6 +80,7 @@ const DEFAULT_MINTS = {
 
 const params = DEFAULT_MINTS.fleek;
 const mintTo = '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049';
+const verifier = '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049';
 
 (async () => {
   const contract = await getContract('FleekERC721');
@@ -90,10 +91,10 @@ const mintTo = '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049';
   params.push(await getSVGBase64(svgPath));
   console.log('SVG length: ', params[params.length - 1].length);
   params.push(await getSVGColor(svgPath));
+  params.push(false);
+  params.push(verifier);
 
-  const transaction = await contract[
-    'mint(address,string,string,string,string,string,string,string,uint24)'
-  ](...params);
+  const transaction = await contract.mint(...params);
 
   console.log('Response: ', transaction);
 })();

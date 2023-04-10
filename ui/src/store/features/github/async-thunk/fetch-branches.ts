@@ -1,7 +1,9 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { ComboboxItem } from '@/components';
 import { githubActions, RootState } from '@/store';
 import { AppLog } from '@/utils';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { GithubClient } from '../github-client';
 
 type FetchBranches = {

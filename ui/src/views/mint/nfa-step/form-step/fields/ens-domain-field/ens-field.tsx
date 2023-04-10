@@ -1,35 +1,59 @@
-import { Combobox, ComboboxItem, Form } from '@/components';
-import { ensActions, useAppDispatch, useEnsStore } from '@/store';
-import { Mint } from '@/views/mint/mint.context';
+import { useQuery } from '@apollo/client';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useAccount } from 'wagmi';
 
-export const EnsField = () => {
-  const { ens, ensError, setEns } = Mint.useContext();
-  const { state, ensNames } = useEnsStore();
-  const dispatch = useAppDispatch();
+import { getENSNamesDocument } from '@/../.graphclient';
+import { ComboboxItem, Form } from '@/components';
+import { AppLog } from '@/utils';
+
+import { useMintFormContext } from '../../mint-form.context';
+
+export const EnsField: React.FC = () => {
   const { address } = useAccount();
+  const { data, error } = useQuery(getENSNamesDocument, {
+    variables: {
+      address: address?.toLowerCase() || '', //should skip if undefined
+    },
+    skip: address === undefined,
+  });
 
-  if (state === 'idle' && address) {
-    dispatch(ensActions.fetchEnsNamesThunk(address));
-  }
+  const {
+    form: { ens },
+  } = useMintFormContext();
 
-  const handleEnsChange = (item: ComboboxItem) => {
-    setEns(item);
-  };
+  const showError = useCallback(() => {
+    AppLog.errorToast(
+      'There was an error trying to get your ENS names. Please try again later.'
+    );
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      showError();
+    }
+  }, [error, showError]);
+
+  const ensNames = useMemo(() => {
+    const ensList: ComboboxItem[] = [];
+    if (data && data.account && data.account.domains) {
+      data.account.domains.forEach((ens) => {
+        const { name } = ens;
+        if (name) {
+          ensList.push({
+            label: name,
+            value: name,
+          });
+        }
+      });
+    }
+    return ensList;
+  }, [data]);
 
   return (
-    <Form.Field css={{ flex: 1 }}>
+    <Form.Field context={ens} css={{ flex: 1 }}>
       <Form.Label>ENS</Form.Label>
-      <Combobox
-        items={ensNames.map((ens) => ({
-          label: ens,
-          value: ens,
-        }))}
-        selectedValue={ens}
-        onChange={handleEnsChange}
-        withAutocomplete
-      />
-      {ensError && <Form.Error>{ensError}</Form.Error>}
+      <Form.Combobox items={ensNames} />
+      <Form.Overline />
     </Form.Field>
   );
 };
