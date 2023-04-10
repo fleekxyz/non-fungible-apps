@@ -1,7 +1,6 @@
-import { dripStitches } from '../../../theme'; //TODO replace with absolute path
-import { Flex, Grid } from '../../layout';
+import { styled } from '@/theme';
 
-const { styled } = dripStitches;
+import { Flex, Grid } from '../../layout';
 
 export const StyledButtonContentGrid = styled(Grid, {
   gap: '$0h',

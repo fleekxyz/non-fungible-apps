@@ -30,7 +30,7 @@ export interface CreateDripStitchesConfig<
   utils?: ConfigType.Utils<Utils>;
 }
 
-export const createDripStitches = <
+const createDripStitches = <
   Prefix extends string = '',
   Media extends {} = {},
   Theme extends {} = {},
@@ -131,4 +131,17 @@ export const createDripStitches = <
   };
 };
 
-export const dripStitches = createDripStitches();
+export const {
+  styled,
+  css,
+  config,
+  globalCss,
+  createTheme,
+  darkTheme,
+  darkThemeSelector,
+  getCssText,
+  keyframes,
+  prefix,
+  theme,
+  reset,
+} = createDripStitches();

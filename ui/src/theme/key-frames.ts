@@ -1,6 +1,4 @@
-import { dripStitches } from './themes';
-
-const { keyframes } = dripStitches;
+import { keyframes } from './themes';
 
 export const KeyFrames = {
   slideUpAndFade: keyframes({
