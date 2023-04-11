@@ -3,7 +3,6 @@ name: Deploy site via Fleek
 on:
   pull_request:
     branches:
-      - main
       - develop
     paths:
       - 'ui/**'
