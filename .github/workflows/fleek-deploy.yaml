@@ -1,23 +1,42 @@
 name: Deploy site via Fleek
-on: push
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'ui/**'
+
 jobs:
   deploy-to-fleek:
     runs-on: ubuntu-latest
+
     env:
       FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
       FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
+
+    defaults:
+      run:
+        working-directory: ui
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
+
       - name: Install Fleek CLI
         run: npm i -g @fleekxyz/cli
+
       - name: Install UI dependencies
-        run: cd ui && yarn
+        run: yarn
+
       - name: Build ui folder
-        run: cd ui && yarn build
+        run: yarn build
+
       - name: Build & deploy sites
         run: fleek sites deploy
