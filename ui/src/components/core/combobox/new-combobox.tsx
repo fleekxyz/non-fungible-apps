@@ -5,6 +5,7 @@ import { Spinner } from '@/components/spinner';
 import { forwardStyledRef } from '@/theme';
 import { createContext, CreateContextReturn } from '@/utils';
 
+import { Icon } from '../icon';
 import { ComboboxStyles as CS } from './combobox.styles';
 
 const EmptyMessage = <CS.Message>No items found</CS.Message>;
@@ -56,6 +57,7 @@ export class ComboboxClass<T> {
 
   public Options = ({
     items,
+    search,
     children,
   }: ComboboxClass.OptionsProps<T>): JSX.Element => {
     const {
@@ -79,6 +81,13 @@ export class ComboboxClass<T> {
 
     return (
       <CS.Options>
+        {search && (
+          <CS.InnerSearchContainer>
+            <Icon name="search" />
+            <this.Input placeholder="Search..." />
+          </CS.InnerSearchContainer>
+        )}
+
         {filteredItems.map((item) => {
           const id = this.identifier(item);
           const selected = this.useContext().selected[0];
@@ -92,7 +101,9 @@ export class ComboboxClass<T> {
             </CS.Option>
           );
         })}
+
         {!loading && filteredItems.length === 0 && EmptyRender}
+
         {loading && LoadingRender}
       </CS.Options>
     );
@@ -114,7 +125,7 @@ export class ComboboxClass<T> {
     return <CS.Input ref={ref} {...props} onChange={onChange} />;
   });
 
-  public Field = forwardStyledRef<HTMLDivElement, ComboboxClass.FieldProps>(
+  public Field = forwardStyledRef<HTMLButtonElement, ComboboxClass.FieldProps>(
     (props, ref) => {
       const { open } = this.useContext();
       return <CS.Field {...props} ref={ref} open={open} />;
@@ -133,6 +144,7 @@ export namespace ComboboxClass {
   };
 
   export type OptionsProps<T> = {
+    search?: boolean;
     items: T[];
     children:
       | ((item: T, selected: boolean) => React.ReactNode)

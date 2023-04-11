@@ -24,27 +24,33 @@ const NewComboboxTest = (): JSX.Element => {
   const selected = useState<Item>();
 
   return (
-    <ItemsCombobox.Root
-      selected={selected}
-      isLoading
-      css={{ width: '400px', alignSelf: 'center' }}
-    >
-      <ItemsCombobox.Field>
-        <Icon name={selected[0]?.icon || 'search'} />
-        <ItemsCombobox.Input
-          placeholder="Search"
-          displayValue={(item) => item?.label || ''}
-        />
-      </ItemsCombobox.Field>
+    <div style={{ position: 'relative', width: '600px', alignSelf: 'center' }}>
+      <ItemsCombobox.Root
+        unattached
+        selected={selected}
+        css={{ width: '400px' }}
+      >
+        <ItemsCombobox.Field>
+          <Icon name={selected[0]?.icon || 'search'} />
+          <span>{selected[0]?.label || 'Select something'}</span>
+          {/* <ItemsCombobox.Input
+            placeholder="Search..."
+            displayValue={(item) => item?.label || ''}
+          /> */}
+        </ItemsCombobox.Field>
 
-      <ItemsCombobox.Options items={Items}>
-        {(item) => (
-          <>
-            <Icon name={item.icon} /> {item.label}
-          </>
-        )}
-      </ItemsCombobox.Options>
-    </ItemsCombobox.Root>
+        <ItemsCombobox.Options items={Items} search>
+          {(item) => (
+            <>
+              <Icon name={item.icon} /> {item.label}
+            </>
+          )}
+          <ItemsCombobox.Message>
+            No results found for that search
+          </ItemsCombobox.Message>
+        </ItemsCombobox.Options>
+      </ItemsCombobox.Root>
+    </div>
   );
 };
 
