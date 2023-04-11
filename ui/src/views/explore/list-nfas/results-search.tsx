@@ -13,7 +13,6 @@ const orderResults: DropdownItem[] = [
 
 export const ResultsSearch: React.FC = () => {
   const { setSearch } = Explore.useContext();
-  // const [searchInputValue, setSearchInputValue] = useState('');
   const [selectedValue, setSelectedValue] = useState<DropdownItem>(
     orderResults[0]
   ); //TODO replace for context
@@ -24,7 +23,6 @@ export const ResultsSearch: React.FC = () => {
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    // setSearchInputValue(e.target.value);
     handleSearch(e.target.value);
   };
 
@@ -39,7 +37,6 @@ export const ResultsSearch: React.FC = () => {
           placeholder="Search"
           leftIcon="search"
           css={{ width: '23rem' }}
-          // value={searchInputValue}
           onChange={handleSearchChange}
         />
         <Dropdown
