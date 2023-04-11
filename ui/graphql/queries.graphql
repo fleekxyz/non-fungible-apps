@@ -1,9 +1,14 @@
-query lastNFAsPaginated($pageSize: Int, $skip: Int) {
+query lastNFAsPaginated(
+  $pageSize: Int
+  $skip: Int
+  $orderBy: OrderDirection
+  $orderDirection: Token_orderBy
+) {
   tokens(
     first: $pageSize
     skip: $skip
-    orderDirection: desc
-    orderBy: tokenId
+    orderDirection: $orderBy
+    orderBy: $orderDirection
   ) {
     id
     tokenId

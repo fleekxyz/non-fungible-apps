@@ -5,8 +5,10 @@ import { Dropdown, DropdownItem, Flex, Input } from '@/components';
 import { ResultsContainer, ResultsNumber, ResultsText } from './results.styles';
 
 const orderResults: DropdownItem[] = [
-  { value: 'a-z', label: 'Sort A-Z' },
-  { value: 'z-a', label: 'Sort Z-A' },
+  { value: 'newest', label: 'Newest' },
+  { value: 'oldest', label: 'Oldest' },
+  { value: 'a-z', label: 'Name A-Z' },
+  { value: 'z-a', label: 'Name Z-A' },
 ];
 
 export const ResultsSearch: React.FC = () => {
