@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { Flex, NFACard, NFACardSkeleton, NoResults } from '@/components';
 import { lastNFAsPaginatedDocument } from '@/graphclient';
@@ -18,10 +18,9 @@ const LoadingSkeletons: React.FC = () => (
   </>
 );
 
-export const NFAList: React.FC = () => {
+export const NFAListFragment: React.FC = () => {
   const { endReached, pageNumber, search, setEndReached, setPageNumber } =
     Explore.useContext();
-  // const [pageNumber, setPageNumber] = useState(0); //This is for the pagination
 
   const {
     data: { tokens } = { tokens: [] },
