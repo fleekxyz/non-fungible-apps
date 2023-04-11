@@ -1,7 +1,7 @@
 import { Flex } from '@/components';
 import { styled } from '@/theme';
 
-export abstract class Header {
+export abstract class ExploreHeaderStyles {
   static readonly Container = styled(Flex, {
     flexDirection: 'column',
     gap: '$6',
