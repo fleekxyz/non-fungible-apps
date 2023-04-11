@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-import { Flex, Icon, IconName } from '@/components';
-import { ComboboxClass } from '@/components/core/combobox/new-combobox';
+import { ComboboxFactory, Flex, Icon, IconName } from '@/components';
 
 import { ColorPickerTest } from './color-picker';
 import { ComboboxTest } from './combobox-test';
@@ -15,7 +14,7 @@ const Items: Item[] = [
   { id: 3, label: 'Option 3', icon: 'metamask' },
 ];
 
-const ItemsCombobox = new ComboboxClass<Item>(
+const ItemsCombobox = new ComboboxFactory<Item>(
   (item) => item.id,
   (query, item) => item.label.toLowerCase().includes(query.toLowerCase())
 );

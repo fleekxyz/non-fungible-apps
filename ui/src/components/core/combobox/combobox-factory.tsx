@@ -15,18 +15,20 @@ const LoadingMessage = (
   </CS.Message>
 );
 
-export class ComboboxClass<T> {
+export class ComboboxFactory<T> {
   static readonly Root = Combobox;
 
-  private readonly Provider: CreateContextReturn<ComboboxClass.Context<T>>[0];
+  private readonly Provider: CreateContextReturn<ComboboxFactory.Context<T>>[0];
 
-  private readonly useContext: CreateContextReturn<ComboboxClass.Context<T>>[1];
+  private readonly useContext: CreateContextReturn<
+    ComboboxFactory.Context<T>
+  >[1];
 
   constructor(
     private identifier: (item: T) => string | number,
     private filter: (input: string, item: T) => boolean
   ) {
-    const [Provider, useContext] = createContext<ComboboxClass.Context<T>>({
+    const [Provider, useContext] = createContext<ComboboxFactory.Context<T>>({
       name: 'ComboboxContext',
       hookName: 'useComboboxContext',
       providerName: 'ComboboxProvider',
@@ -36,7 +38,7 @@ export class ComboboxClass<T> {
     this.useContext = useContext;
   }
 
-  public Root = forwardStyledRef<HTMLDivElement, ComboboxClass.RootProps<T>>(
+  public Root = forwardStyledRef<HTMLDivElement, ComboboxFactory.RootProps<T>>(
     ({ children, selected, isLoading: loading = false, ...props }, ref) => {
       const [value, setValue] = selected;
       const query = useState('');
@@ -59,7 +61,7 @@ export class ComboboxClass<T> {
     items,
     search,
     children,
-  }: ComboboxClass.OptionsProps<T>): JSX.Element => {
+  }: ComboboxFactory.OptionsProps<T>): JSX.Element => {
     const {
       query: [query],
       loading,
@@ -111,7 +113,7 @@ export class ComboboxClass<T> {
 
   public Input = forwardStyledRef<
     HTMLInputElement,
-    ComboboxClass.InputProps<T>
+    ComboboxFactory.InputProps<T>
   >((props, ref): JSX.Element => {
     const {
       query: [, setQuery],
@@ -125,17 +127,18 @@ export class ComboboxClass<T> {
     return <CS.Input ref={ref} {...props} onChange={onChange} />;
   });
 
-  public Field = forwardStyledRef<HTMLButtonElement, ComboboxClass.FieldProps>(
-    (props, ref) => {
-      const { open } = this.useContext();
-      return <CS.Field {...props} ref={ref} open={open} />;
-    }
-  );
+  public Field = forwardStyledRef<
+    HTMLButtonElement,
+    ComboboxFactory.FieldProps
+  >((props, ref) => {
+    const { open } = this.useContext();
+    return <CS.Field {...props} ref={ref} open={open} />;
+  });
 
   public Message = CS.Message;
 }
 
-export namespace ComboboxClass {
+export namespace ComboboxFactory {
   export type Context<T> = {
     selected: ReactState<T | undefined>;
     query: ReactState<string>;
