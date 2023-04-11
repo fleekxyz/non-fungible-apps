@@ -46,8 +46,7 @@ export const NFAListFragment: React.FC = () => {
 
   useWindowScrollEnd(() => {
     if (isLoading || endReached || queryError) return;
-    const newPageNumber = pageNumber + 1;
-    setPageNumber(newPageNumber);
+    setPageNumber(pageNumber + 1);
   });
 
   if (queryError) return <div>Error</div>; //TODO handle error
