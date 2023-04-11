@@ -1,15 +1,15 @@
 import { Flex } from '@/components';
 
 import { Explore } from '../explore.context';
-import { NFAList } from './nfa-list';
-import { ResultsSearch } from './results-search';
+import { NFAListFragment } from './nfa-list';
+import { NFASearchFragment } from './nfa-search';
 
-export const ListNfas: React.FC = () => {
+export const ExploreListContainer: React.FC = () => {
   return (
     <Flex css={{ flexDirection: 'column' }}>
       <Explore.Provider>
-        <ResultsSearch />
-        <NFAList />
+        <NFASearchFragment />
+        <NFAListFragment />
       </Explore.Provider>
     </Flex>
   );

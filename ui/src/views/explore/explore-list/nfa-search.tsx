@@ -11,7 +11,7 @@ const orderResults: DropdownItem[] = [
   { value: 'z-a', label: 'Sort Z-A' },
 ];
 
-export const ResultsSearch: React.FC = () => {
+export const NFASearchFragment: React.FC = () => {
   const { setSearch } = Explore.useContext();
   const [selectedValue, setSelectedValue] = useState<DropdownItem>(
     orderResults[0]
