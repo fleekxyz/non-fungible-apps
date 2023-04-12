@@ -1,11 +1,4 @@
-import {
-  Address,
-  Bytes,
-  log,
-  store,
-  ethereum,
-  BigInt,
-} from '@graphprotocol/graph-ts';
+import { Bytes, log, BigInt } from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]
 import {
@@ -27,7 +20,7 @@ import { AccessPoint, Owner } from '../generated/schema';
  */
 export function handleNewAccessPoint(event: NewAccessPointEvent): void {
   // Create an AccessPoint entity
-  let accessPointEntity = new AccessPoint(event.params.apName);
+  const accessPointEntity = new AccessPoint(event.params.apName);
   accessPointEntity.score = BigInt.fromU32(0);
   accessPointEntity.contentVerified = false;
   accessPointEntity.nameVerified = false;
@@ -59,8 +52,8 @@ export function handleChangeAccessPointCreationStatus(
   event: ChangeAccessPointCreationStatusEvent
 ): void {
   // Load the AccessPoint entity
-  let accessPointEntity = AccessPoint.load(event.params.apName);
-  let status = event.params.status;
+  const accessPointEntity = AccessPoint.load(event.params.apName);
+  const status = event.params.status;
 
   if (accessPointEntity) {
     switch (status) {
@@ -101,7 +94,7 @@ export function handleChangeAccessPointScore(
   event: ChangeAccessPointCreationScoreEvent
 ): void {
   // Load the AccessPoint entity
-  let accessPointEntity = AccessPoint.load(event.params.apName);
+  const accessPointEntity = AccessPoint.load(event.params.apName);
 
   if (accessPointEntity) {
     accessPointEntity.score = event.params.score;
@@ -122,7 +115,7 @@ export function handleChangeAccessPointNameVerify(
   event: ChangeAccessPointNameVerifyEvent
 ): void {
   // Load the AccessPoint entity
-  let accessPointEntity = AccessPoint.load(event.params.apName);
+  const accessPointEntity = AccessPoint.load(event.params.apName);
 
   if (accessPointEntity) {
     accessPointEntity.nameVerified = event.params.verified;
@@ -143,7 +136,7 @@ export function handleChangeAccessPointContentVerify(
   event: ChangeAccessPointContentVerifyEvent
 ): void {
   // Load the AccessPoint entity
-  let accessPointEntity = AccessPoint.load(event.params.apName);
+  const accessPointEntity = AccessPoint.load(event.params.apName);
 
   if (accessPointEntity) {
     accessPointEntity.contentVerified = event.params.verified;
