@@ -32,6 +32,7 @@ export const Ethereum: Ethereum.Core = {
     return new ethers.Contract(contract.address, contract.abi, provider);
   },
 
+  //TODO remove cause we're using ENS subgraph
   async getEnsName(address) {
     const ensAddresses = await alchemy.nft.getNftsForOwner(address, {
       contractAddresses: [env.ens.contractAddress],
