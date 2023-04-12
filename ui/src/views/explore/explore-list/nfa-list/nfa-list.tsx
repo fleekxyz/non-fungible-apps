@@ -19,8 +19,15 @@ const LoadingSkeletons: React.FC = () => (
 );
 
 export const NFAListFragment: React.FC = () => {
-  const { endReached, pageNumber, search, setEndReached, setPageNumber } =
-    Explore.useContext();
+  const {
+    endReached,
+    orderBy,
+    orderDirection,
+    pageNumber,
+    search,
+    setEndReached,
+    setPageNumber,
+  } = Explore.useContext();
 
   const {
     data: { tokens } = { tokens: [] },
@@ -31,6 +38,8 @@ export const NFAListFragment: React.FC = () => {
     variables: {
       pageSize,
       searchValue: search,
+      orderBy,
+      orderDirection,
       skip: pageNumber * pageSize, //skip is for the pagination
     },
     onCompleted: (data) => {

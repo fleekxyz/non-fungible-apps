@@ -7,15 +7,50 @@ import { Explore } from '../explore.context';
 import { ResultsContainer, ResultsNumber, ResultsText } from './results.styles';
 
 const orderResults: DropdownItem[] = [
-  { value: 'a-z', label: 'Sort A-Z' },
-  { value: 'z-a', label: 'Sort Z-A' },
+  { value: 'newest', label: 'Newest' },
+  { value: 'oldest', label: 'Oldest' },
+  { value: 'a-z', label: 'Name A-Z' },
+  { value: 'z-a', label: 'Name Z-A' },
 ];
 
 export const NFASearchFragment: React.FC = () => {
-  const { setSearch } = Explore.useContext();
+  const {
+    setEndReached,
+    setOrderBy,
+    setOrderDirection,
+    setSearch,
+    setPageNumber,
+  } = Explore.useContext();
   const [selectedValue, setSelectedValue] = useState<DropdownItem>(
     orderResults[0]
-  ); //TODO replace for context
+  );
+
+  const handleSortChange = (item: DropdownItem): void => {
+    setSelectedValue(item);
+    setPageNumber(0);
+    setEndReached(false);
+
+    switch (item.value) {
+      case 'newest':
+        setOrderBy('tokenId');
+        setOrderDirection('desc');
+        break;
+      case 'oldest':
+        setOrderBy('tokenId');
+        setOrderDirection('asc');
+        break;
+      case 'a-z':
+        setOrderBy('name');
+        setOrderDirection('asc');
+        break;
+      case 'z-a':
+        setOrderBy('name');
+        setOrderDirection('desc');
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleSearch = useDebounce(
     (searchValue: string) => setSearch(searchValue),
@@ -42,7 +77,7 @@ export const NFASearchFragment: React.FC = () => {
         <Dropdown
           items={orderResults}
           selectedValue={selectedValue}
-          onChange={setSelectedValue}
+          onChange={handleSortChange}
           backgroundColor="slate4"
           textColor="slate11"
           optionsWidth="40"
