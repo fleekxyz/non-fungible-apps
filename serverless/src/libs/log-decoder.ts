@@ -1,4 +1,4 @@
-var Web3 = require('web3');
+import Web3 from 'web3';
 
 var web3 = new Web3(Web3.givenProvider || "ws://localhost:17895");
 
