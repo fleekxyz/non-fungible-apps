@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 
-var web3 = new Web3(Web3.givenProvider || "ws://localhost:17895");
+const web3 = new Web3(Web3.givenProvider || "ws://localhost:17895");
 
 export const logDecoder = (eventFieldsABI: { indexed: boolean; internalType: string; name: string; type: string; }[], data: string, topics: string[]) => {
     return web3.eth.abi.decodeLog(eventFieldsABI, data, topics);
