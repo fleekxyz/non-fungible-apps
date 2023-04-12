@@ -5,10 +5,8 @@ import {
   clearStore,
   beforeAll,
   afterAll,
-  logStore,
-  log,
 } from 'matchstick-as/assembly/index';
-import { BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { BigInt } from '@graphprotocol/graph-ts';
 import {
   CONTRACT,
   createTransferEvent,
@@ -22,7 +20,7 @@ import { Transfer } from '../../generated/FleekNFA/FleekNFA';
 describe('Transfer tests', () => {
   beforeAll(() => {
     // TRANSFERS
-    let transfers: Transfer[] = [];
+    const transfers: Transfer[] = [];
     transfers.push(
       createTransferEvent(0, CONTRACT, USER_ONE, BigInt.fromI32(0))
     );
