@@ -89,8 +89,8 @@ export const MintFormStep: React.FC = () => {
           <Grid css={{ rowGap: '$4' }}>
             <AppNameField />
             <AppDescriptionField />
-            <LogoField />
             <EnsDomainField />
+            <LogoField />
           </Grid>
           <Button
             disabled={!isValid}
