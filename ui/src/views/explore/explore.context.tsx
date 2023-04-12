@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import { OrderDirection } from '@/../.graphclient';
+import { OrderDirection, Token_orderBy } from '@/graphclient';
 import { createContext } from '@/utils';
 
 export type ExploreContext = {
   search: string;
-  orderBy: string;
+  orderBy: Token_orderBy;
   orderDirection: OrderDirection;
   pageNumber: number;
   endReached: boolean;
@@ -29,7 +29,7 @@ export abstract class Explore {
     children,
   }: Explore.ProviderProps) => {
     const [search, setSearch] = useState('');
-    const [orderBy, setOrderBy] = useState('');
+    const [orderBy, setOrderBy] = useState('tokenId');
     const [orderDirection, setOrderDirection] =
       useState<OrderDirection>('desc');
     const [pageNumber, setPageNumber] = useState(0);

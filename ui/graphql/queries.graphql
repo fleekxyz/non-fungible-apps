@@ -1,15 +1,15 @@
 query lastNFAsPaginated(
   $pageSize: Int
   $skip: Int
-  $orderBy: OrderDirection
-  $orderDirection: Token_orderBy
+  $orderBy: Token_orderBy
+  $orderDirection: OrderDirection
   $searchValue: String
 ) {
   tokens(
     first: $pageSize
     skip: $skip
-    orderDirection: $orderBy
-    orderBy: $orderDirection
+    orderDirection: $orderDirection
+    orderBy: $orderBy
     where: { name_contains_nocase: $searchValue }
   ) {
     id
