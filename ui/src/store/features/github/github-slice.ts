@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ComboboxItem } from '@/components';
 import { RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
 
 import * as asyncThunk from './async-thunk';
-import { UserData } from './github-client';
+import { GithubClient } from './github-client';
 
 export namespace GithubState {
   export type Token = string;
@@ -20,7 +19,7 @@ export namespace GithubState {
 
   export type QueryLoading = 'idle' | 'loading' | 'failed' | 'success';
 
-  export type UserAndOrganizations = Array<UserData>;
+  export type UserAndOrganizations = Array<GithubClient.UserData>;
 
   export type Repository = {
     name: string;
@@ -30,7 +29,7 @@ export namespace GithubState {
 
   export type Repositories = Array<Repository>;
 
-  export type Branches = Array<ComboboxItem>;
+  export type Branches = Array<GithubClient.Branch>;
 }
 
 export interface GithubState {

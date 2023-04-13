@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
 import { AppLog } from '@/utils';
 
-import { GithubClient, UserData } from '../github-client';
+import { GithubClient } from '../github-client';
 import { githubActions } from '../github-slice';
 
 export const fetchUserAndOrgsThunk = createAsyncThunk(
@@ -26,7 +26,7 @@ export const fetchUserAndOrgsThunk = createAsyncThunk(
       const userResponse = response[0];
       const orgsResponse = response[1];
 
-      let comboboxItems: UserData[] = [];
+      let comboboxItems: GithubClient.UserData[] = [];
 
       if (userResponse) {
         comboboxItems.push(userResponse);

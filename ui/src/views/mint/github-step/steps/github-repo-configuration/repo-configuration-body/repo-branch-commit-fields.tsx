@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
 
-import { ComboboxItem, Flex, Form, Spinner } from '@/components';
-import { ComboboxItemm } from '@/components/core/combobox/combobox.utils';
-import { githubActions, useAppDispatch, useGithubStore } from '@/store';
+import { Flex, Form, Spinner } from '@/components';
+import {
+  githubActions,
+  GithubClient,
+  useAppDispatch,
+  useGithubStore,
+} from '@/store';
 import { AppLog } from '@/utils';
 import { Mint } from '@/views/mint/mint.context';
 import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
@@ -45,12 +49,12 @@ export const RepoBranchCommitFields: React.FC = () => {
       ) {
         const defaultBranch = branches.find(
           (branch) =>
-            branch.label.toLowerCase() ===
+            branch.name.toLowerCase() ===
             repositoryName.defaultBranch.toLowerCase()
         );
         if (defaultBranch) {
-          setGitBranch(defaultBranch.label);
-          setGitCommit(defaultBranch.value);
+          setGitBranch(defaultBranch.name);
+          setGitCommit(defaultBranch.commit);
         }
       }
     } catch (error) {
@@ -79,10 +83,17 @@ export const RepoBranchCommitFields: React.FC = () => {
     );
   }
 
-  const handleBranchChange = (branch: ComboboxItem): void => {
-    setGitBranch(branch.label);
-    setGitCommit(branch.value);
+  const handleBranchChange = (branch: GithubClient.Branch): void => {
+    setGitBranch(branch.name);
+    setGitCommit(branch.commit);
   };
+
+  const branchQueryFilter = (
+    query: string,
+    item: GithubClient.Branch
+  ): boolean => item.name.includes(query);
+
+  const branchHandleValue = (item: GithubClient.Branch): string => item.name;
 
   return (
     <>
@@ -91,16 +102,14 @@ export const RepoBranchCommitFields: React.FC = () => {
         <Form.Combobox
           items={branches}
           onChange={handleBranchChange}
-          queryFilter={ComboboxItemm.queryFilter}
-          handleValue={ComboboxItemm.handleValue}
+          queryFilter={branchQueryFilter}
+          handleValue={branchHandleValue}
         >
           {({ Field, Options }) => (
             <>
-              <Field>
-                {(selected) => selected?.label || 'Select a branch'}
-              </Field>
+              <Field>{(selected) => selected?.name || 'Select a branch'}</Field>
 
-              <Options>{(item) => item.label}</Options>
+              <Options>{(item) => item.name}</Options>
             </>
           )}
         </Form.Combobox>
