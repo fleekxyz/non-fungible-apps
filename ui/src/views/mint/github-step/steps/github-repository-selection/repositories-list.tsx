@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 
-import { Flex, NoResults } from '@/components';
+import { Flex } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
 
@@ -27,7 +27,7 @@ export const RepositoriesList: React.FC<RepositoriesListProps> = ({
   }, [searchValue, repositories]);
 
   useEffect(() => {
-    if (queryLoading === 'idle' && selectedUserOrg.value) {
+    if (queryLoading === 'idle' && selectedUserOrg?.value) {
       dispatch(githubActions.fetchRepositoriesThunk(selectedUserOrg.value));
     }
   }, [queryLoading, dispatch, selectedUserOrg]);
@@ -56,7 +56,11 @@ export const RepositoriesList: React.FC<RepositoriesListProps> = ({
           />
         ))
       ) : (
-        <NoResults css="text-center" />
+        <div
+          className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 text-center`}
+        >
+          Nothing found.
+        </div>
       )}
     </Flex>
   );

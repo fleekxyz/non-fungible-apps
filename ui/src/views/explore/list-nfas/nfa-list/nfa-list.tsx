@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 
-import { Flex, NFACard, NFACardSkeleton, NoResults } from '@/components';
+import { Flex, NFACard, NFACardSkeleton } from '@/components';
 import { lastNFAsPaginatedDocument } from '@/graphclient';
 import { useWindowScrollEnd } from '@/hooks';
 
@@ -63,7 +63,13 @@ export const NFAList: React.FC = () => {
           <NFACard data={token} key={token.id} />
         ))}
         {isLoading && <LoadingSkeletons />}
-        {!isLoading && tokens.length === 0 && <NoResults />}
+        {!isLoading && tokens.length === 0 && (
+          <div
+            className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 text-center`}
+          >
+            Nothing found.
+          </div>
+        )}
       </Flex>
     </Flex>
   );

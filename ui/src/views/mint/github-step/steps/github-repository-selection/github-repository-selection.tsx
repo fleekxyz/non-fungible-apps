@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
 
-import {
-  Card,
-  ComboboxItem,
-  Flex,
-  Grid,
-  Icon,
-  IconButton,
-  Spinner,
-} from '@/components';
+import { Card, Flex, Grid, Icon, IconButton, Spinner } from '@/components';
 import { Input } from '@/components/core/input';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useGithubStore } from '@/store';
@@ -50,7 +42,7 @@ export const GithubRepositoryConnection: React.FC = () => {
 
   const handlePrevStepClick = (): void => {
     setGithubStep(1);
-    setSelectedUserOrg({} as ComboboxItem);
+    setSelectedUserOrg(undefined);
   };
 
   return (
@@ -79,7 +71,7 @@ export const GithubRepositoryConnection: React.FC = () => {
       />
       <Card.Body css={{ pt: '$4' }}>
         <Grid css={{ rowGap: '$2' }}>
-          <Flex css={{ gap: '$4', pr: '$3h' }}>
+          <Flex css={{ gap: '$4', pr: '$3h', position: 'relative' }}>
             <UserOrgsCombobox />
             <Input
               leftIcon="search"

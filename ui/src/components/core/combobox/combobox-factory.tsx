@@ -148,7 +148,7 @@ export function ComboboxFactory<T>({
 
 export namespace ComboboxFactory {
   export type Context<T> = {
-    selected: ReactState<T | undefined>;
+    selected: [T | undefined, (newState: T | undefined) => void];
     query: ReactState<string>;
     loading: boolean;
     open: boolean;

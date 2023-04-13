@@ -1,9 +1,36 @@
 import { useEffect } from 'react';
 
-import { Avatar, Combobox, ComboboxItem } from '@/components';
-import { githubActions, useAppDispatch, useGithubStore } from '@/store';
+import { Avatar, ComboboxFactory, Icon } from '@/components';
+import {
+  githubActions,
+  GithubClient,
+  useAppDispatch,
+  useGithubStore,
+} from '@/store';
 import { AppLog } from '@/utils';
 import { Mint } from '@/views/mint/mint.context';
+
+const renderSelected = (selected?: GithubClient.UserData): JSX.Element => (
+  <>
+    {selected ? (
+      <Avatar
+        src={selected.avatar}
+        alt={selected.label}
+        css={{ fontSize: '$2xl' }}
+      />
+    ) : (
+      <Icon name="github" css={{ fontSize: '$2xl' }} />
+    )}
+    {selected?.label || 'Select'}
+  </>
+);
+
+const renderItem = (item: GithubClient.UserData): JSX.Element => (
+  <>
+    <Avatar src={item.avatar} alt={item.label} />
+    {item.label}
+  </>
+);
 
 export const UserOrgsCombobox: React.FC = () => {
   const { queryUserAndOrganizations, userAndOrganizations } = useGithubStore();
@@ -17,7 +44,9 @@ export const UserOrgsCombobox: React.FC = () => {
     }
   }, [dispatch, queryUserAndOrganizations]);
 
-  const handleUserOrgChange = (item: ComboboxItem): void => {
+  const handleUserOrgChange = (
+    item: GithubClient.UserData | undefined
+  ): void => {
     if (item) {
       dispatch(githubActions.fetchRepositoriesThunk(item.value));
       setSelectedUserOrg(item);
@@ -29,7 +58,7 @@ export const UserOrgsCombobox: React.FC = () => {
   useEffect(() => {
     if (
       queryUserAndOrganizations === 'success' &&
-      selectedUserOrg.value === undefined &&
+      selectedUserOrg?.value === undefined &&
       userAndOrganizations.length > 0
     ) {
       //SET first user
@@ -43,18 +72,21 @@ export const UserOrgsCombobox: React.FC = () => {
   ]);
 
   return (
-    <Combobox
-      items={userAndOrganizations.map(
-        (item) =>
-          ({
-            label: item.label,
-            value: item.value,
-            icon: <Avatar src={item.avatar} />,
-          } as ComboboxItem)
+    <ComboboxFactory
+      unattached
+      css={{ flex: 1 }}
+      items={userAndOrganizations}
+      selected={[selectedUserOrg, handleUserOrgChange]}
+      queryFilter={(query, item) =>
+        item.label.toLowerCase().includes(query.toLowerCase())
+      }
+    >
+      {({ Field, Options }) => (
+        <>
+          <Field>{renderSelected}</Field>
+          <Options>{renderItem}</Options>
+        </>
       )}
-      selectedValue={selectedUserOrg}
-      onChange={handleUserOrgChange}
-      leftIcon="github"
-    />
+    </ComboboxFactory>
   );
 };
