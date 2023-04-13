@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Combobox, ComboboxInputProps } from '@headlessui/react';
 import React, { useMemo, useState } from 'react';
 
 import { Spinner } from '@/components/spinner';
-import { forwardStyledRef } from '@/theme';
-import { createContext, CreateContextReturn } from '@/utils';
+import { createContext } from '@/utils';
 
 import { Icon } from '../icon';
 import { ComboboxStyles as CS } from './combobox.styles';
@@ -15,57 +15,65 @@ const LoadingMessage = (
   </CS.Message>
 );
 
-export class ComboboxFactory<T> {
-  static readonly Root = Combobox;
+type ComboboxItem = {
+  label: string;
+  value: string;
+};
 
-  private readonly Provider: CreateContextReturn<ComboboxFactory.Context<T>>[0];
+const [Provider, useContext] = createContext<ComboboxFactory.Context>({
+  name: 'ComboboxContext',
+  hookName: 'useComboboxContext',
+  providerName: 'ComboboxProvider',
+});
 
-  private readonly useContext: CreateContextReturn<
-    ComboboxFactory.Context<T>
-  >[1];
+const defaultIdentifier = (item: ComboboxItem): string => item.label;
+const defaultFilter = (query: string, item: ComboboxItem): boolean =>
+  item.label.toLowerCase().includes(query.toLowerCase());
 
-  constructor(
-    private identifier: (item: T) => string | number,
-    private filter: (input: string, item: T) => boolean
-  ) {
-    const [Provider, useContext] = createContext<ComboboxFactory.Context<T>>({
-      name: 'ComboboxContext',
-      hookName: 'useComboboxContext',
-      providerName: 'ComboboxProvider',
-    });
+export const ComboboxFactory = {
+  useContext,
 
-    this.Provider = Provider;
-    this.useContext = useContext;
-  }
+  Root<T = ComboboxItem>({
+    children,
+    selected,
+    isLoading: loading = false,
+    ...props
+  }: ComboboxFactory.RootProps<T>): JSX.Element {
+    const [value, setValue] = selected;
+    const query = useState('');
 
-  public Root = forwardStyledRef<HTMLDivElement, ComboboxFactory.RootProps<T>>(
-    ({ children, selected, isLoading: loading = false, ...props }, ref) => {
-      const [value, setValue] = selected;
-      const query = useState('');
+    return (
+      <Combobox as={CS.Wrapper} value={value} onChange={setValue} {...props}>
+        {({ open }) => (
+          <Provider
+            value={{
+              selected: selected as ReactState<ComboboxItem | undefined>,
+              query,
+              loading,
+              open,
+            }}
+          >
+            {children}
+          </Provider>
+        )}
+      </Combobox>
+    );
+  },
 
-      return (
-        <CS.Wrapper ref={ref} {...props}>
-          <Combobox value={value} onChange={setValue} nullable>
-            {({ open }) => (
-              <this.Provider value={{ selected, query, loading, open }}>
-                {children}
-              </this.Provider>
-            )}
-          </Combobox>
-        </CS.Wrapper>
-      );
-    }
-  );
-
-  public Options = ({
+  Options<T = ComboboxItem>({
     items,
     search,
     children,
-  }: ComboboxFactory.OptionsProps<T>): JSX.Element => {
+    // @ts-ignore
+    filter = defaultFilter,
+    // @ts-ignore
+    identifier = defaultIdentifier,
+  }: ComboboxFactory.OptionsProps<T>): JSX.Element {
     const {
       query: [query],
       loading,
-    } = this.useContext();
+      selected: [selected],
+    } = useContext();
 
     const [
       optionRenderer,
@@ -77,8 +85,8 @@ export class ComboboxFactory<T> {
     );
 
     const filteredItems = useMemo(
-      () => items.filter((item) => this.filter(query, item)),
-      [items, query]
+      () => items.filter((item) => filter(query, item)),
+      [items, query, filter]
     );
 
     return (
@@ -86,15 +94,13 @@ export class ComboboxFactory<T> {
         {search && (
           <CS.InnerSearchContainer>
             <Icon name="search" />
-            <this.Input placeholder="Search..." />
+            <ComboboxFactory.Input placeholder="Search..." />
           </CS.InnerSearchContainer>
         )}
 
         {filteredItems.map((item) => {
-          const id = this.identifier(item);
-          const selected = this.useContext().selected[0];
-          const isSelected =
-            !!selected && this.identifier(selected) === this.identifier(item);
+          const id = identifier(item);
+          const isSelected = selected === id;
 
           return (
             <CS.Option key={id} value={item}>
@@ -109,46 +115,47 @@ export class ComboboxFactory<T> {
         {loading && LoadingRender}
       </CS.Options>
     );
-  };
+  },
 
-  public Input = forwardStyledRef<
-    HTMLInputElement,
-    ComboboxFactory.InputProps<T>
-  >((props, ref): JSX.Element => {
+  Input(props: ComboboxFactory.InputProps): JSX.Element {
     const {
       query: [, setQuery],
-    } = this.useContext();
+    } = useContext();
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
       setQuery(event.target.value);
       if (props.onChange) props.onChange(event);
     };
 
-    return <CS.Input ref={ref} {...props} onChange={onChange} />;
-  });
+    return <CS.Input {...props} onChange={onChange} />;
+  },
 
-  public Field = forwardStyledRef<
-    HTMLButtonElement,
-    ComboboxFactory.FieldProps
-  >((props, ref) => {
-    const { open } = this.useContext();
-    return <CS.Field {...props} ref={ref} open={open} />;
-  });
+  Field<T = ComboboxItem>({
+    children,
+    ...props
+  }: ComboboxFactory.FieldProps<T>): JSX.Element {
+    const {
+      selected: [selected],
+    } = useContext();
 
-  public Message = CS.Message;
-}
+    return <CS.Field {...props}>{children(selected as T)}</CS.Field>;
+  },
+
+  Message: CS.Message,
+};
 
 export namespace ComboboxFactory {
-  export type Context<T> = {
-    selected: ReactState<T | undefined>;
+  export type Context = {
+    selected: ReactState<ComboboxItem | undefined>;
     query: ReactState<string>;
     loading: boolean;
     open: boolean;
   };
 
-  export type OptionsProps<T> = {
+  type BaseOptionsProps<T> = {
     search?: boolean;
     items: T[];
+
     children:
       | ((item: T, selected: boolean) => React.ReactNode)
       | [
@@ -158,12 +165,30 @@ export namespace ComboboxFactory {
         ];
   };
 
-  export type RootProps<T> = React.ComponentPropsWithRef<typeof CS.Wrapper> & {
+  export type OptionsProps<T = ComboboxItem> = T extends ComboboxItem
+    ? BaseOptionsProps<T>
+    : BaseOptionsProps<T> & {
+        filter: (query: string, item: T) => boolean;
+        identifier: (item: T) => string;
+      };
+
+  export type RootProps<T = ComboboxItem> = Omit<
+    React.ComponentPropsWithRef<typeof CS.Wrapper>,
+    'defaultValue' | 'onChange'
+  > & {
     selected: ReactState<T | undefined>;
     isLoading?: boolean;
   };
 
-  export type InputProps<T> = ComboboxInputProps<'input', T | undefined>;
+  export type InputProps<T = ComboboxItem> = ComboboxInputProps<
+    'input',
+    T | undefined
+  >;
 
-  export type FieldProps = React.ComponentPropsWithRef<typeof CS.Field>;
+  export type FieldProps<T = ComboboxItem> = Omit<
+    React.ComponentPropsWithRef<typeof CS.Field>,
+    'children'
+  > & {
+    children: (item: T | undefined) => React.ReactElement | React.ReactNode;
+  };
 }

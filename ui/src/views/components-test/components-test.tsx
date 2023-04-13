@@ -14,41 +14,40 @@ const Items: Item[] = [
   { id: 3, label: 'Option 3', icon: 'metamask' },
 ];
 
-const ItemsCombobox = new ComboboxFactory<Item>(
-  (item) => item.id,
-  (query, item) => item.label.toLowerCase().includes(query.toLowerCase())
-);
-
 const NewComboboxTest = (): JSX.Element => {
   const selected = useState<Item>();
 
   return (
     <div style={{ position: 'relative', width: '600px', alignSelf: 'center' }}>
-      <ItemsCombobox.Root
+      <ComboboxFactory.Root
         unattached
         selected={selected}
         css={{ width: '400px' }}
       >
-        <ItemsCombobox.Field>
-          <Icon name={selected[0]?.icon || 'search'} />
-          <span>{selected[0]?.label || 'Select something'}</span>
-          {/* <ItemsCombobox.Input
-            placeholder="Search..."
-            displayValue={(item) => item?.label || ''}
-          /> */}
-        </ItemsCombobox.Field>
+        <ComboboxFactory.Field<Item>>
+          {(item) => (
+            <>
+              <Icon name={item?.icon || 'search'} />
+              {item?.label || 'Select an option'}
+            </>
+          )}
+        </ComboboxFactory.Field>
 
-        <ItemsCombobox.Options items={Items} search>
+        <ComboboxFactory.Options
+          items={Items}
+          search
+          filter={(query, item) =>
+            item.label.toLowerCase().includes(query.toLowerCase())
+          }
+          identifier={(item) => item.label}
+        >
           {(item) => (
             <>
               <Icon name={item.icon} /> {item.label}
             </>
           )}
-          <ItemsCombobox.Message>
-            No results found for that search
-          </ItemsCombobox.Message>
-        </ItemsCombobox.Options>
-      </ItemsCombobox.Root>
+        </ComboboxFactory.Options>
+      </ComboboxFactory.Root>
     </div>
   );
 };
