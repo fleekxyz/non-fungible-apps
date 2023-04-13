@@ -14,7 +14,7 @@ export const CreateApStepper: React.FC = () => {
   } = useAccessPointFormContext();
 
   return (
-    <Stepper.Root initialStep={3}>
+    <Stepper.Root initialStep={1}>
       <Form.Root onValidationChange={setIsValid}>
         <Stepper.Container>
           <Stepper.Step>

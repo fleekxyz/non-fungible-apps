@@ -85,7 +85,7 @@ export const GithubRepositoryConnection: React.FC = () => {
               leftIcon="search"
               placeholder="Search repo"
               onChange={handleSearchChange}
-              css="flex-1"
+              divcss="flex-1"
             />
           </Flex>
           {queryLoading === 'loading' ||

@@ -9,6 +9,7 @@ import {
   Icon,
   IconButton,
   Stepper,
+  Text,
 } from '@/components';
 import { useTransactionCost } from '@/hooks';
 import { FleekERC721 } from '@/integrations';
@@ -105,9 +106,10 @@ export const CreateAccessPointPreview: React.FC = () => {
           <SelectedNFA />
           <DisplayText label="Owner" value={ensName || address || ''} />
           <DisplayText label="Frontend URL" value={domain} />
+          <Text>{message}</Text>
           <Button
-            disabled={!isValid}
             isLoading={isLoading}
+            isDisabled={isLoading || !isValid}
             colorScheme="blue"
             variant="solid"
             onClick={write}

@@ -3,7 +3,7 @@ import {
   ComboboxInputProps as ComboboxLibInputProps,
   Transition,
 } from '@headlessui/react';
-import React, { forwardRef, Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import { Icon, IconName } from '@/components/core/icon';
 import { Flex } from '@/components/layout';
