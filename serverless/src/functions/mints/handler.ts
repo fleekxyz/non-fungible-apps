@@ -1,7 +1,7 @@
 import {
     APIGatewayProxyResult,
     APIGatewayEvent,
-    APIGatewayEventRequestContext,
+    ///APIGatewayEventRequestContext,
   } from 'aws-lambda';
   import { formatJSONResponse } from '@libs/api-gateway';
   
@@ -9,19 +9,19 @@ import {
   
   export const submitMintInfo = async (
     event: APIGatewayEvent,
-    context: APIGatewayEventRequestContext
+    ///context: APIGatewayEventRequestContext
   ): Promise<APIGatewayProxyResult> => {
     try {
       const id = v4();
   
-      if (!verifyAlchemySig(event.headers.xalchemywork)) {
+      /**if (!verifyAlchemySig(event.headers.xalchemywork)) {
         throw new Error('Invalid sig');
-      }
+      }**/
   
       const mintInfo = {
         buildId: id,
         createdAt: new Date().toISOString(),
-        tokenId: event.body.event.data,
+        tokenId: event.body,
       };
   
       // check if we have it in mongo
@@ -29,7 +29,7 @@ import {
       // if not, add to mongo
   
       return formatJSONResponse({
-        buildInfo,
+        mintInfo,
       });
     } catch (e) {
       return formatJSONResponse({
