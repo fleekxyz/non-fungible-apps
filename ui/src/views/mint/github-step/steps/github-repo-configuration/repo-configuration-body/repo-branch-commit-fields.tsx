@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Flex, Form, Spinner } from '@/components';
+import { Flex, Form, Icon, Spinner } from '@/components';
 import {
   githubActions,
   GithubClient,
@@ -107,7 +107,14 @@ export const RepoBranchCommitFields: React.FC = () => {
         >
           {({ Field, Options }) => (
             <>
-              <Field>{(selected) => selected?.name || 'Select a branch'}</Field>
+              <Field>
+                {(selected) => (
+                  <>
+                    <Icon name="branch" />
+                    {selected?.name || 'Select a branch'}
+                  </>
+                )}
+              </Field>
 
               <Options>{(item) => item.name}</Options>
             </>

@@ -68,7 +68,6 @@ export const ComboboxStyles = {
 
     [`${IconStyles.Container}`]: {
       fontSize: '1.5em',
-      color: '$slate8',
     },
 
     '&:focus-within': {
