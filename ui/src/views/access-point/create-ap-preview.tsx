@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import {
   Button,
@@ -18,26 +18,42 @@ import { CreateAccessPoint } from './create-ap.context';
 import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
 import { SelectedNFA } from './ap-form-step/create-ap.form-body';
 import { useAccount, useEnsName } from 'wagmi';
+import { AppLog } from '@/utils';
+
+export const AccessPointDataFragment: React.FC = () => {
+  const { address } = useAccount();
+  const { data: ensName, isLoading: isLoadingEns } = useEnsName({ address });
+
+  const {
+    form: {
+      domain: {
+        value: [domain],
+      },
+    },
+  } = useAccessPointFormContext();
+
+  if (isLoadingEns) return <div>Loading...</div>; //TODO replace with spinner
+
+  return (
+    <>
+      <SelectedNFA />
+      <DisplayText label="Owner" value={ensName || address || ''} />
+      <DisplayText label="Frontend URL" value={domain} />
+    </>
+  );
+};
 
 export const CreateAccessPointPreview: React.FC = () => {
   const { prevStep } = Stepper.useContext();
-  const { address } = useAccount();
-  const {
-    data: ensName,
-    isError,
-    isLoading: isLoadingEns,
-  } = useEnsName({ address });
 
   const {
     prepare: { status: prepareStatus, data: prepareData, error: prepareError },
     write: { status: writeStatus, write },
     transaction: { status: transactionStatus },
   } = CreateAccessPoint.useTransactionContext();
+
   const {
     form: {
-      domain: {
-        value: [domain],
-      },
       isValid: [isValid],
     },
   } = useAccessPointFormContext();
@@ -76,7 +92,17 @@ export const CreateAccessPointPreview: React.FC = () => {
     [prepareStatus, writeStatus, transactionStatus]
   );
 
-  if (isLoadingEns) return <div>Loading...</div>; //TODO replace with spinner
+  console.log(prepareStatus);
+  const error = useMemo(
+    () => [writeStatus, transactionStatus].some((status) => status === 'error'),
+    [writeStatus, transactionStatus]
+  );
+
+  useEffect(() => {
+    if (error) {
+      AppLog.errorToast('An error occurred while minting the NFA');
+    }
+  }, [error]);
 
   return (
     <Card.Container css={{ width: '$107h' }}>
@@ -103,9 +129,7 @@ export const CreateAccessPointPreview: React.FC = () => {
       />
       <Card.Body>
         <Flex css={{ flexDirection: 'column', gap: '$6' }}>
-          <SelectedNFA />
-          <DisplayText label="Owner" value={ensName || address || ''} />
-          <DisplayText label="Frontend URL" value={domain} />
+          <AccessPointDataFragment />
           <Text>{message}</Text>
           <Button
             isLoading={isLoading}
@@ -114,7 +138,7 @@ export const CreateAccessPointPreview: React.FC = () => {
             variant="solid"
             onClick={write}
           >
-            Continue
+            Create
           </Button>
         </Flex>
       </Card.Body>

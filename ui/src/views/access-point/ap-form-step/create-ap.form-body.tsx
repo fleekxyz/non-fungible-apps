@@ -28,11 +28,19 @@ export const SelectedNFA: React.FC = () => {
         justifyContent: 'space-between',
       }}
     >
-      <Flex css={{ alignItems: 'center' }}>
+      <Flex css={{ alignItems: 'center', maxWidth: '65%' }}>
         <NFAIcon image={nfa.logo} color={nfa.color} />
-        <span>{nfa.name}</span>
+        <Text
+          css={{
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+          }}
+        >
+          {nfa.name}
+        </Text>
       </Flex>
-      <CardTag>Selected NFA</CardTag>
+      <CardTag css={{ minWidth: '$28' }}>Selected NFA</CardTag>
     </Flex>
   );
 };
@@ -100,9 +108,12 @@ export const CreateAccessPointFormBody: React.FC = () => {
 
   const handleContinueClick = (): void => {
     if (nfa && domain) {
-      //TODO add try-catch
-      setArgs([Number(nfa.tokenId), domain, { value: billing }]);
-      nextStep();
+      try {
+        setArgs([Number(nfa.tokenId), domain, { value: billing }]);
+        nextStep();
+      } catch (e) {
+        AppLog.errorToast('Error setting transaction arguments');
+      }
     }
   };
 

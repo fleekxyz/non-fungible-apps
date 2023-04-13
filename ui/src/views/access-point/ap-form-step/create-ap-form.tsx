@@ -1,4 +1,4 @@
-import { Card, Grid, Icon, IconButton, Stepper } from '@/components';
+import { Card, Flex, Icon, IconButton, Stepper } from '@/components';
 
 import { CreateAccessPointFormBody } from './create-ap.form-body';
 
@@ -29,13 +29,14 @@ export const CreateAccessPointForm: React.FC = () => {
         }
       />
       <Card.Body>
-        <Grid
+        <Flex
           css={{
-            rowGap: '$6',
+            flexDirection: 'column',
+            gap: '$6',
           }}
         >
           <CreateAccessPointFormBody />
-        </Grid>
+        </Flex>
       </Card.Body>
     </Card.Container>
   );

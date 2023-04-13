@@ -5,13 +5,20 @@ import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context
 import { CreateAccessPointForm } from './ap-form-step/create-ap-form';
 import { CreateAccessPointPreview } from './create-ap-preview';
 import { CNAMEStep } from './cname-step/cname-step';
+import { CreateAccessPoint } from './create-ap.context';
+import { CreateAccessPointSuccess } from './create-ap-success';
 
 export const CreateApStepper: React.FC = () => {
+  const {
+    transaction: { isSuccess },
+  } = CreateAccessPoint.useTransactionContext();
   const {
     form: {
       isValid: [, setIsValid],
     },
   } = useAccessPointFormContext();
+
+  if (isSuccess) return <CreateAccessPointSuccess />;
 
   return (
     <Stepper.Root initialStep={1}>
