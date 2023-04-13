@@ -16,7 +16,7 @@ export abstract class InputFileStyles {
     transition: 'border-color 0.2s ease-in-out',
     borderWidth: '$default',
     borderRadius: '$lg',
-    zIndex: '$docked',
+    zIndex: '$base',
 
     '&:hover': {
       borderColor: '$gray8',
