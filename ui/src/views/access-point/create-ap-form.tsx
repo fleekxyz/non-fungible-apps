@@ -11,7 +11,7 @@ export const CreateAccessPointForm: React.FC = () => {
   return (
     <Card.Container css={{ width: '$107h' }}>
       <Card.Heading
-        title={`Create Access Point - ${nfa.label || ''}`}
+        title={`Create Access Point - ${nfa?.id || ''}`}
         leftIcon={
           <IconButton
             aria-label="Add"
