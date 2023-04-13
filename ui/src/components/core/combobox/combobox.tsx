@@ -243,7 +243,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
             <div className="absolute max-h-60 mt-2 w-full z-10 overflow-auto rounded-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
               <ComboboxInput onChange={handleInputChange} onBlur={onBlur} />
               <Separator />
-              <ComboboxLib.Options className="mt-1">
+              <ComboboxLib.Options className="mt-1 z-20">
                 {[...autocompleteItems, ...filteredItems].length === 0 ||
                 filteredItems === undefined ? (
                   <NoResults />
