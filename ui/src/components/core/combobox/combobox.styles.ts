@@ -1,4 +1,4 @@
-import { Combobox as HCombobox } from '@headlessui/react';
+import { Combobox as HeadlessCombobox } from '@headlessui/react';
 
 import { dripStitches } from '@/theme';
 
@@ -21,7 +21,7 @@ export const ComboboxStyles = {
     },
   }),
 
-  Option: styled(HCombobox.Option, {
+  Option: styled(HeadlessCombobox.Option, {
     width: '100%',
     position: 'relative',
     display: 'flex',
@@ -43,7 +43,7 @@ export const ComboboxStyles = {
     },
   }),
 
-  Options: styled(HCombobox.Options, {
+  Options: styled(HeadlessCombobox.Options, {
     display: 'flex',
     flexDirection: 'column',
     position: 'absolute',
@@ -59,7 +59,7 @@ export const ComboboxStyles = {
     zIndex: 10,
   }),
 
-  Field: styled(HCombobox.Button, InputStyled, {
+  Field: styled(HeadlessCombobox.Button, InputStyled, {
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
@@ -84,7 +84,7 @@ export const ComboboxStyles = {
     },
   }),
 
-  Input: styled(HCombobox.Input, {
+  Input: styled(HeadlessCombobox.Input, {
     width: '100%',
     color: '$slate11',
     backgroundColor: 'transparent',

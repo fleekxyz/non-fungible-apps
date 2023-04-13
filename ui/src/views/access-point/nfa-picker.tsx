@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useMemo } from 'react';
 
-import { ComboboxFactory } from '@/components';
+import { Combobox } from '@/components';
 import { getLatestNFAsDocument } from '@/graphclient';
 import { AppLog } from '@/utils';
 

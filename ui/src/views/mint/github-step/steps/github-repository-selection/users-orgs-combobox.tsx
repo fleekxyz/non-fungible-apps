@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Avatar, ComboboxFactory, Icon } from '@/components';
+import { Avatar, Combobox, Icon } from '@/components';
 import {
   githubActions,
   GithubClient,

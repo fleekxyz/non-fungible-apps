@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ComboboxFactory, Flex, Icon, IconName } from '@/components';
+import { Combobox, Flex, Icon, IconName } from '@/components';
 
 type Item = { id: number; label: string; icon: IconName };
 

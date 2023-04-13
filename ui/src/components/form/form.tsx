@@ -4,7 +4,7 @@ import React, { forwardRef, useMemo, useState } from 'react';
 import { hasValidator } from '@/utils';
 import { fileToBase64 } from '@/views/mint/nfa-step/form-step/form.utils';
 
-import { ColorPicker, ComboboxFactory } from '../core';
+import { ColorPicker, Combobox } from '../core';
 import { Input, LogoFileInput, Textarea } from '../core/input';
 import {
   FormProvider,
@@ -291,10 +291,7 @@ export namespace Form {
     'value' | 'error'
   >;
 
-  export type ComboboxProps<T> = Omit<
-    ComboboxFactory.RootProps<T>,
-    'selected'
-  > & {
+  export type ComboboxProps<T> = Omit<Combobox.RootProps<T>, 'selected'> & {
     handleValue: (item: T) => string;
     onChange?: (item: T) => void;
   };

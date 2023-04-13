@@ -1,5 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Combobox, ComboboxInputProps } from '@headlessui/react';
+import {
+  Combobox as HeadlessCombobox,
+  ComboboxInputProps,
+} from '@headlessui/react';
 import React, { useMemo, useState } from 'react';
 
 import { Spinner } from '@/components/spinner';
@@ -15,19 +17,19 @@ const LoadingMessage = (
   </CS.Message>
 );
 
-type BuiltElements<T> = ComboboxFactory.Elements<T> & {
-  Provider: React.Provider<ComboboxFactory.Context<T>>;
-  useContext: () => ComboboxFactory.Context<T>;
+type BuiltElements<T> = Combobox.Elements<T> & {
+  Provider: React.Provider<Combobox.Context<T>>;
+  useContext: () => Combobox.Context<T>;
 };
 
 function buildElements<T>(): BuiltElements<T> {
-  const [Provider, useContext] = createContext<ComboboxFactory.Context<T>>({
+  const [Provider, useContext] = createContext<Combobox.Context<T>>({
     name: 'ComboboxContext',
     hookName: 'useComboboxContext',
     providerName: 'ComboboxProvider',
   });
 
-  function Input(props: ComboboxFactory.InputProps<T>): JSX.Element {
+  function Input(props: Combobox.InputProps<T>): JSX.Element {
     const {
       query: [, setQuery],
     } = useContext();
@@ -44,7 +46,7 @@ function buildElements<T>(): BuiltElements<T> {
     disableSearch,
     children,
     ...props
-  }: ComboboxFactory.OptionsProps<T>): JSX.Element {
+  }: Combobox.OptionsProps<T>): JSX.Element {
     const {
       query: [query],
       loading,
@@ -90,10 +92,7 @@ function buildElements<T>(): BuiltElements<T> {
     );
   }
 
-  function Field({
-    children,
-    ...props
-  }: ComboboxFactory.FieldProps<T>): JSX.Element {
+  function Field({ children, ...props }: Combobox.FieldProps<T>): JSX.Element {
     const {
       selected: [selected],
     } = useContext();
@@ -113,21 +112,26 @@ function buildElements<T>(): BuiltElements<T> {
   };
 }
 
-export function ComboboxFactory<T>({
+export function Combobox<T>({
   children,
   selected,
   isLoading: loading = false,
   items,
   queryFilter,
   ...props
-}: ComboboxFactory.RootProps<T>): JSX.Element {
+}: Combobox.RootProps<T>): JSX.Element {
   const [value, setValue] = selected;
   const query = useState('');
 
   const { Provider, ...Elements } = useMemo(() => buildElements<T>(), []);
 
   return (
-    <Combobox as={CS.Wrapper} value={value} onChange={setValue} {...props}>
+    <HeadlessCombobox
+      as={CS.Wrapper}
+      value={value}
+      onChange={setValue}
+      {...props}
+    >
       {({ open }) => (
         <Provider
           value={{
@@ -142,11 +146,11 @@ export function ComboboxFactory<T>({
           {children(Elements)}
         </Provider>
       )}
-    </Combobox>
+    </HeadlessCombobox>
   );
 }
 
-export namespace ComboboxFactory {
+export namespace Combobox {
   export type Context<T> = {
     selected: [T | undefined, (newState: T | undefined) => void];
     query: ReactState<string>;
