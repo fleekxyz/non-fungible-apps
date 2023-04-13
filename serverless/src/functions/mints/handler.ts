@@ -17,11 +17,15 @@ import {
       /**if (!verifyAlchemySig(event.headers.xalchemywork)) {
         throw new Error('Invalid sig');
       }**/
+
+      if (event.body == undefined) {
+        throw new Error('Undefined data');
+      }      
   
       const mintInfo = {
         buildId: id,
         createdAt: new Date().toISOString(),
-        tokenId: event.body,
+        body: JSON.parse(event.body),
       };
   
       // check if we have it in mongo
