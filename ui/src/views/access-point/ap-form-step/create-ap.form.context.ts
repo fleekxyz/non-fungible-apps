@@ -5,7 +5,7 @@ import { createContext, StringValidators } from '@/utils';
 
 export type CreateAccessPointFormContext = {
   form: {
-    appName: FormField;
+    domain: FormField;
     isValid: ReactState<boolean>;
   };
 };
@@ -20,9 +20,9 @@ export const [CreateAccessPointFormProvider, useAccessPointFormContext] =
 export const useAccessPointFormContextInit =
   (): CreateAccessPointFormContext => ({
     form: {
-      appName: useFormField('appName', [
+      domain: useFormField('domain', [
         StringValidators.required,
-        StringValidators.maxLength(50),
+        StringValidators.isUrl,
       ]),
       isValid: useState(false),
     },

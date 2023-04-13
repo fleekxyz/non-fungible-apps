@@ -1,9 +1,10 @@
 import { Form, Step, Stepper } from '@/components';
 
 import { WalletStep } from '../mint/wallet-step';
-import { useAccessPointFormContext } from './create-ap.form.context';
-import { CreateAccessPointForm } from './create-ap-form';
+import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
+import { CreateAccessPointForm } from './ap-form-step/create-ap-form';
 import { CreateAccessPointPreview } from './create-ap-preview';
+import { CNAMEStep } from './cname-step/cname-step';
 
 export const CreateApStepper: React.FC = () => {
   const {
@@ -11,8 +12,9 @@ export const CreateApStepper: React.FC = () => {
       isValid: [, setIsValid],
     },
   } = useAccessPointFormContext();
+
   return (
-    <Stepper.Root initialStep={1}>
+    <Stepper.Root initialStep={3}>
       <Form.Root onValidationChange={setIsValid}>
         <Stepper.Container>
           <Stepper.Step>
@@ -22,13 +24,19 @@ export const CreateApStepper: React.FC = () => {
           </Stepper.Step>
 
           <Stepper.Step>
-            <Step header="Set Access Point">
+            <Step header="Enter the domain you  want to host the NFA">
               <CreateAccessPointForm />
             </Step>
           </Stepper.Step>
 
           <Stepper.Step>
-            <Step header="Create Access Point">
+            <Step header="Add a CNAME record to your DNS provider">
+              <CNAMEStep />
+            </Step>
+          </Stepper.Step>
+
+          <Stepper.Step>
+            <Step header="Review your DyDx hosted frontend and confirm">
               <CreateAccessPointPreview />
             </Step>
           </Stepper.Step>

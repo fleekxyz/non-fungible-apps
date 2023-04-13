@@ -11,8 +11,8 @@ import {
   EnsDomainField,
   LogoField,
 } from './fields';
-import { parseColorToNumber } from './form.utils';
 import { useMintFormContext } from './mint-form.context';
+import { parseColorToNumber } from '@/utils/color';
 
 export const MintFormStep: React.FC = () => {
   const {

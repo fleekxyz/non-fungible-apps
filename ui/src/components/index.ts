@@ -7,3 +7,6 @@ export * from './toast';
 export * from './step';
 export * from './nfa-card';
 export * from './nfa-preview';
+export * from './card-tag';
+export * from './nfa-icon';
+export * from './display-text';

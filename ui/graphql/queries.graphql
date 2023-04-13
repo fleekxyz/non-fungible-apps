@@ -42,6 +42,8 @@ query getNFA($id: ID!) {
   token(id: $id) {
     tokenId
     name
+    logo
+    color
   }
 }
 

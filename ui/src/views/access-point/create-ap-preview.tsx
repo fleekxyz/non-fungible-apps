@@ -4,8 +4,8 @@ import { useMemo } from 'react';
 import {
   Button,
   Card,
+  DisplayText,
   Flex,
-  Grid,
   Icon,
   IconButton,
   Stepper,
@@ -14,10 +14,19 @@ import { useTransactionCost } from '@/hooks';
 import { FleekERC721 } from '@/integrations';
 
 import { CreateAccessPoint } from './create-ap.context';
-import { useAccessPointFormContext } from './create-ap.form.context';
+import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
+import { SelectedNFA } from './ap-form-step/create-ap.form-body';
+import { useAccount, useEnsName } from 'wagmi';
 
 export const CreateAccessPointPreview: React.FC = () => {
   const { prevStep } = Stepper.useContext();
+  const { address } = useAccount();
+  const {
+    data: ensName,
+    isError,
+    isLoading: isLoadingEns,
+  } = useEnsName({ address });
+
   const {
     prepare: { status: prepareStatus, data: prepareData, error: prepareError },
     write: { status: writeStatus, write },
@@ -25,12 +34,12 @@ export const CreateAccessPointPreview: React.FC = () => {
   } = CreateAccessPoint.useTransactionContext();
   const {
     form: {
-      appName: {
-        value: [appName],
+      domain: {
+        value: [domain],
       },
+      isValid: [isValid],
     },
   } = useAccessPointFormContext();
-  const { nfa } = CreateAccessPoint.useContext();
 
   const [cost, currency, isCostLoading] = useTransactionCost(
     prepareData?.request.value,
@@ -66,10 +75,12 @@ export const CreateAccessPointPreview: React.FC = () => {
     [prepareStatus, writeStatus, transactionStatus]
   );
 
+  if (isLoadingEns) return <div>Loading...</div>; //TODO replace with spinner
+
   return (
     <Card.Container css={{ width: '$107h' }}>
       <Card.Heading
-        title={`Create Access Point ${nfa.label || ''}`}
+        title="Review Details"
         leftIcon={
           <IconButton
             aria-label="Add"
@@ -90,26 +101,20 @@ export const CreateAccessPointPreview: React.FC = () => {
         }
       />
       <Card.Body>
-        <Grid
-          css={{
-            rowGap: '$6',
-          }}
-        >
-          <Flex css={{ flexDirection: 'column' }}>
-            <span>NFA: {nfa.value}</span>
-            <span>{appName}</span>
-            <span className="text-slate11 text-sm">{message}</span>
-          </Flex>
+        <Flex css={{ flexDirection: 'column', gap: '$6' }}>
+          <SelectedNFA />
+          <DisplayText label="Owner" value={ensName || address || ''} />
+          <DisplayText label="Frontend URL" value={domain} />
           <Button
-            disabled={!!prepareError || !nfa}
+            disabled={!isValid}
+            isLoading={isLoading}
             colorScheme="blue"
             variant="solid"
             onClick={write}
-            isLoading={isLoading}
           >
-            Create
+            Continue
           </Button>
-        </Grid>
+        </Flex>
       </Card.Body>
     </Card.Container>
   );

@@ -3,13 +3,39 @@ import { ethers } from 'ethers';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Button, Flex, Form, Spinner, Stepper } from '@/components';
+import {
+  Button,
+  CardTag,
+  Flex,
+  Form,
+  NFAIcon,
+  Spinner,
+  Stepper,
+  Text,
+} from '@/components';
 import { getNFADocument } from '@/graphclient';
 import { AppLog } from '@/utils';
 
-import { CreateAccessPoint } from './create-ap.context';
+import { CreateAccessPoint } from '../create-ap.context';
 import { useAccessPointFormContext } from './create-ap.form.context';
-import { NfaPicker } from './nfa-picker';
+
+export const SelectedNFA: React.FC = () => {
+  const { nfa } = CreateAccessPoint.useContext();
+
+  return (
+    <Flex
+      css={{
+        justifyContent: 'space-between',
+      }}
+    >
+      <Flex css={{ alignItems: 'center' }}>
+        <NFAIcon image={nfa.logo} color={nfa.color} />
+        <span>{nfa.name}</span>
+      </Flex>
+      <CardTag>Selected NFA</CardTag>
+    </Flex>
+  );
+};
 
 export const CreateAccessPointFormBody: React.FC = () => {
   const { id } = useParams();
@@ -19,15 +45,15 @@ export const CreateAccessPointFormBody: React.FC = () => {
 
   const {
     form: {
-      appName: {
-        value: [appName],
+      domain: {
+        value: [domain],
       },
       isValid: [isValid],
     },
   } = useAccessPointFormContext();
 
   const {
-    form: { appName: appNameContext },
+    form: { domain: domainContext },
   } = useAccessPointFormContext();
 
   const {
@@ -50,8 +76,8 @@ export const CreateAccessPointFormBody: React.FC = () => {
   useEffect(() => {
     if (nfaData) {
       if (nfaData.token && id) {
-        const { name } = nfaData.token;
-        setNfa({ value: id, label: name });
+        const { name, tokenId, logo, color } = nfaData.token;
+        setNfa({ name, tokenId, logo, color });
       } else {
         AppLog.errorToast("We couldn't find the NFA you are looking for");
       }
@@ -73,19 +99,23 @@ export const CreateAccessPointFormBody: React.FC = () => {
   }
 
   const handleContinueClick = (): void => {
-    if (nfa && appName) {
-      setArgs([Number(nfa.value), appName, { value: billing }]);
+    if (nfa && domain) {
+      setArgs([Number(nfa.name), domain, { value: billing }]);
       nextStep();
     }
   };
 
   return (
-    <>
-      {/* TODO will have to do some changes on the Form.Combobox if we use this component for the NFA picker */}
-      {id === undefined && <NfaPicker />}
-      <Form.Field context={appNameContext}>
-        <Form.Label>App Name</Form.Label>
-        <Form.Input />
+    <Flex css={{ flexDirection: 'column', gap: '$6' }}>
+      <SelectedNFA />
+      <Text css={{ fontSize: '$sm', color: '$slate11' }}>
+        Enter the domain you want to host the NFA. You will need access to the
+        DNS settings in the next step.
+      </Text>
+      <Form.Field context={domainContext}>
+        <Form.Label>Domain</Form.Label>
+        <Form.Input placeholder="mydomain.com" />
+        <Form.Overline />
       </Form.Field>
       <Button
         disabled={!isValid}
@@ -95,6 +125,6 @@ export const CreateAccessPointFormBody: React.FC = () => {
       >
         Continue
       </Button>
-    </>
+    </Flex>
   );
 };

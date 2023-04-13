@@ -1,14 +1,20 @@
 import { useState } from 'react';
 
-import { ComboboxItem } from '@/components';
 import { EthereumHooks } from '@/integrations';
 import { useFleekERC721Billing } from '@/store';
 import { AppLog, createContext, pushToast } from '@/utils';
 
+export type NFA = {
+  tokenId: string;
+  name: string;
+  logo: string;
+  color: number;
+};
+
 export type AccessPointContext = {
   billing: string | undefined;
-  nfa: ComboboxItem;
-  setNfa: (nfa: ComboboxItem) => void;
+  nfa: NFA;
+  setNfa: (nfa: NFA) => void;
 };
 
 const [CreateAPProvider, useContext] = createContext<AccessPointContext>({
@@ -29,7 +35,12 @@ export abstract class CreateAccessPoint {
     children,
   }) => {
     const [billing] = useFleekERC721Billing('AddAccessPoint');
-    const [nfa, setNfa] = useState<ComboboxItem>({} as ComboboxItem);
+    const [nfa, setNfa] = useState<NFA>({
+      tokenId: '',
+      name: '',
+      logo: '',
+      color: 0,
+    });
 
     const value = {
       billing,
@@ -42,12 +53,12 @@ export abstract class CreateAccessPoint {
         <TransactionProvider
           config={{
             transaction: {
-              onSuccess: (data) => {
+              onSuccess: (data: any) => {
                 AppLog.info('Transaction:', data);
                 pushToast('success', 'Your transaction was successful!');
               },
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              onError: (error) => {
+              onError: (error: any) => {
                 AppLog.errorToast(
                   'There was an error trying to create the Access Point. Please try again'
                 );
