@@ -16,38 +16,39 @@ const Items: Item[] = [
 
 const NewComboboxTest = (): JSX.Element => {
   const selected = useState<Item>();
+  const queryFilter = (query: string, item: Item): boolean =>
+    item.label.toLowerCase().includes(query.toLowerCase());
 
   return (
     <div style={{ position: 'relative', width: '600px', alignSelf: 'center' }}>
-      <ComboboxFactory.Root
+      <ComboboxFactory
         unattached
+        items={Items}
         selected={selected}
+        queryFilter={queryFilter}
         css={{ width: '400px' }}
       >
-        <ComboboxFactory.Field<Item>>
-          {(item) => (
-            <>
-              <Icon name={item?.icon || 'search'} />
-              {item?.label || 'Select an option'}
-            </>
-          )}
-        </ComboboxFactory.Field>
+        {({ Field, Options }) => (
+          <>
+            <Field>
+              {(selected) => (
+                <>
+                  <Icon name={selected?.icon || 'search'} />
+                  {selected?.label || 'Select an option'}
+                </>
+              )}
+            </Field>
 
-        <ComboboxFactory.Options
-          items={Items}
-          search
-          filter={(query, item) =>
-            item.label.toLowerCase().includes(query.toLowerCase())
-          }
-          identifier={(item) => item.label}
-        >
-          {(item) => (
-            <>
-              <Icon name={item.icon} /> {item.label}
-            </>
-          )}
-        </ComboboxFactory.Options>
-      </ComboboxFactory.Root>
+            <Options>
+              {(item) => (
+                <>
+                  <Icon name={item.icon} /> {item.label}
+                </>
+              )}
+            </Options>
+          </>
+        )}
+      </ComboboxFactory>
     </div>
   );
 };

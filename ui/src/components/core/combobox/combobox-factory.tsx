@@ -15,64 +15,42 @@ const LoadingMessage = (
   </CS.Message>
 );
 
-type ComboboxItem = {
-  label: string;
-  value: string;
+type BuiltElements<T> = ComboboxFactory.Elements<T> & {
+  Provider: React.Provider<ComboboxFactory.Context<T>>;
+  useContext: () => ComboboxFactory.Context<T>;
 };
 
-const [Provider, useContext] = createContext<ComboboxFactory.Context>({
-  name: 'ComboboxContext',
-  hookName: 'useComboboxContext',
-  providerName: 'ComboboxProvider',
-});
+function buildElements<T>(): BuiltElements<T> {
+  const [Provider, useContext] = createContext<ComboboxFactory.Context<T>>({
+    name: 'ComboboxContext',
+    hookName: 'useComboboxContext',
+    providerName: 'ComboboxProvider',
+  });
 
-const defaultIdentifier = (item: ComboboxItem): string => item.label;
-const defaultFilter = (query: string, item: ComboboxItem): boolean =>
-  item.label.toLowerCase().includes(query.toLowerCase());
+  function Input(props: ComboboxFactory.InputProps<T>): JSX.Element {
+    const {
+      query: [, setQuery],
+    } = useContext();
 
-export const ComboboxFactory = {
-  useContext,
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+      setQuery(event.target.value);
+      if (props.onChange) props.onChange(event);
+    };
 
-  Root<T = ComboboxItem>({
+    return <CS.Input {...props} onChange={onChange} />;
+  }
+
+  function Options({
+    disableSearch,
     children,
-    selected,
-    isLoading: loading = false,
     ...props
-  }: ComboboxFactory.RootProps<T>): JSX.Element {
-    const [value, setValue] = selected;
-    const query = useState('');
-
-    return (
-      <Combobox as={CS.Wrapper} value={value} onChange={setValue} {...props}>
-        {({ open }) => (
-          <Provider
-            value={{
-              selected: selected as ReactState<ComboboxItem | undefined>,
-              query,
-              loading,
-              open,
-            }}
-          >
-            {children}
-          </Provider>
-        )}
-      </Combobox>
-    );
-  },
-
-  Options<T = ComboboxItem>({
-    items,
-    search,
-    children,
-    // @ts-ignore
-    filter = defaultFilter,
-    // @ts-ignore
-    identifier = defaultIdentifier,
   }: ComboboxFactory.OptionsProps<T>): JSX.Element {
     const {
       query: [query],
       loading,
       selected: [selected],
+      items,
+      queryFilter,
     } = useContext();
 
     const [
@@ -85,52 +63,34 @@ export const ComboboxFactory = {
     );
 
     const filteredItems = useMemo(
-      () => items.filter((item) => filter(query, item)),
-      [items, query, filter]
+      () => items.filter((item) => queryFilter(query, item)),
+      [items, query, queryFilter]
     );
 
     return (
-      <CS.Options>
-        {search && (
+      <CS.Options {...props}>
+        {!disableSearch && (
           <CS.InnerSearchContainer>
             <Icon name="search" />
-            <ComboboxFactory.Input placeholder="Search..." />
+            <Input placeholder="Search..." />
           </CS.InnerSearchContainer>
         )}
 
-        {filteredItems.map((item) => {
-          const id = identifier(item);
-          const isSelected = selected === id;
-
-          return (
-            <CS.Option key={id} value={item}>
-              {optionRenderer(item, isSelected)}
-              {isSelected && <CS.SelectedIcon name="check" />}
-            </CS.Option>
-          );
-        })}
+        {filteredItems.map((item) => (
+          <CS.Option key={JSON.stringify(item)} value={item}>
+            {optionRenderer(item, selected === item)}
+            {selected === item && <CS.SelectedIcon name="check" />}
+          </CS.Option>
+        ))}
 
         {!loading && filteredItems.length === 0 && EmptyRender}
 
         {loading && LoadingRender}
       </CS.Options>
     );
-  },
+  }
 
-  Input(props: ComboboxFactory.InputProps): JSX.Element {
-    const {
-      query: [, setQuery],
-    } = useContext();
-
-    const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-      setQuery(event.target.value);
-      if (props.onChange) props.onChange(event);
-    };
-
-    return <CS.Input {...props} onChange={onChange} />;
-  },
-
-  Field<T = ComboboxItem>({
+  function Field({
     children,
     ...props
   }: ComboboxFactory.FieldProps<T>): JSX.Element {
@@ -139,23 +99,68 @@ export const ComboboxFactory = {
     } = useContext();
 
     return <CS.Field {...props}>{children(selected as T)}</CS.Field>;
-  },
+  }
 
-  Message: CS.Message,
-};
+  const Message = CS.Message;
+
+  return {
+    Provider,
+    useContext,
+    Options,
+    Input,
+    Field,
+    Message,
+  };
+}
+
+export function ComboboxFactory<T>({
+  children,
+  selected,
+  isLoading: loading = false,
+  items,
+  queryFilter,
+  ...props
+}: ComboboxFactory.RootProps<T>): JSX.Element {
+  const [value, setValue] = selected;
+  const query = useState('');
+
+  const { Provider, ...Elements } = useMemo(() => buildElements<T>(), []);
+
+  return (
+    <Combobox as={CS.Wrapper} value={value} onChange={setValue} {...props}>
+      {({ open }) => (
+        <Provider
+          value={{
+            selected,
+            query,
+            loading,
+            open,
+            items,
+            queryFilter,
+          }}
+        >
+          {children(Elements)}
+        </Provider>
+      )}
+    </Combobox>
+  );
+}
 
 export namespace ComboboxFactory {
-  export type Context = {
-    selected: ReactState<ComboboxItem | undefined>;
+  export type Context<T> = {
+    selected: ReactState<T | undefined>;
     query: ReactState<string>;
     loading: boolean;
     open: boolean;
+    items: T[];
+    queryFilter: (query: string, item: T) => boolean;
   };
 
-  type BaseOptionsProps<T> = {
-    search?: boolean;
-    items: T[];
-
+  export type OptionsProps<T> = Omit<
+    React.ComponentPropsWithRef<typeof CS.Options>,
+    'children'
+  > & {
+    disableSearch?: boolean;
     children:
       | ((item: T, selected: boolean) => React.ReactNode)
       | [
@@ -165,30 +170,28 @@ export namespace ComboboxFactory {
         ];
   };
 
-  export type OptionsProps<T = ComboboxItem> = T extends ComboboxItem
-    ? BaseOptionsProps<T>
-    : BaseOptionsProps<T> & {
-        filter: (query: string, item: T) => boolean;
-        identifier: (item: T) => string;
-      };
+  export type InputProps<T> = ComboboxInputProps<'input', T | undefined>;
 
-  export type RootProps<T = ComboboxItem> = Omit<
-    React.ComponentPropsWithRef<typeof CS.Wrapper>,
-    'defaultValue' | 'onChange'
-  > & {
-    selected: ReactState<T | undefined>;
-    isLoading?: boolean;
-  };
-
-  export type InputProps<T = ComboboxItem> = ComboboxInputProps<
-    'input',
-    T | undefined
-  >;
-
-  export type FieldProps<T = ComboboxItem> = Omit<
+  export type FieldProps<T> = Omit<
     React.ComponentPropsWithRef<typeof CS.Field>,
     'children'
   > & {
     children: (item: T | undefined) => React.ReactElement | React.ReactNode;
   };
+
+  export type Elements<T> = {
+    Options: React.FC<OptionsProps<T>>;
+    Input: React.FC<InputProps<T>>;
+    Field: React.FC<FieldProps<T>>;
+    Message: React.FC;
+  };
+
+  export type RootProps<T> = Omit<
+    React.ComponentPropsWithRef<typeof CS.Wrapper>,
+    'defaultValue' | 'onChange' | 'children'
+  > &
+    Pick<Context<T>, 'selected' | 'items' | 'queryFilter'> & {
+      isLoading?: boolean;
+      children: (elements: Elements<T>) => React.ReactNode;
+    };
 }
