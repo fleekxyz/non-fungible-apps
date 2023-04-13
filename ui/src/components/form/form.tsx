@@ -4,7 +4,7 @@ import React, { forwardRef, useMemo, useState } from 'react';
 import { hasValidator } from '@/utils';
 import { fileToBase64 } from '@/views/mint/nfa-step/form-step/form.utils';
 
-import { ColorPicker, Combobox, ComboboxItem } from '../core';
+import { ColorPicker, ComboboxFactory } from '../core';
 import { Input, LogoFileInput, Textarea } from '../core/input';
 import {
   FormProvider,
@@ -134,7 +134,10 @@ export abstract class Form {
     }
   );
 
-  static readonly Combobox: React.FC<Form.ComboboxProps> = (props) => {
+  static readonly Combobox = <T,>({
+    handleValue,
+    ...props
+  }: Form.ComboboxProps<T>): JSX.Element => {
     const {
       id,
       validators,
@@ -142,21 +145,16 @@ export abstract class Form {
       validationEnabled: [validationEnabled, setValidationEnabled],
     } = useFormFieldContext();
 
-    const comboboxValue = useMemo(() => {
-      // if it's with autocomplete maybe won't be on the items list
-      const item = props.items.find((item) => item.label === value);
-      if (props.withAutocomplete && !item && value !== '') {
-        //return the selected value if the item doesn't exist
-        return { label: value, value: value };
-      }
+    const selected = useMemo(() => {
+      const item = props.items.find((item) => handleValue(item) === value);
       return item;
-    }, [props.items, props.withAutocomplete, value]);
+    }, [props.items, value, handleValue]);
 
     const isValid = useFormFieldValidatorValue(id, validators, value);
 
-    const handleComboboxChange = (option: ComboboxItem): void => {
+    const setSelected = (option: T): void => {
       if (props.onChange) props.onChange(option);
-      setValue(option.label);
+      setValue(handleValue(option));
     };
 
     const handleComboboxBlur = (): void => {
@@ -164,10 +162,9 @@ export abstract class Form {
     };
 
     return (
-      <Combobox
+      <ComboboxFactory
         {...props}
-        onChange={handleComboboxChange}
-        selectedValue={comboboxValue || ({} as ComboboxItem)}
+        selected={[selected, setSelected]}
         onBlur={handleComboboxBlur}
         error={validationEnabled && !isValid}
       />
@@ -255,7 +252,7 @@ export abstract class Form {
 
     const handleFileInputChange = async (
       e: React.ChangeEvent<HTMLInputElement>
-    ): void => {
+    ): Promise<void> => {
       const file = e.target.files?.[0];
       if (file) {
         //Convert to string base64 to send to contract
@@ -294,12 +291,13 @@ export namespace Form {
     'value' | 'error'
   >;
 
-  export type ComboboxProps = {
-    onChange?: (option: ComboboxItem) => void;
-  } & Omit<
-    React.ComponentProps<typeof Combobox>,
-    'error' | 'selectedValue' | 'onChange'
-  >;
+  export type ComboboxProps<T> = Omit<
+    ComboboxFactory.RootProps<T>,
+    'selected'
+  > & {
+    handleValue: (item: T) => string;
+    onChange?: (item: T) => void;
+  };
 
   export type LogoFileInputProps = Omit<
     React.ComponentProps<typeof LogoFileInput>,

@@ -4,6 +4,7 @@ import { useAccount } from 'wagmi';
 
 import { getENSNamesDocument } from '@/../.graphclient';
 import { ComboboxItem, Form } from '@/components';
+import { ComboboxItemm } from '@/components/core/combobox/combobox.utils';
 import { AppLog } from '@/utils';
 
 import { useMintFormContext } from '../../mint-form.context';
@@ -52,7 +53,19 @@ export const EnsField: React.FC = () => {
   return (
     <Form.Field context={ens} css={{ flex: 1 }}>
       <Form.Label>ENS</Form.Label>
-      <Form.Combobox items={ensNames} />
+      <Form.Combobox
+        items={ensNames}
+        queryFilter={ComboboxItemm.queryFilter}
+        handleValue={ComboboxItemm.handleValue}
+      >
+        {({ Field, Options }) => (
+          <>
+            <Field>{(selected) => selected?.label || 'Select an ENS'}</Field>
+
+            <Options>{(item) => item.label}</Options>
+          </>
+        )}
+      </Form.Combobox>
       <Form.Overline />
     </Form.Field>
   );

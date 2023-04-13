@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { ComboboxItem, Flex, Form, Spinner } from '@/components';
+import { ComboboxItemm } from '@/components/core/combobox/combobox.utils';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { AppLog } from '@/utils';
 import { Mint } from '@/views/mint/mint.context';
@@ -88,10 +89,21 @@ export const RepoBranchCommitFields: React.FC = () => {
       <Form.Field context={gitBranchContext}>
         <Form.Label>Git Branch</Form.Label>
         <Form.Combobox
-          leftIcon="branch"
           items={branches}
           onChange={handleBranchChange}
-        />
+          queryFilter={ComboboxItemm.queryFilter}
+          handleValue={ComboboxItemm.handleValue}
+        >
+          {({ Field, Options }) => (
+            <>
+              <Field>
+                {(selected) => selected?.label || 'Select a branch'}
+              </Field>
+
+              <Options>{(item) => item.label}</Options>
+            </>
+          )}
+        </Form.Combobox>
       </Form.Field>
       <Form.Field context={gitCommitContext}>
         <Form.Label>Git Commit</Form.Label>
