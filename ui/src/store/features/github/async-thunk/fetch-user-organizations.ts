@@ -19,24 +19,22 @@ export const fetchUserAndOrgsThunk = createAsyncThunk(
 
       const githubClient = new GithubClient(token);
 
-      const response = await Promise.all([
+      const [userResponse, orgsResponse] = await Promise.all([
         githubClient.fetchUser(),
         githubClient.fetchOrgs(),
       ]);
-      const userResponse = response[0];
-      const orgsResponse = response[1];
 
-      let comboboxItems: GithubClient.UserData[] = [];
+      const items: GithubClient.UserData[] = [];
 
       if (userResponse) {
-        comboboxItems.push(userResponse);
+        items.push(userResponse);
       }
 
       if (orgsResponse) {
-        comboboxItems = [...comboboxItems, ...orgsResponse];
+        items.push(...orgsResponse);
       }
 
-      dispatch(githubActions.setUserAndOrgs(comboboxItems));
+      dispatch(githubActions.setUserAndOrgs(items));
     } catch (error) {
       AppLog.errorToast('We have a problem. Please try again later.');
       dispatch(githubActions.setQueryState('failed'));

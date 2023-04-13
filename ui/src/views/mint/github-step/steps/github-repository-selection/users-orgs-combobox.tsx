@@ -61,7 +61,7 @@ export const UserOrgsCombobox: React.FC = () => {
       selectedUserOrg?.value === undefined &&
       userAndOrganizations.length > 0
     ) {
-      //SET first user
+      // sets first the user
       setSelectedUserOrg(userAndOrganizations[0]);
     }
   }, [
@@ -72,7 +72,7 @@ export const UserOrgsCombobox: React.FC = () => {
   ]);
 
   return (
-    <ComboboxFactory
+    <Combobox
       unattached
       css={{ flex: 1 }}
       items={userAndOrganizations}
@@ -87,6 +87,6 @@ export const UserOrgsCombobox: React.FC = () => {
           <Options>{renderItem}</Options>
         </>
       )}
-    </ComboboxFactory>
+    </Combobox>
   );
 };

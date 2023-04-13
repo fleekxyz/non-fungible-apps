@@ -20,7 +20,7 @@ export const NfaPicker: React.FC = () => {
   }
 
   return (
-    <ComboboxFactory
+    <Combobox
       items={items}
       selected={[nfa, setNfa]}
       queryFilter={(query, item) =>
@@ -34,6 +34,6 @@ export const NfaPicker: React.FC = () => {
           <Options>{(item) => item.name}</Options>
         </>
       )}
-    </ComboboxFactory>
+    </Combobox>
   );
 };

@@ -162,7 +162,7 @@ export abstract class Form {
     };
 
     return (
-      <ComboboxFactory
+      <Combobox
         {...props}
         selected={[selected, setSelected]}
         onBlur={handleComboboxBlur}

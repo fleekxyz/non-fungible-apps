@@ -26,7 +26,7 @@ export const ComboboxTest: React.FC = () => {
         alignSelf: 'center',
       }}
     >
-      <ComboboxFactory
+      <Combobox
         unattached
         items={Items}
         selected={selected}
@@ -52,9 +52,9 @@ export const ComboboxTest: React.FC = () => {
             </Options>
           </>
         )}
-      </ComboboxFactory>
+      </Combobox>
 
-      <ComboboxFactory
+      <Combobox
         unattached
         items={Items}
         selected={selected}
@@ -80,7 +80,7 @@ export const ComboboxTest: React.FC = () => {
             </Options>
           </>
         )}
-      </ComboboxFactory>
+      </Combobox>
     </Flex>
   );
 };
