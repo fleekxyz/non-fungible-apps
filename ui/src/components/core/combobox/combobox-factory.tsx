@@ -183,7 +183,7 @@ export namespace ComboboxFactory {
     Options: React.FC<OptionsProps<T>>;
     Input: React.FC<InputProps<T>>;
     Field: React.FC<FieldProps<T>>;
-    Message: React.FC;
+    Message: typeof CS.Message;
   };
 
   export type RootProps<T> = Omit<
