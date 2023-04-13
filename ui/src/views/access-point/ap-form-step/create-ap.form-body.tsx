@@ -100,7 +100,8 @@ export const CreateAccessPointFormBody: React.FC = () => {
 
   const handleContinueClick = (): void => {
     if (nfa && domain) {
-      setArgs([Number(nfa.name), domain, { value: billing }]);
+      //TODO add try-catch
+      setArgs([Number(nfa.tokenId), domain, { value: billing }]);
       nextStep();
     }
   };
