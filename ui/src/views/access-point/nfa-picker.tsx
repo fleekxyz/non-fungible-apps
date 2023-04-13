@@ -20,13 +20,7 @@ export const NfaPicker: React.FC = () => {
   }
 
   return (
-    <Combobox
-      items={items}
-      selected={[nfa, setNfa]}
-      queryFilter={(query, item) =>
-        item.name.toLowerCase().includes(query.toLowerCase())
-      }
-    >
+    <Combobox items={items} selected={[nfa, setNfa]} queryKey={['name', 'id']}>
       {({ Field, Options }) => (
         <>
           <Field>{(selected) => selected?.name || 'Select NFA'}</Field>

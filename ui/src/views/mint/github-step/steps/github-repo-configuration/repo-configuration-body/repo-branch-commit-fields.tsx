@@ -29,33 +29,34 @@ export const RepoBranchCommitFields: React.FC = () => {
   const { repositoryName, selectedUserOrg } = Mint.useContext();
 
   useEffect(() => {
-    if (queryLoading === 'idle') {
-      dispatch(
-        githubActions.fetchBranchesThunk({
-          owner: selectedUserOrg.label,
-          repository: repositoryName.name,
-        })
-      );
-    }
-  }, [queryLoading, dispatch, selectedUserOrg.label, repositoryName.name]);
+    if (!(queryLoading === 'idle' && selectedUserOrg && repositoryName)) return;
+    dispatch(
+      githubActions.fetchBranchesThunk({
+        owner: selectedUserOrg?.label,
+        repository: repositoryName.name,
+      })
+    );
+  }, [queryLoading, dispatch, selectedUserOrg, repositoryName]);
 
   useEffect(() => {
     try {
       if (
-        queryLoading === 'success' &&
-        branches.length > 0 &&
-        repositoryName.defaultBranch !== undefined &&
-        gitBranch === '' //we only set the default branch the first time
-      ) {
-        const defaultBranch = branches.find(
-          (branch) =>
-            branch.name.toLowerCase() ===
-            repositoryName.defaultBranch.toLowerCase()
-        );
-        if (defaultBranch) {
-          setGitBranch(defaultBranch.name);
-          setGitCommit(defaultBranch.commit);
-        }
+        queryLoading !== 'success' ||
+        branches.length === 0 ||
+        !repositoryName ||
+        gitBranch !== ''
+      )
+        return;
+
+      const defaultBranch = branches.find(
+        (branch) =>
+          branch.name.toLowerCase() ===
+          repositoryName.defaultBranch.toLowerCase()
+      );
+
+      if (defaultBranch) {
+        setGitBranch(defaultBranch.name);
+        setGitCommit(defaultBranch.commit);
       }
     } catch (error) {
       AppLog.errorToast('We had a problem. Try again');
@@ -63,7 +64,7 @@ export const RepoBranchCommitFields: React.FC = () => {
   }, [
     queryLoading,
     branches,
-    repositoryName.defaultBranch,
+    repositoryName,
     gitBranch,
     setGitBranch,
     setGitCommit,
@@ -88,13 +89,6 @@ export const RepoBranchCommitFields: React.FC = () => {
     setGitCommit(branch.commit);
   };
 
-  const branchQueryFilter = (
-    query: string,
-    item: GithubClient.Branch
-  ): boolean => item.name.includes(query);
-
-  const branchHandleValue = (item: GithubClient.Branch): string => item.name;
-
   return (
     <>
       <Form.Field context={gitBranchContext}>
@@ -102,8 +96,8 @@ export const RepoBranchCommitFields: React.FC = () => {
         <Form.Combobox
           items={branches}
           onChange={handleBranchChange}
-          queryFilter={branchQueryFilter}
-          handleValue={branchHandleValue}
+          queryKey="name"
+          handleValue={(item) => item.name}
         >
           {({ Field, Options }) => (
             <>

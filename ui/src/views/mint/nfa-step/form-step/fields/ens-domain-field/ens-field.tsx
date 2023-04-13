@@ -45,8 +45,7 @@ export const EnsField: React.FC = () => {
         unattached
         isLoading={loading}
         items={ensNames}
-        queryFilter={(query, item = '') => item.includes(query)}
-        handleValue={(item = '') => item}
+        handleValue={(item) => item}
       >
         {({ Field, Options, Message }) => (
           <>
@@ -54,7 +53,7 @@ export const EnsField: React.FC = () => {
 
             <Options>
               {(item) => item}
-              <Message>You do not own ENS names</Message>
+              <Message>No owned ENS names found</Message>
             </Options>
           </>
         )}

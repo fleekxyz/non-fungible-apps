@@ -12,8 +12,6 @@ const Items: Item[] = [
 
 export const ComboboxTest: React.FC = () => {
   const selected = useState<Item>();
-  const queryFilter = (query: string, item: Item): boolean =>
-    item.label.toLowerCase().includes(query.toLowerCase());
 
   return (
     <Flex
@@ -26,12 +24,7 @@ export const ComboboxTest: React.FC = () => {
         alignSelf: 'center',
       }}
     >
-      <Combobox
-        unattached
-        items={Items}
-        selected={selected}
-        queryFilter={queryFilter}
-      >
+      <Combobox unattached items={Items} selected={selected} queryKey="label">
         {({ Field, Options }) => (
           <>
             <Field>
@@ -54,12 +47,7 @@ export const ComboboxTest: React.FC = () => {
         )}
       </Combobox>
 
-      <Combobox
-        unattached
-        items={Items}
-        selected={selected}
-        queryFilter={queryFilter}
-      >
+      <Combobox unattached items={Items} selected={selected} queryKey="label">
         {({ Field, Options }) => (
           <>
             <Field>

@@ -73,13 +73,11 @@ export const UserOrgsCombobox: React.FC = () => {
 
   return (
     <Combobox
+      items={userAndOrganizations}
       unattached
       css={{ flex: 1 }}
-      items={userAndOrganizations}
       selected={[selectedUserOrg, handleUserOrgChange]}
-      queryFilter={(query, item) =>
-        item.label.toLowerCase().includes(query.toLowerCase())
-      }
+      queryKey="label"
     >
       {({ Field, Options }) => (
         <>

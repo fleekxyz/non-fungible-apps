@@ -2,7 +2,7 @@ import {
   Combobox as HeadlessCombobox,
   ComboboxInputProps,
 } from '@headlessui/react';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Spinner } from '@/components/spinner';
 import { createContext } from '@/utils';
@@ -117,13 +117,32 @@ export function Combobox<T>({
   selected,
   isLoading: loading = false,
   items,
-  queryFilter,
+  queryKey,
   ...props
 }: Combobox.RootProps<T>): JSX.Element {
   const [value, setValue] = selected;
   const query = useState('');
 
   const { Provider, ...Elements } = useMemo(() => buildElements<T>(), []);
+
+  const queryFilter = useCallback(
+    (query: string, item: T): boolean => {
+      if (typeof queryKey === 'undefined')
+        return `${item}`.includes(query.toLowerCase());
+
+      const keys = Array.isArray(queryKey) ? queryKey : [queryKey];
+
+      const searchString = keys
+        .reduce((acc, key) => {
+          const value = item[key];
+          return `${acc} ${value}`;
+        }, '')
+        .toLowerCase();
+
+      return searchString.includes(query.toLowerCase());
+    },
+    [queryKey]
+  );
 
   return (
     <HeadlessCombobox
@@ -152,11 +171,11 @@ export function Combobox<T>({
 
 export namespace Combobox {
   export type Context<T> = {
+    items: T[];
     selected: [T | undefined, (newState: T | undefined) => void];
     query: ReactState<string>;
     loading: boolean;
     open: boolean;
-    items: T[];
     queryFilter: (query: string, item: T) => boolean;
   };
 
@@ -194,8 +213,10 @@ export namespace Combobox {
     React.ComponentPropsWithRef<typeof CS.Wrapper>,
     'defaultValue' | 'onChange' | 'children'
   > &
-    Pick<Context<T>, 'selected' | 'items' | 'queryFilter'> & {
+    Pick<Context<T>, 'selected' | 'items'> & {
       isLoading?: boolean;
       children: (elements: Elements<T>) => React.ReactNode;
-    };
+    } & (T extends object
+      ? { queryKey: keyof T | (keyof T)[] }
+      : { queryKey?: undefined });
 }
