@@ -1,14 +1,16 @@
 import { useState } from 'react';
 
-import { ComboboxItem } from '@/components';
+import { Token } from '@/graphclient';
 import { EthereumHooks } from '@/integrations';
 import { useFleekERC721Billing } from '@/store';
 import { AppLog, createContext, pushToast } from '@/utils';
 
+type NFA = Pick<Token, 'id' | 'name'>;
+
 export type AccessPointContext = {
   billing: string | undefined;
-  nfa: ComboboxItem;
-  setNfa: (nfa: ComboboxItem) => void;
+  nfa: NFA | undefined;
+  setNfa: ReactState<NFA | undefined>[1];
 };
 
 const [CreateAPProvider, useContext] = createContext<AccessPointContext>({
@@ -29,7 +31,7 @@ export abstract class CreateAccessPoint {
     children,
   }) => {
     const [billing] = useFleekERC721Billing('AddAccessPoint');
-    const [nfa, setNfa] = useState<ComboboxItem>({} as ComboboxItem);
+    const [nfa, setNfa] = useState<NFA>();
 
     const value = {
       billing,
