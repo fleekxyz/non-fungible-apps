@@ -45,7 +45,7 @@ export const login = createAsyncThunk(
         throw Error('Invalid response type');
       }
     } catch (error) {
-      AppLog.error(error);
+      AppLog.errorToast('Github login failed. Please try again later.', error);
       AppLog.errorToast('Github login failed. Please try again later.');
       dispatch(githubActions.setState('failed'));
     }
