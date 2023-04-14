@@ -81,7 +81,7 @@ function buildElements<T>(): BuiltElements<T> {
         {filteredItems.map((item) => (
           <CS.Option key={JSON.stringify(item)} value={item}>
             {optionRenderer(item, selected === item)}
-            {selected === item && <CS.SelectedIcon name="check" />}
+            {selected === item && <CS.RightPositionedIcon name="check" />}
           </CS.Option>
         ))}
 
@@ -92,12 +92,21 @@ function buildElements<T>(): BuiltElements<T> {
     );
   }
 
-  function Field({ children, ...props }: Combobox.FieldProps<T>): JSX.Element {
+  function Field({
+    children,
+    disableChevron,
+    ...props
+  }: Combobox.FieldProps<T>): JSX.Element {
     const {
       selected: [selected],
     } = useContext();
 
-    return <CS.Field {...props}>{children(selected as T)}</CS.Field>;
+    return (
+      <CS.Field {...props}>
+        {children(selected as T)}
+        {!disableChevron && <CS.RightPositionedIcon name="chevron-down" />}
+      </CS.Field>
+    );
   }
 
   const Message = CS.Message;
@@ -200,6 +209,7 @@ export namespace Combobox {
     'children'
   > & {
     children: (item: T | undefined) => React.ReactElement | React.ReactNode;
+    disableChevron?: boolean;
   };
 
   export type Elements<T> = {

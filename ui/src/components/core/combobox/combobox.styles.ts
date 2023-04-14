@@ -68,17 +68,9 @@ export const ComboboxStyles = {
     width: '100%',
     gap: '$3',
 
-    [`${IconStyles.Container}`]: {
-      fontSize: '1.5em',
-    },
-
     '&:focus-within': {
       outline: 'none',
       borderColor: '$blue9',
-
-      [`${IconStyles.Container}`]: {
-        color: '$slate12',
-      },
     },
 
     '&:hover': {
@@ -93,7 +85,7 @@ export const ComboboxStyles = {
     outline: 'none',
   }),
 
-  SelectedIcon: styled(Icon, {
+  RightPositionedIcon: styled(Icon, {
     position: 'absolute',
     right: '$3',
   }),
