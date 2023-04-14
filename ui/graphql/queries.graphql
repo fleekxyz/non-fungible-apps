@@ -45,6 +45,12 @@ query getNFA($id: ID!) {
   }
 }
 
+query getVerifiers {
+  verifiers {
+    id
+  }
+}
+
 # query to get the ens name of an address
 query getENSNames($address: ID!) {
   account(id: $address) {

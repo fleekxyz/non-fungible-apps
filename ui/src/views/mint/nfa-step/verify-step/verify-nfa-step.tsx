@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { useMemo, useState } from 'react';
 
+import { getVerifiersDocument } from '@/../.graphclient';
 import {
   Button,
   Card,
@@ -15,13 +17,6 @@ import { Mint } from '../../mint.context';
 import { MintCardHeader } from '../../mint-card';
 import { useMintFormContext } from '../form-step';
 
-const DropdownValuesMock = [
-  {
-    label: 'Fleek',
-    value: 'fleek',
-  },
-];
-
 const SelectVerifier: React.FC = () => {
   const {
     form: {
@@ -31,6 +26,17 @@ const SelectVerifier: React.FC = () => {
     },
   } = useMintFormContext();
 
+  const { data } = useQuery(getVerifiersDocument);
+
+  const items = useMemo(() => {
+    if (!data) return [];
+
+    return data.verifiers.map((item) => ({
+      label: item.id,
+      value: item.id,
+    }));
+  }, [data]);
+
   const [selectedItem, setSelectedItem] = useState<DropdownItem>();
 
   const onChange = (selected: DropdownItem): void => {
@@ -39,11 +45,7 @@ const SelectVerifier: React.FC = () => {
   };
 
   return (
-    <Dropdown
-      items={DropdownValuesMock}
-      onChange={onChange}
-      selectedValue={selectedItem}
-    />
+    <Dropdown items={items} onChange={onChange} selectedValue={selectedItem} />
   );
 };
 
