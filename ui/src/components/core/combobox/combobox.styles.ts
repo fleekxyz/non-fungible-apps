@@ -57,6 +57,8 @@ export const ComboboxStyles = {
     gap: '$2',
     borderRadius: '$lg',
     zIndex: 10,
+    maxHeight: '30vh',
+    overflow: 'auto',
   }),
 
   Field: styled(HeadlessCombobox.Button, InputStyled, {
@@ -106,11 +108,16 @@ export const ComboboxStyles = {
   }),
 
   InnerSearchContainer: styled('div', {
+    position: 'sticky',
+    top: '-$3',
+    padding: '$3 $2 $3 $2',
+    margin: '-$3 0 0 0',
+    zIndex: 10,
     display: 'flex',
     alignItems: 'center',
     gap: '$3',
-    padding: '0 $2 $3 $2',
     borderBottom: '1px solid $slate6',
+    backgroundColor: '$black',
 
     [`${IconStyles.Container}`]: {
       fontSize: '1.5em',

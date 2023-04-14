@@ -13,14 +13,17 @@ export const NfaPicker: React.FC = () => {
 
   const items = useMemo(() => data?.tokens || [], [data]);
 
-  if (loading) return <div>Loading...</div>;
-
   if (error) {
-    AppLog.errorToast('Error loading NFA list');
+    AppLog.errorToast('Error loading NFA list', error);
   }
 
   return (
-    <Combobox items={items} selected={[nfa, setNfa]} queryKey={['name', 'id']}>
+    <Combobox
+      isLoading={loading}
+      items={items}
+      selected={[nfa, setNfa]}
+      queryKey={['name', 'id']}
+    >
       {({ Field, Options }) => (
         <>
           <Field>{(selected) => selected?.name || 'Select NFA'}</Field>
