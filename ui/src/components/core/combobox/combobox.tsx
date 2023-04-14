@@ -17,122 +17,102 @@ const LoadingMessage = (
   </CS.Message>
 );
 
-type BuiltElements<T> = Combobox.Elements<T> & {
-  Provider: React.Provider<Combobox.Context<T>>;
-  useContext: () => Combobox.Context<T>;
+const [Provider, useContext] = createContext<Combobox.Context<unknown>>({
+  name: 'ComboboxContext',
+  hookName: 'useComboboxContext',
+  providerName: 'ComboboxProvider',
+});
+
+const Input = <T,>(props: Combobox.InputProps<T>): JSX.Element => {
+  const {
+    query: [, setQuery],
+  } = useContext() as Combobox.Context<T>;
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setQuery(event.target.value);
+    if (props.onChange) props.onChange(event);
+  };
+
+  return <CS.Input {...props} onChange={onChange} />;
 };
 
-function buildElements<T>(): BuiltElements<T> {
-  const [Provider, useContext] = createContext<Combobox.Context<T>>({
-    name: 'ComboboxContext',
-    hookName: 'useComboboxContext',
-    providerName: 'ComboboxProvider',
-  });
+const Options = <T,>({
+  disableSearch,
+  children,
+  ...props
+}: Combobox.OptionsProps<T>): JSX.Element => {
+  const {
+    query: [query],
+    loading,
+    selected: [selected],
+    items,
+    queryFilter,
+  } = useContext() as Combobox.Context<T>;
 
-  function Input(props: Combobox.InputProps<T>): JSX.Element {
-    const {
-      query: [, setQuery],
-    } = useContext();
+  const [
+    optionRenderer,
+    EmptyRender = EmptyMessage,
+    LoadingRender = LoadingMessage,
+  ] = useMemo(
+    () => (Array.isArray(children) ? children : [children]),
+    [children]
+  );
 
-    const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-      setQuery(event.target.value);
-      if (props.onChange) props.onChange(event);
-    };
+  const filteredItems = useMemo(
+    () => items.filter((item) => queryFilter(query, item)),
+    [items, query, queryFilter]
+  );
 
-    return <CS.Input {...props} onChange={onChange} />;
-  }
+  return (
+    <CS.Options {...props}>
+      {!disableSearch && (
+        <CS.InnerSearchContainer>
+          <Icon name="search" />
+          <Input placeholder="Search..." />
+        </CS.InnerSearchContainer>
+      )}
 
-  function Options({
-    disableSearch,
-    children,
-    ...props
-  }: Combobox.OptionsProps<T>): JSX.Element {
-    const {
-      query: [query],
-      loading,
-      selected: [selected],
-      items,
-      queryFilter,
-    } = useContext();
+      {filteredItems.map((item) => (
+        <CS.Option key={JSON.stringify(item)} value={item}>
+          {optionRenderer(item, selected === item)}
+          {selected === item && <CS.RightPositionedIcon name="check" />}
+        </CS.Option>
+      ))}
 
-    const [
-      optionRenderer,
-      EmptyRender = EmptyMessage,
-      LoadingRender = LoadingMessage,
-    ] = useMemo(
-      () => (Array.isArray(children) ? children : [children]),
-      [children]
-    );
+      {!loading && filteredItems.length === 0 && EmptyRender}
 
-    const filteredItems = useMemo(
-      () => items.filter((item) => queryFilter(query, item)),
-      [items, query, queryFilter]
-    );
+      {loading && LoadingRender}
+    </CS.Options>
+  );
+};
 
-    return (
-      <CS.Options {...props}>
-        {!disableSearch && (
-          <CS.InnerSearchContainer>
-            <Icon name="search" />
-            <Input placeholder="Search..." />
-          </CS.InnerSearchContainer>
-        )}
+const Field = <T,>({
+  children,
+  disableChevron,
+  ...props
+}: Combobox.FieldProps<T>): JSX.Element => {
+  const {
+    selected: [selected],
+  } = useContext() as Combobox.Context<T>;
 
-        {filteredItems.map((item) => (
-          <CS.Option key={JSON.stringify(item)} value={item}>
-            {optionRenderer(item, selected === item)}
-            {selected === item && <CS.RightPositionedIcon name="check" />}
-          </CS.Option>
-        ))}
+  return (
+    <CS.Field {...props}>
+      {children(selected)}
+      {!disableChevron && <CS.RightPositionedIcon name="chevron-down" />}
+    </CS.Field>
+  );
+};
 
-        {!loading && filteredItems.length === 0 && EmptyRender}
-
-        {loading && LoadingRender}
-      </CS.Options>
-    );
-  }
-
-  function Field({
-    children,
-    disableChevron,
-    ...props
-  }: Combobox.FieldProps<T>): JSX.Element {
-    const {
-      selected: [selected],
-    } = useContext();
-
-    return (
-      <CS.Field {...props}>
-        {children(selected as T)}
-        {!disableChevron && <CS.RightPositionedIcon name="chevron-down" />}
-      </CS.Field>
-    );
-  }
-
-  const Message = CS.Message;
-
-  return {
-    Provider,
-    useContext,
-    Options,
-    Input,
-    Field,
-    Message,
-  };
-}
-
-export function Combobox<T>({
+export const Combobox = <T,>({
   children,
   selected,
   isLoading: loading = false,
   items,
   queryKey,
   ...props
-}: Combobox.RootProps<T>): JSX.Element {
+}: Combobox.RootProps<T>): JSX.Element => {
   const [value, setValue] = selected;
   const query = useState('');
-
-  const { Provider, ...Elements } = useMemo(() => buildElements<T>(), []);
 
   const queryFilter = useCallback(
     (query: string, item: T): boolean => {
@@ -153,6 +133,8 @@ export function Combobox<T>({
     [queryKey]
   );
 
+  const TypedProvider = Provider as React.Provider<Combobox.Context<T>>;
+
   return (
     <HeadlessCombobox
       as={CS.Wrapper}
@@ -161,7 +143,7 @@ export function Combobox<T>({
       {...props}
     >
       {({ open }) => (
-        <Provider
+        <TypedProvider
           value={{
             selected,
             query,
@@ -171,12 +153,17 @@ export function Combobox<T>({
             queryFilter,
           }}
         >
-          {children(Elements)}
-        </Provider>
+          {children({
+            Options: Options<T>,
+            Input: Input<T>,
+            Field: Field<T>,
+            Message: CS.Message,
+          })}
+        </TypedProvider>
       )}
     </HeadlessCombobox>
   );
-}
+};
 
 export namespace Combobox {
   export type Context<T> = {
