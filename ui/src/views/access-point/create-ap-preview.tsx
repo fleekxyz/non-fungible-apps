@@ -92,7 +92,6 @@ export const CreateAccessPointPreview: React.FC = () => {
     [prepareStatus, writeStatus, transactionStatus]
   );
 
-  console.log(prepareStatus);
   const error = useMemo(
     () => [writeStatus, transactionStatus].some((status) => status === 'error'),
     [writeStatus, transactionStatus]

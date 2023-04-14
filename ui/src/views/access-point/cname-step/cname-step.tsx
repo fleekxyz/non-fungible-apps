@@ -5,7 +5,7 @@ import {
   Grid,
   Icon,
   IconButton,
-  Spinner,
+  SpinnerDot,
   Stepper,
   Text,
 } from '@/components';
@@ -16,6 +16,7 @@ export const CNAMEStep: React.FC = () => {
   const { prevStep, nextStep } = Stepper.useContext();
 
   const handleContinueClick = (): void => {
+    //TODO add CNAME creation handler
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -48,9 +49,11 @@ export const CNAMEStep: React.FC = () => {
       />
       <Card.Body>
         {isLoading ? (
-          <Card.Text css={{ height: '$22', mt: '$6' }}>
-            <Spinner />
-            <Text>Waiting for DNS propagation, allow a few minutes.</Text>
+          <Card.Text css={{ p: '$12 $10', gap: '$7' }}>
+            <SpinnerDot css={{ fontSize: '$7xl' }} />
+            <Text css={{ fontSize: '$md' }}>
+              Waiting for DNS propagation, allow a few minutes.
+            </Text>
           </Card.Text>
         ) : (
           <Grid

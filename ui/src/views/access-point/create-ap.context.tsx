@@ -55,7 +55,6 @@ export abstract class CreateAccessPoint {
             transaction: {
               onSuccess: (data: any) => {
                 AppLog.info('Transaction:', data);
-                pushToast('success', 'Your transaction was successful!');
               },
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
               onError: (error: any) => {

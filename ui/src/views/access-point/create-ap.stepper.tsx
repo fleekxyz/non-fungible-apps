@@ -43,7 +43,7 @@ export const CreateApStepper: React.FC = () => {
           </Stepper.Step>
 
           <Stepper.Step>
-            <Step header="Review your DyDx hosted frontend and confirm">
+            <Step header="Review your hosted frontend and confirm">
               <CreateAccessPointPreview />
             </Step>
           </Stepper.Step>
