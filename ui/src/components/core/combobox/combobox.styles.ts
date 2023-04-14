@@ -1,12 +1,10 @@
 import { Combobox as HeadlessCombobox } from '@headlessui/react';
 
-import { dripStitches } from '@/theme';
+import { styled } from '@/theme';
 
 import { Icon } from '../icon';
 import { IconStyles } from '../icon/icon.styles';
 import { InputStyled } from '../input';
-
-const { styled } = dripStitches;
 
 export const ComboboxStyles = {
   Wrapper: styled('div', {

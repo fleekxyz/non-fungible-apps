@@ -1,4 +1,4 @@
-// npx hardhat run scripts/mint.js --network mumbai
+// npx hardhat run scripts/mint.js --network mumbai/sepolia/goerli
 const { getContract } = require('./util');
 const { getSVGBase64, getSVGColor } = require('./utils/read-svg');
 const path = require('path');

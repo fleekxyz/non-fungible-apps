@@ -181,7 +181,8 @@ export namespace ArgumentsMaps {
       string, // string gitRepository
       string, // string logo
       number, // uint24 color
-      boolean // bool accessPointAutoApproval
+      boolean, // bool accessPointAutoApproval
+      string //verifier address
     ];
 
     addAccessPoint: [

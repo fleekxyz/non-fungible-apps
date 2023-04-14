@@ -4,30 +4,25 @@ import { Bytes, log } from '@graphprotocol/graph-ts';
 import { NewMint as NewMintEvent } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
-import {
-  Owner,
-  GitRepository as GitRepositoryEntity,
-  NewMint,
-  Token,
-} from '../generated/schema';
+import { Owner, NewMint, Token } from '../generated/schema';
 
 export function handleNewMint(event: NewMintEvent): void {
-  let newMintEntity = new NewMint(
+  const newMintEntity = new NewMint(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
 
-  let name = event.params.name;
-  let description = event.params.description;
-  let externalURL = event.params.externalURL;
-  let ENS = event.params.ENS;
-  let gitRepository = event.params.gitRepository;
-  let commitHash = event.params.commitHash;
-  let logo = event.params.logo;
-  let color = event.params.color;
-  let accessPointAutoApproval = event.params.accessPointAutoApproval;
-  let tokenId = event.params.tokenId;
-  let ownerAddress = event.params.owner;
-  let verifierAddress = event.params.verifier;
+  const name = event.params.name;
+  const description = event.params.description;
+  const externalURL = event.params.externalURL;
+  const ENS = event.params.ENS;
+  const gitRepository = event.params.gitRepository;
+  const commitHash = event.params.commitHash;
+  const logo = event.params.logo;
+  const color = event.params.color;
+  const accessPointAutoApproval = event.params.accessPointAutoApproval;
+  const tokenId = event.params.tokenId;
+  const ownerAddress = event.params.owner;
+  const verifierAddress = event.params.verifier;
 
   newMintEntity.tokenId = tokenId;
   newMintEntity.name = name;
@@ -51,7 +46,7 @@ export function handleNewMint(event: NewMintEvent): void {
   // Create Token, Owner, and Controller entities
 
   let owner = Owner.load(ownerAddress);
-  let token = new Token(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
+  const token = new Token(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
 
   if (!owner) {
     // Create a new owner entity

@@ -1,8 +1,6 @@
 import { useMemo } from 'react';
 
-import { dripStitches, forwardStyledRef } from '@/theme';
-
-const { styled } = dripStitches;
+import { forwardStyledRef, styled } from '@/theme';
 
 const StyledSVG = styled('svg');
 

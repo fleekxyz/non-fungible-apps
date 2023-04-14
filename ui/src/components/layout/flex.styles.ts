@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { dripStitches } from '../../theme'; //TODO replace with absolute path
-
-const { styled } = dripStitches;
+import { styled } from '@/theme';
 
 export const Flex = styled('div', {
   display: 'flex',

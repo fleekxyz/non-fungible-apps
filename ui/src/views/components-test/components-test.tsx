@@ -7,9 +7,9 @@ import { ToastTest } from './toast-test';
 export const ComponentsTest: React.FC = () => {
   return (
     <Flex css={{ flexDirection: 'column' }}>
+      <ComboboxTest />
       <ColorPickerTest />
       <ToastTest />
-      <ComboboxTest />
     </Flex>
   );
 };

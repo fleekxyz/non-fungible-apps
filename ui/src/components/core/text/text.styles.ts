@@ -1,5 +1,3 @@
-import { dripStitches } from '@/theme';
-
-const { styled } = dripStitches;
+import { styled } from '@/theme';
 
 export const Text = styled('span');

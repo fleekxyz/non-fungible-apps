@@ -43,7 +43,7 @@ const client = new ApolloClient({
       Query: {
         fields: {
           tokens: {
-            keyArgs: ['where'],
+            keyArgs: ['where', 'orderBy', 'orderDirection'],
             merge: mergeByKey('id'),
           },
         },
