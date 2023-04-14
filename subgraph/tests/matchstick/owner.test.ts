@@ -5,8 +5,6 @@ import {
   clearStore,
   beforeAll,
   afterAll,
-  logStore,
-  log,
 } from 'matchstick-as/assembly/index';
 import { BigInt } from '@graphprotocol/graph-ts';
 import {
@@ -24,7 +22,7 @@ import { NewMint, Transfer } from '../../generated/FleekNFA/FleekNFA';
 describe('Owner tests', () => {
   beforeAll(() => {
     // NEW MINTS
-    let newMints: NewMint[] = [];
+    const newMints: NewMint[] = [];
     newMints.push(createNewMintEvent(0, USER_ONE, BigInt.fromI32(0)));
     newMints.push(createNewMintEvent(1, USER_TWO, BigInt.fromI32(1)));
     newMints.push(createNewMintEvent(2, USER_ONE, BigInt.fromI32(2)));
@@ -32,7 +30,7 @@ describe('Owner tests', () => {
     newMints.push(createNewMintEvent(4, USER_TWO, BigInt.fromI32(4)));
     handleNewMints(newMints);
     // TRANSFERS
-    let transfers: Transfer[] = [];
+    const transfers: Transfer[] = [];
     transfers.push(
       createTransferEvent(0, CONTRACT, USER_ONE, BigInt.fromI32(0))
     );

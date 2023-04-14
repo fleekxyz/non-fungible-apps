@@ -27,7 +27,7 @@ export function handleMetadataUpdateWithStringValue(
    * setTokenDescription
    * setTokenLogo
    * */
-  let entity = new MetadataUpdate(
+  const entity = new MetadataUpdate(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
 
@@ -41,7 +41,7 @@ export function handleMetadataUpdateWithStringValue(
   entity.save();
 
   // UPDATE TOKEN
-  let token = Token.load(
+  const token = Token.load(
     Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
   );
 
@@ -68,7 +68,7 @@ export function handleMetadataUpdateWithDoubleStringValue(
   /**
    * setTokenBuild
    */
-  let entity = new MetadataUpdate(
+  const entity = new MetadataUpdate(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
 
@@ -82,7 +82,7 @@ export function handleMetadataUpdateWithDoubleStringValue(
   entity.save();
 
   // UPDATE TOKEN
-  let token = Token.load(
+  const token = Token.load(
     Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
   );
 
@@ -107,7 +107,7 @@ export function handleMetadataUpdateWithIntValue(
   /**
    * setTokenColor
    */
-  let entity = new MetadataUpdate(
+  const entity = new MetadataUpdate(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
 
@@ -120,7 +120,7 @@ export function handleMetadataUpdateWithIntValue(
 
   entity.save();
 
-  let token = Token.load(
+  const token = Token.load(
     Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
   );
 
@@ -138,7 +138,7 @@ export function handleMetadataUpdateWithBooleanValue(
   /**
    * accessPointAutoApproval
    */
-  let entity = new MetadataUpdate(
+  const entity = new MetadataUpdate(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
 
@@ -151,7 +151,7 @@ export function handleMetadataUpdateWithBooleanValue(
 
   entity.save();
 
-  let token = Token.load(
+  const token = Token.load(
     Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
   );
 

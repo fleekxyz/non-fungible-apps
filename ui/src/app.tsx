@@ -13,8 +13,7 @@ export const App: React.FC = () => {
         <ToastProvider />
         <AppPage>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/explore" element={<Explore />} />
+            <Route path="/" element={<Explore />} />
             <Route path="/mint" element={<Mint />} />
             <Route path="/create-ap" element={<CreateAP />} />
             <Route path="/create-ap/:id" element={<CreateAP />} />

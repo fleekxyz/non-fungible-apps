@@ -1,6 +1,4 @@
-import { dripStitches } from '@/theme';
-
-const { styled, keyframes } = dripStitches;
+import { keyframes, styled } from '@/theme';
 
 const SkeletonKeyframes = keyframes({
   '0%': {

@@ -1,0 +1,52 @@
+name: Deploy site via Fleek
+
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'ui/**'
+
+jobs:
+  deploy-to-fleek:
+    runs-on: ubuntu-latest
+
+    env:
+      FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
+      FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
+      VITE_ALCHEMY_API_KEY: ${{ secrets.VITE_ALCHEMY_API_KEY }}
+      VITE_ALCHEMY_APP_NAME: ${{ secrets.VITE_ALCHEMY_APP_NAME }}
+      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+      VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+      VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
+      VITE_TWITTER_URL: ${{ secrets.VITE_TWITTER_URL }}
+      VITE_GOERLI_RPC: ${{ secrets.VITE_GOERLI_RPC }}
+
+    defaults:
+      run:
+        working-directory: ui
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Fleek CLI
+        run: npm i -g @fleekxyz/cli
+
+      - name: Install UI dependencies
+        run: yarn
+
+      - name: Build ui folder
+        run: yarn build
+
+      - name: Build & deploy sites
+        run: fleek sites deploy

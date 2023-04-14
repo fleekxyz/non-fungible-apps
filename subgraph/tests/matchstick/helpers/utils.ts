@@ -27,11 +27,11 @@ export function createApprovalEvent(
   event_count: i32,
   owner: Address,
   approved: Address,
-  tokenId: BigInt
+  tokenId: bigint
 ): ApprovalEvent {
-  let approvalEvent = changetype<ApprovalEvent>(newMockEvent());
+  const approvalEvent = changetype<ApprovalEvent>(newMockEvent());
 
-  approvalEvent.parameters = new Array();
+  approvalEvent.parameters = [];
 
   approvalEvent.parameters.push(
     new ethereum.EventParam('owner', ethereum.Value.fromAddress(owner))
@@ -58,9 +58,9 @@ export function createApprovalForAllEvent(
   operator: Address,
   approved: boolean
 ): ApprovalForAllEvent {
-  let approvalForAllEvent = changetype<ApprovalForAllEvent>(newMockEvent());
+  const approvalForAllEvent = changetype<ApprovalForAllEvent>(newMockEvent());
 
-  approvalForAllEvent.parameters = new Array();
+  approvalForAllEvent.parameters = [];
 
   approvalForAllEvent.parameters.push(
     new ethereum.EventParam('owner', ethereum.Value.fromAddress(owner))
@@ -82,11 +82,11 @@ export function createTransferEvent(
   event_count: i32,
   from: Address,
   to: Address,
-  tokenId: BigInt
+  tokenId: bigint
 ): TransferEvent {
-  let transferEvent = changetype<TransferEvent>(newMockEvent());
+  const transferEvent = changetype<TransferEvent>(newMockEvent());
 
-  transferEvent.parameters = new Array();
+  transferEvent.parameters = [];
 
   transferEvent.parameters.push(
     new ethereum.EventParam('from', ethereum.Value.fromAddress(from))
@@ -110,11 +110,11 @@ export function createTransferEvent(
 export function createNewMintEvent(
   event_count: i32,
   to: Address,
-  tokenId: BigInt
+  tokenId: bigint
 ): NewMintEvent {
-  let newMintEvent = changetype<NewMintEvent>(newMockEvent());
+  const newMintEvent = changetype<NewMintEvent>(newMockEvent());
 
-  newMintEvent.parameters = new Array();
+  newMintEvent.parameters = [];
 
   newMintEvent.parameters.push(
     new ethereum.EventParam(
@@ -177,12 +177,12 @@ export function createNewMintEvent(
 export function createNewAccessPointEvent(
   event_count: i32,
   apName: string,
-  tokenId: BigInt,
+  tokenId: bigint,
   owner: Address
 ): NewAccessPoint {
-  let newAccessPoint = changetype<NewAccessPoint>(newMockEvent());
+  const newAccessPoint = changetype<NewAccessPoint>(newMockEvent());
 
-  newAccessPoint.parameters = new Array();
+  newAccessPoint.parameters = [];
 
   newAccessPoint.parameters.push(
     new ethereum.EventParam(
@@ -211,14 +211,14 @@ export function createNewAccessPointEvent(
 export function createNewChangeAccessPointCreationStatus(
   event_count: i32,
   apName: string,
-  tokenId: BigInt,
+  tokenId: bigint,
   status: i32,
   triggeredBy: Address
 ): ChangeAccessPointCreationStatus {
-  let changeAccessPointCreationStatus =
+  const changeAccessPointCreationStatus =
     changetype<ChangeAccessPointCreationStatus>(newMockEvent());
 
-  changeAccessPointCreationStatus.parameters = new Array();
+  changeAccessPointCreationStatus.parameters = [];
 
   changeAccessPointCreationStatus.parameters.push(
     new ethereum.EventParam(
@@ -254,15 +254,15 @@ export function createNewChangeAccessPointCreationStatus(
 export function createNewChangeAccessPointNameVerify(
   event_count: i32,
   apName: string,
-  tokenId: BigInt,
+  tokenId: bigint,
   verified: boolean,
   triggeredBy: Address
 ): ChangeAccessPointNameVerify {
-  let changeAccessPointNameVerify = changetype<ChangeAccessPointNameVerify>(
+  const changeAccessPointNameVerify = changetype<ChangeAccessPointNameVerify>(
     newMockEvent()
   );
 
-  changeAccessPointNameVerify.parameters = new Array();
+  changeAccessPointNameVerify.parameters = [];
 
   changeAccessPointNameVerify.parameters.push(
     new ethereum.EventParam(
@@ -297,15 +297,15 @@ export function createNewChangeAccessPointNameVerify(
 
 export function createNewTokenRoleChanged(
   event_count: i32,
-  tokenId: BigInt,
+  tokenId: bigint,
   role: i32,
   toAddress: Address,
   status: boolean,
   byAddress: Address
 ): TokenRoleChanged {
-  let tokenRoleChanged = changetype<TokenRoleChanged>(newMockEvent());
+  const tokenRoleChanged = changetype<TokenRoleChanged>(newMockEvent());
 
-  tokenRoleChanged.parameters = new Array();
+  tokenRoleChanged.parameters = [];
 
   tokenRoleChanged.parameters.push(
     new ethereum.EventParam(
@@ -343,9 +343,11 @@ export function createNewCollectionRoleChanged(
   status: boolean,
   byAddress: Address
 ): CollectionRoleChanged {
-  let collectionRoleChanged = changetype<CollectionRoleChanged>(newMockEvent());
+  const collectionRoleChanged = changetype<CollectionRoleChanged>(
+    newMockEvent()
+  );
 
-  collectionRoleChanged.parameters = new Array();
+  collectionRoleChanged.parameters = [];
 
   collectionRoleChanged.parameters.push(
     new ethereum.EventParam('role', ethereum.Value.fromI32(role))
