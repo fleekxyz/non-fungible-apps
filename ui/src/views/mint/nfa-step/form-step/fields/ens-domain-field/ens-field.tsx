@@ -3,14 +3,14 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useAccount } from 'wagmi';
 
 import { getENSNamesDocument } from '@/../.graphclient';
-import { ComboboxItem, Form } from '@/components';
+import { Form } from '@/components';
 import { AppLog } from '@/utils';
 
 import { useMintFormContext } from '../../mint-form.context';
 
 export const EnsField: React.FC = () => {
   const { address } = useAccount();
-  const { data, error } = useQuery(getENSNamesDocument, {
+  const { data, error, loading } = useQuery(getENSNamesDocument, {
     variables: {
       address: address?.toLowerCase() || '', //should skip if undefined
     },
@@ -34,25 +34,30 @@ export const EnsField: React.FC = () => {
   }, [error, showError]);
 
   const ensNames = useMemo(() => {
-    const ensList: ComboboxItem[] = [];
-    if (data && data.account && data.account.domains) {
-      data.account.domains.forEach((ens) => {
-        const { name } = ens;
-        if (name) {
-          ensList.push({
-            label: name,
-            value: name,
-          });
-        }
-      });
-    }
-    return ensList;
+    if (!(data && data.account && data.account.domains)) return [];
+    return data.account.domains.map((ens) => ens.name as string);
   }, [data]);
 
   return (
     <Form.Field context={ens} css={{ flex: 1 }}>
       <Form.Label>ENS</Form.Label>
-      <Form.Combobox items={ensNames} />
+      <Form.Combobox
+        unattached
+        isLoading={loading}
+        items={ensNames}
+        handleValue={(item) => item}
+      >
+        {({ Field, Options, Message }) => (
+          <>
+            <Field>{(selected) => selected || 'Select an ENS'}</Field>
+
+            <Options>
+              {(item) => item}
+              <Message>No owned ENS names found</Message>
+            </Options>
+          </>
+        )}
+      </Form.Combobox>
       <Form.Overline />
     </Form.Field>
   );

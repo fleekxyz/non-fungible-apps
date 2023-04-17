@@ -56,7 +56,7 @@ describe('FleekERC721.CollectionRoles', () => {
   });
 
   it('should fetch the list of owners', async () => {
-    const { owner, contract, otherAccount } = fixture;
+    const { contract, otherAccount } = fixture;
 
     await contract.grantCollectionRole(
       CollectionRoles.Owner,

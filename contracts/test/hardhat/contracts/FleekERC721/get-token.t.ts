@@ -1,6 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures, parseTokenURI } from './helpers';
+import { TestConstants, Fixtures } from './helpers';
 import { ethers } from 'hardhat';
 const { MintParams } = TestConstants;
 

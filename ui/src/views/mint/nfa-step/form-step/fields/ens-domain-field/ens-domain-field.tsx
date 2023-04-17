@@ -4,7 +4,7 @@ import { DomainField } from './domain-field';
 import { EnsField } from './ens-field';
 
 export const EnsDomainField: React.FC = () => (
-  <Flex css={{ columnGap: '$4' }}>
+  <Flex css={{ columnGap: '$4', position: 'relative' }}>
     <EnsField />
     <DomainField />
   </Flex>

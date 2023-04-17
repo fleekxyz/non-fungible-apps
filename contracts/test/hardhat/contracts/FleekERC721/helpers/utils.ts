@@ -1,6 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { ethers, upgrades } from 'hardhat';
-import { TestConstants } from './constants';
+import { ethers } from 'hardhat';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const namehash = require('@ensdomains/eth-ens-namehash');

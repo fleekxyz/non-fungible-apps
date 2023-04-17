@@ -1,4 +1,6 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
+
+import { forwardStyledRef } from '@/theme';
 
 import { IconName } from '../icon';
 import { InputIconStyled, InputStyled, TextareaStyled } from './input.styles';
@@ -10,24 +12,26 @@ export const LogoFileInput = StyledInputFile;
 
 type InputProps = {
   leftIcon?: IconName;
-  css?: string; //tailwind css
+  wrapperClassName?: string; //tailwind css
 } & React.ComponentPropsWithRef<typeof InputStyled>;
 
-export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const { leftIcon, css, ...ownProps } = props;
+export const Input = forwardStyledRef<HTMLInputElement, InputProps>(
+  (props, ref) => {
+    const { leftIcon, wrapperClassName: css = '', ...ownProps } = props;
 
-  return (
-    <div className={`relative ${css ? css : ''}`}>
-      {leftIcon && (
-        <InputIconStyled name={leftIcon} css={{ fontSize: '$lg' }} />
-      )}
-      <InputStyled
-        {...props}
-        ref={ref}
-        css={{ ...(leftIcon && { pl: '$10' }), ...(ownProps.css || {}) }}
-      />
-    </div>
-  );
-});
+    return (
+      <div className={`relative ${css}`}>
+        {leftIcon && (
+          <InputIconStyled name={leftIcon} css={{ fontSize: '$lg' }} />
+        )}
+        <InputStyled
+          {...props}
+          ref={ref}
+          css={{ ...(leftIcon && { pl: '$10' }), ...(ownProps.css || {}) }}
+        />
+      </div>
+    );
+  }
+);
 
 Input.displayName = 'Input';
