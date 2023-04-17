@@ -61,7 +61,7 @@ export const UserOrgsCombobox: React.FC = () => {
       selectedUserOrg?.value === undefined &&
       userAndOrganizations.length > 0
     ) {
-      // sets first the user
+      // sets the first user
       setSelectedUserOrg(userAndOrganizations[0]);
     }
   }, [
