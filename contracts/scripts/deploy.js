@@ -44,7 +44,7 @@ module.exports = async (taskArgs, hre) => {
   console.log(taskArgs);
   console.log();
 
-  const arguments = [name, symbol, billing];
+  const deployArguments = [name, symbol, billing];
 
   const libraries = await libraryDeployment(hre);
 
@@ -80,7 +80,7 @@ module.exports = async (taskArgs, hre) => {
       console.log('Creating new proxy contract...');
       deployResult = await upgrades.deployProxy(
         Contract,
-        arguments,
+        deployArguments,
         DEFAULT_PROXY_SETTINGS
       );
       await deployResult.deployed();
