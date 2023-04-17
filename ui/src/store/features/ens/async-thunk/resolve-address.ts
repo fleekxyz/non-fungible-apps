@@ -30,7 +30,7 @@ export const resolveAddress = createAsyncThunk<void, string>(
     } catch (error) {
       AppLog.error('Failed to resolve ENS name by address', error);
       dispatch(
-        ENSActions.setAddress({ key: address, value: { state: 'loading' } })
+        ENSActions.setAddress({ key: address, value: { state: 'failed' } })
       );
     }
   }
