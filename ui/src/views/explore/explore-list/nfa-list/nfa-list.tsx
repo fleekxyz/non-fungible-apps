@@ -76,6 +76,7 @@ export const NFAListFragment: React.FC = () => {
         ))}
         {isLoading && <LoadingSkeletons />}
         {!isLoading && tokens.length === 0 && (
+          // TODO: update this after designs are done
           <div
             className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 text-center`}
           >

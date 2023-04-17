@@ -56,6 +56,7 @@ export const RepositoriesList: React.FC<RepositoriesListProps> = ({
           />
         ))
       ) : (
+        // TODO: update this after designs are done
         <div
           className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 text-center`}
         >
