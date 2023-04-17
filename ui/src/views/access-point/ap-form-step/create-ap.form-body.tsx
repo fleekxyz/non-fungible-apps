@@ -19,6 +19,8 @@ import { AppLog } from '@/utils';
 import { CreateAccessPoint } from '../create-ap.context';
 import { useAccessPointFormContext } from './create-ap.form.context';
 import { useAccount } from 'wagmi';
+import { bunnyCDNActions, useBunnyCDNStore } from '@/store/features/bunny-cdn';
+import { useAppDispatch } from '@/store';
 
 export const SelectedNFA: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
@@ -52,6 +54,8 @@ export const CreateAccessPointFormBody: React.FC = () => {
   const { nextStep } = Stepper.useContext();
   const { nfa, setNfa, billing } = CreateAccessPoint.useContext();
   const { setArgs } = CreateAccessPoint.useTransactionContext();
+  const { state } = useBunnyCDNStore();
+  const dispatch = useAppDispatch();
 
   const {
     form: {
@@ -94,6 +98,13 @@ export const CreateAccessPointFormBody: React.FC = () => {
     }
   }, [nfaData, id, setNfa]);
 
+  useEffect(() => {
+    if (state === 'success') {
+      nextStep();
+      dispatch(bunnyCDNActions.setState(undefined));
+    }
+  }, [state]);
+
   if (nfaLoading) {
     return (
       <Flex
@@ -117,7 +128,12 @@ export const CreateAccessPointFormBody: React.FC = () => {
     if (nfa && domain) {
       try {
         setArgs([Number(nfa.tokenId), domain, { value: billing }]);
-        nextStep();
+        dispatch(
+          bunnyCDNActions.createBunnyCDN({
+            domain: 'domain',
+            targetDomain: domain,
+          })
+        );
       } catch (e) {
         AppLog.errorToast('Error setting transaction arguments');
       }
@@ -137,7 +153,8 @@ export const CreateAccessPointFormBody: React.FC = () => {
         <Form.Overline />
       </Form.Field>
       <Button
-        disabled={!isValid}
+        disabled={!isValid || nfa.tokenId === ''}
+        isLoading={state === 'loading'}
         colorScheme="blue"
         variant="solid"
         onClick={handleContinueClick}
