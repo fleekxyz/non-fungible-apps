@@ -18,6 +18,7 @@ import { AppLog } from '@/utils';
 
 import { CreateAccessPoint } from '../create-ap.context';
 import { useAccessPointFormContext } from './create-ap.form.context';
+import { useAccount } from 'wagmi';
 
 export const SelectedNFA: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
@@ -47,6 +48,7 @@ export const SelectedNFA: React.FC = () => {
 
 export const CreateAccessPointFormBody: React.FC = () => {
   const { id } = useParams();
+  const { address } = useAccount();
   const { nextStep } = Stepper.useContext();
   const { nfa, setNfa, billing } = CreateAccessPoint.useContext();
   const { setArgs } = CreateAccessPoint.useTransactionContext();
@@ -107,6 +109,11 @@ export const CreateAccessPointFormBody: React.FC = () => {
   }
 
   const handleContinueClick = (): void => {
+    if (!address) {
+      AppLog.errorToast('No address found. Please connect your wallet.');
+      return;
+    }
+
     if (nfa && domain) {
       try {
         setArgs([Number(nfa.tokenId), domain, { value: billing }]);

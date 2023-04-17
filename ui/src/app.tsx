@@ -15,9 +15,8 @@ export const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Explore />} />
             <Route path="/mint" element={<Mint />} />
-            <Route path="/create-ap" element={<CreateAP />} />
             <Route path="/create-ap/:id" element={<CreateAP />} />
-            {/** TODO remove for release */}
+            {/* TODO remove for release */}
             <Route path="/components-test" element={<ComponentsTest />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

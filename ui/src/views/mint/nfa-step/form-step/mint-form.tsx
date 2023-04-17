@@ -54,7 +54,7 @@ export const MintFormStep: React.FC = () => {
       AppLog.errorToast('No address found. Please connect your wallet.');
       return;
     }
-    // setting the args otherwise mint may fail
+
     setArgs([
       address,
       appName,
@@ -62,7 +62,7 @@ export const MintFormStep: React.FC = () => {
       domainURL,
       ens,
       gitCommit,
-      `${repositoryName.url}/tree/${gitBranch}`,
+      `${repositoryName?.url}/tree/${gitBranch}`,
       appLogo,
       parseColorToNumber(logoColor),
       verifyNFA,
