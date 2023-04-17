@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ethers } from 'ethers';
 
+import { env } from '@/constants';
 import { ENSActions, RootState } from '@/store';
 import { AppLog } from '@/utils';
 
@@ -17,9 +18,8 @@ export const resolveAddress = createAsyncThunk<void, string>(
         ENSActions.setAddress({ key: address, value: { state: 'loading' } })
       );
 
-      const value = await ethers.providers
-        .getDefaultProvider()
-        .lookupAddress(address);
+      const provider = new ethers.providers.JsonRpcProvider(env.goerli.rpc);
+      const value = (await provider.lookupAddress(address)) || undefined;
 
       dispatch(
         ENSActions.setAddress({
