@@ -1,7 +1,7 @@
 import { DisplayTextStyles as S } from './display-text.styles';
 type DisplayTextProps = {
   label: string;
-  value: string;
+  value: string | React.ReactNode;
 };
 
 export const DisplayText: React.FC<DisplayTextProps> = ({ label, value }) => {

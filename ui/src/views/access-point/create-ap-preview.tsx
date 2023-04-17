@@ -8,6 +8,7 @@ import {
   Flex,
   Icon,
   IconButton,
+  ResolvedAddress,
   Stepper,
   Text,
 } from '@/components';
@@ -17,12 +18,12 @@ import { FleekERC721 } from '@/integrations';
 import { CreateAccessPoint } from './create-ap.context';
 import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
 import { SelectedNFA } from './ap-form-step/create-ap.form-body';
-import { useAccount, useEnsName } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { AppLog } from '@/utils';
 
 export const AccessPointDataFragment: React.FC = () => {
-  const { address } = useAccount();
-  const { data: ensName, isLoading: isLoadingEns } = useEnsName({ address });
+  const { address, status } = useAccount();
+  // const { data: ensName, isLoading: isLoadingEns } = useEnsName({ address });
 
   const {
     form: {
@@ -32,12 +33,17 @@ export const AccessPointDataFragment: React.FC = () => {
     },
   } = useAccessPointFormContext();
 
-  if (isLoadingEns) return <div>Loading...</div>; //TODO replace with spinner
+  if (status === 'connecting') return <div>Loading...</div>; //TODO replace with spinner
 
   return (
     <>
       <SelectedNFA />
-      <DisplayText label="Owner" value={ensName || address || ''} />
+      <DisplayText
+        label="Owner"
+        value={
+          <ResolvedAddress truncated={false}>{address || ''}</ResolvedAddress>
+        }
+      />
       <DisplayText label="Frontend URL" value={domain} />
     </>
   );
