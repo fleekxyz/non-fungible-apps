@@ -1,279 +1,219 @@
 import {
-  Combobox as ComboboxLib,
-  ComboboxInputProps as ComboboxLibInputProps,
-  Transition,
+  Combobox as HeadlessCombobox,
+  ComboboxInputProps,
 } from '@headlessui/react';
-import React, { forwardRef, Fragment, useEffect, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
-import { Icon, IconName } from '@/components/core/icon';
-import { Flex } from '@/components/layout';
-import { useDebounce } from '@/hooks/use-debounce';
+import { Spinner } from '@/components/spinner';
+import { createContext } from '@/utils';
 
-import { Separator } from '../separator.styles';
-import { cleanString } from './combobox.utils';
+import { Icon } from '../icon';
+import { ComboboxStyles as CS } from './combobox.styles';
 
-type ComboboxInputProps = ComboboxLibInputProps<'input', ComboboxItem>;
+const EmptyMessage = <CS.Message>No items found</CS.Message>;
+const LoadingMessage = (
+  <CS.Message>
+    <Spinner /> Searching...
+  </CS.Message>
+);
 
-const ComboboxInput: React.FC<ComboboxInputProps> = ({
+const [Provider, useContext] = createContext<Combobox.Context<unknown>>({
+  name: 'ComboboxContext',
+  hookName: 'useComboboxContext',
+  providerName: 'ComboboxProvider',
+});
+
+const Input = <T,>(props: Combobox.InputProps<T>): JSX.Element => {
+  const {
+    query: [, setQuery],
+  } = useContext() as Combobox.Context<T>;
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setQuery(event.target.value);
+    if (props.onChange) props.onChange(event);
+  };
+
+  return <CS.Input {...props} onChange={onChange} />;
+};
+
+const Options = <T,>({
+  disableSearch,
+  children,
   ...props
-}: ComboboxInputProps) => (
-  <div className="relative w-full">
-    <Icon
-      name="search"
-      size="sm"
-      css={{
-        position: 'absolute',
-        left: '$3',
-        top: '$3',
-        fontSize: '$xl',
-        color: '$slate8',
-      }}
-    />
-    <ComboboxLib.Input
-      placeholder="Search"
-      className={`w-full h-9 py-3 px-10 text-sm bg-transparent leading-5 text-slate11 outline-none `}
-      {...props}
-    />
-  </div>
-);
+}: Combobox.OptionsProps<T>): JSX.Element => {
+  const {
+    query: [query],
+    loading,
+    selected: [selected],
+    items,
+    queryFilter,
+  } = useContext() as Combobox.Context<T>;
 
-type ComboboxOptionProps = {
-  option: ComboboxItem;
-};
-
-const ComboboxOption: React.FC<ComboboxOptionProps> = ({
-  option,
-}: ComboboxOptionProps) => (
-  <ComboboxLib.Option
-    value={option}
-    className={({ active }) =>
-      `relative cursor-default select-none py-2 px-3.5 text-slate11 rounded-xl mb-2 text-sm ${
-        active ? 'bg-slate5 text-slate12' : 'bg-transparent'
-      }`
-    }
-  >
-    {({ selected, active }) => (
-      <Flex css={{ justifyContent: 'space-between' }}>
-        <Flex css={{ flexDirection: 'row', maxWidth: '95%' }}>
-          {option.icon}
-          <span
-            className={`${active ? 'text-slate12' : 'text-slate11'} ${
-              option.icon ? 'max-w-70' : 'max-w-full'
-            } whitespace-nowrap text-ellipsis overflow-hidden`}
-          >
-            {option.label}
-          </span>
-        </Flex>
-        {selected && <Icon name="check" color="white" />}
-      </Flex>
-    )}
-  </ComboboxLib.Option>
-);
-
-export const NoResults: React.FC = ({ css }: { css?: string }) => (
-  <div
-    className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 ${css}`}
-  >
-    Nothing found.
-  </div>
-);
-
-export type ComboboxItem = {
-  /**
-   * The key of the item.
-   */
-  value: string;
-  /**
-   * The label to display of the item.
-   */
-  label: string;
-  /**
-   * Optional icon to display on the left of the item.
-   */
-  icon?: React.ReactNode;
-};
-
-export type ComboboxProps = {
-  /**
-   * List of items to be displayed in the combobox.
-   */
-  items: ComboboxItem[];
-  /**
-   * The selected value of the combobox.
-   */
-  selectedValue: ComboboxItem | undefined;
-  /**
-   * If true, the combobox will add the input if it doesn't exist in the list of items.
-   */
-  withAutocomplete?: boolean;
-  /**
-   * Name of the left icon to display in the input. Defualt is "search".
-   */
-  leftIcon?: IconName;
-  /**
-   * Callback when the selected value changes.
-   */
-  onChange: (option: ComboboxItem) => void;
-  /**
-   * Function to handle the input blur
-   */
-  onBlur?: () => void;
-  /**
-   * Value to indicate it's invalid
-   */
-  error?: boolean;
-  css?: string; //tailwind css
-};
-
-export const Combobox: React.FC<ComboboxProps> = ({
-  items,
-  selectedValue = { value: '', label: '' },
-  withAutocomplete = false,
-  leftIcon = 'search',
-  onChange,
-  onBlur,
-  error = false,
-  css,
-}) => {
-  const [filteredItems, setFilteredItems] = useState<ComboboxItem[]>([]);
-  const [autocompleteItems, setAutocompleteItems] = useState<ComboboxItem[]>(
-    []
+  const [
+    optionRenderer,
+    EmptyRender = EmptyMessage,
+    LoadingRender = LoadingMessage,
+  ] = useMemo(
+    () => (Array.isArray(children) ? children : [children]),
+    [children]
   );
 
-  useEffect(() => {
-    // If the selected value doesn't exist in the list of items, we add it
-    if (
-      items.filter((item) => item === selectedValue).length === 0 &&
-      selectedValue.value !== undefined &&
-      autocompleteItems.length === 0 &&
-      withAutocomplete
-    ) {
-      setAutocompleteItems([selectedValue]);
-    }
-  }, [autocompleteItems.length, items, selectedValue, withAutocomplete]);
-
-  useEffect(() => {
-    setFilteredItems(items);
-  }, [items]);
-
-  const handleSearch = useDebounce((searchValue: string) => {
-    if (searchValue === '') {
-      setFilteredItems(items);
-
-      if (withAutocomplete) {
-        setAutocompleteItems([]);
-        handleComboboxChange({} as ComboboxItem);
-      }
-    } else {
-      const filteredValues = items.filter((item) =>
-        cleanString(item.label).startsWith(cleanString(searchValue))
-      );
-
-      if (withAutocomplete && filteredValues.length === 0) {
-        // If the search value doesn't exist in the list of items, we add it
-        setAutocompleteItems([{ value: searchValue, label: searchValue }]);
-      }
-      setFilteredItems(filteredValues);
-    }
-  }, 200);
-
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    event.stopPropagation();
-    handleSearch(event.target.value);
-  };
-
-  const handleComboboxChange = (optionSelected: ComboboxItem): void => {
-    onChange(optionSelected);
-  };
-
-  const handleLeaveTransition = (): void => {
-    setFilteredItems(items);
-    if (selectedValue.value === undefined && withAutocomplete) {
-      setAutocompleteItems([]);
-      handleComboboxChange({} as ComboboxItem);
-    }
-  };
+  const filteredItems = useMemo(
+    () => items.filter((item) => queryFilter(query, item)),
+    [items, query, queryFilter]
+  );
 
   return (
-    <ComboboxLib
-      value={selectedValue}
-      by="value"
-      onChange={handleComboboxChange}
-    >
-      {({ open }) => (
-        <div className={`relative w-full ${css ? css : ''}`}>
-          <div className="relative w-full">
-            <Icon
-              name={leftIcon}
-              size="sm"
-              css={{
-                position: 'absolute',
-                left: '$3',
-                top: '$3',
-                fontSize: '$xl',
-                color: 'slate8',
-              }}
-            />
-            <ComboboxLib.Button
-              className={`w-full text-left border-solid border rounded-xl h-11  py-3 px-10 text-sm leading-5 text-slate11 outline-none ${
-                error ? 'border-red9' : 'border-slate7'
-              }`}
-              onBlur={onBlur}
-            >
-              {selectedValue && selectedValue.label
-                ? selectedValue.label
-                : 'Search'}
-            </ComboboxLib.Button>
-            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
-              <Icon name="chevron-down" css={{ fontSize: '$xs' }} />
-            </span>
-          </div>
-
-          <Transition
-            show={open}
-            as={Fragment}
-            enter="transition duration-400 ease-out"
-            leave="transition ease-out duration-100"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-            afterLeave={handleLeaveTransition}
-          >
-            <div className="absolute max-h-60 mt-2 w-full z-10 overflow-auto rounded-xl border-solid  border-slate6  border  bg-black pt-2 px-3 text-base focus:outline-none sm:text-sm">
-              <ComboboxInput onChange={handleInputChange} onBlur={onBlur} />
-              <Separator />
-              <ComboboxLib.Options className="mt-1 z-20">
-                {[...autocompleteItems, ...filteredItems].length === 0 ||
-                filteredItems === undefined ? (
-                  <NoResults />
-                ) : (
-                  <>
-                    {autocompleteItems.length > 0 && <span>Create new</span>}
-                    {autocompleteItems.map(
-                      (autocompleteOption: ComboboxItem) => (
-                        <ComboboxOption
-                          key={autocompleteOption.value}
-                          option={autocompleteOption}
-                        />
-                      )
-                    )}
-                    {autocompleteItems.length > 0 &&
-                      filteredItems.length > 0 && (
-                        <Separator css={{ mb: '$2' }} />
-                      )}
-                    {filteredItems.map((option: ComboboxItem) => (
-                      <ComboboxOption key={option.value} option={option} />
-                    ))}
-                  </>
-                )}
-              </ComboboxLib.Options>
-            </div>
-          </Transition>
-        </div>
+    <CS.Options {...props}>
+      {!disableSearch && (
+        <CS.InnerSearchContainer>
+          <Icon name="search" />
+          <Input placeholder="Search..." />
+        </CS.InnerSearchContainer>
       )}
-    </ComboboxLib>
+
+      {filteredItems.map((item) => (
+        <CS.Option key={JSON.stringify(item)} value={item}>
+          {optionRenderer(item, selected === item)}
+          {selected === item && <CS.RightPositionedIcon name="check" />}
+        </CS.Option>
+      ))}
+
+      {!loading && filteredItems.length === 0 && EmptyRender}
+
+      {loading && LoadingRender}
+    </CS.Options>
   );
 };
 
-Combobox.displayName = 'Combobox';
+const Field = <T,>({
+  children,
+  disableChevron,
+  ...props
+}: Combobox.FieldProps<T>): JSX.Element => {
+  const {
+    selected: [selected],
+  } = useContext() as Combobox.Context<T>;
+
+  return (
+    <CS.Field {...props}>
+      {children(selected)}
+      {!disableChevron && <CS.RightPositionedIcon name="chevron-down" />}
+    </CS.Field>
+  );
+};
+
+export const Combobox = <T,>({
+  children,
+  selected,
+  isLoading: loading = false,
+  items,
+  queryKey,
+  ...props
+}: Combobox.RootProps<T>): JSX.Element => {
+  const [value, setValue] = selected;
+  const query = useState('');
+
+  const queryFilter = useCallback(
+    (query: string, item: T): boolean => {
+      if (typeof queryKey === 'undefined')
+        return `${item}`.includes(query.toLowerCase());
+
+      const keys = Array.isArray(queryKey) ? queryKey : [queryKey];
+
+      const searchString = keys
+        .reduce((acc, key) => {
+          const value = item[key];
+          return `${acc} ${value}`;
+        }, '')
+        .toLowerCase();
+
+      return searchString.includes(query.toLowerCase());
+    },
+    [queryKey]
+  );
+
+  const TypedProvider = Provider as React.Provider<Combobox.Context<T>>;
+
+  return (
+    <HeadlessCombobox
+      as={CS.Wrapper}
+      value={value}
+      onChange={setValue}
+      {...props}
+    >
+      {({ open }) => (
+        <TypedProvider
+          value={{
+            selected,
+            query,
+            loading,
+            open,
+            items,
+            queryFilter,
+          }}
+        >
+          {children({
+            Options: Options<T>,
+            Input: Input<T>,
+            Field: Field<T>,
+            Message: CS.Message,
+          })}
+        </TypedProvider>
+      )}
+    </HeadlessCombobox>
+  );
+};
+
+export namespace Combobox {
+  export type Context<T> = {
+    items: T[];
+    selected: [T | undefined, (newState: T | undefined) => void];
+    query: ReactState<string>;
+    loading: boolean;
+    open: boolean;
+    queryFilter: (query: string, item: T) => boolean;
+  };
+
+  export type OptionsProps<T> = Omit<
+    React.ComponentPropsWithRef<typeof CS.Options>,
+    'children'
+  > & {
+    disableSearch?: boolean;
+    children:
+      | ((item: T, selected: boolean) => React.ReactNode)
+      | [
+          (item: T, selected: boolean) => React.ReactNode,
+          React.ReactNode?,
+          React.ReactNode?
+        ];
+  };
+
+  export type InputProps<T> = ComboboxInputProps<'input', T | undefined>;
+
+  export type FieldProps<T> = Omit<
+    React.ComponentPropsWithRef<typeof CS.Field>,
+    'children'
+  > & {
+    children: (item: T | undefined) => React.ReactElement | React.ReactNode;
+    disableChevron?: boolean;
+  };
+
+  export type Elements<T> = {
+    Options: React.FC<OptionsProps<T>>;
+    Input: React.FC<InputProps<T>>;
+    Field: React.FC<FieldProps<T>>;
+    Message: typeof CS.Message;
+  };
+
+  export type RootProps<T> = Omit<
+    React.ComponentPropsWithRef<typeof CS.Wrapper>,
+    'defaultValue' | 'onChange' | 'children'
+  > &
+    Pick<Context<T>, 'selected' | 'items'> & {
+      isLoading?: boolean;
+      children: (elements: Elements<T>) => React.ReactNode;
+    } & (T extends object
+      ? { queryKey: keyof T | (keyof T)[] }
+      : { queryKey?: undefined });
+}

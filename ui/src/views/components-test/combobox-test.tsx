@@ -1,53 +1,74 @@
 import { useState } from 'react';
 
-import { Combobox, ComboboxItem, Flex } from '@/components';
+import { Combobox, Flex, Icon, IconName } from '@/components';
 
-const itemsCombobox = [
-  { label: 'Item 1', value: 'item-1' },
-  { label: 'Item 2', value: 'item-2' },
-  { label: 'Item 3', value: 'item-3' },
+type Item = { id: number; label: string; icon: IconName };
+
+const Items: Item[] = [
+  { id: 1, label: 'Option 1', icon: 'branch' },
+  { id: 2, label: 'Option 2', icon: 'ethereum' },
+  { id: 3, label: 'Option 3', icon: 'metamask' },
 ];
 
 export const ComboboxTest: React.FC = () => {
-  const [selectedValue, setSelectedValue] = useState({} as ComboboxItem);
-  const [selectedValueAutocomplete, setSelectedValueAutocomplete] = useState(
-    {} as ComboboxItem
-  );
-
-  const handleComboboxChange = (value: ComboboxItem): void => {
-    setSelectedValue(value);
-  };
-
-  const handleComboboxChangeAutocomplete = (value: ComboboxItem): void => {
-    setSelectedValueAutocomplete(value);
-  };
+  const selected = useState<Item>();
 
   return (
     <Flex
       css={{
+        position: 'relative',
         flexDirection: 'column',
-        margin: '100px',
-
         justifyContent: 'center',
         gap: '10px',
+        width: '600px',
+        alignSelf: 'center',
       }}
     >
-      <h1>Components Test</h1>
-      <Flex css={{ width: '600px', gap: '$2' }}>
-        <Combobox
-          items={itemsCombobox}
-          selectedValue={selectedValue}
-          onChange={handleComboboxChange}
-          leftIcon="github"
-        />
+      <Combobox unattached items={Items} selected={selected} queryKey="label">
+        {({ Field, Options }) => (
+          <>
+            <Field>
+              {(selected) => (
+                <>
+                  <Icon name={selected?.icon || 'search'} />
+                  {selected?.label || 'Select an option'}
+                </>
+              )}
+            </Field>
 
-        <Combobox
-          items={itemsCombobox}
-          selectedValue={selectedValueAutocomplete}
-          onChange={handleComboboxChangeAutocomplete}
-          withAutocomplete
-        />
-      </Flex>
+            <Options>
+              {(item) => (
+                <>
+                  <Icon name={item.icon} /> {item.label}
+                </>
+              )}
+            </Options>
+          </>
+        )}
+      </Combobox>
+
+      <Combobox unattached items={Items} selected={selected} queryKey="label">
+        {({ Field, Options }) => (
+          <>
+            <Field>
+              {(selected) => (
+                <>
+                  <Icon name={selected?.icon || 'search'} />
+                  {selected?.label || 'Select an option'}
+                </>
+              )}
+            </Field>
+
+            <Options>
+              {(item) => (
+                <>
+                  <Icon name={item.icon} /> {item.label}
+                </>
+              )}
+            </Options>
+          </>
+        )}
+      </Combobox>
     </Flex>
   );
 };

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ComboboxItem } from '@/components';
 
 const listSites = [
   {
@@ -29,13 +28,13 @@ const listSites = [
   },
 ];
 
-const listBranches: ComboboxItem[] = [
+const listBranches = [
   { value: '4573495837458934', label: 'main' },
   { value: '293857439857348', label: 'develop' },
   { value: '12344', label: 'feat/nabvar' },
 ];
 
-export const fetchMintedSites = async (): Promise<ComboboxItem[]> => {
+export const fetchMintedSites = async (): Promise<typeof listBranches> => {
   return new Promise((resolved) => {
     setTimeout(() => {
       resolved(listBranches);
