@@ -19,4 +19,10 @@ export const env = Object.freeze({
   twitter: {
     url: import.meta.env.VITE_TWITTER_URL || '',
   },
+  sepolia: {
+    rpc: import.meta.env.VITE_SEPOLIA_RPC || '',
+  },
+  goerli: {
+    rpc: import.meta.env.VITE_GOERLI_RPC || '',
+  },
 });

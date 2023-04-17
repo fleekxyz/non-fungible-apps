@@ -23,7 +23,7 @@ import {
 describe('Change Access Point Name Verify tests', () => {
   beforeAll(() => {
     // New Access Points
-    let newAccessPoints: NewAccessPoint[] = [];
+    const newAccessPoints: NewAccessPoint[] = [];
 
     // User One has two access points: one for tokenId 0 and one for tokenId 1
     newAccessPoints.push(
@@ -53,7 +53,7 @@ describe('Change Access Point Name Verify tests', () => {
 
     test('Check the `nameVerified` field of each access point entity after changing it', () => {
       // New Access Point Name Verified fields
-      let changeAccessPointNameVerifies: ChangeAccessPointNameVerify[] = [];
+      const changeAccessPointNameVerifies: ChangeAccessPointNameVerify[] = [];
 
       changeAccessPointNameVerifies.push(
         createNewChangeAccessPointNameVerify(

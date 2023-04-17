@@ -55,6 +55,7 @@ export const UserOrgsCombobox: React.FC = () => {
       selectedValue={selectedUserOrg}
       onChange={handleUserOrgChange}
       leftIcon="github"
+      css="flex-1"
     />
   );
 };

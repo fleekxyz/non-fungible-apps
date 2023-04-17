@@ -7,7 +7,7 @@ import { Transfer as TransferEvent } from '../generated/FleekNFA/FleekNFA';
 import { Owner, Token, Transfer } from '../generated/schema';
 
 export function handleTransfer(event: TransferEvent): void {
-  let transfer = new Transfer(
+  const transfer = new Transfer(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
 
@@ -25,7 +25,7 @@ export function handleTransfer(event: TransferEvent): void {
 
   let token: Token | null;
 
-  let owner_address = event.params.to;
+  const owner_address = event.params.to;
   let owner = Owner.load(owner_address);
 
   if (!owner) {

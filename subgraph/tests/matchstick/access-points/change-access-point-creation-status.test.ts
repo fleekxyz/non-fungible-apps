@@ -6,13 +6,12 @@ import {
   beforeAll,
   afterAll,
 } from 'matchstick-as/assembly/index';
-import { BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { BigInt } from '@graphprotocol/graph-ts';
 import {
   createNewAccessPointEvent,
   createNewChangeAccessPointCreationStatus,
   handleChangeAccessPointCreationStatusList,
   handleNewAccessPoints,
-  makeEventId,
   USER_ONE,
   USER_TWO,
 } from '../helpers/utils';
@@ -24,7 +23,7 @@ import {
 describe('Change Access Point Creation Status tests', () => {
   beforeAll(() => {
     // New Access Points
-    let newAccessPoints: NewAccessPoint[] = [];
+    const newAccessPoints: NewAccessPoint[] = [];
 
     // User One has two access points: one for tokenId 0 and one for tokenId 1
     newAccessPoints.push(
@@ -54,7 +53,7 @@ describe('Change Access Point Creation Status tests', () => {
 
     test('Check the `creationStatus` field of each access point entity after changing it', () => {
       // New Access Points
-      let changeAccessPointCreationStatusList: ChangeAccessPointCreationStatus[] =
+      const changeAccessPointCreationStatusList: ChangeAccessPointCreationStatus[] =
         [];
 
       // User One has two access points: one for tokenId 0 and one for tokenId 1

@@ -55,11 +55,8 @@ export const MintPreview: React.FC = () => {
   );
 
   const error = useMemo(
-    () =>
-      [prepareStatus, writeStatus, transactionStatus].some(
-        (status) => status === 'error'
-      ),
-    [prepareStatus, writeStatus, transactionStatus]
+    () => [writeStatus, transactionStatus].some((status) => status === 'error'),
+    [writeStatus, transactionStatus]
   );
 
   useEffect(() => {

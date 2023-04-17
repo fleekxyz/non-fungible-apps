@@ -1,7 +1,5 @@
 import { Flex } from '@/components/layout';
-import { dripStitches } from '@/theme';
-
-const { styled } = dripStitches;
+import { styled } from '@/theme';
 
 export abstract class InputFileStyles {
   static readonly Container = styled(Flex, {
@@ -18,7 +16,6 @@ export abstract class InputFileStyles {
     transition: 'border-color 0.2s ease-in-out',
     borderWidth: '$default',
     borderRadius: '$lg',
-    zIndex: '$docked',
 
     '&:hover': {
       borderColor: '$gray8',

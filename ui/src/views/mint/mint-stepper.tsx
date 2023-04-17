@@ -42,7 +42,7 @@ export const MintStepper: React.FC = () => {
             </Stepper.Step>
 
             <Stepper.Step>
-              <Step header="Review your NFA and mint it on Polygon">
+              <Step header="Review your NFA and mint it on Ethereum">
                 <MintPreview />
               </Step>
             </Stepper.Step>

@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 
-import { dripStitches } from '@/theme';
+import { styled } from '@/theme';
 
 import { Skeleton } from '../layout';
-
-const { styled } = dripStitches;
 
 export const NFACardStyles = {
   Container: styled(Link, {

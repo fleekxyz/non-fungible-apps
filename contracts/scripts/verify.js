@@ -1,4 +1,7 @@
-const { address } = require('../deployments/mumbai/FleekERC721.json');
+require('@nomiclabs/hardhat-etherscan');
+
+const networkName = hre.network.name;
+const { address } = require(`../deployments/${networkName}/FleekERC721.json`);
 require('@nomiclabs/hardhat-etherscan');
 
 async function main() {
