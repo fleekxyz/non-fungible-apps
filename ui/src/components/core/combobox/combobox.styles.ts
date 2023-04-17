@@ -54,7 +54,7 @@ export const ComboboxStyles = {
     padding: '$3',
     gap: '$2',
     borderRadius: '$lg',
-    zIndex: 10,
+    zIndex: '$dropdown',
     maxHeight: '30vh',
     overflow: 'auto',
   }),

@@ -41,7 +41,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
       <div className="relative">
         <Flex css={{ gap: '$3h', alignItems: 'center' }}>
           <span>Primary Color</span>
-          {/* TODO crate color picker component */}
           <Button
             leftIcon={
               <Icon name="square" css={{ color: `${logoColor || '$black'}` }} />
@@ -54,7 +53,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
               height: '$5',
               borderRadius: '$md',
               color: '$slate12',
-              zIndex: '$dropdown',
+              zIndex: '$docked',
               minWidth: '$28',
             }}
             onClick={handleColorPickerClick}
