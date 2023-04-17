@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useMemo } from 'react';
 
-import { Combobox, ComboboxItem } from '@/components';
+import { Combobox } from '@/components';
 import { getLatestNFAsDocument } from '@/graphclient';
 import { AppLog } from '@/utils';
 
@@ -11,25 +11,26 @@ export const NfaPicker: React.FC = () => {
   const { nfa, setNfa } = CreateAccessPoint.useContext();
   const { data, loading, error } = useQuery(getLatestNFAsDocument);
 
-  const handleNfaChange = (item: ComboboxItem): void => {
-    setNfa(item);
-  };
-
-  const items = useMemo(() => {
-    return data
-      ? data.tokens.map(
-          (nfa) => ({ value: nfa.id, label: nfa.name } as ComboboxItem)
-        )
-      : [];
-  }, [data]);
-
-  if (loading) return <div>Loading...</div>;
+  const items = useMemo(() => data?.tokens || [], [data]);
 
   if (error) {
-    AppLog.errorToast('Error loading NFA list');
+    AppLog.errorToast('Error loading NFA list', error);
   }
 
   return (
-    <Combobox items={items} selectedValue={nfa} onChange={handleNfaChange} />
+    <Combobox
+      isLoading={loading}
+      items={items}
+      selected={[nfa, setNfa]}
+      queryKey={['name', 'id']}
+    >
+      {({ Field, Options }) => (
+        <>
+          <Field>{(selected) => selected?.name || 'Select NFA'}</Field>
+
+          <Options>{(item) => item.name}</Options>
+        </>
+      )}
+    </Combobox>
   );
 };

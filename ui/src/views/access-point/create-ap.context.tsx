@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { EthereumHooks } from '@/integrations';
 import { useFleekERC721Billing } from '@/store';
-import { AppLog, createContext, pushToast } from '@/utils';
+import { AppLog, createContext } from '@/utils';
 
 export type NFA = {
   tokenId: string;

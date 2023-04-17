@@ -1,21 +1,20 @@
 import { useState } from 'react';
 
-import { ComboboxItem } from '@/components';
 import { EthereumHooks } from '@/integrations';
-import { GithubState, useFleekERC721Billing } from '@/store';
+import { GithubClient, GithubState, useFleekERC721Billing } from '@/store';
 import { AppLog, createContext } from '@/utils';
 
 export type MintContext = {
   billing: string | undefined;
-  selectedUserOrg: ComboboxItem;
-  repositoryName: GithubState.Repository;
+  selectedUserOrg: GithubClient.UserData | undefined;
+  repositoryName: GithubState.Repository | undefined;
   githubStep: number;
   nfaStep: number;
   verifyNFA: boolean;
   setGithubStep: (step: number) => void;
   setNfaStep: (step: number) => void;
-  setSelectedUserOrg: (userOrgValue: ComboboxItem) => void;
-  setRepositoryName: (repo: GithubState.Repository) => void;
+  setSelectedUserOrg: (userOrgValue: GithubClient.UserData | undefined) => void;
+  setRepositoryName: (repo: GithubState.Repository | undefined) => void;
   setVerifyNFA: (verify: boolean) => void;
 };
 
@@ -35,9 +34,10 @@ export abstract class Mint {
 
   static readonly Provider: React.FC<Mint.ProviderProps> = ({ children }) => {
     //Github Connection
-    const [selectedUserOrg, setSelectedUserOrg] = useState({} as ComboboxItem);
+    const [selectedUserOrg, setSelectedUserOrg] =
+      useState<GithubClient.UserData>();
     const [repositoryName, setRepositoryName] =
-      useState<GithubState.Repository>({} as GithubState.Repository);
+      useState<GithubState.Repository>();
     const [githubStep, setGithubStepContext] = useState(1);
 
     //NFA Details

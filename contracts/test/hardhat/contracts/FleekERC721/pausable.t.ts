@@ -2,7 +2,7 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { TestConstants, Fixtures, Errors } from './helpers';
 
-const { MintParams, CollectionRoles, TokenRoles } = TestConstants;
+const { MintParams, CollectionRoles } = TestConstants;
 
 describe('FleekERC721.Pausable', () => {
   let fixture: Awaited<ReturnType<typeof Fixtures.default>>;
