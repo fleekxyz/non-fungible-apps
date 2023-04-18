@@ -9,7 +9,17 @@ export const IndexedNFAStyles = {
     gridTemplateAreas: '"aside main"',
     gridTemplateColumns: '24.0625rem 1fr',
     gridTemplateRows: 'fit-content',
-    gap: `calc(3 * ${Spacing})`,
+    gap: Spacing,
+    padding: Spacing,
+
+    '@media (max-width: 1080px)': {
+      gridTemplateColumns: '20rem 1fr',
+    },
+
+    '@media (max-width: 580px)': {
+      gridTemplateAreas: '"aside" "main"',
+      gridTemplateColumns: '1fr',
+    },
   }),
 
   Aside: {
@@ -21,6 +31,10 @@ export const IndexedNFAStyles = {
       flexDirection: 'column',
       gap: Spacing,
       height: 'fit-content',
+
+      '@media (max-width: 580px)': {
+        position: 'static',
+      },
     }),
 
     CreateAccessPoint: {
@@ -55,7 +69,6 @@ export const IndexedNFAStyles = {
       gridArea: 'main',
       display: 'flex',
       flexDirection: 'column',
-      height: '200vh',
       gap: Spacing,
     }),
     Heading: styled('h1', {
