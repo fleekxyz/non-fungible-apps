@@ -92,5 +92,49 @@ export const IndexedNFAStyles = {
       padding: Spacing,
       gap: `$1`,
     }),
+    DataList: styled('div', {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '$5',
+    }),
+    VerificationBanner: styled('div', {
+      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      border: '1px solid $slate6',
+      borderRadius: '$lg',
+      padding: '$8 $5',
+      fontWeight: 700,
+      overflow: 'hidden',
+
+      '&:after': {
+        content: '""',
+        position: 'absolute',
+        right: '-$5',
+        top: '-$10',
+        bottom: '-$10',
+        left: '80%',
+        borderRadius: '80% 0 0 80%',
+      },
+
+      variants: {
+        verified: {
+          true: {
+            borderColor: '$green11',
+            color: '$green11',
+            '&:after': {
+              backgroundColor: '$green11',
+            },
+          },
+          false: {
+            borderColor: '$red11',
+            color: '$red11',
+            '&:after': {
+              backgroundColor: '$red11',
+            },
+          },
+        },
+      },
+    }),
   },
 };

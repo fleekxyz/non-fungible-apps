@@ -59,6 +59,20 @@ const Description: React.FC = () => {
   );
 };
 
+type DataWrapperProps = React.PropsWithChildren<{
+  label: string | number;
+}>;
+
+const DataWrapper: React.FC<DataWrapperProps> = ({
+  children,
+  label,
+}: DataWrapperProps) => (
+  <S.Main.DataContainer key={label} css={{ flex: 1, minWidth: '45%' }}>
+    <Text css={{ color: '$slate12', fontWeight: 700 }}>{children || '-'}</Text>
+    <Text css={{ color: '$slate11' }}>{label}</Text>
+  </S.Main.DataContainer>
+);
+
 const Traits: React.FC = () => {
   const { nfa } = IndexedNFA.useContext();
 
@@ -68,23 +82,53 @@ const Traits: React.FC = () => {
       [nfa.gitRepository.id, 'Repository'],
       [10, 'Version'],
       [nfa.externalURL, 'Domain'],
-      [nfa.externalURL, 'Domain'],
+      [nfa.externalURL, 'Domain 2'],
     ];
   }, [nfa]);
 
   return (
     <>
       <S.Main.SectionHeading>Traits</S.Main.SectionHeading>
-      <Flex css={{ flexWrap: 'wrap', gap: '$5' }}>
+      <S.Main.DataList>
         {traitsToShow.map(([value, label]) => (
-          <S.Main.DataContainer key={label} css={{ flex: 1, minWidth: '45%' }}>
-            <Text css={{ color: '$slate12', fontWeight: 700 }}>
-              {value || '-'}
-            </Text>
-            <Text css={{ color: '$slate11' }}>{label}</Text>
-          </S.Main.DataContainer>
+          <DataWrapper key={label} label={label}>
+            {value}
+          </DataWrapper>
         ))}
-      </Flex>
+      </S.Main.DataList>
+    </>
+  );
+};
+
+type VerificationBannerProps = {
+  verified: boolean;
+};
+
+// TODO: add banner icon
+const VerificationBanner: React.FC<VerificationBannerProps> = ({
+  verified,
+}: VerificationBannerProps) => {
+  const text = useMemo(() => {
+    if (verified) return 'This Non Fungible Application is Verified.';
+    return 'This Non Fungible Application is not Verified.';
+  }, [verified]);
+
+  return (
+    <S.Main.VerificationBanner verified={verified}>
+      {text}
+    </S.Main.VerificationBanner>
+  );
+};
+
+const Verification: React.FC = () => {
+  return (
+    <>
+      <S.Main.SectionHeading>Verification</S.Main.SectionHeading>
+      <VerificationBanner verified={true} />
+      <S.Main.DataList>
+        <DataWrapper label="Verifier">polygon.eth</DataWrapper>
+        <DataWrapper label="Repository">polygon/fe</DataWrapper>
+      </S.Main.DataList>
     </>
   );
 };
@@ -95,6 +139,7 @@ export const IndexedNFAMainFragment: React.FC = () => {
       <Header />
       <Description />
       <Traits />
+      <Verification />
     </S.Main.Container>
   );
 };
