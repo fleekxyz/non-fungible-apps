@@ -31,7 +31,7 @@ custom:
 
 functions:
   submitBuildInfo:
-    handler: dist/functions/builds/handler.submitBuildInfo
+    handler: src/functions/builds/handler.submitBuildInfo # Change `src` to `dist` for deployment
     events:
       - http:
           path: build
