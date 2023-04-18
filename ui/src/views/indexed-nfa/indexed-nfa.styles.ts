@@ -61,10 +61,12 @@ export const IndexedNFAStyles = {
     Heading: styled('h1', {
       fontSize: '2.125rem',
       lineHeight: 1.35,
+      fontWeight: 700,
     }),
     SectionHeading: styled('h2', {
       fontSize: '$xl',
       lineHeight: 1.2,
+      fontWeight: 700,
     }),
     Divider: {
       Line: styled('span', {
@@ -84,9 +86,11 @@ export const IndexedNFAStyles = {
     }),
     DataContainer: styled('div', {
       display: 'flex',
+      flexDirection: 'column',
       border: '1px solid $slate6',
       borderRadius: '$lg',
       padding: Spacing,
+      gap: `$1`,
     }),
   },
 };
