@@ -136,5 +136,62 @@ export const IndexedNFAStyles = {
         },
       },
     }),
+
+    Table: {
+      Container: styled('div', {
+        border: '1px solid $slate6',
+        borderRadius: '10px',
+        padding: '0 $5',
+
+        maxHeight: '15.125rem',
+        overflow: 'auto',
+      }),
+      Root: styled('table', {
+        width: 'calc(100% + 2 * $space$5)',
+        margin: '0 -$5',
+      }),
+      Head: styled('thead', {
+        position: 'sticky',
+        top: 0,
+        backgroundColor: '$black',
+
+        '&:after': {
+          position: 'absolute',
+          content: '""',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          borderBottom: '1px solid $slate6',
+        },
+      }),
+      Row: styled('tr', {
+        '&:hover': {
+          backgroundColor: '$slate6',
+        },
+      }),
+      Data: styled('td', {
+        padding: '$3',
+      }),
+      Body: styled('tbody'),
+      Marker: styled('span', {
+        display: 'block',
+        margin: 'auto',
+        width: '0.5625rem',
+        height: '0.5625rem',
+        borderRadius: '100%',
+        backgroundColor: '$slate6',
+
+        variants: {
+          variant: {
+            green: {
+              backgroundColor: '$green11',
+            },
+            red: {
+              backgroundColor: '$red11',
+            },
+          },
+        },
+      }),
+    },
   },
 };

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Flex, ResolvedAddress, Text } from '@/components';
+import { Flex, Icon, ResolvedAddress, Text } from '@/components';
 
 import { IndexedNFA } from './indexed-nfa.context';
 import { IndexedNFAStyles as S } from './indexed-nfa.styles';
@@ -133,6 +133,53 @@ const Verification: React.FC = () => {
   );
 };
 
+const apMocks = new Array(10).fill(0).map((_, index) => ({
+  approved: Math.random() > 0.5,
+  domain: `domain${index}.com`,
+  owner: '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049',
+  createdAt: `${Math.floor(Math.random() * 30)}m ago`,
+}));
+
+const AccessPoints: React.FC = () => {
+  return (
+    <>
+      <S.Main.SectionHeading>Frontends</S.Main.SectionHeading>
+      <S.Main.Table.Container>
+        <S.Main.Table.Root>
+          <S.Main.Table.Head>
+            <S.Main.Table.Data align="center">
+              <S.Main.Table.Marker />
+            </S.Main.Table.Data>
+            <S.Main.Table.Data>Domain</S.Main.Table.Data>
+            <S.Main.Table.Data>Owner</S.Main.Table.Data>
+            <S.Main.Table.Data>Created</S.Main.Table.Data>
+            <S.Main.Table.Data />
+          </S.Main.Table.Head>
+          <S.Main.Table.Body>
+            {apMocks.map((item) => (
+              <S.Main.Table.Row key={item.domain}>
+                <S.Main.Table.Data align="center">
+                  <S.Main.Table.Marker
+                    variant={item.approved ? 'green' : 'red'}
+                  />
+                </S.Main.Table.Data>
+                <S.Main.Table.Data>{item.domain}</S.Main.Table.Data>
+                <S.Main.Table.Data>
+                  <ResolvedAddress>{item.owner}</ResolvedAddress>
+                </S.Main.Table.Data>
+                <S.Main.Table.Data>{item.createdAt}</S.Main.Table.Data>
+                <S.Main.Table.Data>
+                  <Icon name="external-link" />
+                </S.Main.Table.Data>
+              </S.Main.Table.Row>
+            ))}
+          </S.Main.Table.Body>
+        </S.Main.Table.Root>
+      </S.Main.Table.Container>
+    </>
+  );
+};
+
 export const IndexedNFAMainFragment: React.FC = () => {
   return (
     <S.Main.Container>
@@ -140,6 +187,7 @@ export const IndexedNFAMainFragment: React.FC = () => {
       <Description />
       <Traits />
       <Verification />
+      <AccessPoints />
     </S.Main.Container>
   );
 };
