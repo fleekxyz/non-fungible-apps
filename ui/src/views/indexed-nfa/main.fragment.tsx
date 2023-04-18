@@ -147,7 +147,7 @@ const AccessPoints: React.FC = () => {
       <S.Main.Table.Container>
         <S.Main.Table.Root>
           <S.Main.Table.Head>
-            <S.Main.Table.Data align="center">
+            <S.Main.Table.Data>
               <S.Main.Table.Marker />
             </S.Main.Table.Data>
             <S.Main.Table.Data>Domain</S.Main.Table.Data>
@@ -180,6 +180,49 @@ const AccessPoints: React.FC = () => {
   );
 };
 
+const versionsMock = new Array(10).fill(0).map((_, index) => ({
+  live: index === 0,
+  commit: (Math.random() * 0xfffffffff).toString(16),
+  preview: 'Merge pull request #11',
+  time: `${Math.floor(Math.random() * 30)}m ago`,
+}));
+
+const Versions: React.FC = () => {
+  return (
+    <>
+      <S.Main.SectionHeading>Versions</S.Main.SectionHeading>
+      <S.Main.Table.Container>
+        <S.Main.Table.Root>
+          <S.Main.Table.Head>
+            <S.Main.Table.Data align="center">
+              <S.Main.Table.Marker />
+            </S.Main.Table.Data>
+            <S.Main.Table.Data>Commit</S.Main.Table.Data>
+            <S.Main.Table.Data>Preview</S.Main.Table.Data>
+            <S.Main.Table.Data>Time</S.Main.Table.Data>
+            <S.Main.Table.Data />
+          </S.Main.Table.Head>
+          <S.Main.Table.Body>
+            {versionsMock.map((item) => (
+              <S.Main.Table.Row key={item.commit}>
+                <S.Main.Table.Data>
+                  <S.Main.Table.Marker variant={item.live ? 'green' : 'red'} />
+                </S.Main.Table.Data>
+                <S.Main.Table.Data>{item.commit.slice(0, 6)}</S.Main.Table.Data>
+                <S.Main.Table.Data>{item.preview}</S.Main.Table.Data>
+                <S.Main.Table.Data>{item.time}</S.Main.Table.Data>
+                <S.Main.Table.Data>
+                  <Icon name="external-link" />
+                </S.Main.Table.Data>
+              </S.Main.Table.Row>
+            ))}
+          </S.Main.Table.Body>
+        </S.Main.Table.Root>
+      </S.Main.Table.Container>
+    </>
+  );
+};
+
 export const IndexedNFAMainFragment: React.FC = () => {
   return (
     <S.Main.Container>
@@ -188,6 +231,7 @@ export const IndexedNFAMainFragment: React.FC = () => {
       <Traits />
       <Verification />
       <AccessPoints />
+      <Versions />
     </S.Main.Container>
   );
 };
