@@ -31,9 +31,19 @@ custom:
 
 functions:
   submitBuildInfo:
-    handler: dist/functions/builds/handler.submitBuildInfo
+    handler: src/functions/builds/handler.submitBuildInfo
     events:
       - http:
           path: build
           method: post
           cors: true
+          request:
+            parameters:
+              querystrings:
+                githubOrg: true
+                githubRepo: true
+                commitHash: true
+                author: true
+                timestamp: true
+                ipfsHash: true
+                tokenId: true
