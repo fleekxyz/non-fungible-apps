@@ -23,8 +23,6 @@ import { AppLog } from '@/utils';
 
 export const AccessPointDataFragment: React.FC = () => {
   const { address, status } = useAccount();
-  // const { data: ensName, isLoading: isLoadingEns } = useEnsName({ address });
-
   const {
     form: {
       domain: {

@@ -4,9 +4,10 @@ import { WalletStep } from '../mint/wallet-step';
 import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
 import { CreateAccessPointForm } from './ap-form-step/create-ap-form';
 import { CreateAccessPointPreview } from './create-ap-preview';
-import { CNAMEStep } from './cname-step/cname-step';
+import { APRecordStep } from './ap-record-step/ap-record-step';
 import { CreateAccessPoint } from './create-ap.context';
 import { CreateAccessPointSuccess } from './create-ap-success';
+import { isSubdomain } from './ap-record-step/record-step.utils';
 
 export const CreateApStepper: React.FC = () => {
   const {
@@ -14,6 +15,9 @@ export const CreateApStepper: React.FC = () => {
   } = CreateAccessPoint.useTransactionContext();
   const {
     form: {
+      domain: {
+        value: [accesPointDomain],
+      },
       isValid: [, setIsValid],
     },
   } = useAccessPointFormContext();
@@ -37,8 +41,12 @@ export const CreateApStepper: React.FC = () => {
           </Stepper.Step>
 
           <Stepper.Step>
-            <Step header="Add a CNAME record to your DNS provider">
-              <CNAMEStep />
+            <Step
+              header={`Add a ${
+                isSubdomain(accesPointDomain) ? 'CNAME' : 'ANAME'
+              } record to your DNS provider`}
+            >
+              <APRecordStep />
             </Step>
           </Stepper.Step>
 

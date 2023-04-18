@@ -9,6 +9,7 @@ export type NFA = {
   name: string;
   logo: string;
   color: number;
+  domain: string;
 };
 
 export type AccessPointContext = {
@@ -40,6 +41,7 @@ export abstract class CreateAccessPoint {
       name: '',
       logo: '',
       color: 0,
+      domain: '',
     });
 
     const value = {

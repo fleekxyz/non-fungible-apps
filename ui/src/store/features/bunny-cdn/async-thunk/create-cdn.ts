@@ -19,18 +19,12 @@ export const createBunnyCDN = createAsyncThunk<void, CNAMERecord>(
     try {
       dispatch(bunnyCDNActions.setState('loading'));
 
-      const CNAMERecord = await createBunnyCDNMock(domain, targetDomain);
+      const CDNRecord = await createBunnyCDNMock(domain, targetDomain);
 
-      dispatch(
-        bunnyCDNActions.setCNAMERecordData({
-          recordType: CNAMERecord.record_type,
-          host: CNAMERecord.host,
-          cdn: CNAMERecord.cdn,
-        })
-      );
+      dispatch(bunnyCDNActions.setCDNRecordData(CDNRecord.bunnyURL));
     } catch (error) {
       AppLog.errorToast(
-        'Failed to create the CNAME record. Please, try again',
+        'Failed to create the CDN record. Please, try again',
         error
       );
       dispatch(bunnyCDNActions.setState('failed'));

@@ -8,6 +8,7 @@ import { AppLog } from '@/utils';
 import { CreateAccessPoint } from './create-ap.context';
 
 export const NfaPicker: React.FC = () => {
+  //TODO: remove
   const { nfa, setNfa } = CreateAccessPoint.useContext();
   const { data, loading, error } = useQuery(getLatestNFAsDocument);
 

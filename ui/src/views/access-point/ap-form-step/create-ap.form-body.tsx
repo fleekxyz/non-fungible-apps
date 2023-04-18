@@ -90,8 +90,14 @@ export const CreateAccessPointFormBody: React.FC = () => {
   useEffect(() => {
     if (nfaData) {
       if (nfaData.token && id) {
-        const { name, tokenId, logo, color } = nfaData.token;
-        setNfa({ name, tokenId, logo, color });
+        const {
+          name,
+          tokenId,
+          logo,
+          color,
+          externalURL: domain,
+        } = nfaData.token;
+        setNfa({ name, tokenId, logo, color, domain });
       } else {
         AppLog.errorToast("We couldn't find the NFA you are looking for");
       }

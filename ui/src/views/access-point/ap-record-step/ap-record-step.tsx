@@ -9,19 +9,41 @@ import {
   Stepper,
   Text,
 } from '@/components';
-import { useState } from 'react';
+import { useAppDispatch } from '@/store';
+import { bunnyCDNActions, useBunnyCDNStore } from '@/store/features/bunny-cdn';
+import { CreateAccessPoint } from '../create-ap.context';
+import { useEffect, useMemo } from 'react';
+import { isSubdomain } from './record-step.utils';
+import { useAccessPointFormContext } from '../ap-form-step';
 
-export const CNAMEStep: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
+export const APRecordStep: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { bunnyURL, state } = useBunnyCDNStore();
+  const {
+    nfa: { domain: nfaDomain },
+  } = CreateAccessPoint.useContext();
+  const {
+    form: {
+      domain: {
+        value: [accesPointDomain],
+      },
+    },
+  } = useAccessPointFormContext();
   const { prevStep, nextStep } = Stepper.useContext();
 
-  const handleContinueClick = (): void => {
-    //TODO add CNAME creation handler
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+  const isSudomain = useMemo(
+    () => isSubdomain(accesPointDomain),
+    [accesPointDomain]
+  );
+
+  useEffect(() => {
+    if (state === 'success') {
       nextStep();
-    }, 3000);
+    }
+  }, [state]);
+
+  const handleContinueClick = (): void => {
+    dispatch(bunnyCDNActions.verifyAP(nfaDomain));
   };
 
   return (
@@ -48,7 +70,7 @@ export const CNAMEStep: React.FC = () => {
         }
       />
       <Card.Body>
-        {isLoading ? (
+        {state === 'loading' ? (
           <Card.Text css={{ p: '$12 $10', gap: '$7' }}>
             <SpinnerDot css={{ fontSize: '$7xl' }} />
             <Text css={{ fontSize: '$md' }}>
@@ -62,15 +84,17 @@ export const CNAMEStep: React.FC = () => {
             }}
           >
             <Text>
-              Create a CNAME record in your DNS provider pointing to our CDN
-              endpoint.
+              {`Create a ${
+                isSudomain ? 'CNAME' : 'ANAME'
+              } record in your DNS provider pointing to our CDN
+              endpoint.`}
             </Text>
-            <DisplayText label="Record Type" value="CNAME" />
-            <DisplayText label="Host" value="App" />
             <DisplayText
-              label="Data (Points to)"
-              value="8c12c649402442d88b5f.b-cdn.net"
+              label="Record Type"
+              value={isSudomain ? 'CNAME' : 'ANAME'}
             />
+            <DisplayText label="Host" value={isSudomain ? 'App' : '@'} />
+            <DisplayText label="Data (Points to)" value={bunnyURL} />
             <Button
               colorScheme="blue"
               variant="solid"
