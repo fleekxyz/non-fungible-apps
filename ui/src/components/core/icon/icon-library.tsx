@@ -4,6 +4,7 @@ import { AiOutlineTwitter } from '@react-icons/all-files/ai/AiOutlineTwitter';
 import { BiGitBranch } from '@react-icons/all-files/bi/BiGitBranch';
 import { BiSearch } from '@react-icons/all-files/bi/BiSearch';
 import { BsFillSquareFill } from '@react-icons/all-files/bs/BsFillSquareFill';
+import { FaExternalLinkAlt } from '@react-icons/all-files/fa/FaExternalLinkAlt';
 import { IoArrowBackCircleSharp } from '@react-icons/all-files/io5/IoArrowBackCircleSharp';
 import { IoCheckmarkCircleSharp } from '@react-icons/all-files/io5/IoCheckmarkCircleSharp';
 import { IoClose } from '@react-icons/all-files/io5/IoClose';
@@ -31,6 +32,7 @@ export const IconLibrary = Object.freeze({
   close: IoClose,
   error: ErrorIcon,
   ethereum: EthereumIcon,
+  'external-link': FaExternalLinkAlt,
   fleekLogo: FleekLogo,
   fleekName: FleekName,
   github: IoLogoGithub,
