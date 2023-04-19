@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Flex, Icon, ResolvedAddress, Text } from '@/components';
+import { Flex, Icon, IconName, ResolvedAddress, Text } from '@/components';
 
 import { IndexedNFA } from '../indexed-nfa.context';
 import { IndexedNFAStyles as S } from '../indexed-nfa.styles';
@@ -104,18 +104,28 @@ type VerificationBannerProps = {
   verified: boolean;
 };
 
-// TODO: add banner icon
 const VerificationBanner: React.FC<VerificationBannerProps> = ({
   verified,
 }: VerificationBannerProps) => {
-  const text = useMemo(() => {
-    if (verified) return 'This Non Fungible Application is Verified.';
-    return 'This Non Fungible Application is not Verified.';
+  const [text, icon] = useMemo<[string, IconName]>(() => {
+    if (verified)
+      return ['This Non Fungible Application is Verified.', 'verified'];
+    return ['This Non Fungible Application is not Verified.', 'error'];
   }, [verified]);
 
   return (
     <S.Main.VerificationBanner verified={verified}>
       {text}
+      <Icon
+        name={icon}
+        css={{
+          fontSize: '3.5rem',
+          color: '$black',
+          position: 'absolute',
+          right: 'calc(8% - 1.75rem)',
+          zIndex: 1,
+        }}
+      />
     </S.Main.VerificationBanner>
   );
 };
@@ -124,7 +134,8 @@ const Verification: React.FC = () => {
   return (
     <>
       <S.Main.SectionHeading>Verification</S.Main.SectionHeading>
-      <VerificationBanner verified={true} />
+      {/* TODO: Get verified from context */}
+      <VerificationBanner verified={Math.random() > 0.5} />
       <S.Main.DataList>
         <DataWrapper label="Verifier">polygon.eth</DataWrapper>
         <DataWrapper label="Repository">polygon/fe</DataWrapper>
@@ -194,7 +205,7 @@ const Versions: React.FC = () => {
       <S.Main.Table.Container>
         <S.Main.Table.Root>
           <S.Main.Table.Head>
-            <S.Main.Table.Data align="center">
+            <S.Main.Table.Data>
               <S.Main.Table.Marker />
             </S.Main.Table.Data>
             <S.Main.Table.Data>Commit</S.Main.Table.Data>

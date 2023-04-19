@@ -127,7 +127,7 @@ export const IndexedNFAStyles = {
         right: '-$5',
         top: '-$10',
         bottom: '-$10',
-        left: '80%',
+        left: '84%',
         borderRadius: '80% 0 0 80%',
       },
 
