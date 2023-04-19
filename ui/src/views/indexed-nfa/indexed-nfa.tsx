@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getNFADocument } from '@/graphclient';
+import { NFAMock } from '@/mocks';
 import { AppLog } from '@/utils';
 
 import {
@@ -42,8 +43,9 @@ export const IndexedNFAView: React.FC = () => {
     return <IndexedNFASkeletonFragment />;
   }
 
+  // TODO: replace NFAMock with real data from useQuery
   return (
-    <IndexedNFA.Provider>
+    <IndexedNFA.Provider nfa={NFAMock}>
       <S.Grid>
         <IndexedNFAAsideFragment />
         <IndexedNFAMainFragment />
