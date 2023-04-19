@@ -60,13 +60,12 @@ const CreateAccessPoint: React.FC = () => {
 
 export const IndexedNFAAsideFragment: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const [top, setTop] = useState(0);
+  const [top, setTop] = useState<number>();
 
   useEffect(() => {
-    setTop(ref.current?.getBoundingClientRect().top ?? 0);
+    setTop(ref.current?.getBoundingClientRect().top);
   }, [ref]);
 
-  // TODO: improve fixed position on scroll
   return (
     <S.Aside.Container ref={ref} css={{ top }}>
       <Preview />

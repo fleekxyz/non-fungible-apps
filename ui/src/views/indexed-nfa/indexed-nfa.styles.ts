@@ -5,7 +5,6 @@ const Spacing = '$5';
 
 export const IndexedNFAStyles = {
   Grid: styled('div', {
-    position: 'relative',
     display: 'grid',
     gridTemplateAreas: '"aside main"',
     gridTemplateColumns: '24.0625rem 1fr',
