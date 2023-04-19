@@ -1,6 +1,6 @@
 export const NFAMock = {
-  id: '',
-  tokenId: '',
+  id: '6',
+  tokenId: '6',
   name: 'Polygon',
   description:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet velit dolor. Praesent dapibus euismod molestie. Duis maximus porttitor odio. Duis quis lorem id lacus cursus commodo vel vehicula mauris.',

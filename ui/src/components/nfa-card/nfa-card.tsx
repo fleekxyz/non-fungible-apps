@@ -33,7 +33,7 @@ export const NFACard: React.FC<NFACardProps> = forwardStyledRef<
   HTMLAnchorElement,
   NFACardProps
   // TODO: Set default path to NFA page
->(({ data, to = `/create-ap/${data.tokenId}`, ...props }, ref) => {
+>(({ data, to = `/nfa/${data.tokenId}`, ...props }, ref) => {
   const { name, color, ENS, logo, accessPoints } = data;
 
   const apCounter = useMemo(() => accessPoints?.length ?? 0, [accessPoints]);

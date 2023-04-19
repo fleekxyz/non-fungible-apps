@@ -38,12 +38,12 @@ const CreateAccessPoint: React.FC = () => {
         ante erat. Sed quis finibus diam.
       </S.Aside.CreateAccessPoint.Text>
       <Flex css={{ gap: '$3' }}>
-        <Button as={Link} to={`create-ap/${nfa.tokenId}`} colorScheme="blue">
+        <Button as={Link} to={`/create-ap/${nfa.tokenId}`} colorScheme="blue">
           Host NFA Frontend
         </Button>
-        <S.Aside.CreateAccessPoint.Extra href="#">
+        <S.Aside.CreateAccessPoint.Extra href="">
           Learn more
-          <Icon name="chevron-down" />
+          <Icon name="chevron-right" />
         </S.Aside.CreateAccessPoint.Extra>
       </Flex>
     </S.Aside.CreateAccessPoint.Container>
