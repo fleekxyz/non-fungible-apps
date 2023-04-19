@@ -5,7 +5,6 @@ import { useAccount } from 'wagmi';
 import {
   Button,
   Card,
-  DisplayText,
   Flex,
   Icon,
   IconButton,
@@ -20,6 +19,7 @@ import { AppLog } from '@/utils';
 import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
 import { SelectedNFA } from './ap-form-step/create-ap-form-body';
 import { CreateAccessPoint } from './create-ap.context';
+import { DisplayText } from './display-text';
 
 export const AccessPointDataFragment: React.FC = () => {
   const { address, status } = useAccount();

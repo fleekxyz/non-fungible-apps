@@ -22,7 +22,7 @@ export const useAccessPointFormContextInit =
     form: {
       domain: useFormField('domain', [
         StringValidators.required,
-        StringValidators.isUrl,
+        StringValidators.isValidDomain,
       ]),
       isValid: useState(false),
     },
