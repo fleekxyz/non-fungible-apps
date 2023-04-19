@@ -4,6 +4,7 @@ import { AiOutlineTwitter } from '@react-icons/all-files/ai/AiOutlineTwitter';
 import { BiGitBranch } from '@react-icons/all-files/bi/BiGitBranch';
 import { BiSearch } from '@react-icons/all-files/bi/BiSearch';
 import { BsFillSquareFill } from '@react-icons/all-files/bs/BsFillSquareFill';
+import { FaChevronRight } from '@react-icons/all-files/fa/FaChevronRight';
 import { FaExternalLinkAlt } from '@react-icons/all-files/fa/FaExternalLinkAlt';
 import { IoArrowBackCircleSharp } from '@react-icons/all-files/io5/IoArrowBackCircleSharp';
 import { IoCheckmarkCircleSharp } from '@react-icons/all-files/io5/IoCheckmarkCircleSharp';
@@ -30,6 +31,7 @@ export const IconLibrary = Object.freeze({
   check: AiOutlineCheck,
   'check-circle': IoCheckmarkCircleSharp,
   'chevron-down': ChevronDownIcon,
+  'chevron-right': FaChevronRight,
   close: IoClose,
   error: ErrorIcon,
   ethereum: EthereumIcon,
