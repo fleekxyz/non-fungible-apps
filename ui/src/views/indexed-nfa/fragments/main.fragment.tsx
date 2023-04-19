@@ -33,7 +33,10 @@ const Header: React.FC = () => {
 
         <S.Main.Divider.Elipse />
 
-        <HeaderData label="Created">12/12/22</HeaderData>
+        <HeaderData label="Created">
+          {/* TODO: place correct data */}
+          12/12/22
+        </HeaderData>
 
         <S.Main.Divider.Elipse />
 
@@ -76,6 +79,7 @@ const DataWrapper: React.FC<DataWrapperProps> = ({
 const Traits: React.FC = () => {
   const { nfa } = IndexedNFA.useContext();
 
+  // TODO: place correct data
   const traitsToShow = useMemo(() => {
     return [
       [nfa.ENS, 'ENS'],
@@ -137,6 +141,7 @@ const Verification: React.FC = () => {
       {/* TODO: Get verified from context */}
       <VerificationBanner verified={Math.random() > 0.5} />
       <S.Main.DataList>
+        {/* TODO: place correct data */}
         <DataWrapper label="Verifier">polygon.eth</DataWrapper>
         <DataWrapper label="Repository">polygon/fe</DataWrapper>
       </S.Main.DataList>
@@ -144,6 +149,7 @@ const Verification: React.FC = () => {
   );
 };
 
+// TODO: replace mocks with fetched data
 const apMocks = new Array(10).fill(0).map((_, index) => ({
   approved: Math.random() > 0.5,
   domain: `domain${index}.com`,
@@ -200,6 +206,7 @@ const AccessPoints: React.FC = () => {
   );
 };
 
+// TODO: replace mocks with fetched data
 const versionsMock = new Array(10).fill(0).map((_, index) => ({
   live: index === 0,
   commit: (Math.random() * 0xfffffffff).toString(16),

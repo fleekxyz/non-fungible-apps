@@ -26,7 +26,7 @@ export const IndexedNFAView: React.FC = () => {
     navigate('/', { replace: true });
   };
 
-  const { loading } = useQuery(getNFADocument, {
+  const { loading, data = { token: {} } } = useQuery(getNFADocument, {
     skip: id === undefined,
     variables: {
       id: ethers.utils.hexlify(Number(id)),
@@ -45,7 +45,7 @@ export const IndexedNFAView: React.FC = () => {
 
   // TODO: replace NFAMock with real data from useQuery
   return (
-    <IndexedNFA.Provider nfa={NFAMock}>
+    <IndexedNFA.Provider nfa={{ ...NFAMock, ...data.token }}>
       <S.Grid>
         <IndexedNFAAsideFragment />
         <IndexedNFAMainFragment />

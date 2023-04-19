@@ -9,7 +9,11 @@ import { IndexedNFAStyles as S } from '../indexed-nfa.styles';
 const Preview: React.FC = () => {
   const { nfa } = IndexedNFA.useContext();
 
-  const color = useMemo(() => `#${nfa.color.toString(16)}`, [nfa]);
+  const color = useMemo(
+    // TODO: replace with util function
+    () => `#${`000000${nfa.color.toString(16)}`.slice(-6)}`,
+    [nfa]
+  );
 
   return (
     <NFAPreview
@@ -33,15 +37,19 @@ const CreateAccessPoint: React.FC = () => {
       <S.Aside.CreateAccessPoint.Heading>
         Host NFA Frontend
       </S.Aside.CreateAccessPoint.Heading>
+      {/* TODO: replace with correct text */}
+
       <S.Aside.CreateAccessPoint.Text>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae
         ante erat. Sed quis finibus diam.
       </S.Aside.CreateAccessPoint.Text>
+
       <Flex css={{ gap: '$3' }}>
         <Button as={Link} to={`/create-ap/${nfa.tokenId}`} colorScheme="blue">
           Host NFA Frontend
         </Button>
         <S.Aside.CreateAccessPoint.Extra href="">
+          {/* TODO: place correct href */}
           Learn more
           <Icon name="chevron-right" />
         </S.Aside.CreateAccessPoint.Extra>

@@ -1,4 +1,4 @@
-import { Token } from '@/graphclient';
+import { Owner, Token } from '@/graphclient';
 import { createContext } from '@/utils';
 
 const [Provider, useContext] = createContext<IndexedNFA.Context>({
@@ -16,7 +16,9 @@ export const IndexedNFA = {
 
 export namespace IndexedNFA {
   export type Context = {
-    nfa: Omit<Token, 'mintTransaction'>;
+    nfa: Omit<Token, 'mintTransaction' | 'id' | 'owner'> & {
+      owner: Pick<Owner, 'id'>;
+    };
   };
 
   export type ProviderProps = {
