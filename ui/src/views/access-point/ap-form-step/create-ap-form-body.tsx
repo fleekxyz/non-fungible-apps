@@ -2,25 +2,25 @@ import { useQuery } from '@apollo/client';
 import { ethers } from 'ethers';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 
 import {
   Button,
   CardTag,
   Flex,
   Form,
-  NFAIcon,
   Spinner,
   Stepper,
   Text,
 } from '@/components';
 import { getNFADocument } from '@/graphclient';
+import { useAppDispatch } from '@/store';
+import { bunnyCDNActions, useBunnyCDNStore } from '@/store/features/bunny-cdn';
 import { AppLog } from '@/utils';
 
 import { CreateAccessPoint } from '../create-ap.context';
+import { NFAIconFragment } from '../nfa-icon';
 import { useAccessPointFormContext } from './create-ap.form.context';
-import { useAccount } from 'wagmi';
-import { bunnyCDNActions, useBunnyCDNStore } from '@/store/features/bunny-cdn';
-import { useAppDispatch } from '@/store';
 
 export const SelectedNFA: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
@@ -32,7 +32,7 @@ export const SelectedNFA: React.FC = () => {
       }}
     >
       <Flex css={{ alignItems: 'center', maxWidth: '65%' }}>
-        <NFAIcon image={nfa.logo} color={nfa.color} />
+        <NFAIconFragment image={nfa.logo} color={nfa.color} />
         <Text
           css={{
             textOverflow: 'ellipsis',
@@ -70,46 +70,30 @@ export const CreateAccessPointFormBody: React.FC = () => {
     form: { domain: domainContext },
   } = useAccessPointFormContext();
 
-  const {
-    data: nfaData,
-    error: nfaError,
-    loading: nfaLoading,
-  } = useQuery(getNFADocument, {
+  const { loading: nfaLoading } = useQuery(getNFADocument, {
     skip: id === undefined,
     variables: {
       id: ethers.utils.hexlify(Number(id)),
     },
-  });
-
-  useEffect(() => {
-    if (nfaError) {
-      AppLog.errorToast('Error fetching NFA');
-    }
-  }, [nfaError]);
-
-  useEffect(() => {
-    if (nfaData) {
-      if (nfaData.token && id) {
-        const {
-          name,
-          tokenId,
-          logo,
-          color,
-          externalURL: domain,
-        } = nfaData.token;
+    onCompleted(data) {
+      if (data.token && id) {
+        const { name, tokenId, logo, color, externalURL: domain } = data.token;
         setNfa({ name, tokenId, logo, color, domain });
       } else {
         AppLog.errorToast("We couldn't find the NFA you are looking for");
       }
-    }
-  }, [nfaData, id, setNfa]);
+    },
+    onError(error) {
+      AppLog.errorToast('Error fetching NFA', error);
+    },
+  });
 
   useEffect(() => {
     if (state === 'success') {
       nextStep();
       dispatch(bunnyCDNActions.setState(undefined));
     }
-  }, [state]);
+  }, [state, nextStep, dispatch]);
 
   if (nfaLoading) {
     return (

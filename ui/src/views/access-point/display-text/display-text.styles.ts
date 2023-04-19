@@ -1,5 +1,6 @@
 import { styled } from '@/theme';
-import { Flex } from '../layout';
+
+import { Flex } from '../../../components/layout';
 
 export const DisplayTextStyles = {
   Container: styled(Flex, {

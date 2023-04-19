@@ -1,5 +1,4 @@
 import { styled } from '@/theme';
-import { Image } from '../core';
 
 export const NFAIconStyles = {
   Container: styled('span', {
@@ -9,7 +8,7 @@ export const NFAIconStyles = {
     height: '$7',
     mr: '$2',
   }),
-  Image: styled(Image, {
+  Image: styled('img', {
     width: '100%',
     height: '100%',
   }),

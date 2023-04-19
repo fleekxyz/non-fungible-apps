@@ -4,7 +4,10 @@ type DisplayTextProps = {
   value: string | React.ReactNode;
 };
 
-export const DisplayText: React.FC<DisplayTextProps> = ({ label, value }) => {
+export const DisplayText: React.FC<DisplayTextProps> = ({
+  label,
+  value,
+}: DisplayTextProps) => {
   return (
     <S.Container>
       <S.Label>{label}</S.Label>

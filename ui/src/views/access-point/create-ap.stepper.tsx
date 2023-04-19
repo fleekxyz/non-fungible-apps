@@ -3,11 +3,11 @@ import { Form, Step, Stepper } from '@/components';
 import { WalletStep } from '../mint/wallet-step';
 import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
 import { CreateAccessPointForm } from './ap-form-step/create-ap-form';
-import { CreateAccessPointPreview } from './create-ap-preview';
 import { APRecordStep } from './ap-record-step/ap-record-step';
-import { CreateAccessPoint } from './create-ap.context';
-import { CreateAccessPointSuccess } from './create-ap-success';
 import { isSubdomain } from './ap-record-step/record-step.utils';
+import { CreateAccessPoint } from './create-ap.context';
+import { CreateAccessPointPreview } from './create-ap-preview';
+import { CreateAccessPointSuccess } from './create-ap-success';
 
 export const CreateApStepper: React.FC = () => {
   const {

@@ -1,6 +1,6 @@
 import { Card, Flex, Icon, IconButton, Stepper } from '@/components';
 
-import { CreateAccessPointFormBody } from './create-ap.form-body';
+import { CreateAccessPointFormBody } from './create-ap-form-body';
 
 export const CreateAccessPointForm: React.FC = () => {
   const { prevStep } = Stepper.useContext();

@@ -1,8 +1,10 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { createBunnyCDNMock } from '@/mocks';
 import { RootState } from '@/store';
 import { AppLog } from '@/utils';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { bunnyCDNActions } from '../bunny-cdn-slice';
-import { createBunnyCDNMock } from '@/mocks';
 
 type CNAMERecord = {
   domain: string;

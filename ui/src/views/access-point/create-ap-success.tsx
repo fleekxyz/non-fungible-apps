@@ -1,4 +1,5 @@
 import { Button, Card, Flex, Icon, IconButton, Text } from '@/components';
+
 import { AccessPointDataFragment } from './create-ap-preview';
 
 export const CreateAccessPointSuccess: React.FC = () => {

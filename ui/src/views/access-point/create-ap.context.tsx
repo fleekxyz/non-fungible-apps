@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
 import { EthereumHooks } from '@/integrations';
@@ -58,7 +60,6 @@ export abstract class CreateAccessPoint {
               onSuccess: (data: any) => {
                 AppLog.info('Transaction:', data);
               },
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               onError: (error: any) => {
                 AppLog.errorToast(
                   'There was an error trying to create the Access Point. Please try again'

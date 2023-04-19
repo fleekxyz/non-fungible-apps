@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import { useEffect, useMemo } from 'react';
+import { useAccount } from 'wagmi';
 
 import {
   Button,
@@ -14,12 +15,11 @@ import {
 } from '@/components';
 import { useTransactionCost } from '@/hooks';
 import { FleekERC721 } from '@/integrations';
-
-import { CreateAccessPoint } from './create-ap.context';
-import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
-import { SelectedNFA } from './ap-form-step/create-ap.form-body';
-import { useAccount } from 'wagmi';
 import { AppLog } from '@/utils';
+
+import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
+import { SelectedNFA } from './ap-form-step/create-ap-form-body';
+import { CreateAccessPoint } from './create-ap.context';
 
 export const AccessPointDataFragment: React.FC = () => {
   const { address, status } = useAccount();
@@ -96,16 +96,14 @@ export const CreateAccessPointPreview: React.FC = () => {
     [prepareStatus, writeStatus, transactionStatus]
   );
 
-  const error = useMemo(
-    () => [writeStatus, transactionStatus].some((status) => status === 'error'),
-    [writeStatus, transactionStatus]
-  );
-
   useEffect(() => {
+    const error = [writeStatus, transactionStatus].some(
+      (status) => status === 'error'
+    );
     if (error) {
       AppLog.errorToast('An error occurred while minting the NFA');
     }
-  }, [error]);
+  }, [writeStatus, transactionStatus]);
 
   return (
     <Card.Container css={{ width: '$107h' }}>

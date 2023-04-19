@@ -19,12 +19,10 @@ export const ResolvedAddress = forwardStyledRef<
   const [resolvedAddress, loading] = useResolvedAddress(children);
 
   const text = useMemo(() => {
-    if (!resolvedAddress.endsWith('.eth'))
-      if (truncated)
-        return `${resolvedAddress.slice(0, 6)}...${resolvedAddress.slice(-4)}`;
-      else return resolvedAddress;
+    if (!resolvedAddress.endsWith('.eth') && truncated)
+      return `${resolvedAddress.slice(0, 6)}...${resolvedAddress.slice(-4)}`;
     return resolvedAddress;
-  }, [resolvedAddress]);
+  }, [resolvedAddress, truncated]);
 
   return (
     <RAS.Container {...props} ref={ref} data-loading={loading}>

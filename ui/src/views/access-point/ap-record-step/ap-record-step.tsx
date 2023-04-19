@@ -1,3 +1,5 @@
+import { useEffect, useMemo } from 'react';
+
 import {
   Button,
   Card,
@@ -11,10 +13,10 @@ import {
 } from '@/components';
 import { useAppDispatch } from '@/store';
 import { bunnyCDNActions, useBunnyCDNStore } from '@/store/features/bunny-cdn';
-import { CreateAccessPoint } from '../create-ap.context';
-import { useEffect, useMemo } from 'react';
-import { isSubdomain } from './record-step.utils';
+
 import { useAccessPointFormContext } from '../ap-form-step';
+import { CreateAccessPoint } from '../create-ap.context';
+import { isSubdomain } from './record-step.utils';
 
 export const APRecordStep: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +42,7 @@ export const APRecordStep: React.FC = () => {
     if (state === 'success') {
       nextStep();
     }
-  }, [state]);
+  }, [state, nextStep]);
 
   const handleContinueClick = (): void => {
     dispatch(bunnyCDNActions.verifyAP(nfaDomain));

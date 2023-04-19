@@ -1,4 +1,5 @@
 import { parseNumberToHexColor } from '@/utils/color';
+
 import { NFAIconStyles as NS } from './nfa-icon.styles';
 
 type NFAIconProps = {
@@ -6,7 +7,10 @@ type NFAIconProps = {
   color: number;
 };
 
-export const NFAIcon: React.FC<NFAIconProps> = ({ image, color }) => {
+export const NFAIconFragment: React.FC<NFAIconProps> = ({
+  image,
+  color,
+}: NFAIconProps) => {
   return (
     <NS.Container
       css={{ backgroundColor: `#${parseNumberToHexColor(color)}57` }}

@@ -1,13 +1,13 @@
 import { Avatar, ConnectKitButton } from 'connectkit';
+import { useDispatch } from 'react-redux';
 
 import { Button, Flex } from '@/components';
-import { useDispatch } from 'react-redux';
 import { ENSActions } from '@/store';
 
 export const ConnectWalletButton: React.FC = () => {
   const dispatch = useDispatch();
 
-  const setEnsNameStore = (ensName: string, address: string) => {
+  const setEnsNameStore = (ensName: string, address: string): void => {
     dispatch(
       ENSActions.setAddress({
         key: address,

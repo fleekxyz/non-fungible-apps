@@ -1,8 +1,10 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { verifyBunnyCDNMock } from '@/mocks';
 import { RootState } from '@/store';
 import { AppLog } from '@/utils';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { bunnyCDNActions } from '../bunny-cdn-slice';
-import { verifyBunnyCDNMock } from '@/mocks';
 
 export const verifyAP = createAsyncThunk<void, string>(
   'BunnyCDN/VerifyAP',

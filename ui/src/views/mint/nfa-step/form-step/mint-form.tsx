@@ -2,6 +2,7 @@ import { useAccount } from 'wagmi';
 
 import { Button, Card, Grid, Stepper } from '@/components';
 import { AppLog } from '@/utils';
+import { parseColorToNumber } from '@/utils/color';
 
 import { Mint } from '../../mint.context';
 import { MintCardHeader } from '../../mint-card';
@@ -12,7 +13,6 @@ import {
   LogoField,
 } from './fields';
 import { useMintFormContext } from './mint-form.context';
-import { parseColorToNumber } from '@/utils/color';
 
 export const MintFormStep: React.FC = () => {
   const {
