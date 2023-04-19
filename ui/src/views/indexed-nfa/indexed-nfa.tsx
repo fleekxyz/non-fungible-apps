@@ -2,14 +2,16 @@ import { useQuery } from '@apollo/client';
 import { ethers } from 'ethers';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { getNFADocument } from '@/../.graphclient';
+import { getNFADocument } from '@/graphclient';
 import { AppLog } from '@/utils';
 
-import { IndexedNFAAsideFragment } from './aside.fragment';
+import {
+  IndexedNFAAsideFragment,
+  IndexedNFAMainFragment,
+  IndexedNFASkeletonFragment,
+} from './fragments';
 import { IndexedNFA } from './indexed-nfa.context';
 import { IndexedNFAStyles as S } from './indexed-nfa.styles';
-import { IndexedNFAMainFragment } from './main.fragment';
-import { IndexedNFASkeletonFragment } from './skeleton.fragment';
 
 export const IndexedNFAView: React.FC = () => {
   const { id } = useParams<{ id: string }>();

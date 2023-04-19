@@ -1,4 +1,4 @@
-import { IndexedNFAStyles as S } from './indexed-nfa.styles';
+import { IndexedNFAStyles as S } from '../indexed-nfa.styles';
 
 export const IndexedNFASkeletonFragment: React.FC = () => (
   <S.Grid>

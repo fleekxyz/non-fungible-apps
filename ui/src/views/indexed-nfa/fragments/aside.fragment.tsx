@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 import { Button, Flex, Icon, NFAPreview } from '@/components';
 
-import { IndexedNFA } from './indexed-nfa.context';
-import { IndexedNFAStyles as S } from './indexed-nfa.styles';
+import { IndexedNFA } from '../indexed-nfa.context';
+import { IndexedNFAStyles as S } from '../indexed-nfa.styles';
 
 const Preview: React.FC = () => {
   const { nfa } = IndexedNFA.useContext();

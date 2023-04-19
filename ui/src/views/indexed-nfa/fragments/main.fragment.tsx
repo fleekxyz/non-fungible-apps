@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 
 import { Flex, Icon, ResolvedAddress, Text } from '@/components';
 
-import { IndexedNFA } from './indexed-nfa.context';
-import { IndexedNFAStyles as S } from './indexed-nfa.styles';
+import { IndexedNFA } from '../indexed-nfa.context';
+import { IndexedNFAStyles as S } from '../indexed-nfa.styles';
 
 type HeaderDataProps = {
   label: string;
