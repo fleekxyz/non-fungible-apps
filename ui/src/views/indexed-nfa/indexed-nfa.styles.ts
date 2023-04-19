@@ -1,3 +1,4 @@
+import { Skeleton } from '@/components';
 import { styled } from '@/theme';
 
 const Spacing = '$5';
@@ -207,4 +208,8 @@ export const IndexedNFAStyles = {
       }),
     },
   },
+
+  Skeleton: styled(Skeleton, {
+    borderRadius: '$lg',
+  }),
 };
