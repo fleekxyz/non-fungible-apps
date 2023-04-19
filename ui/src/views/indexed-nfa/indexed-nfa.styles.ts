@@ -178,33 +178,59 @@ export const IndexedNFAStyles = {
           borderBottom: '1px solid $slate6',
         },
       }),
-      Row: styled('tr', {
-        '&:hover': {
-          backgroundColor: '$slate6',
-        },
-      }),
+      Row: styled('tr'),
       Data: styled('td', {
         padding: '$3',
+        maxWidth: '10rem',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
       }),
-      Body: styled('tbody'),
+      Body: styled('tbody', {
+        tr: {
+          '&:hover': {
+            backgroundColor: '$slate6',
+            cursor: 'pointer',
+          },
+        },
+      }),
       Marker: styled('span', {
         display: 'block',
         margin: 'auto',
         width: '0.5625rem',
         height: '0.5625rem',
-        borderRadius: '100%',
+        borderRadius: '$full',
         backgroundColor: '$slate6',
 
         variants: {
           variant: {
-            green: {
+            active: {
               backgroundColor: '$green11',
             },
-            red: {
-              backgroundColor: '$red11',
+            inactive: {
+              backgroundColor: '$slate8',
+            },
+          },
+          text: {
+            true: {
+              fontSize: '$xs',
+              padding: '0 $2',
+              width: 'fit-content',
+              height: 'fit-content',
             },
           },
         },
+
+        compoundVariants: [
+          {
+            variant: 'active',
+            text: true,
+            css: {
+              color: '$green11',
+              backgroundColor: '$green3',
+            },
+          },
+        ],
       }),
     },
   },

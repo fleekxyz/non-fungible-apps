@@ -157,21 +157,30 @@ const AccessPoints: React.FC = () => {
       <S.Main.SectionHeading>Frontends</S.Main.SectionHeading>
       <S.Main.Table.Container>
         <S.Main.Table.Root>
+          <colgroup>
+            <col span={1} style={{ width: '9.5%' }} />
+            <col span={1} style={{ width: '32.5%' }} />
+            <col span={1} style={{ width: '32.5%' }} />
+            <col span={1} style={{ width: '16%' }} />
+            <col span={1} style={{ width: '9.5%' }} />
+          </colgroup>
           <S.Main.Table.Head>
-            <S.Main.Table.Data>
-              <S.Main.Table.Marker />
-            </S.Main.Table.Data>
-            <S.Main.Table.Data>Domain</S.Main.Table.Data>
-            <S.Main.Table.Data>Owner</S.Main.Table.Data>
-            <S.Main.Table.Data>Created</S.Main.Table.Data>
-            <S.Main.Table.Data />
+            <S.Main.Table.Row>
+              <S.Main.Table.Data>
+                <S.Main.Table.Marker />
+              </S.Main.Table.Data>
+              <S.Main.Table.Data>Domain</S.Main.Table.Data>
+              <S.Main.Table.Data>Owner</S.Main.Table.Data>
+              <S.Main.Table.Data>Created</S.Main.Table.Data>
+              <S.Main.Table.Data />
+            </S.Main.Table.Row>
           </S.Main.Table.Head>
           <S.Main.Table.Body>
             {apMocks.map((item) => (
               <S.Main.Table.Row key={item.domain}>
                 <S.Main.Table.Data align="center">
                   <S.Main.Table.Marker
-                    variant={item.approved ? 'green' : 'red'}
+                    variant={item.approved ? 'active' : 'inactive'}
                   />
                 </S.Main.Table.Data>
                 <S.Main.Table.Data>{item.domain}</S.Main.Table.Data>
@@ -194,7 +203,10 @@ const AccessPoints: React.FC = () => {
 const versionsMock = new Array(10).fill(0).map((_, index) => ({
   live: index === 0,
   commit: (Math.random() * 0xfffffffff).toString(16),
-  preview: 'Merge pull request #11',
+  preview: `test: subgraph matchstick tests for access points and acl refactor (#150
+    )
+    
+    * fix: errors from deprecated entities.`,
   time: `${Math.floor(Math.random() * 30)}m ago`,
 }));
 
@@ -204,23 +216,39 @@ const Versions: React.FC = () => {
       <S.Main.SectionHeading>Versions</S.Main.SectionHeading>
       <S.Main.Table.Container>
         <S.Main.Table.Root>
+          <colgroup>
+            <col span={1} style={{ width: '9.5%' }} />
+            <col span={1} style={{ width: '15%' }} />
+            <col span={1} style={{ width: '50%' }} />
+            <col span={1} style={{ width: '16%' }} />
+            <col span={1} style={{ width: '9.5%' }} />
+          </colgroup>
           <S.Main.Table.Head>
-            <S.Main.Table.Data>
-              <S.Main.Table.Marker />
-            </S.Main.Table.Data>
-            <S.Main.Table.Data>Commit</S.Main.Table.Data>
-            <S.Main.Table.Data>Preview</S.Main.Table.Data>
-            <S.Main.Table.Data>Time</S.Main.Table.Data>
-            <S.Main.Table.Data />
+            <S.Main.Table.Row>
+              <S.Main.Table.Data>
+                <S.Main.Table.Marker />
+              </S.Main.Table.Data>
+              <S.Main.Table.Data>Commit</S.Main.Table.Data>
+              <S.Main.Table.Data>Preview</S.Main.Table.Data>
+              <S.Main.Table.Data>Time</S.Main.Table.Data>
+              <S.Main.Table.Data />
+            </S.Main.Table.Row>
           </S.Main.Table.Head>
           <S.Main.Table.Body>
             {versionsMock.map((item) => (
               <S.Main.Table.Row key={item.commit}>
                 <S.Main.Table.Data>
-                  <S.Main.Table.Marker variant={item.live ? 'green' : 'red'} />
+                  <S.Main.Table.Marker
+                    variant={item.live ? 'active' : 'inactive'}
+                    text={item.live}
+                  >
+                    {item.live && 'Live'}
+                  </S.Main.Table.Marker>
                 </S.Main.Table.Data>
                 <S.Main.Table.Data>{item.commit.slice(0, 6)}</S.Main.Table.Data>
-                <S.Main.Table.Data>{item.preview}</S.Main.Table.Data>
+                <S.Main.Table.Data title={item.preview}>
+                  {item.preview}
+                </S.Main.Table.Data>
                 <S.Main.Table.Data>{item.time}</S.Main.Table.Data>
                 <S.Main.Table.Data>
                   <Icon name="external-link" />
