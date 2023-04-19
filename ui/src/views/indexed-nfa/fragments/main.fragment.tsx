@@ -54,7 +54,9 @@ const Description: React.FC = () => {
 
   return (
     <>
-      <S.Main.SectionHeading>Description</S.Main.SectionHeading>
+      <S.Main.SectionHeading css={{ marginTop: 0 }}>
+        Description
+      </S.Main.SectionHeading>
       <S.Main.DataContainer as={S.Main.Paragraph}>
         {nfa.description}
       </S.Main.DataContainer>

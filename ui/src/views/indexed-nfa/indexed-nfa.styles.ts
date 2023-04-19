@@ -9,7 +9,7 @@ export const IndexedNFAStyles = {
     gridTemplateAreas: '"aside main"',
     gridTemplateColumns: '24.0625rem 1fr',
     gridTemplateRows: 'fit-content',
-    gap: Spacing,
+    gap: `calc(2 * ${Spacing})`,
     padding: Spacing,
 
     '@media (max-width: 1080px)': {
@@ -80,6 +80,7 @@ export const IndexedNFAStyles = {
       fontSize: '$xl',
       lineHeight: 1.2,
       fontWeight: 700,
+      marginTop: Spacing,
     }),
     Divider: {
       Line: styled('span', {
