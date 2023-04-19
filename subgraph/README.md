@@ -126,7 +126,3 @@ Finally, you can generate the build that is going to be deployed to the Hosted S
 The command that should be used for re-deployment purposes is no different than the one that is used to deploy subgraphs in the first place (remember to replace the access token and the github_username/subgraph_name parts):
 
 `graph deploy --product hosted-service --deploy-key YOUR_ACCESS_TOKEN --version-lable v0.0.1 YOUR_GITHUB_USERNAME/SUBGRAPH_NAME_ON_HOSTED_SERVICE`
-
-## Testing
-
-You can run the unit tests found in `./tests/` with `yarn test` or `npm run test`.
