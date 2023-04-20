@@ -49,14 +49,14 @@ const createWriteContractContext = <
     providerName,
   });
 
-  const Provider: React.FC = ({
+  const Provider = ({
     children,
     config: {
       prepare: prepareConfig = {},
       transaction: transactionConfig = {},
       write: writeConfig = {},
     } = {},
-  }: EthereumHooks.WriteContext.ProviderProps<TFunctionName>) => {
+  }: EthereumHooks.WriteContext.ProviderProps<TFunctionName>): JSX.Element => {
     const [args, setArgs] = useState<TFunctionArguments>();
 
     const prepare = usePrepareContractWrite({
