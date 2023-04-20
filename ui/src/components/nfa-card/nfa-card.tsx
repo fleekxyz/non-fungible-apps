@@ -32,7 +32,6 @@ export type NFACardProps = Omit<
 export const NFACard: React.FC<NFACardProps> = forwardStyledRef<
   HTMLAnchorElement,
   NFACardProps
-  // TODO: Set default path to NFA page
 >(({ data, to = `/nfa/${data.tokenId}`, ...props }, ref) => {
   const { name, color, ENS, logo, accessPoints } = data;
 
