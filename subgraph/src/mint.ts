@@ -4,7 +4,7 @@ import { Bytes, log } from '@graphprotocol/graph-ts';
 import { NewMint as NewMintEvent } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
-import { Owner, NewMint, Token } from '../generated/schema';
+import { Owner, NewMint, Token, GitRepository } from '../generated/schema';
 
 export function handleNewMint(event: NewMintEvent): void {
   const newMintEntity = new NewMint(
@@ -74,7 +74,22 @@ export function handleNewMint(event: NewMintEvent): void {
   token.mintedBy = event.params.minter;
   token.controllers = [ownerAddress];
 
+  // Populate GitRepository entity
+  let repository = GitRepository.load(gitRepository);
+  if (!repository) {
+    repository = new GitRepository(gitRepository);
+  }
+
+  let repositoryTokens = repository.tokens;
+  if (repositoryTokens === null) {
+    repositoryTokens = [token.id];
+  } else {
+    repositoryTokens.push(token.id);
+  }
+  repository.tokens = repositoryTokens;
+
   // Save entities
   owner.save();
   token.save();
+  repository.save();
 }
