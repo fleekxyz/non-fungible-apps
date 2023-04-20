@@ -18,11 +18,8 @@ export const verifyAP = createAsyncThunk<void, string>(
 
       const verifyAPState = await verifyBunnyCDNMock(domain);
 
-      if (verifyAPState) dispatch(bunnyCDNActions.setState('success'));
-      else {
-        AppLog.errorToast('We couldn`t verify the domain. Please, try again');
-        dispatch(bunnyCDNActions.setState('failed'));
-      }
+      if (verifyAPState) return dispatch(bunnyCDNActions.setState('success'));
+      throw new Error('Invalid AP state');
     } catch (error) {
       AppLog.errorToast(
         'There was an error trying to verify the domain. Please, try again',
