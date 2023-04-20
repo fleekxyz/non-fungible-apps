@@ -1,8 +1,10 @@
 import { Button, Card, Flex, Icon, IconButton, Text } from '@/components';
 
+import { CreateAccessPoint } from './create-ap.context';
 import { AccessPointDataFragment } from './create-ap-preview';
 
 export const CreateAccessPointSuccess: React.FC = () => {
+  const { nfa } = CreateAccessPoint.useContext();
   return (
     <Card.Container css={{ width: '$107h' }}>
       <Card.Heading
@@ -25,7 +27,7 @@ export const CreateAccessPointSuccess: React.FC = () => {
       <Card.Body>
         <Flex css={{ flexDirection: 'column', gap: '$6' }}>
           <Text css={{ fontSize: '$sm', color: '$slate11' }}>
-            You have successfully hosted a DyDx frontend on your own domain.
+            {`You have successfully hosted a ${nfa.name} frontend on your own domain.`}
           </Text>
           <AccessPointDataFragment />
           <Flex css={{ flexDirection: 'column', gap: '$4' }}>
