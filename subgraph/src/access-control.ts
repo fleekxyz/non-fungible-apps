@@ -8,15 +8,7 @@ import {
 
 // Entity Imports [based on the schema]
 import { Owner, Token, Verifier } from '../generated/schema';
-
-enum CollectionRoles {
-  Owner,
-  Verifier,
-}
-
-enum TokenRoles {
-  Controller,
-}
+import { CollectionRoles, TokenRoles } from './constants';
 
 export function handleCollectionRoleChanged(
   event: CollectionRoleChangedEvent
