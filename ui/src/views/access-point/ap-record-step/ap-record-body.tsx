@@ -33,10 +33,10 @@ export const APRecordCardBody: React.FC = () => {
       dispatch(bunnyCDNActions.setState(undefined));
       nextStep();
     }
-  }, [state, nextStep]);
+  }, [state, nextStep, dispatch]);
 
   const handleContinueClick = (): void => {
-    dispatch(bunnyCDNActions.verifyAP(nfaDomain));
+    dispatch(bunnyCDNActions.verifyBunnyPullzone(nfaDomain));
   };
 
   return (

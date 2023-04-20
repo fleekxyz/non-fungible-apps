@@ -1,2 +1,2 @@
 export * from './create-cdn';
-export * from './verify-ap';
+export * from './verify-pullzone';
