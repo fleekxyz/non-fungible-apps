@@ -73,6 +73,7 @@ export function handleNewMint(event: NewMintEvent): void {
   );
   token.mintedBy = event.params.minter;
   token.controllers = [ownerAddress];
+  token.createdAt = event.block.timestamp;
 
   // Populate GitRepository entity
   let repository = GitRepository.load(gitRepository);

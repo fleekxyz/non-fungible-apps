@@ -31,7 +31,7 @@ type NewMint @entity(immutable: true) {
   color: Int!
   accessPointAutoApproval: Boolean!
   triggeredBy: Bytes! # address
-  owner: Owner! # address 
+  owner: Owner! # address
   verifier: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -80,6 +80,7 @@ type Token @entity {
   commitHash: String!
   accessPoints: [AccessPoint!] @derivedFrom(field: "token")
   verifier: Verifier! # Address
+  createdAt: BigInt!
 }
 
 # Owner entity for collection, access points, and tokens
