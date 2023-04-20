@@ -80,6 +80,7 @@ type Token @entity {
   commitHash: String!
   accessPoints: [AccessPoint!] @derivedFrom(field: "token")
   verifier: Verifier! # Address
+  verified: Boolean!
   createdAt: BigInt!
 }
 

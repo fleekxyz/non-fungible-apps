@@ -68,6 +68,7 @@ export function handleNewMint(event: NewMintEvent): void {
   token.accessPointAutoApproval = accessPointAutoApproval;
   token.owner = ownerAddress;
   token.verifier = verifierAddress;
+  token.verified = false;
   token.mintTransaction = event.transaction.hash.concatI32(
     event.logIndex.toI32()
   );
