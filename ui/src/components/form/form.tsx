@@ -1,80 +1,310 @@
-import React, { forwardRef } from 'react';
+/* eslint-disable react/display-name */
+import React, { forwardRef, useMemo, useState } from 'react';
+
+import { hasValidator } from '@/utils';
+import { fileToBase64 } from '@/views/mint/nfa-step/form-step/form.utils';
+
+import { ColorPicker, Combobox } from '../core';
 import { Input, LogoFileInput, Textarea } from '../core/input';
+import {
+  FormProvider,
+  useFormContext,
+  useFormFieldValidatorValue,
+} from './form.context';
 import { FormStyles } from './form.styles';
+import {
+  FormFieldContext,
+  FormFieldProvider,
+  useFormFieldContext,
+} from './form-field.context';
 
 export abstract class Form {
+  static readonly Root = FormProvider;
+
   static readonly Field = forwardRef<HTMLDivElement, Form.FieldProps>(
-    ({ children, ...props }, ref) => {
+    ({ children, context, ...props }, ref) => {
+      const {
+        value: [value],
+      } = context;
+      const validationEnabled = useState(Boolean(value));
+
       return (
-        <FormStyles.Field ref={ref} {...props}>
-          {children}
-        </FormStyles.Field>
+        <FormFieldProvider value={{ ...context, validationEnabled }}>
+          <FormStyles.Field ref={ref} {...props}>
+            {children}
+          </FormStyles.Field>
+        </FormFieldProvider>
       );
     }
   );
 
   static readonly Label = forwardRef<HTMLLabelElement, Form.LabelProps>(
-    ({ children, isRequired, ...props }, ref) => (
-      <FormStyles.Label ref={ref} {...props}>
-        {children}{' '}
-        {isRequired && <FormStyles.RequiredLabel>*</FormStyles.RequiredLabel>}
-      </FormStyles.Label>
-    )
-  );
-
-  static readonly MaxLength = forwardRef<HTMLLabelElement, Form.LabelProps>(
     ({ children, ...props }, ref) => {
+      const { validators } = useFormFieldContext();
+
+      const isRequired = useMemo(
+        () => hasValidator(validators, 'required'),
+        [validators]
+      );
+
       return (
-        <FormStyles.MaxLength ref={ref} {...props}>
+        <FormStyles.Label ref={ref} {...props}>
           {children}
-        </FormStyles.MaxLength>
+          {isRequired && <FormStyles.RequiredLabel>*</FormStyles.RequiredLabel>}
+        </FormStyles.Label>
       );
     }
   );
 
-  static readonly Error = forwardRef<HTMLDivElement, Form.ErrorProps>(
-    ({ children, ...props }, ref) => (
-      <FormStyles.ErrorMessage ref={ref} {...props}>
-        {children}
-      </FormStyles.ErrorMessage>
-    )
-  );
+  static readonly Overline = forwardRef<HTMLDivElement>((props, ref) => {
+    const {
+      validations: [validations],
+    } = useFormContext();
+    const {
+      id,
+      value: [value],
+      validationEnabled: [validationEnabled],
+      validators,
+    } = useFormFieldContext();
+
+    const errors = useMemo(() => {
+      if (!validationEnabled) return [];
+      if (!validations[id]) return [];
+      return validations[id].map((validator) => validator.message);
+    }, [validations, id, validationEnabled]);
+
+    const counter = useMemo(
+      () => hasValidator(validators, 'maxLength')?.args || 0,
+      [validators]
+    );
+
+    return (
+      <FormStyles.Overline ref={ref} {...props}>
+        <FormStyles.OverlineErrors>
+          {errors.map((error) => (
+            <FormStyles.ErrorMessage key={error}>
+              {error}
+            </FormStyles.ErrorMessage>
+          ))}
+        </FormStyles.OverlineErrors>
+
+        {Boolean(counter) && (
+          <FormStyles.MaxLength>
+            {`${value.length}/${counter}`}
+          </FormStyles.MaxLength>
+        )}
+      </FormStyles.Overline>
+    );
+  });
 
   static readonly Input = forwardRef<HTMLInputElement, Form.InputProps>(
     (props, ref) => {
-      return <Input ref={ref} {...props} />;
+      const {
+        id,
+        validators,
+        value: [value, setValue],
+        validationEnabled: [validationEnabled, setValidationEnabled],
+      } = useFormFieldContext();
+      const isValid = useFormFieldValidatorValue(id, validators, value);
+
+      const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+      ): void => {
+        if (props.onChange) props.onChange(e);
+        setValue(e.target.value);
+      };
+
+      const handleInputBlur = (
+        e: React.FocusEvent<HTMLInputElement, Element>
+      ): void => {
+        if (props.onBlur) props.onBlur(e);
+        setValidationEnabled(true);
+      };
+
+      return (
+        <Input
+          ref={ref}
+          {...props}
+          value={value}
+          onChange={handleInputChange}
+          aria-invalid={validationEnabled && !isValid}
+          onBlur={handleInputBlur}
+        />
+      );
     }
   );
+
+  static readonly Combobox = <T,>({
+    handleValue,
+    ...props
+  }: Form.ComboboxProps<T>): JSX.Element => {
+    const {
+      id,
+      validators,
+      value: [value, setValue],
+      validationEnabled: [validationEnabled, setValidationEnabled],
+    } = useFormFieldContext();
+
+    const selected = useMemo(() => {
+      const item = props.items.find((item) => handleValue(item) === value);
+      return item;
+    }, [props.items, value, handleValue]);
+
+    const isValid = useFormFieldValidatorValue(id, validators, value);
+
+    const setSelected = (option: T): void => {
+      if (props.onChange) props.onChange(option);
+      setValue(handleValue(option));
+    };
+
+    const handleComboboxBlur = (): void => {
+      setValidationEnabled(true);
+    };
+
+    return (
+      <Combobox
+        {...props}
+        selected={[selected, setSelected]}
+        onBlur={handleComboboxBlur}
+        error={validationEnabled && !isValid}
+      />
+    );
+  };
+
+  static readonly ColorPicker: React.FC<Form.ColorPickerProps> = ({
+    logo,
+    setLogoColor,
+  }: Form.ColorPickerProps) => {
+    const {
+      value: [value, setValue],
+      validationEnabled: [, setValidationEnabled],
+    } = useFormFieldContext();
+
+    const handleColorChange = (color: string): void => {
+      if (setLogoColor) setLogoColor(color);
+      setValue(color);
+    };
+
+    const handleInputBlur = (): void => {
+      setValidationEnabled(true);
+    };
+
+    return (
+      <ColorPicker
+        logo={logo}
+        logoColor={value}
+        setLogoColor={handleColorChange}
+        onBlur={handleInputBlur}
+      />
+    );
+  };
 
   static readonly Textarea = forwardRef<
     HTMLTextAreaElement,
     Form.TextareaProps
   >((props, ref) => {
-    return <Textarea ref={ref} {...props} />;
+    const {
+      id,
+      validators,
+      value: [value, setValue],
+      validationEnabled: [validationEnabled, setValidationEnabled],
+    } = useFormFieldContext();
+    const isValid = useFormFieldValidatorValue(id, validators, value);
+
+    const handleTextareaChange = (
+      e: React.ChangeEvent<HTMLTextAreaElement>
+    ): void => {
+      if (props.onChange) props.onChange(e);
+      setValue(e.target.value);
+    };
+
+    const handleTextareaBlur = (
+      e: React.FocusEvent<HTMLTextAreaElement, Element>
+    ): void => {
+      if (props.onBlur) props.onBlur(e);
+      setValidationEnabled(true);
+    };
+
+    return (
+      <Textarea
+        ref={ref}
+        {...props}
+        value={value}
+        onChange={handleTextareaChange}
+        aria-invalid={validationEnabled && !isValid}
+        onBlur={handleTextareaBlur}
+      />
+    );
   });
 
   static readonly LogoFileInput = forwardRef<
     HTMLInputElement,
     Form.LogoFileInputProps
   >((props, ref) => {
-    return <LogoFileInput ref={ref} {...props} />;
+    const {
+      id,
+      validators,
+      value: [value, setValue],
+      validationEnabled: [, setValidationEnabled],
+    } = useFormFieldContext();
+
+    const isValid = useFormFieldValidatorValue(id, validators, value);
+
+    const handleFileInputChange = async (
+      e: React.ChangeEvent<HTMLInputElement>
+    ): Promise<void> => {
+      const file = e.target.files?.[0];
+      if (file) {
+        //Convert to string base64 to send to contract
+        setValidationEnabled(true);
+        const fileBase64 = await fileToBase64(file);
+        setValue(fileBase64);
+      }
+    };
+
+    return (
+      <LogoFileInput
+        ref={ref}
+        {...props}
+        value={value}
+        aria-invalid={value !== '' && !isValid}
+        onChange={handleFileInputChange}
+      />
+    );
   });
 }
 
 export namespace Form {
   export type FieldProps = {
     children: React.ReactNode;
+    context: Omit<FormFieldContext, 'validationEnabled'>;
   } & React.ComponentProps<typeof FormStyles.Field>;
 
-  export type LabelProps = { isRequired?: boolean } & React.ComponentProps<
-    typeof FormStyles.Label
-  >;
+  export type LabelProps = React.ComponentProps<typeof FormStyles.Label>;
 
   export type ErrorProps = React.ComponentProps<typeof FormStyles.ErrorMessage>;
 
-  export type InputProps = React.ComponentProps<typeof Input>;
+  export type InputProps = Omit<React.ComponentProps<typeof Input>, 'error'>;
 
-  export type TextareaProps = React.ComponentProps<typeof Textarea>;
+  export type TextareaProps = Omit<
+    React.ComponentProps<typeof Textarea>,
+    'value' | 'error'
+  >;
 
-  export type LogoFileInputProps = React.ComponentProps<typeof LogoFileInput>;
+  export type ComboboxProps<T> = Omit<Combobox.RootProps<T>, 'selected'> & {
+    handleValue: (item: T) => string;
+    onChange?: (item: T) => void;
+  };
+
+  export type LogoFileInputProps = Omit<
+    React.ComponentProps<typeof LogoFileInput>,
+    'value' | 'onChange'
+  >;
+
+  export type ColorPickerProps = {
+    setLogoColor?: (color: string) => void;
+  } & Omit<
+    React.ComponentProps<typeof ColorPicker>,
+    'setLogoColor' | 'logoColor'
+  >;
 }

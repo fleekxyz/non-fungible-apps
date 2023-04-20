@@ -9,6 +9,7 @@ import "./FleekAccessControl.sol";
 import "./FleekBilling.sol";
 import "./FleekPausable.sol";
 import "./FleekAccessPoints.sol";
+import "./util/FleekENS.sol";
 import "./util/FleekStrings.sol";
 import "./IERCX.sol";
 
@@ -51,6 +52,19 @@ contract FleekERC721 is
     uint256 private _appIds;
     mapping(uint256 => Token) private _apps;
     mapping(uint256 => address) private _tokenVerifier;
+    mapping(uint256 => bool) private _tokenVerified;
+
+    /**
+     * @dev This constructor sets the state of implementation contract to paused
+     * and disable initializers, not allowing interactions with the implementation
+     * contracts.
+     */
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _setPausable(true);
+        _pause();
+        _disableInitializers();
+    }
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -91,7 +105,7 @@ contract FleekERC721 is
         string memory name,
         string memory description,
         string memory externalURL,
-        string memory ENS,
+        string calldata ens,
         string memory commitHash,
         string memory gitRepository,
         string memory logo,
@@ -99,6 +113,7 @@ contract FleekERC721 is
         bool accessPointAutoApproval,
         address verifier
     ) public payable requirePayment(Billing.Mint) returns (uint256) {
+        FleekENS.requireENSOwner(ens);
         uint256 tokenId = _appIds;
         _mint(to, tokenId);
 
@@ -108,7 +123,7 @@ contract FleekERC721 is
         app.name = name;
         app.description = description;
         app.externalURL = externalURL;
-        app.ENS = ENS;
+        app.ENS = ens;
         app.logo = logo;
         app.color = color;
 
@@ -121,7 +136,7 @@ contract FleekERC721 is
             name,
             description,
             externalURL,
-            ENS,
+            ens,
             commitHash,
             gitRepository,
             logo,
@@ -133,6 +148,7 @@ contract FleekERC721 is
         );
 
         _tokenVerifier[tokenId] = verifier;
+        _tokenVerified[tokenId] = false;
         _setAccessPointAutoApproval(tokenId, accessPointAutoApproval);
 
         return tokenId;
@@ -152,9 +168,10 @@ contract FleekERC721 is
         _requireMinted(tokenId);
         address owner = ownerOf(tokenId);
         bool accessPointAutoApproval = _getAccessPointAutoApproval(tokenId);
+        bool verified = _tokenVerified[tokenId];
         Token storage app = _apps[tokenId];
 
-        return string(abi.encodePacked(_baseURI(), app.toString(owner, accessPointAutoApproval).toBase64()));
+        return string(abi.encodePacked(_baseURI(), app.toString(owner, accessPointAutoApproval, verified).toBase64()));
     }
 
     /**
@@ -259,8 +276,9 @@ contract FleekERC721 is
      */
     function setTokenENS(
         uint256 tokenId,
-        string memory _tokenENS
+        string calldata _tokenENS
     ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
+        FleekENS.requireENSOwner(_tokenENS);
         _requireMinted(tokenId);
         _apps[tokenId].ENS = _tokenENS;
         emit MetadataUpdate(tokenId, "ENS", _tokenENS, msg.sender);
@@ -435,6 +453,40 @@ contract FleekERC721 is
     function getTokenVerifier(uint256 tokenId) public view returns (address) {
         _requireMinted(tokenId);
         return _tokenVerifier[tokenId];
+    }
+
+    /**
+     * @dev Sets the verification status of a token.
+     *
+     * May emit a {MetadataUpdate} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must be the token verifier.
+     * - the sender must have `CollectionRoles.Verifier` role.
+     *
+     */
+    function setTokenVerified(
+        uint256 tokenId,
+        bool verified
+    ) public requireCollectionRole(CollectionRoles.Verifier) requireTokenVerifier(tokenId) {
+        _requireMinted(tokenId);
+        _tokenVerified[tokenId] = verified;
+        emit MetadataUpdate(tokenId, "verified", verified, msg.sender);
+    }
+
+    /**
+     * @dev Returns the verification status of a token.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     *
+     */
+    function isTokenVerified(uint256 tokenId) public view returns (bool) {
+        _requireMinted(tokenId);
+        return _tokenVerified[tokenId];
     }
 
     /*//////////////////////////////////////////////////////////////

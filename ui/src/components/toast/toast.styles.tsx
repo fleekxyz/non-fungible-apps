@@ -1,9 +1,9 @@
-import { dripStitches } from '@/theme';
 import * as ToastLib from '@radix-ui/react-toast';
+
+import { keyframes, styled } from '@/theme';
+
 import { Icon, IconButton } from '../core';
 import { Flex } from '../layout';
-
-const { styled, keyframes } = dripStitches;
 
 export abstract class ToastStyles {
   static readonly Provider = ToastLib.Provider;

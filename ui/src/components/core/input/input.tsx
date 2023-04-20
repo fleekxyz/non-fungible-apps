@@ -1,7 +1,10 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
+
+import { forwardStyledRef } from '@/theme';
+
 import { IconName } from '../icon';
-import { StyledInputFile } from './input-file';
 import { InputIconStyled, InputStyled, TextareaStyled } from './input.styles';
+import { StyledInputFile } from './input-file';
 
 export const Textarea = TextareaStyled;
 
@@ -9,21 +12,26 @@ export const LogoFileInput = StyledInputFile;
 
 type InputProps = {
   leftIcon?: IconName;
-} & React.ComponentProps<typeof InputStyled>;
+  wrapperClassName?: string; //tailwind css
+} & React.ComponentPropsWithRef<typeof InputStyled>;
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ leftIcon, ...props }, ref) => {
+export const Input = forwardStyledRef<HTMLInputElement, InputProps>(
+  (props, ref) => {
+    const { leftIcon, wrapperClassName: css = '', ...ownProps } = props;
+
     return (
-      <div className="relative">
+      <div className={`relative ${css}`}>
         {leftIcon && (
           <InputIconStyled name={leftIcon} css={{ fontSize: '$lg' }} />
         )}
         <InputStyled
           {...props}
           ref={ref}
-          css={{ ...(leftIcon && { pl: '$10' }) }}
+          css={{ ...(leftIcon && { pl: '$10' }), ...(ownProps.css || {}) }}
         />
       </div>
     );
   }
 );
+
+Input.displayName = 'Input';

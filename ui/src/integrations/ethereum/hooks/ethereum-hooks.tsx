@@ -1,20 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Abi as AbiType } from 'abitype';
+import { useState } from 'react';
 import {
   Address,
   useContractWrite,
   usePrepareContractWrite,
-  useWaitForTransaction,
   UsePrepareContractWriteConfig,
+  useWaitForTransaction,
 } from 'wagmi';
-import type { Abi as AbiType } from 'abitype';
-import { FleekERC721 } from '../contracts';
+
 import { createContext } from '@/utils';
-import { useState } from 'react';
+
+import { FleekERC721 } from '../contracts';
 
 /**
  * This is a factory to create context factories for contracts write.
  * It should be used inside other context factories specific for each
  * contract.
  */
+// TODO: Fix this eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const createWriteContractContext = <
   TAbi extends EthereumHooks.Abi,
   TArgumentsMap extends EthereumHooks.WriteContext.ArgumentsMap,
@@ -51,7 +56,7 @@ const createWriteContractContext = <
       transaction: transactionConfig = {},
       write: writeConfig = {},
     } = {},
-  }: EthereumHooks.WriteContext.ProviderProps<TFunctionName>) => {
+  }: EthereumHooks.WriteContext.ProviderProps<TFunctionName>): JSX.Element => {
     const [args, setArgs] = useState<TFunctionArguments>();
 
     const prepare = usePrepareContractWrite({
@@ -176,7 +181,13 @@ export namespace ArgumentsMaps {
       string, // string gitRepository
       string, // string logo
       number, // uint24 color
-      boolean // bool accessPointAutoApproval
+      boolean, // bool accessPointAutoApproval
+      string //verifier address
+    ];
+
+    addAccessPoint: [
+      number, // tokenId
+      string // access point DNS
     ];
 
     /**

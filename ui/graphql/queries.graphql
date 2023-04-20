@@ -1,20 +1,62 @@
-query lastMintsPaginated($pageSize: Int, $skip: Int) {
-  newMints(
+query lastNFAsPaginated(
+  $pageSize: Int
+  $skip: Int
+  $orderBy: Token_orderBy
+  $orderDirection: OrderDirection
+  $searchValue: String
+) {
+  tokens(
     first: $pageSize
     skip: $skip
-    orderDirection: desc
-    orderBy: tokenId
+    orderDirection: $orderDirection
+    orderBy: $orderBy
+    where: { name_contains_nocase: $searchValue }
   ) {
     id
     tokenId
     description
     name
+    ENS
+    color
+    logo
+    accessPoints {
+      id
+    }
   }
 }
 
 query totalTokens {
   tokens {
     id
+  }
+}
+
+query getLatestNFAs {
+  tokens {
+    id
+    name
+  }
+}
+
+query getNFA($id: ID!) {
+  token(id: $id) {
+    tokenId
+    name
+  }
+}
+
+query getVerifiers {
+  verifiers {
+    id
+  }
+}
+
+# query to get the ens name of an address
+query getENSNames($address: ID!) {
+  account(id: $address) {
+    domains {
+      name
+    }
   }
 }
 

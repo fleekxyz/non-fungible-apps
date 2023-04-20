@@ -1,1 +1,1 @@
-export * from './fetch-ens-names';
+export * from './resolve-address';

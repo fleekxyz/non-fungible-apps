@@ -1,6 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { TestConstants, Fixtures, Events } from './helpers';
+import { TestConstants, Fixtures, Events, transferENSNode } from './helpers';
 
 const {
   Logos: { 1: Logo1 },
@@ -25,9 +25,11 @@ describe('FleekERC721.UpdateProperties', () => {
   it('should emit event for ens change', async () => {
     const { contract, tokenId, owner } = fixture;
 
-    await expect(contract.setTokenENS(tokenId, 'app.eth'))
+    await transferENSNode('subdomain.app.eth', owner);
+
+    await expect(contract.setTokenENS(tokenId, 'subdomain.app.eth'))
       .to.emit(contract, Events.MetadataUpdate.string)
-      .withArgs(tokenId, 'ENS', 'app.eth', owner.address);
+      .withArgs(tokenId, 'ENS', 'subdomain.app.eth', owner.address);
   });
 
   it('should emit event for name change', async () => {

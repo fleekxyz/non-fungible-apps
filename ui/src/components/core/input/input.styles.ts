@@ -1,6 +1,6 @@
-import { dripStitches } from '@/theme';
+import { styled } from '@/theme';
+
 import { Icon } from '../icon';
-const { styled } = dripStitches;
 
 const styles = {
   all: 'unset',

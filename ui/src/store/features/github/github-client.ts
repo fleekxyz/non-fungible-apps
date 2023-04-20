@@ -1,12 +1,6 @@
-import { DropdownItem } from '@/components';
 import { Octokit } from 'octokit';
-import { GithubState } from './github-slice';
 
-export type UserData = {
-  value: string;
-  label: string;
-  avatar: string;
-};
+import { GithubState } from './github-slice';
 
 export class GithubClient {
   octokit: Octokit;
@@ -19,7 +13,7 @@ export class GithubClient {
       }));
   }
 
-  async fetchUser(): Promise<UserData> {
+  async fetchUser(): Promise<GithubClient.UserData> {
     const { data: userData } = await this.octokit.request('GET /user');
 
     return {
@@ -29,7 +23,7 @@ export class GithubClient {
     };
   }
 
-  async fetchOrgs(): Promise<UserData[]> {
+  async fetchOrgs(): Promise<GithubClient.UserData[]> {
     const { data: organizationsData } = await this.octokit.request(
       'GET /user/orgs'
     );
@@ -43,28 +37,28 @@ export class GithubClient {
     });
   }
 
-  async fetchRepos(url: string) {
-    try {
-      const repos = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-        },
-      }).then((res) => res.json());
+  async fetchRepos(url: string): Promise<GithubState.Repository[]> {
+    const repos = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    }).then((res) => res.json());
 
-      return repos.map(
-        (repo: any) =>
-          ({
-            name: repo.name,
-            url: repo.html_url,
-            defaultBranch: repo.default_branch,
-          } as GithubState.Repository)
-      );
-    } catch (error) {
-      return error;
-    }
+    return repos.map(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (repo: any) =>
+        ({
+          name: repo.name,
+          url: repo.html_url,
+          defaultBranch: repo.default_branch,
+        } as GithubState.Repository)
+    );
   }
 
-  async fetchBranches(owner: string, repo: string): Promise<DropdownItem[]> {
+  async fetchBranches(
+    owner: string,
+    repo: string
+  ): Promise<GithubClient.Branch[]> {
     const branches = await this.octokit
       .request('GET /repos/{owner}/{repo}/branches', {
         owner,
@@ -73,12 +67,25 @@ export class GithubClient {
       .then((res) =>
         res.data.map((branch) => {
           return {
-            label: branch.name,
-            value: branch.commit.sha,
+            name: branch.name,
+            commit: branch.commit.sha,
           };
         })
       );
 
     return branches;
   }
+}
+
+export namespace GithubClient {
+  export type UserData = {
+    value: string;
+    label: string;
+    avatar: string;
+  };
+
+  export type Branch = {
+    name: string;
+    commit: string;
+  };
 }

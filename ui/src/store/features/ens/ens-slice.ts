@@ -1,47 +1,52 @@
-import { RootState, useAppSelector } from '@/store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { RootState } from '@/store';
+import { useAppSelector } from '@/store/hooks';
+
 import * as asyncThunk from './async-thunk';
 
-export namespace EnsState {
-  export type State = 'idle' | 'loading' | 'success' | 'failed';
+export namespace ENSState {
+  export type QueryState = undefined | 'loading' | 'failed' | 'success';
 
-  export type EnsNames = string[];
+  export type Address = {
+    state: QueryState;
+    value?: string;
+  };
+
+  export type AddressMap = Record<string, Address>;
 }
 
-export interface EnsState {
-  state: EnsState.State;
-  ensNames: EnsState.EnsNames;
+export interface ENSState {
+  addressMap: ENSState.AddressMap;
 }
 
-const initialState: EnsState = {
-  state: 'idle',
-  ensNames: [],
+const initialState: ENSState = {
+  addressMap: {},
 };
 
-export const ensSlice = createSlice({
-  name: 'ens',
+export const ENSSlice = createSlice({
+  name: 'ENSSLice',
   initialState,
   reducers: {
-    setEnsNames: (state, action: PayloadAction<EnsState.EnsNames>) => {
-      state.ensNames = action.payload;
-      state.state = 'success';
-    },
-    setState: (
+    setAddress: (
       state,
-      action: PayloadAction<Exclude<EnsState.State, 'success'>>
+      action: PayloadAction<{
+        key: string;
+        value: ENSState.Address;
+      }>
     ) => {
-      state.state = action.payload;
+      state.addressMap[action.payload.key] = action.payload.value;
     },
   },
 });
 
-export const ensActions = {
-  ...ensSlice.actions,
+export const ENSActions = {
+  ...ENSSlice.actions,
   ...asyncThunk,
 };
 
-const selectEnsState = (state: RootState): EnsState => state.ens;
+const selectENSState = (state: RootState): ENSState => state.ENS;
 
-export const useEnsStore = (): EnsState => useAppSelector(selectEnsState);
+export const useENSStore = (): ENSState => useAppSelector(selectENSState);
 
-export default ensSlice.reducer;
+export default ENSSlice.reducer;

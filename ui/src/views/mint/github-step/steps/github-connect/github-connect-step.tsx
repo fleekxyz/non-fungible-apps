@@ -1,5 +1,6 @@
 import { Card, Grid, Stepper } from '@/components';
 import { MintCardHeader } from '@/views/mint/mint-card';
+
 import { GithubButton } from './github-button';
 
 export const GithubConnect: React.FC = () => {

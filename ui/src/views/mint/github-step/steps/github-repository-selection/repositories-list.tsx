@@ -1,14 +1,18 @@
 import { useEffect, useMemo } from 'react';
-import { Flex, NoResults } from '@/components';
-import { Mint } from '@/views/mint/mint.context';
+
+import { Flex } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
+import { Mint } from '@/views/mint/mint.context';
+
 import { Repository } from './repository';
 
 type RepositoriesListProps = {
   searchValue: string;
 };
 
-export const RepositoriesList = ({ searchValue }: RepositoriesListProps) => {
+export const RepositoriesList: React.FC<RepositoriesListProps> = ({
+  searchValue,
+}: RepositoriesListProps) => {
   const { selectedUserOrg } = Mint.useContext();
   const { queryLoading, repositories } = useGithubStore();
   const dispatch = useAppDispatch();
@@ -23,7 +27,7 @@ export const RepositoriesList = ({ searchValue }: RepositoriesListProps) => {
   }, [searchValue, repositories]);
 
   useEffect(() => {
-    if (queryLoading === 'idle' && selectedUserOrg.value) {
+    if (queryLoading === 'idle' && selectedUserOrg?.value) {
       dispatch(githubActions.fetchRepositoriesThunk(selectedUserOrg.value));
     }
   }, [queryLoading, dispatch, selectedUserOrg]);
@@ -52,7 +56,12 @@ export const RepositoriesList = ({ searchValue }: RepositoriesListProps) => {
           />
         ))
       ) : (
-        <NoResults css="text-center" />
+        // TODO: update this after designs are done
+        <div
+          className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 text-center`}
+        >
+          Nothing found.
+        </div>
       )}
     </Flex>
   );

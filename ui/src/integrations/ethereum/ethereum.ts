@@ -1,8 +1,10 @@
 import { JsonRpcProvider, Networkish } from '@ethersproject/providers';
-import { ethers } from 'ethers';
-import * as Contracts from './contracts';
-import { env } from '@/constants';
 import { Alchemy, Network } from 'alchemy-sdk';
+import { ethers } from 'ethers';
+
+import { env } from '@/constants';
+
+import * as Contracts from './contracts';
 
 const config = {
   apiKey: env.alchemy.id,
@@ -12,8 +14,7 @@ const config = {
 const alchemy = new Alchemy(config);
 
 export const Ethereum: Ethereum.Core = {
-  //TODO remove
-  defaultNetwork: 'https://rpc-mumbai.maticvigil.com', // TODO: make it environment variable
+  defaultNetwork: env.goerli.rpc,
 
   provider: {
     metamask:
@@ -31,6 +32,7 @@ export const Ethereum: Ethereum.Core = {
     return new ethers.Contract(contract.address, contract.abi, provider);
   },
 
+  //TODO remove cause we're using ENS subgraph
   async getEnsName(address) {
     const ensAddresses = await alchemy.nft.getNftsForOwner(address, {
       contractAddresses: [env.ens.contractAddress],

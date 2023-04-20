@@ -5,6 +5,7 @@ pragma solidity ^0.8.17;
 import "forge-std/Test.sol";
 import "contracts/FleekERC721.sol";
 import {TestConstants} from "./Constants.sol";
+import {Utils} from "./Utils.sol";
 
 abstract contract Test_FleekERC721_Assertions is Test {
     function expectRevertWithTokenRole(uint256 tokenId, FleekAccessControl.TokenRoles role) public {
@@ -38,16 +39,37 @@ abstract contract Test_FleekERC721_Assertions is Test {
     function expectRevertWithInvalidTokenId() public {
         vm.expectRevert("ERC721: invalid token ID");
     }
+
+    function expectRevertWithMustBeTokenVerifier(uint256 tokenId) public {
+        vm.expectRevert(abi.encodeWithSelector(MustBeTokenVerifier.selector, tokenId));
+    }
 }
 
 abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
     FleekERC721 internal CuT; // Contract Under Test
     address internal deployer;
+    ENS internal constant _ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
+
+    function deployUninitialized() internal returns (FleekERC721) {
+        FleekERC721 _contract = new FleekERC721();
+        vm.store(address(_contract), bytes32(0), bytes32(0)); // Overrides `_initialized` and `_initializing` states
+        return _contract;
+    }
 
     function baseSetUp() internal {
-        CuT = new FleekERC721();
+        vm.prank(address(CuT));
+        CuT = deployUninitialized();
         CuT.initialize("Test Contract", "FLKAPS", new uint256[](0));
         deployer = address(this);
+        transferENS(TestConstants.APP_ENS, deployer);
+    }
+
+    function transferENS(string memory ens, address newOwner) public {
+        bytes32 node = Utils.namehash(ens);
+        address ensOwner = _ens.owner(node);
+        vm.deal(ensOwner, 100000000000);
+        vm.prank(ensOwner);
+        _ens.setOwner(node, newOwner);
     }
 
     function mintDefault(address to) internal returns (uint256) {

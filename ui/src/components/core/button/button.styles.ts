@@ -1,7 +1,8 @@
-import { dripStitches } from '../../../theme';
 import { CSS } from '@stitches/react';
 
-type StyledButtonProps = React.ComponentProps<typeof StyledButton>;
+import { styled } from '@/theme';
+
+type StyledButtonProps = React.ComponentPropsWithRef<typeof StyledButton>;
 export interface ButtonProps extends StyledButtonProps {
   /**
    * If `true`, the button will show a spinner.
@@ -147,8 +148,6 @@ const getButtonCompoundVariant = ({
       return {};
   }
 };
-
-const { styled } = dripStitches;
 
 export const StyledButton = styled('button', {
   all: 'unset',

@@ -1,5 +1,7 @@
-import { Flex } from '@/components';
 import React, { useMemo, useState } from 'react';
+
+import { Flex } from '@/components';
+
 import { createContext } from '../../../utils';
 import { StepperStyles } from './stepper.styles';
 
