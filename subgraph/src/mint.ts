@@ -1,10 +1,17 @@
-import { Bytes, log } from '@graphprotocol/graph-ts';
+import { BigInt, Bytes, log } from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]
 import { NewMint as NewMintEvent } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
-import { Owner, NewMint, Token, GitRepository } from '../generated/schema';
+import {
+  Owner,
+  NewMint,
+  Token,
+  GitRepository,
+  Collection,
+} from '../generated/schema';
+import { CollectionId } from './constants';
 
 export function handleNewMint(event: NewMintEvent): void {
   const newMintEntity = new NewMint(
@@ -89,6 +96,13 @@ export function handleNewMint(event: NewMintEvent): void {
     repositoryTokens.push(token.id);
   }
   repository.tokens = repositoryTokens;
+
+  // Increase total tokens counter
+  const collection = Collection.load(CollectionId);
+  if (collection) {
+    collection.totalTokens = collection.totalTokens.plus(BigInt.fromU32(1));
+    collection.save();
+  }
 
   // Save entities
   owner.save();

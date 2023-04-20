@@ -1,10 +1,11 @@
-import { log, ethereum } from '@graphprotocol/graph-ts';
+import { log, ethereum, BigInt } from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]
 import { Initialized as InitializedEvent } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
-import { Owner, Verifier } from '../generated/schema';
+import { Collection, Owner, Verifier } from '../generated/schema';
+import { CollectionId } from './constants';
 export function handleInitialized(event: InitializedEvent): void {
   // This is the contract creation transaction.
   log.warning('This is the contract creation transaction.', []);
@@ -13,6 +14,11 @@ export function handleInitialized(event: InitializedEvent): void {
     log.warning('Contract address is: {}', [
       receipt.contractAddress.toHexString(),
     ]);
+
+    // start collection entity
+    const collection = new Collection(CollectionId);
+    collection.totalTokens = BigInt.fromU32(0);
+    collection.save();
 
     // add owner
     const owner = new Owner(event.transaction.from);

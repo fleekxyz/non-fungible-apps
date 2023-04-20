@@ -119,3 +119,8 @@ type AccessPoint @entity {
   creationStatus: String!
   createdAt: BigInt!
 }
+
+type Collection @entity {
+  id: String!
+  totalTokens: BigInt!
+}
