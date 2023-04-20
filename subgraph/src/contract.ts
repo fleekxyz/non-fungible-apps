@@ -4,7 +4,7 @@ import { log, ethereum } from '@graphprotocol/graph-ts';
 import { Initialized as InitializedEvent } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
-import { Owner } from '../generated/schema';
+import { Owner, Verifier } from '../generated/schema';
 export function handleInitialized(event: InitializedEvent): void {
   // This is the contract creation transaction.
   log.warning('This is the contract creation transaction.', []);
@@ -18,5 +18,9 @@ export function handleInitialized(event: InitializedEvent): void {
     const owner = new Owner(event.transaction.from);
     owner.collection = true;
     owner.save();
+
+    // add verifier
+    const verifier = new Verifier(event.transaction.from);
+    verifier.save();
   }
 }
