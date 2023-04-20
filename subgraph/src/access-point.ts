@@ -29,6 +29,7 @@ export function handleNewAccessPoint(event: NewAccessPointEvent): void {
   accessPointEntity.token = Bytes.fromByteArray(
     Bytes.fromBigInt(event.params.tokenId)
   );
+  accessPointEntity.createdAt = event.block.timestamp;
 
   // Load / Create an Owner entity
   let ownerEntity = Owner.load(event.params.owner);
