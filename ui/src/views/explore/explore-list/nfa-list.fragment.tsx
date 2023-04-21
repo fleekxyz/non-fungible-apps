@@ -16,6 +16,8 @@ const LoadingSkeletons: React.FC = () => (
     <NFACardSkeleton />
     <NFACardSkeleton />
     <NFACardSkeleton />
+    <NFACardSkeleton />
+    <NFACardSkeleton />
   </>
 );
 
