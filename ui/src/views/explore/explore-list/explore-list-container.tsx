@@ -2,7 +2,7 @@ import { Flex } from '@/components';
 
 import { Explore } from '../explore.context';
 import { NFAListFragment } from './nfa-list';
-import { NFASearchFragment } from './nfa-search';
+import { NFASearchFragment } from './nfa-search.fragment';
 
 export const ExploreListContainer: React.FC = () => {
   return (
