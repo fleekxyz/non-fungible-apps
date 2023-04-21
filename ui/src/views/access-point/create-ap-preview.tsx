@@ -39,7 +39,11 @@ export const AccessPointDataFragment: React.FC = () => {
       <DisplayText
         label="Owner"
         value={
-          <ResolvedAddress truncated={false}>{address || ''}</ResolvedAddress>
+          address ? (
+            <ResolvedAddress truncated={false}>{address || ''}</ResolvedAddress>
+          ) : (
+            'Please connect to wallet'
+          )
         }
       />
       <DisplayText label="Frontend URL" value={domain} />
@@ -49,6 +53,7 @@ export const AccessPointDataFragment: React.FC = () => {
 
 export const CreateAccessPointPreview: React.FC = () => {
   const { prevStep } = Stepper.useContext();
+  const { address } = useAccount();
 
   const {
     prepare: { status: prepareStatus, data: prepareData, error: prepareError },
@@ -134,7 +139,7 @@ export const CreateAccessPointPreview: React.FC = () => {
           <Text>{message}</Text>
           <Button
             isLoading={isLoading}
-            isDisabled={isLoading || !isValid}
+            isDisabled={isLoading || !isValid || !address}
             colorScheme="blue"
             variant="solid"
             onClick={write}
