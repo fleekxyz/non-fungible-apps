@@ -1,10 +1,10 @@
 import { Flex } from '@/components';
 
-import { CreateAccessPoint } from './create-ap.context';
 import {
   CreateAccessPointFormProvider,
   useAccessPointFormContextInit,
-} from './create-ap.form.context';
+} from './ap-form-step/create-ap.form.context';
+import { CreateAccessPoint } from './create-ap.context';
 import { CreateApStepper } from './create-ap.stepper';
 
 export const CreateAP: React.FC = () => {
