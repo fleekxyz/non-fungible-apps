@@ -4,6 +4,7 @@ import { AiOutlineTwitter } from '@react-icons/all-files/ai/AiOutlineTwitter';
 import { BiGitBranch } from '@react-icons/all-files/bi/BiGitBranch';
 import { BiSearch } from '@react-icons/all-files/bi/BiSearch';
 import { BsFillSquareFill } from '@react-icons/all-files/bs/BsFillSquareFill';
+import { FaBars } from '@react-icons/all-files/fa/FaBars';
 import { FaChevronRight } from '@react-icons/all-files/fa/FaChevronRight';
 import { FaExternalLinkAlt } from '@react-icons/all-files/fa/FaExternalLinkAlt';
 import { IoArrowBackCircleSharp } from '@react-icons/all-files/io5/IoArrowBackCircleSharp';
@@ -40,6 +41,7 @@ export const IconLibrary = Object.freeze({
   fleekName: FleekName,
   github: IoLogoGithub,
   info: IoInformationCircleSharp,
+  menu: FaBars,
   metamask: MetamaskIcon, //remove if not used
   search: BiSearch,
   square: BsFillSquareFill,
