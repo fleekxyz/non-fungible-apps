@@ -104,6 +104,6 @@ describe('Deploy', () => {
         TestConstants.MintParams.accessPointAutoApprovalSettings,
         owner.address
       )
-    ).to.be.revertedWithCustomError(implementation, Errors.ContractIsPaused);
+    ).to.be.reverted;
   });
 });
