@@ -13,6 +13,7 @@ export abstract class NavBarStyles {
     backgroundColor: '$black',
     zIndex: '$sticky',
     height: '$22',
+    overflow: 'hidden', // TODO: this must be worked on for responsive layout
   });
 
   static readonly Content = styled('div', {

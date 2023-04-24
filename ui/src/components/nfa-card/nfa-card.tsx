@@ -60,8 +60,7 @@ export const NFACard: React.FC<NFACardProps> = forwardStyledRef<
             alignItems: 'center',
           }}
         >
-          {/* TODO: treat names bigger than space in layout when designs are done */}
-          <S.Title>{data.name}</S.Title>
+          <S.Title title={data.name}>{data.name}</S.Title>
           {/* TODO: set correct value when it gets available on contract side */}
           <Badge verified={Math.random() > 0.5} />
         </Flex>
