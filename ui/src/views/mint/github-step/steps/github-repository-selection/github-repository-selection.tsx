@@ -6,6 +6,7 @@ import {
   Icon,
   IconButton,
   InputGroup,
+  InputGroupText,
   Spinner,
 } from '@/components';
 import { useDebounce } from '@/hooks/use-debounce';
@@ -81,8 +82,8 @@ export const GithubRepositoryConnection: React.FC = () => {
           <S.Row>
             <UserOrgsCombobox />
             <InputGroup css={{ flex: 1 }}>
-              <S.Input.LeftAddon name="search" />
-              <S.Input.Input
+              <S.Group.Icon name="search" />
+              <InputGroupText
                 placeholder="Search repo"
                 onChange={handleSearchChange}
               />

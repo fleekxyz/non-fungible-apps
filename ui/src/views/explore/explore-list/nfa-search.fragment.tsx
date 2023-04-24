@@ -1,6 +1,11 @@
 import { useState } from 'react';
 
-import { Dropdown, DropdownItem, InputGroup } from '@/components';
+import {
+  Dropdown,
+  DropdownItem,
+  InputGroup,
+  InputGroupText,
+} from '@/components';
 import { useDebounce } from '@/hooks';
 
 import { Explore } from '../explore.context';
@@ -70,8 +75,8 @@ export const NFASearchFragment: React.FC = () => {
 
       <S.Input.Wrapper>
         <InputGroup css={{ flex: 1 }}>
-          <S.Input.LeftAddon name="search" />
-          <S.Input.Input placeholder="Search" onChange={handleSearchChange} />
+          <S.Input.Icon name="search" />
+          <InputGroupText placeholder="Search" onChange={handleSearchChange} />
         </InputGroup>
 
         <Dropdown

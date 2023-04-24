@@ -1,10 +1,10 @@
-import { Card, Flex, Input, InputLeftAddon } from '@/components';
+import { Card, Flex, Icon } from '@/components';
 import { styled } from '@/theme';
 
 export const GithubRepositorySelectionStyles = {
   Card: {
     Wrapper: styled(Card.Container, {
-      maxWidth: '$107',
+      maxWidth: '$107h',
       maxHeight: '$95h',
       pr: '$3h',
     }),
@@ -21,12 +21,9 @@ export const GithubRepositorySelectionStyles = {
     pr: '$3h',
     position: 'relative',
   }),
-  Input: {
-    LeftAddon: styled(InputLeftAddon, {
+  Group: {
+    Icon: styled(Icon, {
       fontSize: '$lg',
-    }),
-    Input: styled(Input, {
-      pl: '$10',
     }),
   },
 };
