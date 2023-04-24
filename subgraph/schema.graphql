@@ -79,7 +79,7 @@ type Token @entity {
   gitRepository: GitRepository!
   commitHash: String!
   accessPoints: [AccessPoint!] @derivedFrom(field: "token")
-  verifier: Verifier! # Address
+  verifier: Verifier # Address
   verified: Boolean!
   createdAt: BigInt!
 }

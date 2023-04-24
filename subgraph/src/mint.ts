@@ -10,6 +10,7 @@ import {
   Token,
   GitRepository,
   Collection,
+  Verifier,
 } from '../generated/schema';
 import { CollectionId } from './constants';
 
@@ -74,7 +75,6 @@ export function handleNewMint(event: NewMintEvent): void {
   token.color = color;
   token.accessPointAutoApproval = accessPointAutoApproval;
   token.owner = ownerAddress;
-  token.verifier = verifierAddress;
   token.verified = false;
   token.mintTransaction = event.transaction.hash.concatI32(
     event.logIndex.toI32()
@@ -82,6 +82,10 @@ export function handleNewMint(event: NewMintEvent): void {
   token.mintedBy = event.params.minter;
   token.controllers = [ownerAddress];
   token.createdAt = event.block.timestamp;
+
+  if (Verifier.load(verifierAddress)) {
+    token.verifier = verifierAddress;
+  }
 
   // Populate GitRepository entity
   let repository = GitRepository.load(gitRepository);
