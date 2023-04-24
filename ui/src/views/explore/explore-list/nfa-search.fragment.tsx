@@ -9,8 +9,8 @@ import { NFASearchFragmentStyles as S } from './nfa-search.styles';
 const orderResults: DropdownItem[] = [
   { value: 'newest', label: 'Newest' },
   { value: 'oldest', label: 'Oldest' },
-  { value: 'a-z', label: 'Name A-Z' },
-  { value: 'z-a', label: 'Name Z-A' },
+  { value: 'a-z', label: 'Sort A-Z' },
+  { value: 'z-a', label: 'Sort Z-A' },
 ];
 
 export const NFASearchFragment: React.FC = () => {
