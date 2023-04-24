@@ -25,7 +25,7 @@ export const ConnectWalletButton: React.FC = () => {
         if (ensName && address) setEnsNameStore(ensName, address);
 
         return (
-          <Button onClick={show}>
+          <Button onClick={show} css={{ gridArea: 'wallet' }}>
             {isConnected && !!address && !!truncatedAddress ? (
               <Flex css={{ gap: '$2' }}>
                 <Avatar address={address} size={20} />
