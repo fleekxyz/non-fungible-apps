@@ -1,12 +1,18 @@
 import { useState } from 'react';
 
-import { Dropdown, DropdownItem, Input } from '@/components';
+import { Combobox, Input } from '@/components';
 import { useDebounce } from '@/hooks';
+import { AppLog } from '@/utils';
 
 import { Explore } from '../explore.context';
 import { NFASearchFragmentStyles as S } from './nfa-search.styles';
 
-const orderResults: DropdownItem[] = [
+type SortItem = {
+  value: string;
+  label: string;
+};
+
+const orderResults: SortItem[] = [
   { value: 'newest', label: 'Newest' },
   { value: 'oldest', label: 'Oldest' },
   { value: 'a-z', label: 'Name A-Z' },
@@ -21,34 +27,36 @@ export const NFASearchFragment: React.FC = () => {
     setSearch,
     setPageNumber,
   } = Explore.useContext();
-  const [selectedValue, setSelectedValue] = useState<DropdownItem>(
-    orderResults[0]
-  );
+  const [selectedValue, setSelectedValue] = useState<SortItem>(orderResults[0]);
 
-  const handleSortChange = (item: DropdownItem): void => {
-    setSelectedValue(item);
-    setPageNumber(0);
-    setEndReached(false);
+  const handleSortChange = (item: SortItem | undefined): void => {
+    if (item) {
+      setSelectedValue(item);
+      setPageNumber(0);
+      setEndReached(false);
 
-    switch (item.value) {
-      case 'newest':
-        setOrderBy('tokenId');
-        setOrderDirection('desc');
-        break;
-      case 'oldest':
-        setOrderBy('tokenId');
-        setOrderDirection('asc');
-        break;
-      case 'a-z':
-        setOrderBy('name');
-        setOrderDirection('asc');
-        break;
-      case 'z-a':
-        setOrderBy('name');
-        setOrderDirection('desc');
-        break;
-      default:
-        break;
+      switch (item.value) {
+        case 'newest':
+          setOrderBy('tokenId');
+          setOrderDirection('desc');
+          break;
+        case 'oldest':
+          setOrderBy('tokenId');
+          setOrderDirection('asc');
+          break;
+        case 'a-z':
+          setOrderBy('name');
+          setOrderDirection('asc');
+          break;
+        case 'z-a':
+          setOrderBy('name');
+          setOrderDirection('desc');
+          break;
+        default:
+          break;
+      }
+    } else {
+      AppLog.errorToast('Error selecting sort option. Try again');
     }
   };
 
@@ -75,14 +83,29 @@ export const NFASearchFragment: React.FC = () => {
           onChange={handleSearchChange}
           wrapperClassName="flex-1"
         />
-        <Dropdown
+        <Combobox
           items={orderResults}
-          selectedValue={selectedValue}
-          onChange={handleSortChange}
-          backgroundColor="slate4"
-          textColor="slate11"
-          optionsWidth="40"
-        />
+          selected={[selectedValue, handleSortChange]}
+          css={{ minWidth: '$28' }}
+          queryKey="label"
+        >
+          {({ Field, Options }) => (
+            <>
+              <Field
+                css={{
+                  backgroundColor: '$slate4',
+                  borderColor: '$slate4',
+                  color: '$slate11',
+                }}
+              >
+                {(selected) => selected?.label || 'Select'}
+              </Field>
+              <Options disableSearch css={{ minWidth: '$44', left: 'unset' }}>
+                {(item) => item.label}
+              </Options>
+            </>
+          )}
+        </Combobox>
       </S.Input.Wrapper>
     </S.Container>
   );
