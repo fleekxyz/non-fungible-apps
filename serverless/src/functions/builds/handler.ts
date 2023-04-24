@@ -13,7 +13,7 @@ export const submitBuildInfo = async (): Promise<APIGatewayProxyResult> => {
     };
 
     nfaContract.methods
-      .setTokenBuild(1, 'lokjhg', 'repo')
+      .setTokenBuild(1, 'hash', 'repo')
       .call((err: string | undefined, res: any) => {
         if (err) throw new Error(err);
         console.log('result');
