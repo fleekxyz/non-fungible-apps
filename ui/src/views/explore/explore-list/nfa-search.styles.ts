@@ -1,4 +1,4 @@
-import { Flex } from '@/components';
+import { Flex, Input, InputGroup, InputLeftAddon } from '@/components';
 import { styled } from '@/theme';
 
 export const NFASearchFragmentStyles = {
@@ -31,6 +31,12 @@ export const NFASearchFragmentStyles = {
       width: '100%',
       maxWidth: '30rem',
       justifySelf: 'center',
+    }),
+    LeftAddon: styled(InputLeftAddon, {
+      fontSize: '$lg',
+    }),
+    Input: styled(Input, {
+      pl: '$10',
     }),
   },
 };

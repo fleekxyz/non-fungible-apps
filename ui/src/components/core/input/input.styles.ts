@@ -68,4 +68,8 @@ export const InputIconStyled = styled(Icon, {
   color: 'slate8',
 });
 
+export const InputGroupStyled = styled('div', {
+  position: 'relative',
+});
+
 export const TextareaStyled = styled('textarea', styles);
