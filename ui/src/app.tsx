@@ -21,7 +21,6 @@ export const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<ExploreView />} />
             <Route path="/mint" element={<Mint />} />
-            <Route path="/create-ap" element={<CreateAP />} />
             <Route path="/create-ap/:id" element={<CreateAP />} />
             <Route path="/nfa/:id" element={<IndexedNFAView />} />
             {/** TODO remove for release */}

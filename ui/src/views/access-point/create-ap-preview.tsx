@@ -1,36 +1,71 @@
 import { ethers } from 'ethers';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useAccount } from 'wagmi';
 
 import {
   Button,
   Card,
   Flex,
-  Grid,
   Icon,
   IconButton,
+  ResolvedAddress,
   Stepper,
+  Text,
 } from '@/components';
 import { useTransactionCost } from '@/hooks';
 import { FleekERC721 } from '@/integrations';
+import { AppLog } from '@/utils';
 
+import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
+import { SelectedNFA } from './ap-form-step/create-ap-form-body';
 import { CreateAccessPoint } from './create-ap.context';
-import { useAccessPointFormContext } from './create-ap.form.context';
+import { DisplayText } from './display-text';
+
+export const AccessPointDataFragment: React.FC = () => {
+  const { address, status } = useAccount();
+  const {
+    form: {
+      domain: {
+        value: [domain],
+      },
+    },
+  } = useAccessPointFormContext();
+
+  if (status === 'connecting') return <div>Loading...</div>; //TODO replace with spinner
+
+  return (
+    <>
+      <SelectedNFA />
+      <DisplayText
+        label="Owner"
+        value={
+          address ? (
+            <ResolvedAddress truncated={false}>{address || ''}</ResolvedAddress>
+          ) : (
+            'Please connect to wallet'
+          )
+        }
+      />
+      <DisplayText label="Frontend URL" value={domain} />
+    </>
+  );
+};
 
 export const CreateAccessPointPreview: React.FC = () => {
   const { prevStep } = Stepper.useContext();
+  const { address } = useAccount();
+
   const {
     prepare: { status: prepareStatus, data: prepareData, error: prepareError },
     write: { status: writeStatus, write },
     transaction: { status: transactionStatus },
   } = CreateAccessPoint.useTransactionContext();
+
   const {
     form: {
-      appName: {
-        value: [appName],
-      },
+      isValid: [isValid],
     },
   } = useAccessPointFormContext();
-  const { nfa } = CreateAccessPoint.useContext();
 
   const [cost, currency, isCostLoading] = useTransactionCost(
     prepareData?.request.value,
@@ -66,10 +101,19 @@ export const CreateAccessPointPreview: React.FC = () => {
     [prepareStatus, writeStatus, transactionStatus]
   );
 
+  useEffect(() => {
+    const error = [writeStatus, transactionStatus].some(
+      (status) => status === 'error'
+    );
+    if (error) {
+      AppLog.errorToast('An error occurred while minting the NFA');
+    }
+  }, [writeStatus, transactionStatus]);
+
   return (
     <Card.Container css={{ width: '$107h' }}>
       <Card.Heading
-        title={`Create Access Point ${nfa.label || ''}`}
+        title="Review Details"
         leftIcon={
           <IconButton
             aria-label="Add"
@@ -90,26 +134,19 @@ export const CreateAccessPointPreview: React.FC = () => {
         }
       />
       <Card.Body>
-        <Grid
-          css={{
-            rowGap: '$6',
-          }}
-        >
-          <Flex css={{ flexDirection: 'column' }}>
-            <span>NFA: {nfa.value}</span>
-            <span>{appName}</span>
-            <span className="text-slate11 text-sm">{message}</span>
-          </Flex>
+        <Flex css={{ flexDirection: 'column', gap: '$6' }}>
+          <AccessPointDataFragment />
+          <Text>{message}</Text>
           <Button
-            disabled={!!prepareError || !nfa}
+            isLoading={isLoading}
+            isDisabled={isLoading || !isValid || !address}
             colorScheme="blue"
             variant="solid"
             onClick={write}
-            isLoading={isLoading}
           >
             Create
           </Button>
-        </Grid>
+        </Flex>
       </Card.Body>
     </Card.Container>
   );

@@ -16,7 +16,6 @@ export const RepoRow = forwardRef<HTMLDivElement, RepoRowProps>(
         justifyContent: 'space-between',
         my: '$4',
         ...props.css,
-        cursor: 'pointer',
       }}
     >
       <Flex css={{ alignItems: 'center' }}>
