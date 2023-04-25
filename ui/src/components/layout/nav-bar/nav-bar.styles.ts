@@ -111,4 +111,11 @@ export const NavBarStyles = {
       },
     }),
   },
+
+  Logo: {
+    Wrapper: styled(Flex, {
+      gridArea: 'logo',
+      cursor: 'pointer',
+    }),
+  },
 };

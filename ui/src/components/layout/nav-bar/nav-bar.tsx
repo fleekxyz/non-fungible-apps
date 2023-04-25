@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { Button, Icon } from '@/components/core';
-import { Logo } from '@/components/logo/logo';
 import { useMediaQuery } from '@/hooks';
 
 import { ConnectWalletButton } from './connect-wallet-button';
+import { Logo } from './logo';
 import { NavBarStyles as Styles } from './nav-bar.styles';
 import { Navigation } from './navigations';
 
@@ -54,12 +54,9 @@ export const NavBar: React.FC = () => {
     <Styles.Container>
       <Styles.Content>
         <Logo />
-
-        {!enableSidebar && <Navigation />}
-
         <ConnectWalletButton />
 
-        {enableSidebar && <Sidebar />}
+        {enableSidebar ? <Sidebar /> : <Navigation />}
       </Styles.Content>
     </Styles.Container>
   );

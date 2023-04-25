@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Icon } from '../core/icon';
-import { LogoStyles as LS } from './logo.styles';
+import { Icon } from '../../core/icon';
+import { NavBarStyles as S } from './nav-bar.styles';
 
 export const Logo: React.FC = () => {
   const navigate = useNavigate();
   return (
-    <LS.Container onClick={() => navigate('/home')}>
+    <S.Logo.Wrapper onClick={() => navigate('/home')}>
       <Icon
         name="fleekLogo"
         css={{ fontSize: '$2xl' }}
@@ -14,6 +14,6 @@ export const Logo: React.FC = () => {
       />
       <Icon name="fleekName" css={{ fontSize: '$6xl', mr: '$3' }} />
       <Icon name="betaTag" css={{ fontSize: '$5xl' }} />
-    </LS.Container>
+    </S.Logo.Wrapper>
   );
 };
