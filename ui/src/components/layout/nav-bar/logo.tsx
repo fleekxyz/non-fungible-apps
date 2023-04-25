@@ -8,12 +8,12 @@ export const Logo: React.FC = () => {
   return (
     <S.Logo.Wrapper onClick={() => navigate('/home')}>
       <Icon
-        name="fleekLogo"
+        name="fleek-logo"
         css={{ fontSize: '$2xl' }}
         iconElementCss={{ height: '$6' }}
       />
-      <Icon name="fleekName" css={{ fontSize: '$6xl', mr: '$3' }} />
-      <Icon name="betaTag" css={{ fontSize: '$5xl' }} />
+      <Icon name="fleek-name" css={{ fontSize: '$6xl', mr: '$3' }} />
+      <Icon name="beta-tag" css={{ fontSize: '$5xl' }} />
     </S.Logo.Wrapper>
   );
 };

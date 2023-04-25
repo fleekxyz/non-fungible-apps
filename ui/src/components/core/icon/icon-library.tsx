@@ -27,7 +27,7 @@ import {
 
 export const IconLibrary = Object.freeze({
   back: IoArrowBackCircleSharp,
-  betaTag: BetaTag,
+  'beta-tag': BetaTag,
   branch: BiGitBranch,
   check: AiOutlineCheck,
   'check-circle': IoCheckmarkCircleSharp,
@@ -37,8 +37,8 @@ export const IconLibrary = Object.freeze({
   error: ErrorIcon,
   ethereum: EthereumIcon,
   'external-link': FaExternalLinkAlt,
-  fleekLogo: FleekLogo,
-  fleekName: FleekName,
+  'fleek-logo': FleekLogo,
+  'fleek-name': FleekName,
   github: IoLogoGithub,
   info: IoInformationCircleSharp,
   menu: FaBars,
