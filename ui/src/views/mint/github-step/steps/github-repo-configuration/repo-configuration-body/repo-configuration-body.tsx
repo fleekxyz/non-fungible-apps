@@ -31,7 +31,7 @@ export const RepoConfigurationBody: React.FC = () => {
     <Card.Body css={{ pt: '$4' }}>
       <Flex css={{ rowGap: '$6', flexDirection: 'column' }}>
         <RowData
-          leftIcon={<Icon name="github" css={{ fontSize: '$2xl', mr: '$2' }} />}
+          leftIcon={<Icon name="github" css={{ fontSize: '$2xl' }} />}
           label={repositoryName?.name || ''}
           css={{ cursor: 'default' }}
           rightComponent={<CardTag>Use for NFA</CardTag>}

@@ -9,6 +9,7 @@ export const RowDataStyles = {
     Container: styled(Flex, {
       alignItems: 'center',
       maxWidth: '65%',
+      gap: '$2',
     }),
     Label: styled(Text, {
       textOverflow: 'ellipsis',

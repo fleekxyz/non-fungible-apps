@@ -6,7 +6,6 @@ export const NFAIconStyles = {
     borderRadius: '$full',
     width: '$7',
     height: '$7',
-    mr: '$2',
   }),
   Image: styled('img', {
     width: '100%',

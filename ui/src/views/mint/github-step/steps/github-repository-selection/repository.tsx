@@ -27,7 +27,7 @@ export const Repository: React.FC<RepositoryProps> = ({
   return (
     <>
       <RowData
-        leftIcon={<Icon name="github" css={{ fontSize: '$2xl', mr: '$2' }} />}
+        leftIcon={<Icon name="github" css={{ fontSize: '$2xl' }} />}
         label={repository.name}
         css={{ cursor: 'pointer', my: '$4' }}
         rightComponent={
