@@ -1,5 +1,5 @@
 import { StyledButton } from '@/components/core';
-import { styled } from '@/theme';
+import { alphaColor, styled } from '@/theme';
 
 import { Flex } from '../flex.styles';
 
@@ -11,14 +11,22 @@ export const NavBarStyles = {
     right: 0,
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: '$black',
     zIndex: '$sticky',
     height: '$22',
     overflow: 'hidden', // TODO: this must be worked on for responsive layout
+
+    '&:after': {
+      content: '""',
+      position: 'absolute',
+      inset: 0,
+      backgroundColor: alphaColor('black', 0.8),
+      backdropFilter: 'blur(4px)',
+      zIndex: -1,
+    },
   }),
 
   Content: styled('div', {
-    width: '100vw',
+    width: '100%',
     maxWidth: '$7xl',
     margin: '0 auto',
     alignItems: 'center',
@@ -97,7 +105,7 @@ export const NavBarStyles = {
       position: 'fixed',
       inset: 0,
       zIndex: '$sticky',
-      backgroundColor: '#00000080',
+      backgroundColor: alphaColor('black', 0.5),
       display: 'none',
       transition: 'opacity 0.3s ease-in-out',
 
