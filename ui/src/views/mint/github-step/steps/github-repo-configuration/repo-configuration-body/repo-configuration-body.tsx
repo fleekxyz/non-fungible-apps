@@ -1,8 +1,15 @@
-import { Button, Card, CardTag, Flex, Stepper } from '@/components';
+import {
+  Button,
+  Card,
+  CardTag,
+  Flex,
+  Icon,
+  RowData,
+  Stepper,
+} from '@/components';
 import { Mint } from '@/views/mint/mint.context';
 import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
 
-import { RepoRow } from '../../repository-row';
 import { RepoBranchCommitFields } from './repo-branch-commit-fields';
 
 export const RepoConfigurationBody: React.FC = () => {
@@ -21,12 +28,13 @@ export const RepoConfigurationBody: React.FC = () => {
   };
 
   return (
-    <Card.Body css={{ pt: '$2' }}>
+    <Card.Body css={{ pt: '$4' }}>
       <Flex css={{ rowGap: '$6', flexDirection: 'column' }}>
-        <RepoRow
-          repo={repositoryName.name}
-          css={{ mb: '0', cursor: 'default' }}
-          button={<CardTag>Use for NFA</CardTag>}
+        <RowData
+          leftIcon={<Icon name="github" css={{ fontSize: '$2xl', mr: '$2' }} />}
+          label={repositoryName?.name || ''}
+          css={{ cursor: 'default' }}
+          rightComponent={<CardTag>Use for NFA</CardTag>}
         />
         <RepoBranchCommitFields />
         <Button
