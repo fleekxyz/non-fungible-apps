@@ -4,7 +4,7 @@ import { ConnectWalletButton } from './connect-wallet-button';
 
 export const WalletStep: React.FC = () => {
   return (
-    <Card.Container>
+    <Card.Container css={{ maxWidth: '$107h' }}>
       <Card.Heading
         title="Connect Wallet"
         rightIcon={
@@ -20,7 +20,12 @@ export const WalletStep: React.FC = () => {
         <Grid css={{ rowGap: '$6' }}>
           <ConnectWalletButton />
           <Card.Text
-            css={{ height: '$46h', width: '$95', fontSize: '$md', px: '$12' }}
+            css={{
+              height: '$46h',
+              maxWidth: '$95',
+              fontSize: '$md',
+              px: '$12',
+            }}
           >
             <span>Connect with the wallet you want to mint & own the NFA.</span>
           </Card.Text>

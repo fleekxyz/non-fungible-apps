@@ -7,7 +7,7 @@ export const GithubConnect: React.FC = () => {
   const { prevStep } = Stepper.useContext();
 
   return (
-    <Card.Container>
+    <Card.Container css={{ maxWidth: '$107h' }}>
       <MintCardHeader title="Connect GitHub" onClickBack={prevStep} />
       <Card.Body>
         <Grid css={{ rowGap: '$6' }}>

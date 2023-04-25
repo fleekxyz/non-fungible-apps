@@ -1,5 +1,7 @@
 import { Flex, Stepper } from '@/components';
 
+import { StepStyles as S } from './step.styles';
+
 type StepperIndicatorContainerProps = {
   children: React.ReactNode;
 };
@@ -12,26 +14,14 @@ const StepperIndicatorContainer: React.FC<StepperIndicatorContainerProps> = ({
       css={{
         flexDirection: 'column',
         justifyContent: 'center',
-        mr: '$34',
-        width: '$106',
+        // mr: '$34',
+        maxWidth: '$106',
       }}
     >
       {children}
     </Flex>
   );
 };
-
-type MintStepContainerProps = {
-  children: React.ReactNode;
-};
-
-const Container: React.FC<MintStepContainerProps> = ({
-  children,
-}: MintStepContainerProps) => (
-  <Flex css={{ flexDirection: 'row', justifyContent: 'center' }}>
-    {children}
-  </Flex>
-);
 
 type StepProps = {
   children: React.ReactNode;
@@ -40,12 +30,12 @@ type StepProps = {
 
 export const Step: React.FC<StepProps> = ({ children, header }: StepProps) => {
   return (
-    <Container>
+    <S.Container>
       <StepperIndicatorContainer>
         <Stepper.Indicator />
         <h2 className="text-4xl">{header}</h2>
       </StepperIndicatorContainer>
       {children}
-    </Container>
+    </S.Container>
   );
 };
