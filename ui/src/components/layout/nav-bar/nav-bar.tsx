@@ -1,30 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { Button, Icon } from '@/components/core';
 import { Logo } from '@/components/logo/logo';
 import { useMediaQuery } from '@/hooks';
-import { forwardStyledRef } from '@/theme';
 
 import { ConnectWalletButton } from './connect-wallet-button';
 import { NavBarStyles as Styles } from './nav-bar.styles';
-
-const Navigation = forwardStyledRef<
-  HTMLDivElement,
-  React.ComponentPropsWithRef<typeof Styles.Navigation>
->((props, ref) => (
-  <Styles.Navigation {...props} ref={ref}>
-    <Button as={Link} to="/explore" variant="link" color="gray">
-      Explore
-    </Button>
-    <Button as={Link} to="/mint" variant="link" color="gray">
-      Create
-    </Button>
-    <Button as={Link} to="/" variant="link" color="gray">
-      Learn
-    </Button>
-  </Styles.Navigation>
-));
+import { Navigation } from './navigations';
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

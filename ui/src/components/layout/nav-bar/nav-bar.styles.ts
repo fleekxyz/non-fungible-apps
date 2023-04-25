@@ -30,27 +30,39 @@ export const NavBarStyles = {
     gridTemplateColumns: 'auto 1fr auto',
   }),
 
-  Navigation: styled(Flex, {
-    gridArea: 'navigation',
-    gap: '$10',
-    justifyContent: 'center',
+  Navigation: {
+    Container: styled(Flex, {
+      gridArea: 'navigation',
+      gap: '$10',
+      justifyContent: 'center',
 
-    fontSize: '$lg',
+      fontSize: '$lg',
 
-    variants: {
-      stacked: {
-        true: {
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '$4',
+      variants: {
+        stacked: {
+          true: {
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '$4',
 
-          [`${StyledButton}`]: {
-            fontSize: '$lg',
+            [`${StyledButton}`]: {
+              fontSize: '$lg',
+            },
           },
         },
       },
-    },
-  }),
+    }),
+
+    Button: styled(StyledButton, {
+      variants: {
+        active: {
+          true: {
+            color: '$slate12 !important',
+          },
+        },
+      },
+    }),
+  },
 
   Sidebar: {
     Content: styled(Flex, {
