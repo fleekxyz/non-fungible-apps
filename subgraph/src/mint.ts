@@ -12,7 +12,6 @@ import {
   Collection,
   Verifier,
 } from '../generated/schema';
-import { CollectionId } from './constants';
 
 export function handleNewMint(event: NewMintEvent): void {
   const newMintEntity = new NewMint(
@@ -102,7 +101,7 @@ export function handleNewMint(event: NewMintEvent): void {
   repository.tokens = repositoryTokens;
 
   // Increase total tokens counter
-  const collection = Collection.load(CollectionId);
+  const collection = Collection.load(event.address.toHexString());
   if (collection) {
     collection.totalTokens = collection.totalTokens.plus(BigInt.fromU32(1));
     collection.save();

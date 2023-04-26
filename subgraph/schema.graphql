@@ -121,6 +121,6 @@ type AccessPoint @entity {
 }
 
 type Collection @entity {
-  id: String!
+  id: Bytes!
   totalTokens: BigInt!
 }

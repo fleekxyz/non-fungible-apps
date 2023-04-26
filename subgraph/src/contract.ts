@@ -5,7 +5,6 @@ import { Initialized as InitializedEvent } from '../generated/FleekNFA/FleekNFA'
 
 // Entity Imports [based on the schema]
 import { Collection, Owner, Verifier } from '../generated/schema';
-import { CollectionId } from './constants';
 export function handleInitialized(event: InitializedEvent): void {
   // This is the contract creation transaction.
   log.warning('This is the contract creation transaction.', []);
@@ -16,7 +15,7 @@ export function handleInitialized(event: InitializedEvent): void {
     ]);
 
     // start collection entity
-    const collection = new Collection(CollectionId);
+    const collection = new Collection(event.address.toHexString());
     collection.totalTokens = BigInt.fromU32(0);
     collection.save();
 
