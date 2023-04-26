@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 
-import { Button, Icon } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
+import { ButtonConnection } from '@/views/mint/button-connection';
 import { Mint } from '@/views/mint/mint.context';
 
 export const GithubButton: React.FC = () => {
@@ -18,22 +18,11 @@ export const GithubButton: React.FC = () => {
   }, [setGithubStep, state]);
 
   return (
-    <Button
-      size="lg"
-      variant="ghost"
-      css={{
-        backgroundColor: '$slate4',
-        color: '$slate12',
-        py: '$2h',
-        justifyContent: 'space-between', //TODO remove
-      }}
+    <ButtonConnection
+      icon={'github'}
+      label={'GitHub'}
       onClick={handleGithubLogin}
       disabled={state === 'loading'}
-      rightIcon={
-        <Icon name="github" css={{ color: 'white', fontSize: '$4xl' }} />
-      }
-    >
-      GitHub
-    </Button>
+    />
   );
 };
