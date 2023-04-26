@@ -14,8 +14,6 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
       spinner,
       loadingText,
       iconSpacing,
-      topIcon,
-      bottomIcon,
       rightIcon,
       leftIcon,
       isFullWidth,
@@ -26,8 +24,6 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
     const contentProps = {
       rightIcon,
       leftIcon,
-      bottomIcon,
-      topIcon,
       iconSpacing,
       children,
     };
@@ -40,7 +36,7 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
         data-loading={isLoading}
         css={{
           width: isFullWidth ? '100%' : undefined,
-          ...(ownProps?.css || {}),
+          ...ownProps?.css,
         }}
         {...ownProps}
       >

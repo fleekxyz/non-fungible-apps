@@ -1,57 +1,23 @@
 import React from 'react';
 
 import { ButtonProps } from '.';
-import {
-  StyledButtonContentFlex,
-  StyledButtonContentGrid,
-} from './button-content.styles';
 import { ButtonIcon } from './button-icon';
 
 export type ButtonContentProps = Pick<
   ButtonProps,
-  | 'leftIcon'
-  | 'rightIcon'
-  | 'topIcon'
-  | 'bottomIcon'
-  | 'children'
-  | 'iconSpacing'
+  'leftIcon' | 'rightIcon' | 'children'
 >;
 
 export const ButtonContent: React.FC<ButtonContentProps> = (props) => {
-  const {
-    leftIcon,
-    rightIcon,
-    topIcon,
-    bottomIcon,
-    children,
-    iconSpacing = '1h',
-  } = props;
+  const { leftIcon, rightIcon, children } = props;
 
   const midNode = (
     <>
-      {leftIcon && (
-        <ButtonIcon css={{ marginRight: `$${iconSpacing}` }}>
-          {leftIcon}
-        </ButtonIcon>
-      )}
+      {leftIcon && <ButtonIcon>{leftIcon}</ButtonIcon>}
       {children}
-      {rightIcon && (
-        <ButtonIcon css={{ marginLeft: `$${iconSpacing}` }}>
-          {rightIcon}
-        </ButtonIcon>
-      )}
+      {rightIcon && <ButtonIcon>{rightIcon}</ButtonIcon>}
     </>
   );
 
-  if (!topIcon && !bottomIcon) {
-    return midNode;
-  }
-
-  return (
-    <StyledButtonContentGrid>
-      {topIcon && <ButtonIcon>{topIcon}</ButtonIcon>}
-      <StyledButtonContentFlex>{midNode}</StyledButtonContentFlex>
-      {bottomIcon && <ButtonIcon>{bottomIcon}</ButtonIcon>}
-    </StyledButtonContentGrid>
-  );
+  return midNode;
 };

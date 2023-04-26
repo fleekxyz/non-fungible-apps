@@ -6,7 +6,7 @@ import { AccessPointDataFragment } from './create-ap-preview';
 export const CreateAccessPointSuccess: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
   return (
-    <Card.Container css={{ width: '$107h' }}>
+    <Card.Container css={{ maxWidth: '$107h' }}>
       <Card.Heading
         title="Hosting Successful"
         leftIcon={

@@ -11,19 +11,19 @@ export const ConnectWalletButton: React.FC = () => {
         if (isConnected && address) {
           return (
             <Button onClick={nextStep} css={{ color: '$slate12' }}>
-              Connected address: {truncatedAddress}. Continue
+              {truncatedAddress}. Continue
             </Button>
           );
         } else {
           return (
             <Button
               disabled={isConnected}
-              iconSpacing="44"
               size="lg"
               variant="ghost"
               css={{
                 backgroundColor: '$slate4',
                 color: '$slate12',
+                justifyContent: 'space-between', //TODO remove
                 py: '$2h',
               }}
               onClick={show}

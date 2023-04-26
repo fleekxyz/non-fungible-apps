@@ -19,13 +19,13 @@ export const GithubButton: React.FC = () => {
 
   return (
     <Button
-      iconSpacing="59"
       size="lg"
       variant="ghost"
       css={{
         backgroundColor: '$slate4',
         color: '$slate12',
         py: '$2h',
+        justifyContent: 'space-between', //TODO remove
       }}
       onClick={handleGithubLogin}
       disabled={state === 'loading'}

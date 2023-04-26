@@ -5,7 +5,7 @@ import { APRecordCardHeader } from './ap-record-header';
 
 export const APRecordStep: React.FC = () => {
   return (
-    <Card.Container css={{ width: '$107h' }}>
+    <Card.Container css={{ maxWidth: '$107h' }}>
       <APRecordCardHeader />
       <APRecordCardBody />
     </Card.Container>

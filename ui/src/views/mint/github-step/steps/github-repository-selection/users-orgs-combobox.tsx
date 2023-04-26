@@ -75,7 +75,7 @@ export const UserOrgsCombobox: React.FC = () => {
     <Combobox
       items={userAndOrganizations}
       unattached
-      css={{ flex: 1, minWidth: '$44' }}
+      css={{ flex: 1 }}
       selected={[selectedUserOrg, handleUserOrgChange]}
       queryKey="label"
     >

@@ -13,7 +13,12 @@ export const GithubConnect: React.FC = () => {
         <Grid css={{ rowGap: '$6' }}>
           <GithubButton />
           <Card.Text
-            css={{ height: '$46h', width: '$95', fontSize: '$md', px: '$12' }}
+            css={{
+              height: '$46h',
+              maxWidth: '$95',
+              fontSize: '$md',
+              px: '$12',
+            }}
           >
             <span>
               After connecting your GitHub, your repositories will show here.
