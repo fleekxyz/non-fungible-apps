@@ -13,7 +13,6 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
       spinnerPlacement = 'start',
       spinner,
       loadingText,
-      iconSpacing,
       rightIcon,
       leftIcon,
       isFullWidth,
@@ -24,7 +23,6 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
     const contentProps = {
       rightIcon,
       leftIcon,
-      iconSpacing,
       children,
     };
 
@@ -41,11 +39,7 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
         {...ownProps}
       >
         {isLoading && spinnerPlacement === 'start' && (
-          <ButtonSpinner
-            label={loadingText}
-            placement={spinnerPlacement}
-            spacing={iconSpacing}
-          >
+          <ButtonSpinner label={loadingText} placement={spinnerPlacement}>
             {spinner}
           </ButtonSpinner>
         )}
@@ -61,11 +55,7 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
         )}
 
         {isLoading && spinnerPlacement === 'end' && (
-          <ButtonSpinner
-            label={loadingText}
-            placement={spinnerPlacement}
-            spacing={iconSpacing}
-          >
+          <ButtonSpinner label={loadingText} placement={spinnerPlacement}>
             {spinner}
           </ButtonSpinner>
         )}

@@ -8,7 +8,6 @@ type OmittedProps =
   | 'isFullWidth'
   | 'rightIcon'
   | 'loadingText'
-  | 'iconSpacing'
   | 'spinnerPlacement';
 
 type BaseButtonProps = Omit<ButtonProps, OmittedProps>;

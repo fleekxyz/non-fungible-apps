@@ -11,13 +11,15 @@ export const StepStyles = {
     '@media (min-width: 768px)': {
       flexDirection: 'row',
       justifyContent: 'center',
-      //   gap: '$34',
     },
 
     '@media (min-width: 1024px)': {
-      flexDirection: 'row',
-      justifyContent: 'center',
       gap: '$34',
     },
+  }),
+  Indicator: styled(Flex, {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    maxWidth: '$106',
   }),
 };
