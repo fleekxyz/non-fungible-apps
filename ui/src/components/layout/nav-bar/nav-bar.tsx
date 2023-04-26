@@ -1,29 +1,20 @@
-import { Link } from 'react-router-dom';
-
-import { Button } from '@/components/core';
-import { Logo } from '@/components/logo/logo';
+import { useMediaQuery } from '@/hooks';
 
 import { ConnectWalletButton } from './connect-wallet-button';
+import { Logo } from './logo';
 import { NavBarStyles as Styles } from './nav-bar.styles';
+import { Navigation } from './navigation';
+import { Sidebar } from './sidebar';
 
 export const NavBar: React.FC = () => {
+  const enableSidebar = useMediaQuery('(max-width: 540px)');
+
   return (
     <Styles.Container>
       <Styles.Content>
         <Logo />
-
-        <Styles.Navigation>
-          <Button as={Link} to="/explore" variant="link" color="gray">
-            Explore
-          </Button>
-          <Button as={Link} to="/mint" variant="link" color="gray">
-            Create
-          </Button>
-          <Button as={Link} to="/" variant="link" color="gray">
-            Learn
-          </Button>
-        </Styles.Navigation>
         <ConnectWalletButton />
+        {enableSidebar ? <Sidebar /> : <Navigation />}
       </Styles.Content>
     </Styles.Container>
   );
