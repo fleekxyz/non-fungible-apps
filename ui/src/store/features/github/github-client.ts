@@ -1,14 +1,6 @@
 import { Octokit } from 'octokit';
 
-import { DropdownItem } from '@/components';
-
 import { GithubState } from './github-slice';
-
-export type UserData = {
-  value: string;
-  label: string;
-  avatar: string;
-};
 
 export class GithubClient {
   octokit: Octokit;
@@ -21,7 +13,7 @@ export class GithubClient {
       }));
   }
 
-  async fetchUser(): Promise<UserData> {
+  async fetchUser(): Promise<GithubClient.UserData> {
     const { data: userData } = await this.octokit.request('GET /user');
 
     return {
@@ -31,7 +23,7 @@ export class GithubClient {
     };
   }
 
-  async fetchOrgs(): Promise<UserData[]> {
+  async fetchOrgs(): Promise<GithubClient.UserData[]> {
     const { data: organizationsData } = await this.octokit.request(
       'GET /user/orgs'
     );
@@ -63,7 +55,10 @@ export class GithubClient {
     );
   }
 
-  async fetchBranches(owner: string, repo: string): Promise<DropdownItem[]> {
+  async fetchBranches(
+    owner: string,
+    repo: string
+  ): Promise<GithubClient.Branch[]> {
     const branches = await this.octokit
       .request('GET /repos/{owner}/{repo}/branches', {
         owner,
@@ -72,12 +67,25 @@ export class GithubClient {
       .then((res) =>
         res.data.map((branch) => {
           return {
-            label: branch.name,
-            value: branch.commit.sha,
+            name: branch.name,
+            commit: branch.commit.sha,
           };
         })
       );
 
     return branches;
   }
+}
+
+export namespace GithubClient {
+  export type UserData = {
+    value: string;
+    label: string;
+    avatar: string;
+  };
+
+  export type Branch = {
+    name: string;
+    commit: string;
+  };
 }

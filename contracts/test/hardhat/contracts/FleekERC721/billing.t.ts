@@ -2,6 +2,7 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { Fixtures, TestConstants, Errors } from './helpers';
+import { BigNumber } from 'ethers';
 
 const { Billing, MintParams } = TestConstants;
 
@@ -10,7 +11,7 @@ describe('FleekERC721.Billing', () => {
   const mintPrice = ethers.utils.parseEther('1');
   const addAPPrice = ethers.utils.parseEther('1');
 
-  const mint = (value?: any) => {
+  const mint = (value?: BigNumber) => {
     const { contract, owner } = fixture;
     return contract.mint(
       owner.address,
@@ -28,7 +29,7 @@ describe('FleekERC721.Billing', () => {
     );
   };
 
-  const addAP = (value?: any) => {
+  const addAP = (value?: BigNumber) => {
     const { contract } = fixture;
     return contract.addAccessPoint(0, 'random.com', { value });
   };

@@ -45,7 +45,7 @@
     "colorthief": "^2.3.2",
     "dotenv": "^16.0.2",
     "ethers": "^5.7.2",
-    "hardhat": "^2.11.2",
+    "hardhat": "^2.14.0",
     "hardhat-contract-sizer": "^2.6.1",
     "hardhat-gas-reporter": "^1.0.9",
     "lint-staged": "^13.0.4",

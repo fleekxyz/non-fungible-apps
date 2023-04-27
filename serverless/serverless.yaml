@@ -37,3 +37,21 @@ functions:
           path: build
           method: post
           cors: true
+          request:
+            parameters:
+              querystrings:
+                githubOrg: true
+                githubRepo: true
+                commitHash: true
+                author: true
+                timestamp: true
+                ipfsHash: true
+                tokenId: true
+
+  submitMintInfo:
+    handler: src/functions/mints/handler.submitMintInfo
+    events:
+      - http:
+          path: mint
+          method: post
+          cors: true

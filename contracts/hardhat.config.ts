@@ -21,7 +21,6 @@ const {
   ETH_MAIN_API_URL,
   ETH_SEPOLIA_API_URL,
   ETH_GOERLI_API_URL,
-  POLYGONSCAN_KEY,
   MAINNET_API_KEY,
   COINMARKETCAP_KEY,
 } = process.env;
@@ -39,22 +38,22 @@ const config: HardhatUserConfig = {
         : undefined,
     },
     mumbai: {
-      url: POLYGON_API_URL ? POLYGON_API_URL : "",
+      url: POLYGON_API_URL ? POLYGON_API_URL : '',
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 80001,
     },
     goerli: {
-      url: ETH_GOERLI_API_URL ? ETH_GOERLI_API_URL : "",
+      url: ETH_GOERLI_API_URL ? ETH_GOERLI_API_URL : '',
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 5,
     },
     sepolia: {
-      url: ETH_SEPOLIA_API_URL ? ETH_SEPOLIA_API_URL : "",
+      url: ETH_SEPOLIA_API_URL ? ETH_SEPOLIA_API_URL : '',
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 11155111,
     },
     mainnet: {
-      url: ETH_MAIN_API_URL ? ETH_MAIN_API_URL : "",
+      url: ETH_MAIN_API_URL ? ETH_MAIN_API_URL : '',
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 1,
     },
@@ -90,7 +89,7 @@ const config: HardhatUserConfig = {
     // apiKey: {
     //   polygonMumbai: POLYGONSCAN_KEY,
     // },
-    apiKey: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : "",
+    apiKey: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
   },
 };
 

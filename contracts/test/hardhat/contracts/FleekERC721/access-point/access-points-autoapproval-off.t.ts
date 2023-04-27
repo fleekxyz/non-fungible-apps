@@ -1,7 +1,5 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
-import { ethers } from 'hardhat';
 import { TestConstants, Fixtures, Errors } from '../helpers';
 const { AccessPointStatus } = TestConstants;
 
@@ -19,7 +17,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOff', () => {
       .to.emit(contract, 'NewAccessPoint')
       .withArgs('accesspoint.com', tokenId, owner.address);
 
-    let ap = await contract.getAccessPointJSON('accesspoint.com');
+    const ap = await contract.getAccessPointJSON('accesspoint.com');
     const parsedAp = JSON.parse(ap);
 
     expect(parsedAp).to.eql({

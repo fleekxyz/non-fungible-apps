@@ -24,6 +24,5 @@ export abstract class InputFileStyles {
     '&[aria-invalid=true], &[data-invalid]': {
       borderColor: '$red9',
     },
-    //TODO add error state
   });
 }
