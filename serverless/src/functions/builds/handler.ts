@@ -1,15 +1,18 @@
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
 import { formatJSONResponse } from '@libs/api-gateway';
+const querystring = require('querystring');
 
 import { v4 } from 'uuid';
 import { nfaContract } from '@libs/nfa-contract';
 
-export const submitBuildInfo = async (): Promise<APIGatewayProxyResult> => {
+export const submitBuildInfo = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   try {
+    const eventData = querystring.parse(event.body);
     const id = v4();
     const buildInfo = {
       buildId: id,
       createdAt: new Date().toISOString(),
+      submittedData: eventData
     };
 
     // place holder call
