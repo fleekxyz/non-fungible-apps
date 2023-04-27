@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Avatar, Combobox, Icon } from '@/components';
+import { Avatar, Combobox, Icon, Text } from '@/components';
 import {
   githubActions,
   GithubClient,
@@ -21,7 +21,7 @@ const renderSelected = (selected?: GithubClient.UserData): JSX.Element => (
     ) : (
       <Icon name="github" css={{ fontSize: '$2xl' }} />
     )}
-    {selected?.label || 'Select'}
+    <Text ellipsis>{selected?.label || 'Select'}</Text>
   </>
 );
 
