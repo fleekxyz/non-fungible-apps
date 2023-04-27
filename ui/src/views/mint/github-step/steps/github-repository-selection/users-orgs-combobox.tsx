@@ -21,7 +21,9 @@ const renderSelected = (selected?: GithubClient.UserData): JSX.Element => (
     ) : (
       <Icon name="github" css={{ fontSize: '$2xl' }} />
     )}
-    <Text ellipsis>{selected?.label || 'Select'}</Text>
+    <Text ellipsis css={{ maxWidth: '60%' }}>
+      {selected?.label || 'Select'}
+    </Text>
   </>
 );
 
@@ -75,7 +77,7 @@ export const UserOrgsCombobox: React.FC = () => {
     <Combobox
       items={userAndOrganizations}
       unattached
-      css={{ flex: 1 }}
+      css={{ width: '$full', flexGrow: 1 }}
       selected={[selectedUserOrg, handleUserOrgChange]}
       queryKey="label"
     >

@@ -6,12 +6,17 @@ type RowDataProps = {
   leftIcon: React.ReactNode;
   label: string;
   rightComponent: React.ReactNode;
+  onClick?: () => void;
 };
 
 export const RowData = forwardStyledRef<HTMLDivElement, RowDataProps>(
-  ({ leftIcon, label, rightComponent, ...props }, ref) => {
+  ({ leftIcon, label, rightComponent, onClick, ...props }, ref) => {
+    const handleOnClick = (): void => {
+      if (onClick) onClick();
+    };
+
     return (
-      <S.Container ref={ref} {...props}>
+      <S.Container ref={ref} {...props} onClick={handleOnClick}>
         <S.Text.Container>
           {leftIcon}
           <S.Text.Label>{label}</S.Text.Label>

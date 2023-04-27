@@ -100,7 +100,7 @@ export const VerifyNFAStep: React.FC = () => {
   };
 
   return (
-    <Card.Container css={{ maxwidth: '$107h' }}>
+    <Card.Container css={{ maxWidth: '$107h' }}>
       <MintCardHeader title="Verify NFA" onClickBack={prevStep} />
       <Card.Body>
         <Flex css={{ flexDirection: 'column', gap: '$6' }}>

@@ -6,6 +6,7 @@ export const StepStyles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    width: '$full',
     gap: '$6',
 
     '@media (min-width: 768px)': {

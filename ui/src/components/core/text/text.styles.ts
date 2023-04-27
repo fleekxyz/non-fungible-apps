@@ -7,7 +7,6 @@ export const Text = styled('span', {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
-        maxWidth: '60%',
       },
     },
   },
