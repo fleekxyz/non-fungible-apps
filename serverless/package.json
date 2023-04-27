@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "yarn tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "invoke:build": "yarn build && serverless invoke local --function submitBuildInfo",
+    "prisma:generate": "npx prisma generate"
   },
   "author": "fleek",
   "license": "MIT",
@@ -27,7 +28,9 @@
     "@middy/core": "^4.2.7",
     "@middy/http-json-body-parser": "^4.2.7",
     "@middy/http-response-serializer": "^4.2.8",
+    "@prisma/client": "^4.13.0",
     "aws-sdk": "^2.1342.0",
+    "prisma": "^4.13.0",
     "uuid": "^9.0.0"
   }
 }
