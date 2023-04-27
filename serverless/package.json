@@ -30,12 +30,12 @@
     "@middy/http-json-body-parser": "^4.2.7",
     "@middy/http-response-serializer": "^4.2.8",
     "@prisma/client": "^4.13.0",
+    "@types/node": "^18.15.11",
     "aws-sdk": "^2.1342.0",
     "prisma": "^4.13.0",
-    "uuid": "^9.0.0",
-    "@types/node": "^18.15.11",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4",
+    "uuid": "^9.0.0",
     "web3": "^1.9.0"
   }
 }
