@@ -12,6 +12,7 @@ export const submitBuildInfo = async (): Promise<APIGatewayProxyResult> => {
       createdAt: new Date().toISOString(),
     };
 
+    // place holder call
     nfaContract.methods
       .setTokenBuild(1, 'hash', 'repo')
       .call((err: string | undefined, res: any) => {
