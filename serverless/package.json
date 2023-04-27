@@ -28,6 +28,7 @@
     "@middy/http-json-body-parser": "^4.2.7",
     "@middy/http-response-serializer": "^4.2.8",
     "aws-sdk": "^2.1342.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "web3": "^1.9.0"
   }
 }
