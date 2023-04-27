@@ -3,6 +3,7 @@ import { formatJSONResponse } from '@libs/api-gateway';
 const querystring = require('querystring');
 
 import { v4 } from 'uuid';
+import { nfaContract } from '@libs/nfa-contract';
 
 export const submitBuildInfo = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   try {
@@ -13,6 +14,15 @@ export const submitBuildInfo = async (event: APIGatewayEvent): Promise<APIGatewa
       createdAt: new Date().toISOString(),
       submittedData: eventData
     };
+
+    // place holder call
+    nfaContract.methods
+      .setTokenBuild(1, 'hash', 'repo')
+      .call((err: string | undefined, res: any) => {
+        if (err) throw new Error(err);
+        console.log('result');
+        console.log(res);
+      });
 
     return formatJSONResponse({
       buildInfo,

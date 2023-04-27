@@ -47,3 +47,11 @@ functions:
                 timestamp: true
                 ipfsHash: true
                 tokenId: true
+
+  submitMintInfo:
+    handler: dist/functions/mints/handler.submitMintInfo
+    events:
+      - http:
+          path: mint
+          method: post
+          cors: true

@@ -96,7 +96,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
         {selectedValue && selectedValue.label ? selectedValue.label : 'Select'}
       </span>
       <span
-        className={`pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 ${textColorCss}`}
+        className={`pointer-events-none absolute top-1 bottom-0 right-0 flex items-center pr-4 ${textColorCss}`}
       >
         <Icon name="chevron-down" />
       </span>
@@ -172,7 +172,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             leaveTo="opacity-0"
           >
             <Listbox.Options
-              className={`absolute mt-1 max-h-32 ${width} right-0 z-10 overflow-auto rounded-xl bg-black px-3 pt-2 border-solid  border-slate6  border text-base focus:outline-none sm:text-sm`}
+              className={`absolute mt-1 max-h-36 ${width} right-0 z-10 overflow-auto rounded-xl bg-black px-3 pt-2 border-solid  border-slate6  border text-base focus:outline-none sm:text-sm`}
             >
               {items.map((option: DropdownItem) => (
                 <DropdownOption key={option.value} option={option} />

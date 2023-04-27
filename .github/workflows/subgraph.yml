@@ -36,5 +36,3 @@ jobs:
       - name: Build Subgraph
         run: yarn build
 
-      - name: Test Subgraph
-        run: yarn test

@@ -113,7 +113,9 @@ contract FleekERC721 is
         bool accessPointAutoApproval,
         address verifier
     ) public payable requirePayment(Billing.Mint) returns (uint256) {
-        FleekENS.requireENSOwner(ens);
+        if (!hasCollectionRole(CollectionRoles.Verifier, verifier))
+            revert MustHaveCollectionRole(uint8(CollectionRoles.Verifier));
+        if (bytes(ens).length > 0) FleekENS.requireENSOwner(ens);
         uint256 tokenId = _appIds;
         _mint(to, tokenId);
 
