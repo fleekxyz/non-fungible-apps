@@ -23,6 +23,7 @@ export const colors = {
   ...amber,
 };
 export const darkColors = {
+  black: '#000000',
   ...grayDark,
   ...slateDark,
   ...blueDark,
