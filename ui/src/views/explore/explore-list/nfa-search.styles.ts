@@ -1,4 +1,4 @@
-import { Flex } from '@/components';
+import { Flex, Icon, Input } from '@/components';
 import { styled } from '@/theme';
 
 export const NFASearchFragmentStyles = {
@@ -35,6 +35,9 @@ export const NFASearchFragmentStyles = {
       button: {
         minWidth: '$28',
       },
+    }),
+    Icon: styled(Icon, {
+      fontSize: '$lg',
     }),
   },
 };
