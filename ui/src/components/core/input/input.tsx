@@ -1,7 +1,3 @@
-import React from 'react';
-
-import { forwardStyledRef } from '@/theme';
-
 import {
   InputGroupStyled,
   InputGroupTextSyled,
@@ -16,18 +12,6 @@ export const LogoFileInput = StyledInputFile;
 
 export const Input = InputStyled;
 
-type InputGroupProps = {
-  children: React.ReactNode;
-} & React.ComponentPropsWithRef<typeof InputGroupStyled>;
-
-export const InputGroup = forwardStyledRef<HTMLDivElement, InputGroupProps>(
-  ({ children, ...props }, ref) => {
-    return (
-      <InputGroupStyled ref={ref} {...props}>
-        {children}
-      </InputGroupStyled>
-    );
-  }
-);
+export const InputGroup = InputGroupStyled;
 
 export const InputGroupText = InputGroupTextSyled;
