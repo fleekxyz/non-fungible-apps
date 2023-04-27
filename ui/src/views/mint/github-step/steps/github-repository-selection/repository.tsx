@@ -1,10 +1,8 @@
 import { useCallback } from 'react';
 
-import { Button, Separator } from '@/components';
+import { Button, Icon, RowData, Separator } from '@/components';
 import { githubActions, GithubState, useAppDispatch } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
-
-import { RepoRow } from '../repository-row';
 
 type RepositoryProps = {
   repository: GithubState.Repository;
@@ -28,14 +26,15 @@ export const Repository: React.FC<RepositoryProps> = ({
 
   return (
     <>
-      <RepoRow
-        onClick={handleSelectRepo}
-        repo={repository.name}
-        css={{ cursor: 'pointer' }}
-        button={
+      <RowData
+        leftIcon={<Icon name="github" />}
+        label={repository.name}
+        css={{ cursor: 'pointer', my: '$4' }}
+        rightComponent={
           <Button
             colorScheme="blue"
             variant="outline"
+            onClick={handleSelectRepo}
             css={{ py: '$1', height: '$5', borderRadius: '$md' }}
           >
             Use for NFA
