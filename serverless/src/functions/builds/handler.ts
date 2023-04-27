@@ -5,14 +5,16 @@ const querystring = require('querystring');
 import { v4 } from 'uuid';
 import { nfaContract } from '@libs/nfa-contract';
 
-export const submitBuildInfo = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+export const submitBuildInfo = async (
+  event: APIGatewayEvent
+): Promise<APIGatewayProxyResult> => {
   try {
     const eventData = querystring.parse(event.body);
     const id = v4();
     const buildInfo = {
       buildId: id,
       createdAt: new Date().toISOString(),
-      submittedData: eventData
+      submittedData: eventData,
     };
 
     // place holder call

@@ -31,10 +31,6 @@ export const NFASearchFragmentStyles = {
       width: '100%',
       maxWidth: '30rem',
       justifySelf: 'center',
-
-      button: {
-        minWidth: '$28',
-      },
     }),
     Icon: styled(Icon, {
       fontSize: '$lg',
