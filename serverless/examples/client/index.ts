@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
   // Connect the client
-  await prisma.$connect()
+  await prisma.$connect();
 
   // Query the total count of tokens
   const allTokens = await prisma.tokens.findMany();
@@ -13,9 +13,9 @@ async function main() {
 
   // Query the token associated with tokenId 1
   const tokenOne = await prisma.tokens.findRaw({
-      filter: {
-          tokenId: 1
-      }
+    filter: {
+      tokenId: 1,
+    },
   });
   console.log('Token Id One:');
   console.log(tokenOne);
@@ -23,10 +23,10 @@ async function main() {
 
 main()
   .then(async () => {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
