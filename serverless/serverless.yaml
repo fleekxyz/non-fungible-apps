@@ -31,7 +31,7 @@ custom:
 
 functions:
   submitBuildInfo:
-    handler: src/functions/builds/handler.submitBuildInfo
+    handler: src/functions/builds/handler.submitBuildInfo # Change `src` to `dist` for deployment
     events:
       - http:
           path: build
@@ -49,7 +49,7 @@ functions:
                 tokenId: true
 
   submitMintInfo:
-    handler: dist/functions/mints/handler.submitMintInfo
+    handler: src/functions/mints/handler.submitMintInfo
     events:
       - http:
           path: mint
