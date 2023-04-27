@@ -15,7 +15,7 @@ export type ResolvedAddressProps = React.ComponentPropsWithRef<
 export const ResolvedAddress = forwardStyledRef<
   HTMLSpanElement,
   ResolvedAddressProps
->(({ children, truncated = false, ...props }, ref) => {
+>(({ children, truncated = true, ...props }, ref) => {
   const [resolvedAddress, loading] = useResolvedAddress(children);
 
   const text = useMemo(() => {
