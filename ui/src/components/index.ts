@@ -9,3 +9,4 @@ export * from './nfa-card';
 export * from './nfa-preview';
 export * from './card-tag';
 export * from './resolved-address';
+export * from './row-data';

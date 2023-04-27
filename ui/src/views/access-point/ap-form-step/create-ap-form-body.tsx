@@ -9,6 +9,7 @@ import {
   CardTag,
   Flex,
   Form,
+  RowData,
   Spinner,
   Stepper,
   Text,
@@ -26,25 +27,11 @@ export const SelectedNFA: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
 
   return (
-    <Flex
-      css={{
-        justifyContent: 'space-between',
-      }}
-    >
-      <Flex css={{ alignItems: 'center', maxWidth: '65%' }}>
-        <NFAIconFragment image={nfa.logo} color={nfa.color} />
-        <Text
-          css={{
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-          }}
-        >
-          {nfa.name}
-        </Text>
-      </Flex>
-      <CardTag css={{ minWidth: '$28' }}>Selected NFA</CardTag>
-    </Flex>
+    <RowData
+      leftIcon={<NFAIconFragment image={nfa.logo} color={nfa.color} />}
+      label={nfa.name}
+      rightComponent={<CardTag css={{ minWidth: '$28' }}>Selected NFA</CardTag>}
+    />
   );
 };
 

@@ -36,3 +36,15 @@ To deploy to development environment:
 
 To deploy to production environment:
 `yarn sls deploy --stage prd`
+
+
+### Prisma configuration
+
+In order to use and integrate Prisma, both of the `prisma` and `@prisma/client` packages are needed. The `prisma` package reads the schema and generates a version of Prisma Client that is tailored to our modules.
+
+Run the following commands to install the packages and generate the customized Prisma Client version based on the schema:
+
+```
+yarn add prisma @prisma/client
+yarn prisma:generate
+```
