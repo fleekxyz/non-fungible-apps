@@ -1,6 +1,8 @@
 import { ConnectKitButton } from 'connectkit';
 
-import { Button, Icon, Stepper } from '@/components';
+import { Button, Stepper } from '@/components';
+
+import { ButtonConnection } from '../button-connection';
 
 export const ConnectWalletButton: React.FC = () => {
   const { nextStep } = Stepper.useContext();
@@ -11,31 +13,17 @@ export const ConnectWalletButton: React.FC = () => {
         if (isConnected && address) {
           return (
             <Button onClick={nextStep} css={{ color: '$slate12' }}>
-              Connected address: {truncatedAddress}. Continue
+              {truncatedAddress}. Continue
             </Button>
           );
         } else {
           return (
-            <Button
+            <ButtonConnection
+              icon={'ethereum'}
+              label={' Connect Wallet'}
               disabled={isConnected}
-              iconSpacing="44"
-              size="lg"
-              variant="ghost"
-              css={{
-                backgroundColor: '$slate4',
-                color: '$slate12',
-                py: '$2h',
-              }}
               onClick={show}
-              rightIcon={
-                <Icon
-                  name="ethereum"
-                  css={{ color: 'white', fontSize: '$4xl' }}
-                />
-              }
-            >
-              Connect Wallet
-            </Button>
+            />
           );
         }
       }}

@@ -30,11 +30,11 @@ export const Repository: React.FC<RepositoryProps> = ({
         leftIcon={<Icon name="github" />}
         label={repository.name}
         css={{ cursor: 'pointer', my: '$4' }}
+        onClick={handleSelectRepo}
         rightComponent={
           <Button
             colorScheme="blue"
             variant="outline"
-            onClick={handleSelectRepo}
             css={{ py: '$1', height: '$5', borderRadius: '$md' }}
           >
             Use for NFA

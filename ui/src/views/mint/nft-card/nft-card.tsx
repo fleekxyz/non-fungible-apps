@@ -43,7 +43,7 @@ export const NftCard: React.FC<NftCardProps> = ({
   } = useMintFormContext();
 
   return (
-    <Card.Container css={{ width: '$107h', p: '$0' }}>
+    <Card.Container css={{ maxWidth: '$107h', p: '$0' }}>
       <NFAPreview
         color={logoColor}
         logo={appLogo}

@@ -81,9 +81,10 @@ export const GithubRepositoryConnection: React.FC = () => {
         <S.Container>
           <S.Row>
             <UserOrgsCombobox />
-            <InputGroup css={{ flex: 1 }}>
+            <InputGroup>
               <S.Group.Icon name="search" />
               <InputGroupText
+                css={{ overflow: 'hidden' }}
                 placeholder="Search repo"
                 onChange={handleSearchChange}
               />

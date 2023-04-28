@@ -10,6 +10,7 @@ import {
 import { AppLog } from '@/utils';
 import { Mint } from '@/views/mint/mint.context';
 import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
+import { TextStyles } from './repo-branch-commit-fields.styles';
 
 export const RepoBranchCommitFields: React.FC = () => {
   const { queryLoading, branches } = useGithubStore();
@@ -105,12 +106,16 @@ export const RepoBranchCommitFields: React.FC = () => {
                 {(selected) => (
                   <>
                     <Icon name="branch" />
-                    {selected?.name || 'Select a branch'}
+                    <TextStyles ellipsis>
+                      {selected?.name || 'Select a branch'}
+                    </TextStyles>
                   </>
                 )}
               </Field>
 
-              <Options>{(item) => item.name}</Options>
+              <Options>
+                {(item) => <TextStyles ellipsis>{item.name}</TextStyles>}
+              </Options>
             </>
           )}
         </Form.Combobox>

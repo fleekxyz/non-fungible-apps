@@ -62,7 +62,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
           </Button>
           <input
             ref={inputColorRef}
-            className="absolute right-16"
+            className="absolute right-16 h-5"
             type="color"
             value={logoColor}
             onChange={handleColorChange}

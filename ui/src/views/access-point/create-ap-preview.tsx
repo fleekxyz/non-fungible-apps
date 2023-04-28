@@ -111,7 +111,7 @@ export const CreateAccessPointPreview: React.FC = () => {
   }, [writeStatus, transactionStatus]);
 
   return (
-    <Card.Container css={{ width: '$107h' }}>
+    <Card.Container css={{ maxWidth: '$107h' }}>
       <Card.Heading
         title="Review Details"
         leftIcon={

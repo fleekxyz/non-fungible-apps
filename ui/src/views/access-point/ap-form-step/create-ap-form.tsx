@@ -6,7 +6,7 @@ export const CreateAccessPointForm: React.FC = () => {
   const { prevStep } = Stepper.useContext();
 
   return (
-    <Card.Container css={{ width: '$107h' }}>
+    <Card.Container css={{ maxWidth: '$107h' }}>
       <Card.Heading
         title="Enter Domain"
         leftIcon={

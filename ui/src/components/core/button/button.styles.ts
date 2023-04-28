@@ -50,11 +50,6 @@ export interface ButtonProps extends StyledButtonProps {
    */
   bottomIcon?: React.ReactElement;
   /**
-   * The space between the button icon and label.
-   * @type SystemProps["marginRight"]
-   */
-  iconSpacing?: string;
-  /**
    * Replace the spinner component when `isLoading` is set to `true`
    * @type React.ReactElement
    */

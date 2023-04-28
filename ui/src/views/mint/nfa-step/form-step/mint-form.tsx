@@ -78,7 +78,7 @@ export const MintFormStep: React.FC = () => {
   };
 
   return (
-    <Card.Container css={{ width: '$107h' }}>
+    <Card.Container css={{ maxWidth: '$107h' }}>
       <MintCardHeader title="NFA Details" onClickBack={handlePrevStep} />
       <Card.Body>
         <Grid
