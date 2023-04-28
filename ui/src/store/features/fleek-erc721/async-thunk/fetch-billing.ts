@@ -1,6 +1,8 @@
-import { FleekERC721 } from '@/integrations';
-import { FleekERC721State, fleekERC721Actions, RootState } from '@/store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { FleekERC721 } from '@/integrations';
+import { fleekERC721Actions, FleekERC721State, RootState } from '@/store';
+import { AppLog } from '@/utils';
 
 type FetchBilling = FleekERC721State.BillingKeys;
 
@@ -18,7 +20,7 @@ export const fetchBilling = createAsyncThunk<void, FetchBilling>(
 
       dispatch(fleekERC721Actions.setBilling({ key, value }));
     } catch (error) {
-      console.log(error);
+      AppLog.error(error);
       dispatch(fleekERC721Actions.setBillingState({ key, value: 'failed' }));
     }
   }

@@ -1,9 +1,10 @@
+import { forwardStyledRef } from '@/theme';
+
 import { ButtonProps, StyledButton } from './button.styles';
 import { ButtonContent } from './button-content';
 import { ButtonSpinner } from './button-spinner';
-import { forwardRef } from 'react';
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
     const {
       isActive,
@@ -12,9 +13,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       spinnerPlacement = 'start',
       spinner,
       loadingText,
-      iconSpacing,
-      topIcon,
-      bottomIcon,
       rightIcon,
       leftIcon,
       isFullWidth,
@@ -25,9 +23,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const contentProps = {
       rightIcon,
       leftIcon,
-      bottomIcon,
-      topIcon,
-      iconSpacing,
       children,
     };
 
@@ -39,16 +34,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         data-loading={isLoading}
         css={{
           width: isFullWidth ? '100%' : undefined,
-          ...(ownProps?.css || {}),
+          ...ownProps?.css,
         }}
         {...ownProps}
       >
         {isLoading && spinnerPlacement === 'start' && (
-          <ButtonSpinner
-            label={loadingText}
-            placement={spinnerPlacement}
-            spacing={iconSpacing}
-          >
+          <ButtonSpinner label={loadingText} placement={spinnerPlacement}>
             {spinner}
           </ButtonSpinner>
         )}
@@ -64,11 +55,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         )}
 
         {isLoading && spinnerPlacement === 'end' && (
-          <ButtonSpinner
-            label={loadingText}
-            placement={spinnerPlacement}
-            spacing={iconSpacing}
-          >
+          <ButtonSpinner label={loadingText} placement={spinnerPlacement}>
             {spinner}
           </ButtonSpinner>
         )}

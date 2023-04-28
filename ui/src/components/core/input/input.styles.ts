@@ -1,9 +1,6 @@
-import { dripStitches } from '@/theme';
-import { Icon } from '../icon';
-const { styled } = dripStitches;
+import { styled } from '@/theme';
 
 const styles = {
-  all: 'unset',
   width: '100%',
   boxSizing: 'border-box',
   borderStyle: 'solid',
@@ -32,7 +29,9 @@ const styles = {
       color: '$slate8',
     },
   },
+};
 
+const variants = {
   variants: {
     size: {
       sm: {
@@ -59,13 +58,49 @@ const styles = {
   },
 };
 
-export const InputStyled = styled('input', styles);
-
-export const InputIconStyled = styled(Icon, {
-  position: 'absolute',
-  left: '$4',
-  top: '0.9375rem',
-  color: 'slate8',
+export const InputStyled = styled('input', {
+  all: 'unset',
+  ...variants,
+  ...styles,
 });
 
-export const TextareaStyled = styled('textarea', styles);
+export const InputGroupStyled = styled('div', {
+  display: 'flex',
+  flexDirection: 'row',
+  gap: '$2h',
+
+  ...styles,
+
+  variants: {
+    size: {
+      sm: {
+        borderRadius: '$md',
+        fontSize: '$xs',
+        lineHeight: '$4',
+      },
+      md: {
+        borderRadius: '$lg',
+        fontSize: '$sm',
+        height: '$11',
+        px: '$3h',
+      },
+      lg: {
+        borderRadius: '$xl',
+        fontSize: '$md',
+      },
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
+export const InputGroupTextSyled = styled('input', {
+  all: 'unset',
+});
+
+export const TextareaStyled = styled('textarea', {
+  all: 'unset',
+  ...variants,
+  ...styles,
+});

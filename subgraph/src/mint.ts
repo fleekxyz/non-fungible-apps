@@ -1,92 +1,114 @@
-import {
-    Bytes,
-    log,
-} from '@graphprotocol/graph-ts';
+import { BigInt, Bytes, log } from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]
-import {
-    NewMint as NewMintEvent,
-} from '../generated/FleekNFA/FleekNFA';
+import { NewMint as NewMintEvent } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
 import {
-    Owner,
-    GitRepository as GitRepositoryEntity,
-    NewMint,
-    Token,
+  Owner,
+  NewMint,
+  Token,
+  GitRepository,
+  Collection,
+  Verifier,
 } from '../generated/schema';
 
 export function handleNewMint(event: NewMintEvent): void {
-    let newMintEntity = new NewMint(
-        event.transaction.hash.concatI32(event.logIndex.toI32())
-    );
+  const newMintEntity = new NewMint(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
 
-    let name = event.params.name;
-    let description = event.params.description;
-    let externalURL = event.params.externalURL;
-    let ENS = event.params.ENS;
-    let gitRepository = event.params.gitRepository;
-    let commitHash = event.params.commitHash;
-    let logo = event.params.logo;
-    let color = event.params.color;
-    let accessPointAutoApproval = event.params.accessPointAutoApproval;
-    let tokenId = event.params.tokenId;
-    let ownerAddress = event.params.owner;
+  const name = event.params.name;
+  const description = event.params.description;
+  const externalURL = event.params.externalURL;
+  const ENS = event.params.ENS;
+  const gitRepository = event.params.gitRepository;
+  const commitHash = event.params.commitHash;
+  const logo = event.params.logo;
+  const color = event.params.color;
+  const accessPointAutoApproval = event.params.accessPointAutoApproval;
+  const tokenId = event.params.tokenId;
+  const ownerAddress = event.params.owner;
+  const verifierAddress = event.params.verifier;
 
-    newMintEntity.tokenId = tokenId;
-    newMintEntity.name = name;
-    newMintEntity.description = description;
-    newMintEntity.externalURL = externalURL;
-    newMintEntity.ENS = ENS;
-    newMintEntity.commitHash = commitHash;
-    newMintEntity.gitRepository = gitRepository;
-    newMintEntity.logo = logo;
-    newMintEntity.color = color;
-    newMintEntity.accessPointAutoApproval = accessPointAutoApproval;
-    newMintEntity.triggeredBy = event.params.minter;
-    newMintEntity.owner = ownerAddress;
-    newMintEntity.blockNumber = event.block.number;
-    newMintEntity.blockTimestamp = event.block.timestamp;
-    newMintEntity.transactionHash = event.transaction.hash;
-    newMintEntity.save();
-    log.error('{}', [tokenId.toString()]);
+  newMintEntity.tokenId = tokenId;
+  newMintEntity.name = name;
+  newMintEntity.description = description;
+  newMintEntity.externalURL = externalURL;
+  newMintEntity.ENS = ENS;
+  newMintEntity.commitHash = commitHash;
+  newMintEntity.gitRepository = gitRepository;
+  newMintEntity.logo = logo;
+  newMintEntity.color = color;
+  newMintEntity.accessPointAutoApproval = accessPointAutoApproval;
+  newMintEntity.triggeredBy = event.params.minter;
+  newMintEntity.owner = ownerAddress;
+  newMintEntity.verifier = verifierAddress;
+  newMintEntity.blockNumber = event.block.number;
+  newMintEntity.blockTimestamp = event.block.timestamp;
+  newMintEntity.transactionHash = event.transaction.hash;
+  newMintEntity.save();
+  log.error('{}', [tokenId.toString()]);
 
-    // Create Token, Owner, and Controller entities
+  // Create Token, Owner, and Controller entities
 
-    let owner = Owner.load(ownerAddress);
-    let gitRepositoryEntity = GitRepositoryEntity.load(gitRepository);
-    let token = new Token(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
+  let owner = Owner.load(ownerAddress);
+  const token = new Token(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
 
-    if (!owner) {
-        // Create a new owner entity
-        owner = new Owner(ownerAddress);
-    }
+  if (!owner) {
+    // Create a new owner entity
+    owner = new Owner(ownerAddress);
+    // Since no CollectionRoleChanged event was emitted before for this address, we can set `collection` to false.
+    owner.collection = false;
+  }
 
-    if (!gitRepositoryEntity) {
-        // Create a new gitRepository entity
-        gitRepositoryEntity = new GitRepositoryEntity(gitRepository);
-    }
+  // Populate Token with data from the event
+  token.tokenId = tokenId;
+  token.name = name;
+  token.description = description;
+  token.externalURL = externalURL;
+  token.ENS = ENS;
+  token.gitRepository = gitRepository;
+  token.commitHash = commitHash;
+  token.logo = logo;
+  token.color = color;
+  token.accessPointAutoApproval = accessPointAutoApproval;
+  token.owner = ownerAddress;
+  token.verified = false;
+  token.mintTransaction = event.transaction.hash.concatI32(
+    event.logIndex.toI32()
+  );
+  token.mintedBy = event.params.minter;
+  token.controllers = [ownerAddress];
+  token.createdAt = event.block.timestamp;
 
-    // Populate Token with data from the event
-    token.tokenId = tokenId;
-    token.name = name;
-    token.description = description;
-    token.externalURL = externalURL;
-    token.ENS = ENS;
-    token.gitRepository = gitRepository;
-    token.commitHash = commitHash;
-    token.logo = logo;
-    token.color = color;
-    token.accessPointAutoApproval = accessPointAutoApproval;
-    token.owner = ownerAddress;
-    token.mintTransaction = event.transaction.hash.concatI32(
-        event.logIndex.toI32()
-    );
-    token.mintedBy = event.params.minter;
-    token.controllers = [ownerAddress];
+  if (Verifier.load(verifierAddress)) {
+    token.verifier = verifierAddress;
+  }
 
-    // Save entities
-    owner.save();
-    gitRepositoryEntity.save();
-    token.save();
+  // Populate GitRepository entity
+  let repository = GitRepository.load(gitRepository);
+  if (!repository) {
+    repository = new GitRepository(gitRepository);
+  }
+
+  let repositoryTokens = repository.tokens;
+  if (repositoryTokens === null) {
+    repositoryTokens = [token.id];
+  } else {
+    repositoryTokens.push(token.id);
+  }
+  repository.tokens = repositoryTokens;
+
+  // Increase total tokens counter
+  const collection = Collection.load(event.address.toHexString());
+  if (collection) {
+    collection.totalTokens = collection.totalTokens.plus(BigInt.fromU32(1));
+    collection.save();
+  }
+
+  // Save entities
+  owner.save();
+  token.save();
+  repository.save();
 }

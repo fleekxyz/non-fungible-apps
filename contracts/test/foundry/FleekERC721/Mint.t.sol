@@ -26,6 +26,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
 
     function test_mintTwoTokensForTwoAddresses() public {
         uint256 firstMint = mintDefault(deployer);
+
+        transferENS("fleek.eth", deployer);
         uint256 secondMint = CuT.mint(
             address(12),
             "Different App Name",
@@ -36,7 +38,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             "https://github.com/a-different/repository",
             TestConstants.LOGO_1,
             0x654321,
-            false
+            false,
+            deployer
         );
 
         assertEq(firstMint, 0);
@@ -44,6 +47,7 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
     }
 
     function test_mintWithAutoApprovalAPsOn() public {
+        transferENS("fleek.eth", deployer);
         uint256 mint = CuT.mint(
             address(12),
             "Different App Name",
@@ -54,7 +58,8 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             "https://github.com/a-different/repository",
             TestConstants.LOGO_1,
             0x654321,
-            true
+            true,
+            deployer
         );
 
         assertEq(mint, 0);
@@ -81,6 +86,7 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
         bool autoApprovalAp
     ) public {
         vm.assume(to != address(0));
+        transferENS(ens, deployer);
         uint256 tokenId = CuT.mint(
             to,
             appName,
@@ -91,9 +97,45 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             gitRepository,
             logo,
             color,
-            autoApprovalAp
+            autoApprovalAp,
+            deployer
         );
         assertEq(tokenId, 0);
         assertEq(CuT.ownerOf(tokenId), to);
+    }
+
+    function testFuzz_shouldNotAllowMintWithInvalidVerifier(address verifier) public {
+        vm.assume(!CuT.hasCollectionRole(FleekAccessControl.CollectionRoles.Verifier, verifier));
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+        CuT.mint(
+            deployer,
+            TestConstants.APP_NAME,
+            TestConstants.APP_DESCRIPTION,
+            TestConstants.APP_EXTERNAL_URL,
+            TestConstants.APP_ENS,
+            TestConstants.APP_COMMIT_HASH,
+            TestConstants.APP_GIT_REPOSITORY,
+            TestConstants.LOGO_0,
+            TestConstants.APP_COLOR,
+            false,
+            verifier
+        );
+    }
+
+    function test_shouldAllowMintWithEmptyENS() public {
+        uint256 tokenId = CuT.mint(
+            deployer,
+            TestConstants.APP_NAME,
+            TestConstants.APP_DESCRIPTION,
+            TestConstants.APP_EXTERNAL_URL,
+            "",
+            TestConstants.APP_COMMIT_HASH,
+            TestConstants.APP_GIT_REPOSITORY,
+            TestConstants.LOGO_0,
+            TestConstants.APP_COLOR,
+            false,
+            deployer
+        );
+        assertEq(tokenId, 0);
     }
 }

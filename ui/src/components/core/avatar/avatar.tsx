@@ -1,15 +1,15 @@
-import { forwardRef } from 'react';
-import { AvatarProps, AvatarStyles } from './avatar.styles';
+import { forwardStyledRef } from '@/theme';
 
-export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
-  (
-    { fallback, fallbackProps, imageProps = {}, src, alt, css, ...rootProps },
-    ref
-  ) => {
+import { AvatarStyles as AS } from './avatar.styles';
+
+export const Avatar = forwardStyledRef<HTMLDivElement, AS.RootProps>(
+  ({ imageProps = {}, src, alt, ...rootProps }, ref) => {
     return (
-      <AvatarStyles.Root {...rootProps} ref={ref} css={css}>
-        <AvatarStyles.Image src={src} alt={alt} {...imageProps} />
-      </AvatarStyles.Root>
+      <AS.Root {...rootProps} ref={ref}>
+        <AS.Image src={src} alt={alt} {...imageProps} />
+      </AS.Root>
     );
   }
 );
+
+Avatar.displayName = 'Avatar';

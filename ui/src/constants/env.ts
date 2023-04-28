@@ -16,4 +16,13 @@ export const env = Object.freeze({
     appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || '',
   },
+  twitter: {
+    url: import.meta.env.VITE_TWITTER_URL || '',
+  },
+  sepolia: {
+    rpc: import.meta.env.VITE_SEPOLIA_RPC || '',
+  },
+  goerli: {
+    rpc: import.meta.env.VITE_GOERLI_RPC || '',
+  },
 });

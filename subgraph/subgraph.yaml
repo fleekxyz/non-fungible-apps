@@ -3,11 +3,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: FleekNFA
-    network: mumbai
+    network: goerli
     source:
-      address: "0x550Ee47Fa9E0B81c1b9C394FeE62Fe699a955519" # <- Proxy Contract | Current implementation contract: 0x9e4a318c788e0097a24146fe7041a0cd93939d56
+      address: "0x8795608346Eb475E42e69F1281008AEAa522479D" # <- Proxy Contract
       abi: FleekNFA
-      startBlock: 32373064
+      startBlock: 8671990
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -32,7 +32,7 @@ dataSources:
         - ChangeAccessPointAutoApproval
       abis:
         - name: FleekNFA
-          file: ../contracts/artifacts/contracts/FleekERC721.sol/FleekERC721.json
+          file: ../contracts/deployments/goerli/FleekERC721.json
       eventHandlers:
         - event: Approval(indexed address,indexed address,indexed uint256)
           handler: handleApproval
@@ -47,7 +47,7 @@ dataSources:
           handler: handleMetadataUpdateWithIntValue
         - event: MetadataUpdate(indexed uint256,string,bool,indexed address)
           handler: handleMetadataUpdateWithBooleanValue
-        - event: NewMint(indexed uint256,string,string,string,string,string,string,string,uint24,bool,indexed address,indexed address)
+        - event: NewMint(indexed uint256,string,string,string,string,string,string,string,uint24,bool,indexed address,indexed address,address)
           handler: handleNewMint
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer

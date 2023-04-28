@@ -18,7 +18,7 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
             string memory name,
             string memory description,
             string memory externalURL,
-            string memory ENS,
+            string memory ens,
             uint256 currentBuild,
             string memory logo,
             uint24 color
@@ -28,7 +28,7 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
         assertEq(externalURL, TestConstants.APP_EXTERNAL_URL);
         assertEq(logo, TestConstants.LOGO_0);
         assertEq(color, TestConstants.APP_COLOR);
-        assertEq(ENS, TestConstants.APP_ENS);
+        assertEq(ens, TestConstants.APP_ENS);
         assertEq(currentBuild, 0);
     }
 
@@ -45,6 +45,7 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
         CuT.setTokenName(tokenId, newAppName);
         CuT.setTokenDescription(tokenId, newDescription);
         CuT.setTokenExternalURL(tokenId, newExternalURL);
+        transferENS(newENS, deployer);
         CuT.setTokenENS(tokenId, newENS);
         CuT.setTokenBuild(tokenId, newCommitHash, newRepository);
         CuT.setTokenLogoAndColor(tokenId, newLogo, newColor);
@@ -53,7 +54,7 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
             string memory name,
             string memory description,
             string memory externalURL,
-            string memory ENS,
+            string memory ens,
             uint256 currentBuild,
             string memory logo,
             uint24 color
@@ -63,7 +64,7 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
         assertEq(externalURL, newExternalURL);
         assertEq(logo, newLogo);
         assertEq(color, newColor);
-        assertEq(ENS, newENS);
+        assertEq(ens, newENS);
         assertEq(currentBuild, 1);
     }
 

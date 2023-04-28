@@ -1,14 +1,23 @@
-import { Card, ComboboxItem, Flex, Grid, Icon, Spinner } from '@/components';
-import { Input } from '@/components/core/input';
+import React, { useState } from 'react';
+
+import {
+  Card,
+  Flex,
+  Icon,
+  IconButton,
+  InputGroup,
+  InputGroupText,
+  Spinner,
+} from '@/components';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useGithubStore } from '@/store';
-import { MintCardHeader } from '@/views/mint/mint-card';
 import { Mint } from '@/views/mint/mint.context';
-import React, { forwardRef, useState } from 'react';
+
+import { GithubRepositorySelectionStyles as S } from './github-repository-selection.styles';
 import { RepositoriesList } from './repositories-list';
 import { UserOrgsCombobox } from './users-orgs-combobox';
 
-export const Loading = () => (
+export const Loading: React.FC = () => (
   <Flex
     css={{
       justifyContent: 'center',
@@ -32,40 +41,63 @@ export const GithubRepositoryConnection: React.FC = () => {
     500
   );
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     event.stopPropagation();
     setSearchValueDebounced(event);
   };
 
-  const handlePrevStepClick = () => {
+  const handlePrevStepClick = (): void => {
     setGithubStep(1);
-    setSelectedUserOrg({} as ComboboxItem);
+    setSelectedUserOrg(undefined);
   };
 
   return (
-    <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pr: '$3h' }}>
-      <MintCardHeader
+    <S.Card.Wrapper>
+      <Card.Heading
         title="Select Repository"
-        onClickBack={handlePrevStepClick}
+        css={{ pr: '$3h' }}
+        leftIcon={
+          <IconButton
+            aria-label="back"
+            colorScheme="gray"
+            variant="link"
+            icon={<Icon name="back" />}
+            css={{ mr: '$2' }}
+            onClick={handlePrevStepClick}
+          />
+        }
+        rightIcon={
+          <IconButton
+            aria-label="info"
+            colorScheme="gray"
+            variant="link"
+            icon={<Icon name="info" />}
+          />
+        }
       />
-      <Card.Body css={{ pt: '$4' }}>
-        <Grid css={{ rowGap: '$2' }}>
-          <Flex css={{ gap: '$4', pr: '$3h' }}>
+      <S.Card.Body>
+        <S.Container>
+          <S.Row>
             <UserOrgsCombobox />
-            <Input
-              leftIcon="search"
-              placeholder="Search repo"
-              onChange={handleSearchChange}
-            />
-          </Flex>
+            <InputGroup>
+              <S.Group.Icon name="search" />
+              <InputGroupText
+                css={{ overflow: 'hidden' }}
+                placeholder="Search repo"
+                onChange={handleSearchChange}
+              />
+            </InputGroup>
+          </S.Row>
           {queryLoading === 'loading' ||
           queryUserAndOrganizations === 'loading' ? (
             <Loading />
           ) : (
             <RepositoriesList searchValue={searchValue} />
           )}
-        </Grid>
-      </Card.Body>
-    </Card.Container>
+        </S.Container>
+      </S.Card.Body>
+    </S.Card.Wrapper>
   );
 };

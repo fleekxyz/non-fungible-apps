@@ -34,8 +34,10 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
         // Mint to tokenOwner to set tokenOwner
         mintDefault(tokenOwner);
         // Set tokenController to minted token
-        vm.prank(tokenOwner);
+        vm.startPrank(tokenOwner);
         CuT.grantTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller, tokenController);
+        CuT.setTokenVerifier(tokenId, collectionVerifier);
+        vm.stopPrank();
     }
 
     function test_setUp() public {
@@ -160,6 +162,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
 
     function test_mint() public {
         // Anyone can mint
+        transferENS(TestConstants.APP_ENS, anyAddress);
         vm.startPrank(anyAddress);
         mintDefault(address(99));
         vm.stopPrank();
@@ -199,7 +202,7 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
     }
 
     function test_setTokenENS() public {
-        string memory ens = "ens";
+        string memory ens = "ens.eth";
 
         // ColletionOwner
         vm.prank(collectionOwner);
@@ -212,10 +215,12 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
         CuT.setTokenENS(tokenId, ens);
 
         // TokenOwner
+        transferENS(ens, tokenOwner);
         vm.prank(tokenOwner);
         CuT.setTokenENS(tokenId, ens);
 
         // TokenController
+        transferENS(ens, tokenController);
         vm.prank(tokenController);
         CuT.setTokenENS(tokenId, ens);
 
@@ -590,6 +595,61 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
         vm.prank(anyAddress);
         expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Owner);
         CuT.setPausable(true);
+    }
+
+    function test_setTokenVerifier() public {
+        address otherVerifier = address(0x1234);
+        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Verifier, otherVerifier);
+
+        // ColletionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.setTokenVerifier(tokenId, otherVerifier);
+
+        // CollectionVerifier
+        vm.prank(collectionVerifier);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.setTokenVerifier(tokenId, otherVerifier);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        CuT.setTokenVerifier(tokenId, otherVerifier);
+
+        // TokenController
+        vm.prank(tokenController);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.setTokenVerifier(tokenId, collectionVerifier);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithMustBeTokenOwner(tokenId);
+        CuT.setTokenVerifier(tokenId, collectionVerifier);
+    }
+
+    function test_setTokenVerified() public {
+        // CollectionOwner
+        vm.prank(collectionOwner);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+        CuT.setTokenVerified(tokenId, true);
+
+        // CollectionVerifier
+        vm.prank(collectionVerifier);
+        CuT.setTokenVerified(tokenId, true);
+
+        // TokenOwner
+        vm.prank(tokenOwner);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+        CuT.setTokenVerified(tokenId, false);
+
+        // TokenController
+        vm.prank(tokenController);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+        CuT.setTokenVerified(tokenId, false);
+
+        // AnyAddress
+        vm.prank(anyAddress);
+        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+        CuT.setTokenVerified(tokenId, false);
     }
 
     function test_cannotHaveLessThanOneCollectionOwner() public {

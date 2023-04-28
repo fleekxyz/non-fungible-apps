@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { FleekERC721 } from '@/integrations';
 import { RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
+
 import * as asyncThunk from './async-thunk';
-import { FleekERC721 } from '@/integrations';
 
 export namespace FleekERC721State {
   export type QueryState = undefined | 'loading' | 'failed' | 'success';

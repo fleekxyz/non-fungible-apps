@@ -1,5 +1,6 @@
-import { dripStitches } from '../../../theme'; //TODO replace with absolute path
 import React, { HTMLAttributes, useMemo } from 'react';
+
+import { keyframes } from '@/theme';
 
 import {
   ButtonSpinnerProps,
@@ -34,8 +35,6 @@ export const ButtonSpinner: React.FC<ButtonSpinnerProps> = (props) => {
     </StyledButtonSpinnerBox>
   );
 };
-
-const { keyframes } = dripStitches;
 
 const blink = keyframes({
   '0%': { opacity: 0.2 },

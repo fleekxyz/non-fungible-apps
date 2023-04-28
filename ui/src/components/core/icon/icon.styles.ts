@@ -1,6 +1,4 @@
-import { dripStitches } from '../../../theme'; //TODO replace for absolute path
-
-const { styled } = dripStitches;
+import { styled } from '@/theme';
 
 export abstract class IconStyles {
   static readonly Container = styled('span', {

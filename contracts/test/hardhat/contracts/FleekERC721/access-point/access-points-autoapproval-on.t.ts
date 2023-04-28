@@ -42,7 +42,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
   });
 
   it('should revert if AP does not exist', async () => {
-    const { contract, tokenId } = fixture;
+    const { contract } = fixture;
 
     await expect(
       contract.getAccessPointJSON('random.com')
@@ -88,7 +88,7 @@ describe('FleekERC721.AccessPoints.AutoApprovalOn', () => {
   });
 
   it('should allow anyone to change AP score', async () => {
-    const { contract, otherAccount, tokenId } = fixture;
+    const { contract, otherAccount } = fixture;
 
     await contract.increaseAccessPointScore(DefaultAP);
     await contract.connect(otherAccount).increaseAccessPointScore(DefaultAP);

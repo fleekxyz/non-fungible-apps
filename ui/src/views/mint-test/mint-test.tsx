@@ -1,9 +1,10 @@
+import { ConnectKitButton } from 'connectkit';
+import { useAccount } from 'wagmi';
+
 import { Button, Flex } from '@/components';
 import { Separator } from '@/components/core/separator.styles';
 import { EthereumHooks } from '@/integrations';
 import { AppLog } from '@/utils';
-import { ConnectKitButton } from 'connectkit';
-import { useAccount } from 'wagmi';
 
 /**
  * This is an example about how to use the EthereumHooks to create a context for a contract method
@@ -22,7 +23,7 @@ const Preparing: React.FC = () => {
     setArgs,
   } = useMintContext();
 
-  const handlePrepare = () => {
+  const handlePrepare = (): void => {
     // `setArgs` will fulfill the arguments used to call the contract method
     setArgs([
       '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049',
@@ -81,7 +82,7 @@ const Minting: React.FC = () => {
     },
   } = useMintContext();
 
-  const handleMint = () => {
+  const handleMint = (): void => {
     // The trigger function will be undefined in case the contract method is not ready to be called
     // Preparing the contract method will run a gas estimation and will set the trigger function
     // If the gas estimation fails, the trigger function will be undefined
@@ -135,6 +136,7 @@ const Waiting: React.FC = () => {
 
   if (transactionStatus !== 'success') {
     if (transactionStatus === 'error') {
+      // eslint-disable-next-line no-console
       console.error(transactionError);
       return <div>Transaction error</div>;
     }

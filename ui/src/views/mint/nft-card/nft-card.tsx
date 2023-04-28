@@ -1,6 +1,7 @@
 import { Button, Card, Grid } from '@/components';
-import { Mint } from '../mint.context';
-import { SVGPreview } from './svg-preview';
+import { NFAPreview } from '@/components';
+
+import { useMintFormContext } from '../nfa-step/form-step';
 
 type NftCardProps = {
   title: string;
@@ -22,19 +23,34 @@ export const NftCard: React.FC<NftCardProps> = ({
   leftIconButton,
   onClick,
   isLoading,
-}) => {
+}: NftCardProps) => {
   const size = '26.5rem';
-  const { appLogo, logoColor, appName, ens } = Mint.useContext();
+  const {
+    form: {
+      appName: {
+        value: [appName],
+      },
+      appLogo: {
+        value: [appLogo],
+      },
+      logoColor: {
+        value: [logoColor],
+      },
+      ens: {
+        value: [ens],
+      },
+    },
+  } = useMintFormContext();
 
   return (
-    <Card.Container css={{ width: '$107h', p: '$0' }}>
-      <SVGPreview
+    <Card.Container css={{ maxWidth: '$107h', p: '$0' }}>
+      <NFAPreview
         color={logoColor}
         logo={appLogo}
         name={appName}
-        ens={ens.label}
+        ens={ens}
         size={size}
-        css="rounded-t-xhl"
+        className="rounded-t-xhl"
       />
       <Card.Body css={{ p: '$7' }}>
         <Grid css={{ rowGap: '$6' }}>
@@ -43,10 +59,7 @@ export const NftCard: React.FC<NftCardProps> = ({
             leftIcon={leftIcon}
             rightIcon={rightIcon}
           />
-          {/* TODO replace for real price when integrate with wallet */}
           <span className="text-slate11 text-sm">{message}</span>
-          {/* TODO add desabled when user doesnt have enough MATIC */}
-          {/* TODO repalce for app name when connect with context */}
           <Button
             colorScheme="blue"
             variant="solid"

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { createStitches, DefaultThemeMap } from '@stitches/react';
 import type { ConfigType } from '@stitches/react/types/config';
 
 import { allToNegative } from '../utils';
 import {
-  colors,
   darkColors,
   media as libMedia,
   radii,
@@ -29,7 +29,8 @@ export interface CreateDripStitchesConfig<
   themeMap?: ConfigType.ThemeMap<ThemeMap>;
   utils?: ConfigType.Utils<Utils>;
 }
-export const createDripStitches = <
+
+const createDripStitches = <
   Prefix extends string = '',
   Media extends {} = {},
   Theme extends {} = {},
@@ -129,4 +130,17 @@ export const createDripStitches = <
   };
 };
 
-export const dripStitches = createDripStitches();
+export const {
+  styled,
+  css,
+  config,
+  globalCss,
+  createTheme,
+  darkTheme,
+  darkThemeSelector,
+  getCssText,
+  keyframes,
+  prefix,
+  theme,
+  reset,
+} = createDripStitches();

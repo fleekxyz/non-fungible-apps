@@ -31,7 +31,8 @@ type NewMint @entity(immutable: true) {
   color: Int!
   accessPointAutoApproval: Boolean!
   triggeredBy: Bytes! # address
-  owner: Owner! # address 
+  owner: Owner! # address
+  verifier: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -78,6 +79,9 @@ type Token @entity {
   gitRepository: GitRepository!
   commitHash: String!
   accessPoints: [AccessPoint!] @derivedFrom(field: "token")
+  verifier: Verifier # Address
+  verified: Boolean!
+  createdAt: BigInt!
 }
 
 # Owner entity for collection, access points, and tokens
@@ -94,6 +98,12 @@ type Controller @entity {
   tokens: [Token!] @derivedFrom(field: "controllers")
 }
 
+# Verifier entity for tokens
+type Verifier @entity {
+  id: Bytes! # address
+  tokens: [Token!] @derivedFrom(field: "verifier")
+}
+
 type GitRepository @entity {
   id: String! # transaction hash of the first transaction this repository appeared in
   tokens: [Token!] @derivedFrom(field: "gitRepository")
@@ -107,4 +117,10 @@ type AccessPoint @entity {
   nameVerified: Boolean!
   owner: Owner!
   creationStatus: String!
+  createdAt: BigInt!
+}
+
+type Collection @entity {
+  id: Bytes!
+  totalTokens: BigInt!
 }

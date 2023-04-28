@@ -1,5 +1,13 @@
-import { dripStitches } from '@/theme';
+import { styled } from '@/theme';
 
-const { styled } = dripStitches;
-
-export const Text = styled('span');
+export const Text = styled('span', {
+  variants: {
+    ellipsis: {
+      true: {
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+      },
+    },
+  },
+});

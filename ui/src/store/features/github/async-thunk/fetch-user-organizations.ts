@@ -1,8 +1,9 @@
-import { ComboboxItem } from '@/components';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { RootState } from '@/store';
 import { AppLog } from '@/utils';
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { GithubClient, UserData } from '../github-client';
+
+import { GithubClient } from '../github-client';
 import { githubActions } from '../github-slice';
 
 export const fetchUserAndOrgsThunk = createAsyncThunk(
@@ -18,24 +19,22 @@ export const fetchUserAndOrgsThunk = createAsyncThunk(
 
       const githubClient = new GithubClient(token);
 
-      const response = await Promise.all([
+      const [userResponse, orgsResponse] = await Promise.all([
         githubClient.fetchUser(),
         githubClient.fetchOrgs(),
       ]);
-      const userResponse = response[0];
-      const orgsResponse = response[1];
 
-      let comboboxItems: UserData[] = [];
+      const items: GithubClient.UserData[] = [];
 
       if (userResponse) {
-        comboboxItems.push(userResponse);
+        items.push(userResponse);
       }
 
       if (orgsResponse) {
-        comboboxItems = [...comboboxItems, ...orgsResponse];
+        items.push(...orgsResponse);
       }
 
-      dispatch(githubActions.setUserAndOrgs(comboboxItems));
+      dispatch(githubActions.setUserAndOrgs(items));
     } catch (error) {
       AppLog.errorToast('We have a problem. Please try again later.');
       dispatch(githubActions.setQueryState('failed'));

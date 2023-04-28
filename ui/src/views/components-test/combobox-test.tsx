@@ -1,50 +1,77 @@
-import { Combobox, ComboboxItem, Flex } from '@/components';
 import { useState } from 'react';
 
-const itemsCombobox = [
-  { label: 'Item 1', value: 'item-1' },
-  { label: 'Item 2', value: 'item-2' },
-  { label: 'Item 3', value: 'item-3' },
+import { Combobox, Flex, Icon, IconName } from '@/components';
+
+type Item = { id: number; label: string; icon: IconName };
+
+type ItemDropdown = { id: number; label: string };
+
+const Items: Item[] = [
+  { id: 1, label: 'Option 1', icon: 'branch' },
+  { id: 2, label: 'Option 2', icon: 'ethereum' },
+  { id: 3, label: 'Option 3', icon: 'metamask' },
 ];
 
-export const ComboboxTest = () => {
-  const [selectedValue, setSelectedValue] = useState({} as ComboboxItem);
-  const [selectedValueAutocomplete, setSelectedValueAutocomplete] = useState(
-    {} as ComboboxItem
-  );
+const ItemsDropdown: ItemDropdown[] = [
+  { id: 1, label: 'Option 1' },
+  { id: 2, label: 'Option 2' },
+  { id: 3, label: 'Option 3' },
+];
 
-  const handleComboboxChange = (item: ComboboxItem) => {
-    setSelectedValue(item);
-  };
-
-  const handleComboboxChangeAutocomplete = (item: ComboboxItem) => {
-    setSelectedValueAutocomplete(item);
-  };
+export const ComboboxTest: React.FC = () => {
+  const selected = useState<Item>();
+  const selectedDropdown = useState<ItemDropdown>(ItemsDropdown[0]);
 
   return (
     <Flex
       css={{
+        position: 'relative',
         flexDirection: 'column',
-        margin: '100px',
-
         justifyContent: 'center',
         gap: '10px',
+        width: '600px',
+        alignSelf: 'center',
       }}
     >
-      <h1>Components Test</h1>
-      <Flex css={{ width: '400px', gap: '$2' }}>
-        <Combobox
-          items={itemsCombobox}
-          selectedValue={selectedValue}
-          onChange={handleComboboxChange}
-        />
-        <Combobox
-          items={itemsCombobox}
-          selectedValue={selectedValueAutocomplete}
-          onChange={handleComboboxChangeAutocomplete}
-          withAutocomplete
-        />
-      </Flex>
+      <Combobox
+        unattached
+        items={ItemsDropdown}
+        selected={selectedDropdown}
+        queryKey="label"
+      >
+        {({ Field, Options }) => (
+          <>
+            <Field css={{ backgroundColor: '$slate4', borderColor: '$slate4' }}>
+              {(selected) => <>{selected?.label || 'Select an option'}</>}
+            </Field>
+
+            <Options disableSearch>{(item) => <>{item.label}</>}</Options>
+          </>
+        )}
+      </Combobox>
+
+      <Combobox unattached items={Items} selected={selected} queryKey="label">
+        {({ Field, Options }) => (
+          <>
+            <Field>
+              {(selected) => (
+                <>
+                  <Icon name={selected?.icon || 'search'} />
+                  {selected?.label || 'Select an option'}
+                </>
+              )}
+            </Field>
+
+            <Options>
+              {(item) => (
+                <>
+                  <Icon name={item.icon} /> {item.label}
+                </>
+              )}
+            </Options>
+          </>
+        )}
+      </Combobox>
     </Flex>
   );
 };

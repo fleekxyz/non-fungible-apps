@@ -1,13 +1,13 @@
 import { ethers, upgrades } from 'hardhat';
 import { TestConstants } from './constants';
-import { OverloadedFunctions } from './overloaded-functions';
+import { transferENSNode } from './utils';
 
 export abstract class Fixtures {
-  static async paused() {}
-
   static async default() {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
+
+    await transferENSNode(TestConstants.MintParams.ens, owner);
 
     const libraries = {
       FleekSVG: (await (await ethers.getContractFactory('FleekSVG')).deploy())
@@ -36,9 +36,7 @@ export abstract class Fixtures {
   static async withMint() {
     const fromDefault = await Fixtures.default();
 
-    const response = await fromDefault.contract[
-      OverloadedFunctions.Mint.Default
-    ](
+    const response = await fromDefault.contract.mint(
       fromDefault.owner.address,
       TestConstants.MintParams.name,
       TestConstants.MintParams.description,
@@ -47,7 +45,9 @@ export abstract class Fixtures {
       TestConstants.MintParams.commitHash,
       TestConstants.MintParams.gitRepository,
       TestConstants.MintParams.logo,
-      TestConstants.MintParams.color
+      TestConstants.MintParams.color,
+      TestConstants.MintParams.accessPointAutoApprovalSettings,
+      fromDefault.owner.address
     );
 
     const tokenId = response.value.toNumber();

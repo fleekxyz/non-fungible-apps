@@ -1,15 +1,14 @@
-import { Flex } from '@/components';
 import { Link } from 'react-router-dom';
-import { NFAList } from './nfa-list/nfa-list';
 
-export const Home = () => {
+import { Flex } from '@/components';
+
+export const Home: React.FC = () => {
   return (
-    <Flex css={{ flexDirection: 'column', margin: '$60' }}>
+    <Flex css={{ flexDirection: 'column' }}>
       <h1>Home</h1>
       <Link to="/mint">
         <u>Mint NFA!</u>
       </Link>
-      <NFAList />
     </Flex>
   );
 };

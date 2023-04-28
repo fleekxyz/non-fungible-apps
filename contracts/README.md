@@ -140,19 +140,43 @@ $ yarn deploy:hardhat
 
 If the execution is successful, you will see the contract address on your screen.
 
-### **Polygon Mumbai Testnet**
+### **Testnet deployments**
 
 To deploy the contract on the testnet, you have to first export your wallet's private key and update the `.env.example` file at the root directory of this repository.
 
 The [.env.example](./.env.example) file needs to be renamed to `.env` before continuing. Make sure you are using your private API URL, if you have one.
 
-After updating the `.env` file, you can run:
+After updating the `.env` file, you can deploy the contract by following the guides below.
+
+#### **Polygon Mumbai Testnet**
+
+Run:
 
 ```
 $ yarn deploy:mumbai
 ```
 
 to deploy the contract on the testnet. Please note that your wallet needs to hold enough Mumbai MATIC for the deployment to be successful. To reach more in-depth information about how to deploy contract checkout [this guide](https://wiki.polygon.technology/docs/develop/alchemy).
+
+#### **Ethereum Sepolia Testnet**
+
+Run:
+
+```
+$ yarn deploy:sepolia
+```
+
+to deploy the contract on the testnet. Please note that your wallet needs to hold enough Sepolia ETH for the deployment to be successful. To reach more in-depth information about how to deploy contract checkout [this guide](https://docs.alchemy.com/docs/how-to-deploy-a-smart-contract-to-the-sepolia-testnet).
+
+#### **Ethereum Goerli Testnet**
+
+Run:
+
+```
+$ yarn deploy:goerli
+```
+
+to deploy the contract on the testnet. Please note that your wallet needs to hold enough Goerli ETH for the deployment to be successful.
 
 ### **Deploy arguments**
 
@@ -189,7 +213,7 @@ to deploy the contract on the testnet. Please note that your wallet needs to hol
 
 ## ▶️ Interaction scripts
 
-Right away, in the [scripts](./scripts/) folder you are able to see some scripts that will help you to interact with deployed contracts. By default you are able to select `localhost`, `hardhat` or `mumbai` network name predefined on [hardhat.config.ts](./hardhat.config.ts). The scripts will be using the deployment information stored in the [deployments](./deployments/) folder. You should have a nested folder for each of the networks you have deployed it. The scripts needs be run using the Hardhat environment following the pattern:
+Right away, in the [scripts](./scripts/) folder you are able to see some scripts that will help you to interact with deployed contracts. By default you are able to select `localhost`, `hardhat`, `mumbai`, `sepolia` or `goerli` network name predefined on [hardhat.config.ts](./hardhat.config.ts). The scripts will be using the deployment information stored in the [deployments](./deployments/) folder. You should have a nested folder for each of the networks you have deployed it. The scripts needs be run using the Hardhat environment following the pattern:
 
 ```bash
 # Replace <script_name> with the selected script
