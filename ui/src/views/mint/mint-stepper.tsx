@@ -1,6 +1,3 @@
-import { useEffect } from 'react';
-import { useAccount } from 'wagmi';
-
 import { Form, Step, Stepper } from '@/components';
 
 import { GithubStep } from './github-step';
@@ -12,21 +9,15 @@ import { MintPreview } from './preview-step/mint-preview';
 import { WalletStep } from './wallet-step';
 
 export const MintStepper: React.FC = () => {
-  const { isConnected } = useAccount();
   const {
     transaction: { isSuccess },
   } = Mint.useTransactionContext();
-  const { setStep } = Stepper.useContext();
 
   const {
     form: {
       isValid: [, setIsValid],
     },
   } = useMintFormContext();
-
-  useEffect(() => {
-    if (isConnected) setStep(2);
-  }, [isConnected, setStep]);
 
   if (isSuccess) return <NftMinted />;
 
