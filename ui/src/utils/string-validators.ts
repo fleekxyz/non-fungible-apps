@@ -54,12 +54,23 @@ const hasSpecialCharacters: StringValidator = {
   message: 'This field has special characters',
 };
 
+const isValidDomain: StringValidator = {
+  name: 'isValidDomain',
+  validate: (value = '') => {
+    const regex =
+      /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/;
+    return regex.test(value);
+  },
+  message: 'This field is not a valid domain',
+};
+
 export const StringValidators = {
   required,
   maxLength,
   isUrl,
   maxFileSize,
   hasSpecialCharacters,
+  isValidDomain,
 };
 
 export const hasValidator = <

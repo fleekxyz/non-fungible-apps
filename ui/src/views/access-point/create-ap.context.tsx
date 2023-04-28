@@ -1,16 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
-import { Token } from '@/graphclient';
 import { EthereumHooks } from '@/integrations';
 import { useFleekERC721Billing } from '@/store';
-import { AppLog, createContext, pushToast } from '@/utils';
+import { AppLog, createContext } from '@/utils';
 
-type NFA = Pick<Token, 'id' | 'name'>;
+export type NFA = {
+  tokenId: string;
+  name: string;
+  logo: string;
+  color: number;
+  domain: string;
+};
 
 export type AccessPointContext = {
   billing: string | undefined;
-  nfa: NFA | undefined;
-  setNfa: ReactState<NFA | undefined>[1];
+  nfa: NFA;
+  setNfa: (nfa: NFA) => void;
 };
 
 const [CreateAPProvider, useContext] = createContext<AccessPointContext>({
@@ -31,7 +38,13 @@ export abstract class CreateAccessPoint {
     children,
   }) => {
     const [billing] = useFleekERC721Billing('AddAccessPoint');
-    const [nfa, setNfa] = useState<NFA>();
+    const [nfa, setNfa] = useState<NFA>({
+      tokenId: '',
+      name: '',
+      logo: '',
+      color: 0,
+      domain: '',
+    });
 
     const value = {
       billing,
@@ -44,12 +57,10 @@ export abstract class CreateAccessPoint {
         <TransactionProvider
           config={{
             transaction: {
-              onSuccess: (data) => {
+              onSuccess: (data: any) => {
                 AppLog.info('Transaction:', data);
-                pushToast('success', 'Your transaction was successful!');
               },
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              onError: (error) => {
+              onError: (error: any) => {
                 AppLog.errorToast(
                   'There was an error trying to create the Access Point. Please try again'
                 );

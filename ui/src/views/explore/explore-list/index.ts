@@ -1,1 +1,1 @@
-export * from './explore-list-container';
+export * from './explore-list.fragment';
