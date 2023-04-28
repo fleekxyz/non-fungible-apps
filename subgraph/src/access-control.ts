@@ -1,4 +1,4 @@
-import { Bytes, log } from '@graphprotocol/graph-ts';
+import { Bytes, log, store } from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]
 import {
@@ -7,15 +7,8 @@ import {
 } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
-import { Owner, Token } from '../generated/schema';
-
-enum CollectionRoles {
-  Owner,
-}
-
-enum TokenRoles {
-  Controller,
-}
+import { Owner, Token, Verifier } from '../generated/schema';
+import { CollectionRoles, TokenRoles } from './constants';
 
 export function handleCollectionRoleChanged(
   event: CollectionRoleChangedEvent
@@ -25,35 +18,56 @@ export function handleCollectionRoleChanged(
   const role = event.params.role;
   const status = event.params.status;
 
-  if (role === CollectionRoles.Owner) {
-    // Owner role
-    if (status) {
-      // granted
-      let owner = Owner.load(toAddress);
-      if (!owner) {
-        owner = new Owner(toAddress);
+  switch (role) {
+    case CollectionRoles.Owner:
+      // Owner role
+      if (status) {
+        // granted
+        let owner = Owner.load(toAddress);
+        if (!owner) {
+          owner = new Owner(toAddress);
+        }
+        owner.collection = true;
+        owner.save();
+      } else {
+        // revoked
+        const owner = Owner.load(toAddress);
+        if (!owner) {
+          log.error(
+            'Owner entity not found. Role: {}, byAddress: {}, toAddress: {}',
+            [role.toString(), byAddress.toHexString(), toAddress.toHexString()]
+          );
+          return;
+        }
+        owner.collection = false;
+        owner.save();
       }
-      owner.collection = true;
-      owner.save();
-    } else {
-      // revoked
-      const owner = Owner.load(toAddress);
-      if (!owner) {
-        log.error(
-          'Owner entity not found. Role: {}, byAddress: {}, toAddress: {}',
-          [role.toString(), byAddress.toHexString(), toAddress.toHexString()]
-        );
-        return;
+      break;
+
+    case CollectionRoles.Verifier:
+      // Verifier role
+      if (status) {
+        // granted
+        let verifier = Verifier.load(toAddress);
+        if (!verifier) {
+          verifier = new Verifier(toAddress);
+        }
+        verifier.save();
+      } else {
+        // revoked
+        const verifier = Verifier.load(toAddress);
+        if (verifier) {
+          store.remove('Verifier', verifier.id.toString());
+        }
       }
-      owner.collection = false;
-      owner.save();
-    }
-  } else {
-    log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [
-      role.toString(),
-      byAddress.toHexString(),
-      toAddress.toHexString(),
-    ]);
+
+      break;
+    default:
+      log.error('Role not supported. Role: {}, byAddress: {}, toAddress: {}', [
+        role.toString(),
+        byAddress.toHexString(),
+        toAddress.toHexString(),
+      ]);
   }
 }
 

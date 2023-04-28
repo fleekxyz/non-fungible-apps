@@ -2,7 +2,6 @@ import { Bytes } from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]
 import {
-  MetadataUpdate as MetadataUpdateEvent,
   MetadataUpdate1 as MetadataUpdateEvent1,
   MetadataUpdate2 as MetadataUpdateEvent2,
   MetadataUpdate3 as MetadataUpdateEvent3,
@@ -158,6 +157,9 @@ export function handleMetadataUpdateWithBooleanValue(
   if (token) {
     if (event.params.key == 'accessPointAutoApproval') {
       token.accessPointAutoApproval = event.params.value;
+    }
+    if (event.params.key == 'verified') {
+      token.verified = event.params.value;
     }
     token.save();
   }
