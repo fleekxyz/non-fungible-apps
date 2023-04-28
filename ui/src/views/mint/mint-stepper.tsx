@@ -1,11 +1,12 @@
 import { Stepper } from '@/components';
-import { MintPreview } from './preview-step/mint-preview';
+
 import { GithubStep } from './github-step';
 import { MintStep } from './mint-step';
-import { WalletStep } from './wallet-step';
 import { NFAStep } from './nfa-step';
+import { MintPreview } from './preview-step/mint-preview';
+import { WalletStep } from './wallet-step';
 
-export const MintStepper = () => {
+export const MintStepper: React.FC = () => {
   return (
     <Stepper.Root initialStep={1}>
       <Stepper.Container>
