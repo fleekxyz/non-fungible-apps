@@ -15,7 +15,7 @@ import {
 import { useENSStore } from '@/store';
 
 import { Mint } from '../../mint.context';
-import { MintCardHeader } from '../../mint-card';
+import { MintCardContainer, MintCardHeader } from '../../mint-card';
 import { useMintFormContext } from '../form-step';
 
 // TODO: remove mocked items after graphql api is fixed
@@ -100,7 +100,7 @@ export const VerifyNFAStep: React.FC = () => {
   };
 
   return (
-    <Card.Container css={{ maxWidth: '$107h' }}>
+    <MintCardContainer>
       <MintCardHeader title="Verify NFA" onClickBack={prevStep} />
       <Card.Body>
         <Flex css={{ flexDirection: 'column', gap: '$6' }}>
@@ -135,6 +135,6 @@ export const VerifyNFAStep: React.FC = () => {
           </Button>
         </Flex>
       </Card.Body>
-    </Card.Container>
+    </MintCardContainer>
   );
 };

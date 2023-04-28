@@ -1,4 +1,5 @@
-import { Card, Flex, Icon, IconButton, Stepper } from '@/components';
+import { Card, Flex, Stepper } from '@/components';
+import { MintCardContainer, MintCardHeader } from '@/views/mint/mint-card';
 
 import { CreateAccessPointFormBody } from './create-ap-form-body';
 
@@ -6,28 +7,8 @@ export const CreateAccessPointForm: React.FC = () => {
   const { prevStep } = Stepper.useContext();
 
   return (
-    <Card.Container css={{ maxWidth: '$107h' }}>
-      <Card.Heading
-        title="Enter Domain"
-        leftIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="back" />}
-            css={{ mr: '$2' }}
-            onClick={prevStep}
-          />
-        }
-        rightIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="info" />}
-          />
-        }
-      />
+    <MintCardContainer>
+      <MintCardHeader title="Enter Domain" onClickBack={prevStep} />
       <Card.Body>
         <Flex
           css={{
@@ -38,6 +19,6 @@ export const CreateAccessPointForm: React.FC = () => {
           <CreateAccessPointFormBody />
         </Flex>
       </Card.Body>
-    </Card.Container>
+    </MintCardContainer>
   );
 };

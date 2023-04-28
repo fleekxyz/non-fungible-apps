@@ -1,12 +1,13 @@
 import { Button, Card, Flex, Icon, IconButton, Text } from '@/components';
 
+import { MintCardContainer } from '../mint/mint-card';
 import { CreateAccessPoint } from './create-ap.context';
 import { AccessPointDataFragment } from './create-ap-preview';
 
 export const CreateAccessPointSuccess: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
   return (
-    <Card.Container css={{ maxWidth: '$107h' }}>
+    <MintCardContainer>
       <Card.Heading
         title="Hosting Successful"
         leftIcon={
@@ -42,6 +43,6 @@ export const CreateAccessPointSuccess: React.FC = () => {
           </Flex>
         </Flex>
       </Card.Body>
-    </Card.Container>
+    </MintCardContainer>
   );
 };

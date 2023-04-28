@@ -2,6 +2,7 @@ import { Button, Card, Grid } from '@/components';
 import { NFAPreview } from '@/components';
 
 import { useMintFormContext } from '../nfa-step/form-step';
+import { MintCardContainer } from '../mint-card';
 
 type NftCardProps = {
   title: string;
@@ -43,14 +44,14 @@ export const NftCard: React.FC<NftCardProps> = ({
   } = useMintFormContext();
 
   return (
-    <Card.Container css={{ maxWidth: '$107h', p: '$0' }}>
+    <MintCardContainer css={{ p: '$0' }}>
       <NFAPreview
         color={logoColor}
         logo={appLogo}
         name={appName}
         ens={ens}
         size={size}
-        className="rounded-t-xhl"
+        className="rounded-t-xhl" //TODO remove tailwind class
       />
       <Card.Body css={{ p: '$7' }}>
         <Grid css={{ rowGap: '$6' }}>
@@ -72,6 +73,6 @@ export const NftCard: React.FC<NftCardProps> = ({
           </Button>
         </Grid>
       </Card.Body>
-    </Card.Container>
+    </MintCardContainer>
   );
 };

@@ -5,7 +5,7 @@ import { AppLog } from '@/utils';
 import { parseColorToNumber } from '@/utils/color';
 
 import { Mint } from '../../mint.context';
-import { MintCardHeader } from '../../mint-card';
+import { MintCardContainer, MintCardHeader } from '../../mint-card';
 import {
   AppDescriptionField,
   AppNameField,
@@ -78,7 +78,7 @@ export const MintFormStep: React.FC = () => {
   };
 
   return (
-    <Card.Container css={{ maxWidth: '$107h' }}>
+    <MintCardContainer>
       <MintCardHeader title="NFA Details" onClickBack={handlePrevStep} />
       <Card.Body>
         <Grid
@@ -102,6 +102,6 @@ export const MintFormStep: React.FC = () => {
           </Button>
         </Grid>
       </Card.Body>
-    </Card.Container>
+    </MintCardContainer>
   );
 };
