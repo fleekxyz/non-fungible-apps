@@ -119,7 +119,7 @@ export const submitMintInfo = async (
     );
 
     const mintInfo = {
-      buildId: id,
+      mintId: id,
       createdAt: new Date().toISOString(),
       tokenId: decodedLogs.tokenId,
       github_url: decodedLogs.githubRepository,
