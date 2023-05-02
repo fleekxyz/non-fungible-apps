@@ -3,7 +3,7 @@ import {
   Card,
   CustomCardContainer,
   CustomCardHeader,
-  Grid,
+  Flex,
   Text,
 } from '@/components';
 import { NFAPreview } from '@/components';
@@ -60,7 +60,7 @@ export const NftCard: React.FC<NftCardProps> = ({
         }}
       />
       <Card.Body css={{ p: '$7' }}>
-        <Grid css={{ rowGap: '$6' }}>
+        <Flex css={{ gap: '$6', flexDirection: 'column' }}>
           <CustomCardHeader.Success title={title} />
           <Text css={{ color: '$slate11', fontSize: '$sm' }}>{message}</Text>
           <Button
@@ -73,7 +73,7 @@ export const NftCard: React.FC<NftCardProps> = ({
           >
             {buttonText}
           </Button>
-        </Grid>
+        </Flex>
       </Card.Body>
     </CustomCardContainer>
   );

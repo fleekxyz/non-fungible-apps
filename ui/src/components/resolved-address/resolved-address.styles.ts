@@ -1,3 +1,4 @@
+import { Text } from '@/components';
 import { keyframes, styled } from '@/theme';
 
 const Loading = keyframes({
@@ -13,7 +14,7 @@ const Loading = keyframes({
 });
 
 export const ResolvedAddressStyles = {
-  Container: styled('span', {
+  Container: styled(Text, {
     '&[data-loading="true"]': {
       animation: `${Loading} 1s ease-in-out infinite`,
     },

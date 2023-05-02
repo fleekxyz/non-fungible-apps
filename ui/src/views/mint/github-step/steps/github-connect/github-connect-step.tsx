@@ -2,7 +2,7 @@ import {
   Card,
   CustomCardContainer,
   CustomCardHeader,
-  Grid,
+  Flex,
   Stepper,
 } from '@/components';
 
@@ -15,7 +15,7 @@ export const GithubConnect: React.FC = () => {
     <CustomCardContainer>
       <CustomCardHeader.Default title="Connect GitHub" onClickBack={prevStep} />
       <Card.Body>
-        <Grid css={{ rowGap: '$6' }}>
+        <Flex css={{ gap: '$6', flexDirection: 'column' }}>
           <GithubButton />
           <Card.Text
             css={{
@@ -29,7 +29,7 @@ export const GithubConnect: React.FC = () => {
               After connecting your GitHub, your repositories will show here.
             </span>
           </Card.Text>
-        </Grid>
+        </Flex>
       </Card.Body>
     </CustomCardContainer>
   );

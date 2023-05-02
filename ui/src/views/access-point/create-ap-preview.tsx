@@ -40,7 +40,9 @@ export const AccessPointDataFragment: React.FC = () => {
         label="Owner"
         value={
           address ? (
-            <ResolvedAddress truncated={false}>{address || ''}</ResolvedAddress>
+            <ResolvedAddress truncated={false} ellipsis>
+              {address}
+            </ResolvedAddress>
           ) : (
             'Please connect to wallet'
           )
