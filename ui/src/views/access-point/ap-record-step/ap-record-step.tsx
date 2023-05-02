@@ -1,13 +1,13 @@
-import { MintCardContainer } from '@/views/mint/mint-card';
+import { CustomCardContainer } from '@/components';
 
 import { APRecordCardBody } from './ap-record-body';
 import { APRecordCardHeader } from './ap-record-header';
 
 export const APRecordStep: React.FC = () => {
   return (
-    <MintCardContainer>
+    <CustomCardContainer>
       <APRecordCardHeader />
       <APRecordCardBody />
-    </MintCardContainer>
+    </CustomCardContainer>
   );
 };

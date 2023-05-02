@@ -1,11 +1,17 @@
 import { useAccount } from 'wagmi';
 
-import { Button, Card, Grid, Stepper } from '@/components';
+import {
+  Button,
+  Card,
+  CustomCardContainer,
+  CustomCardHeader,
+  Grid,
+  Stepper,
+} from '@/components';
 import { AppLog } from '@/utils';
 import { parseColorToNumber } from '@/utils/color';
 
 import { Mint } from '../../mint.context';
-import { MintCardContainer, MintCardHeader } from '../../mint-card';
 import {
   AppDescriptionField,
   AppNameField,
@@ -78,8 +84,11 @@ export const MintFormStep: React.FC = () => {
   };
 
   return (
-    <MintCardContainer>
-      <MintCardHeader title="NFA Details" onClickBack={handlePrevStep} />
+    <CustomCardContainer>
+      <CustomCardHeader.Default
+        title="NFA Details"
+        onClickBack={handlePrevStep}
+      />
       <Card.Body>
         <Grid
           css={{
@@ -102,6 +111,6 @@ export const MintFormStep: React.FC = () => {
           </Button>
         </Grid>
       </Card.Body>
-    </MintCardContainer>
+    </CustomCardContainer>
   );
 };

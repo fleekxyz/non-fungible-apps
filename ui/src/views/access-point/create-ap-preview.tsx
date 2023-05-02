@@ -5,9 +5,9 @@ import { useAccount } from 'wagmi';
 import {
   Button,
   Card,
+  CustomCardContainer,
+  CustomCardHeader,
   Flex,
-  Icon,
-  IconButton,
   ResolvedAddress,
   Stepper,
   Text,
@@ -20,7 +20,6 @@ import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context
 import { SelectedNFA } from './ap-form-step/create-ap-form-body';
 import { CreateAccessPoint } from './create-ap.context';
 import { DisplayText } from './display-text';
-import { MintCardContainer, MintCardHeader } from '../mint/mint-card';
 
 export const AccessPointDataFragment: React.FC = () => {
   const { address, status } = useAccount();
@@ -112,8 +111,8 @@ export const CreateAccessPointPreview: React.FC = () => {
   }, [writeStatus, transactionStatus]);
 
   return (
-    <MintCardContainer>
-      <MintCardHeader title="Review Details" onClickBack={prevStep} />
+    <CustomCardContainer>
+      <CustomCardHeader.Default title="Review Details" onClickBack={prevStep} />
       <Card.Body>
         <Flex css={{ flexDirection: 'column', gap: '$6' }}>
           <AccessPointDataFragment />
@@ -129,6 +128,6 @@ export const CreateAccessPointPreview: React.FC = () => {
           </Button>
         </Flex>
       </Card.Body>
-    </MintCardContainer>
+    </CustomCardContainer>
   );
 };

@@ -1,12 +1,16 @@
-import { Card, Grid } from '@/components';
-import { MintCardContainer, MintCardHeader } from '@/views/mint/mint-card';
+import {
+  Card,
+  CustomCardContainer,
+  CustomCardHeader,
+  Grid,
+} from '@/components';
 
 import { ConnectWalletButton } from './connect-wallet-button';
 
 export const WalletStep: React.FC = () => {
   return (
-    <MintCardContainer>
-      <MintCardHeader title="Connect Wallet" />
+    <CustomCardContainer>
+      <CustomCardHeader.Default title="Connect Wallet" />
       <Card.Body>
         <Grid css={{ rowGap: '$6' }}>
           <ConnectWalletButton />
@@ -22,6 +26,6 @@ export const WalletStep: React.FC = () => {
           </Card.Text>
         </Grid>
       </Card.Body>
-    </MintCardContainer>
+    </CustomCardContainer>
   );
 };

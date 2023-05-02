@@ -1,5 +1,10 @@
-import { Card, Grid, Stepper } from '@/components';
-import { MintCardContainer, MintCardHeader } from '@/views/mint/mint-card';
+import {
+  Card,
+  CustomCardContainer,
+  CustomCardHeader,
+  Grid,
+  Stepper,
+} from '@/components';
 
 import { GithubButton } from './github-button';
 
@@ -7,8 +12,8 @@ export const GithubConnect: React.FC = () => {
   const { prevStep } = Stepper.useContext();
 
   return (
-    <MintCardContainer>
-      <MintCardHeader title="Connect GitHub" onClickBack={prevStep} />
+    <CustomCardContainer>
+      <CustomCardHeader.Default title="Connect GitHub" onClickBack={prevStep} />
       <Card.Body>
         <Grid css={{ rowGap: '$6' }}>
           <GithubButton />
@@ -26,6 +31,6 @@ export const GithubConnect: React.FC = () => {
           </Card.Text>
         </Grid>
       </Card.Body>
-    </MintCardContainer>
+    </CustomCardContainer>
   );
 };

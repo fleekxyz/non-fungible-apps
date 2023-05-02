@@ -1,7 +1,7 @@
 import { Card, Flex } from '@/components';
 import { styled } from '@/theme';
 
-export const MintCardStyles = {
+export const CustomCardStyles = {
   Container: styled(Card.Container, {
     maxWidth: '$107h',
   }),

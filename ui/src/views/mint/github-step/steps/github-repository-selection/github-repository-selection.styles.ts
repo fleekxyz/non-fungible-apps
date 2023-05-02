@@ -1,14 +1,19 @@
-import { Card, Flex, Icon } from '@/components';
+import {
+  Card,
+  CustomCardContainer,
+  CustomCardHeader,
+  Flex,
+  Icon,
+} from '@/components';
 import { styled } from '@/theme';
-import { MintCardContainer, MintCardHeader } from '@/views/mint/mint-card';
 
 export const GithubRepositorySelectionStyles = {
   Card: {
-    Wrapper: styled(MintCardContainer, {
+    Wrapper: styled(CustomCardContainer, {
       maxHeight: '$95h',
       pr: '$3h',
     }),
-    Header: styled(MintCardHeader, {
+    Header: styled(CustomCardHeader.Default, {
       pr: '$3h',
     }),
     Body: styled(Card.Body, {

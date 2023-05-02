@@ -1,7 +1,6 @@
 /* eslint-disable react/display-name */
 import React, { forwardRef } from 'react';
 
-import { Flex } from '../layout';
 import { CardStyles } from './card.styles';
 
 export abstract class Card {
@@ -18,15 +17,9 @@ export abstract class Card {
   static readonly Header = forwardRef<HTMLHeadingElement, Card.HeadingProps>(
     ({ children, ...props }, ref) => {
       return (
-        // <Flex css={{ justifyContent: 'space-between', ...css }}>
-        //   <Flex>
-        //     {leftIcon}
         <CardStyles.Header ref={ref} {...props}>
           {children}
         </CardStyles.Header>
-        //   </Flex>
-        //   {rightIcon}
-        // </Flex>
       );
     }
   );
