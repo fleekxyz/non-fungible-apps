@@ -1,4 +1,4 @@
-import { log, ethereum, BigInt } from '@graphprotocol/graph-ts';
+import { log, ethereum, BigInt, Address } from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]
 import { Initialized as InitializedEvent } from '../generated/FleekNFA/FleekNFA';
@@ -15,7 +15,7 @@ export function handleInitialized(event: InitializedEvent): void {
     ]);
 
     // start collection entity
-    const collection = new Collection(event.address.toHexString());
+    const collection = new Collection(event.address);
     collection.totalTokens = BigInt.fromU32(0);
     collection.save();
 
