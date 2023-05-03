@@ -1,4 +1,4 @@
-import { Button, Card, Grid } from '@/components';
+import { Button, Card, Grid, Text } from '@/components';
 import { NFAPreview } from '@/components';
 
 import { useMintFormContext } from '../nfa-step/form-step';
@@ -50,7 +50,7 @@ export const NftCard: React.FC<NftCardProps> = ({
         name={appName}
         ens={ens}
         size={size}
-        className="rounded-t-xhl"
+        css={{ bt: '$xlh' }}
       />
       <Card.Body css={{ p: '$7' }}>
         <Grid css={{ rowGap: '$6' }}>
@@ -59,7 +59,7 @@ export const NftCard: React.FC<NftCardProps> = ({
             leftIcon={leftIcon}
             rightIcon={rightIcon}
           />
-          <span className="text-slate11 text-sm">{message}</span>
+          <Text css={{ color: '$slate11', fontSize: '$sm' }}>{message}</Text>
           <Button
             colorScheme="blue"
             variant="solid"

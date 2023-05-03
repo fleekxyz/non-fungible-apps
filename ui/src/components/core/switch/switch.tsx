@@ -1,5 +1,7 @@
-import { Switch as SwitchComponent } from '@headlessui/react';
+import { Switch as SwitchHeadless } from '@headlessui/react';
 import React from 'react';
+
+import { SwitchStyles as S } from './switch.styles';
 
 type SwitchProps = {
   checked: boolean;
@@ -7,25 +9,13 @@ type SwitchProps = {
 };
 
 export const Switch: React.FC<SwitchProps> = ({ checked, onChange }) => (
-  <SwitchComponent
+  <SwitchHeadless
+    as={S.Wrapper}
     checked={checked}
     onChange={onChange}
-    className={`${checked ? 'bg-green4' : 'bg-red4'}
-          relative inline-flex h-[32px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+    isChecked={checked}
   >
-    <span
-      className={`absolute top-1 ${
-        checked ? 'right-3 text-green11' : 'text-red11 left-4'
-      }`}
-    >
-      {checked ? 'Yes' : 'No'}
-    </span>
-    <span
-      aria-hidden="true"
-      className={`${
-        checked ? 'bg-green11 translate-x-0' : 'bg-red11 translate-x-[2.625rem]'
-      }
-            absolute top-1 left-1 pointer-events-none inline-block h-[20px] w-[20px] transform rounded-full shadow-lg ring-0 transition duration-200 ease-in-out`}
-    />
-  </SwitchComponent>
+    <S.Text checked={checked}>{checked ? 'Yes' : 'No'}</S.Text>
+    <S.Dot checked={checked} />
+  </SwitchHeadless>
 );

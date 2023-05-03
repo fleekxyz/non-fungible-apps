@@ -3,7 +3,9 @@
 import ColorThief from 'colorthief';
 import { useRef } from 'react';
 
-import { Button, Card, Flex, Icon } from '@/components';
+import { Button, Card, Flex, Icon, Text } from '@/components';
+
+import { ColorPickerStyles as CS } from './color-picker.styles';
 
 export type ColorPickerProps = {
   logoColor: string;
@@ -38,9 +40,9 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 
   return (
     <Card.Text css={{ height: '$22', mt: '$6' }}>
-      <div className="relative">
-        <Flex css={{ gap: '$3h', alignItems: 'center' }}>
-          <span>Primary Color</span>
+      <CS.Container>
+        <Flex>
+          <Text>Primary Color</Text>
           <Button
             leftIcon={
               <Icon name="square" css={{ color: `${logoColor || '$black'}` }} />
@@ -60,18 +62,16 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
           >
             {logoColor.toUpperCase() || '#000000'}
           </Button>
-          <input
+          <CS.Input
             ref={inputColorRef}
-            className="absolute right-16 h-5"
             type="color"
             value={logoColor}
             onChange={handleColorChange}
           />
         </Flex>
-      </div>
+      </CS.Container>
 
-      <img
-        className="hidden"
+      <CS.Image
         src={logo}
         ref={imageRef}
         onLoad={handleLogoLoad}
