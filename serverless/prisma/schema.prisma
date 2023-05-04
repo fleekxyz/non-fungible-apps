@@ -16,9 +16,10 @@ model builds {
 }
 
 model tokens {
-  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
   commitHash       String
   githubRepository String
   owner            String
   tokenId          Int
+  verified         Boolean
 }
