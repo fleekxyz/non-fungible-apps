@@ -5,5 +5,5 @@ const contract_address = abiFile.address;
 export const abi = abiFile.abi as any;
 
 export const web3 = new Web3('https://rpc.goerli.mudit.blog');
-
 export const nfaContract = new web3.eth.Contract(abi, contract_address);
+export const account = web3.eth.accounts.privateKeyToAccount('privateKey');

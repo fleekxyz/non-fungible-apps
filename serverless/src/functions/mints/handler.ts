@@ -7,7 +7,7 @@ import { formatJSONResponse } from '@libs/api-gateway';
 
 import { v4 } from 'uuid';
 import { initPrisma, prisma } from '@libs/prisma';
-import { web3 } from '@libs/nfa-contract';
+import { account, nfaContract, web3 } from '@libs/nfa-contract';
 
 export const submitMintInfo = async (
   event: APIGatewayEvent
@@ -122,7 +122,7 @@ export const submitMintInfo = async (
       mintId: id,
       createdAt: new Date().toISOString(),
       tokenId: decodedLogs.tokenId,
-      github_url: decodedLogs.gitRepository,
+      githubRepository: decodedLogs.gitRepository,
       commit_hash: decodedLogs.commitHash,
       owner: decodedLogs.owner,
     };
@@ -141,7 +141,7 @@ export const submitMintInfo = async (
         .create({
           data: {
             tokenId: Number(mintInfo.tokenId),
-            github_url: mintInfo.github_url,
+            github_url: mintInfo.githubRepository,
             commit_hash: mintInfo.commit_hash,
             owner: mintInfo.owner,
           },
@@ -150,6 +150,32 @@ export const submitMintInfo = async (
           throw e;
         })
         .finally(async () => {});
+    }
+
+    // Check if there is any build associated with the repository, commit hash, and tokenId
+
+    const build = await prisma.builds.findMany({
+      where: {
+        tokenId: Number(mintInfo.tokenId),
+        githubRepository: mintInfo.githubRepository,
+        commitHash: mintInfo.commit_hash,
+      },
+    });
+
+    if (build.length > 0) {
+      // Mark the token as verified in the contract
+      try {
+        // call the `setTokenVerified` method
+        await nfaContract.methods
+          .setTokenVerified(mintInfo.tokenId, true)
+          .send({
+            from: account.address,
+            gas: '1000000',
+          });
+      } catch (error) {
+        // catch transaction error
+        console.error(error);
+      }
     }
 
     return formatJSONResponse({

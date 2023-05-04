@@ -7,10 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model builds {
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  commitHash       String
+  githubRepository String
+  ipfsHash         String
+  tokenId          Int
+}
+
 model tokens {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  commit_hash String
-  github_url  String
-  owner       String
-  tokenId     Int
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  commitHash       String
+  githubRepository String
+  owner            String
+  tokenId          Int
 }
