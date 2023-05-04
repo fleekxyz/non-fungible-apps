@@ -37,6 +37,22 @@ To deploy to development environment:
 To deploy to production environment:
 `yarn sls deploy --stage prd`
 
+### Running MongoDB
+
+The first step to run MongoDB is making sure the service is installed on the machine locally. You can check the [official MongoDB website](https://www.mongodb.com/docs/manual/installation/#mongodb-installation-tutorials) for more information on the installation process.
+
+To process database transactions such as `create` calls, Prisma needs the MongoDB instance to be running as a replica set. Run the commands below to start a replica set with `mongod` and `mongosh`:
+
+```
+// You should replace the dbpath with the actual path on your machine and assign a name to your replica set. (Default path on linux is: /var/lib/mongodb)
+// Do not close the terminal tab after running mongod.
+$ sudo mongod --port 27017 --dbpath /path/to/db --replSet replicaName --bind_ip localhost,127.0.0.1
+// Start a mongosh session and run the replica set initiation command in the mongo shell.
+$ mongosh
+    > rs.initiate()
+```
+
+Make sure you copy the connection string that is presented in the `Connecting to` field when the mongosh service starts to run. We need the connection string to access the replica set. Rename the `.env.example` file to `.env` and replace the connection string placeholder in the file with the one you copied.
 
 ### Prisma configuration
 
