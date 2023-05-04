@@ -1,4 +1,4 @@
-import { Flex, Icon, Input } from '@/components';
+import { Flex, Icon } from '@/components';
 import { styled } from '@/theme';
 
 export const NFASearchFragmentStyles = {
