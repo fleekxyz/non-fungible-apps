@@ -33,22 +33,16 @@ const getBuildData = async (contractName) => {
   };
 };
 
-const deployStore = async (network, contractName, contract) => {
+const deployStore = async (network, contractName, contract, isProxy = true) => {
   const filePath = getDeployFilePath(network, contractName);
 
   const { buildId, solcInput, abi, bytecode, metadata, storageLayout } =
     await getBuildData(contractName);
 
-  const implementationAddress = await getImplementationAddress(
-    hre.network.provider,
-    contract.address
-  );
-
   const data = {
     buildId,
     timestamp: new Date().toLocaleString('en-US'),
     address: contract.address,
-    implementationAddress,
     transactionHash: contract.deployTransaction.hash,
     args: contract.deployTransaction.args,
     gasPrice: contract.deployTransaction.gasPrice.toNumber(),
@@ -57,6 +51,14 @@ const deployStore = async (network, contractName, contract) => {
     metadata,
     storageLayout,
   };
+
+  if (isProxy) {
+    const implementationAddress = await getImplementationAddress(
+      hre.network.provider,
+      contract.address
+    );
+    data.implementationAddress = implementationAddress;
+  }
 
   try {
     const solcInputsFilePath =

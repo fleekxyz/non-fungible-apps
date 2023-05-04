@@ -92,16 +92,8 @@ export function handleNewMint(event: NewMintEvent): void {
     repository = new GitRepository(gitRepository);
   }
 
-  let repositoryTokens = repository.tokens;
-  if (repositoryTokens === null) {
-    repositoryTokens = [token.id];
-  } else {
-    repositoryTokens.push(token.id);
-  }
-  repository.tokens = repositoryTokens;
-
   // Increase total tokens counter
-  const collection = Collection.load(event.address.toHexString());
+  const collection = Collection.load(event.address);
   if (collection) {
     collection.totalTokens = collection.totalTokens.plus(BigInt.fromU32(1));
     collection.save();

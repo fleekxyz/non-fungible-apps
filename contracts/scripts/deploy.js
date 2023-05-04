@@ -25,7 +25,7 @@ const libraryDeployment = async (hre) => {
     const libContract = await hre.ethers.getContractFactory(lib);
     const libInstance = await libContract.deploy();
     await libInstance.deployed();
-    deployStore(hre.network.name, lib, libInstance);
+    await deployStore(hre.network.name, lib, libInstance, false);
     console.log(`Library "${lib}" deployed at ${libInstance.address}`);
     libraries[lib] = libInstance.address;
   }
@@ -70,7 +70,6 @@ module.exports = async (taskArgs, hre) => {
       `Contract ${CONTRACT_NAME} upgraded at "${deployResult.address}" by account "${deployResult.signer.address}"`
     );
     console.log('\x1b[0m');
-    await deployStore(network, CONTRACT_NAME, deployResult);
   } catch (e) {
     if (
       e.message === 'new-proxy-instance' ||

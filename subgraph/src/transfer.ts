@@ -1,10 +1,10 @@
-import { Bytes, log, store } from '@graphprotocol/graph-ts';
+import { BigInt, Bytes, log, store } from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]
 import { Transfer as TransferEvent } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
-import { Owner, Token, Transfer } from '../generated/schema';
+import { Collection, Owner, Token, Transfer } from '../generated/schema';
 
 export function handleTransfer(event: TransferEvent): void {
   const transfer = new Transfer(
@@ -39,6 +39,14 @@ export function handleTransfer(event: TransferEvent): void {
       // Remove the entity from storage
       // Its controllers and owner will be affected.
       store.remove('Token', TokenId.toString());
+      // decrement the collection entity's token count
+      const collection = Collection.load(event.address);
+      if (collection) {
+        collection.totalTokens = collection.totalTokens.minus(
+          BigInt.fromU32(1)
+        );
+        collection.save();
+      }
     } else {
       // Transfer
       // Load the Token by using its TokenId
