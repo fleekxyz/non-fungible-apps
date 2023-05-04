@@ -80,6 +80,12 @@ export const submitMintInfo = async (
         {
           indexed: false,
           internalType: 'string',
+          name: 'ipfsHash',
+          type: 'string',
+        },
+        {
+          indexed: false,
+          internalType: 'string',
           name: 'logo',
           type: 'string',
         },
@@ -125,17 +131,20 @@ export const submitMintInfo = async (
       githubRepository: decodedLogs.gitRepository,
       commit_hash: decodedLogs.commitHash,
       owner: decodedLogs.owner,
+      ipfsHash: decodedLogs.ipfsHash,
+      domain: decodedLogs.externalURL,
     };
 
     initPrisma();
 
-    // Check if there is any build associated with the repository, commit hash, and tokenId
+    // Check if there is any build associated with the repository, commit hash, tokenId, and ipfsHash
 
     const build = await prisma.builds.findMany({
       where: {
-        tokenId: Number(mintInfo.tokenId),
         githubRepository: mintInfo.githubRepository,
         commitHash: mintInfo.commit_hash,
+        ipfsHash: mintInfo.ipfsHash,
+        domain: mintInfo.domain,
       },
     });
 
@@ -174,7 +183,9 @@ export const submitMintInfo = async (
             githubRepository: mintInfo.githubRepository,
             commitHash: mintInfo.commit_hash,
             owner: mintInfo.owner,
+            ipfsHash: mintInfo.ipfsHash,
             verified: verified,
+            domain: mintInfo.domain,
           },
         })
         .catch((e) => {

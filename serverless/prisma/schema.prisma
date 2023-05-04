@@ -10,15 +10,17 @@ datasource db {
 model builds {
   id               String @id @default(auto()) @map("_id") @db.ObjectId
   commitHash       String
+  domain           String
   githubRepository String
   ipfsHash         String
-  tokenId          Int
 }
 
 model tokens {
   id               String  @id @default(auto()) @map("_id") @db.ObjectId
   commitHash       String
+  domain           String
   githubRepository String
+  ipfsHash         String
   owner            String
   tokenId          Int
   verified         Boolean

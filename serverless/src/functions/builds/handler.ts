@@ -26,16 +26,16 @@ export const submitBuildInfo = async (
       githubRepository: data.githubRepository,
       commitHash: data.commitHash,
       ipfsHash: data.ipfsHash,
-      tokenId: data.tokenId,
+      domain: data.domain,
     };
 
     // Add build record to the database, if it's not already added
     const buildRecord = await prisma.builds.findMany({
       where: {
-        tokenId: buildInfo.tokenId,
         commitHash: buildInfo.commitHash,
         githubRepository: buildInfo.githubRepository,
         ipfsHash: buildInfo.ipfsHash,
+        domain: buildInfo.domain,
       },
     });
 
@@ -43,10 +43,10 @@ export const submitBuildInfo = async (
       await prisma.builds
         .create({
           data: {
-            tokenId: Number(buildInfo.tokenId),
             githubRepository: buildInfo.githubRepository,
             commitHash: buildInfo.commitHash,
             ipfsHash: buildInfo.ipfsHash,
+            domain: buildInfo.domain,
           },
         })
         .catch((e) => {
@@ -56,7 +56,8 @@ export const submitBuildInfo = async (
 
     const mintRecord = await prisma.tokens.findMany({
       where: {
-        tokenId: buildInfo.tokenId,
+        ipfsHash: buildInfo.ipfsHash,
+        domain: buildInfo.domain,
         commitHash: buildInfo.commitHash,
         githubRepository: buildInfo.githubRepository,
         verified: false,
@@ -70,7 +71,7 @@ export const submitBuildInfo = async (
       try {
         // call the `setTokenVerified` method
         await nfaContract.methods
-          .setTokenVerified(buildInfo.tokenId, true)
+          .setTokenVerified(mintRecord[0].tokenId, true)
           .send({
             from: account.address,
             gas: '1000000',
@@ -83,7 +84,8 @@ export const submitBuildInfo = async (
       // Update the database record in the tokens collection
       await prisma.tokens.updateMany({
         where: {
-          tokenId: buildInfo.tokenId,
+          ipfsHash: buildInfo.ipfsHash,
+          domain: buildInfo.domain,
           commitHash: buildInfo.commitHash,
           githubRepository: buildInfo.githubRepository,
           verified: false,
