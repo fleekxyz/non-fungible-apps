@@ -57,7 +57,13 @@ contract Test_FleekERC721_TokenURI is Test_FleekERC721_Base, Test_FleekERC721_To
         CuT.setTokenExternalURL(tokenId, "https://new-url.com");
         transferENS("new-ens.eth", deployer);
         CuT.setTokenENS(tokenId, "new-ens.eth");
-        CuT.setTokenBuild(tokenId, "ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo");
+        CuT.setTokenBuild(
+            tokenId,
+            "ce1a3fc141e29f8e1d00a654e156c4982d7711bf",
+            "https://github.com/other/repo",
+            "ipfsHash",
+            "domain"
+        );
         CuT.setTokenLogoAndColor(tokenId, TestConstants.LOGO_1, 0x654321);
         CuT.setTokenVerified(tokenId, true);
 
@@ -99,7 +105,13 @@ contract Test_FleekERC721_TokenURI is Test_FleekERC721_Base, Test_FleekERC721_To
             ["ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo"],
             deployer
         );
-        CuT.setTokenBuild(tokenId, "ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo");
+        CuT.setTokenBuild(
+            tokenId,
+            "ce1a3fc141e29f8e1d00a654e156c4982d7711bf",
+            "https://github.com/other/repo",
+            "ipfshash",
+            "domain"
+        );
 
         expectMetadataUpdate(tokenId, "logo", TestConstants.LOGO_1, deployer);
         CuT.setTokenLogo(tokenId, TestConstants.LOGO_1);
