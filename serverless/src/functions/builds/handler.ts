@@ -29,20 +29,30 @@ export const submitBuildInfo = async (
       tokenId: data.tokenId,
     };
 
-    // Add build record to the database
-    await prisma.builds
-      .create({
-        data: {
-          tokenId: Number(buildInfo.tokenId),
-          githubRepository: buildInfo.githubRepository,
-          commitHash: buildInfo.commitHash,
-          ipfsHash: buildInfo.ipfsHash,
-        },
-      })
-      .catch((e) => {
-        throw e;
-      })
-      .finally(async () => {});
+    // Add build record to the database, if it's not already added
+    const buildRecord = await prisma.builds.findMany({
+      where: {
+        tokenId: buildInfo.tokenId,
+        commitHash: buildInfo.commitHash,
+        githubRepository: buildInfo.githubRepository,
+        ipfsHash: buildInfo.ipfsHash,
+      },
+    });
+
+    if (buildRecord.length == 0) {
+      await prisma.builds
+        .create({
+          data: {
+            tokenId: Number(buildInfo.tokenId),
+            githubRepository: buildInfo.githubRepository,
+            commitHash: buildInfo.commitHash,
+            ipfsHash: buildInfo.ipfsHash,
+          },
+        })
+        .catch((e) => {
+          throw e;
+        });
+    }
 
     const mintRecord = await prisma.tokens.findMany({
       where: {
@@ -55,6 +65,7 @@ export const submitBuildInfo = async (
 
     if (mintRecord.length > 0) {
       // Trigger verification
+
       // Mark the token as verified in the contract
       try {
         // call the `setTokenVerified` method
@@ -68,6 +79,19 @@ export const submitBuildInfo = async (
         // catch transaction error
         console.error(error);
       }
+
+      // Update the database record in the tokens collection
+      await prisma.tokens.updateMany({
+        where: {
+          tokenId: buildInfo.tokenId,
+          commitHash: buildInfo.commitHash,
+          githubRepository: buildInfo.githubRepository,
+          verified: false,
+        },
+        data: {
+          verified: true,
+        },
+      });
     }
 
     return formatJSONResponse({

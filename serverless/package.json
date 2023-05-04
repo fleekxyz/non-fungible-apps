@@ -7,7 +7,8 @@
     "build": "yarn tsc",
     "invoke:build": "yarn build && serverless invoke local --function submitBuildInfo",
     "prisma:generate": "npx prisma generate",
-    "prisma:pull": "npx prisma db pull"
+    "prisma:pull": "npx prisma db pull --force",
+    "start": "serverless offline"
   },
   "author": "fleek",
   "license": "MIT",
