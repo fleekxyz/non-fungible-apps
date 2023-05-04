@@ -102,7 +102,7 @@ contract Test_FleekERC721_TokenURI is Test_FleekERC721_Base, Test_FleekERC721_To
         expectMetadataUpdate(
             tokenId,
             "build",
-            ["ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo"],
+            ["ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo", "ipfshash", "domain"],
             deployer
         );
         CuT.setTokenBuild(
