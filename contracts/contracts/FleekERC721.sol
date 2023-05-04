@@ -39,6 +39,7 @@ contract FleekERC721 is
         string ENS,
         string commitHash,
         string gitRepository,
+        string ipfsHash,
         string logo,
         uint24 color,
         bool accessPointAutoApproval,
@@ -108,6 +109,7 @@ contract FleekERC721 is
         string calldata ens,
         string memory commitHash,
         string memory gitRepository,
+        string memory ipfsHash,
         string memory logo,
         uint24 color,
         bool accessPointAutoApproval,
@@ -131,7 +133,7 @@ contract FleekERC721 is
 
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
-        app.builds[0] = Build(commitHash, gitRepository);
+        app.builds[0] = Build(commitHash, gitRepository, ipfsHash, externalURL);
 
         emit NewMint(
             tokenId,
@@ -141,6 +143,7 @@ contract FleekERC721 is
             ens,
             commitHash,
             gitRepository,
+            ipfsHash,
             logo,
             color,
             accessPointAutoApproval,
@@ -396,11 +399,13 @@ contract FleekERC721 is
     function setTokenBuild(
         uint256 tokenId,
         string memory _commitHash,
-        string memory _gitRepository
+        string memory _gitRepository,
+        string memory _ipfsHash,
+        string memory _domain
     ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
-        _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(_commitHash, _gitRepository);
-        emit MetadataUpdate(tokenId, "build", [_commitHash, _gitRepository], msg.sender);
+        _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(_commitHash, _gitRepository, _ipfsHash, _domain);
+        emit MetadataUpdate(tokenId, "build", [_commitHash, _gitRepository, _ipfsHash, _domain], msg.sender);
     }
 
     /**
