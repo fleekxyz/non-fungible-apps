@@ -129,29 +129,6 @@ export const submitMintInfo = async (
 
     initPrisma();
 
-    const token = await prisma.tokens.findMany({
-      where: {
-        tokenId: Number(mintInfo.tokenId),
-      },
-    });
-
-    if (token.length == 0) {
-      // Add the token to the database
-      await prisma.tokens
-        .create({
-          data: {
-            tokenId: Number(mintInfo.tokenId),
-            github_url: mintInfo.githubRepository,
-            commit_hash: mintInfo.commit_hash,
-            owner: mintInfo.owner,
-          },
-        })
-        .catch((e) => {
-          throw e;
-        })
-        .finally(async () => {});
-    }
-
     // Check if there is any build associated with the repository, commit hash, and tokenId
 
     const build = await prisma.builds.findMany({
@@ -161,6 +138,8 @@ export const submitMintInfo = async (
         commitHash: mintInfo.commit_hash,
       },
     });
+
+    let verified = false;
 
     if (build.length > 0) {
       // Mark the token as verified in the contract
@@ -172,10 +151,35 @@ export const submitMintInfo = async (
             from: account.address,
             gas: '1000000',
           });
+        verified = true;
       } catch (error) {
         // catch transaction error
         console.error(error);
       }
+    }
+
+    // Add the record to the database
+
+    const token = await prisma.tokens.findMany({
+      where: {
+        tokenId: Number(mintInfo.tokenId),
+      },
+    });
+
+    if (token.length == 0) {
+      await prisma.tokens
+        .create({
+          data: {
+            tokenId: Number(mintInfo.tokenId),
+            githubRepository: mintInfo.githubRepository,
+            commitHash: mintInfo.commit_hash,
+            owner: mintInfo.owner,
+            verified: verified,
+          },
+        })
+        .catch((e) => {
+          throw e;
+        });
     }
 
     return formatJSONResponse({
