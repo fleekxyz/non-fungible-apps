@@ -405,6 +405,7 @@ contract FleekERC721 is
     ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
         _requireMinted(tokenId);
         _apps[tokenId].builds[++_apps[tokenId].currentBuild] = Build(_commitHash, _gitRepository, _ipfsHash, _domain);
+        // Note from Nima: should we update the externalURL field with each new domain?
         emit MetadataUpdate(tokenId, "build", [_commitHash, _gitRepository, _ipfsHash, _domain], msg.sender);
     }
 

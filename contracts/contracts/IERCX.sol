@@ -24,7 +24,6 @@ interface IERCX {
      */
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
-    event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, string[4] value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, bool value, address indexed triggeredBy);
 
