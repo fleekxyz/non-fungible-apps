@@ -6,7 +6,7 @@ import {
 import { formatJSONResponse } from '@libs/api-gateway';
 
 import { v4 } from 'uuid';
-import { initPrisma, prisma } from '@libs/query-prisma';
+import { initPrisma, prisma } from '@libs/prisma';
 import { web3 } from '@libs/nfa-contract';
 
 export const submitMintInfo = async (
@@ -25,13 +25,13 @@ export const submitMintInfo = async (
     /**if (!verifyAlchemySig(event.headers.xalchemywork)) {
         throw new Error('Invalid sig');
       }**/
+
     let topics = [
       JSON.parse(event.body).event.data.block.logs[1].topics[1],
       JSON.parse(event.body).event.data.block.logs[1].topics[2],
       JSON.parse(event.body).event.data.block.logs[1].topics[3],
     ];
     const hexCalldata = JSON.parse(event.body).event.data.block.logs[1].data;
-    console.log(hexCalldata);
 
     const decodedLogs = web3.eth.abi.decodeLog(
       [
@@ -122,31 +122,34 @@ export const submitMintInfo = async (
       mintId: id,
       createdAt: new Date().toISOString(),
       tokenId: decodedLogs.tokenId,
-      github_url: decodedLogs.githubRepository,
+      github_url: decodedLogs.gitRepository,
       commit_hash: decodedLogs.commitHash,
       owner: decodedLogs.owner,
     };
 
-    console.log(mintInfo);
-
     initPrisma();
 
-    const token = await prisma.tokens.findRaw({
-      filter: {
-        tokenId: mintInfo.tokenId,
+    const token = await prisma.tokens.findMany({
+      where: {
+        tokenId: Number(mintInfo.tokenId),
       },
     });
 
     if (token.length == 0) {
       // Add the token to the database
-      // await prisma.tokens.create({
-      //   data: {
-      //     tokenId: Number(mintInfo.tokenId),
-      //     github_url: mintInfo.github_url,
-      //     commit_hash: mintInfo.commit_hash,
-      //     owner: mintInfo.owner,
-      //   },
-      // });
+      await prisma.tokens
+        .create({
+          data: {
+            tokenId: Number(mintInfo.tokenId),
+            github_url: mintInfo.github_url,
+            commit_hash: mintInfo.commit_hash,
+            owner: mintInfo.owner,
+          },
+        })
+        .catch((e) => {
+          throw e;
+        })
+        .finally(async () => {});
     }
 
     return formatJSONResponse({

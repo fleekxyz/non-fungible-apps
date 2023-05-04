@@ -8,11 +8,11 @@ export async function initPrisma() {
 }
 
 initPrisma()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
   .catch(async (e) => {
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);
+  })
+  .finally(() => {
+    prisma.$disconnect();
   });
