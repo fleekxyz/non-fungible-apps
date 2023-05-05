@@ -10,6 +10,5 @@ export const parseColorToNumber = (color: string): number => {
  * Converts string number to hex color string.
  */
 export const parseNumberToHexColor = (color: number): string => {
-  const hexColor = color.toString(16);
-  return hexColor;
+  return `${`000000${color.toString(16)}`.slice(-6)}`;
 };

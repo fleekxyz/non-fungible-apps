@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button, Flex, Icon, NFAPreview } from '@/components';
+import { parseNumberToHexColor } from '@/utils/color';
 
 import { IndexedNFA } from '../indexed-nfa.context';
 import { IndexedNFAStyles as S } from '../indexed-nfa.styles';
@@ -10,8 +11,7 @@ const Preview: React.FC = () => {
   const { nfa } = IndexedNFA.useContext();
 
   const color = useMemo(
-    // TODO: replace with util function
-    () => `#${`000000${nfa.color.toString(16)}`.slice(-6)}`,
+    () => `#${parseNumberToHexColor(nfa.color ?? '')}`,
     [nfa]
   );
 

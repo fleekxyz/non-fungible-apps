@@ -1,10 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { ethers } from 'ethers';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { App } from '@/app.context';
 import { getNFADocument } from '@/graphclient';
 import { NFAMock } from '@/mocks';
 import { AppLog } from '@/utils';
+import { parseNumberToHexColor } from '@/utils/color';
 
 import {
   IndexedNFAAsideFragment,
@@ -16,7 +19,14 @@ import { IndexedNFAStyles as S } from './indexed-nfa.styles';
 
 export const IndexedNFAView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { setBackgroundColor } = App.useContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    return () => {
+      setBackgroundColor('000000');
+    };
+  }, [setBackgroundColor]);
 
   const handleError = (error: unknown): void => {
     AppLog.errorToast(
@@ -33,6 +43,8 @@ export const IndexedNFAView: React.FC = () => {
     },
     onCompleted(data) {
       if (!data.token) handleError(new Error('Token not found'));
+      if (data.token?.color)
+        setBackgroundColor(parseNumberToHexColor(data.token.color));
     },
     onError(error) {
       handleError(error);
