@@ -1,7 +1,7 @@
-import { Skeleton } from '@/components';
+import { Button, Flex, Skeleton, Text } from '@/components';
 import { styled } from '@/theme';
 
-const Spacing = '$5';
+const Spacing = '$6';
 
 export const IndexedNFAStyles = {
   Grid: styled('div', {
@@ -32,34 +32,108 @@ export const IndexedNFAStyles = {
       gap: Spacing,
       height: 'fit-content',
 
+      borderRadius: '$lg',
+      padding: Spacing,
+      maxWidth: '24rem',
+
       '@media (max-width: 580px)': {
         position: 'static',
       },
     }),
+    Header: {
+      Wrapper: styled(Flex, {
+        flexDirection: 'column',
+        gap: '$2h',
+        color: '$slate12',
+      }),
+      Container: styled(Flex, {
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }),
+      Header: styled('h1', {
+        fontSize: '2.125rem',
+        lineHeight: 1.35,
+        fontWeight: 700,
 
-    CreateAccessPoint: {
+        // maxWidth: '10rem',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+      }),
+      Badge: styled('span', {
+        height: 'fit-content',
+        width: 'fit-content',
+        fontSize: '$xs',
+        fontWeight: '$bold',
+        padding: '$0h $2',
+        borderRadius: '$full',
+        backgroundColor: '#131313',
+        display: 'flex',
+        gap: '$1h',
+
+        variants: {
+          verified: {
+            true: {
+              color: '$green10',
+            },
+            false: {
+              color: '$red10',
+            },
+          },
+        },
+      }),
+    },
+    Divider: {
+      Line: styled('span', {
+        width: '100%',
+        borderBottom: '1px solid $slate6',
+      }),
+      Elipse: styled('span', {
+        width: '0.375rem',
+        height: '0.375rem',
+        backgroundColor: '$slate8',
+        borderRadius: '100%',
+      }),
+    },
+    Button: {
+      Container: styled(Flex, {
+        gap: '$3',
+        fontSize: '16px',
+
+        [`${Button}`]: {
+          borderRadius: '0.375rem',
+        },
+      }),
+    },
+    Overview: {
       Container: styled('div', {
         display: 'flex',
         flexDirection: 'column',
-        gap: Spacing,
-        padding: Spacing,
-        backgroundColor: '$blue1',
+        backgroundColor: '$slate4',
         borderRadius: '$lg',
+        fontSize: '14px',
       }),
-      Heading: styled('h2', {
-        fontSize: '$md',
-        color: '$slate12',
-      }),
-      Text: styled('p', {
-        fontSize: '$sm',
+      Row: {
+        Container: styled(Flex, {
+          justifyContent: 'space-between',
+        }),
+        Label: styled(Text, {
+          color: '$slate11',
+        }),
+        Value: styled(Text, {
+          fontWeight: '$bold',
+        }),
+      },
+      Description: styled('p', {
         color: '$slate11',
       }),
-      Extra: styled('a', {
+    },
+    Properties: {
+      Container: styled('div', {
         display: 'flex',
-        alignItems: 'center',
-        color: '$slate11',
-        fontSize: '$sm',
-        gap: '$2',
+        flexDirection: 'column',
+        gap: '$1',
+        padding: '$2h $4',
       }),
     },
   },
@@ -90,7 +164,7 @@ export const IndexedNFAStyles = {
       Elipse: styled('span', {
         width: '0.375rem',
         height: '0.375rem',
-        backgroundColor: '$slate4',
+        backgroundColor: '$slate11',
         borderRadius: '100%',
       }),
     },
@@ -150,7 +224,6 @@ export const IndexedNFAStyles = {
         },
       },
     }),
-
     Table: {
       Container: styled('div', {
         border: '1px solid $slate6',
