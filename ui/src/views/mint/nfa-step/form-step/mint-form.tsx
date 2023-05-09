@@ -5,7 +5,7 @@ import {
   Card,
   CustomCardContainer,
   CustomCardHeader,
-  Grid,
+  Flex,
   Stepper,
 } from '@/components';
 import { AppLog } from '@/utils';
@@ -90,17 +90,18 @@ export const MintFormStep: React.FC = () => {
         onClickBack={handlePrevStep}
       />
       <Card.Body>
-        <Grid
+        <Flex
           css={{
-            rowGap: '$6',
+            gap: '$6',
+            flexDirection: 'column',
           }}
         >
-          <Grid css={{ rowGap: '$4' }}>
+          <Flex css={{ gap: '$4', flexDirection: 'column' }}>
             <AppNameField />
             <AppDescriptionField />
             <EnsDomainField />
             <LogoField />
-          </Grid>
+          </Flex>
           <Button
             disabled={!isValid}
             colorScheme="blue"
@@ -109,7 +110,7 @@ export const MintFormStep: React.FC = () => {
           >
             Continue
           </Button>
-        </Grid>
+        </Flex>
       </Card.Body>
     </CustomCardContainer>
   );

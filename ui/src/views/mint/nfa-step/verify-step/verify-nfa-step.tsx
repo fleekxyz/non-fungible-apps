@@ -10,6 +10,7 @@ import {
 
 import { Mint } from '../../mint.context';
 import { useMintFormContext } from '../form-step';
+import { SelectVerifier } from './select-verifier';
 import { VerifyNfaStepStyles as S } from './verify-nfa-step.styles';
 
 export const VerifyNFAStep: React.FC = () => {

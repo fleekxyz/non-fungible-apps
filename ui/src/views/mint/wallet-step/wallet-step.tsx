@@ -2,7 +2,7 @@ import {
   Card,
   CustomCardContainer,
   CustomCardHeader,
-  Grid,
+  Flex,
 } from '@/components';
 
 import { ConnectWalletButton } from './connect-wallet-button';
@@ -12,7 +12,7 @@ export const WalletStep: React.FC = () => {
     <CustomCardContainer>
       <CustomCardHeader.Default title="Connect Wallet" />
       <Card.Body>
-        <Grid css={{ rowGap: '$6' }}>
+        <Flex css={{ gap: '$6', flexDirection: 'column' }}>
           <ConnectWalletButton />
           <Card.Text
             css={{
@@ -24,7 +24,7 @@ export const WalletStep: React.FC = () => {
           >
             <span>Connect with the wallet you want to mint & own the NFA.</span>
           </Card.Text>
-        </Grid>
+        </Flex>
       </Card.Body>
     </CustomCardContainer>
   );
