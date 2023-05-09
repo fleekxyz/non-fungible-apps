@@ -26,12 +26,9 @@ export const submitMintInfo = async (
         throw new Error('Invalid sig');
       }**/
 
-    let topics = [
-      JSON.parse(event.body).event.data.block.logs[1].topics[1],
-      JSON.parse(event.body).event.data.block.logs[1].topics[2],
-      JSON.parse(event.body).event.data.block.logs[1].topics[3],
-    ];
-    const hexCalldata = JSON.parse(event.body).event.data.block.logs[1].data;
+    const eventBody = JSON.parse(event.body);
+    const topics = eventBody.event.data.block.logs[1].slice(1, 3);
+    const hexCalldata = eventBody.event.data.block.logs[1].data;
 
     const decodedLogs = web3.eth.abi.decodeLog(
       [
@@ -176,21 +173,17 @@ export const submitMintInfo = async (
     });
 
     if (token.length == 0) {
-      await prisma.tokens
-        .create({
-          data: {
-            tokenId: Number(mintInfo.tokenId),
-            githubRepository: mintInfo.githubRepository,
-            commitHash: mintInfo.commit_hash,
-            owner: mintInfo.owner,
-            ipfsHash: mintInfo.ipfsHash,
-            verified: verified,
-            domain: mintInfo.domain,
-          },
-        })
-        .catch((e) => {
-          throw e;
-        });
+      await prisma.tokens.create({
+        data: {
+          tokenId: Number(mintInfo.tokenId),
+          githubRepository: mintInfo.githubRepository,
+          commitHash: mintInfo.commit_hash,
+          owner: mintInfo.owner,
+          ipfsHash: mintInfo.ipfsHash,
+          verified: verified,
+          domain: mintInfo.domain,
+        },
+      });
     }
 
     return formatJSONResponse({

@@ -6,7 +6,7 @@ import "./TestBase.sol";
 
 contract Test_FleekERC721_TokenURIAssertions is Test {
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
-    event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, string[4] value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
 
     function expectMetadataUpdate(
@@ -22,7 +22,7 @@ contract Test_FleekERC721_TokenURIAssertions is Test {
     function expectMetadataUpdate(
         uint256 _tokenId,
         string memory key,
-        string[2] memory value,
+        string[4] memory value,
         address triggeredBy
     ) public {
         vm.expectEmit(true, true, true, true);
