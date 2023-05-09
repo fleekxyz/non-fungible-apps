@@ -83,10 +83,10 @@ export const NFASearchFragment: React.FC = () => {
   return (
     <S.Container>
       <S.Data.Wrapper>
-        <S.Data.Text>{totalTokens?.collection && 'All NFAs '}</S.Data.Text>
-        {totalTokens?.collection && (
-          <S.Data.Number>({totalTokens.collection?.totalTokens})</S.Data.Number>
-        )}
+       {totalTokens?.collection && (<>
+          <S.Data.Text>All NFAs&nbsp;</S.Data.Text> 
+          <S.Data.Number>({totalTokens.collection.totalTokens})</S.Data.Number>
+       </>)}
       </S.Data.Wrapper>
 
       <S.Input.Wrapper>
