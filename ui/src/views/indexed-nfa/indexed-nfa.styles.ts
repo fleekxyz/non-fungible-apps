@@ -35,6 +35,7 @@ export const IndexedNFAStyles = {
       borderRadius: '$lg',
       padding: Spacing,
       maxWidth: '24rem',
+      mixBlendMode: 'screen',
 
       '@media (max-width: 580px)': {
         position: 'static',
@@ -109,7 +110,7 @@ export const IndexedNFAStyles = {
       Container: styled('div', {
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '$slate4',
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
         borderRadius: '$lg',
         fontSize: '14px',
       }),

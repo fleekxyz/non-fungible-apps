@@ -16,7 +16,7 @@ import {
 import { env } from '@/constants';
 import { FleekERC721 } from '@/integrations/ethereum/contracts';
 import { forwardStyledRef } from '@/theme';
-import { AppLog } from '@/utils';
+import { AppLog, getDate, getRepositoryFromURL } from '@/utils';
 import { parseNumberToHexColor } from '@/utils/color';
 
 import { IndexedNFA } from '../indexed-nfa.context';
@@ -73,8 +73,7 @@ const Header: React.FC = () => {
     <S.Aside.Header.Wrapper>
       <S.Aside.Header.Container>
         <S.Aside.Header.Header>{nfa.name}</S.Aside.Header.Header>
-        {/* TODO remove once subrgraph integration is merged */}
-        <Badge verified={Math.random() > 0.5} />
+        <Badge verified={nfa.verified} />
       </S.Aside.Header.Container>
 
       <Flex css={{ gap: '$1h' }}>
@@ -110,10 +109,7 @@ const NFAInfo: React.FC = () => {
 
       <S.Aside.Divider.Elipse />
 
-      <HeaderData label="Created">
-        {/* TODO: place correct data */}
-        12/12/22
-      </HeaderData>
+      <HeaderData label="Created">{getDate(nfa.createdAt)}</HeaderData>
     </Flex>
   );
 };
@@ -208,18 +204,17 @@ const ButtonsFragment: React.FC = () => {
 const PropertiesFragment: React.FC = () => {
   const { nfa } = IndexedNFA.useContext();
 
-  //TODO replace with real data
   const traitsToShow = useMemo(() => {
     return [
       [nfa.ENS, 'ENS'],
-      [nfa.gitRepository.id, 'Repository'],
+      [getRepositoryFromURL(nfa.gitRepository.id), 'Repository'],
       [10, 'Version'],
       [nfa.externalURL, 'Domain'],
     ];
   }, [nfa]);
 
   return (
-    <Flex css={{ flexDirection: 'column', gap: '$3' }}>
+    <Flex css={{ flexDirection: 'column', gap: '$3', height: '336px' }}>
       {traitsToShow.map(([value, label], index) => (
         <S.Aside.Overview.Container
           css={{ gap: '$1', p: '$2h $4' }}
@@ -239,7 +234,9 @@ const OverviewFragment: React.FC = () => {
   const { nfa } = IndexedNFA.useContext();
 
   return (
-    <S.Aside.Overview.Container css={{ gap: '$4h', p: '$6' }}>
+    <S.Aside.Overview.Container
+      css={{ gap: '$4h', p: '$5 $6', height: '336px' }}
+    >
       <S.Aside.Overview.Row.Container>
         <S.Aside.Overview.Row.Label>Token ID</S.Aside.Overview.Row.Label>
         <S.Aside.Overview.Row.Value>{nfa.tokenId}</S.Aside.Overview.Row.Value>
@@ -258,7 +255,7 @@ const OverviewFragment: React.FC = () => {
       <S.Aside.Overview.Row.Container>
         <S.Aside.Overview.Row.Label>Description</S.Aside.Overview.Row.Label>
       </S.Aside.Overview.Row.Container>
-      <S.Aside.Overview.Description>
+      <S.Aside.Overview.Description css={{ overflowY: 'scroll' }}>
         {nfa.description}
       </S.Aside.Overview.Description>
     </S.Aside.Overview.Container>
@@ -294,7 +291,7 @@ export const IndexedNFAAsideFragment: React.FC = () => {
   const { nfa } = IndexedNFA.useContext();
 
   const { backgroundColor } = App.useContext();
-  const background = `linear-gradient(230deg, #${backgroundColor} 0%, #181818 80%)`;
+  const background = `radial-gradient(closest-corner circle at 90% 45%, #${backgroundColor}8c 1% ,#${backgroundColor}57 20%, transparent 40%), radial-gradient(closest-corner circle at 60% 25%, #${backgroundColor} 3%, #${backgroundColor}73 30%, #181818 70%)`;
 
   useEffect(() => {
     setTop(ref.current?.getBoundingClientRect().top);
@@ -303,7 +300,7 @@ export const IndexedNFAAsideFragment: React.FC = () => {
   return (
     <S.Aside.Container
       ref={ref}
-      css={{ top, background: background, backdropFilter: 'blur(10px)' }}
+      css={{ top, background, backdropFilter: 'blur(10px)' }}
     >
       <Preview />
       <Header />

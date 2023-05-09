@@ -14,6 +14,7 @@ import {
 import { getDate, getRepositoryFromURL, getTimeSince } from '@/utils';
 
 import { IndexedNFAStyles as S } from '../indexed-nfa.styles';
+import { IndexedNFA } from '../indexed-nfa.context';
 
 type SortItem = {
   value: string;
@@ -205,27 +206,31 @@ const apMocks = new Array(20).fill(0).map((_, index) => ({
 }));
 
 const AccessPointsListFragment: React.FC = () => {
-  //TODO add infinite scroll
+  const {
+    nfa: { accessPoints },
+  } = IndexedNFA.useContext();
 
   return (
     <S.Main.AccessPoint.List>
-      {apMocks.map((item, index) => (
+      {accessPoints.map((item, index) => (
         <S.Main.AccessPoint.Grid key={index}>
           <S.Main.AccessPoint.Thumbnail>
-            <img src={item.thumbnail} />
+            <img src={Rectangle1} />
           </S.Main.AccessPoint.Thumbnail>
           <S.Main.AccessPoint.Data.Container>
-            <S.Main.AccessPoint.Title>{item.domain}</S.Main.AccessPoint.Title>
+            <S.Main.AccessPoint.Title>{item.id}</S.Main.AccessPoint.Title>
             <Flex
               css={{ gap: '$2h', alignItems: 'center', textAlign: 'center' }}
             >
               <Text css={{ color: '$slate11' }}>
-                <ResolvedAddress>{item.owner}</ResolvedAddress>
+                <ResolvedAddress>{item.owner.id}</ResolvedAddress>
               </Text>
               <S.Main.Divider.Elipse />
               <Text css={{ color: '$slate11' }}>220 views</Text>
               <S.Main.Divider.Elipse />
-              <Text css={{ color: '$slate11' }}>2 months ago</Text>
+              <Text css={{ color: '$slate11' }}>
+                {getTimeSince(item.createdAt)}
+              </Text>
             </Flex>
           </S.Main.AccessPoint.Data.Container>
         </S.Main.AccessPoint.Grid>
