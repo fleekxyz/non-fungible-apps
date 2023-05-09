@@ -11,7 +11,6 @@ const Preview: React.FC = () => {
   const { nfa } = IndexedNFA.useContext();
 
   const color = useMemo(
-    // TODO: replace with util function
     () => `#${parseNumberToHexColor(nfa.color)}`,
     [nfa]
   );
