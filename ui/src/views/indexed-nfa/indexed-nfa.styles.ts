@@ -145,8 +145,8 @@ export const IndexedNFAStyles = {
       flexDirection: 'column',
       gap: Spacing,
     }),
-    Heading: styled('h1', {
-      fontSize: '2.125rem',
+    Heading: styled('h2', {
+      fontSize: '1.625rem',
       lineHeight: 1.35,
       fontWeight: 700,
     }),
@@ -156,6 +156,36 @@ export const IndexedNFAStyles = {
       fontWeight: 700,
       marginTop: Spacing,
     }),
+    AccessPoint: {
+      List: styled('div', {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: Spacing,
+      }),
+      Grid: styled('div', {
+        display: 'grid',
+        gridTemplateAreas: '"thumbnail data"',
+        gap: '$4h',
+        alignItems: 'center',
+        gridTemplateColumns: '10rem 1fr',
+      }),
+      Thumbnail: styled('div', {
+        gridArea: 'thumbnail',
+      }),
+      Data: {
+        Container: styled('div', {
+          gridArea: 'data',
+
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '$2',
+        }),
+      },
+      Title: styled('h3', {
+        color: '$slate12',
+        fontSize: '$lg',
+      }),
+    },
     Divider: {
       Line: styled('span', {
         width: '100%',

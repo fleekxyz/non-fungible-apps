@@ -24,6 +24,7 @@ import {
   FleekLogo,
   FleekName,
   MetamaskIcon,
+  OpenseaIcon,
 } from './custom';
 import { Share } from './custom/share-icon';
 
@@ -45,6 +46,7 @@ export const IconLibrary = Object.freeze({
   info: IoInformationCircleSharp,
   menu: FaBars,
   metamask: MetamaskIcon, //remove if not used
+  opensea: OpenseaIcon,
   search: BiSearch,
   square: BsFillSquareFill,
   share: Share,
