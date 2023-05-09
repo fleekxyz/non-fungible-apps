@@ -4,8 +4,7 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { App } from '@/app.context';
-import { getNFADocument } from '@/graphclient';
-import { NFAMock } from '@/mocks';
+import { getNFADetailDocument } from '@/graphclient';
 import { AppLog } from '@/utils';
 import { parseNumberToHexColor } from '@/utils/color';
 
@@ -36,7 +35,7 @@ export const IndexedNFAView: React.FC = () => {
     navigate('/', { replace: true });
   };
 
-  const { loading, data = { token: {} } } = useQuery(getNFADocument, {
+  const { loading, data = { token: {} } } = useQuery(getNFADetailDocument, {
     skip: id === undefined,
     variables: {
       id: ethers.utils.hexlify(Number(id)),
@@ -55,9 +54,13 @@ export const IndexedNFAView: React.FC = () => {
     return <IndexedNFASkeletonFragment />;
   }
 
-  // TODO: replace NFAMock with real data from useQuery
+  if (!data.token) {
+    //TODO add 404 page
+    return <div>Token not found</div>;
+  }
+
   return (
-    <IndexedNFA.Provider nfa={{ ...NFAMock, ...data.token }}>
+    <IndexedNFA.Provider nfa={data.token}>
       <S.Grid>
         <IndexedNFAAsideFragment />
         <IndexedNFAMainFragment />

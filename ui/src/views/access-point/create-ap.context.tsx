@@ -2,17 +2,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
+import { Token } from '@/graphclient';
 import { EthereumHooks } from '@/integrations';
 import { useFleekERC721Billing } from '@/store';
 import { AppLog, createContext } from '@/utils';
 
-export type NFA = {
-  tokenId: string;
-  name: string;
-  logo: string;
-  color: number;
-  domain: string;
-};
+export type NFA = Pick<
+  Token,
+  'tokenId' | 'name' | 'logo' | 'color' | 'externalURL'
+>;
 
 export type AccessPointContext = {
   billing: string | undefined;
@@ -43,7 +41,7 @@ export abstract class CreateAccessPoint {
       name: '',
       logo: '',
       color: 0,
-      domain: '',
+      externalURL: '',
     });
 
     const value = {
