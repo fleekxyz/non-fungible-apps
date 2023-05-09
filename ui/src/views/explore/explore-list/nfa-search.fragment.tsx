@@ -37,7 +37,7 @@ export const NFASearchFragment: React.FC = () => {
     variables: {
       contractId: FleekERC721.address,
     },
-    skip: !!search,
+    skip: Boolean(search),
   });
 
   const handleSortChange = (item: SortItem | undefined): void => {
