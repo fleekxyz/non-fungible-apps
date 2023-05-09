@@ -15,6 +15,8 @@ library TestConstants {
 
     string public constant APP_GIT_REPOSITORY = "https://github.com/fleekxyz/non-fungible-apps";
 
+    string public constant APP_IPFS_HASH = "mtwirsqawjuoloq2gvtyug2tc3jbf5htm2zeo4rsknfiv3fdp46a";
+
     uint24 public constant APP_COLOR = 0x123456;
 
     bool public constant APP_ACCESS_POINT_AUTO_APPROVAL_SETTINGS = true;

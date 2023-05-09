@@ -10,7 +10,9 @@ export async function initPrisma() {
 initPrisma()
   .catch(async (e) => {
     console.error(e);
-  })
-  .finally(async () => {
     await prisma.$disconnect();
+    process.exit(1);
+  })
+  .finally(() => {
+    prisma.$disconnect();
   });

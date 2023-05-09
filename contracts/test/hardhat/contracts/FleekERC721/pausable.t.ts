@@ -18,6 +18,7 @@ describe('FleekERC721.Pausable', () => {
       MintParams.ens,
       MintParams.commitHash,
       MintParams.gitRepository,
+      MintParams.ipfsHash,
       MintParams.logo,
       MintParams.color,
       false,
