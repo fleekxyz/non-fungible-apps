@@ -54,11 +54,6 @@ export const IndexedNFAView: React.FC = () => {
     return <IndexedNFASkeletonFragment />;
   }
 
-  if (!data.token) {
-    //TODO add 404 page
-    return <div>Token not found</div>;
-  }
-
   return (
     <IndexedNFA.Provider nfa={data.token}>
       <S.Grid>
