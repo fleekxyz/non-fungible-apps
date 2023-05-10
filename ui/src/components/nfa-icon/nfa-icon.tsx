@@ -11,7 +11,10 @@ export const NFAIcon: React.FC<NFAIconProps> = ({
 }: NFAIconProps) => {
   return (
     <NS.Container css={{ backgroundColor: color }}>
-      <NS.Image src={image} />
+      <NS.Image
+        src={image}
+        onErrorCapture={(event) => (event.currentTarget.style.display = 'none')}
+      />
     </NS.Container>
   );
 };
