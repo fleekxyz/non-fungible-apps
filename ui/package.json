@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "vite",
     "dev:css": "tailwindcss -o ./tailwind.css --watch && yarn dev",
-    "build": "yarn graphclient build && vite build",
+    "build:graph": "yarn graphclient build",
+    "build": "yarn build:graph && vite build",
     "postinstall": "graphclient build",
     "preview": "vite preview",
     "prod": "yarn build && npx serve dist -s"

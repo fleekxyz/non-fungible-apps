@@ -1,7 +1,10 @@
+import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 
 import { Combobox, InputGroup, InputGroupText } from '@/components';
+import { totalTokensDocument } from '@/graphclient';
 import { useDebounce } from '@/hooks';
+import { FleekERC721 } from '@/integrations/ethereum/contracts';
 import { AppLog } from '@/utils';
 
 import { Explore } from '../explore.context';
@@ -21,6 +24,7 @@ const orderResults: SortItem[] = [
 
 export const NFASearchFragment: React.FC = () => {
   const {
+    search,
     setEndReached,
     setOrderBy,
     setOrderDirection,
@@ -28,6 +32,13 @@ export const NFASearchFragment: React.FC = () => {
     setPageNumber,
   } = Explore.useContext();
   const [selectedValue, setSelectedValue] = useState<SortItem>(orderResults[0]);
+
+  const { data: totalTokens } = useQuery(totalTokensDocument, {
+    variables: {
+      contractId: FleekERC721.address,
+    },
+    skip: Boolean(search),
+  });
 
   const handleSortChange = (item: SortItem | undefined): void => {
     if (item) {
@@ -72,8 +83,10 @@ export const NFASearchFragment: React.FC = () => {
   return (
     <S.Container>
       <S.Data.Wrapper>
-        <S.Data.Text>All NFAs&nbsp;</S.Data.Text>
-        <S.Data.Number>(3,271)</S.Data.Number>
+       {totalTokens?.collection && (<>
+          <S.Data.Text>All NFAs&nbsp;</S.Data.Text> 
+          <S.Data.Number>({totalTokens.collection.totalTokens})</S.Data.Number>
+       </>)}
       </S.Data.Wrapper>
 
       <S.Input.Wrapper>

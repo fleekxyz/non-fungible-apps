@@ -25,9 +25,9 @@ query lastNFAsPaginated(
   }
 }
 
-query totalTokens {
-  tokens {
-    id
+query totalTokens($contractId: ID!) {
+  collection(id: $contractId) {
+    totalTokens
   }
 }
 
