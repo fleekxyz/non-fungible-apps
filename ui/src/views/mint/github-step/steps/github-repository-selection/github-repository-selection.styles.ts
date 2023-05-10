@@ -1,11 +1,19 @@
-import { Card, Flex, Icon } from '@/components';
+import {
+  Card,
+  CustomCardContainer,
+  CustomCardHeader,
+  Flex,
+  Icon,
+} from '@/components';
 import { styled } from '@/theme';
 
 export const GithubRepositorySelectionStyles = {
   Card: {
-    Wrapper: styled(Card.Container, {
-      maxWidth: '$107h',
+    Wrapper: styled(CustomCardContainer, {
       maxHeight: '$95h',
+      pr: '$3h',
+    }),
+    Header: styled(CustomCardHeader.Default, {
       pr: '$3h',
     }),
     Body: styled(Card.Body, {

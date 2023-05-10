@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 
-import { Button, Card, Grid, SpinnerDot, Stepper, Text } from '@/components';
+import { Button, Card, Flex, SpinnerDot, Stepper, Text } from '@/components';
 import { bunnyCDNActions, useAppDispatch, useBunnyCDNStore } from '@/store';
 
 import { useAccessPointFormContext } from '../ap-form-step';
@@ -49,9 +49,10 @@ export const APRecordCardBody: React.FC = () => {
           </Text>
         </Card.Text>
       ) : (
-        <Grid
+        <Flex
           css={{
-            rowGap: '$6',
+            gap: '$6',
+            flexDirection: 'column',
           }}
         >
           <Text>
@@ -73,7 +74,7 @@ export const APRecordCardBody: React.FC = () => {
           >
             I added the record
           </Button>
-        </Grid>
+        </Flex>
       )}
     </Card.Body>
   );

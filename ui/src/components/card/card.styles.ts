@@ -11,10 +11,8 @@ export abstract class CardStyles {
     borderWidth: '$default',
   });
 
-  static readonly Heading = styled('h3', {
-    color: '$slate12',
-    fontSize: '$xl',
-    fontWeight: '$medium',
+  static readonly Header = styled('div', {
+    width: '$full',
   });
 
   static readonly Body = styled('div', {

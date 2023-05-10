@@ -5,9 +5,9 @@ import { useAccount } from 'wagmi';
 import {
   Button,
   Card,
+  CustomCardContainer,
+  CustomCardHeader,
   Flex,
-  Icon,
-  IconButton,
   ResolvedAddress,
   Stepper,
   Text,
@@ -40,7 +40,9 @@ export const AccessPointDataFragment: React.FC = () => {
         label="Owner"
         value={
           address ? (
-            <ResolvedAddress truncated={false}>{address || ''}</ResolvedAddress>
+            <ResolvedAddress truncated={false} ellipsis>
+              {address}
+            </ResolvedAddress>
           ) : (
             'Please connect to wallet'
           )
@@ -111,28 +113,8 @@ export const CreateAccessPointPreview: React.FC = () => {
   }, [writeStatus, transactionStatus]);
 
   return (
-    <Card.Container css={{ maxWidth: '$107h' }}>
-      <Card.Heading
-        title="Review Details"
-        leftIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="back" />}
-            css={{ mr: '$2' }}
-            onClick={prevStep}
-          />
-        }
-        rightIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="info" />}
-          />
-        }
-      />
+    <CustomCardContainer>
+      <CustomCardHeader.Default title="Review Details" onClickBack={prevStep} />
       <Card.Body>
         <Flex css={{ flexDirection: 'column', gap: '$6' }}>
           <AccessPointDataFragment />
@@ -148,6 +130,6 @@ export const CreateAccessPointPreview: React.FC = () => {
           </Button>
         </Flex>
       </Card.Body>
-    </Card.Container>
+    </CustomCardContainer>
   );
 };
