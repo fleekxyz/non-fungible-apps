@@ -15,14 +15,6 @@ export abstract class Card {
   );
 
   static readonly Header = CardStyles.Header;
-    ({ children, ...props }, ref) => {
-      return (
-        <CardStyles.Header ref={ref} {...props}>
-          {children}
-        </CardStyles.Header>
-      );
-    }
-  );
 
   static readonly Body = forwardRef<HTMLDivElement, Card.BodyProps>(
     ({ children, ...props }, ref) => {
