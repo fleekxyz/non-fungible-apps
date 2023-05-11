@@ -18,39 +18,37 @@ export const MintStepper: React.FC = () => {
     },
   } = useMintFormContext();
 
-  if (!isSuccess) {
-    return (
-      <Stepper.Root initialStep={1}>
-        <Form.Root onValidationChange={setIsValid}>
-          <Stepper.Container>
-            <Stepper.Step>
-              <Step header="Connect your Ethereum Wallet to mint an NFA">
-                <WalletStep />
-              </Step>
-            </Stepper.Step>
+  if (isSuccess) return <NftMinted />;
 
-            <Stepper.Step>
-              <Step header="Connect GitHub and select repository">
-                <GithubStep />
-              </Step>
-            </Stepper.Step>
+  return (
+    <Stepper.Root initialStep={1}>
+      <Form.Root onValidationChange={setIsValid}>
+        <Stepper.Container>
+          <Stepper.Step>
+            <Step header="Connect your Ethereum Wallet to mint an NFA">
+              <WalletStep />
+            </Step>
+          </Stepper.Step>
 
-            <Stepper.Step>
-              <Step header="Finalize a few key things for your NFA">
-                <NFAStep />
-              </Step>
-            </Stepper.Step>
+          <Stepper.Step>
+            <Step header="Connect GitHub and select repository">
+              <GithubStep />
+            </Step>
+          </Stepper.Step>
 
-            <Stepper.Step>
-              <Step header="Review your NFA and mint it on Ethereum">
-                <MintPreview />
-              </Step>
-            </Stepper.Step>
-          </Stepper.Container>
-        </Form.Root>
-      </Stepper.Root>
-    );
-  } else {
-    return <NftMinted />;
-  }
+          <Stepper.Step>
+            <Step header="Finalize a few key things for your NFA">
+              <NFAStep />
+            </Step>
+          </Stepper.Step>
+
+          <Stepper.Step>
+            <Step header="Review your NFA and mint it on Ethereum">
+              <MintPreview />
+            </Step>
+          </Stepper.Step>
+        </Stepper.Container>
+      </Form.Root>
+    </Stepper.Root>
+  );
 };

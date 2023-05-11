@@ -8,7 +8,7 @@ export const NFACardStyles = {
   Container: styled(Link, {
     display: 'flex',
     flexDirection: 'column',
-    width: '14.6875rem',
+    minWidth: '12.5rem',
     padding: 0,
     overflow: 'hidden',
     cursor: 'pointer',
@@ -60,6 +60,11 @@ export const NFACardStyles = {
     fontSize: '$xl',
     fontWeight: '$medium',
     lineHeight: 1.4,
+
+    maxWidth: 'auto',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   }),
   Content: styled('span', {
     all: 'unset',
@@ -79,7 +84,7 @@ export const NFACardStyles = {
   Skeleton: {
     Preview: styled(Skeleton, {
       width: '100%',
-      height: 'calc(14.6875rem - 2px)',
+      aspectRatio: 1,
     }),
 
     Title: styled(Skeleton, {

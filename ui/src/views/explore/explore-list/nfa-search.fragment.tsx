@@ -1,16 +1,16 @@
 import { useState } from 'react';
 
-import { Dropdown, DropdownItem, Flex, Input } from '@/components';
+import { Dropdown, DropdownItem, Input } from '@/components';
 import { useDebounce } from '@/hooks';
 
 import { Explore } from '../explore.context';
-import { ResultsContainer, ResultsNumber, ResultsText } from './results.styles';
+import { NFASearchFragmentStyles as S } from './nfa-search.styles';
 
 const orderResults: DropdownItem[] = [
   { value: 'newest', label: 'Newest' },
   { value: 'oldest', label: 'Oldest' },
-  { value: 'a-z', label: 'Name A-Z' },
-  { value: 'z-a', label: 'Name Z-A' },
+  { value: 'a-z', label: 'Sort A-Z' },
+  { value: 'z-a', label: 'Sort Z-A' },
 ];
 
 export const NFASearchFragment: React.FC = () => {
@@ -62,17 +62,18 @@ export const NFASearchFragment: React.FC = () => {
   };
 
   return (
-    <Flex css={{ justifyContent: 'space-between' }}>
-      <ResultsContainer>
-        <ResultsText>All NFAs </ResultsText>
-        <ResultsNumber>(3,271)</ResultsNumber>
-      </ResultsContainer>
-      <Flex css={{ gap: '$3' }}>
+    <S.Container>
+      <S.Data.Wrapper>
+        <S.Data.Text>All NFAs&nbsp;</S.Data.Text>
+        <S.Data.Number>(3,271)</S.Data.Number>
+      </S.Data.Wrapper>
+
+      <S.Input.Wrapper>
         <Input
           placeholder="Search"
           leftIcon="search"
-          css={{ width: '23rem' }}
           onChange={handleSearchChange}
+          wrapperClassName="flex-1"
         />
         <Dropdown
           items={orderResults}
@@ -82,7 +83,7 @@ export const NFASearchFragment: React.FC = () => {
           textColor="slate11"
           optionsWidth="40"
         />
-      </Flex>
-    </Flex>
+      </S.Input.Wrapper>
+    </S.Container>
   );
 };
