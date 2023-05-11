@@ -97,7 +97,6 @@ export const AccessPointsListFragment: React.FC = () => {
   }, []);
 
   useWindowScrollEnd(() => {
-    // debugger;
     if (isLoading || endReached || queryError) return;
     setPageNumber(pageNumber + 1);
   });
