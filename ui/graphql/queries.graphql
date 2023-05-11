@@ -22,6 +22,9 @@ query lastNFAsPaginated(
     accessPoints {
       id
     }
+    owner {
+      id
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import { Explore } from '../explore.context';
-import { NFAListFragment } from './nfa-list.fragment';
+import { NFAListFragment } from './nfa-list';
 import { NFASearchFragment } from './nfa-search.fragment';
 
 export const ExploreListFragment: React.FC = () => {

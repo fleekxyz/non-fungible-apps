@@ -5,8 +5,9 @@ import { NFACard, NFACardSkeleton } from '@/components';
 import { lastNFAsPaginatedDocument } from '@/graphclient';
 import { useWindowScrollEnd } from '@/hooks';
 
-import { Explore } from '../explore.context';
+import { Explore } from '../../explore.context';
 import { NFAListFragmentStyles as S } from './nfa-list.styles';
+import { NFAsGridView } from './nfa-grid.fragment';
 
 const pageSize = 10; //Set this size to test pagination
 
@@ -79,6 +80,6 @@ export const NFAListFragment: React.FC = () => {
       </S.Container>
     );
   else {
-    return <>List</>;
+    return <NFAsGridView accessPoints={tokens} />;
   }
 };
