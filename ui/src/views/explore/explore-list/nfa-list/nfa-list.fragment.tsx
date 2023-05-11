@@ -6,8 +6,8 @@ import { lastNFAsPaginatedDocument } from '@/graphclient';
 import { useWindowScrollEnd } from '@/hooks';
 
 import { Explore } from '../../explore.context';
+import { NFAsListView } from './nfa-grid.fragment';
 import { NFAListFragmentStyles as S } from './nfa-list.styles';
-import { NFAsGridView } from './nfa-grid.fragment';
 
 const pageSize = 10; //Set this size to test pagination
 
@@ -80,6 +80,6 @@ export const NFAListFragment: React.FC = () => {
       </S.Container>
     );
   else {
-    return <NFAsGridView accessPoints={tokens} />;
+    return <NFAsListView accessPoints={tokens} />;
   }
 };

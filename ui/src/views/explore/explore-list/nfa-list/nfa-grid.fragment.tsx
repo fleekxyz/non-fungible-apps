@@ -6,16 +6,16 @@ import { parseNumberToHexColor } from '@/utils/color';
 
 import { NFAListFragmentStyles as S } from './nfa-list.styles';
 
-type NFAsGridViewProps = {
+type NFAsListViewProps = {
   accessPoints: Array<lastNFAsPaginatedQuery['tokens'][0]>;
 };
 
-export const NFAsGridView: React.FC<NFAsGridViewProps> = ({
+export const NFAsListView: React.FC<NFAsListViewProps> = ({
   accessPoints,
-}: NFAsGridViewProps) => {
+}: NFAsListViewProps) => {
   const navigate = useNavigate();
 
-  const handleClick = (id: string) => {
+  const handleClick = (id: string): void => {
     navigate(`/nfa/${id}`);
   };
   return (
