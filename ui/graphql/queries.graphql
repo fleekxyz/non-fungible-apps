@@ -22,50 +22,56 @@ query lastNFAsPaginated(
     accessPoints {
       id
     }
-  }
-}
-
-query totalTokens {
-  tokens {
-    id
-  }
-}
-
-query getLatestNFAs {
-  tokens {
-    id
-    name
+    verified
   }
 }
 
 query getNFADetail($id: ID!) {
   token(id: $id) {
-    tokenId
-    owner {
+    accessPoints {
       id
     }
-    name
     description
-    ENS
-    externalURL
-    logo
     color
     createdAt
-    accessPoints {
-      createdAt
-      contentVerified
-      owner {
-        id
-      }
+    ENS
+    externalURL
+    gitRepository {
+      id
+    }
+    logo
+    name
+    owner {
       id
     }
     verified
     verifier {
       id
     }
-    gitRepository {
+    tokenId
+  }
+}
+
+query getAccessPointsNFA(
+  $tokenId: String!
+  $orderBy: AccessPoint_orderBy
+  $orderDirection: OrderDirection
+  $pageSize: Int
+  $skip: Int
+) {
+  accessPoints(
+    where: { token: $tokenId }
+    orderDirection: $orderDirection
+    orderBy: $orderBy
+    first: $pageSize
+    skip: $skip
+  ) {
+    contentVerified
+    createdAt
+    owner {
       id
     }
+    id
   }
 }
 

@@ -1,28 +1,38 @@
 import { useState } from 'react';
 
+import { OrderDirection } from '@/../.graphclient';
 import { Combobox, Flex } from '@/components';
+import { AppLog } from '@/utils';
 
+import { IndexedNFA } from '../../indexed-nfa.context';
 import { IndexedNFAStyles as S } from '../../indexed-nfa.styles';
 
 type SortItem = {
-  value: string;
+  value: OrderDirection;
   label: string;
 };
 
 const orderResults: SortItem[] = [
-  { value: 'newest', label: 'Newest' },
-  { value: 'oldest', label: 'Oldest' },
+  { value: 'desc', label: 'Newest' },
+  { value: 'asc', label: 'Oldest' },
 ];
 
 export const Header: React.FC = () => {
+  const { setPageNumber, setOrderDirection, setEndReached } =
+    IndexedNFA.useContext();
   const [selectedValue, setSelectedValue] = useState<SortItem>(orderResults[0]);
 
   const handleSortChange = (item: SortItem | undefined): void => {
-    //TODO integrate with context and sort
     if (item) {
       setSelectedValue(item);
+      setPageNumber(0);
+      setEndReached(false);
+      setOrderDirection(item.value);
+    } else {
+      AppLog.errorToast('Error selecting sort option. Try again');
     }
   };
+
   return (
     <>
       <Flex css={{ justifyContent: 'space-between', alignItems: 'center' }}>
