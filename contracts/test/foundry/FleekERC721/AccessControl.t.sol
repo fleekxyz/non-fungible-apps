@@ -369,29 +369,31 @@ contract Test_FleekERC721_AccessControl is Test_FleekERC721_Base, Test_FleekERC7
     function test_setTokenBuild() public {
         string memory commitHash = "commitHash";
         string memory gitRepository = "gitRepository";
+        string memory ipfsHash = "ipfsHash";
+        string memory domain = "domain";
 
         // ColletionOwner
         vm.prank(collectionOwner);
         expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
-        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
+        CuT.setTokenBuild(tokenId, commitHash, gitRepository, ipfsHash, domain);
 
         // CollectionVerifier
         vm.prank(collectionVerifier);
         expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
-        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
+        CuT.setTokenBuild(tokenId, commitHash, gitRepository, ipfsHash, domain);
 
         // TokenOwner
         vm.prank(tokenOwner);
-        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
+        CuT.setTokenBuild(tokenId, commitHash, gitRepository, ipfsHash, domain);
 
         // TokenController
         vm.prank(tokenController);
-        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
+        CuT.setTokenBuild(tokenId, commitHash, gitRepository, ipfsHash, domain);
 
         // AnyAddress
         vm.prank(anyAddress);
         expectRevertWithTokenRole(tokenId, FleekAccessControl.TokenRoles.Controller);
-        CuT.setTokenBuild(tokenId, commitHash, gitRepository);
+        CuT.setTokenBuild(tokenId, commitHash, gitRepository, ipfsHash, domain);
     }
 
     function test_burn() public {

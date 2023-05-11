@@ -11,7 +11,7 @@ export const DisplayText: React.FC<DisplayTextProps> = ({
   return (
     <S.Container>
       <S.Label>{label}</S.Label>
-      <S.Input>{value}</S.Input>
+      <S.Input ellipsis>{value}</S.Input>
     </S.Container>
   );
 };

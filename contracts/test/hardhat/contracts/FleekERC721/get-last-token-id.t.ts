@@ -14,6 +14,7 @@ describe('FleekERC721.GetLastTokenId', () => {
       TestConstants.MintParams.ens,
       TestConstants.MintParams.commitHash,
       TestConstants.MintParams.gitRepository,
+      TestConstants.MintParams.ipfsHash,
       TestConstants.MintParams.logo,
       TestConstants.MintParams.color,
       false,

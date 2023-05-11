@@ -99,6 +99,7 @@ describe('Deploy', () => {
         TestConstants.MintParams.ens,
         TestConstants.MintParams.commitHash,
         TestConstants.MintParams.gitRepository,
+        TestConstants.MintParams.ipfsHash,
         TestConstants.MintParams.logo,
         TestConstants.MintParams.color,
         TestConstants.MintParams.accessPointAutoApprovalSettings,

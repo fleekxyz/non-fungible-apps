@@ -1,5 +1,5 @@
+import { CustomCardHeader } from '@/components';
 import { Mint } from '@/views/mint/mint.context';
-import { MintCardHeader } from '@/views/mint/mint-card';
 import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
 
 export const RepoConfigurationHeader: React.FC = () => {
@@ -22,7 +22,7 @@ export const RepoConfigurationHeader: React.FC = () => {
   };
 
   return (
-    <MintCardHeader
+    <CustomCardHeader.Default
       title="Configure Repository"
       onClickBack={handlePrevStepClick}
     />

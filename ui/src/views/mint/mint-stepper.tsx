@@ -12,6 +12,7 @@ export const MintStepper: React.FC = () => {
   const {
     transaction: { isSuccess },
   } = Mint.useTransactionContext();
+
   const {
     form: {
       isValid: [, setIsValid],

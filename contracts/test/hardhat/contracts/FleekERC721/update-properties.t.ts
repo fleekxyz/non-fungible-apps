@@ -51,12 +51,20 @@ describe('FleekERC721.UpdateProperties', () => {
   it('should emit event for build change', async () => {
     const { contract, tokenId, owner } = fixture;
 
-    await expect(contract.setTokenBuild(tokenId, 'commitHash', 'gitRepository'))
-      .to.emit(contract, Events.MetadataUpdate.stringTuple)
+    await expect(
+      contract.setTokenBuild(
+        tokenId,
+        'commitHash',
+        'gitRepository',
+        'ipfsHash',
+        'domain'
+      )
+    )
+      .to.emit(contract, Events.MetadataUpdate.stringArray4)
       .withArgs(
         tokenId,
         'build',
-        ['commitHash', 'gitRepository'],
+        ['commitHash', 'gitRepository', 'ipfsHash', 'domain'],
         owner.address
       );
   });

@@ -6,7 +6,14 @@ export const MintStyles = {
     height: '100%',
     justifyContent: 'center',
 
-    '@media (min-width: 1024px)': {
+    '@md': {
+      //to align on center
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+    },
+
+    '@lg': {
       flexDirection: 'row',
     },
   }),

@@ -26,6 +26,12 @@ query lastNFAsPaginated(
   }
 }
 
+query totalTokens($contractId: ID!) {
+  collection(id: $contractId) {
+    totalTokens
+  }
+}
+
 query getNFADetail($id: ID!) {
   token(id: $id) {
     accessPoints {

@@ -27,6 +27,7 @@ type NewMint @entity(immutable: true) {
   ENS: String!
   commitHash: String! # string
   gitRepository: String! # string
+  ipfsHash: String!
   logo: String!
   color: Int!
   accessPointAutoApproval: Boolean!
@@ -44,7 +45,7 @@ type MetadataUpdate @entity(immutable: true) {
   key: String!
   stringValue: String
   uint24Value: Int
-  doubleStringValue: [String!]!
+  multipleStringValue: [String!]!
   booleanValue: Boolean
   byAddress: Bytes!
   blockNumber: BigInt!
@@ -76,12 +77,20 @@ type Token @entity {
   owner: Owner!
   mintedBy: Bytes!
   controllers: [Controller!]
-  gitRepository: GitRepository!
-  commitHash: String!
   accessPoints: [AccessPoint!] @derivedFrom(field: "token")
   verifier: Verifier # Address
   verified: Boolean!
   createdAt: BigInt!
+  builds: [Build!]!
+}
+
+type Build @entity {
+  id: Bytes! # Token ID
+  gitRepository: GitRepository!
+  commitHash: String!
+  ipfsHash: String!
+  domain: String!
+  token: Token! @derivedFrom(field: "builds")
 }
 
 # Owner entity for collection, access points, and tokens
@@ -106,7 +115,7 @@ type Verifier @entity {
 
 type GitRepository @entity {
   id: String! # transaction hash of the first transaction this repository appeared in
-  tokens: [Token!] @derivedFrom(field: "gitRepository")
+  builds: [Build!] @derivedFrom(field: "gitRepository")
 }
 
 type AccessPoint @entity {

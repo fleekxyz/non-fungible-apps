@@ -6,7 +6,7 @@ import "./TestBase.sol";
 
 contract Test_FleekERC721_TokenURIAssertions is Test {
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
-    event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, string[4] value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
 
     function expectMetadataUpdate(
@@ -22,7 +22,7 @@ contract Test_FleekERC721_TokenURIAssertions is Test {
     function expectMetadataUpdate(
         uint256 _tokenId,
         string memory key,
-        string[2] memory value,
+        string[4] memory value,
         address triggeredBy
     ) public {
         vm.expectEmit(true, true, true, true);
@@ -57,7 +57,13 @@ contract Test_FleekERC721_TokenURI is Test_FleekERC721_Base, Test_FleekERC721_To
         CuT.setTokenExternalURL(tokenId, "https://new-url.com");
         transferENS("new-ens.eth", deployer);
         CuT.setTokenENS(tokenId, "new-ens.eth");
-        CuT.setTokenBuild(tokenId, "ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo");
+        CuT.setTokenBuild(
+            tokenId,
+            "ce1a3fc141e29f8e1d00a654e156c4982d7711bf",
+            "https://github.com/other/repo",
+            "ipfsHash",
+            "domain"
+        );
         CuT.setTokenLogoAndColor(tokenId, TestConstants.LOGO_1, 0x654321);
         CuT.setTokenVerified(tokenId, true);
 
@@ -96,10 +102,16 @@ contract Test_FleekERC721_TokenURI is Test_FleekERC721_Base, Test_FleekERC721_To
         expectMetadataUpdate(
             tokenId,
             "build",
-            ["ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo"],
+            ["ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo", "ipfshash", "domain"],
             deployer
         );
-        CuT.setTokenBuild(tokenId, "ce1a3fc141e29f8e1d00a654e156c4982d7711bf", "https://github.com/other/repo");
+        CuT.setTokenBuild(
+            tokenId,
+            "ce1a3fc141e29f8e1d00a654e156c4982d7711bf",
+            "https://github.com/other/repo",
+            "ipfshash",
+            "domain"
+        );
 
         expectMetadataUpdate(tokenId, "logo", TestConstants.LOGO_1, deployer);
         CuT.setTokenLogo(tokenId, TestConstants.LOGO_1);

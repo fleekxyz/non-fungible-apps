@@ -1,29 +1,14 @@
-import { Button, Card, Flex, Icon, IconButton, Text } from '@/components';
+import { Button, Card, CustomCardHeader, Flex, Icon, Text } from '@/components';
 
-import { CreateAccessPoint } from './create-ap.context';
-import { AccessPointDataFragment } from './create-ap-preview';
+import { CreateAccessPoint } from '../create-ap.context';
+import { AccessPointDataFragment } from '../create-ap-preview';
+import { CreateApSuccessStyles as S } from './create-ap-success.styles';
 
 export const CreateAccessPointSuccess: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
   return (
-    <Card.Container css={{ maxWidth: '$107h' }}>
-      <Card.Heading
-        title="Hosting Successful"
-        leftIcon={
-          <Icon
-            name="check-circle"
-            css={{ color: '$green11', fontSize: '$xl', mr: '$2' }}
-          />
-        }
-        rightIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="info" />}
-          />
-        }
-      />
+    <S.Container>
+      <CustomCardHeader.Success title="Hosting Successful" />
       <Card.Body>
         <Flex css={{ flexDirection: 'column', gap: '$6' }}>
           <Text css={{ fontSize: '$sm', color: '$slate11' }}>
@@ -42,6 +27,6 @@ export const CreateAccessPointSuccess: React.FC = () => {
           </Flex>
         </Flex>
       </Card.Body>
-    </Card.Container>
+    </S.Container>
   );
 };

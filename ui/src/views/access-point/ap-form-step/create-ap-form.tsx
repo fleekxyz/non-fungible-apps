@@ -1,4 +1,10 @@
-import { Card, Flex, Icon, IconButton, Stepper } from '@/components';
+import {
+  Card,
+  CustomCardContainer,
+  CustomCardHeader,
+  Flex,
+  Stepper,
+} from '@/components';
 
 import { CreateAccessPointFormBody } from './create-ap-form-body';
 
@@ -6,28 +12,8 @@ export const CreateAccessPointForm: React.FC = () => {
   const { prevStep } = Stepper.useContext();
 
   return (
-    <Card.Container css={{ maxWidth: '$107h' }}>
-      <Card.Heading
-        title="Enter Domain"
-        leftIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="back" />}
-            css={{ mr: '$2' }}
-            onClick={prevStep}
-          />
-        }
-        rightIcon={
-          <IconButton
-            aria-label="Add"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="info" />}
-          />
-        }
-      />
+    <CustomCardContainer>
+      <CustomCardHeader.Default title="Enter Domain" onClickBack={prevStep} />
       <Card.Body>
         <Flex
           css={{
@@ -38,6 +24,6 @@ export const CreateAccessPointForm: React.FC = () => {
           <CreateAccessPointFormBody />
         </Flex>
       </Card.Body>
-    </Card.Container>
+    </CustomCardContainer>
   );
 };

@@ -21,6 +21,7 @@ describe('FleekERC721.Billing', () => {
       MintParams.ens,
       MintParams.commitHash,
       MintParams.gitRepository,
+      MintParams.ipfsHash,
       MintParams.logo,
       MintParams.color,
       MintParams.accessPointAutoApprovalSettings,
