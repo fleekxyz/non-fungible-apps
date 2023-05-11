@@ -23,6 +23,7 @@ export const NFAListFragmentStyles = {
   }),
   Table: {
     Container: styled('div', {
+      marginTop: '$6',
       padding: '0 $5',
 
       // maxHeight: '15.125rem',
