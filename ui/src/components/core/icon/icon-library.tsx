@@ -1,6 +1,7 @@
 import { AiFillCheckCircle } from '@react-icons/all-files/ai/AiFillCheckCircle';
 import { AiOutlineCheck } from '@react-icons/all-files/ai/AiOutlineCheck';
 import { AiOutlineTwitter } from '@react-icons/all-files/ai/AiOutlineTwitter';
+import { AiOutlineUnorderedList } from '@react-icons/all-files/ai/AiOutlineUnorderedList';
 import { BiGitBranch } from '@react-icons/all-files/bi/BiGitBranch';
 import { BiSearch } from '@react-icons/all-files/bi/BiSearch';
 import { BsFillSquareFill } from '@react-icons/all-files/bs/BsFillSquareFill';
@@ -11,6 +12,7 @@ import { IoArrowBackCircleSharp } from '@react-icons/all-files/io5/IoArrowBackCi
 import { IoCheckmarkCircleSharp } from '@react-icons/all-files/io5/IoCheckmarkCircleSharp';
 import { IoClose } from '@react-icons/all-files/io5/IoClose';
 import { IoCloudUploadSharp } from '@react-icons/all-files/io5/IoCloudUploadSharp';
+import { IoGridOutline } from '@react-icons/all-files/io5/IoGridOutline';
 import { IoInformationCircleSharp } from '@react-icons/all-files/io5/IoInformationCircleSharp';
 import { IoLogoGithub } from '@react-icons/all-files/io5/IoLogoGithub';
 import { MdVerifiedUser } from '@react-icons/all-files/md/MdVerifiedUser';
@@ -40,7 +42,9 @@ export const IconLibrary = Object.freeze({
   'fleek-logo': FleekLogo,
   'fleek-name': FleekName,
   github: IoLogoGithub,
+  grid: IoGridOutline,
   info: IoInformationCircleSharp,
+  list: AiOutlineUnorderedList,
   menu: FaBars,
   metamask: MetamaskIcon, //remove if not used
   search: BiSearch,

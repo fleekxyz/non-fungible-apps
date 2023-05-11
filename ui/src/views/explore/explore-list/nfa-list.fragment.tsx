@@ -28,6 +28,7 @@ export const NFAListFragment: React.FC = () => {
     orderDirection,
     pageNumber,
     search,
+    nfaView,
     setEndReached,
     setPageNumber,
   } = Explore.useContext();
@@ -63,17 +64,21 @@ export const NFAListFragment: React.FC = () => {
 
   if (queryError) return <div>Error</div>; //TODO handle error
 
-  return (
-    <S.Container>
-      {tokens.map((token) => (
-        <NFACard data={token} key={token.id} />
-      ))}
+  if (nfaView === 'grid')
+    return (
+      <S.Container>
+        {tokens.map((token) => (
+          <NFACard data={token} key={token.id} />
+        ))}
 
-      {isLoading && <LoadingSkeletons />}
+        {isLoading && <LoadingSkeletons />}
 
-      {!isLoading && tokens.length === 0 && (
-        <S.EmptyMessage>Nothing found.</S.EmptyMessage>
-      )}
-    </S.Container>
-  );
+        {!isLoading && tokens.length === 0 && (
+          <S.EmptyMessage>Nothing found.</S.EmptyMessage>
+        )}
+      </S.Container>
+    );
+  else {
+    return <>List</>;
+  }
 };

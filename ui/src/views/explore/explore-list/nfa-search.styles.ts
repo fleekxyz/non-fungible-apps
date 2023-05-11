@@ -1,4 +1,4 @@
-import { Flex, Icon } from '@/components';
+import { Flex, Icon, IconButton } from '@/components';
 import { styled } from '@/theme';
 
 export const NFASearchFragmentStyles = {
@@ -34,6 +34,31 @@ export const NFASearchFragmentStyles = {
     }),
     Icon: styled(Icon, {
       fontSize: '$lg',
+    }),
+  },
+  GridList: {
+    Wrapper: styled(Flex, {
+      border: '1px solid $slate7',
+      borderRadius: '$lg',
+    }),
+    Icon: styled(Icon, {
+      p: '$2 $3',
+      border: 'none',
+      borderRadius: '$lg',
+      cursor: 'pointer',
+
+      variants: {
+        selected: {
+          true: {
+            color: 'white',
+            backgroundColor: '$slate7',
+          },
+          false: {
+            color: '$slate7 ',
+            backgroundColor: 'transparent',
+          },
+        },
+      },
     }),
   },
 };

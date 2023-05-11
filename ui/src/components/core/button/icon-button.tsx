@@ -65,7 +65,6 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
 
       return props[size as 'sm' | 'md' | 'lg'];
     }, [size]);
-
     return (
       <Button
         ref={ref}
@@ -73,7 +72,6 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         size={size}
         {...rest}
         css={{
-          padding: 0,
           minWidth,
           fontSize,
           borderRadius: isRound ? '$full' : undefined,
