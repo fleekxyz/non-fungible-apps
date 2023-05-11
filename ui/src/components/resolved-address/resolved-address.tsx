@@ -9,20 +9,19 @@ export type ResolvedAddressProps = React.ComponentPropsWithRef<
   typeof RAS.Container
 > & {
   children: string;
-  truncated?: boolean;
 };
 
 export const ResolvedAddress = forwardStyledRef<
   HTMLSpanElement,
   ResolvedAddressProps
->(({ children, truncated = false, ...props }, ref) => {
+>(({ children, ...props }, ref) => {
   const [resolvedAddress, loading] = useResolvedAddress(children);
 
   const text = useMemo(() => {
-    if (!resolvedAddress.endsWith('.eth') && truncated)
+    if (!resolvedAddress.endsWith('.eth'))
       return `${resolvedAddress.slice(0, 6)}...${resolvedAddress.slice(-4)}`;
     return resolvedAddress;
-  }, [resolvedAddress, truncated]);
+  }, [resolvedAddress]);
 
   return (
     <RAS.Container {...props} ref={ref} data-loading={loading}>

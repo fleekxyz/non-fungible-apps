@@ -1,19 +1,16 @@
 import { useQuery } from '@apollo/client';
 import { useEffect } from 'react';
 
-import { NFACard, NFACardSkeleton } from '@/components';
+import { Flex, NFACard, NFACardSkeleton } from '@/components';
 import { lastNFAsPaginatedDocument } from '@/graphclient';
 import { useWindowScrollEnd } from '@/hooks';
 
-import { Explore } from '../explore.context';
-import { NFAListFragmentStyles as S } from './nfa-list.styles';
+import { Explore } from '../../explore.context';
 
 const pageSize = 10; //Set this size to test pagination
 
 const LoadingSkeletons: React.FC = () => (
   <>
-    <NFACardSkeleton />
-    <NFACardSkeleton />
     <NFACardSkeleton />
     <NFACardSkeleton />
     <NFACardSkeleton />
@@ -64,16 +61,29 @@ export const NFAListFragment: React.FC = () => {
   if (queryError) return <div>Error</div>; //TODO handle error
 
   return (
-    <S.Container>
-      {tokens.map((token) => (
-        <NFACard data={token} key={token.id} />
-      ))}
-
-      {isLoading && <LoadingSkeletons />}
-
-      {!isLoading && tokens.length === 0 && (
-        <S.EmptyMessage>Nothing found.</S.EmptyMessage>
-      )}
-    </S.Container>
+    <Flex
+      css={{
+        flexDirection: 'column',
+        gap: '$2',
+        my: '$6',
+        minHeight: '50vh',
+        marginBottom: '30vh', // TODO: remove this if we add page footer
+      }}
+    >
+      <Flex css={{ gap: '$6', flexWrap: 'wrap' }}>
+        {tokens.map((token) => (
+          <NFACard data={token} key={token.id} />
+        ))}
+        {isLoading && <LoadingSkeletons />}
+        {!isLoading && tokens.length === 0 && (
+          // TODO: update this after designs are done
+          <div
+            className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 text-center`}
+          >
+            Nothing found.
+          </div>
+        )}
+      </Flex>
+    </Flex>
   );
 };

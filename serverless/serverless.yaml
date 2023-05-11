@@ -37,11 +37,3 @@ functions:
           path: build
           method: post
           cors: true
-
-  submitMintInfo:
-    handler: dist/functions/mints/handler.submitMintInfo
-    events:
-      - http:
-          path: mint
-          method: post
-          cors: true

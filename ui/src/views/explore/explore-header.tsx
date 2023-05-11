@@ -4,7 +4,7 @@ import { Button } from '@/components';
 
 import { ExploreHeaderStyles as S } from './explore-header.styles';
 
-export const ExploreHeaderFragment: React.FC = () => (
+export const ExploreHeader: React.FC = () => (
   <S.Container>
     <S.Text>
       <S.GrayText>

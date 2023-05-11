@@ -5,8 +5,6 @@ jspm_packages
 # Serverless directories
 .serverless
 
-yarn-error.log
-
 # esbuild directories
 .esbuild
 

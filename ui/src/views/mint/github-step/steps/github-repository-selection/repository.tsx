@@ -31,7 +31,6 @@ export const Repository: React.FC<RepositoryProps> = ({
       <RepoRow
         onClick={handleSelectRepo}
         repo={repository.name}
-        css={{ cursor: 'pointer' }}
         button={
           <Button
             colorScheme="blue"

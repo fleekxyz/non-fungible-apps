@@ -1,4 +1,4 @@
-import { Button, Card, CardTag, Flex, Stepper } from '@/components';
+import { Button, Card, Flex, Stepper } from '@/components';
 import { Mint } from '@/views/mint/mint.context';
 import { useMintFormContext } from '@/views/mint/nfa-step/form-step';
 
@@ -25,8 +25,17 @@ export const RepoConfigurationBody: React.FC = () => {
       <Flex css={{ rowGap: '$6', flexDirection: 'column' }}>
         <RepoRow
           repo={repositoryName.name}
-          css={{ mb: '0', cursor: 'default' }}
-          button={<CardTag>Use for NFA</CardTag>}
+          css={{ mb: '0' }}
+          button={
+            <Button
+              colorScheme="gray"
+              disabled
+              variant="outline"
+              css={{ py: '$1', height: '$5', borderRadius: '$md' }}
+            >
+              Use for NFA
+            </Button>
+          }
         />
         <RepoBranchCommitFields />
         <Button

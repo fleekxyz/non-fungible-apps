@@ -9,8 +9,7 @@ export abstract class PageStyles {
   public static readonly Content = styled('div', {
     width: '100%',
     minHeight: '85vh',
-    maxWidth: '$6xl',
-    padding: '0 $6',
+    maxWidth: '$7xl',
     margin: '0 auto',
     display: 'grid',
   });

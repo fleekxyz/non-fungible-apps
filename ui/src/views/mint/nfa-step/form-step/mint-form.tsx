@@ -2,7 +2,6 @@ import { useAccount } from 'wagmi';
 
 import { Button, Card, Grid, Stepper } from '@/components';
 import { AppLog } from '@/utils';
-import { parseColorToNumber } from '@/utils/color';
 
 import { Mint } from '../../mint.context';
 import { MintCardHeader } from '../../mint-card';
@@ -12,6 +11,7 @@ import {
   EnsDomainField,
   LogoField,
 } from './fields';
+import { parseColorToNumber } from './form.utils';
 import { useMintFormContext } from './mint-form.context';
 
 export const MintFormStep: React.FC = () => {
@@ -54,7 +54,7 @@ export const MintFormStep: React.FC = () => {
       AppLog.errorToast('No address found. Please connect your wallet.');
       return;
     }
-
+    // setting the args otherwise mint may fail
     setArgs([
       address,
       appName,
@@ -62,7 +62,7 @@ export const MintFormStep: React.FC = () => {
       domainURL,
       ens,
       gitCommit,
-      `${repositoryName?.url}/tree/${gitBranch}`,
+      `${repositoryName.url}/tree/${gitBranch}`,
       appLogo,
       parseColorToNumber(logoColor),
       verifyNFA,

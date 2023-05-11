@@ -1,6 +1,6 @@
-import { Card, Flex, Icon, IconButton, Stepper } from '@/components';
+import { Card, Grid, Icon, IconButton, Stepper } from '@/components';
 
-import { CreateAccessPointFormBody } from './create-ap-form-body';
+import { CreateAccessPointFormBody } from './create-ap.form-body';
 
 export const CreateAccessPointForm: React.FC = () => {
   const { prevStep } = Stepper.useContext();
@@ -8,7 +8,7 @@ export const CreateAccessPointForm: React.FC = () => {
   return (
     <Card.Container css={{ width: '$107h' }}>
       <Card.Heading
-        title="Enter Domain"
+        title="Create Access Point"
         leftIcon={
           <IconButton
             aria-label="Add"
@@ -29,14 +29,13 @@ export const CreateAccessPointForm: React.FC = () => {
         }
       />
       <Card.Body>
-        <Flex
+        <Grid
           css={{
-            flexDirection: 'column',
-            gap: '$6',
+            rowGap: '$6',
           }}
         >
           <CreateAccessPointFormBody />
-        </Flex>
+        </Grid>
       </Card.Body>
     </Card.Container>
   );

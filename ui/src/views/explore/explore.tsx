@@ -1,12 +1,12 @@
 import { Explore as ES } from './explore.styles';
-import { ExploreHeaderFragment } from './explore-header';
-import { ExploreListFragment } from './explore-list';
+import { ExploreHeader } from './explore-header';
+import { ExploreListContainer } from './explore-list';
 
-export const ExploreView: React.FC = () => {
+export const Explore: React.FC = () => {
   return (
     <ES.Container>
-      <ExploreHeaderFragment />
-      <ExploreListFragment />
+      <ExploreHeader />
+      <ExploreListContainer />
     </ES.Container>
   );
 };

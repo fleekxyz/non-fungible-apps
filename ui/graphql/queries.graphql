@@ -41,15 +41,7 @@ query getLatestNFAs {
 query getNFA($id: ID!) {
   token(id: $id) {
     tokenId
-    owner {
-      id
-    }
     name
-    description
-    ENS
-    externalURL
-    logo
-    color
   }
 }
 

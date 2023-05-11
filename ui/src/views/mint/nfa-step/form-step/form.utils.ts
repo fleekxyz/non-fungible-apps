@@ -8,3 +8,11 @@ export const fileToBase64 = (file: File): Promise<string> =>
     reader.onload = () => resolve(reader.result?.toString() || '');
     reader.onerror = reject;
   });
+
+/**
+ * Converts a hex color string to a number.
+ */
+export const parseColorToNumber = (color: string): number => {
+  const hexColor = color.replace('#', '');
+  return parseInt(hexColor, 16);
+};

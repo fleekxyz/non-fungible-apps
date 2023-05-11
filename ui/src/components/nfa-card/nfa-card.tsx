@@ -32,7 +32,8 @@ export type NFACardProps = Omit<
 export const NFACard: React.FC<NFACardProps> = forwardStyledRef<
   HTMLAnchorElement,
   NFACardProps
->(({ data, to = `/nfa/${data.tokenId}`, ...props }, ref) => {
+  // TODO: Set default path to NFA page
+>(({ data, to = `/create-ap/${data.tokenId}`, ...props }, ref) => {
   const { name, color, ENS, logo, accessPoints } = data;
 
   const apCounter = useMemo(() => accessPoints?.length ?? 0, [accessPoints]);
@@ -60,7 +61,8 @@ export const NFACard: React.FC<NFACardProps> = forwardStyledRef<
             alignItems: 'center',
           }}
         >
-          <S.Title title={data.name}>{data.name}</S.Title>
+          {/* TODO: treat names bigger than space in layout when designs are done */}
+          <S.Title>{data.name}</S.Title>
           {/* TODO: set correct value when it gets available on contract side */}
           <Badge verified={Math.random() > 0.5} />
         </Flex>
