@@ -16,9 +16,10 @@ export const IndexedNFAStyles = {
       gridTemplateColumns: '20rem 1fr',
     },
 
-    '@media (max-width: 580px)': {
+    '@media (max-width: 640px)': {
       gridTemplateAreas: '"aside" "main"',
       gridTemplateColumns: '1fr',
+      justifyItems: 'center',
     },
   }),
 
@@ -37,7 +38,7 @@ export const IndexedNFAStyles = {
       maxWidth: '24rem',
       mixBlendMode: 'screen',
 
-      '@media (max-width: 580px)': {
+      '@media (max-width: 640px)': {
         position: 'static',
       },
     }),
@@ -161,7 +162,7 @@ export const IndexedNFAStyles = {
         gridTemplateAreas: '"thumbnail data"',
         gap: '$4h',
         alignItems: 'center',
-        gridTemplateColumns: '10rem 1fr',
+        gridTemplateColumns: '7rem 1fr',
       }),
       Thumbnail: styled('div', {
         gridArea: 'thumbnail',
