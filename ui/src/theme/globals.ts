@@ -11,6 +11,10 @@ export const themeGlobals = globalCss({
 
     fontSize: '16px',
 
+    '* > *': {
+      boxSizing: 'border-box',
+    },
+
     '@media (max-width: 850px)': {
       fontSize: '13px',
     },
