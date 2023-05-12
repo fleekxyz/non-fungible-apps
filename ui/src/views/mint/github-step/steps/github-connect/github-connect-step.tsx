@@ -1,5 +1,10 @@
-import { Card, Grid, Stepper } from '@/components';
-import { MintCardHeader } from '@/views/mint/mint-card';
+import {
+  Card,
+  CustomCardContainer,
+  CustomCardHeader,
+  Flex,
+  Stepper,
+} from '@/components';
 
 import { GithubButton } from './github-button';
 
@@ -7,10 +12,10 @@ export const GithubConnect: React.FC = () => {
   const { prevStep } = Stepper.useContext();
 
   return (
-    <Card.Container css={{ maxWidth: '$107h' }}>
-      <MintCardHeader title="Connect GitHub" onClickBack={prevStep} />
+    <CustomCardContainer>
+      <CustomCardHeader.Default title="Connect GitHub" onClickBack={prevStep} />
       <Card.Body>
-        <Grid css={{ rowGap: '$6' }}>
+        <Flex css={{ gap: '$6', flexDirection: 'column' }}>
           <GithubButton />
           <Card.Text
             css={{
@@ -24,8 +29,8 @@ export const GithubConnect: React.FC = () => {
               After connecting your GitHub, your repositories will show here.
             </span>
           </Card.Text>
-        </Grid>
+        </Flex>
       </Card.Body>
-    </Card.Container>
+    </CustomCardContainer>
   );
 };

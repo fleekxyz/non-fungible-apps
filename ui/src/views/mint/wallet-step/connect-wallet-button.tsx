@@ -1,6 +1,6 @@
 import { ConnectKitButton } from 'connectkit';
 
-import { Button, Stepper } from '@/components';
+import { Stepper } from '@/components';
 
 import { ButtonConnection } from '../button-connection';
 
@@ -9,19 +9,14 @@ export const ConnectWalletButton: React.FC = () => {
 
   return (
     <ConnectKitButton.Custom>
-      {({ isConnected, show, truncatedAddress, address }) => {
+      {({ isConnected, show, address }) => {
         if (isConnected && address) {
-          return (
-            <Button onClick={nextStep} css={{ color: '$slate12' }}>
-              {truncatedAddress}. Continue
-            </Button>
-          );
+          nextStep();
         } else {
           return (
             <ButtonConnection
               icon={'ethereum'}
-              label={' Connect Wallet'}
-              disabled={isConnected}
+              label={'Connect Wallet'}
               onClick={show}
             />
           );

@@ -25,9 +25,9 @@ query lastNFAsPaginated(
   }
 }
 
-query totalTokens {
-  tokens {
-    id
+query totalTokens($contractId: ID!) {
+  collection(id: $contractId) {
+    totalTokens
   }
 }
 
@@ -38,7 +38,7 @@ query getLatestNFAs {
   }
 }
 
-query getNFA($id: ID!) {
+query getNFADetail($id: ID!) {
   token(id: $id) {
     tokenId
     owner {
@@ -46,6 +46,33 @@ query getNFA($id: ID!) {
     }
     name
     description
+    ENS
+    externalURL
+    logo
+    color
+    createdAt
+    accessPoints {
+      createdAt
+      contentVerified
+      owner {
+        id
+      }
+      id
+    }
+    verified
+    verifier {
+      id
+    }
+    gitRepository {
+      id
+    }
+  }
+}
+
+query getNFA($id: ID!) {
+  token(id: $id) {
+    tokenId
+    name
     ENS
     externalURL
     logo

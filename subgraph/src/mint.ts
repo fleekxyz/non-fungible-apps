@@ -23,6 +23,7 @@ export function handleNewMint(event: NewMintEvent): void {
   const externalURL = event.params.externalURL;
   const ENS = event.params.ENS;
   const gitRepository = event.params.gitRepository;
+  const ipfsHash = event.params.ipfsHash;
   const commitHash = event.params.commitHash;
   const logo = event.params.logo;
   const color = event.params.color;
@@ -38,6 +39,7 @@ export function handleNewMint(event: NewMintEvent): void {
   newMintEntity.ENS = ENS;
   newMintEntity.commitHash = commitHash;
   newMintEntity.gitRepository = gitRepository;
+  newMintEntity.ipfsHash = ipfsHash;
   newMintEntity.logo = logo;
   newMintEntity.color = color;
   newMintEntity.accessPointAutoApproval = accessPointAutoApproval;
@@ -68,8 +70,6 @@ export function handleNewMint(event: NewMintEvent): void {
   token.description = description;
   token.externalURL = externalURL;
   token.ENS = ENS;
-  token.gitRepository = gitRepository;
-  token.commitHash = commitHash;
   token.logo = logo;
   token.color = color;
   token.accessPointAutoApproval = accessPointAutoApproval;

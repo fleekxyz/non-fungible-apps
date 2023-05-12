@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
 
-import {
-  Card,
-  Flex,
-  Icon,
-  IconButton,
-  InputGroup,
-  InputGroupText,
-  Spinner,
-} from '@/components';
+import { Flex, InputGroup, InputGroupText, Spinner } from '@/components';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
@@ -55,27 +47,9 @@ export const GithubRepositoryConnection: React.FC = () => {
 
   return (
     <S.Card.Wrapper>
-      <Card.Heading
+      <S.Card.Header
         title="Select Repository"
-        css={{ pr: '$3h' }}
-        leftIcon={
-          <IconButton
-            aria-label="back"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="back" />}
-            css={{ mr: '$2' }}
-            onClick={handlePrevStepClick}
-          />
-        }
-        rightIcon={
-          <IconButton
-            aria-label="info"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="info" />}
-          />
-        }
+        onClickBack={handlePrevStepClick}
       />
       <S.Card.Body>
         <S.Container>

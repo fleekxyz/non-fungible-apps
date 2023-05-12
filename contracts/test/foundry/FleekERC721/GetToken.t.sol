@@ -39,6 +39,8 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
         string memory newENS,
         string memory newCommitHash,
         string memory newRepository,
+        string memory newIpfsHash,
+        string memory newDomain,
         string memory newLogo,
         uint24 newColor
     ) public {
@@ -47,7 +49,7 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
         CuT.setTokenExternalURL(tokenId, newExternalURL);
         transferENS(newENS, deployer);
         CuT.setTokenENS(tokenId, newENS);
-        CuT.setTokenBuild(tokenId, newCommitHash, newRepository);
+        CuT.setTokenBuild(tokenId, newCommitHash, newRepository, newIpfsHash, newDomain);
         CuT.setTokenLogoAndColor(tokenId, newLogo, newColor);
 
         (

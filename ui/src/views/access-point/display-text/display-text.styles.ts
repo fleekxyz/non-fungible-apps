@@ -1,6 +1,5 @@
+import { Flex, Text } from '@/components';
 import { styled } from '@/theme';
-
-import { Flex } from '../../../components/layout';
 
 export const DisplayTextStyles = {
   Container: styled(Flex, {
@@ -13,7 +12,7 @@ export const DisplayTextStyles = {
     fontSize: '$xs',
     //TODO add variants
   }),
-  Input: styled('span', {
+  Input: styled(Text, {
     backgroundColor: '$slate1',
     borderColor: '$slate1',
     color: '$slate12',

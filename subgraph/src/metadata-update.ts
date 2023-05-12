@@ -13,6 +13,7 @@ import {
   GitRepository as GitRepositoryEntity,
   MetadataUpdate,
   Token,
+  Build,
 } from '../generated/schema';
 
 export function handleMetadataUpdateWithStringValue(
@@ -61,7 +62,7 @@ export function handleMetadataUpdateWithStringValue(
   }
 }
 
-export function handleMetadataUpdateWithDoubleStringValue(
+export function handleMetadataUpdateWithMultipleStringValues(
   event: MetadataUpdateEvent3
 ): void {
   /**
@@ -73,30 +74,29 @@ export function handleMetadataUpdateWithDoubleStringValue(
 
   entity.key = event.params.key;
   entity.tokenId = event.params._tokenId;
-  entity.doubleStringValue = event.params.value;
+  entity.multipleStringValue = event.params.value;
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
 
-  // UPDATE TOKEN
-  const token = Token.load(
+  // CREATE BUILD
+  const build = new Build(
     Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
   );
-
-  if (token) {
-    if (event.params.key == 'build') {
-      let gitRepositoryEntity = GitRepositoryEntity.load(event.params.value[1]);
-      if (!gitRepositoryEntity) {
-        // Create a new gitRepository entity
-        gitRepositoryEntity = new GitRepositoryEntity(event.params.value[1]);
-      }
-      token.commitHash = event.params.value[0];
-      token.gitRepository = event.params.value[1];
-      token.save();
-      gitRepositoryEntity.save();
+  if (event.params.key == 'build') {
+    let gitRepositoryEntity = GitRepositoryEntity.load(event.params.value[1]);
+    if (!gitRepositoryEntity) {
+      // Create a new gitRepository entity
+      gitRepositoryEntity = new GitRepositoryEntity(event.params.value[1]);
     }
+    build.commitHash = event.params.value[0];
+    build.gitRepository = event.params.value[1];
+    build.ipfsHash = event.params.value[2];
+    build.domain = event.params.value[3];
+    build.save();
+    gitRepositoryEntity.save();
   }
 }
 
