@@ -131,6 +131,7 @@ export const NFASearchFragment: React.FC = () => {
           </Combobox>
         </S.Input.Wrapper>
 
+        {/* TODO move this to the app context */}
         <S.GridList.Wrapper>
           <S.GridList.Icon
             name="grid"
