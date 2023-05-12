@@ -1,1 +1,1 @@
-export * from './nfa-list.fragment';
+export * from './nfas-container.fragment';

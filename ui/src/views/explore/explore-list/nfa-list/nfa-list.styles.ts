@@ -1,3 +1,4 @@
+import { Skeleton } from '@/components';
 import { styled } from '@/theme';
 
 export const NFAListFragmentStyles = {
@@ -65,4 +66,8 @@ export const NFAListFragmentStyles = {
       },
     }),
   },
+
+  Skeleton: styled(Skeleton, {
+    borderRadius: '$lg',
+  }),
 };

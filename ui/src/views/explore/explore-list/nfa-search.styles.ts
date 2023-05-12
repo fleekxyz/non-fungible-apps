@@ -40,6 +40,7 @@ export const NFASearchFragmentStyles = {
     Wrapper: styled(Flex, {
       border: '1px solid $slate7',
       borderRadius: '$lg',
+      backgroundColor: '$slate7',
     }),
     Icon: styled(Icon, {
       p: '$2 $3',
@@ -51,11 +52,11 @@ export const NFASearchFragmentStyles = {
         selected: {
           true: {
             color: 'white',
-            backgroundColor: '$slate7',
+            backgroundColor: 'transparent',
           },
           false: {
             color: '$slate7 ',
-            backgroundColor: 'transparent',
+            backgroundColor: 'black',
           },
         },
       },

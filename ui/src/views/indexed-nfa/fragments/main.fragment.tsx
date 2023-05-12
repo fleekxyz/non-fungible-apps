@@ -159,7 +159,7 @@ const AccessPoints: React.FC = () => {
   const {
     nfa: { accessPoints },
   } = IndexedNFA.useContext();
-
+  console.log(accessPoints);
   return (
     <>
       <S.Main.SectionHeading>Frontends</S.Main.SectionHeading>
