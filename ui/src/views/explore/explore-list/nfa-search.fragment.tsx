@@ -1,12 +1,21 @@
+import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 
-import { Dropdown, DropdownItem, Input } from '@/components';
+import { Combobox, InputGroup, InputGroupText } from '@/components';
+import { totalTokensDocument } from '@/graphclient';
 import { useDebounce } from '@/hooks';
+import { FleekERC721 } from '@/integrations/ethereum/contracts';
+import { AppLog } from '@/utils';
 
 import { Explore } from '../explore.context';
 import { NFASearchFragmentStyles as S } from './nfa-search.styles';
 
-const orderResults: DropdownItem[] = [
+type SortItem = {
+  value: string;
+  label: string;
+};
+
+const orderResults: SortItem[] = [
   { value: 'newest', label: 'Newest' },
   { value: 'oldest', label: 'Oldest' },
   { value: 'a-z', label: 'Sort A-Z' },
@@ -15,40 +24,50 @@ const orderResults: DropdownItem[] = [
 
 export const NFASearchFragment: React.FC = () => {
   const {
+    search,
     setEndReached,
     setOrderBy,
     setOrderDirection,
     setSearch,
     setPageNumber,
   } = Explore.useContext();
-  const [selectedValue, setSelectedValue] = useState<DropdownItem>(
-    orderResults[0]
-  );
+  const [selectedValue, setSelectedValue] = useState<SortItem>(orderResults[0]);
 
-  const handleSortChange = (item: DropdownItem): void => {
-    setSelectedValue(item);
-    setPageNumber(0);
-    setEndReached(false);
+  const { data: totalTokens } = useQuery(totalTokensDocument, {
+    variables: {
+      contractId: FleekERC721.address,
+    },
+    skip: Boolean(search),
+  });
 
-    switch (item.value) {
-      case 'newest':
-        setOrderBy('tokenId');
-        setOrderDirection('desc');
-        break;
-      case 'oldest':
-        setOrderBy('tokenId');
-        setOrderDirection('asc');
-        break;
-      case 'a-z':
-        setOrderBy('name');
-        setOrderDirection('asc');
-        break;
-      case 'z-a':
-        setOrderBy('name');
-        setOrderDirection('desc');
-        break;
-      default:
-        break;
+  const handleSortChange = (item: SortItem | undefined): void => {
+    if (item) {
+      setSelectedValue(item);
+      setPageNumber(0);
+      setEndReached(false);
+
+      switch (item.value) {
+        case 'newest':
+          setOrderBy('tokenId');
+          setOrderDirection('desc');
+          break;
+        case 'oldest':
+          setOrderBy('tokenId');
+          setOrderDirection('asc');
+          break;
+        case 'a-z':
+          setOrderBy('name');
+          setOrderDirection('asc');
+          break;
+        case 'z-a':
+          setOrderBy('name');
+          setOrderDirection('desc');
+          break;
+        default:
+          break;
+      }
+    } else {
+      AppLog.errorToast('Error selecting sort option. Try again');
     }
   };
 
@@ -64,25 +83,40 @@ export const NFASearchFragment: React.FC = () => {
   return (
     <S.Container>
       <S.Data.Wrapper>
-        <S.Data.Text>All NFAs&nbsp;</S.Data.Text>
-        <S.Data.Number>(3,271)</S.Data.Number>
+       {totalTokens?.collection && (<>
+          <S.Data.Text>All NFAs&nbsp;</S.Data.Text> 
+          <S.Data.Number>({totalTokens.collection.totalTokens})</S.Data.Number>
+       </>)}
       </S.Data.Wrapper>
 
       <S.Input.Wrapper>
-        <Input
-          placeholder="Search"
-          leftIcon="search"
-          onChange={handleSearchChange}
-          wrapperClassName="flex-1"
-        />
-        <Dropdown
+        <InputGroup css={{ flex: 1 }}>
+          <S.Input.Icon name="search" />
+          <InputGroupText placeholder="Search" onChange={handleSearchChange} />
+        </InputGroup>
+        <Combobox
           items={orderResults}
-          selectedValue={selectedValue}
-          onChange={handleSortChange}
-          backgroundColor="slate4"
-          textColor="slate11"
-          optionsWidth="40"
-        />
+          selected={[selectedValue, handleSortChange]}
+          css={{ minWidth: '$28' }}
+          queryKey="label"
+        >
+          {({ Field, Options }) => (
+            <>
+              <Field
+                css={{
+                  backgroundColor: '$slate4',
+                  borderColor: '$slate4',
+                  color: '$slate11',
+                }}
+              >
+                {(selected) => selected?.label || 'Select'}
+              </Field>
+              <Options disableSearch css={{ minWidth: '$44', left: 'unset' }}>
+                {(item) => item.label}
+              </Options>
+            </>
+          )}
+        </Combobox>
       </S.Input.Wrapper>
     </S.Container>
   );

@@ -1,4 +1,11 @@
-import { Button, Card, Grid } from '@/components';
+import {
+  Button,
+  Card,
+  CustomCardContainer,
+  CustomCardHeader,
+  Flex,
+  Text,
+} from '@/components';
 import { NFAPreview } from '@/components';
 
 import { useMintFormContext } from '../nfa-step/form-step';
@@ -16,8 +23,6 @@ type NftCardProps = {
 
 export const NftCard: React.FC<NftCardProps> = ({
   title,
-  leftIcon,
-  rightIcon,
   message,
   buttonText,
   leftIconButton,
@@ -43,23 +48,21 @@ export const NftCard: React.FC<NftCardProps> = ({
   } = useMintFormContext();
 
   return (
-    <Card.Container css={{ width: '$107h', p: '$0' }}>
+    <CustomCardContainer css={{ p: '$0' }}>
       <NFAPreview
         color={logoColor}
         logo={appLogo}
         name={appName}
         ens={ens}
         size={size}
-        className="rounded-t-xhl"
+        css={{
+          bt: '1.25rem',
+        }}
       />
       <Card.Body css={{ p: '$7' }}>
-        <Grid css={{ rowGap: '$6' }}>
-          <Card.Heading
-            title={title}
-            leftIcon={leftIcon}
-            rightIcon={rightIcon}
-          />
-          <span className="text-slate11 text-sm">{message}</span>
+        <Flex css={{ gap: '$6', flexDirection: 'column' }}>
+          <CustomCardHeader.Success title={title} />
+          <Text css={{ color: '$slate11', fontSize: '$sm' }}>{message}</Text>
           <Button
             colorScheme="blue"
             variant="solid"
@@ -70,8 +73,8 @@ export const NftCard: React.FC<NftCardProps> = ({
           >
             {buttonText}
           </Button>
-        </Grid>
+        </Flex>
       </Card.Body>
-    </Card.Container>
+    </CustomCardContainer>
   );
 };

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Avatar, Combobox, Icon } from '@/components';
+import { Avatar, Combobox, Icon, Text } from '@/components';
 import {
   githubActions,
   GithubClient,
@@ -21,7 +21,9 @@ const renderSelected = (selected?: GithubClient.UserData): JSX.Element => (
     ) : (
       <Icon name="github" css={{ fontSize: '$2xl' }} />
     )}
-    {selected?.label || 'Select'}
+    <Text ellipsis css={{ maxWidth: '60%' }}>
+      {selected?.label || 'Select'}
+    </Text>
   </>
 );
 
@@ -75,7 +77,7 @@ export const UserOrgsCombobox: React.FC = () => {
     <Combobox
       items={userAndOrganizations}
       unattached
-      css={{ flex: 1, minWidth: '$44' }}
+      css={{ width: '$full', flexGrow: 1 }}
       selected={[selectedUserOrg, handleUserOrgChange]}
       queryKey="label"
     >

@@ -50,11 +50,6 @@ export interface ButtonProps extends StyledButtonProps {
    */
   bottomIcon?: React.ReactElement;
   /**
-   * The space between the button icon and label.
-   * @type SystemProps["marginRight"]
-   */
-  iconSpacing?: string;
-  /**
    * Replace the spinner component when `isLoading` is set to `true`
    * @type React.ReactElement
    */
@@ -130,17 +125,6 @@ const getButtonCompoundVariant = ({
         },
         '&:focus, &:active': {
           backgroundColor: `$${color}3`,
-        },
-
-        '&:disabled': {
-          backgroundColor: `initial`,
-          '&:hover': {
-            color: `$${color}11`,
-            backgroundColor: `initial`,
-          },
-          '& img, & svg': {
-            filter: 'grayscale(100%)',
-          },
         },
       };
 

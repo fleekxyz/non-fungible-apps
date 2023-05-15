@@ -9,6 +9,7 @@ import {
   CardTag,
   Flex,
   Form,
+  RowData,
   Spinner,
   Stepper,
   Text,
@@ -26,25 +27,11 @@ export const SelectedNFA: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
 
   return (
-    <Flex
-      css={{
-        justifyContent: 'space-between',
-      }}
-    >
-      <Flex css={{ alignItems: 'center', maxWidth: '65%' }}>
-        <NFAIconFragment image={nfa.logo} color={nfa.color} />
-        <Text
-          css={{
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-          }}
-        >
-          {nfa.name}
-        </Text>
-      </Flex>
-      <CardTag css={{ minWidth: '$28' }}>Selected NFA</CardTag>
-    </Flex>
+    <RowData
+      leftIcon={<NFAIconFragment image={nfa.logo} color={nfa.color} />}
+      label={nfa.name}
+      rightComponent={<CardTag css={{ minWidth: '$28' }}>Selected NFA</CardTag>}
+    />
   );
 };
 
@@ -77,8 +64,8 @@ export const CreateAccessPointFormBody: React.FC = () => {
     },
     onCompleted(data) {
       if (data.token && id) {
-        const { name, tokenId, logo, color, externalURL: domain } = data.token;
-        setNfa({ name, tokenId, logo, color, domain });
+        const { name, tokenId, logo, color, externalURL } = data.token;
+        setNfa({ name, tokenId, logo, color, externalURL });
       } else {
         AppLog.errorToast("We couldn't find the NFA you are looking for");
       }

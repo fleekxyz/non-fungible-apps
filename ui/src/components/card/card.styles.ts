@@ -2,6 +2,7 @@ import { styled } from '@/theme';
 
 export abstract class CardStyles {
   static readonly Container = styled('div', {
+    width: '$full',
     backgroundColor: '$slate2',
     borderRadius: '$xlh',
     padding: '$7',
@@ -10,10 +11,8 @@ export abstract class CardStyles {
     borderWidth: '$default',
   });
 
-  static readonly Heading = styled('h3', {
-    color: '$slate12',
-    fontSize: '$xl',
-    fontWeight: '$medium',
+  static readonly Header = styled('div', {
+    width: '$full',
   });
 
   static readonly Body = styled('div', {

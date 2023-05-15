@@ -24,7 +24,7 @@ interface IERCX {
      */
     event MetadataUpdate(uint256 indexed _tokenId, string key, string value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
-    event MetadataUpdate(uint256 indexed _tokenId, string key, string[2] value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, string[4] value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, bool value, address indexed triggeredBy);
 
     /**
@@ -33,6 +33,8 @@ interface IERCX {
     struct Build {
         string commitHash;
         string gitRepository;
+        string ipfsHash;
+        string domain;
     }
 
     /**
@@ -84,7 +86,13 @@ interface IERCX {
     /**
      * @dev Sets a minted token's build.
      */
-    function setTokenBuild(uint256 tokenId, string memory commitHash, string memory gitRepository) external;
+    function setTokenBuild(
+        uint256 tokenId,
+        string memory commitHash,
+        string memory gitRepository,
+        string memory ipfsHash,
+        string memory domain
+    ) external;
 
     /**
      * @dev Returns the token metadata for a given tokenId.

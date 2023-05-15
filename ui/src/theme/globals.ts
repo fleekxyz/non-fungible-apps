@@ -10,6 +10,7 @@ export const themeGlobals = globalCss({
     fontFamily: 'Manrope',
 
     fontSize: '16px',
+
     '@media (max-width: 850px)': {
       fontSize: '13px',
     },

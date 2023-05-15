@@ -13,9 +13,6 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
       spinnerPlacement = 'start',
       spinner,
       loadingText,
-      iconSpacing,
-      topIcon,
-      bottomIcon,
       rightIcon,
       leftIcon,
       isFullWidth,
@@ -26,9 +23,6 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
     const contentProps = {
       rightIcon,
       leftIcon,
-      bottomIcon,
-      topIcon,
-      iconSpacing,
       children,
     };
 
@@ -40,16 +34,12 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
         data-loading={isLoading}
         css={{
           width: isFullWidth ? '100%' : undefined,
-          ...(ownProps?.css || {}),
+          ...ownProps?.css,
         }}
         {...ownProps}
       >
         {isLoading && spinnerPlacement === 'start' && (
-          <ButtonSpinner
-            label={loadingText}
-            placement={spinnerPlacement}
-            spacing={iconSpacing}
-          >
+          <ButtonSpinner label={loadingText} placement={spinnerPlacement}>
             {spinner}
           </ButtonSpinner>
         )}
@@ -65,11 +55,7 @@ export const Button = forwardStyledRef<HTMLButtonElement, ButtonProps>(
         )}
 
         {isLoading && spinnerPlacement === 'end' && (
-          <ButtonSpinner
-            label={loadingText}
-            placement={spinnerPlacement}
-            spacing={iconSpacing}
-          >
+          <ButtonSpinner label={loadingText} placement={spinnerPlacement}>
             {spinner}
           </ButtonSpinner>
         )}

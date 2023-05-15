@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-import { Card, Flex, Grid, Icon, IconButton, Spinner } from '@/components';
-import { Input } from '@/components/core/input';
+import { Flex, InputGroup, InputGroupText, Spinner } from '@/components';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
 
+import { GithubRepositorySelectionStyles as S } from './github-repository-selection.styles';
 import { RepositoriesList } from './repositories-list';
 import { UserOrgsCombobox } from './users-orgs-combobox';
 
@@ -46,48 +46,32 @@ export const GithubRepositoryConnection: React.FC = () => {
   };
 
   return (
-    <Card.Container css={{ maxWidth: '$107h', maxHeight: '$95h', pr: '$3h' }}>
-      <Card.Heading
+    <S.Card.Wrapper>
+      <S.Card.Header
         title="Select Repository"
-        css={{ pr: '$3h' }}
-        leftIcon={
-          <IconButton
-            aria-label="back"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="back" />}
-            css={{ mr: '$2' }}
-            onClick={handlePrevStepClick}
-          />
-        }
-        rightIcon={
-          <IconButton
-            aria-label="info"
-            colorScheme="gray"
-            variant="link"
-            icon={<Icon name="info" />}
-          />
-        }
+        onClickBack={handlePrevStepClick}
       />
-      <Card.Body css={{ pt: '$4' }}>
-        <Grid css={{ rowGap: '$2' }}>
-          <Flex css={{ gap: '$4', pr: '$3h', position: 'relative' }}>
+      <S.Card.Body>
+        <S.Container>
+          <S.Row>
             <UserOrgsCombobox />
-            <Input
-              leftIcon="search"
-              placeholder="Search repo"
-              onChange={handleSearchChange}
-              wrapperClassName="flex-1"
-            />
-          </Flex>
+            <InputGroup>
+              <S.Group.Icon name="search" />
+              <InputGroupText
+                css={{ overflow: 'hidden' }}
+                placeholder="Search repo"
+                onChange={handleSearchChange}
+              />
+            </InputGroup>
+          </S.Row>
           {queryLoading === 'loading' ||
           queryUserAndOrganizations === 'loading' ? (
             <Loading />
           ) : (
             <RepositoriesList searchValue={searchValue} />
           )}
-        </Grid>
-      </Card.Body>
-    </Card.Container>
+        </S.Container>
+      </S.Card.Body>
+    </S.Card.Wrapper>
   );
 };

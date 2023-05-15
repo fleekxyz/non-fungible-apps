@@ -1,11 +1,17 @@
 import { useAccount } from 'wagmi';
 
-import { Button, Card, Grid, Stepper } from '@/components';
+import {
+  Button,
+  Card,
+  CustomCardContainer,
+  CustomCardHeader,
+  Flex,
+  Stepper,
+} from '@/components';
 import { AppLog } from '@/utils';
 import { parseColorToNumber } from '@/utils/color';
 
 import { Mint } from '../../mint.context';
-import { MintCardHeader } from '../../mint-card';
 import {
   AppDescriptionField,
   AppNameField,
@@ -78,20 +84,24 @@ export const MintFormStep: React.FC = () => {
   };
 
   return (
-    <Card.Container css={{ width: '$107h' }}>
-      <MintCardHeader title="NFA Details" onClickBack={handlePrevStep} />
+    <CustomCardContainer>
+      <CustomCardHeader.Default
+        title="NFA Details"
+        onClickBack={handlePrevStep}
+      />
       <Card.Body>
-        <Grid
+        <Flex
           css={{
-            rowGap: '$6',
+            gap: '$6',
+            flexDirection: 'column',
           }}
         >
-          <Grid css={{ rowGap: '$4' }}>
+          <Flex css={{ gap: '$4', flexDirection: 'column' }}>
             <AppNameField />
             <AppDescriptionField />
             <EnsDomainField />
             <LogoField />
-          </Grid>
+          </Flex>
           <Button
             disabled={!isValid}
             colorScheme="blue"
@@ -100,8 +110,8 @@ export const MintFormStep: React.FC = () => {
           >
             Continue
           </Button>
-        </Grid>
+        </Flex>
       </Card.Body>
-    </Card.Container>
+    </CustomCardContainer>
   );
 };
