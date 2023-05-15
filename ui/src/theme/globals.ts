@@ -1,14 +1,14 @@
 import { globalCss } from '@stitches/react';
 
 export const themeGlobals = globalCss({
-  'html, body, #root': {
+  'html, body': {
     height: '100%',
-    padding: 0,
+
+    //TODO add theme colors
     color: '#ECEDEE',
     backgroundColor: 'black',
 
     fontFamily: 'Manrope',
-
     fontSize: '16px',
 
     '* > *': {
@@ -17,6 +17,13 @@ export const themeGlobals = globalCss({
 
     '@media (max-width: 850px)': {
       fontSize: '13px',
+    },
+
+    '*': {
+      margin: '0',
+      padding: '0',
+      border: '0',
+      verticalAlign: 'baseline',
     },
   },
 });
