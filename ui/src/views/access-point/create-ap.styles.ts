@@ -1,14 +1,13 @@
 import { Flex } from '@/components';
 import { styled } from '@/theme';
 
-export const MintStyles = {
+export const CreateApStyles = {
   Container: styled(Flex, {
     height: '100%',
+    flexDirection: 'column',
     justifyContent: 'center',
-    // minHeight: '85vh',
+    alignItems: 'center',
 
-    '@lg': {
-      flexDirection: 'row',
-    },
+    // minHeight: '85vh',
   }),
 };

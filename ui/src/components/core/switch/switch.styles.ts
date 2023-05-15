@@ -38,7 +38,8 @@ export const SwitchStyles = {
   }),
   Text: styled('span', {
     position: 'absolute',
-    top: '0.25rem',
+    top: '25%',
+    fontSize: '$sm',
 
     variants: {
       checked: {
@@ -55,8 +56,8 @@ export const SwitchStyles = {
   }),
   Dot: styled('span', {
     position: 'absolute',
-    top: '0.25rem',
-    left: '0.25rem',
+    top: '5px',
+    left: '5px',
     pointerEvents: 'none',
     display: 'inline-block',
     height: '1.25rem',
