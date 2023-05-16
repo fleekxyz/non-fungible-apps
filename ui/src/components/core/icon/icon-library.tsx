@@ -8,6 +8,7 @@ import { BsFillSquareFill } from '@react-icons/all-files/bs/BsFillSquareFill';
 import { FaBars } from '@react-icons/all-files/fa/FaBars';
 import { FaChevronRight } from '@react-icons/all-files/fa/FaChevronRight';
 import { FaExternalLinkAlt } from '@react-icons/all-files/fa/FaExternalLinkAlt';
+import { HiOutlineDotsHorizontal } from '@react-icons/all-files/hi/HiOutlineDotsHorizontal';
 import { IoArrowBackCircleSharp } from '@react-icons/all-files/io5/IoArrowBackCircleSharp';
 import { IoCheckmarkCircleSharp } from '@react-icons/all-files/io5/IoCheckmarkCircleSharp';
 import { IoClose } from '@react-icons/all-files/io5/IoClose';
@@ -25,7 +26,9 @@ import {
   FleekLogo,
   FleekName,
   MetamaskIcon,
+  OpenseaIcon,
 } from './custom';
+import { Share } from './custom/share-icon';
 
 export const IconLibrary = Object.freeze({
   back: IoArrowBackCircleSharp,
@@ -47,10 +50,13 @@ export const IconLibrary = Object.freeze({
   list: AiOutlineUnorderedList,
   menu: FaBars,
   metamask: MetamaskIcon, //remove if not used
+  opensea: OpenseaIcon,
   search: BiSearch,
   square: BsFillSquareFill,
+  share: Share,
   success: AiFillCheckCircle,
   twitter: AiOutlineTwitter,
+  'three-dots': HiOutlineDotsHorizontal,
   upload: IoCloudUploadSharp,
   verified: MdVerifiedUser,
 });

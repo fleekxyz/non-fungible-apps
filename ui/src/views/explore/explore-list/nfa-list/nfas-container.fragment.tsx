@@ -36,7 +36,9 @@ export const NFAsContainerFragment: React.FC = () => {
       skip: pageNumber * pageSize, //skip is for the pagination
     },
     onCompleted: (data) => {
-      if (data.tokens.length - tokens.length < pageSize) setEndReached(true);
+      if (data.tokens.length - tokens.length < pageSize) {
+        setEndReached(true);
+      }
     },
   });
 
