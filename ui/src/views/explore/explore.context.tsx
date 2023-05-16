@@ -10,7 +10,7 @@ export type ExploreContext = {
   pageNumber: number;
   endReached: boolean;
   setSearch: (search: string) => void;
-  setOrderBy: (orderBy: string) => void;
+  setOrderBy: (orderBy: Token_orderBy) => void;
   setOrderDirection: (orderDirection: OrderDirection) => void;
   setPageNumber: (pageNumber: number) => void;
   setEndReached: (isEndReaced: boolean) => void;
@@ -29,7 +29,7 @@ export abstract class Explore {
     children,
   }: Explore.ProviderProps) => {
     const [search, setSearch] = useState('');
-    const [orderBy, setOrderBy] = useState('tokenId');
+    const [orderBy, setOrderBy] = useState<Token_orderBy>('tokenId');
     const [orderDirection, setOrderDirection] =
       useState<OrderDirection>('desc');
     const [pageNumber, setPageNumber] = useState(0);

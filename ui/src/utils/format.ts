@@ -13,7 +13,9 @@ export const contractAddress = (address: string): string => {
 
 export const getRepositoryFromURL = (url: string): string => {
   const urlSplitted = url.split('/');
-  return `${urlSplitted[3]}/${urlSplitted[4]}`;
+  return urlSplitted[3] && urlSplitted[4]
+    ? `${urlSplitted[3]}/${urlSplitted[4]}`
+    : '';
 };
 
 export const getDate = (date: number): string => {

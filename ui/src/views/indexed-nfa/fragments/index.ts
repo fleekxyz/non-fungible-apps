@@ -1,3 +1,3 @@
-export * from './aside.fragment';
-export * from './main.fragment';
+export * from './aside/aside.fragment';
+export * from './main/main.fragment';
 export * from './skeleton.fragment';
