@@ -128,6 +128,8 @@ export const IndexedNFAStyles = {
       },
       Description: styled('p', {
         color: '$slate11',
+        overflowY: 'scroll',
+        pr: '1rem',
       }),
     },
     Properties: {

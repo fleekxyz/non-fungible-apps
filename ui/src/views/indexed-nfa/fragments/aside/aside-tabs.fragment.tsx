@@ -32,7 +32,7 @@ const OverviewFragment: React.FC = () => {
       <S.Aside.Overview.Row.Container>
         <S.Aside.Overview.Row.Label>Description</S.Aside.Overview.Row.Label>
       </S.Aside.Overview.Row.Container>
-      <S.Aside.Overview.Description css={{ overflowY: 'scroll' }}>
+      <S.Aside.Overview.Description>
         {nfa.description}
       </S.Aside.Overview.Description>
     </S.Aside.Overview.Container>

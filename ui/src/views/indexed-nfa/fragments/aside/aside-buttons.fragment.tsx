@@ -7,6 +7,12 @@ import { AppLog } from '@/utils';
 import { IndexedNFA } from '../../indexed-nfa.context';
 import { IndexedNFAStyles as S } from '../../indexed-nfa.styles';
 
+const openseaLink = `https://${
+  env.environment === 'development' ? 'testnets' : ''
+}.opensea.io/assets/${
+  env.environment === 'development' ? 'goerli' : 'ethereum'
+}/${FleekERC721.address}`;
+
 type CustomButtonProps = {
   icon: IconName;
 };
@@ -26,19 +32,21 @@ const CustomButon = forwardStyledRef<HTMLButtonElement, CustomButtonProps>(
 type MenuItemProps = {
   label: string;
   iconName: IconName;
-  onClick: () => void;
+  href: string;
 };
 
 const MenuItem: React.FC<MenuItemProps> = ({
   label,
   iconName,
-  onClick,
+  href,
 }: MenuItemProps) => {
   return (
-    <Flex onClick={onClick} css={{ gap: '$2' }}>
-      <Icon name={iconName} />
-      {label}
-    </Flex>
+    <a href={href} rel="noopener noreferrer" target="_blank">
+      <Flex css={{ gap: '$2' }}>
+        <Icon name={iconName} />
+        {label}
+      </Flex>
+    </a>
   );
 };
 
@@ -51,39 +59,24 @@ export const ButtonsFragment: React.FC = () => {
     AppLog.successToast('Link copied to clipboard');
   };
 
-  const handleShareOpenSeaOnClick = (): void => {
-    window.open(
-      `https://${
-        env.environment === 'development' ? 'testnets' : ''
-      }.opensea.io/assets/${
-        env.environment === 'development' ? 'goerli' : 'ethereum'
-      }/${FleekERC721.address}/${nfa.tokenId}`,
-      '_blank'
-    );
-  };
-
-  const handleShareOnTwitterOnClick = (): void => {
-    window.open(env.twitter.url, '_blank'); //TODO replace with twitter share
-  };
-
   return (
     <S.Aside.Button.Container>
       <Menu.Root>
-        <Menu.Button as={CustomButon} icon={'three-dots'} />
+        <Menu.Button as={CustomButon} icon="three-dots" />
         <Menu.Items css={{ minWidth: '12rem' }}>
           {/* TODO remove span and render as fragment */}
           <span>
             <MenuItem
               label="Open on OpenSea"
               iconName="opensea"
-              onClick={handleShareOpenSeaOnClick}
+              href={`${openseaLink}/${nfa.tokenId}`}
             />
           </span>
           <span>
             <MenuItem
               label="Share to Twitter"
               iconName="twitter"
-              onClick={handleShareOnTwitterOnClick}
+              href={env.twitter.url}
             />
           </span>
         </Menu.Items>
