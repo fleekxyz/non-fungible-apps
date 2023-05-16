@@ -20,6 +20,7 @@ export const IndexedNFAStyles = {
       gridTemplateAreas: '"aside" "main"',
       gridTemplateColumns: '1fr',
       justifyItems: 'center',
+      padding: '0',
     },
   }),
 
@@ -145,6 +146,7 @@ export const IndexedNFAStyles = {
       display: 'flex',
       flexDirection: 'column',
       gap: Spacing,
+      width: '100%',
     }),
     Heading: styled('h2', {
       fontSize: '1.625rem',
@@ -193,8 +195,8 @@ export const IndexedNFAStyles = {
         borderBottom: '1px solid $slate6',
       }),
       Elipse: styled('span', {
-        width: '0.375rem',
-        height: '0.375rem',
+        minWidth: '0.375rem',
+        minHeight: '0.375rem',
         backgroundColor: '$slate11',
         borderRadius: '100%',
       }),
