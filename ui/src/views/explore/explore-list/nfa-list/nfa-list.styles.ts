@@ -51,7 +51,6 @@ export const NFAListFragmentStyles = {
     Row: styled('tr'),
     Data: styled('td', {
       padding: '$3',
-      // maxWidth: '10rem',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
