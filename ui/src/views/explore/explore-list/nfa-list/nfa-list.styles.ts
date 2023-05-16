@@ -59,7 +59,6 @@ export const NFAListFragmentStyles = {
       tr: {
         height: '3rem',
         '&:hover': {
-          // backgroundColor: '$slate6',
           cursor: 'pointer',
         },
       },
