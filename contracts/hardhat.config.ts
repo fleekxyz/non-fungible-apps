@@ -9,7 +9,9 @@ import '@openzeppelin/hardhat-upgrades';
 import * as dotenv from 'dotenv';
 import { HardhatUserConfig } from 'hardhat/types';
 import { task, types } from 'hardhat/config';
-import deploy from './scripts/deploy';
+import deployFleekERC721 from './scripts/deploy/deploy-fleek-erc721';
+import deployFleekApps from './scripts/deploy/deploy-fleek-apps';
+import { hardhatArguments } from 'hardhat';
 
 dotenv.config();
 
@@ -26,7 +28,7 @@ const {
 } = process.env;
 
 const config: HardhatUserConfig = {
-  defaultNetwork: 'hardhat',
+  defaultNetwork: 'local',
   networks: {
     hardhat: {
       chainId: 31337,
@@ -35,6 +37,9 @@ const config: HardhatUserConfig = {
             url: MAINNET_API_KEY,
             blockNumber: 16876149,
           }
+        : undefined,
+      accounts: PRIVATE_KEY
+        ? [{ privateKey: PRIVATE_KEY, balance: '10000000000000000000' }]
         : undefined,
     },
     mumbai: {
@@ -56,6 +61,10 @@ const config: HardhatUserConfig = {
       url: ETH_MAIN_API_URL ? ETH_MAIN_API_URL : '',
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 1,
+    },
+    local: {
+      url: 'http://localhost:8545',
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
     },
   },
   gasReporter: {
@@ -97,9 +106,9 @@ export default config;
 
 // Use the following command to deploy where the network flag can be replaced with the network you choose:
 // npx hardhat deploy --network goerli --new-proxy-instance --name "FleekNFAs" --symbol "FLKNFA" --billing "[10000, 20000]"
-task('deploy', 'Deploy the contracts')
+task('deploy:FleekERC721', 'Deploy the FleekERC721 contract')
   .addFlag('newProxyInstance', 'Force to deploy a new proxy instance')
-  .addOptionalParam('name', 'The collection name', 'FleekNFAs', types.string)
+  .addOptionalParam('name', 'The collection name', 'Fleek NFAs', types.string)
   .addOptionalParam('symbol', 'The collection symbol', 'FLKNFA', types.string)
   .addOptionalParam(
     'billing',
@@ -107,4 +116,10 @@ task('deploy', 'Deploy the contracts')
     [],
     types.json
   )
-  .setAction(deploy);
+  .setAction(deployFleekERC721);
+
+task('deploy:FleekApps', 'Deploy the FleekApps contract')
+  .addFlag('newProxyInstance', 'Force to deploy a new proxy instance')
+  .addOptionalParam('name', 'The collection name', 'NFA - Apps', types.string)
+  .addOptionalParam('symbol', 'The collection symbol', 'NFAA', types.string)
+  .setAction(deployFleekApps);
