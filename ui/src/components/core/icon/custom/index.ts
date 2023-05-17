@@ -5,3 +5,4 @@ export * from './fleek-name-icon';
 export * from './beta-tag-icon';
 export * from './error-icon';
 export * from './fleek-logo-icon';
+export * from './opensea-icon';

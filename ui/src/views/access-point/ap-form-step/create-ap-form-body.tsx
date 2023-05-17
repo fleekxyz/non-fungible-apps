@@ -9,6 +9,7 @@ import {
   CardTag,
   Flex,
   Form,
+  NFAIcon,
   RowData,
   Spinner,
   Stepper,
@@ -18,9 +19,9 @@ import { getNFADocument } from '@/graphclient';
 import { useAppDispatch } from '@/store';
 import { bunnyCDNActions, useBunnyCDNStore } from '@/store/features/bunny-cdn';
 import { AppLog } from '@/utils';
+import { parseNumberToHexColor } from '@/utils/color';
 
 import { CreateAccessPoint } from '../create-ap.context';
-import { NFAIconFragment } from '../nfa-icon';
 import { useAccessPointFormContext } from './create-ap.form.context';
 
 export const SelectedNFA: React.FC = () => {
@@ -28,7 +29,12 @@ export const SelectedNFA: React.FC = () => {
 
   return (
     <RowData
-      leftIcon={<NFAIconFragment image={nfa.logo} color={nfa.color} />}
+      leftIcon={
+        <NFAIcon
+          image={nfa.logo}
+          color={`#${parseNumberToHexColor(nfa.color)}57`}
+        />
+      }
       label={nfa.name}
       rightComponent={<CardTag css={{ minWidth: '$28' }}>Selected NFA</CardTag>}
     />

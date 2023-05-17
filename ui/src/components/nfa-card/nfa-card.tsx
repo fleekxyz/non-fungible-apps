@@ -61,8 +61,7 @@ export const NFACard: React.FC<NFACardProps> = forwardStyledRef<
           }}
         >
           <S.Title title={data.name}>{data.name}</S.Title>
-          {/* TODO: set correct value when it gets available on contract side */}
-          <Badge verified={Math.random() > 0.5} />
+          <Badge verified={data.verified} />
         </Flex>
 
         <Flex css={{ gap: '$1' }}>

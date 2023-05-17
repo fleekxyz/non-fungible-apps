@@ -19,7 +19,6 @@ export const NavBarStyles = {
       content: '""',
       position: 'absolute',
       inset: 0,
-      backgroundColor: alphaColor('black', 0.8),
       backdropFilter: 'blur(4px)',
       zIndex: -1,
     },

@@ -46,6 +46,10 @@ const client = new ApolloClient({
             keyArgs: ['where', 'orderBy', 'orderDirection'],
             merge: mergeByKey('id'),
           },
+          accessPoints: {
+            keyArgs: ['where', 'orderBy', 'orderDirection'],
+            merge: mergeByKey('id'),
+          },
         },
       },
     },
