@@ -8,7 +8,8 @@
     "invoke:build": "yarn build && serverless invoke local --function submitBuildInfo",
     "prisma:generate": "npx prisma generate",
     "prisma:pull": "npx prisma db pull --force",
-    "start": "serverless offline"
+    "start": "serverless offline",
+    "generate:layers": "./scripts/prepare-prisma-client-lambda-layer.sh && ./scripts/prepare-libs-lambda-layer.sh && ./scripts/prepare-node-modules-lambda-layer.sh"
   },
   "author": "fleek",
   "license": "MIT",
