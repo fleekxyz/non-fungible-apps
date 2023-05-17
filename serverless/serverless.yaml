@@ -58,8 +58,8 @@ functions:
                 tokenId: true
     environment:
       NODE_ENV: production
-      PRISMA_DATABASE_URL: ${env:PRISMA_DATABASE_URL}
-      CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
+      DATABASE_URL: ${DATABASE_URL}
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS}
       PRIVATE_KEY: ${PRIVATE_KEY}
     layers:
       - { Ref: TopicAwsNodeModules }
@@ -75,8 +75,8 @@ functions:
           cors: true
     environment:
       NODE_ENV: production
-      PRISMA_DATABASE_URL: ${env:PRISMA_DATABASE_URL}  
-      CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
+      DATABASE_URL: ${DATABASE_URL}  
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS}
       PRIVATE_KEY: ${PRIVATE_KEY}
     layers:
       - { Ref: TopicAwsNodeModules }
