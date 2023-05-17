@@ -44,8 +44,9 @@ const DEFAULT_MINTS = {
     'aave', // name
     'Earn interest, borrow assets, and build applications', // description
     'https://aave.com/', // external url
-    'aave.eth', // ens
-    '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash
+    '', // ens
+    '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash,
+    'bafybeifc5pgon43a2xoeevwq45ftwghzbgtjxc7k4dqlzhqh432wpahigm', // ipfs hash
     'https://github.com/org/repo', // repo
     path.resolve(__dirname, '../assets/aave.svg'), // svg
   ],
@@ -53,9 +54,10 @@ const DEFAULT_MINTS = {
     'Uniswap', // name
     'Swap, earn, and build on the leading decentralized crypto trading protocol', // description
     'https://uniswap.org/', // external url
-    'uniswap.eth', // ens
+    '', // ens
     '6ea6ad16c46ae85faced7e50555ff7368422f57', // commit hash
     'https://github.com/org/repo', // repo
+    'bafybeidwf6m2lhkdifuxqucgaq547bwyxk2mljwmazvhmyryjr6yjoe3nu', // ipfs hash
     path.resolve(__dirname, '../assets/uniswap.svg'), // svg
   ],
   yearn: [
@@ -78,7 +80,7 @@ const DEFAULT_MINTS = {
   ],
 };
 
-const params = DEFAULT_MINTS.fleek;
+const params = DEFAULT_MINTS.aave;
 const mintTo = '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049';
 const verifier = '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049';
 
@@ -90,11 +92,15 @@ const verifier = '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049';
   console.log('SVG Path: ', svgPath);
   params.push(await getSVGBase64(svgPath));
   console.log('SVG length: ', params[params.length - 1].length);
-  params.push(await getSVGColor(svgPath));
+  params.push(
+    (await getSVGColor(svgPath))
+      .reduce((a, b, i) => a | (b << ((2 - i) * 8)), 0)
+      .toString()
+  );
   params.push(false);
   params.push(verifier);
 
   const transaction = await contract.mint(...params);
 
-  console.log('Response: ', transaction);
+  console.log('Response: ', transaction.hash);
 })();

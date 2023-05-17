@@ -81,7 +81,20 @@ const getCurrentAddressIfSameBytecode = async (contractName) => {
       hre.network.name,
       contractName
     ));
-    return deployData.bytecode === bytecode ? deployData.address : null;
+
+    if (deployData.bytecode === bytecode) {
+      try {
+        const contract = await hre.ethers.getContractAt(
+          contractName,
+          deployData.address
+        );
+        return contract.address;
+      } catch {
+        console.log(
+          `Contract ${contractName} at ${deployData.address} is not deployed`
+        );
+      }
+    }
   }
 
   return null;
