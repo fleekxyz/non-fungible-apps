@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 
-import { Combobox, InputGroup, InputGroupText } from '@/components';
+import { Combobox, Flex, Icon, InputGroup, InputGroupText } from '@/components';
 import { totalTokensDocument } from '@/graphclient';
 import { useDebounce } from '@/hooks';
 import { FleekERC721 } from '@/integrations/ethereum/contracts';
@@ -25,11 +25,13 @@ const orderResults: SortItem[] = [
 export const NFASearchFragment: React.FC = () => {
   const {
     search,
+    nfaView,
     setEndReached,
     setOrderBy,
     setOrderDirection,
     setSearch,
     setPageNumber,
+    setNFAView,
   } = Explore.useContext();
   const [selectedValue, setSelectedValue] = useState<SortItem>(orderResults[0]);
 
@@ -39,6 +41,10 @@ export const NFASearchFragment: React.FC = () => {
     },
     skip: Boolean(search),
   });
+
+  const handleViewChange = (view: View): void => {
+    setNFAView(view);
+  };
 
   const handleSortChange = (item: SortItem | undefined): void => {
     if (item) {
@@ -83,41 +89,64 @@ export const NFASearchFragment: React.FC = () => {
   return (
     <S.Container>
       <S.Data.Wrapper>
-       {totalTokens?.collection && (<>
-          <S.Data.Text>All NFAs&nbsp;</S.Data.Text> 
-          <S.Data.Number>({totalTokens.collection.totalTokens})</S.Data.Number>
-       </>)}
+        {totalTokens?.collection && (
+          <>
+            <S.Data.Text>All NFAs&nbsp;</S.Data.Text>
+            <S.Data.Number>
+              ({totalTokens.collection.totalTokens})
+            </S.Data.Number>
+          </>
+        )}
       </S.Data.Wrapper>
 
-      <S.Input.Wrapper>
-        <InputGroup css={{ flex: 1 }}>
-          <S.Input.Icon name="search" />
-          <InputGroupText placeholder="Search" onChange={handleSearchChange} />
-        </InputGroup>
-        <Combobox
-          items={orderResults}
-          selected={[selectedValue, handleSortChange]}
-          css={{ minWidth: '$28' }}
-          queryKey="label"
-        >
-          {({ Field, Options }) => (
-            <>
-              <Field
-                css={{
-                  backgroundColor: '$slate4',
-                  borderColor: '$slate4',
-                  color: '$slate11',
-                }}
-              >
-                {(selected) => selected?.label || 'Select'}
-              </Field>
-              <Options disableSearch css={{ minWidth: '$44', left: 'unset' }}>
-                {(item) => item.label}
-              </Options>
-            </>
-          )}
-        </Combobox>
-      </S.Input.Wrapper>
+      <S.Flex>
+        <S.Input.Wrapper>
+          <InputGroup css={{ flex: 1 }}>
+            <S.Input.Icon name="search" />
+            <InputGroupText
+              placeholder="Search"
+              onChange={handleSearchChange}
+            />
+          </InputGroup>
+          <Combobox
+            items={orderResults}
+            selected={[selectedValue, handleSortChange]}
+            css={{ minWidth: '$28' }}
+            queryKey="label"
+          >
+            {({ Field, Options }) => (
+              <>
+                <Field
+                  css={{
+                    color: '$slate11',
+                  }}
+                >
+                  {(selected) => selected?.label || 'Select'}
+                </Field>
+                <Options disableSearch css={{ minWidth: '$44', left: 'unset' }}>
+                  {(item) => item.label}
+                </Options>
+              </>
+            )}
+          </Combobox>
+        </S.Input.Wrapper>
+
+        {/* TODO move this to the app context */}
+        <S.GridList.Wrapper>
+          <S.GridList.Icon
+            name="grid"
+            selected={nfaView === 'grid'}
+            css={{ btrr: '0', bbrr: '0' }}
+            onClick={() => handleViewChange('grid')}
+          />
+          <S.GridList.Icon
+            name="list"
+            css={{ btlr: '0', bblr: '0' }}
+            selected={nfaView === 'list'}
+            onClick={() => handleViewChange('list')}
+          />
+        </S.GridList.Wrapper>
+      </S.Flex>
     </S.Container>
   );
 };
