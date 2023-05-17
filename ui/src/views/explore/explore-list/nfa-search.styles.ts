@@ -1,4 +1,4 @@
-import { Flex, Icon, IconButton } from '@/components';
+import { Flex, Icon } from '@/components';
 import { styled } from '@/theme';
 
 export const NFASearchFragmentStyles = {
@@ -25,6 +25,16 @@ export const NFASearchFragmentStyles = {
     }),
   },
 
+  Flex: styled(Flex, {
+    flex: 1,
+    justifyContent: 'flex-end',
+    gap: '$3h',
+
+    '@media (max-width: 374px)': {
+      flexWrap: 'wrap',
+    },
+  }),
+
   Input: {
     Wrapper: styled(Flex, {
       gap: '$3',
@@ -36,6 +46,7 @@ export const NFASearchFragmentStyles = {
       fontSize: '$lg',
     }),
   },
+
   GridList: {
     Wrapper: styled(Flex, {
       border: '1px solid $slate7',

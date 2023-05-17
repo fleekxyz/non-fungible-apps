@@ -99,7 +99,7 @@ export const NFASearchFragment: React.FC = () => {
         )}
       </S.Data.Wrapper>
 
-      <Flex css={{ flex: 1, justifyContent: 'flex-end', gap: '$3h' }}>
+      <S.Flex>
         <S.Input.Wrapper>
           <InputGroup css={{ flex: 1 }}>
             <S.Input.Icon name="search" />
@@ -146,7 +146,7 @@ export const NFASearchFragment: React.FC = () => {
             onClick={() => handleViewChange('list')}
           />
         </S.GridList.Wrapper>
-      </Flex>
+      </S.Flex>
     </S.Container>
   );
 };

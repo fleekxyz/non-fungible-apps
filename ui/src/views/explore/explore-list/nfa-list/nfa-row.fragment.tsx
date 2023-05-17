@@ -33,7 +33,7 @@ export const NFARow: React.FC<NFARowProps> = ({ token }: NFARowProps) => {
               borderWidth: '1px',
               borderColor: `#${parseNumberToHexColor(token.color)}`,
             }}
-            size="5rem"
+            size="4rem"
             name={token.name}
             color={`#${parseNumberToHexColor(token.color)}`}
             logo={token.logo}
@@ -42,7 +42,9 @@ export const NFARow: React.FC<NFARowProps> = ({ token }: NFARowProps) => {
           {token.name}
         </Flex>
       </S.Table.Data>
-      <S.Table.Data>{token.accessPoints?.length ?? 0}</S.Table.Data>
+      <S.Table.Data css={{ textAlign: 'center' }}>
+        {token.accessPoints?.length ?? 0}
+      </S.Table.Data>
       <S.Table.Data>
         {/* TODO add menu button once the component it's added */}
         <ResolvedAddress>{token.owner.id}</ResolvedAddress>

@@ -25,11 +25,6 @@ export const NFAListFragment: React.FC<NFAListFragmentProps> = ({
   return (
     <S.Table.Container>
       <S.Table.Root>
-        <colgroup>
-          <col span={1} />
-          <col span={1} />
-          <col span={1} />
-        </colgroup>
         <S.Table.Head>
           <S.Table.Row>
             <S.Table.Data>NAME</S.Table.Data>
