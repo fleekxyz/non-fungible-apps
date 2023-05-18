@@ -17,6 +17,7 @@ const {
   PRIVATE_KEY,
   REPORT_GAS,
   ETHERSCAN_API_KEY,
+  POLYGONSCAN_KEY,
   POLYGON_API_URL,
   ETH_MAIN_API_URL,
   ETH_SEPOLIA_API_URL,
@@ -86,10 +87,10 @@ const config: HardhatUserConfig = {
     timeout: 200000, // 200 seconds max for running tests
   },
   etherscan: {
-    // apiKey: {
-    //   polygonMumbai: POLYGONSCAN_KEY,
-    // },
-    apiKey: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
+    apiKey: {
+      polygonMumbai: POLYGONSCAN_KEY,
+    },
+    // apiKey: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
   },
 };
 

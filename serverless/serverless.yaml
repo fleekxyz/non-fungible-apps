@@ -58,12 +58,13 @@ functions:
                 tokenId: true
     environment:
       NODE_ENV: production
-      DATABASE_URL: ${DATABASE_URL}
-      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS}
-      PRIVATE_KEY: ${PRIVATE_KEY}
+      DATABASE_URL: ${env:DATABASE_URL}
+      CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
+      PRIVATE_KEY: ${env:PRIVATE_KEY}
+      JSON_RPC: ${env:JSON_RPC}
     layers:
-      - { Ref: TopicAwsNodeModules }
-      - { Ref: TopicAwsLibs }
+      - { Ref: TopicAwsNodeModulesLambdaLayer }
+      - { Ref: TopicAwsLibsLambdaLayer }
       - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
 
   submitMintInfo:
@@ -75,10 +76,11 @@ functions:
           cors: true
     environment:
       NODE_ENV: production
-      DATABASE_URL: ${DATABASE_URL}  
-      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS}
-      PRIVATE_KEY: ${PRIVATE_KEY}
+      DATABASE_URL: ${env:DATABASE_URL}  
+      CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
+      PRIVATE_KEY: ${env:PRIVATE_KEY}
+      JSON_RPC: ${env:JSON_RPC}
     layers:
-      - { Ref: TopicAwsNodeModules }
-      - { Ref: TopicAwsLibs }
+      - { Ref: TopicAwsNodeModulesLambdaLayer }
+      - { Ref: TopicAwsLibsLambdaLayer }
       - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
