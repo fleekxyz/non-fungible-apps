@@ -9,7 +9,8 @@
     "prisma:generate": "npx prisma generate",
     "prisma:pull": "npx prisma db pull --force",
     "start": "serverless offline",
-    "generate:layers": "./scripts/prepare-prisma-client-lambda-layer.sh && ./scripts/prepare-libs-lambda-layer.sh && ./scripts/prepare-node-modules-lambda-layer.sh"
+    "generate:layers": "./scripts/prepare-prisma-client-lambda-layer.sh && ./scripts/prepare-libs-lambda-layer.sh && ./scripts/prepare-node-modules-lambda-layer.sh",
+    "deploy:dev": "yarn build && yarn generate:layers && yarn sls deploy --stage dev"
   },
   "author": "fleek",
   "license": "MIT",
