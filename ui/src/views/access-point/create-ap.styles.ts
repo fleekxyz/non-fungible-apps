@@ -5,9 +5,12 @@ export const CreateApStyles = {
   Container: styled(Flex, {
     height: '100%',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    minHeight: '85vh',
+    alignItems: 'flex-start',
 
-    // minHeight: '85vh',
+    '@md': {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   }),
 };

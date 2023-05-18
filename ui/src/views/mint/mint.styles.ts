@@ -5,11 +5,11 @@ export const MintStyles = {
   Container: styled(Flex, {
     height: '100%',
     justifyContent: 'center',
-    // position: 'relative',
-    // top: 'calc(85vh / 4)',
+    minHeight: '85vh',
+    alignItems: 'flex-start',
 
-    '@lg': {
-      flexDirection: 'row',
+    '@md': {
+      alignItems: 'center',
     },
   }),
 };
