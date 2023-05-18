@@ -57,7 +57,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
               color: '$slate12',
               zIndex: '$docked',
               minWidth: '$28',
-              gap: '2px',
+              gap: '0.125rem',
             }}
             onClick={handleColorPickerClick}
           >
