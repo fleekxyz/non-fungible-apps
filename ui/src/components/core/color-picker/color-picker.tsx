@@ -41,7 +41,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
   return (
     <Card.Text css={{ height: '$22', mt: '$6' }}>
       <CS.Container>
-        <Flex css={{ gap: '1px' }}>
+        <Flex css={{ gap: '0.0625rem' }}>
           <Text>Primary Color</Text>
           <Button
             leftIcon={
