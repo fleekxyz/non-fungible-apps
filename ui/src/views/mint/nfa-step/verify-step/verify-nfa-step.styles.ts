@@ -10,7 +10,7 @@ export const VerifyNfaStepStyles = {
     Text: styled(Text, {
       color: '$slate11',
       fontSize: '$sm',
-      lineHeight: '20px',
+      lineHeight: '1.25rem',
     }),
     VerifyContainer: styled(Card.Text, {
       p: '$4',
