@@ -19,11 +19,8 @@ export const themeGlobals = globalCss({
       fontSize: '13px',
     },
 
-    '*': {
       margin: '0',
       padding: '0',
       border: '0',
-      // verticalAlign: 'baseline',
-    },
   },
 });
