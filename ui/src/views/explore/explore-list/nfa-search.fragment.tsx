@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 
-import { Combobox, Flex, Icon, InputGroup, InputGroupText } from '@/components';
+import { Combobox, InputGroup, InputGroupText } from '@/components';
 import { totalTokensDocument } from '@/graphclient';
 import { useDebounce } from '@/hooks';
 import { FleekERC721 } from '@/integrations/ethereum/contracts';
