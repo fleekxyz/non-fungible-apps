@@ -75,6 +75,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
           minWidth,
           fontSize,
           borderRadius: isRound ? '$full' : undefined,
+          padding: 0,
           ...(rest.css ?? {}),
         }}
       >

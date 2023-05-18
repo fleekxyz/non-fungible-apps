@@ -5,7 +5,8 @@ export const MintStyles = {
   Container: styled(Flex, {
     height: '100%',
     justifyContent: 'center',
-    // minHeight: '85vh',
+    // position: 'relative',
+    // top: 'calc(85vh / 4)',
 
     '@lg': {
       flexDirection: 'row',

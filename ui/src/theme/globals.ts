@@ -23,7 +23,7 @@ export const themeGlobals = globalCss({
       margin: '0',
       padding: '0',
       border: '0',
-      verticalAlign: 'baseline',
+      // verticalAlign: 'baseline',
     },
   },
 });
