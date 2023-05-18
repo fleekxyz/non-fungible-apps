@@ -11,16 +11,15 @@ export const themeGlobals = globalCss({
     fontFamily: 'Manrope',
     fontSize: '16px',
 
-    '* > *': {
-      boxSizing: 'border-box',
-    },
-
     '@media (max-width: 850px)': {
       fontSize: '13px',
     },
+  },
 
-      margin: '0',
-      padding: '0',
-      border: '0',
+  '*': {
+    margin: '0',
+    padding: '0',
+    border: '0',
+    boxSizing: 'border-box',
   },
 });

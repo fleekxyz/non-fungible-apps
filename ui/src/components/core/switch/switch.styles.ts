@@ -14,15 +14,14 @@ export const SwitchStyles = {
     borderWidth: '0.125rem',
     borderColor: 'transparent',
 
-    transitionProperty:
-      'color, background-color, border-color, text-decoration-color, fill, stroke',
+    transitionProperty: 'all',
 
     transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
     transitionDuration: '200ms',
 
     '&:focus': {
-      outline: '2px solid transparent',
-      outlineOffset: '2px',
+      outline: '0.125rem solid transparent',
+      outlineOffset: '0.125rem',
     },
 
     variants: {
@@ -64,8 +63,7 @@ export const SwitchStyles = {
     width: '1.25rem',
     borderRadius: '$full',
 
-    transitionProperty:
-      'color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter',
+    transitionProperty: 'all',
 
     transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
     transitionDuration: '200ms',
