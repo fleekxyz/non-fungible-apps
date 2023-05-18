@@ -11,7 +11,7 @@ export const SwitchStyles = {
     flexShrink: 0,
     cursor: 'pointer',
     borderRadius: '$full',
-    borderWidth: '2px',
+    borderWidth: '0.125rem',
     borderColor: 'transparent',
 
     transitionProperty:
