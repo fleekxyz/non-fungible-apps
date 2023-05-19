@@ -20,10 +20,7 @@ export const [CreateAccessPointFormProvider, useAccessPointFormContext] =
 export const useAccessPointFormContextInit =
   (): CreateAccessPointFormContext => ({
     form: {
-      domain: useFormField('domain', [
-        StringValidators.required,
-        StringValidators.isValidDomain,
-      ]),
+      domain: useFormField('custom', [StringValidators.isValidDomain]),
       isValid: useState(false),
     },
   });

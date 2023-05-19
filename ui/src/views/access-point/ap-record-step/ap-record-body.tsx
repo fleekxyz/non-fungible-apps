@@ -17,15 +17,15 @@ export const APRecordCardBody: React.FC = () => {
   const {
     form: {
       domain: {
-        value: [accesPointDomain],
+        value: [accessPointDomain],
       },
     },
   } = useAccessPointFormContext();
   const { nextStep } = Stepper.useContext();
 
-  const isSudomain = useMemo(
-    () => isSubdomain(accesPointDomain),
-    [accesPointDomain]
+  const subdomain = useMemo(
+    () => isSubdomain(accessPointDomain),
+    [accessPointDomain]
   );
 
   useEffect(() => {
@@ -57,15 +57,15 @@ export const APRecordCardBody: React.FC = () => {
         >
           <Text>
             {`Create a ${
-              isSudomain ? 'CNAME' : 'ANAME'
+              subdomain ? 'CNAME' : 'ANAME'
             } record in your DNS provider pointing to our CDN
               endpoint.`}
           </Text>
           <DisplayText
             label="Record Type"
-            value={isSudomain ? 'CNAME' : 'ANAME'}
+            value={subdomain ? 'CNAME' : 'ANAME'}
           />
-          <DisplayText label="Host" value={isSudomain ? 'App' : '@'} />
+          <DisplayText label="Host" value={subdomain ? 'App' : '@'} />
           <DisplayText label="Data (Points to)" value={bunnyURL} />
           <Button
             colorScheme="blue"

@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import { Token } from '@/graphclient';
 import { EthereumHooks } from '@/integrations';
-import { useFleekERC721Billing } from '@/store';
 import { AppLog, createContext } from '@/utils';
 
 export type NFA = Pick<
@@ -13,7 +12,6 @@ export type NFA = Pick<
 >;
 
 export type AccessPointContext = {
-  billing: string | undefined;
   nfa: NFA;
   setNfa: (nfa: NFA) => void;
 };
@@ -25,7 +23,7 @@ const [CreateAPProvider, useContext] = createContext<AccessPointContext>({
 });
 
 const [TransactionProvider, useTransactionContext] =
-  EthereumHooks.createFleekERC721WriteContext('addAccessPoint');
+  EthereumHooks.createFleekAppsWriteContext('mint');
 
 export abstract class CreateAccessPoint {
   static readonly useContext = useContext;
@@ -35,7 +33,6 @@ export abstract class CreateAccessPoint {
   static readonly Provider: React.FC<CreateAccessPoint.ProviderProps> = ({
     children,
   }) => {
-    const [billing] = useFleekERC721Billing('AddAccessPoint');
     const [nfa, setNfa] = useState<NFA>({
       tokenId: '',
       name: '',
@@ -44,23 +41,23 @@ export abstract class CreateAccessPoint {
       externalURL: '',
     });
 
-    const value = {
-      billing,
-      nfa,
-      setNfa,
-    };
-
     return (
-      <CreateAPProvider value={value}>
+      <CreateAPProvider
+        value={{
+          nfa,
+          setNfa,
+        }}
+      >
         <TransactionProvider
           config={{
             transaction: {
-              onSuccess: (data: any) => {
+              onSuccess: (data) => {
                 AppLog.info('Transaction:', data);
               },
-              onError: (error: any) => {
+              onError: (error) => {
                 AppLog.errorToast(
-                  'There was an error trying to create the Access Point. Please try again'
+                  'There was an error trying to mint the app. Please try again',
+                  error
                 );
               },
             },
