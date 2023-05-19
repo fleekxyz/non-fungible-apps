@@ -1,5 +1,5 @@
-import { App } from '@/app.context';
 import { NavBar } from '@/components';
+import { useAppStore } from '@/store';
 
 import { PageStyles as PS } from './page.styles';
 
@@ -8,8 +8,10 @@ export type AppPageProps = {
 };
 
 export const AppPage: React.FC<AppPageProps> = ({ children }: AppPageProps) => {
-  const { backgroundColor } = App.useContext();
-  const background = `linear-gradient(180deg, #${backgroundColor}59 0%, #000000 30%)`;
+  const { backgroundColor } = useAppStore();
+  const background =
+    backgroundColor &&
+    `linear-gradient(180deg, #${backgroundColor}59 0%, transparent 30%)`;
 
   return (
     <PS.Container
