@@ -1,6 +1,8 @@
-import { NavBar } from '@/components';
-import { useAppStore } from '@/store';
+import React from 'react';
 
+import { NavBar } from '@/components';
+
+import { GradientOverlay } from './gradient-overlay';
 import { PageStyles as PS } from './page.styles';
 
 export type AppPageProps = {
@@ -8,20 +10,12 @@ export type AppPageProps = {
 };
 
 export const AppPage: React.FC<AppPageProps> = ({ children }: AppPageProps) => {
-  const { backgroundColor } = useAppStore();
-  const background =
-    backgroundColor &&
-    `linear-gradient(180deg, #${backgroundColor}59 0%, transparent 30%)`;
-
   return (
-    <PS.Container
-      css={{
-        background: background,
-      }}
-    >
+    <>
+      <GradientOverlay />
       <NavBar />
       <PS.Content as="main">{children}</PS.Content>
-    </PS.Container>
+    </>
   );
 };
 
