@@ -26,7 +26,7 @@ import { useAccessPointFormContext } from './create-ap.form.context';
 
 export const SelectedNFA: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
-
+  if (!nfa.logo) return null;
   return (
     <RowData
       leftIcon={

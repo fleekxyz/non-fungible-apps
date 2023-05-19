@@ -52,7 +52,7 @@ const createDripStitches = <
   };
 
   const { createTheme, ...otherStitches } = createStitches({
-    prefix: prefix || ('drip' as string),
+    prefix: prefix || ('nfa' as string),
     media: {
       ...libMedia,
       ...(media || {}),

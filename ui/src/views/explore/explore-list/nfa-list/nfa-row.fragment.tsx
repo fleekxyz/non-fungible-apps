@@ -30,8 +30,7 @@ export const NFARow: React.FC<NFARowProps> = ({ token }: NFARowProps) => {
           <NFAPreview
             css={{
               borderRadius: '$lg',
-              borderWidth: '1px',
-              borderColor: `#${parseNumberToHexColor(token.color)}`,
+              border: `1px solid #${parseNumberToHexColor(token.color)}`,
             }}
             size="4rem"
             name={token.name}

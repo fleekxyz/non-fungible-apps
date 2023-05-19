@@ -1,15 +1,16 @@
 import { Flex } from '@/components';
 import { styled } from '@/theme';
 
-export const MintStyles = {
+export const CreateApStyles = {
   Container: styled(Flex, {
     height: '100%',
-    justifyContent: 'center',
+    flexDirection: 'column',
     minHeight: '85vh',
     alignItems: 'flex-start',
 
     '@md': {
       alignItems: 'center',
+      justifyContent: 'center',
     },
   }),
 };
