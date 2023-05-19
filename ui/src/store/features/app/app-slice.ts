@@ -4,22 +4,22 @@ import { RootState } from '@/store';
 import { useAppSelector } from '@/store/hooks';
 
 export interface AppState {
-  backgroundColor?: string;
+  overlayColor?: string;
 }
 
 const initialState: AppState = {
-  backgroundColor: undefined,
+  overlayColor: undefined,
 };
 
 export const appSlice = createSlice({
   name: 'AppSlice',
   initialState,
   reducers: {
-    setBackgroundColor: (state, action: PayloadAction<string>) => {
-      state.backgroundColor = action.payload;
+    setOverlayColor: (state, action: PayloadAction<string>) => {
+      state.overlayColor = action.payload;
     },
-    clearBackgroundColor: (state) => {
-      state.backgroundColor = undefined;
+    clearOverlayColor: (state) => {
+      state.overlayColor = undefined;
     },
   },
 });

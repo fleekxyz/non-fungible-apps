@@ -14,7 +14,7 @@ export const AppPage: React.FC<AppPageProps> = ({ children }: AppPageProps) => {
     <>
       <GradientOverlay />
       <NavBar />
-      <PS.Content as="main">{children}</PS.Content>
+      <PS.Content>{children}</PS.Content>
     </>
   );
 };

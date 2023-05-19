@@ -7,7 +7,10 @@ export const PageStyles = {
     pointerEvents: 'none',
   }),
 
-  Content: styled('div', {
+  Content: styled('main', {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
     width: '100%',
     minHeight: '85vh',
     maxWidth: '$6xl',
