@@ -25,3 +25,9 @@ model tokens {
   tokenId          Int
   verified         Boolean
 }
+
+model zones {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  sourceDomain String
+}

@@ -30,6 +30,14 @@ custom:
     concurrency: 10
 
 functions:
+  submitAccessPointInfo:
+    handler: src/functions/access-points/handler.submitAccessPointInfo
+    events:
+      - http:
+          path: accesspoint
+          method: post
+          cors: true
+    
   submitBuildInfo:
     handler: src/functions/builds/handler.submitBuildInfo # Change `src` to `dist` for deployment
     events:
