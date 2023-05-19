@@ -11,7 +11,6 @@ import { HardhatUserConfig } from 'hardhat/types';
 import { task, types } from 'hardhat/config';
 import deployFleekERC721 from './scripts/deploy/deploy-fleek-erc721';
 import deployFleekApps from './scripts/deploy/deploy-fleek-apps';
-import { hardhatArguments } from 'hardhat';
 
 dotenv.config();
 
