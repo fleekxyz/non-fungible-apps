@@ -23,7 +23,7 @@ export const IndexedNFAView: React.FC = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(appActions.clearBackgroundColor());
+      dispatch(appActions.clearOverlayColor());
     };
   }, [dispatch]);
 
@@ -44,7 +44,7 @@ export const IndexedNFAView: React.FC = () => {
       if (!data.token) handleError(new Error('Token not found'));
       if (data.token?.color)
         dispatch(
-          appActions.setBackgroundColor(parseNumberToHexColor(data.token.color))
+          appActions.setOverlayColor(parseNumberToHexColor(data.token.color))
         );
     },
     onError(error) {

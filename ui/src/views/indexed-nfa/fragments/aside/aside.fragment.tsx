@@ -18,8 +18,8 @@ export const IndexedNFAAsideFragment: React.FC = () => {
   const [top, setTop] = useState<number>();
   const { nfa } = IndexedNFA.useContext();
 
-  const { backgroundColor } = useAppStore();
-  const background = `radial-gradient(closest-corner circle at 90% 45%, #${backgroundColor}8c 1% ,#${backgroundColor}57 20%, transparent 40%), radial-gradient(closest-corner circle at 60% 25%, #${backgroundColor} 3%, #${backgroundColor}73 30%, #181818 70%)`;
+  const { overlayColor } = useAppStore();
+  const background = `radial-gradient(closest-corner circle at 90% 45%, #${overlayColor}8c 1% ,#${overlayColor}57 20%, transparent 40%), radial-gradient(closest-corner circle at 60% 25%, #${overlayColor} 3%, #${overlayColor}73 30%, #181818 70%)`;
 
   useEffect(() => {
     setTop(ref.current?.getBoundingClientRect().top);
