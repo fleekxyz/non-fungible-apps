@@ -3,3 +3,4 @@ export * from './github';
 export * from './toasts';
 export * from './ens';
 export * from './bunny-cdn';
+export * from './app';

@@ -25,6 +25,16 @@ export const NFASearchFragmentStyles = {
     }),
   },
 
+  Flex: styled(Flex, {
+    flex: 1,
+    justifyContent: 'flex-end',
+    gap: '$3h',
+
+    '@media (max-width: 374px)': {
+      flexWrap: 'wrap',
+    },
+  }),
+
   Input: {
     Wrapper: styled(Flex, {
       gap: '$3',
@@ -34,6 +44,33 @@ export const NFASearchFragmentStyles = {
     }),
     Icon: styled(Icon, {
       fontSize: '$lg',
+    }),
+  },
+
+  GridList: {
+    Wrapper: styled(Flex, {
+      border: '1px solid $slate7',
+      borderRadius: '$lg',
+      backgroundColor: '$slate7',
+    }),
+    Icon: styled(Icon, {
+      p: '$2 $3',
+      border: 'none',
+      borderRadius: '$lg',
+      cursor: 'pointer',
+
+      variants: {
+        selected: {
+          true: {
+            color: 'white',
+            backgroundColor: 'transparent',
+          },
+          false: {
+            color: '$slate7 ',
+            backgroundColor: 'black',
+          },
+        },
+      },
     }),
   },
 };

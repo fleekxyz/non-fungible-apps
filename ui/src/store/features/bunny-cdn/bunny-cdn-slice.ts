@@ -43,9 +43,9 @@ export const bunnyCDNActions = {
   ...asyncThunk,
 };
 
-const selectENSState = (state: RootState): BunnyCDNState => state.bunnyCDN;
+const selectBunnyCDNState = (state: RootState): BunnyCDNState => state.bunnyCDN;
 
 export const useBunnyCDNStore = (): BunnyCDNState =>
-  useAppSelector(selectENSState);
+  useAppSelector(selectBunnyCDNState);
 
 export default bunnyCDNSlice.reducer;

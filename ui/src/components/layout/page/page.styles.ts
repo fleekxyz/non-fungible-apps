@@ -1,12 +1,16 @@
 import { styled } from '@/theme';
 
-export abstract class PageStyles {
-  public static readonly Container = styled('div', {
-    minHeight: '100vh',
-    position: 'relative',
-  });
+export const PageStyles = {
+  GradientOverlay: styled('div', {
+    position: 'absolute',
+    inset: 0,
+    pointerEvents: 'none',
+  }),
 
-  public static readonly Content = styled('div', {
+  Content: styled('main', {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
     width: '100%',
     minHeight: '85vh',
     maxWidth: '$6xl',
@@ -16,5 +20,5 @@ export abstract class PageStyles {
     '@md': {
       padding: '0 $6',
     },
-  });
-}
+  }),
+};

@@ -1,7 +1,7 @@
 import { Flex } from '@/components';
 import { styled } from '@/theme';
 
-export const MintStyles = {
+export const CreateApStyles = {
   Container: styled(Flex, {
     flex: 1,
     alignItems: 'center',
