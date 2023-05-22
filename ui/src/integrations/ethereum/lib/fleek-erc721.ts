@@ -39,6 +39,7 @@ export const FleekERC721 = {
       params.description.replaceAll(/\n/g, '\\n'), //replace break lines with \\n so it doesn't break the json,
       params.image,
       params.externalUrl,
+      params.ipfsHash,
       params.ens,
       params.commitHash,
       params.repo
@@ -155,6 +156,7 @@ export namespace FleekERC721 {
     description: string;
     owner: string;
     externalUrl: string;
+    ipfsHash: string;
     image: string;
     ens?: string;
     commitHash: string;

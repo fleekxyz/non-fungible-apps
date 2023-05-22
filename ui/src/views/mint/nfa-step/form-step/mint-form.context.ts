@@ -13,6 +13,7 @@ export type MintFormContext = {
     logoColor: FormField;
     ens: FormField;
     domainURL: FormField;
+    ipfsHash: FormField;
     verifier: FormField;
     isValid: ReactState<boolean>;
   };
@@ -51,6 +52,7 @@ export const useMintFormContextInit = (): MintFormContext => ({
       StringValidators.required,
       StringValidators.isUrl,
     ]),
+    ipfsHash: useFormField('ipfsHash', [StringValidators.required]),
     ens: useFormField('ens', [], ''),
     verifier: useFormField('verifier', [StringValidators.required]),
     isValid: useState(false),
