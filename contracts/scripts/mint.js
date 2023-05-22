@@ -80,7 +80,7 @@ const DEFAULT_MINTS = {
   ],
 };
 
-const params = DEFAULT_MINTS.aave;
+const params = DEFAULT_MINTS.uniswap;
 const mintTo = '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049';
 const verifier = '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049';
 

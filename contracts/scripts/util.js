@@ -14,8 +14,8 @@ module.exports.getContract = async function (contractName) {
 
 module.exports.parseDataURI = function (dataURI) {
   if (!dataURI.startsWith('data:')) throw new Error('Invalid data URI');
-  dataURI.replace('data:', '');
-  const [type, data] = dataURI.split(';base64,');
+  const content = dataURI.replace('data:', '');
+  const [type, data] = content.split(';base64,');
 
   switch (type) {
     case 'application/json':
