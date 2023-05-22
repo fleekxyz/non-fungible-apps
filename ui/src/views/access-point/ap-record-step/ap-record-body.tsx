@@ -3,7 +3,6 @@ import { useEffect, useMemo } from 'react';
 import { Button, Card, Flex, SpinnerDot, Stepper, Text } from '@/components';
 import { bunnyCDNActions, useAppDispatch, useBunnyCDNStore } from '@/store';
 
-import { useAccessPointFormContext } from '../ap-form-step';
 import { CreateAccessPoint } from '../create-ap.context';
 import { DisplayText } from '../display-text';
 import { isSubdomain } from './record-step.utils';
@@ -12,15 +11,12 @@ export const APRecordCardBody: React.FC = () => {
   const dispatch = useAppDispatch();
   const { bunnyURL, state } = useBunnyCDNStore();
   const {
-    nfa: { domain: nfaDomain },
-  } = CreateAccessPoint.useContext();
-  const {
     form: {
       domain: {
         value: [accessPointDomain],
       },
     },
-  } = useAccessPointFormContext();
+  } = CreateAccessPoint.useFormContext();
   const { nextStep } = Stepper.useContext();
 
   const subdomain = useMemo(
@@ -36,7 +32,7 @@ export const APRecordCardBody: React.FC = () => {
   }, [state, nextStep, dispatch]);
 
   const handleContinueClick = (): void => {
-    dispatch(bunnyCDNActions.verifyBunnyPullzone(nfaDomain));
+    dispatch(bunnyCDNActions.verifyBunnyPullzone(accessPointDomain));
   };
 
   return (

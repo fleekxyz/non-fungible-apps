@@ -1,7 +1,6 @@
 import { Form, Step, Stepper } from '@/components';
 
 import { WalletStep } from '../mint/wallet-step';
-import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
 import { CreateAccessPointForm } from './ap-form-step/create-ap-form';
 import { APRecordStep } from './ap-record-step/ap-record-step';
 import { isSubdomain } from './ap-record-step/record-step.utils';
@@ -13,6 +12,7 @@ export const CreateApStepper: React.FC = () => {
   const {
     transaction: { isSuccess },
   } = CreateAccessPoint.useTransactionContext();
+
   const {
     form: {
       domain: {
@@ -20,7 +20,7 @@ export const CreateApStepper: React.FC = () => {
       },
       isValid: [, setIsValid],
     },
-  } = useAccessPointFormContext();
+  } = CreateAccessPoint.useFormContext();
 
   if (isSuccess) return <CreateAccessPointSuccess />;
 
