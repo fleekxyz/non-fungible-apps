@@ -1,11 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useQuery } from '@apollo/client';
+import { ethers } from 'ethers';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { FormField, useFormField } from '@/components';
 import { Token } from '@/graphclient';
+import { getNFADocument } from '@/graphclient';
 import { EthereumHooks } from '@/integrations';
 import { AppLog, createContext, StringValidators } from '@/utils';
+
+import UniswapNFAMock from './uniswap-nfa.mock.json';
 
 const [CreateAPProvider, useContext] = createContext<CreateAccessPoint.Context>(
   {
@@ -35,19 +41,34 @@ export abstract class CreateAccessPoint {
   static readonly Provider: React.FC<CreateAccessPoint.ProviderProps> = ({
     children,
   }) => {
-    const [nfa, setNfa] = useState<CreateAccessPoint.NFA>({
-      tokenId: '0',
-      name: '',
-      logo: '',
-      color: 0,
-      externalURL: '',
+    const { id } = useParams();
+    const [nfa, setNfa] = useState<CreateAccessPoint.NFA>(
+      UniswapNFAMock as any // TODO: remove mock
+    );
+
+    const { loading: nfaLoading } = useQuery(getNFADocument, {
+      skip: id === undefined || Boolean(UniswapNFAMock), // TODO: remove mock
+      variables: {
+        id: ethers.utils.hexlify(Number(id)),
+      },
+      onCompleted(data) {
+        if (data.token && id) {
+          const { name, tokenId, logo, color, externalURL } = data.token;
+          setNfa({ name, tokenId, logo, color, externalURL });
+        } else {
+          AppLog.errorToast("We couldn't find the NFA you are looking for");
+        }
+      },
+      onError(error) {
+        AppLog.errorToast('Error fetching NFA', error);
+      },
     });
 
     return (
       <CreateAPProvider
         value={{
           nfa,
-          setNfa,
+          isLoading: nfaLoading,
         }}
       >
         <TransactionProvider
@@ -95,7 +116,7 @@ export namespace CreateAccessPoint {
 
   export type Context = {
     nfa: NFA;
-    setNfa: (nfa: NFA) => void;
+    isLoading: boolean;
   };
 
   export type FormContext = {

@@ -1,7 +1,4 @@
-import { useQuery } from '@apollo/client';
-import { ethers } from 'ethers';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 
 import {
@@ -15,7 +12,6 @@ import {
   Stepper,
   Text,
 } from '@/components';
-import { getNFADocument } from '@/graphclient';
 import { useAppDispatch } from '@/store';
 import { bunnyCDNActions, useBunnyCDNStore } from '@/store/features/bunny-cdn';
 import { AppLog } from '@/utils';
@@ -25,13 +21,13 @@ import { CreateAccessPoint } from '../create-ap.context';
 
 export const SelectedNFA: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
-  if (!nfa.logo) return null;
+  if (!nfa) return null;
   return (
     <RowData
       leftIcon={
         <NFAIcon
           image={nfa.logo}
-          color={`#${parseNumberToHexColor(nfa.color)}57`}
+          color={`#${parseNumberToHexColor(nfa.color || 0)}57`}
         />
       }
       label={nfa.name}
@@ -41,10 +37,9 @@ export const SelectedNFA: React.FC = () => {
 };
 
 export const CreateAccessPointFormBody: React.FC = () => {
-  const { id } = useParams();
   const { address } = useAccount();
   const { nextStep, setStep } = Stepper.useContext();
-  const { nfa, setNfa } = CreateAccessPoint.useContext();
+  const { nfa, isLoading } = CreateAccessPoint.useContext();
   const { setArgs } = CreateAccessPoint.useTransactionContext();
   const { state } = useBunnyCDNStore();
   const dispatch = useAppDispatch();
@@ -60,24 +55,6 @@ export const CreateAccessPointFormBody: React.FC = () => {
     value: [domain],
   } = domainContext;
 
-  const { loading: nfaLoading } = useQuery(getNFADocument, {
-    skip: id === undefined,
-    variables: {
-      id: ethers.utils.hexlify(Number(id)),
-    },
-    onCompleted(data) {
-      if (data.token && id) {
-        const { name, tokenId, logo, color, externalURL } = data.token;
-        setNfa({ name, tokenId, logo, color, externalURL });
-      } else {
-        AppLog.errorToast("We couldn't find the NFA you are looking for");
-      }
-    },
-    onError(error) {
-      AppLog.errorToast('Error fetching NFA', error);
-    },
-  });
-
   useEffect(() => {
     if (state === 'success') {
       nextStep();
@@ -85,7 +62,7 @@ export const CreateAccessPointFormBody: React.FC = () => {
     }
   }, [state, nextStep, dispatch]);
 
-  if (nfaLoading) {
+  if (isLoading) {
     return (
       <Flex
         css={{
