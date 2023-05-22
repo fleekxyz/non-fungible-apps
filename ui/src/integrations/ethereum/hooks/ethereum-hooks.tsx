@@ -26,7 +26,7 @@ const createWriteContractContext = <
   TFunctionName extends keyof TArgumentsMap & string,
   TFunctionArguments extends [
     ...TArgumentsMap[TFunctionName],
-    EthereumHooks.WriteContext.SettingsParam
+    EthereumHooks.WriteContext.SettingsParam?
   ]
 >(
   address: string,
@@ -116,7 +116,7 @@ export const EthereumHooks = {
     TFunctionName extends keyof ArgumentsMaps.FleekApps & string,
     TFunctionArguments extends [
       ...ArgumentsMaps.FleekApps[TFunctionName],
-      EthereumHooks.WriteContext.SettingsParam
+      EthereumHooks.WriteContext.SettingsParam?
     ]
   >(
     functionName: TFunctionName
@@ -126,7 +126,7 @@ export const EthereumHooks = {
       ArgumentsMaps.FleekApps,
       TFunctionName,
       TFunctionArguments
-    >(FleekERC721.address, FleekApps.abi, functionName);
+    >(FleekApps.address, FleekApps.abi, functionName);
   },
 };
 
@@ -145,7 +145,7 @@ export namespace EthereumHooks {
       TFunctionName extends keyof TArgumentsMap & string,
       TFunctionArguments extends [
         ...TArgumentsMap[TFunctionName],
-        EthereumHooks.WriteContext.SettingsParam
+        EthereumHooks.WriteContext.SettingsParam?
       ]
     > {
       functionName: TFunctionName;
