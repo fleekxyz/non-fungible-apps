@@ -16,7 +16,6 @@ import { useTransactionCost } from '@/hooks';
 import { FleekERC721 } from '@/integrations';
 import { AppLog } from '@/utils';
 
-import { useAccessPointFormContext } from './ap-form-step/create-ap.form.context';
 import { SelectedNFA } from './ap-form-step/create-ap-form-body';
 import { CreateAccessPoint } from './create-ap.context';
 import { DisplayText } from './display-text';
@@ -29,7 +28,7 @@ export const AccessPointDataFragment: React.FC = () => {
         value: [domain],
       },
     },
-  } = useAccessPointFormContext();
+  } = CreateAccessPoint.useFormContext();
 
   if (status === 'connecting') return <div>Loading...</div>; //TODO replace with spinner
 
@@ -54,7 +53,7 @@ export const AccessPointDataFragment: React.FC = () => {
 };
 
 export const CreateAccessPointPreview: React.FC = () => {
-  const { prevStep } = Stepper.useContext();
+  const { setStep } = Stepper.useContext();
   const { address } = useAccount();
 
   const {
@@ -65,9 +64,12 @@ export const CreateAccessPointPreview: React.FC = () => {
 
   const {
     form: {
+      domain: {
+        value: [domain],
+      },
       isValid: [isValid],
     },
-  } = useAccessPointFormContext();
+  } = CreateAccessPoint.useFormContext();
 
   const [cost, currency, isCostLoading] = useTransactionCost(
     prepareData?.request.value,
@@ -112,9 +114,16 @@ export const CreateAccessPointPreview: React.FC = () => {
     }
   }, [writeStatus, transactionStatus]);
 
+  const handleClickBack = (): void => {
+    setStep(domain ? 3 : 2);
+  };
+
   return (
     <CustomCardContainer>
-      <CustomCardHeader.Default title="Review Details" onClickBack={prevStep} />
+      <CustomCardHeader.Default
+        title="Review Details"
+        onClickBack={handleClickBack}
+      />
       <Card.Body>
         <Flex css={{ flexDirection: 'column', gap: '$6' }}>
           <AccessPointDataFragment />
