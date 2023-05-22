@@ -35,7 +35,6 @@
     "@prisma/client": "^4.13.0",
     "@types/node": "^18.15.11",
     "aws-sdk": "^2.1342.0",
-    "dotenv": "^16.0.3",
     "prisma": "^4.13.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4",

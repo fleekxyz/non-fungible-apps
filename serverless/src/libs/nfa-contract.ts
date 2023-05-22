@@ -1,8 +1,5 @@
 import Web3 from 'web3';
 import * as abiFile from '../../../contracts/deployments/goerli/FleekERC721.json';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
 
 if (
   process.env.PRIVATE_KEY === undefined ||

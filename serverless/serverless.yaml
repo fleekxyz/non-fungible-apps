@@ -26,6 +26,11 @@ layers:
   TopicPrismaAwsPrismaClient:
     path: lambda-layers-prisma-client
 
+package: { 
+  individually: true, 
+  patterns: ["**/*.prisma", "**/libquery_engine-rhel-openssl-1.0.x.so.node"],
+},
+
 custom:
   esbuild:
     bundle: true
@@ -40,46 +45,42 @@ custom:
 functions:
 
   submitBuildInfo:
-    handler: src/functions/builds/handler.submitBuildInfo # Change `src` to `dist` for deployment
+    # Deployment:
+    handler: ./dist/serverless/src/functions/builds/handler.submitBuildInfo # TODO This will not work, need to change to nfa-serverless/dist/serverless/src/functions/builds/handler.submitBuildInfo
+    # Local development:
+    # handler: ./src/functions/builds/handler.submitBuildInfo
     events:
       - http:
           path: build
           method: post
           cors: true
-          request:
-            parameters:
-              querystrings:
-                githubOrg: true
-                githubRepo: true
-                commitHash: true
-                author: true
-                timestamp: true
-                ipfsHash: true
-                tokenId: true
-    environment:
+    environment: # TODO They won't be loaded from the shell environment, need to find a way to pass them from the deployment script
       NODE_ENV: production
-      DATABASE_URL: ${env:DATABASE_URL}
-      CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
-      PRIVATE_KEY: ${env:PRIVATE_KEY}
-      JSON_RPC: ${env:JSON_RPC}
+      DATABASE_URL: ${DATABASE_URL}
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+      JSON_RPC: ${JSON_RPC}
     layers:
       - { Ref: TopicAwsNodeModulesLambdaLayer }
       - { Ref: TopicAwsLibsLambdaLayer }
       - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
 
   submitMintInfo:
-    handler: src/functions/mints/handler.submitMintInfo
+    # Deployment:
+    handler: ./dist/serverless/src/functions/mints/handler.submitMintInfo # TODO This will not work, need to change to nfa-serverless/dist/serverless/src/functions/mints/handler.submitMintInfo
+    # Local development:
+    # handler: ./src/functions/mints/handler.submitMintInfo
     events:
       - http:
           path: mint
           method: post
           cors: true
-    environment:
+    environment: # TODO They won't be loaded from the shell environment, need to find a way to pass them from the deployment script
       NODE_ENV: production
-      DATABASE_URL: ${env:DATABASE_URL}  
-      CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
-      PRIVATE_KEY: ${env:PRIVATE_KEY}
-      JSON_RPC: ${env:JSON_RPC}
+      DATABASE_URL: ${DATABASE_URL}  
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+      JSON_RPC: ${JSON_RPC}
     layers:
       - { Ref: TopicAwsNodeModulesLambdaLayer }
       - { Ref: TopicAwsLibsLambdaLayer }
