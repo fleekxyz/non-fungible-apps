@@ -1,16 +1,16 @@
 // npx hardhat run scripts/mint-app.ts --network local
 
-import { ethers } from 'hardhat';
+import { getContract } from './util';
 
 const mintApp = async (nfaId: number) => {
-  const contract = await ethers.getContractAt(
-    'FleekApps',
-    '0x93c58464675a79cb623000C661Fc105795B80aA0'
+  const contract = await getContract('FleekApps');
+
+  const transaction = await contract.mint(
+    '0x7ed735b7095c05d78df169f991f2b7f1a1f1a049',
+    nfaId
   );
 
-  await contract.mint('0x7ed735b7095c05d78df169f991f2b7f1a1f1a049', nfaId);
-
-  console.log('Minted app');
+  console.log('Minted app', transaction.hash);
 };
 
-mintApp(1);
+mintApp(0);
