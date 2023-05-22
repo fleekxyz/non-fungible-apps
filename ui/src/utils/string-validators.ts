@@ -57,6 +57,7 @@ const hasSpecialCharacters: StringValidator = {
 const isValidDomain: StringValidator = {
   name: 'isValidDomain',
   validate: (value = '') => {
+    if (value === '') return true;
     const regex =
       /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/;
     return regex.test(value);
