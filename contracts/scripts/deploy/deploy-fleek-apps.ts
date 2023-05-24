@@ -2,6 +2,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { deployLibraries } from './deploy-libraries';
 import { deployContractWithProxy } from './deploy-proxy-contract';
 import { getContract } from '../util';
+import { Contract } from 'ethers';
 
 type TaskArgs = {
   newProxyInstance: boolean;
@@ -12,13 +13,13 @@ type TaskArgs = {
 export default async (
   { newProxyInstance, name, symbol }: TaskArgs,
   hre: HardhatRuntimeEnvironment
-): Promise<void> => {
+): Promise<Contract> => {
   console.log('Deploying FleekApps...');
   const libraries = await deployLibraries(['FleekSVG'], hre);
 
   const mainContract = await getContract('FleekERC721');
 
-  await deployContractWithProxy(
+  return deployContractWithProxy(
     {
       name: 'FleekApps',
       newProxyInstance,
