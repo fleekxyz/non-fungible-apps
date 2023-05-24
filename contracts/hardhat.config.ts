@@ -37,9 +37,6 @@ const config: HardhatUserConfig = {
             blockNumber: 16876149,
           }
         : undefined,
-      accounts: PRIVATE_KEY
-        ? [{ privateKey: PRIVATE_KEY, balance: '10000000000000000000' }]
-        : undefined,
     },
     mumbai: {
       url: POLYGON_API_URL ? POLYGON_API_URL : '',
