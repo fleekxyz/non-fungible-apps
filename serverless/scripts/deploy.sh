@@ -5,9 +5,9 @@ normal=$(tput sgr0)
 
 source .env
 
-echo "${bold}Starting the deployment process"
+echo "${bold}Starting the deployment process${normal}"
 
-echo "${bold}Installing dependencies via Yarn"
+echo "${bold}Installing dependencies via Yarn${normal}"
 
 yarn
 
@@ -47,33 +47,33 @@ if [[ -z "${AWS_SECRET_ACCESS_KEY}" ]]; then
   export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 fi
 
-echo "${bold}Copying the Prisma schema file to function directories"
+echo "${bold}Copying the Prisma schema file to function directories${normal}"
 cp prisma/schema.prisma dist/serverless/src/functions/builds/
 cp prisma/schema.prisma dist/serverless/src/functions/mints/
 
-echo "${bold}Running the build command"
+echo "${bold}Running the build command${normal}"
 yarn build
 
-echo "${bold}Copying the .env file to dist/"
+echo "${bold}Copying the rhel openssl engine to dist/${normal}"
+cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/serverless/src/functions/mints
+# cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/serverless/src/functions/builds
+
+echo "${bold}Copying the .env file to dist/${normal}"
 cp .env src/
 
-echo "${bold}Copying the Prisma schema file to function directories"
+echo "${bold}Copying the Prisma schema file to function directories${normal}"
 cp prisma/schema.prisma dist/serverless/src/functions/builds/
 cp prisma/schema.prisma dist/serverless/src/functions/mints/
 
-echo "${bold}Generating Prisma Client"
+echo "${bold}Generating Prisma Client${normal}"
 yarn prisma:generate
 
-echo "${bold}Creating layer zip files"
+echo "${bold}Creating layer zip files${normal}"
 /bin/bash ./scripts/prepare-libs-lambda-layer.sh
 /bin/bash ./scripts/prepare-prisma-client-lambda-layer.sh 
 /bin/bash ./scripts/prepare-node-modules-lambda-layer.sh
 
-echo "${bold}Removing the copied Prisma schema files"
-rm dist/serverless/src/functions/builds/schema.prisma
-rm dist/serverless/src/functions/mints/schema.prisma
-
-echo "${bold}Deploying to AWS lambda"
+echo "${bold}Deploying to AWS lambda${normal}"
 yarn sls deploy --stage dev --verbose
 
 # step 0 -> run yarn

@@ -13,8 +13,11 @@ export const submitMintInfo = async (
   event: APIGatewayEvent
   ///context: APIGatewayEventRequestContext
 ): Promise<APIGatewayProxyResult> => {
+  console.log('=*=*=*=*=*=*=*=*=*=*=*=* EVENT LOG');
+  console.log(event);
+  console.log('=*=*=*=*=*=*=*=*=*=*=*=*');
   try {
-    if (event.body === null) {
+    if (event.body === null || event.body === undefined) {
       return formatJSONResponse({
         status: 422,
         message: 'Required parameters were not passed.',
@@ -27,6 +30,9 @@ export const submitMintInfo = async (
       }**/
 
     const eventBody = JSON.parse(event.body);
+    console.log('=*=*=*=*=*=*=*=*=*=*=*=* EVENT BODY JSON LOG');
+    console.log(eventBody);
+    console.log('=*=*=*=*=*=*=*=*=*=*=*=*');
     const topics = eventBody.event.data.block.logs[1].slice(1, 3);
     const hexCalldata = eventBody.event.data.block.logs[1].data;
 
@@ -131,6 +137,9 @@ export const submitMintInfo = async (
       ipfsHash: decodedLogs.ipfsHash,
       domain: decodedLogs.externalURL,
     };
+    console.log('=*=*=*=*=*=*=*=*=*=*=*=* MINT INFO LOG');
+    console.log(mintInfo);
+    console.log('=*=*=*=*=*=*=*=*=*=*=*=*');
 
     initPrisma();
 
