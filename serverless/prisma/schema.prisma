@@ -28,6 +28,8 @@ model tokens {
 
 model zones {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  sourceDomain String
+  zoneId       Int // The returned id from the creation call
+  name         String // The assigned name at the time of creation
+  hostname     String // The target domain that's assigned as hostname
+  sourceDomain String // The origin URL
 }

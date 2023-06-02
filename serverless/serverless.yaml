@@ -10,6 +10,7 @@ provider:
     runtime: nodejs18.x
     stage: ${opt:stage, 'prd'}
     region: ${opt:region, 'us-west-2'}
+    timeout: 40
     apiGateway:
       minimumCompressionSize: 1024
       shouldStartNameWithService: true

@@ -5,8 +5,8 @@ import { v4 } from 'uuid';
 import { prisma } from '@libs/prisma';
 import {
   BunnyCdn,
+  BunnyCdnError,
   CreatePullZoneMethodArgs,
-  fetchPullZoneWhenNameAlreadyTaken,
 } from '@libs/bunnyCDN';
 
 export const submitAccessPointInfo = async (
@@ -25,34 +25,60 @@ export const submitAccessPointInfo = async (
     // Set up constants
     const bunnyCdn = new BunnyCdn(process.env.BUNNY_CDN_ACCESS_KEY);
     const data = JSON.parse(event.body);
-    const id = v4();
     const accessPointInfo = {
-      apId: id,
+      apId: 'null',
       createdAt: new Date().toISOString(),
       sourceDomain: data.sourceDomain,
-      targetDomain: data.targetDomain,
+      hostname: data.targetDomain,
     };
 
-    // Create pull zone request
-    const requestArgs: CreatePullZoneMethodArgs = {
-      zoneId: accessPointInfo.targetDomain,
-      originUrl: accessPointInfo.sourceDomain,
+    let callSuccess;
+    let pullZone: {
+      id: any;
+      name?: string;
+      originUrl?: string;
+      hostname?: string;
     };
-    console.log(data);
 
-    const pullZone = await bunnyCdn.createPullZone(requestArgs).catch(
-      fetchPullZoneWhenNameAlreadyTaken({
-        name: accessPointInfo.targetDomain,
+    do {
+      let id = v4();
+      let requestArgs: CreatePullZoneMethodArgs = {
+        zoneId: id, // this is technically the zone name. It should be unique.
+        originUrl: accessPointInfo.sourceDomain,
+      };
+
+      try {
+        pullZone = await bunnyCdn.createPullZone(requestArgs);
+        accessPointInfo.apId = id;
+        callSuccess = true;
+      } catch (error) {
+        callSuccess = false;
+        if (
+          error instanceof BunnyCdnError &&
+          error.name === 'pullzone.name_taken'
+        ) {
+          continue;
+        } else {
+          throw error;
+        }
+      }
+    } while (callSuccess === false);
+
+    // Create custom hostname
+    await bunnyCdn
+      .addCustomHostname({
+        pullZoneId: pullZone!.id,
+        hostname: accessPointInfo.hostname,
       })
-    );
-    // const pullZone = await bunnyCdn.createPullZone(requestArgs).catch((e) => {
-    //   console.log('errorrrr:' + e);
-    // });
+      .catch((e) => {
+        throw e;
+      });
 
-    //Add record to the database, if it's not been already added
+    // Add record to the database, if it's not been already added
     const zoneRecord = await prisma.zones.findMany({
       where: {
-        name: accessPointInfo.targetDomain,
+        zoneId: pullZone!.id,
+        name: accessPointInfo.apId,
         sourceDomain: accessPointInfo.sourceDomain,
       },
     });
@@ -60,20 +86,16 @@ export const submitAccessPointInfo = async (
     if (zoneRecord.length == 0) {
       await prisma.zones.create({
         data: {
-          name: accessPointInfo.targetDomain,
+          zoneId: pullZone!.id,
+          name: accessPointInfo.apId,
+          hostname: accessPointInfo.hostname,
           sourceDomain: accessPointInfo.sourceDomain,
         },
       });
     }
 
-    // Create custom hostname
-    const hostname = await bunnyCdn.addCustomHostname({
-      pullZoneId: accessPointInfo.targetDomain,
-      hostname: accessPointInfo.targetDomain,
-    });
-
     return formatJSONResponse({
-      // accessPointInfo
+      accessPointInfo,
     });
   } catch (e) {
     return formatJSONResponse({
