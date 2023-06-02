@@ -3,7 +3,7 @@ import { formatJSONResponse } from '@libs/api-gateway';
 import * as dotenv from 'dotenv';
 import { BunnyCdn, LoadFreeCertificateMethodArgs } from '@libs/bunnyCDN';
 
-export const verifyAccessPoint = async (
+export const verifyApp = async (
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   try {

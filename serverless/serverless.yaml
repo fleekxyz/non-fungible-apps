@@ -57,9 +57,9 @@ functions:
           cors: true
 
   verifyAccessPoint:
-    handler: src/functions/access-points/handler.verifyAccessPoint
+    handler: src/functions/apps/handler.verifyApp
     events:
       - http:
-          path: verifyAccessPoint
+          path: verifyApp
           method: post
           cors: true
