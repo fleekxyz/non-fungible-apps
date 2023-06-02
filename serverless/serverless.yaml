@@ -31,11 +31,11 @@ custom:
     concurrency: 10
 
 functions:
-  submitAccessPointInfo:
-    handler: src/functions/access-points/handler.submitAccessPointInfo
+  submitAppInfo:
+    handler: src/functions/apps/handler.submitAppInfo
     events:
       - http:
-          path: accesspoint
+          path: app
           method: post
           cors: true
     

@@ -9,7 +9,7 @@ import {
   CreatePullZoneMethodArgs,
 } from '@libs/bunnyCDN';
 
-export const submitAccessPointInfo = async (
+export const submitAppInfo = async (
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
@@ -25,7 +25,7 @@ export const submitAccessPointInfo = async (
     // Set up constants
     const bunnyCdn = new BunnyCdn(process.env.BUNNY_CDN_ACCESS_KEY);
     const data = JSON.parse(event.body);
-    const accessPointInfo = {
+    const appInfo = {
       apId: 'null',
       createdAt: new Date().toISOString(),
       sourceDomain: data.sourceDomain,
@@ -44,12 +44,12 @@ export const submitAccessPointInfo = async (
       let id = v4();
       let requestArgs: CreatePullZoneMethodArgs = {
         zoneId: id, // this is technically the zone name. It should be unique.
-        originUrl: accessPointInfo.sourceDomain,
+        originUrl: appInfo.sourceDomain,
       };
 
       try {
         pullZone = await bunnyCdn.createPullZone(requestArgs);
-        accessPointInfo.apId = id;
+        appInfo.apId = id;
         callSuccess = true;
       } catch (error) {
         callSuccess = false;
@@ -68,7 +68,7 @@ export const submitAccessPointInfo = async (
     await bunnyCdn
       .addCustomHostname({
         pullZoneId: pullZone!.id,
-        hostname: accessPointInfo.hostname,
+        hostname: appInfo.hostname,
       })
       .catch((e) => {
         throw e;
@@ -78,8 +78,8 @@ export const submitAccessPointInfo = async (
     const zoneRecord = await prisma.zones.findMany({
       where: {
         zoneId: pullZone!.id,
-        name: accessPointInfo.apId,
-        sourceDomain: accessPointInfo.sourceDomain,
+        name: appInfo.apId,
+        sourceDomain: appInfo.sourceDomain,
       },
     });
 
@@ -87,15 +87,15 @@ export const submitAccessPointInfo = async (
       await prisma.zones.create({
         data: {
           zoneId: pullZone!.id,
-          name: accessPointInfo.apId,
-          hostname: accessPointInfo.hostname,
-          sourceDomain: accessPointInfo.sourceDomain,
+          name: appInfo.apId,
+          hostname: appInfo.hostname,
+          sourceDomain: appInfo.sourceDomain,
         },
       });
     }
 
     return formatJSONResponse({
-      accessPointInfo,
+      appInfo,
     });
   } catch (e) {
     return formatJSONResponse({
