@@ -2,11 +2,11 @@ import { expect } from 'chai';
 import * as hre from 'hardhat';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import deploy from '../../../scripts/deploy';
+import deploy from '../../../scripts/deploy/deploy-fleek-erc721';
 import { getImplementationAddress } from '@openzeppelin/upgrades-core';
 import { Contract } from 'ethers';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
-import { Errors, TestConstants } from '../contracts/FleekERC721/helpers';
+import { TestConstants } from '../contracts/FleekERC721/helpers';
 
 const taskArgs = {
   newProxyInstance: false,
@@ -28,7 +28,7 @@ const getImplementationContract = async (
 const deployFixture = async () => {
   const [owner] = await hre.ethers.getSigners();
 
-  const proxy = (await deploy(taskArgs, hre)) as Contract;
+  const proxy = await deploy(taskArgs, hre);
 
   const implementation = await getImplementationContract(proxy.address);
 
