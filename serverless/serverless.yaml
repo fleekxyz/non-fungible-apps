@@ -58,8 +58,8 @@ functions:
 
   verifyAccessPoint:
     handler: src/functions/access-points/handler.verifyAccessPoint
-        events:
+    events:
       - http:
-          path: mint
+          path: verifyAccessPoint
           method: post
           cors: true
