@@ -40,39 +40,37 @@ export const submitAccessPointInfo = async (
     };
     console.log(data);
 
-    // const pullZone = await bunnyCdn.createPullZone(requestArgs).catch(
-    //   fetchPullZoneWhenNameAlreadyTaken({
-    //     name: accessPointInfo.targetDomain
-    //   })
-    // );
-    const pullZone = await bunnyCdn.createPullZone(requestArgs).catch((e) => {
-      console.log('errorrrr:' + e);
+    const pullZone = await bunnyCdn.createPullZone(requestArgs).catch(
+      fetchPullZoneWhenNameAlreadyTaken({
+        name: accessPointInfo.targetDomain,
+      })
+    );
+    // const pullZone = await bunnyCdn.createPullZone(requestArgs).catch((e) => {
+    //   console.log('errorrrr:' + e);
+    // });
+
+    //Add record to the database, if it's not been already added
+    const zoneRecord = await prisma.zones.findMany({
+      where: {
+        name: accessPointInfo.targetDomain,
+        sourceDomain: accessPointInfo.sourceDomain,
+      },
     });
-    console.log(pullZone);
-    console.log('-=-=-=-=-=-=-=-=-0=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-');
 
-    // Add record to the database, if it's not been already added
-    // const zoneRecord = await prisma.zones.findMany({
-    //   where: {
-    //     name: accessPointInfo.targetDomain,
-    //     sourceDomain: accessPointInfo.sourceDomain
-    //   }
-    // });
+    if (zoneRecord.length == 0) {
+      await prisma.zones.create({
+        data: {
+          name: accessPointInfo.targetDomain,
+          sourceDomain: accessPointInfo.sourceDomain,
+        },
+      });
+    }
 
-    // if (zoneRecord.length == 0) {
-    //   await prisma.zones.create({
-    //     data: {
-    //       name: accessPointInfo.targetDomain,
-    //       sourceDomain: accessPointInfo.sourceDomain
-    //     }
-    //   });
-    // }
-
-    // // Create custom hostname
-    // const hostname = await bunnyCdn.addCustomHostname({
-    //   pullZoneId: accessPointInfo.targetDomain,
-    //   hostname: accessPointInfo.targetDomain
-    // });
+    // Create custom hostname
+    const hostname = await bunnyCdn.addCustomHostname({
+      pullZoneId: accessPointInfo.targetDomain,
+      hostname: accessPointInfo.targetDomain,
+    });
 
     return formatJSONResponse({
       // accessPointInfo
