@@ -7,7 +7,7 @@ import { formatJSONResponse } from '@libs/api-gateway';
 
 import { v4 } from 'uuid';
 import { initPrisma, prisma } from '@libs/prisma';
-import { account, nfaContract, web3 } from '@libs/nfa-contract';
+import { contractInstance, signer, web3 } from '@libs/nfa-contract';
 
 export const submitMintInfo = async (
   event: APIGatewayEvent
@@ -149,12 +149,12 @@ export const submitMintInfo = async (
       // Mark the token as verified in the contract
       try {
         // call the `setTokenVerified` method
-        await nfaContract.methods
-          .setTokenVerified(mintInfo.tokenId, true)
-          .send({
-            from: account.address,
-            gas: '1000000',
-          });
+        const unsignedTrx = await contractInstance.populateTransaction.setTokenVerified(
+          mintInfo.tokenId,
+          true
+        );
+        const txResponse = await signer.sendTransaction(unsignedTrx);
+        await txResponse.wait(1); // wait for the first block
         verified = true;
       } catch (error) {
         // catch transaction error

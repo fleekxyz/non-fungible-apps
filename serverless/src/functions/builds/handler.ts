@@ -3,7 +3,7 @@ import { formatJSONResponse } from '@libs/api-gateway';
 
 import { v4 } from 'uuid';
 import { prisma } from '@libs/prisma';
-import { account, nfaContract } from '@libs/nfa-contract';
+import { contractInstance, signer } from '@libs/nfa-contract';
 
 export const submitBuildInfo = async (
   event: APIGatewayEvent
@@ -69,13 +69,12 @@ export const submitBuildInfo = async (
 
       // Mark the token as verified in the contract
       // call the `setTokenVerified` method
-      await nfaContract.methods
-        .setTokenVerified(mintRecord[0].tokenId, true)
-        .send({
-          from: account.address,
-          gas: '1000000',
-        })
-        .catch(console.error);
+      const unsignedTrx = await contractInstance.populateTransaction.setTokenVerified(
+        mintRecord[0].tokenId,
+        true
+      );
+      const txResponse = await signer.sendTransaction(unsignedTrx);
+      await txResponse.wait(1); // wait for the first block
 
       // Update the database record in the tokens collection
       await prisma.tokens.updateMany({
