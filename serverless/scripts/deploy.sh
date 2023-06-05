@@ -56,7 +56,7 @@ yarn build
 
 echo "${bold}Copying the rhel openssl engine to dist/${normal}"
 cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/serverless/src/functions/mints
-# cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/serverless/src/functions/builds
+cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/serverless/src/functions/builds
 
 echo "${bold}Copying the .env file to dist/${normal}"
 cp .env src/

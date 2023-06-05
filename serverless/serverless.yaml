@@ -6,6 +6,7 @@ plugins:
   - serverless-offline
 
 provider:
+    timeout: 150
     name: aws
     runtime: nodejs18.x
     stage: ${opt:stage, 'prd'}
