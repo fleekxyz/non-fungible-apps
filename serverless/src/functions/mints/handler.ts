@@ -4,11 +4,9 @@ import {
   ///APIGatewayEventRequestContext,
 } from 'aws-lambda';
 import { formatJSONResponse } from '@libs/api-gateway';
-
 import { v4 } from 'uuid';
 import { initPrisma, prisma } from '@libs/prisma';
-import { contractInstance, signer, web3 } from '@libs/nfa-contract';
-
+import { contractInstance, web3 } from '@libs/nfa-contract';
 export const submitMintInfo = async (
   event: APIGatewayEvent
   ///context: APIGatewayEventRequestContext
@@ -20,6 +18,7 @@ export const submitMintInfo = async (
         message: 'Required parameters were not passed.',
       });
     }
+    
     const id = v4();
     /**if (!verifyAlchemySig(event.headers.xalchemywork)) {
         throw new Error('Invalid sig');
@@ -128,6 +127,7 @@ export const submitMintInfo = async (
       owner: decodedLogs.owner,
       ipfsHash: decodedLogs.ipfsHash,
       domain: decodedLogs.externalURL,
+      verificationTransactionHash: 'Not verified'
     };
     
     initPrisma();
@@ -148,13 +148,13 @@ export const submitMintInfo = async (
     if (build.length > 0) {
       // Mark the token as verified in the contract
       try {
+        // what if the token has been burned?
         // call the `setTokenVerified` method
-        const unsignedTrx = await contractInstance.populateTransaction.setTokenVerified(
+        const transaction = await contractInstance.setTokenVerified(
           mintInfo.tokenId,
           true
         );
-        const txResponse = await signer.sendTransaction(unsignedTrx);
-        await txResponse.wait(1); // wait for the first block
+        mintInfo.verificationTransactionHash = transaction.hash;
         verified = true;
       } catch (error) {
         // catch transaction error

@@ -1,9 +1,8 @@
 import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
 import { formatJSONResponse } from '@libs/api-gateway';
-
 import { v4 } from 'uuid';
 import { prisma } from '@libs/prisma';
-import { contractInstance, signer } from '@libs/nfa-contract';
+import { contractInstance } from '@libs/nfa-contract';
 
 export const submitBuildInfo = async (
   event: APIGatewayEvent
@@ -26,9 +25,9 @@ export const submitBuildInfo = async (
       commitHash: data.commitHash,
       ipfsHash: data.ipfsHash,
       domain: data.domain,
+      verificationTransactionHash: 'Not verified.'
     };
-    console.log(buildInfo);
-    
+
     // Add build record to the database, if it's not already added
     const buildRecord = await prisma.builds.findMany({
       where: {
@@ -39,11 +38,9 @@ export const submitBuildInfo = async (
       },
     });
     console.log(buildRecord);
-    
+
 
     if (buildRecord.length == 0) {
-      console.log('here i am');
-      
       await prisma.builds.create({
         data: {
           githubRepository: buildInfo.githubRepository,
@@ -65,17 +62,13 @@ export const submitBuildInfo = async (
     });
 
     if (mintRecord.length > 0) {
-      // Trigger verification
-
       // Mark the token as verified in the contract
       // call the `setTokenVerified` method
-      const unsignedTrx = await contractInstance.populateTransaction.setTokenVerified(
+      const transaction = await contractInstance.setTokenVerified(
         mintRecord[0].tokenId,
         true
       );
-      const txResponse = await signer.sendTransaction(unsignedTrx);
-      await txResponse.wait(1); // wait for the first block
-
+      buildInfo.verificationTransactionHash = transaction.hash;
       // Update the database record in the tokens collection
       await prisma.tokens.updateMany({
         where: {

@@ -46,7 +46,7 @@ functions:
 
   submitBuildInfo:
     # Deployment:
-    handler: ./dist/serverless/src/functions/builds/handler.submitBuildInfo # TODO This will not work, need to change to nfa-serverless/dist/serverless/src/functions/builds/handler.submitBuildInfo
+    handler: ./dist/src/functions/builds/handler.submitBuildInfo # TODO This will not work, need to change to nfa-serverless/dist/serverless/src/functions/builds/handler.submitBuildInfo
     # Local development:
     # handler: ./src/functions/builds/handler.submitBuildInfo
     events:
@@ -67,7 +67,7 @@ functions:
 
   submitMintInfo:
     # Deployment:
-    handler: ./dist/serverless/src/functions/mints/handler.submitMintInfo # TODO This will not work, need to change to nfa-serverless/dist/serverless/src/functions/mints/handler.submitMintInfo
+    handler: ./dist/src/functions/mints/handler.submitMintInfo # TODO This will not work, need to change to nfa-serverless/dist/serverless/src/functions/mints/handler.submitMintInfo
     # Local development:
     # handler: ./src/functions/mints/handler.submitMintInfo
     events:
