@@ -7,6 +7,34 @@ source .env
 
 echo "${bold}Starting the deployment process${normal}"
 
+# Default value for the stage variable
+stage="dev"
+
+# Parse command line options using getopts
+while [[ $# -gt 0 ]]; do
+    key="$1"
+
+    case $key in
+        --stage)
+            shift
+            stage="$1"
+            ;;
+        *)
+            # Ignore unknown options or arguments
+            ;;
+    esac
+
+    shift
+done
+
+# Check if the stage variable has a non-empty value
+if [ -n "$stage" ]; then
+    echo "Passed stage value: $stage"
+else
+    echo "Stage flag not provided or value not specified."
+    echo "Will proceed with the default value: dev"
+fi
+
 echo "${bold}Installing dependencies via Yarn${normal}"
 
 yarn
@@ -77,7 +105,7 @@ echo "${bold}Creating layer zip files${normal}"
 /bin/bash ./scripts/prepare-node-modules-lambda-layer.sh
 
 echo "${bold}Deploying to AWS lambda${normal}"
-yarn sls deploy --stage dev --verbose
+yarn sls deploy --stage "$stage" --verbose
 
 # step 0 -> run yarn
 # step 1 -> take params (env variables)
