@@ -1,4 +1,6 @@
-import { Owner, Token } from '@/graphclient';
+import { useState } from 'react';
+
+import { OrderDirection, Owner, Token } from '@/graphclient';
 import { createContext } from '@/utils';
 
 const [Provider, useContext] = createContext<IndexedNFA.Context>({
@@ -10,7 +12,21 @@ const [Provider, useContext] = createContext<IndexedNFA.Context>({
 export const IndexedNFA = {
   useContext,
   Provider: ({ children, nfa }: IndexedNFA.ProviderProps): JSX.Element => {
-    return <Provider value={{ nfa }}>{children}</Provider>;
+    const [orderDirection, setOrderDirection] =
+      useState<OrderDirection>('desc');
+    const [pageNumber, setPageNumber] = useState(0);
+    const [endReached, setEndReached] = useState(false);
+
+    const context = {
+      nfa,
+      orderDirection,
+      pageNumber,
+      endReached,
+      setOrderDirection,
+      setPageNumber,
+      setEndReached,
+    };
+    return <Provider value={context}>{children}</Provider>;
   },
 };
 
@@ -19,6 +35,12 @@ export namespace IndexedNFA {
     nfa: Omit<Token, 'mintTransaction' | 'id' | 'owner'> & {
       owner: Pick<Owner, 'id'>;
     };
+    orderDirection: OrderDirection;
+    pageNumber: number;
+    endReached: boolean;
+    setOrderDirection: (orderDirection: OrderDirection) => void;
+    setPageNumber: (pageNumber: number) => void;
+    setEndReached: (isEndReaced: boolean) => void;
   };
 
   export type ProviderProps = {

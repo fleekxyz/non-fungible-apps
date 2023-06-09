@@ -6,6 +6,7 @@ import { Skeleton } from '../layout';
 
 export const NFACardStyles = {
   Container: styled(Link, {
+    all: 'unset',
     display: 'flex',
     flexDirection: 'column',
     minWidth: '12.5rem',

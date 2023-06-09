@@ -29,7 +29,7 @@ export const NftCard: React.FC<NftCardProps> = ({
   onClick,
   isLoading,
 }: NftCardProps) => {
-  const size = '26.5rem';
+  const size = '100%';
   const {
     form: {
       appName: {
@@ -48,7 +48,15 @@ export const NftCard: React.FC<NftCardProps> = ({
   } = useMintFormContext();
 
   return (
-    <CustomCardContainer css={{ p: '$0' }}>
+    <CustomCardContainer
+      css={{
+        p: '$0',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 0,
+        overflow: 'hidden',
+      }}
+    >
       <NFAPreview
         color={logoColor}
         logo={appLogo}

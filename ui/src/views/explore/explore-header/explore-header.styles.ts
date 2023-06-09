@@ -11,6 +11,7 @@ export abstract class ExploreHeaderStyles {
   static readonly Text = styled('h2', {
     fontSize: '$4xl',
     maxWidth: '46rem',
+    fontWeight: 400,
   });
 
   static readonly GrayText = styled('span', {

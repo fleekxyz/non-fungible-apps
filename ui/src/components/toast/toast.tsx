@@ -8,7 +8,7 @@ import {
 } from '@/store';
 
 import { Icon } from '../core';
-import { ToastStyles } from './toast.styles';
+import { DismissTimeout, ToastStyles } from './toast.styles';
 
 type ToastProps = ToastsState.Toast;
 
@@ -29,7 +29,7 @@ const Toast: React.FC<ToastProps> = ({
         if (onDismiss) onDismiss();
         setTimeout(() => {
           dispatch(toastsActions.dismiss(id));
-        }, ToastStyles.DismissTimeout);
+        }, DismissTimeout);
       }
     },
     [onDismiss, dispatch, id]
@@ -54,6 +54,7 @@ const Toast: React.FC<ToastProps> = ({
             variant="link"
             icon={<Icon name="close" />}
             onClick={onDismiss}
+            css={{ p: '0' }}
           />
         </ToastStyles.Close>
       </ToastStyles.Layout>

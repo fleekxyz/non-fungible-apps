@@ -1,14 +1,13 @@
 import { Flex } from '@/components/layout';
 import { styled } from '@/theme';
 
-export abstract class InputFileStyles {
-  static readonly Container = styled(Flex, {
+export const InputFileStyles = {
+  Container: styled(Flex, {
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
-  });
-
-  static readonly Border = styled('div', {
+  }),
+  Border: styled('div', {
     borderStyle: 'solid',
     borderColor: '$gray7',
     width: '$22',
@@ -24,5 +23,14 @@ export abstract class InputFileStyles {
     '&[aria-invalid=true], &[data-invalid]': {
       borderColor: '$red9',
     },
-  });
-}
+  }),
+  Image: styled('img', {
+    position: 'absolute',
+    width: '3.5rem',
+    height: '3.5rem',
+  }),
+  Input: styled('input', {
+    all: 'unset',
+    display: 'none',
+  }),
+};
