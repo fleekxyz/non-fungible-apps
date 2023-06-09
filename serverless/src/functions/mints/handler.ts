@@ -14,22 +14,20 @@ export const submitMintInfo = async (
   ///context: APIGatewayEventRequestContext
 ): Promise<APIGatewayProxyResult> => {
   try {
-    if (event.body === null) {
+    if (event.body === null || event.body === undefined) {
       return formatJSONResponse({
         status: 422,
         message: 'Required parameters were not passed.',
       });
     }
     const id = v4();
-
     /**if (!verifyAlchemySig(event.headers.xalchemywork)) {
         throw new Error('Invalid sig');
       }**/
-
+    
     const eventBody = JSON.parse(event.body);
-    const topics = eventBody.event.data.block.logs[1].slice(1, 3);
+    const topics = eventBody.event.data.block.logs[1].topics.slice(1, 4);
     const hexCalldata = eventBody.event.data.block.logs[1].data;
-
     const decodedLogs = web3.eth.abi.decodeLog(
       [
         {
@@ -131,9 +129,9 @@ export const submitMintInfo = async (
       ipfsHash: decodedLogs.ipfsHash,
       domain: decodedLogs.externalURL,
     };
-
+    
     initPrisma();
-
+    
     // Check if there is any build associated with the repository, commit hash, tokenId, and ipfsHash
 
     const build = await prisma.builds.findMany({

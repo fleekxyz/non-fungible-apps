@@ -1,5 +1,5 @@
 // npx hardhat run scripts/tokenURI.js --network mumbai/sepolia/goerli
-const { getContract } = require('./util');
+const { getContract, parseDataURI } = require('./util');
 
 // TODO: make this arguments
 const tokenId = 0;
@@ -9,9 +9,7 @@ const tokenId = 0;
 
   const transaction = await contract.tokenURI(tokenId);
 
-  const parsed = JSON.parse(
-    Buffer.from(transaction.slice(29), 'base64').toString('utf-8')
-  );
+  const parsed = parseDataURI(transaction);
 
   console.log('Response: ', parsed);
 })();

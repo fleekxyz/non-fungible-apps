@@ -8,7 +8,9 @@
     "invoke:build": "yarn build && serverless invoke local --function submitBuildInfo",
     "prisma:generate": "npx prisma generate",
     "prisma:pull": "npx prisma db pull --force",
-    "start": "serverless offline"
+    "start": "yarn build && serverless offline",
+    "generate:layers": "./scripts/prepare-prisma-client-lambda-layer.sh && ./scripts/prepare-libs-lambda-layer.sh && ./scripts/prepare-node-modules-lambda-layer.sh",
+    "deploy:dev": "yarn build && yarn generate:layers && yarn sls deploy --stage dev"
   },
   "author": "fleek",
   "license": "MIT",
@@ -20,6 +22,7 @@
     "esbuild": "^0.17.12",
     "json-schema-to-ts": "^2.7.2",
     "serverless": "^3.28.1",
+    "serverless-dotenv-plugin": "^6.0.0",
     "serverless-esbuild": "^1.42.0",
     "serverless-offline": "^12.0.4",
     "ts-node": "^10.9.1",
@@ -33,7 +36,6 @@
     "@prisma/client": "^4.13.0",
     "@types/node": "^18.15.11",
     "aws-sdk": "^2.1342.0",
-    "dotenv": "^16.0.3",
     "prisma": "^4.13.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4",

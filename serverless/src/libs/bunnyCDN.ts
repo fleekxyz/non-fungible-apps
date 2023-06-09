@@ -229,23 +229,6 @@ type PullZoneData = {
   Hostnames: HostnameInterface[];
 };
 
-type FetchPullZoneWhenNameAlreadyTakenArgs = {
-  name: string;
-};
-
-export const fetchPullZoneWhenNameAlreadyTaken =
-  ({ name }: FetchPullZoneWhenNameAlreadyTakenArgs) =>
-  async (error: BunnyCdnError | AxiosError<ErrorData>) => {
-    if (
-      error instanceof BunnyCdnError &&
-      error.name === 'pullzone.name_taken'
-    ) {
-      return fetchPullZone({ name });
-    }
-
-    throw error;
-  };
-
 export type FetchPullZoneArgs = {
   name: string;
 };
