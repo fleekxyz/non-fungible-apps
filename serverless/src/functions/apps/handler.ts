@@ -24,9 +24,7 @@ export const verifyApp = async (
       hostname,
     };
 
-    await bunnyCdn.loadFreeCertificate(args).catch((e) => {
-      throw e;
-    });
+    await bunnyCdn.loadFreeCertificate(args);
 
     return formatJSONResponse({
       status: true,
