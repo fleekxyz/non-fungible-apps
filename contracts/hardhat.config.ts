@@ -88,9 +88,11 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      polygonMumbai: POLYGONSCAN_KEY,
+      polygonMumbai: POLYGONSCAN_KEY ? POLYGONSCAN_KEY : '',
+      mainnet: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
+      goerli: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
+      sepolia: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
     },
-    // apiKey: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
   },
 };
 
