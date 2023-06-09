@@ -93,3 +93,11 @@ functions:
       - { Ref: TopicAwsNodeModulesLambdaLayer }
       - { Ref: TopicAwsLibsLambdaLayer }
       - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
+
+  verifyAccessPoint:
+    handler: src/functions/apps/handler.verifyApp
+    events:
+      - http:
+          path: verifyApp
+          method: post
+          cors: true
