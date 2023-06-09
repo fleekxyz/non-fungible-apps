@@ -1,9 +1,8 @@
 import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
 import { formatJSONResponse } from '@libs/api-gateway';
-
 import { v4 } from 'uuid';
 import { prisma } from '@libs/prisma';
-import { account, nfaContract } from '@libs/nfa-contract';
+import { contractInstance } from '@libs/nfa-contract';
 
 export const submitBuildInfo = async (
   event: APIGatewayEvent
@@ -26,6 +25,7 @@ export const submitBuildInfo = async (
       commitHash: data.commitHash,
       ipfsHash: data.ipfsHash,
       domain: data.domain,
+      verificationTransactionHash: 'Not verified.',
     };
     console.log(buildInfo);
     
@@ -65,18 +65,13 @@ export const submitBuildInfo = async (
     });
 
     if (mintRecord.length > 0) {
-      // Trigger verification
-
       // Mark the token as verified in the contract
       // call the `setTokenVerified` method
-      await nfaContract.methods
-        .setTokenVerified(mintRecord[0].tokenId, true)
-        .send({
-          from: account.address,
-          gas: '1000000',
-        })
-        .catch(console.error);
-
+      const transaction = await contractInstance.setTokenVerified(
+        mintRecord[0].tokenId,
+        true
+      );
+      buildInfo.verificationTransactionHash = transaction.hash;
       // Update the database record in the tokens collection
       await prisma.tokens.updateMany({
         where: {

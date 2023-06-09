@@ -7,6 +7,34 @@ source .env
 
 echo "${bold}Starting the deployment process${normal}"
 
+# Default value for the stage variable
+stage="dev"
+
+# Parse command line options using getopts
+while [[ $# -gt 0 ]]; do
+    key="$1"
+
+    case $key in
+        --stage)
+            shift
+            stage="$1"
+            ;;
+        *)
+            # Ignore unknown options or arguments
+            ;;
+    esac
+
+    shift
+done
+
+# Check if the stage variable has a non-empty value
+if [ -n "$stage" ]; then
+    echo "Passed stage value: $stage"
+else
+    echo "Stage flag not provided or value not specified."
+    echo "Will proceed with the default value: dev"
+fi
+
 echo "${bold}Installing dependencies via Yarn${normal}"
 
 yarn
@@ -48,22 +76,25 @@ if [[ -z "${AWS_SECRET_ACCESS_KEY}" ]]; then
 fi
 
 echo "${bold}Copying the Prisma schema file to function directories${normal}"
-cp prisma/schema.prisma dist/serverless/src/functions/builds/
-cp prisma/schema.prisma dist/serverless/src/functions/mints/
+cp prisma/schema.prisma dist/src/functions/builds/
+cp prisma/schema.prisma dist/src/functions/mints/
 
 echo "${bold}Running the build command${normal}"
 yarn build
 
 echo "${bold}Copying the rhel openssl engine to dist/${normal}"
-cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/serverless/src/functions/mints
-cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/serverless/src/functions/builds
+cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/src/functions/mints
+cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/src/functions/builds
 
 echo "${bold}Copying the .env file to dist/${normal}"
 cp .env src/
 
+echo "${bold}Copying the FleekERC721.json file to dist/serverless/src/libs${normal}"
+cp src/libs/FleekERC721.json dist/src/libs/
+
 echo "${bold}Copying the Prisma schema file to function directories${normal}"
-cp prisma/schema.prisma dist/serverless/src/functions/builds/
-cp prisma/schema.prisma dist/serverless/src/functions/mints/
+cp prisma/schema.prisma dist/src/functions/builds/
+cp prisma/schema.prisma dist/src/functions/mints/
 
 echo "${bold}Generating Prisma Client${normal}"
 yarn prisma:generate
@@ -74,7 +105,7 @@ echo "${bold}Creating layer zip files${normal}"
 /bin/bash ./scripts/prepare-node-modules-lambda-layer.sh
 
 echo "${bold}Deploying to AWS lambda${normal}"
-yarn sls deploy --stage dev --verbose
+yarn sls deploy --stage "$stage" --verbose
 
 # step 0 -> run yarn
 # step 1 -> take params (env variables)
