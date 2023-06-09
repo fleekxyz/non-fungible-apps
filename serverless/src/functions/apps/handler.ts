@@ -32,7 +32,7 @@ export const submitAppInfo = async (
       hostname: data.targetDomain,
     };
 
-    let callSuccess;
+    let maxTries = 5;
     let pullZone: {
       id: any;
       name?: string;
@@ -50,19 +50,20 @@ export const submitAppInfo = async (
       try {
         pullZone = await bunnyCdn.createPullZone(requestArgs);
         appInfo.apId = id;
-        callSuccess = true;
       } catch (error) {
-        callSuccess = false;
+        maxTries -= 1;
         if (
           error instanceof BunnyCdnError &&
           error.name === 'pullzone.name_taken'
         ) {
           continue;
+        } else if (maxTries == 0) {
+          throw 'Max number of tries for creating pullzone was reached.';
         } else {
           throw error;
         }
       }
-    } while (callSuccess === false);
+    } while (maxTries > 0);
 
     // Create custom hostname
     await bunnyCdn
