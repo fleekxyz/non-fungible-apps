@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import appReducer from './features/app/app-slice';
 import bunnyCDNReducer from './features/bunny-cdn/bunny-cdn-slice';
 import ENSReducer from './features/ens/ens-slice';
 import fleekERC721Reducer from './features/fleek-erc721/fleek-erc721-slice';
@@ -8,6 +9,7 @@ import toastsReducer from './features/toasts/toasts-slice';
 
 export const store = configureStore({
   reducer: {
+    app: appReducer,
     bunnyCDN: bunnyCDNReducer,
     ENS: ENSReducer,
     fleekERC721: fleekERC721Reducer,

@@ -6,7 +6,7 @@ import { useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
 
 import { GithubRepositorySelectionStyles as S } from './github-repository-selection.styles';
-import { RepositoriesList } from './repositories-list';
+import { RepositoriesListFragment } from './repositories-list';
 import { UserOrgsCombobox } from './users-orgs-combobox';
 
 export const Loading: React.FC = () => (
@@ -68,7 +68,7 @@ export const GithubRepositoryConnection: React.FC = () => {
           queryUserAndOrganizations === 'loading' ? (
             <Loading />
           ) : (
-            <RepositoriesList searchValue={searchValue} />
+            <RepositoriesListFragment searchValue={searchValue} />
           )}
         </S.Container>
       </S.Card.Body>

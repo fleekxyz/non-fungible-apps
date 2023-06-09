@@ -25,14 +25,13 @@ export const StyledInputFile = forwardRef<HTMLDivElement, InputFileProps>(
       <>
         <S.Container onClick={handleInputClick}>
           {file !== '' ? (
-            <img className="absolute w-14 h-14" src={file} alt="logo" />
+            <S.Image src={file} alt="logo" />
           ) : (
             <Icon name="upload" size="md" css={{ position: 'absolute' }} />
           )}
           <S.Border {...props} ref={ref} />
-          <input
+          <S.Input
             type="file"
-            className="hidden"
             accept={'.svg'}
             ref={inputFileRef}
             onChange={handleFileChange}
