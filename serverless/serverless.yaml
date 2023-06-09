@@ -18,6 +18,14 @@ provider:
       AWS_STAGE: ${self:provider.stage}
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
 
+layers:
+  TopicAwsNodeModules:
+    path: lambda-layers-node_modules
+  TopicAwsLibs:
+    path: lambda-layers-libs
+  TopicPrismaAwsPrismaClient:
+    path: lambda-layers-prisma-client
+
 custom:
   esbuild:
     bundle: true
@@ -30,6 +38,7 @@ custom:
     concurrency: 10
 
 functions:
+
   submitBuildInfo:
     handler: src/functions/builds/handler.submitBuildInfo # Change `src` to `dist` for deployment
     events:
@@ -47,6 +56,16 @@ functions:
                 timestamp: true
                 ipfsHash: true
                 tokenId: true
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${env:DATABASE_URL}
+      CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
+      PRIVATE_KEY: ${env:PRIVATE_KEY}
+      JSON_RPC: ${env:JSON_RPC}
+    layers:
+      - { Ref: TopicAwsNodeModulesLambdaLayer }
+      - { Ref: TopicAwsLibsLambdaLayer }
+      - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
 
   submitMintInfo:
     handler: src/functions/mints/handler.submitMintInfo
@@ -55,3 +74,13 @@ functions:
           path: mint
           method: post
           cors: true
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${env:DATABASE_URL}  
+      CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
+      PRIVATE_KEY: ${env:PRIVATE_KEY}
+      JSON_RPC: ${env:JSON_RPC}
+    layers:
+      - { Ref: TopicAwsNodeModulesLambdaLayer }
+      - { Ref: TopicAwsLibsLambdaLayer }
+      - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
