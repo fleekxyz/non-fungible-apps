@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-1.0.x", "debian-openssl-3.0.x"]
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
@@ -25,4 +25,12 @@ model tokens {
   owner            String
   tokenId          Int
   verified         Boolean
+}
+
+model zones {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  zoneId       Int // The returned id from the creation call
+  name         String // The assigned name at the time of creation
+  hostname     String // The target domain that's assigned as hostname
+  sourceDomain String // The origin URL
 }

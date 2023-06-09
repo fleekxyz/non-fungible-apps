@@ -12,7 +12,7 @@ export const Step: React.FC<StepProps> = ({ children, header }: StepProps) => {
     <S.Container>
       <S.Indicator>
         <Stepper.Indicator />
-        <h2 className="text-4xl">{header}</h2>
+        <S.Text>{header}</S.Text>
       </S.Indicator>
       {children}
     </S.Container>

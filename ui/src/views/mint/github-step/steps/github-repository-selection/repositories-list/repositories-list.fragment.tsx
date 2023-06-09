@@ -1,16 +1,16 @@
 import { useEffect, useMemo } from 'react';
 
-import { Flex } from '@/components';
 import { githubActions, useAppDispatch, useGithubStore } from '@/store';
 import { Mint } from '@/views/mint/mint.context';
 
+import { RepositoiresListStyles as S } from './repositories-list.styles';
 import { Repository } from './repository';
 
 type RepositoriesListProps = {
   searchValue: string;
 };
 
-export const RepositoriesList: React.FC<RepositoriesListProps> = ({
+export const RepositoriesListFragment: React.FC<RepositoriesListProps> = ({
   searchValue,
 }: RepositoriesListProps) => {
   const { selectedUserOrg } = Mint.useContext();
@@ -37,15 +37,7 @@ export const RepositoriesList: React.FC<RepositoriesListProps> = ({
   }
 
   return (
-    <Flex
-      css={{
-        height: '$60',
-        overflowX: 'hidden',
-        overflowY: 'scroll',
-        flexDirection: 'column',
-        pr: '$3h',
-      }}
-    >
+    <S.Container>
       {filteredRepositories.length > 0 ? (
         filteredRepositories.map((repo, index, { length }) => (
           <Repository
@@ -57,12 +49,8 @@ export const RepositoriesList: React.FC<RepositoriesListProps> = ({
         ))
       ) : (
         // TODO: update this after designs are done
-        <div
-          className={`relative cursor-default select-none pt-2 px-3.5 pb-4 text-slate11 text-center`}
-        >
-          Nothing found.
-        </div>
+        <S.Message>Nothing found.</S.Message>
       )}
-    </Flex>
+    </S.Container>
   );
 };

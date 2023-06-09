@@ -4,26 +4,26 @@ import { keyframes, styled } from '@/theme';
 
 import { Icon, IconButton } from '../core';
 import { Flex } from '../layout';
+import { IconStyles } from '../core/icon/icon.styles';
 
-export abstract class ToastStyles {
-  static readonly Provider = ToastLib.Provider;
+const KeyFrames = {
+  hide: keyframes({
+    '0%': { opacity: 1 },
+    '100%': { opacity: 0 },
+  }),
+  show: keyframes({
+    '0%': { opacity: 0 },
+    '100%': { opacity: 1 },
+  }),
+};
 
-  static readonly DismissTimeout = 200;
+export const ViewportPadding = '$md';
+export const DismissTimeout = 200;
 
-  static readonly ViewportPadding = '$md';
+export const ToastStyles = {
+  Provider: ToastLib.Provider,
 
-  static readonly KeyFrames = {
-    hide: keyframes({
-      '0%': { opacity: 1 },
-      '100%': { opacity: 0 },
-    }),
-    show: keyframes({
-      '0%': { opacity: 0 },
-      '100%': { opacity: 1 },
-    }),
-  };
-
-  static readonly Root = styled(ToastLib.Root, {
+  Root: styled(ToastLib.Root, {
     padding: '$4 $5',
     borderRadius: '$lg',
     borderWidth: '$default',
@@ -46,23 +46,20 @@ export abstract class ToastStyles {
 
     '@media (prefers-reduced-motion: no-preference)': {
       '&[data-state="open"]': {
-        animation: `${this.KeyFrames.show} 750ms `,
+        animation: `${KeyFrames.show} 750ms `,
       },
       '&[data-state="closed"]': {
-        animation: `${this.KeyFrames.hide} ${this.DismissTimeout}ms ease-in`,
+        animation: `${KeyFrames.hide} ${DismissTimeout}ms ease-in`,
       },
     },
-  });
-
-  static readonly Body = styled(ToastLib.Description, {
+  }),
+  Body: styled(ToastLib.Description, {
     fontSize: '$md',
     fontWeight: '$normal',
     mr: '$5',
-  });
-
-  static readonly Close = styled(ToastLib.Close, {});
-
-  static readonly CloseButton = styled(IconButton, {
+  }),
+  Close: ToastLib.Close,
+  CloseButton: styled(IconButton, {
     variants: {
       colorScheme: {
         error: {
@@ -73,11 +70,10 @@ export abstract class ToastStyles {
         },
       },
     },
-  });
-
-  static readonly Viewport = styled(ToastLib.Viewport, {
-    padding: '$14',
-
+  }),
+  Viewport: styled(ToastLib.Viewport, {
+    py: '$14',
+    listStyleType: 'none',
     position: 'fixed',
     bottom: 0,
     left: '50%',
@@ -86,17 +82,16 @@ export abstract class ToastStyles {
     flexDirection: 'column',
     gap: '$4',
     zIndex: '$toast',
-  });
-
-  static readonly Layout = styled(Flex, {
+    minWidth: '250px',
+  }),
+  Layout: styled(Flex, {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  });
-
-  static readonly Icon = styled(Icon, {
-    fontSize: '$5',
+    alignItems: 'center',
+  }),
+  Icon: styled(Icon, {
+    fontSize: '1.25rem',
     marginRight: '$2h',
-  });
-
-  static readonly Content = styled(Flex, {});
-}
+  }),
+  Content: styled(Flex),
+};

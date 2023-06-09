@@ -1,33 +1,23 @@
 import { useQuery } from '@apollo/client';
 import { useEffect } from 'react';
 
-import { NFACard, NFACardSkeleton } from '@/components';
 import { lastNFAsPaginatedDocument } from '@/graphclient';
 import { useWindowScrollEnd } from '@/hooks';
 
-import { Explore } from '../explore.context';
-import { NFAListFragmentStyles as S } from './nfa-list.styles';
+import { Explore } from '../../explore.context';
+import { NFAGridFragment } from './nfa-grid.fragment';
+import { NFAListFragment } from './nfa-list.fragment';
 
 const pageSize = 10; //Set this size to test pagination
 
-const LoadingSkeletons: React.FC = () => (
-  <>
-    <NFACardSkeleton />
-    <NFACardSkeleton />
-    <NFACardSkeleton />
-    <NFACardSkeleton />
-    <NFACardSkeleton />
-    <NFACardSkeleton />
-  </>
-);
-
-export const NFAListFragment: React.FC = () => {
+export const NFAsContainerFragment: React.FC = () => {
   const {
     endReached,
     orderBy,
     orderDirection,
     pageNumber,
     search,
+    nfaView,
     setEndReached,
     setPageNumber,
   } = Explore.useContext();
@@ -65,17 +55,9 @@ export const NFAListFragment: React.FC = () => {
 
   if (queryError) return <div>Error</div>; //TODO handle error
 
-  return (
-    <S.Container>
-      {tokens.map((token) => (
-        <NFACard data={token} key={token.id} />
-      ))}
-
-      {isLoading && <LoadingSkeletons />}
-
-      {!isLoading && tokens.length === 0 && (
-        <S.EmptyMessage>Nothing found.</S.EmptyMessage>
-      )}
-    </S.Container>
-  );
+  if (nfaView === 'grid')
+    return <NFAGridFragment tokens={tokens} isLoading={isLoading} />;
+  else {
+    return <NFAListFragment tokens={tokens} isLoading={isLoading} />;
+  }
 };

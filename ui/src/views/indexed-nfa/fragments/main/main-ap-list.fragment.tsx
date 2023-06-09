@@ -29,7 +29,8 @@ const AccessPoint: React.FC<AccessPointProps> = ({
   return (
     <S.Main.AccessPoint.Grid>
       <S.Main.AccessPoint.Thumbnail>
-        <img src={Rectangle1} />
+        {/* TODO remove for real image */}
+        <img src={Rectangle1} style={{ width: '7rem' }} />
       </S.Main.AccessPoint.Thumbnail>
       <S.Main.AccessPoint.Data.Container>
         <S.Main.AccessPoint.Title>{name}</S.Main.AccessPoint.Title>
