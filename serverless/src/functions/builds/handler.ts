@@ -25,7 +25,7 @@ export const submitBuildInfo = async (
       commitHash: data.commitHash,
       ipfsHash: data.ipfsHash,
       domain: data.domain,
-      verificationTransactionHash: 'Not verified.'
+      verificationTransactionHash: 'Not verified.',
     };
 
     // Add build record to the database, if it's not already added
@@ -37,8 +37,6 @@ export const submitBuildInfo = async (
         domain: buildInfo.domain,
       },
     });
-    console.log(buildRecord);
-
 
     if (buildRecord.length == 0) {
       await prisma.builds.create({
