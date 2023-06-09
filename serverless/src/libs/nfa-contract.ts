@@ -1,8 +1,5 @@
 import Web3 from 'web3';
-import * as abiFile from '../../../contracts/deployments/goerli/FleekERC721.json';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
+import * as abiFile from './FleekERC721.json';
 
 if (
   process.env.PRIVATE_KEY === undefined ||
@@ -15,7 +12,6 @@ const contract_address = abiFile.address;
 export const abi = abiFile.abi as any;
 
 export const web3 = new Web3(process.env.JSON_RPC);
+export const account = web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
+web3.eth.setProvider(Web3.givenProvider);
 export const nfaContract = new web3.eth.Contract(abi, contract_address);
-export const account = web3.eth.accounts.privateKeyToAccount(
-  process.env.PRIVATE_KEY
-);
