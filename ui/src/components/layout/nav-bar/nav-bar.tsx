@@ -1,8 +1,8 @@
 import { useMediaQuery } from '@/hooks';
 
-import { ConnectWalletButton } from './connect-wallet-button';
 import { Logo } from './logo';
 import { NavBarStyles as Styles } from './nav-bar.styles';
+import { NavBarConnectWalletButton } from './navbar-connect-wallet-button';
 import { Navigation } from './navigation';
 import { Sidebar } from './sidebar';
 
@@ -13,7 +13,7 @@ export const NavBar: React.FC = () => {
     <Styles.Container>
       <Styles.Content>
         <Logo />
-        <ConnectWalletButton />
+        <NavBarConnectWalletButton />
         {enableSidebar ? <Sidebar /> : <Navigation />}
       </Styles.Content>
     </Styles.Container>

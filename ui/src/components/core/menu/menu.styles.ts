@@ -37,6 +37,10 @@ export const MenuStyles = {
     transition: '$all-200',
     fontSize: '$sm',
 
+    a: {
+      all: 'unset',
+    },
+
     '&[data-headlessui-state*="active"]': {
       backgroundColor: '$slate2',
       color: '$slate12',

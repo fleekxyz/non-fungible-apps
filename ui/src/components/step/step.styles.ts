@@ -1,4 +1,4 @@
-import { Flex } from '@/components';
+import { Flex, Text } from '@/components';
 import { styled } from '@/theme';
 
 export const StepStyles = {
@@ -22,5 +22,8 @@ export const StepStyles = {
     flexDirection: 'column',
     justifyContent: 'center',
     maxWidth: '$106',
+  }),
+  Text: styled(Text, {
+    fontSize: '$4xl',
   }),
 };
