@@ -10,18 +10,30 @@ import {
   LoadFreeCertificateMethodArgs,
 } from '@libs/bunnyCDN';
 
+function verifyURL(url: String) {
+  if (url !== process.env.FRONT_END_URL) {
+    // not valid
+    return formatJSONResponse({
+      status: 401,
+      message: 'Unauthorized',
+    });
+  }
+}
+
 export const verifyApp = async (
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
     // Check the parameters and environment variables
     dotenv.config();
-    if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY == undefined) {
+    if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY == undefined || event.headers.originUrl === undefined) {
       return formatJSONResponse({
         status: 422,
         message: 'Required parameters were not passed.',
       });
     }
+
+    verifyURL(event.headers.originUrl);
 
     // Set up constants
     const bunnyCdn = new BunnyCdn(process.env.BUNNY_CDN_ACCESS_KEY);
@@ -50,12 +62,14 @@ export const submitAppInfo = async (
   try {
     // Check the parameters and environment variables
     dotenv.config();
-    if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY == undefined) {
+    if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY == undefined || event.headers.originUrl === undefined) {
       return formatJSONResponse({
         status: 422,
         message: 'Required parameters were not passed.',
       });
     }
+
+    verifyURL(event.headers.originUrl);
 
     // Set up constants
     const bunnyCdn = new BunnyCdn(process.env.BUNNY_CDN_ACCESS_KEY);
