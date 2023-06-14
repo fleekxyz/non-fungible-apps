@@ -20,7 +20,7 @@ const ItemsDropdown: ItemDropdown[] = [
 
 export const ComboboxTest: React.FC = () => {
   const selected = useState<Item>();
-  const selectedDropdown = useState<ItemDropdown>(ItemsDropdown[0]);
+  const selectedDropdown = useState<ItemDropdown>();
 
   return (
     <Flex

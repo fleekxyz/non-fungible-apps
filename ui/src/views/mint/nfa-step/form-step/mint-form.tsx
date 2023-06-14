@@ -16,6 +16,7 @@ import {
   AppDescriptionField,
   AppNameField,
   EnsDomainField,
+  IPFSHashField,
   LogoField,
 } from './fields';
 import { useMintFormContext } from './mint-form.context';
@@ -38,11 +39,17 @@ export const MintFormStep: React.FC = () => {
       domainURL: {
         value: [domainURL],
       },
+      ipfsHash: {
+        value: [ipfsHash],
+      },
       gitCommit: {
         value: [gitCommit],
       },
       gitBranch: {
         value: [gitBranch],
+      },
+      verifier: {
+        value: [verifier],
       },
       logoColor: {
         value: [logoColor],
@@ -69,10 +76,11 @@ export const MintFormStep: React.FC = () => {
       ens,
       gitCommit,
       `${repositoryName?.url}/tree/${gitBranch}`,
+      ipfsHash,
       appLogo,
       parseColorToNumber(logoColor),
       verifyNFA,
-      '0xdBb04e00D5ec8C9e3aeF811D315Ee7C147c5DBFD', //TODO remove hardcode
+      verifier,
       { value: billing },
     ]);
 
@@ -99,6 +107,7 @@ export const MintFormStep: React.FC = () => {
           <Flex css={{ gap: '$4', flexDirection: 'column' }}>
             <AppNameField />
             <AppDescriptionField />
+            <IPFSHashField />
             <EnsDomainField />
             <LogoField />
           </Flex>

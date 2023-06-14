@@ -179,6 +179,7 @@ export namespace ArgumentsMaps {
       string, // string ENS
       string, // string commitHash
       string, // string gitRepository
+      string, // string ipfsHash
       string, // string logo
       number, // uint24 color
       boolean, // bool accessPointAutoApproval
