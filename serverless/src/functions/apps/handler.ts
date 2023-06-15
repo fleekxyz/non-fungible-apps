@@ -9,10 +9,18 @@ import {
   CreatePullZoneMethodArgs,
   LoadFreeCertificateMethodArgs,
 } from '@libs/bunnyCDN';
+import * as crypto from "crypto";
 
-function verifyURL(url: String) {
-  if (url !== process.env.FRONT_END_URL) {
-    // not valid
+function isTheSignatureValid(
+  body: string, // must be raw string body, not json transformed version of the body
+  signature: string, // the "lambda-signature" from header
+  signingKey: string, // signing secret key for front-end
+) {
+  const hmac = crypto.createHmac("sha256", signingKey); // Create a HMAC SHA256 hash using the signing key
+  hmac.update(body, "utf8"); // Update the token hash with the request body using utf8
+  const digest = hmac.digest("hex");
+  if (signature !== digest) {
+    // the request is not valid
     return formatJSONResponse({
       status: 401,
       message: 'Unauthorized',
@@ -26,14 +34,19 @@ export const verifyApp = async (
   try {
     // Check the parameters and environment variables
     dotenv.config();
-    if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY == undefined || event.headers.originUrl === undefined) {
+    if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY == undefined) {
       return formatJSONResponse({
         status: 422,
         message: 'Required parameters were not passed.',
       });
     }
 
-    verifyURL(event.headers.originUrl);
+    // Check the lambda-signature and confirm the value of the FE_SIGNING_KEY env variable.
+    // If both are valid, verify the authenticity of the request.
+    if (event.headers["lambda-signature"] === undefined) throw Error("Header field 'lambda-signature' was not found.");
+    
+    if (process.env.FE_SIGNING_KEY === undefined) throw Error("FE_SIGNING_KEY env variable not found.");
+    else { isTheSignatureValid(event.body, event.headers["lambda-signature"], process.env.FE_SIGNING_KEY); };
 
     // Set up constants
     const bunnyCdn = new BunnyCdn(process.env.BUNNY_CDN_ACCESS_KEY);
@@ -69,7 +82,12 @@ export const submitAppInfo = async (
       });
     }
 
-    verifyURL(event.headers.originUrl);
+    // Check the lambda-signature and confirm the value of the FE_SIGNING_KEY env variable.
+    // If both are valid, verify the authenticity of the request.
+    if (event.headers["lambda-signature"] === undefined) throw Error("Header field 'lambda-signature' was not found.");
+    
+    if (process.env.FE_SIGNING_KEY === undefined) throw Error("FE_SIGNING_KEY env variable not found.");
+    else { isTheSignatureValid(event.body, event.headers["lambda-signature"], process.env.FE_SIGNING_KEY); };
 
     // Set up constants
     const bunnyCdn = new BunnyCdn(process.env.BUNNY_CDN_ACCESS_KEY);

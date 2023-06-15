@@ -40,10 +40,10 @@ export const submitMintInfo = async (
 
     // Check the alchemy signature and confirm the value of the ALCHEMY_SIGNING_KEY env variable.
     // If both are valid, verify the authenticity of the request.
-    if (event.headers["X-Alchemy-Signature"] === undefined) throw Error("Header field 'X-Alchemy-Signature' was not found.");
+    if (event.headers["x-alchemy-signature"] === undefined) throw Error("Header field 'x-alchemy-signature' was not found.");
     
     if (process.env.ALCHEMY_SIGNING_KEY === undefined) throw Error("ALCHEMY_SIGNING_KEY env variable not found.");
-    else { isTheSignatureValid(event.body, event.headers["X-Alchemy-Signature"], process.env.ALCHEMY_SIGNING_KEY); };
+    else { isTheSignatureValid(event.body, event.headers["x-alchemy-signature"], process.env.ALCHEMY_SIGNING_KEY); };
 
     const id = v4();
 
