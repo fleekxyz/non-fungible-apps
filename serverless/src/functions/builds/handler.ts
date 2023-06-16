@@ -27,8 +27,7 @@ export const submitBuildInfo = async (
       domain: data.domain,
       verificationTransactionHash: 'Not verified.',
     };
-    console.log(buildInfo);
-    
+
     // Add build record to the database, if it's not already added
     const buildRecord = await prisma.builds.findMany({
       where: {
@@ -38,12 +37,8 @@ export const submitBuildInfo = async (
         domain: buildInfo.domain,
       },
     });
-    console.log(buildRecord);
-    
 
     if (buildRecord.length == 0) {
-      console.log('here i am');
-      
       await prisma.builds.create({
         data: {
           githubRepository: buildInfo.githubRepository,
