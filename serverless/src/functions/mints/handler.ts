@@ -7,6 +7,25 @@ import { formatJSONResponse } from '@libs/api-gateway';
 import { v4 } from 'uuid';
 import { initPrisma, prisma } from '@libs/prisma';
 import { contractInstance, web3 } from '@libs/nfa-contract';
+import * as crypto from "crypto";
+
+function isTheSignatureValid(
+  body: string, // must be raw string body, not json transformed version of the body
+  signature: string, // the "x-alchemy-signature" from header
+  signingKey: string, // taken from dashboard for specific webhook
+) {
+  const hmac = crypto.createHmac("sha256", signingKey); // Create a HMAC SHA256 hash using the signing key
+  hmac.update(body, "utf8"); // Update the token hash with the request body using utf8
+  const digest = hmac.digest("hex");
+  if (signature !== digest) {
+    // the request is not valid
+    return formatJSONResponse({
+      status: 401,
+      message: 'Unauthorized',
+    });
+  }
+}
+
 export const submitMintInfo = async (
   event: APIGatewayEvent
   ///context: APIGatewayEventRequestContext
@@ -18,12 +37,16 @@ export const submitMintInfo = async (
         message: 'Required parameters were not passed.',
       });
     }
+
+    // Check the alchemy signature and confirm the value of the ALCHEMY_SIGNING_KEY env variable.
+    // If both are valid, verify the authenticity of the request.
+    if (event.headers["x-alchemy-signature"] === undefined) throw Error("Header field 'x-alchemy-signature' was not found.");
     
+    if (process.env.ALCHEMY_SIGNING_KEY === undefined) throw Error("ALCHEMY_SIGNING_KEY env variable not found.");
+    else { isTheSignatureValid(event.body, event.headers["x-alchemy-signature"], process.env.ALCHEMY_SIGNING_KEY); };
+
     const id = v4();
-    /**if (!verifyAlchemySig(event.headers.xalchemywork)) {
-        throw new Error('Invalid sig');
-      }**/
-    
+
     const eventBody = JSON.parse(event.body);
     const topics = eventBody.event.data.block.logs[1].topics.slice(1, 4);
     const hexCalldata = eventBody.event.data.block.logs[1].data;
@@ -129,9 +152,9 @@ export const submitMintInfo = async (
       domain: decodedLogs.externalURL,
       verificationTransactionHash: 'Not verified'
     };
-    
+
     initPrisma();
-    
+
     // Check if there is any build associated with the repository, commit hash, tokenId, and ipfsHash
 
     const build = await prisma.builds.findMany({
