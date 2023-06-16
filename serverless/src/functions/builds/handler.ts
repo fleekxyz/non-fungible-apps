@@ -39,7 +39,6 @@ export const submitBuildInfo = async (
     });
 
     if (buildRecord.length == 0) {
-
       await prisma.builds.create({
         data: {
           githubRepository: buildInfo.githubRepository,
