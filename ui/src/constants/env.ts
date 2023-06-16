@@ -26,4 +26,8 @@ export const env = Object.freeze({
   goerli: {
     rpc: import.meta.env.VITE_GOERLI_RPC || '',
   },
+  bunnyCDN: {
+    url: import.meta.env.VITE_BUNNYCDN_URL || '',
+    alchemySignature: import.meta.env.VITE_BUNNYCDN_ALCHEMY_SIGNATURE || '',
+  }
 });

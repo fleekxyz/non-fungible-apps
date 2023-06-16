@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { verifyBunnyCDNMock } from '@/mocks';
 import { RootState } from '@/store';
 import { AppLog } from '@/utils';
 
 import { bunnyCDNActions } from '../bunny-cdn-slice';
+import { BunnyCDNClient } from '../bunny-cdn-client';
 
 export const verifyBunnyPullzone = createAsyncThunk<void, string>(
   'BunnyCDN/VerifyPullzone',
@@ -16,7 +16,7 @@ export const verifyBunnyPullzone = createAsyncThunk<void, string>(
     try {
       dispatch(bunnyCDNActions.setState('loading'));
 
-      const verifyAPState = await verifyBunnyCDNMock(domain);
+      const verifyAPState = await BunnyCDNClient.verifyPullzone(domain);
 
       if (verifyAPState) dispatch(bunnyCDNActions.setState('success'));
       else throw new Error('Invalid AP state');

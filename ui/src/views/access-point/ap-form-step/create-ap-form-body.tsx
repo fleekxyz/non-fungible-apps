@@ -112,8 +112,8 @@ export const CreateAccessPointFormBody: React.FC = () => {
       try {
         setArgs([Number(nfa.tokenId), domain, { value: billing }]);
         dispatch(
-          bunnyCDNActions.createBunnyCDN({
-            domain: 'domain',
+          bunnyCDNActions.createPullzone({
+            domain: nfa.externalURL,
             targetDomain: domain,
           })
         );

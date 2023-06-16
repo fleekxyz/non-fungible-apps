@@ -1,17 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { createBunnyCDNMock } from '@/mocks';
 import { RootState } from '@/store';
 import { AppLog } from '@/utils';
 
 import { bunnyCDNActions } from '../bunny-cdn-slice';
+import { BunnyCDNClient } from '../bunny-cdn-client';
 
 type CNAMERecord = {
   domain: string;
   targetDomain: string;
 };
 
-export const createBunnyCDN = createAsyncThunk<void, CNAMERecord>(
+export const createPullzone = createAsyncThunk<void, CNAMERecord>(
   'BunnyCDN/CreateCDN',
   async ({ domain, targetDomain }, { dispatch, getState }) => {
     const { state } = (getState() as RootState).bunnyCDN;
@@ -21,7 +21,10 @@ export const createBunnyCDN = createAsyncThunk<void, CNAMERecord>(
     try {
       dispatch(bunnyCDNActions.setState('loading'));
 
-      const CDNRecord = await createBunnyCDNMock(domain, targetDomain);
+      const CDNRecord = await BunnyCDNClient.createPullzone(
+        domain,
+        targetDomain
+      );
 
       dispatch(bunnyCDNActions.setCDNRecordData(CDNRecord.bunnyURL));
     } catch (error) {
