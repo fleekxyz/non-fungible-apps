@@ -7,24 +7,7 @@ import { formatJSONResponse } from '@libs/api-gateway';
 import { v4 } from 'uuid';
 import { initPrisma, prisma } from '@libs/prisma';
 import { contractInstance, web3 } from '@libs/nfa-contract';
-import * as crypto from 'crypto';
-
-function isTheSignatureValid(
-  body: string, // must be raw string body, not json transformed version of the body
-  signature: string, // the "x-alchemy-signature" from header
-  signingKey: string // taken from dashboard for specific webhook
-) {
-  const hmac = crypto.createHmac('sha256', signingKey); // Create a HMAC SHA256 hash using the signing key
-  hmac.update(body, 'utf8'); // Update the token hash with the request body using utf8
-  const digest = hmac.digest('hex');
-  if (signature !== digest) {
-    // the request is not valid
-    return formatJSONResponse({
-      status: 401,
-      message: 'Unauthorized',
-    });
-  }
-}
+import { isTheSignatureValid } from '@libs/verify-signature';
 
 export const submitMintInfo = async (
   event: APIGatewayEvent
@@ -45,12 +28,17 @@ export const submitMintInfo = async (
 
     if (process.env.ALCHEMY_SIGNING_KEY === undefined)
       throw Error('ALCHEMY_SIGNING_KEY env variable not found.');
-    else {
-      isTheSignatureValid(
+    else if (
+      !isTheSignatureValid(
         event.body,
         event.headers['x-alchemy-signature'],
         process.env.ALCHEMY_SIGNING_KEY
-      );
+      )
+    ) {
+      return formatJSONResponse({
+        status: 401,
+        message: 'Unauthorized',
+      });
     }
 
     const id = v4();
