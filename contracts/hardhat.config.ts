@@ -25,6 +25,7 @@ const {
   ETH_GOERLI_API_URL,
   MAINNET_API_KEY,
   COINMARKETCAP_KEY,
+  QANET_RPC_URL,
 } = process.env;
 
 const config: HardhatUserConfig = {
@@ -58,6 +59,11 @@ const config: HardhatUserConfig = {
       url: ETH_MAIN_API_URL ? ETH_MAIN_API_URL : '',
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 1,
+    },
+    qanet: {
+      url: QANET_RPC_URL ? QANET_RPC_URL : '',
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      chainId: 31337,
     },
     local: {
       url: 'http://localhost:8545',
