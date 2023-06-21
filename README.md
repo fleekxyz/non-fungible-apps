@@ -1,16 +1,22 @@
-# Fleek Non-Fungible Apps
+![nfa-big](https://github.com/fleekxyz/non-fungible-apps/assets/73345016/b9252343-5c2e-4567-8ee4-1463cab5f8bd)
 
-**The repository for Fleek Non-Fungible Apps project**
+# Non-Fungible Apps v2 - by Fleek
 
-> 🚧 IMPORTANT 🚧 - This initiative is under development, so this repo should be treated as a WIP. The goals and the roadmap might change as the project is shaped.
+> 🚧 IMPORTANT 🚧 - This initiative is under development, so this repo should be treated as a WIP. Currently we are developing v2 of the NFA vision, outlined in [this article](https://blog.fleek.xyz/post/introducing-non-fungible-applications-v2/ ) The goals and the roadmap might change as the project is shaped.
 
 ## ⚡ Overview
 
-This is the landing point for Fleek's initiative to implement infrastructure as Solidity contracts.
+This is the landing point for Fleek's initiative to decentralize web3 app frontend infrastructure, their distribution, and access, through Solidity smart contracts.
 
-The vision is to have this on Ethereum Mainnet. We can create a network of smart contracts that represent the different parts of your stack. We had previously targeted Polygon but have changed it to Ethereum Mainnet for better interoperability and the security that mainnet provides.
+**The goal of NFAs** is to put web3 application frontends on-chain to provide users with a verifiable and crypto-friendly way of accessing applications. NFAs bring a concept similar to the App Store experience of Web2, to Web3. Developers mint an web3 app's frontend as a NFA, putting the source on IPFS. Users can then mint a copy of said NFT, holding an immutable version of the app that they can load via their wallets, rendering it from IPFS directly (instead of a shared domain like app.uniswap.com). NFAs act as immutable, verified "app packages" put on-chain for decentralized distribution to users. 
 
-The goal is to be a more verifiable and crypto-friendly Serverless.yaml or Cloudformation manifests that will enable us to develop use cases on top like community hosting.
+**Resources:**
+- [Read this article for an in-depth explanation of NFAs and the experience.](https://blog.fleek.xyz/post/introducing-non-fungible-applications-v2/ )
+- [Visit the NFA website, reach out to us.](https://nfa.fleek.xyz)
+
+The vision is to have this on Ethereum Mainnet. We can create a network of smart contracts that represent the different parts of your stack, much like a Serverless.yaml or Cloudformation manifests that will enable us to develop use cases on top. 
+
+We had previously targeted Polygon but have changed it to Ethereum Mainnet for better interoperability and the security that mainnet provides.
 
 We've developed a base set of contract code so now we want to harden it as well as add more metadata and features to support use cases with the first use case being community hosting. So be sure to check out the roadmap on the wiki.
 
@@ -60,7 +66,7 @@ Our goal is to reach a point where trustable Solidity contracts can be used for 
 
 - Define trustable and extendable smart contracts and standards
 - Prove how the concept would be applied using static sites
-- Prove community-hosted apps via these contracts
+- Prove the minting and copy-mint flow for these contracts
 
 Later on, when the initiative proves its value, a service will be added to Fleek's platform in a friendly way for anyone to be able to get their applications onboard.
 
