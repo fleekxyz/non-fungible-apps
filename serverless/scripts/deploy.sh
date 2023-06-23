@@ -79,12 +79,16 @@ echo "${bold}Copying the Prisma schema file to function directories${normal}"
 cp prisma/schema.prisma dist/src/functions/builds/
 cp prisma/schema.prisma dist/src/functions/mints/
 
+echo "${bold}Generating Prisma Client${normal}"
+yarn prisma:generate
+
 echo "${bold}Running the build command${normal}"
 yarn build
 
 echo "${bold}Copying the rhel openssl engine to dist/${normal}"
 cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/src/functions/mints
 cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/src/functions/builds
+cp node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node dist/src/functions/apps
 
 echo "${bold}Copying the .env file to dist/${normal}"
 cp .env src/
@@ -95,9 +99,7 @@ cp src/libs/FleekERC721.json dist/src/libs/
 echo "${bold}Copying the Prisma schema file to function directories${normal}"
 cp prisma/schema.prisma dist/src/functions/builds/
 cp prisma/schema.prisma dist/src/functions/mints/
-
-echo "${bold}Generating Prisma Client${normal}"
-yarn prisma:generate
+cp prisma/schema.prisma dist/src/functions/apps/
 
 echo "${bold}Creating layer zip files${normal}"
 /bin/bash ./scripts/prepare-libs-lambda-layer.sh
