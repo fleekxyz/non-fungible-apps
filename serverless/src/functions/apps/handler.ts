@@ -17,7 +17,7 @@ export const verifyApp = async (
   try {
     // Check the parameters and environment variables
     dotenv.config();
-    if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY == undefined) {
+    if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY === undefined) {
       return formatJSONResponse({
         status: 422,
         message: 'Required parameters were not passed.',
@@ -71,11 +71,7 @@ export const submitAppInfo = async (
   try {
     // Check the parameters and environment variables
     dotenv.config();
-    if (
-      event.body === null ||
-      process.env.BUNNY_CDN_ACCESS_KEY == undefined ||
-      event.headers.originUrl === undefined
-    ) {
+    if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY === undefined) {
       return formatJSONResponse({
         status: 422,
         message: 'Required parameters were not passed.',
