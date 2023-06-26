@@ -8,6 +8,7 @@ import { v4 } from 'uuid';
 import { initPrisma, prisma } from '@libs/prisma';
 import { contractInstance, web3 } from '@libs/nfa-contract';
 import { isTheSignatureValid } from '@libs/verify-signature';
+import { ethers } from 'ethers';
 
 export const submitMintInfo = async (
   event: APIGatewayEvent
@@ -44,6 +45,18 @@ export const submitMintInfo = async (
     const id = v4();
 
     const eventBody = JSON.parse(event.body);
+
+    if (
+      eventBody.event.data.block.logs[1].topics[0] !=
+      ethers.utils.id(
+        'NewMint(uint256,string,string,string,string,string,string,string,string,uint24,bool,address,address,address)'
+      ) // The first topic should be equal to the hash of the event name and its parameter types
+    ) {
+      throw Error(
+        'The emitted event is not `NewMint`. This request is ignored.'
+      );
+    }
+
     const topics = eventBody.event.data.block.logs[1].topics.slice(1, 4);
     const hexCalldata = eventBody.event.data.block.logs[1].data;
     const decodedLogs = web3.eth.abi.decodeLog(
