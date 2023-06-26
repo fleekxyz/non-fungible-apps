@@ -1,8 +1,7 @@
-![nfa-big](https://github.com/fleekxyz/non-fungible-apps/assets/73345016/b9252343-5c2e-4567-8ee4-1463cab5f8bd)
 
-# Non-Fungible Apps v2 - by Fleek
+# Non-Fungible Apps - by Fleek
 
-> 🚧 IMPORTANT 🚧 - This initiative is under development, so this repo should be treated as a WIP. Currently we are developing v2 of the NFA vision, outlined in [this article](https://blog.fleek.xyz/post/introducing-non-fungible-applications-v2/ ) The goals and the roadmap might change as the project is shaped.
+> 🚧 IMPORTANT 🚧 - This initiative is under development, so this repo should be treated as a WIP. Currently we are developing the NFA vision, outlined in [this article](https://blog.fleek.xyz/post/introducing-non-fungible-applications-update/ ) The goals and the roadmap might change as the project is shaped.
 
 ## ⚡ Overview
 
@@ -11,7 +10,7 @@ This is the landing point for Fleek's initiative to decentralize web3 app fronte
 **The goal of NFAs** is to put web3 application frontends on-chain to provide users with a verifiable and crypto-friendly way of accessing applications. NFAs bring a concept similar to the App Store experience of Web2, to Web3. Developers mint an web3 app's frontend as a NFA, putting the source on IPFS. Users can then mint a copy of said NFT, holding an immutable version of the app that they can load via their wallets, rendering it from IPFS directly (instead of a shared domain like app.uniswap.com). NFAs act as immutable, verified "app packages" put on-chain for decentralized distribution to users. 
 
 **Resources:**
-- [Read this article for an in-depth explanation of NFAs and the experience.](https://blog.fleek.xyz/post/introducing-non-fungible-applications-v2/ )
+- [Read this article for an in-depth explanation of NFAs and the experience.](https://blog.fleek.xyz/post/introducing-non-fungible-applications-update/ )
 - [Visit the NFA website, reach out to us.](https://nfa.fleek.xyz)
 
 The vision is to have this on Ethereum Mainnet. We can create a network of smart contracts that represent the different parts of your stack, much like a Serverless.yaml or Cloudformation manifests that will enable us to develop use cases on top. 
