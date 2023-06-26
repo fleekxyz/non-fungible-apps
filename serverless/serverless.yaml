@@ -11,7 +11,6 @@ provider:
     runtime: nodejs18.x
     stage: ${opt:stage, 'prd'}
     region: ${opt:region, 'us-west-2'}
-    timeout: 40
     apiGateway:
       minimumCompressionSize: 1024
       shouldStartNameWithService: true
@@ -88,7 +87,7 @@ functions:
       - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
 
   verifyAccessPoint:
-    handler: src/functions/apps/handler.verifyApp
+    handler: ./dist/src/functions/apps/handler.verifyApp
     events:
       - http:
           path: verifyApp
@@ -96,7 +95,7 @@ functions:
           cors: true
 
   submitAppInfo:
-    handler: src/functions/apps/handler.submitAppInfo
+    handler: ./dist/src/functions/apps/handler.submitAppInfo
     events:
       - http:
           path: app
