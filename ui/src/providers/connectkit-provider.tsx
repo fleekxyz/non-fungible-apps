@@ -3,12 +3,12 @@ import {
   getDefaultClient,
 } from 'connectkit';
 import { createClient, WagmiConfig } from 'wagmi';
-import { goerli, polygonMumbai } from 'wagmi/chains';
+import { goerli, polygonMumbai, hardhat } from 'wagmi/chains';
 
 import { env } from '@/constants';
 
 const alchemyId = env.alchemy.id;
-const chains = [polygonMumbai];
+const chains = [hardhat];
 
 const wagmiClient = createClient(
   getDefaultClient({

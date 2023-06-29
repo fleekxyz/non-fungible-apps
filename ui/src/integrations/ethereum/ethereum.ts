@@ -14,7 +14,7 @@ const config = {
 const alchemy = new Alchemy(config);
 
 export const Ethereum: Ethereum.Core = {
-  defaultNetwork: env.goerli.rpc,
+  defaultNetwork: env.QANet.rpc,
 
   provider: {
     metamask:
