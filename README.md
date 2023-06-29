@@ -7,7 +7,7 @@
 
 This is the landing point for our initiative to decentralize web3 app frontend infrastructure, their distribution, and access, through Non-fungible Applications, an NFT-based implementation.
 
-**The goal of NFAs** is to put web3 application frontends on-chain to provide users with a verifiable and crypto-friendly way of accessing applications.
+**The goal of NFAs** is to put web3 application frontends, and their surrounding infra, on-chain to provide users with a verifiable and crypto-friendly way of accessing applications.
 
 1. Developers mint their app's frontend onto an NFT, where the frontend bundle is stored and referenced from IPFS.
 2. Users mint prints of the NFA, which allows them to have a decentralized and permanently on-chain access point to any web3 app.
