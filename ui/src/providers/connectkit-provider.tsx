@@ -8,7 +8,7 @@ import { goerli, polygonMumbai, hardhat } from 'wagmi/chains';
 import { env } from '@/constants';
 
 const alchemyId = env.alchemy.id;
-const chains = [hardhat];
+const chains = [goerli];
 
 const wagmiClient = createClient(
   getDefaultClient({

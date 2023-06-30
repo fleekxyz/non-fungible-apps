@@ -8,7 +8,7 @@ import { BunnyCDNClient } from '../bunny-cdn-client';
 
 export const verifyBunnyPullzone = createAsyncThunk<void, string>(
   'BunnyCDN/VerifyPullzone',
-  async (domain, { dispatch, getState }): Promise<void> => {
+  async (hostName, { dispatch, getState }): Promise<void> => {
     const { state } = (getState() as RootState).bunnyCDN;
 
     if (state === 'loading') return;
@@ -16,13 +16,13 @@ export const verifyBunnyPullzone = createAsyncThunk<void, string>(
     try {
       dispatch(bunnyCDNActions.setState('loading'));
 
-      const verifyAPState = await BunnyCDNClient.verifyPullzone(domain);
+      const verifyAPState = await BunnyCDNClient.verifyPullzone(hostName);
 
       if (verifyAPState) dispatch(bunnyCDNActions.setState('success'));
       else throw new Error('Invalid AP state');
     } catch (error) {
       AppLog.errorToast(
-        'There was an error trying to verify the domain. Please, try again',
+        'There was an error trying to verify the hostName. Please, try again',
         error
       );
       dispatch(bunnyCDNActions.setState('failed'));

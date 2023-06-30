@@ -63,7 +63,14 @@ Get them from the project settings on the firebase dashboard. Read [this article
    VITE_GOERLI_RPC
    ```
 
-5. Start the local server running the app:
+5. Set the Bunny CDN endpoint and the Sign in Key needed to create the signature
+
+   ```bash
+   VITE_BUNNYCDN_URL
+   VITE_FE_SIGNING_KEY
+   ```
+
+6. Start the local server running the app:
 
    ```bash
    $ yarn dev
