@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import { prisma } from '@libs/prisma';
 import {
   BunnyCdn,
-  BunnyCdnError,
+  // BunnyCdnError,
   CreatePullZoneMethodArgs,
   LoadFreeCertificateMethodArgs,
 } from '@libs/bunnyCDN';
@@ -108,7 +108,7 @@ export const submitAppInfo = async (
       hostname: data.targetDomain,
     };
 
-    let maxTries = 5;
+    // let maxTries = 5;
     let pullZone: {
       id: any;
       name?: string;
@@ -116,7 +116,7 @@ export const submitAppInfo = async (
       hostname?: string;
     };
 
-    do {
+    // do {
       let id = v4();
       let requestArgs: CreatePullZoneMethodArgs = {
         zoneId: id, // this is technically the zone name. It should be unique.
@@ -126,20 +126,21 @@ export const submitAppInfo = async (
       try {
         pullZone = await bunnyCdn.createPullZone(requestArgs);
         appInfo.apId = id;
+        // break;
       } catch (error) {
-        maxTries -= 1;
-        if (
-          error instanceof BunnyCdnError &&
-          error.name === 'pullzone.name_taken'
-        ) {
-          continue;
-        } else if (maxTries == 0) {
-          throw 'Max number of tries for creating pullzone was reached.';
-        } else {
+        // maxTries -= 1;
+        // if (
+        //   error instanceof BunnyCdnError &&
+        //   error.name === 'pullzone.name_taken'
+        // ) {
+        //   continue;
+        // } else if (maxTries == 0) {
+        //   throw 'Max number of tries for creating pullzone was reached.';
+        // } else {
           throw error;
-        }
+        // }
       }
-    } while (maxTries > 0);
+    // } while (maxTries > 0);
 
     // Create custom hostname
     await bunnyCdn

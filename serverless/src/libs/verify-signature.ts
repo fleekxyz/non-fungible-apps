@@ -5,8 +5,11 @@ export function isTheSignatureValid(
     signature: string, // the "lambda-signature" from header
     signingKey: string // signing secret key for front-end
 ): boolean {
+    console.log('body:' , body);
+    console.log('FE SIGNATURE: ', signature);
     const hmac = crypto.createHmac('sha256', signingKey); // Create a HMAC SHA256 hash using the signing key
     hmac.update(body, 'utf8'); // Update the token hash with the request body using utf8
     const digest = hmac.digest('hex');
+    console.log('FE DIGEST: ', digest);
     return signature === digest; // returns true for valid and false for invalid
 }
