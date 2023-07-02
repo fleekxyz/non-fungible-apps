@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 
 import { env } from '@/constants';
 
-import * as Contracts from './contracts';
+import * as Contracts from './contracts/qanet';
 
 const config = {
   apiKey: env.alchemy.id,
