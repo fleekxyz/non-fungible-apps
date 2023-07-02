@@ -11,7 +11,7 @@ import {
 
 import { createContext } from '@/utils';
 
-import { FleekERC721 } from '../contracts';
+import { FleekApps, FleekERC721 } from '../contracts';
 
 /**
  * This is a factory to create context factories for contracts write.
@@ -26,7 +26,7 @@ const createWriteContractContext = <
   TFunctionName extends keyof TArgumentsMap & string,
   TFunctionArguments extends [
     ...TArgumentsMap[TFunctionName],
-    EthereumHooks.WriteContext.SettingsParam
+    EthereumHooks.WriteContext.SettingsParam?
   ]
 >(
   address: string,
@@ -111,6 +111,23 @@ export const EthereumHooks = {
       TFunctionArguments
     >(FleekERC721.address, FleekERC721.abi, functionName);
   },
+
+  createFleekAppsWriteContext: <
+    TFunctionName extends keyof ArgumentsMaps.FleekApps & string,
+    TFunctionArguments extends [
+      ...ArgumentsMaps.FleekApps[TFunctionName],
+      EthereumHooks.WriteContext.SettingsParam?
+    ]
+  >(
+    functionName: TFunctionName
+  ) => {
+    return createWriteContractContext<
+      typeof FleekApps.abi,
+      ArgumentsMaps.FleekApps,
+      TFunctionName,
+      TFunctionArguments
+    >(FleekApps.address, FleekApps.abi, functionName);
+  },
 };
 
 /**
@@ -128,7 +145,7 @@ export namespace EthereumHooks {
       TFunctionName extends keyof TArgumentsMap & string,
       TFunctionArguments extends [
         ...TArgumentsMap[TFunctionName],
-        EthereumHooks.WriteContext.SettingsParam
+        EthereumHooks.WriteContext.SettingsParam?
       ]
     > {
       functionName: TFunctionName;
@@ -194,5 +211,12 @@ export namespace ArgumentsMaps {
     /**
      * TODO: Add other functions arguments as they are needed.
      */
+  }
+
+  export interface FleekApps extends EthereumHooks.WriteContext.ArgumentsMap {
+    mint: [
+      string, // address to
+      string // string mainTokenId
+    ];
   }
 }

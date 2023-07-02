@@ -1,7 +1,4 @@
-import { useQuery } from '@apollo/client';
-import { ethers } from 'ethers';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 
 import {
@@ -15,24 +12,22 @@ import {
   Stepper,
   Text,
 } from '@/components';
-import { getNFADocument } from '@/graphclient';
 import { useAppDispatch } from '@/store';
 import { bunnyCDNActions, useBunnyCDNStore } from '@/store/features/bunny-cdn';
 import { AppLog } from '@/utils';
 import { parseNumberToHexColor } from '@/utils/color';
 
 import { CreateAccessPoint } from '../create-ap.context';
-import { useAccessPointFormContext } from './create-ap.form.context';
 
 export const SelectedNFA: React.FC = () => {
   const { nfa } = CreateAccessPoint.useContext();
-  if (!nfa.logo) return null;
+  if (!nfa) return null;
   return (
     <RowData
       leftIcon={
         <NFAIcon
           image={nfa.logo}
-          color={`#${parseNumberToHexColor(nfa.color)}57`}
+          color={`#${parseNumberToHexColor(nfa.color || 0)}57`}
         />
       }
       label={nfa.name}
@@ -42,44 +37,23 @@ export const SelectedNFA: React.FC = () => {
 };
 
 export const CreateAccessPointFormBody: React.FC = () => {
-  const { id } = useParams();
   const { address } = useAccount();
-  const { nextStep } = Stepper.useContext();
-  const { nfa, setNfa, billing } = CreateAccessPoint.useContext();
+  const { nextStep, setStep } = Stepper.useContext();
+  const { nfa, isLoading } = CreateAccessPoint.useContext();
   const { setArgs } = CreateAccessPoint.useTransactionContext();
   const { state } = useBunnyCDNStore();
   const dispatch = useAppDispatch();
 
   const {
     form: {
-      domain: {
-        value: [domain],
-      },
+      domain: domainContext,
       isValid: [isValid],
     },
-  } = useAccessPointFormContext();
+  } = CreateAccessPoint.useFormContext();
 
   const {
-    form: { domain: domainContext },
-  } = useAccessPointFormContext();
-
-  const { loading: nfaLoading } = useQuery(getNFADocument, {
-    skip: id === undefined,
-    variables: {
-      id: ethers.utils.hexlify(Number(id)),
-    },
-    onCompleted(data) {
-      if (data.token && id) {
-        const { name, tokenId, logo, color, externalURL } = data.token;
-        setNfa({ name, tokenId, logo, color, externalURL });
-      } else {
-        AppLog.errorToast("We couldn't find the NFA you are looking for");
-      }
-    },
-    onError(error) {
-      AppLog.errorToast('Error fetching NFA', error);
-    },
-  });
+    value: [domain],
+  } = domainContext;
 
   useEffect(() => {
     if (state === 'success') {
@@ -88,7 +62,7 @@ export const CreateAccessPointFormBody: React.FC = () => {
     }
   }, [state, nextStep, dispatch]);
 
-  if (nfaLoading) {
+  if (isLoading) {
     return (
       <Flex
         css={{
@@ -103,23 +77,25 @@ export const CreateAccessPointFormBody: React.FC = () => {
   }
 
   const handleContinueClick = (): void => {
-    if (!address) {
-      AppLog.errorToast('No address found. Please connect your wallet.');
-      return;
-    }
+    if (!address)
+      return AppLog.errorToast('No address found. Please connect your wallet.');
 
-    if (nfa && domain) {
-      try {
-        setArgs([Number(nfa.tokenId), domain, { value: billing }]);
+    if (!nfa) return AppLog.errorToast('The selected NFA is invalid');
+
+    setArgs([address, nfa.tokenId]);
+    try {
+      if (domain) {
         dispatch(
           bunnyCDNActions.createBunnyCDN({
             domain: 'domain',
             targetDomain: domain,
           })
         );
-      } catch (e) {
-        AppLog.errorToast('Error setting transaction arguments');
+      } else {
+        setStep(4);
       }
+    } catch (e) {
+      AppLog.errorToast('Error setting transaction arguments', e);
     }
   };
 
@@ -127,16 +103,16 @@ export const CreateAccessPointFormBody: React.FC = () => {
     <Flex css={{ flexDirection: 'column', gap: '$6' }}>
       <SelectedNFA />
       <Text css={{ fontSize: '$sm', color: '$slate11' }}>
-        Enter the domain you want to host the NFA. You will need access to the
-        DNS settings in the next step.
+        You may add a custom domain for your app. If you do not, you will be
+        able to access it through any public IPFS gateway.
       </Text>
       <Form.Field context={domainContext}>
-        <Form.Label>Domain</Form.Label>
+        <Form.Label>Custom Domain</Form.Label>
         <Form.Input placeholder="mydomain.com" />
         <Form.Overline />
       </Form.Field>
       <Button
-        disabled={!isValid || nfa.tokenId === ''}
+        disabled={!isValid} // TODO: Add nfa.tokenId validation
         isLoading={state === 'loading'}
         colorScheme="blue"
         variant="solid"
