@@ -98,6 +98,7 @@ export function handleNewMint(event: NewMintEvent): void {
   build.commitHash = commitHash;
   build.ipfsHash = ipfsHash;
   build.domain = externalURL;
+  build.gitRepository = gitRepository;
   build.save();
 
   // Increase total tokens counter
