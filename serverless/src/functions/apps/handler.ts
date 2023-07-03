@@ -94,7 +94,7 @@ export const submitAppInfo = async (
     ) {
       return formatJSONResponse({
         status: 401,
-        message: 'Unauthorized',
+        message: 'Unauthorized.',
       });
     }
 
@@ -102,7 +102,7 @@ export const submitAppInfo = async (
     const bunnyCdn = new BunnyCdn(process.env.BUNNY_CDN_ACCESS_KEY);
     const data = JSON.parse(event.body);
     const appInfo = {
-      apId: 'null',
+      appId: 'null',
       createdAt: new Date().toISOString(),
       sourceDomain: data.sourceDomain,
       hostname: data.targetDomain,
@@ -116,6 +116,7 @@ export const submitAppInfo = async (
       hostname?: string;
     };
 
+    let errorOccurred = false;
     do {
       let id = v4();
       let requestArgs: CreatePullZoneMethodArgs = {
@@ -125,7 +126,7 @@ export const submitAppInfo = async (
 
       try {
         pullZone = await bunnyCdn.createPullZone(requestArgs);
-        appInfo.apId = id;
+        appInfo.appId = id;
       } catch (error) {
         maxTries -= 1;
         if (
@@ -139,7 +140,10 @@ export const submitAppInfo = async (
           throw error;
         }
       }
-    } while (maxTries > 0);
+
+      errorOccurred = false; // No error occurred if this line is reached
+      break; // Exit the loop since catch block was not triggered
+    } while (maxTries > 0 && !errorOccurred);
 
     // Create custom hostname
     await bunnyCdn
@@ -155,7 +159,7 @@ export const submitAppInfo = async (
     const zoneRecord = await prisma.zones.findMany({
       where: {
         zoneId: pullZone!.id,
-        name: appInfo.apId,
+        name: appInfo.appId,
         sourceDomain: appInfo.sourceDomain,
       },
     });
@@ -164,7 +168,7 @@ export const submitAppInfo = async (
       await prisma.zones.create({
         data: {
           zoneId: pullZone!.id,
-          name: appInfo.apId,
+          name: appInfo.appId,
           hostname: appInfo.hostname,
           sourceDomain: appInfo.sourceDomain,
         },
