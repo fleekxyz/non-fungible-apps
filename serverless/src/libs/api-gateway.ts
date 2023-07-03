@@ -1,8 +1,11 @@
 // QUESTION: should we add back in schema verification?
 
-export const formatJSONResponse = (response: Record<string, unknown>) => {
+export const formatJSONResponse = (
+  code: number,
+  response: Record<string, unknown>
+) => {
   return {
-    statusCode: 200,
+    statusCode: code,
     body: JSON.stringify(response),
   };
 };

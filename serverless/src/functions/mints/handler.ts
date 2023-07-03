@@ -16,8 +16,7 @@ export const submitMintInfo = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     if (event.body === null || event.body === undefined) {
-      return formatJSONResponse({
-        status: 422,
+      return formatJSONResponse(422, {
         message: 'Required parameters were not passed.',
       });
     }
@@ -36,8 +35,7 @@ export const submitMintInfo = async (
         process.env.ALCHEMY_SIGNING_KEY
       )
     ) {
-      return formatJSONResponse({
-        status: 401,
+      return formatJSONResponse(401, {
         message: 'Unauthorized',
       });
     }
@@ -216,12 +214,11 @@ export const submitMintInfo = async (
       });
     }
 
-    return formatJSONResponse({
+    return formatJSONResponse(200, {
       mintInfo,
     });
   } catch (e) {
-    return formatJSONResponse({
-      status: 500,
+    return formatJSONResponse(500, {
       message: e,
     });
   }

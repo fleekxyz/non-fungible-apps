@@ -86,7 +86,7 @@ functions:
       - { Ref: TopicAwsLibsLambdaLayer }
       - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
 
-  verifyAccessPoint:
+  verifyApp:
     handler: ./dist/src/functions/apps/handler.verifyApp
     events:
       - http:

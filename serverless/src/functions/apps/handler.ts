@@ -18,9 +18,9 @@ export const verifyApp = async (
     // Check the parameters and environment variables
     dotenv.config();
     if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY === undefined) {
-      return formatJSONResponse({
-        status: 422,
-        message: 'Required parameters were not passed.',
+      return formatJSONResponse(422, {
+        message:
+          'Required parameters were not passed. Please check the request body and the environment variables.',
       });
     }
 
@@ -38,8 +38,7 @@ export const verifyApp = async (
         process.env.FE_SIGNING_KEY
       )
     ) {
-      return formatJSONResponse({
-        status: 401,
+      return formatJSONResponse(401, {
         message: 'Unauthorized',
       });
     }
@@ -54,12 +53,11 @@ export const verifyApp = async (
 
     await bunnyCdn.loadFreeCertificate(args);
 
-    return formatJSONResponse({
-      status: true,
+    return formatJSONResponse(200, {
+      message: 'The hostname was verified successfully.',
     });
   } catch (e) {
-    return formatJSONResponse({
-      status: 500,
+    return formatJSONResponse(500, {
       message: e,
     });
   }
@@ -72,9 +70,9 @@ export const submitAppInfo = async (
     // Check the parameters and environment variables
     dotenv.config();
     if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY === undefined) {
-      return formatJSONResponse({
-        status: 422,
-        message: 'Required parameters were not passed.',
+      return formatJSONResponse(422, {
+        message:
+          'Required parameters were not passed. Please check the request body and the environment variables.',
       });
     }
 
@@ -92,8 +90,7 @@ export const submitAppInfo = async (
         process.env.FE_SIGNING_KEY
       )
     ) {
-      return formatJSONResponse({
-        status: 401,
+      return formatJSONResponse(401, {
         message: 'Unauthorized.',
       });
     }
@@ -175,12 +172,11 @@ export const submitAppInfo = async (
       });
     }
 
-    return formatJSONResponse({
+    return formatJSONResponse(200, {
       appInfo,
     });
   } catch (e) {
-    return formatJSONResponse({
-      status: 500,
+    return formatJSONResponse(500, {
       message: e,
     });
   }

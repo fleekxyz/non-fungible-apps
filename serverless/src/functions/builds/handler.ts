@@ -9,9 +9,8 @@ export const submitBuildInfo = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     if (event.body === null) {
-      return formatJSONResponse({
-        status: 422,
-        message: 'Required parameters were not passed.',
+      return formatJSONResponse(422, {
+        message: 'The request body is not configured properly.',
       });
     }
 
@@ -82,12 +81,11 @@ export const submitBuildInfo = async (
       });
     }
 
-    return formatJSONResponse({
+    return formatJSONResponse(200, {
       buildInfo,
     });
   } catch (e) {
-    return formatJSONResponse({
-      status: 500,
+    return formatJSONResponse(500, {
       message: e,
     });
   }
