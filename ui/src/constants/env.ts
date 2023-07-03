@@ -15,7 +15,7 @@ export const env = Object.freeze({
     storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
     messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
     appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
-    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || '',
+    // measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || '', TODO remove is not needed cause we're not using analytics
   },
   twitter: {
     url: import.meta.env.VITE_TWITTER_URL || '',

@@ -15,7 +15,7 @@ const firebaseConfig = {
   storageBucket: env.firebase.storageBucket,
   messagingSenderId: env.firebase.messagingSenderId,
   appId: env.firebase.appId,
-  measurementId: env.firebase.measurementId,
+  // measurementId: env.firebase.measurementId,  TODO remove is not needed cause we're not using analytics
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
