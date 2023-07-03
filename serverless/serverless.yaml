@@ -20,7 +20,7 @@ provider:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
   httpApi:
     cors:
-    origin: '*'
+      allowedOrigins: '*'
       allowedHeaders:
         - lambda-signature
         - x-alchemy-signature
@@ -109,6 +109,10 @@ functions:
           path: verifyApp
           method: post
           cors: true
+    layers:
+      - { Ref: TopicAwsNodeModulesLambdaLayer }
+      - { Ref: TopicAwsLibsLambdaLayer }
+      - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
 
   submitAppInfo:
     handler: ./dist/src/functions/apps/handler.submitAppInfo
@@ -117,3 +121,7 @@ functions:
           path: app
           method: post
           cors: true
+    layers:
+      - { Ref: TopicAwsNodeModulesLambdaLayer }
+      - { Ref: TopicAwsLibsLambdaLayer }
+      - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
