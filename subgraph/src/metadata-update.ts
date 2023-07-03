@@ -103,6 +103,7 @@ export function handleMetadataUpdateWithMultipleStringValues(
     build.gitRepository = event.params.value[1];
     build.ipfsHash = event.params.value[2];
     build.domain = event.params.value[3];
+    build.token = Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId));
     build.save();
     gitRepositoryEntity.save();
   }

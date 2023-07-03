@@ -91,7 +91,7 @@ type Build @entity {
   commitHash: String!
   ipfsHash: String!
   domain: String!
-  token: Token! @derivedFrom(field: "builds")
+  token: Token!
 }
 
 # Owner entity for collection, access points, and tokens
