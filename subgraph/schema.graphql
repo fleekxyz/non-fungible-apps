@@ -81,11 +81,12 @@ type Token @entity {
   verifier: Verifier # Address
   verified: Boolean!
   createdAt: BigInt!
-  builds: [Build!]!
+  builds: [Build!]! @derivedFrom(field: "token")
 }
 
 type Build @entity {
-  id: Bytes! # Token ID
+  id: Bytes! # Build number
+  number: Int!
   gitRepository: GitRepository!
   commitHash: String!
   ipfsHash: String!

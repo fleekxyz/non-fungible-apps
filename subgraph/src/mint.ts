@@ -94,11 +94,13 @@ export function handleNewMint(event: NewMintEvent): void {
   }
 
   // Populate GitRepository entity
-  let build = new Build(Bytes.fromByteArray(Bytes.fromBigInt(tokenId)));
+  let build = new Build(Bytes.fromByteArray(Bytes.fromI32(0)));
+  build.number = 0;
   build.commitHash = commitHash;
   build.ipfsHash = ipfsHash;
   build.domain = externalURL;
   build.gitRepository = gitRepository;
+  build.token = Bytes.fromByteArray(Bytes.fromBigInt(tokenId));
   build.save();
 
   // Increase total tokens counter
