@@ -3,7 +3,7 @@ import { AppLog } from '@/utils';
 import axios from 'axios';
 import * as crypto from 'crypto';
 
-axios.defaults.baseURL = 'http://localhost:3000/prd'; //env.bunnyCDN.url;
+axios.defaults.baseURL = env.bunnyCDN.url;
 
 const createPullzone = async (sourceDomain: string, targetDomain: string) => {
   try {
@@ -24,7 +24,7 @@ const createPullzone = async (sourceDomain: string, targetDomain: string) => {
         'lambda-signature': signature,
       },
     });
-    
+
     //TODO show the user that the pullzone name is already taken
     return response.data.appInfo.apId;
   } catch (error) {
