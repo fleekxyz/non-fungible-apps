@@ -255,7 +255,7 @@ contract FleekERC721 is
      * @dev Override of transfer of ERC721.
      * Transfer is disabled for NFA tokens.
      */
-    function transfer(address from, address to, uint256 tokenId) internal virtual override whenNotPaused {
+    function _transfer(address from, address to, uint256 tokenId) internal virtual override whenNotPaused {
         revert TransferIsDisabled();
     }
 

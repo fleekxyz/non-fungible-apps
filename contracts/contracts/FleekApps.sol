@@ -7,8 +7,6 @@ import "@openzeppelin/contracts/utils/Base64.sol";
 import "./util/FleekSVG.sol";
 import "./FleekERC721.sol";
 
-error TransferIsDisabled();
-
 contract FleekApps is Initializable, ERC721Upgradeable {
     using Strings for address;
     using Base64 for bytes;
@@ -58,7 +56,7 @@ contract FleekApps is Initializable, ERC721Upgradeable {
      * @dev Override of transfer of ERC721.
      * Transfer is disabled for NFA tokens.
      */
-    function transfer(address from, address to, uint256 tokenId) internal virtual override whenNotPaused {
+    function _transfer(address from, address to, uint256 tokenId) internal virtual override {
         revert TransferIsDisabled();
     }
 
