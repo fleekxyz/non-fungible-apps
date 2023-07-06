@@ -9,6 +9,7 @@ import { useMintFormContext } from '../form-step';
 
 // TODO: remove mocked items after graphql api is fixed
 const mockedItems = [
+  '0xd4997d0facc83231b9f26a8b2155b4869e99946f',
   '0xdBb04e00D5ec8C9e3aeF811D315Ee7C147c5DBFD',
   '0x7ED735b7095C05d78dF169F991f2b7f1A1F1A049',
 ];

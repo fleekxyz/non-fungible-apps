@@ -4,32 +4,61 @@ import {
   ///APIGatewayEventRequestContext,
 } from 'aws-lambda';
 import { formatJSONResponse } from '@libs/api-gateway';
-
 import { v4 } from 'uuid';
 import { initPrisma, prisma } from '@libs/prisma';
-import { account, nfaContract, web3 } from '@libs/nfa-contract';
+import { contractInstance, web3 } from '@libs/nfa-contract';
+import { isTheSignatureValid } from '@libs/verify-signature';
+import { ethers } from 'ethers';
 
 export const submitMintInfo = async (
   event: APIGatewayEvent
   ///context: APIGatewayEventRequestContext
 ): Promise<APIGatewayProxyResult> => {
   try {
-    if (event.body === null) {
+    if (event.body === null || event.body === undefined) {
       return formatJSONResponse({
         status: 422,
         message: 'Required parameters were not passed.',
       });
     }
+
+    // Check the alchemy signature and confirm the value of the ALCHEMY_SIGNING_KEY env variable.
+    // If both are valid, verify the authenticity of the request.
+    if (event.headers['x-alchemy-signature'] === undefined)
+      throw Error("Header field 'x-alchemy-signature' was not found.");
+
+    if (process.env.ALCHEMY_SIGNING_KEY === undefined)
+      throw Error('ALCHEMY_SIGNING_KEY env variable not found.');
+    else if (
+      !isTheSignatureValid(
+        event.body,
+        event.headers['x-alchemy-signature'],
+        process.env.ALCHEMY_SIGNING_KEY
+      )
+    ) {
+      return formatJSONResponse({
+        status: 401,
+        message: 'Unauthorized',
+      });
+    }
+
     const id = v4();
 
-    /**if (!verifyAlchemySig(event.headers.xalchemywork)) {
-        throw new Error('Invalid sig');
-      }**/
-
     const eventBody = JSON.parse(event.body);
-    const topics = eventBody.event.data.block.logs[1].slice(1, 3);
-    const hexCalldata = eventBody.event.data.block.logs[1].data;
 
+    if (
+      eventBody.event.data.block.logs[1].topics[0] !=
+      ethers.utils.id(
+        'NewMint(uint256,string,string,string,string,string,string,string,string,uint24,bool,address,address,address)'
+      ) // The first topic should be equal to the hash of the event name and its parameter types
+    ) {
+      throw Error(
+        'The emitted event is not `NewMint`. This request is ignored.'
+      );
+    }
+
+    const topics = eventBody.event.data.block.logs[1].topics.slice(1, 4);
+    const hexCalldata = eventBody.event.data.block.logs[1].data;
     const decodedLogs = web3.eth.abi.decodeLog(
       [
         {
@@ -130,6 +159,7 @@ export const submitMintInfo = async (
       owner: decodedLogs.owner,
       ipfsHash: decodedLogs.ipfsHash,
       domain: decodedLogs.externalURL,
+      verificationTransactionHash: 'Not verified',
     };
 
     initPrisma();
@@ -150,13 +180,13 @@ export const submitMintInfo = async (
     if (build.length > 0) {
       // Mark the token as verified in the contract
       try {
+        // what if the token has been burned?
         // call the `setTokenVerified` method
-        await nfaContract.methods
-          .setTokenVerified(mintInfo.tokenId, true)
-          .send({
-            from: account.address,
-            gas: '1000000',
-          });
+        const transaction = await contractInstance.setTokenVerified(
+          mintInfo.tokenId,
+          true
+        );
+        mintInfo.verificationTransactionHash = transaction.hash;
         verified = true;
       } catch (error) {
         // catch transaction error

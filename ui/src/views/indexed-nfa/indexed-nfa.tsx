@@ -3,8 +3,8 @@ import { ethers } from 'ethers';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { App } from '@/app.context';
 import { getNFADetailDocument } from '@/graphclient';
+import { appActions, useAppDispatch } from '@/store';
 import { AppLog } from '@/utils';
 import { parseNumberToHexColor } from '@/utils/color';
 
@@ -18,14 +18,14 @@ import { IndexedNFAStyles as S } from './indexed-nfa.styles';
 
 export const IndexedNFAView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { setBackgroundColor } = App.useContext();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
-      setBackgroundColor('000000');
+      dispatch(appActions.clearOverlayColor());
     };
-  }, [setBackgroundColor]);
+  }, [dispatch]);
 
   const handleError = (error: unknown): void => {
     AppLog.errorToast(
@@ -43,7 +43,9 @@ export const IndexedNFAView: React.FC = () => {
     onCompleted(data) {
       if (!data.token) handleError(new Error('Token not found'));
       if (data.token?.color)
-        setBackgroundColor(parseNumberToHexColor(data.token.color));
+        dispatch(
+          appActions.setOverlayColor(parseNumberToHexColor(data.token.color))
+        );
     },
     onError(error) {
       handleError(error);

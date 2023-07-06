@@ -9,7 +9,8 @@ import '@openzeppelin/hardhat-upgrades';
 import * as dotenv from 'dotenv';
 import { HardhatUserConfig } from 'hardhat/types';
 import { task, types } from 'hardhat/config';
-import deploy from './scripts/deploy';
+import deployFleekERC721 from './scripts/deploy/deploy-fleek-erc721';
+import deployFleekApps from './scripts/deploy/deploy-fleek-apps';
 
 dotenv.config();
 
@@ -17,16 +18,18 @@ const {
   PRIVATE_KEY,
   REPORT_GAS,
   ETHERSCAN_API_KEY,
+  POLYGONSCAN_KEY,
   POLYGON_API_URL,
   ETH_MAIN_API_URL,
   ETH_SEPOLIA_API_URL,
   ETH_GOERLI_API_URL,
   MAINNET_API_KEY,
   COINMARKETCAP_KEY,
+  QANET_RPC_URL,
 } = process.env;
 
 const config: HardhatUserConfig = {
-  defaultNetwork: 'hardhat',
+  defaultNetwork: 'local',
   networks: {
     hardhat: {
       chainId: 31337,
@@ -57,6 +60,15 @@ const config: HardhatUserConfig = {
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 1,
     },
+    qanet: {
+      url: QANET_RPC_URL ? QANET_RPC_URL : '',
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      chainId: 31337,
+    },
+    local: {
+      url: 'http://localhost:8545',
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+    },
   },
   gasReporter: {
     enabled: REPORT_GAS === 'true' || false,
@@ -86,10 +98,12 @@ const config: HardhatUserConfig = {
     timeout: 200000, // 200 seconds max for running tests
   },
   etherscan: {
-    // apiKey: {
-    //   polygonMumbai: POLYGONSCAN_KEY,
-    // },
-    apiKey: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
+    apiKey: {
+      polygonMumbai: POLYGONSCAN_KEY ? POLYGONSCAN_KEY : '',
+      mainnet: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
+      goerli: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
+      sepolia: ETHERSCAN_API_KEY ? ETHERSCAN_API_KEY : '',
+    },
   },
 };
 
@@ -97,9 +111,9 @@ export default config;
 
 // Use the following command to deploy where the network flag can be replaced with the network you choose:
 // npx hardhat deploy --network goerli --new-proxy-instance --name "FleekNFAs" --symbol "FLKNFA" --billing "[10000, 20000]"
-task('deploy', 'Deploy the contracts')
+task('deploy:FleekERC721', 'Deploy the FleekERC721 contract')
   .addFlag('newProxyInstance', 'Force to deploy a new proxy instance')
-  .addOptionalParam('name', 'The collection name', 'FleekNFAs', types.string)
+  .addOptionalParam('name', 'The collection name', 'Fleek NFAs', types.string)
   .addOptionalParam('symbol', 'The collection symbol', 'FLKNFA', types.string)
   .addOptionalParam(
     'billing',
@@ -107,4 +121,10 @@ task('deploy', 'Deploy the contracts')
     [],
     types.json
   )
-  .setAction(deploy);
+  .setAction(deployFleekERC721);
+
+task('deploy:FleekApps', 'Deploy the FleekApps contract')
+  .addFlag('newProxyInstance', 'Force to deploy a new proxy instance')
+  .addOptionalParam('name', 'The collection name', 'NFA - Apps', types.string)
+  .addOptionalParam('symbol', 'The collection symbol', 'NFAA', types.string)
+  .setAction(deployFleekApps);

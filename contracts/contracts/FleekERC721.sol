@@ -202,6 +202,15 @@ contract FleekERC721 is
         return (app.name, app.description, app.externalURL, app.ENS, app.currentBuild, app.logo, app.color);
     }
 
+    function getAppData(
+        uint256 tokenId
+    ) public view returns (string memory, string memory, string memory, string memory, string memory) {
+        _requireMinted(tokenId);
+        Token storage app = _apps[tokenId];
+
+        return (app.name, app.ENS, app.logo, app.color.toColorString(), app.builds[app.currentBuild].ipfsHash);
+    }
+
     /**
      * @dev Returns the last minted tokenId.
      */
