@@ -21,9 +21,7 @@ provider:
   httpApi:
     cors:
       allowedOrigins: '*'
-      allowedHeaders:
-        - lambda-signature
-        - x-alchemy-signature
+      allowedHeaders: '*'
       allowedMethods:
         - POST
       allowCredentials: false
