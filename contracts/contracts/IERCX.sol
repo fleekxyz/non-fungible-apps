@@ -38,6 +38,17 @@ interface IERCX {
     }
 
     /**
+     * @dev All available app category traits.
+     */
+    enum Categories {
+        DeFi,
+        NFT,
+        Analytics,
+        Infrastructure,
+        Gaming
+    }
+
+    /**
      * The properties are stored as string to keep consistency with
      * other token contracts, we might consider changing for bytes32
      * in the future due to gas optimization.
@@ -49,6 +60,7 @@ interface IERCX {
         string ENS; // ENS for the site
         string logo; // Branding logo
         uint24 color; // Branding color
+        Categories tokenCategory; // The category trait associated with the token
         uint256 currentBuild; // The current build number (Increments by one with each change, starts at zero)
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
     }
@@ -82,6 +94,11 @@ interface IERCX {
      * @dev Sets a minted token's color.
      */
     function setTokenColor(uint256 tokenId, uint24 _tokenColor) external;
+
+    /**
+     * @dev Sets a minted token's category.
+     */
+    function setTokenCategory(uint256 tokenId, Categories tokenCategory) external;
 
     /**
      * @dev Sets a minted token's build.
