@@ -21,7 +21,7 @@ provider:
   httpApi:
     cors:
       allowedOrigins: '*'
-      allowedHeaders: '*'
+      headers: '*'
       allowedMethods:
         - POST
       allowCredentials: false
@@ -67,13 +67,12 @@ functions:
       - http:
           path: build
           method: post
-          cors: true
-    environment: # TODO They won't be loaded from the shell environment, need to find a way to pass them from the deployment script
+          cors:
+            origin: '*'
+            headers: '*'
+            allowCredentials: false
+    environment:
       NODE_ENV: production
-      # DATABASE_URL: ${env:DATABASE_URL}
-      # CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
-      # PRIVATE_KEY: ${env:PRIVATE_KEY}
-      # JSON_RPC: ${env:JSON_RPC}
     layers:
       - { Ref: TopicAwsNodeModulesLambdaLayer }
       - { Ref: TopicAwsLibsLambdaLayer }
@@ -88,13 +87,12 @@ functions:
       - http:
           path: mint
           method: post
-          cors: true
-    environment: # TODO They won't be loaded from the shell environment, need to find a way to pass them from the deployment script
+          cors:
+            origin: '*'
+            headers: '*'
+            allowCredentials: false
+    environment:
       NODE_ENV: production
-      # DATABASE_URL: ${env:DATABASE_URL}
-      # CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
-      # PRIVATE_KEY: ${env:PRIVATE_KEY}
-      # JSON_RPC: ${env:JSON_RPC}
     layers:
       - { Ref: TopicAwsNodeModulesLambdaLayer }
       - { Ref: TopicAwsLibsLambdaLayer }
@@ -106,7 +104,10 @@ functions:
       - http:
           path: verifyApp
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers: '*'
+            allowCredentials: false
     layers:
       - { Ref: TopicAwsNodeModulesLambdaLayer }
       - { Ref: TopicAwsLibsLambdaLayer }
@@ -118,7 +119,10 @@ functions:
       - http:
           path: app
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers: '*'
+            allowCredentials: false
     layers:
       - { Ref: TopicAwsNodeModulesLambdaLayer }
       - { Ref: TopicAwsLibsLambdaLayer }
