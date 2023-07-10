@@ -63,7 +63,7 @@ export const APRecordCardBody: React.FC = () => {
             value={isSudomain ? 'CNAME' : 'ANAME'}
           />
           <DisplayText label="Host" value={isSudomain ? 'App' : '@'} />
-          <DisplayText label="Data (Points to)" value={bunnyURL} />
+          <DisplayText label="Data (Points to)" value={`${bunnyURL}.b-cdn.net`} />
           <Button
             colorScheme="blue"
             variant="solid"
