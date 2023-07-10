@@ -3,7 +3,28 @@ import { AppLog } from '@/utils';
 import axios from 'axios';
 import * as crypto from 'crypto';
 
-axios.defaults.baseURL = env.bunnyCDN.url;
+const client = (body: string, endpoint: string) => {
+  if (!env.bunnyCDN.feSigningKey) {
+    AppLog.error('Missing BunnyCDN signing key');
+    throw new Error();
+  }
+
+  if (!env.bunnyCDN.url) {
+    AppLog.error('Missing BunnyCDN url');
+    throw new Error();
+  }
+
+  const signature = generateSignature(body, env.bunnyCDN.feSigningKey);
+
+  const instance = axios.create({
+    baseURL: env.bunnyCDN.url,
+    headers: {
+      'lambda-signature': signature,
+    },
+  });
+
+  return instance.post(endpoint, body);
+};
 
 const createPullzone = async (sourceDomain: string, targetDomain: string) => {
   try {
@@ -12,21 +33,15 @@ const createPullzone = async (sourceDomain: string, targetDomain: string) => {
       targetDomain,
     });
 
-    if (!env.bunnyCDN.feSigningKey) {
-      AppLog.error('Missing BunnyCDN signing key');
+    if (!env.bunnyCDN.createPullzone) {
+      AppLog.error('Missing BunnyCDN create pullzone endpoint');
       throw new Error();
     }
 
-    const signature = generateSignature(body, env.bunnyCDN.feSigningKey);
-
-    const response = await axios.post('/app', body, {
-      headers: {
-        'lambda-signature': signature,
-      },
-    });
+    const response = await client(body, env.bunnyCDN.createPullzone);
 
     //TODO show the user that the pullzone name is already taken
-    return response.data.appInfo.apId;
+    return response.data.appInfo.appId;
   } catch (error) {
     throw error;
   }
@@ -38,18 +53,12 @@ const verifyPullzone = async (hostName: string) => {
       hostName,
     });
 
-    if (!env.bunnyCDN.feSigningKey) {
-      AppLog.error('Missing BunnyCDN signing key');
+    if (!env.bunnyCDN.verifyPullzone) {
+      AppLog.error('Missing BunnyCDN verify pullzone endpoint');
       throw new Error();
     }
 
-    const signature = generateSignature(body, env.bunnyCDN.feSigningKey);
-
-    const response = await axios.post('/verifyApp', body, {
-      headers: {
-        'lambda-signature': signature,
-      },
-    });
+    const response = await client(body, env.bunnyCDN.verifyPullzone);
 
     console.log(response.data);
     return response.data;
