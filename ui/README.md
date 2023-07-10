@@ -68,6 +68,8 @@ Get them from the project settings on the firebase dashboard. Read [this article
    ```bash
    VITE_BUNNYCDN_URL
    VITE_FE_SIGNING_KEY
+   VITE_BUNNYCDN_CREATE_PULLZONE
+   VITE_BUNNYCDN_VERIFY_PULLZONE
    ```
 
 6. Start the local server running the app:

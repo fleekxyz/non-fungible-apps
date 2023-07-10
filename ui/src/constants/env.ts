@@ -29,6 +29,7 @@ export const env = Object.freeze({
   bunnyCDN: {
     url: import.meta.env.VITE_BUNNYCDN_URL || '',
     feSigningKey: import.meta.env.VITE_FE_SIGNING_KEY || '',
-    alchemySignature: import.meta.env.VITE_BUNNYCDN_ALCHEMY_SIGNATURE || '',
+    createPullzone: import.meta.env.VITE_BUNNYCDN_CREATE_PULLZONE || '',
+    verifyPullzone: import.meta.env.VITE_BUNNYCDN_VERIFY_PULLZONE || '',
   },
 });
