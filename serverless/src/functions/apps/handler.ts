@@ -124,7 +124,9 @@ export const submitAppInfo = async (
       try {
         pullZone = await bunnyCdn.createPullZone(requestArgs);
         appInfo.appId = id;
+        break; // Exit the loop since catch block was not triggered
       } catch (error) {
+        errorOccurred = true;
         maxTries -= 1;
         if (
           error instanceof BunnyCdnError &&
@@ -137,10 +139,7 @@ export const submitAppInfo = async (
           throw error;
         }
       }
-
-      errorOccurred = false; // No error occurred if this line is reached
-      break; // Exit the loop since catch block was not triggered
-    } while (maxTries > 0 && !errorOccurred);
+    } while (maxTries > 0 && errorOccurred);
 
     // Create custom hostname
     await bunnyCdn
