@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import { prisma } from '@libs/prisma';
 import {
   BunnyCdn,
-  // BunnyCdnError,
+  BunnyCdnError,
   CreatePullZoneMethodArgs,
   LoadFreeCertificateMethodArgs,
 } from '@libs/bunnyCDN';
@@ -18,9 +18,9 @@ export const verifyApp = async (
     // Check the parameters and environment variables
     dotenv.config();
     if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY === undefined) {
-      return formatJSONResponse({
-        status: 422,
-        message: 'Required parameters were not passed.',
+      return formatJSONResponse(422, {
+        message:
+          'Required parameters were not passed. Please check the request body and the environment variables.',
       });
     }
 
@@ -38,8 +38,7 @@ export const verifyApp = async (
         process.env.FE_SIGNING_KEY
       )
     ) {
-      return formatJSONResponse({
-        status: 401,
+      return formatJSONResponse(401, {
         message: 'Unauthorized',
       });
     }
@@ -54,12 +53,11 @@ export const verifyApp = async (
 
     await bunnyCdn.loadFreeCertificate(args);
 
-    return formatJSONResponse({
-      status: true,
+    return formatJSONResponse(200, {
+      message: 'The hostname was verified successfully.',
     });
   } catch (e) {
-    return formatJSONResponse({
-      status: 500,
+    return formatJSONResponse(500, {
       message: e,
     });
   }
@@ -72,9 +70,9 @@ export const submitAppInfo = async (
     // Check the parameters and environment variables
     dotenv.config();
     if (event.body === null || process.env.BUNNY_CDN_ACCESS_KEY === undefined) {
-      return formatJSONResponse({
-        status: 422,
-        message: 'Required parameters were not passed.',
+      return formatJSONResponse(422, {
+        message:
+          'Required parameters were not passed. Please check the request body and the environment variables.',
       });
     }
 
@@ -92,9 +90,8 @@ export const submitAppInfo = async (
         process.env.FE_SIGNING_KEY
       )
     ) {
-      return formatJSONResponse({
-        status: 401,
-        message: 'Unauthorized',
+      return formatJSONResponse(401, {
+        message: 'Unauthorized.',
       });
     }
 
@@ -102,13 +99,13 @@ export const submitAppInfo = async (
     const bunnyCdn = new BunnyCdn(process.env.BUNNY_CDN_ACCESS_KEY);
     const data = JSON.parse(event.body);
     const appInfo = {
-      apId: 'null',
+      appId: 'null',
       createdAt: new Date().toISOString(),
       sourceDomain: data.sourceDomain,
       hostname: data.targetDomain,
     };
 
-    // let maxTries = 5;
+    let maxTries = 5;
     let pullZone: {
       id: any;
       name?: string;
@@ -116,7 +113,8 @@ export const submitAppInfo = async (
       hostname?: string;
     };
 
-    // do {
+    let errorOccurred = false;
+    do {
       let id = v4();
       let requestArgs: CreatePullZoneMethodArgs = {
         zoneId: id, // this is technically the zone name. It should be unique.
@@ -125,22 +123,23 @@ export const submitAppInfo = async (
 
       try {
         pullZone = await bunnyCdn.createPullZone(requestArgs);
-        appInfo.apId = id;
-        // break;
+        appInfo.appId = id;
+        break; // Exit the loop since catch block was not triggered
       } catch (error) {
-        // maxTries -= 1;
-        // if (
-        //   error instanceof BunnyCdnError &&
-        //   error.name === 'pullzone.name_taken'
-        // ) {
-        //   continue;
-        // } else if (maxTries == 0) {
-        //   throw 'Max number of tries for creating pullzone was reached.';
-        // } else {
+        errorOccurred = true;
+        maxTries -= 1;
+        if (
+          error instanceof BunnyCdnError &&
+          error.name === 'pullzone.name_taken'
+        ) {
+          continue;
+        } else if (maxTries == 0) {
+          throw 'Max number of tries for creating pullzone was reached.';
+        } else {
           throw error;
-        // }
+        }
       }
-    // } while (maxTries > 0);
+    } while (maxTries > 0 && errorOccurred);
 
     // Create custom hostname
     await bunnyCdn
@@ -156,7 +155,7 @@ export const submitAppInfo = async (
     const zoneRecord = await prisma.zones.findMany({
       where: {
         zoneId: pullZone!.id,
-        name: appInfo.apId,
+        name: appInfo.appId,
         sourceDomain: appInfo.sourceDomain,
       },
     });
@@ -165,19 +164,18 @@ export const submitAppInfo = async (
       await prisma.zones.create({
         data: {
           zoneId: pullZone!.id,
-          name: appInfo.apId,
+          name: appInfo.appId,
           hostname: appInfo.hostname,
           sourceDomain: appInfo.sourceDomain,
         },
       });
     }
 
-    return formatJSONResponse({
+    return formatJSONResponse(200, {
       appInfo,
     });
   } catch (e) {
-    return formatJSONResponse({
-      status: 500,
+    return formatJSONResponse(500, {
       message: e,
     });
   }
