@@ -3,7 +3,7 @@ import {
   getDefaultClient,
 } from 'connectkit';
 import { createClient, WagmiConfig } from 'wagmi';
-import { goerli, polygonMumbai, hardhat } from 'wagmi/chains';
+import { goerli } from 'wagmi/chains';
 
 import { env } from '@/constants';
 

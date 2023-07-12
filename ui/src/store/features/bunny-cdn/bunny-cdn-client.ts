@@ -40,7 +40,6 @@ const createPullzone = async (sourceDomain: string, targetDomain: string) => {
 
     const response = await client(body, env.bunnyCDN.createPullzone);
 
-    //TODO show the user that the pullzone name is already taken
     return response.data.appInfo.appId;
   } catch (error) {
     throw error;
