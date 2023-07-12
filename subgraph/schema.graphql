@@ -30,6 +30,7 @@ type NewMint @entity(immutable: true) {
   ipfsHash: String!
   logo: String!
   color: Int!
+  category: String!
   accessPointAutoApproval: Boolean!
   triggeredBy: Bytes! # address
   owner: Owner! # address
@@ -47,6 +48,7 @@ type MetadataUpdate @entity(immutable: true) {
   uint24Value: Int
   multipleStringValue: [String!]!
   booleanValue: Boolean
+  enumValue: Int
   byAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -73,6 +75,7 @@ type Token @entity {
   ENS: String!
   logo: String!
   color: Int!
+  category: String!
   accessPointAutoApproval: Boolean!
   owner: Owner!
   mintedBy: Bytes!

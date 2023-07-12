@@ -32,7 +32,8 @@ dataSources:
         - ChangeAccessPointAutoApproval
       abis:
         - name: FleekNFA
-          file: ../contracts/deployments/qanet/FleekERC721.json
+          # file: ../contracts/artifacts/contracts/FleekERC721.sol/FleekERC721.json # For local builds
+          file: ../contracts/deployments/qanet/FleekERC721.json # For QA Network Builds
       eventHandlers:
         - event: Approval(indexed address,indexed address,indexed uint256)
           handler: handleApproval
@@ -47,6 +48,8 @@ dataSources:
           handler: handleMetadataUpdateWithIntValue
         - event: MetadataUpdate(indexed uint256,string,bool,indexed address)
           handler: handleMetadataUpdateWithBooleanValue
+        - event: MetadataUpdate(indexed uint256,string,uint24,indexed address)
+          handler: handleMetadataUpdateWithEnumValue
         - event: NewMint(indexed uint256,string,string,string,string,string,string,string,string,uint24,bool,indexed address,indexed address,address)
           handler: handleNewMint
         - event: Transfer(indexed address,indexed address,indexed uint256)

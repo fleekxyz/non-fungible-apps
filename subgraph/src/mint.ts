@@ -11,7 +11,9 @@ import {
   GitRepository,
   Collection,
   Verifier,
+  Build,
 } from '../generated/schema';
+import { Categories } from './constants';
 
 export function handleNewMint(event: NewMintEvent): void {
   const newMintEntity = new NewMint(
@@ -27,11 +29,36 @@ export function handleNewMint(event: NewMintEvent): void {
   const commitHash = event.params.commitHash;
   const logo = event.params.logo;
   const color = event.params.color;
-  const accessPointAutoApproval = event.params.accessPointAutoApproval;
   const tokenId = event.params.tokenId;
+  const categoryParam = event.params.category;
   const ownerAddress = event.params.owner;
   const verifierAddress = event.params.verifier;
 
+  let category = '';
+
+  switch (categoryParam) {
+    case Categories.DeFi:
+      category = 'DeFi';
+      break;
+
+    case Categories.Gaming:
+      category = 'Gaming';
+      break;
+
+    case Categories.Analytics:
+      category = 'Analytics';
+      break;
+
+    case Categories.NFT:
+      category = 'NFT';
+      break;
+
+    case Categories.Infrastructure:
+      category = 'Infrastructure';
+      break;
+  }
+
+  newMintEntity.category = category;
   newMintEntity.tokenId = tokenId;
   newMintEntity.name = name;
   newMintEntity.description = description;
@@ -42,7 +69,6 @@ export function handleNewMint(event: NewMintEvent): void {
   newMintEntity.ipfsHash = ipfsHash;
   newMintEntity.logo = logo;
   newMintEntity.color = color;
-  newMintEntity.accessPointAutoApproval = accessPointAutoApproval;
   newMintEntity.triggeredBy = event.params.minter;
   newMintEntity.owner = ownerAddress;
   newMintEntity.verifier = verifierAddress;
@@ -72,7 +98,7 @@ export function handleNewMint(event: NewMintEvent): void {
   token.ENS = ENS;
   token.logo = logo;
   token.color = color;
-  token.accessPointAutoApproval = accessPointAutoApproval;
+  token.category = category;
   token.owner = ownerAddress;
   token.verified = false;
   token.mintTransaction = event.transaction.hash.concatI32(
@@ -98,6 +124,13 @@ export function handleNewMint(event: NewMintEvent): void {
     collection.totalTokens = collection.totalTokens.plus(BigInt.fromU32(1));
     collection.save();
   }
+
+  const build = new Build(Bytes.fromByteArray(Bytes.fromI32(0)));
+  build.commitHash = commitHash;
+  build.gitRepository = gitRepository;
+  build.ipfsHash = ipfsHash;
+  build.domain = externalURL;
+  build.save();
 
   // Save entities
   owner.save();
