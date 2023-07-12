@@ -5,6 +5,8 @@ import { AppLog } from '@/utils';
 
 import { bunnyCDNActions } from '../bunny-cdn-slice';
 import { BunnyCDNClient } from '../bunny-cdn-client';
+import { env } from '@/constants';
+import axios, { AxiosError } from 'axios';
 
 type CNAMERecord = {
   sourceDomain: string;
@@ -27,11 +29,19 @@ export const createPullzone = createAsyncThunk<void, CNAMERecord>(
       );
 
       dispatch(bunnyCDNActions.setCDNRecordData(CDNRecord));
-    } catch (error) {
-      AppLog.errorToast(
-        'Failed to create the CDN record. Please, try again',
-        error
-      );
+    } catch (error: Error | AxiosError | any) {
+      let message = 'Failed to create the CDN record. Please, try again';
+
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.data.message.name ===
+          env.bunnyCDN.errorMessages.nameTaken
+      ) {
+        message =
+          'Pullzone name is already taken. Please, try again with a different name';
+      }
+
+      AppLog.errorToast(message, error);
       dispatch(bunnyCDNActions.setState('failed'));
     }
   }

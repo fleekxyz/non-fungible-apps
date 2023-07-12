@@ -60,7 +60,6 @@ const verifyPullzone = async (hostName: string) => {
 
     const response = await client(body, env.bunnyCDN.verifyPullzone);
 
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;
