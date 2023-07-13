@@ -1,17 +1,14 @@
 import { env } from '@/constants';
-import { AppLog } from '@/utils';
 import axios from 'axios';
 import * as crypto from 'crypto';
 
 const client = (body: string, endpoint: string) => {
   if (!env.bunnyCDN.feSigningKey) {
-    AppLog.error('Missing BunnyCDN signing key');
-    throw new Error();
+    throw new Error('Missing BunnyCDN signing key');
   }
 
   if (!env.bunnyCDN.url) {
-    AppLog.error('Missing BunnyCDN url');
-    throw new Error();
+    throw new Error('Missing BunnyCDN url');
   }
 
   const signature = generateSignature(body, env.bunnyCDN.feSigningKey);
@@ -34,8 +31,7 @@ const createPullzone = async (sourceDomain: string, targetDomain: string) => {
     });
 
     if (!env.bunnyCDN.createPullzone) {
-      AppLog.error('Missing BunnyCDN create pullzone endpoint');
-      throw new Error();
+      throw new Error('Missing BunnyCDN create pullzone endpoint');
     }
 
     const response = await client(body, env.bunnyCDN.createPullzone);
@@ -53,8 +49,7 @@ const verifyPullzone = async (hostName: string) => {
     });
 
     if (!env.bunnyCDN.verifyPullzone) {
-      AppLog.error('Missing BunnyCDN verify pullzone endpoint');
-      throw new Error();
+      throw new Error('Missing BunnyCDN verify pullzone endpoint');
     }
 
     const response = await client(body, env.bunnyCDN.verifyPullzone);
