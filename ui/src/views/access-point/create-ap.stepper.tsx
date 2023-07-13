@@ -15,8 +15,8 @@ export const CreateApStepper: React.FC = () => {
   } = CreateAccessPoint.useTransactionContext();
   const {
     form: {
-      domain: {
-        value: [accesPointDomain],
+      targetDomain: {
+        value: [targetDomain],
       },
       isValid: [, setIsValid],
     },
@@ -43,7 +43,7 @@ export const CreateApStepper: React.FC = () => {
           <Stepper.Step>
             <Step
               header={`Add a ${
-                isSubdomain(accesPointDomain) ? 'CNAME' : 'ANAME'
+                isSubdomain(targetDomain) ? 'CNAME' : 'ANAME'
               } record to your DNS provider`}
             >
               <APRecordStep />
