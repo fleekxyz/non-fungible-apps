@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-catch */
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import * as crypto from 'crypto';
 
 import { env } from '@/constants';
@@ -25,7 +25,10 @@ const client = (body: string, endpoint: string): Promise<AxiosResponse> => {
   return instance.post(endpoint, body);
 };
 
-const createPullzone = async (sourceDomain: string, targetDomain: string) => {
+const createPullzone = async (
+  sourceDomain: string,
+  targetDomain: string
+): Promise<string | Error | AxiosError> => {
   try {
     const body = JSON.stringify({
       sourceDomain,
@@ -39,12 +42,14 @@ const createPullzone = async (sourceDomain: string, targetDomain: string) => {
     const response = await client(body, env.bunnyCDN.createPullzone);
 
     return response.data.appInfo.appId;
-  } catch (error) {
+  } catch (error: Error | AxiosError | unknown) {
     throw error;
   }
 };
 
-const verifyPullzone = async (hostName: string) => {
+const verifyPullzone = async (
+  hostName: string
+): Promise<boolean | Error | AxiosError> => {
   try {
     const body = JSON.stringify({
       hostName,
@@ -57,7 +62,7 @@ const verifyPullzone = async (hostName: string) => {
     const response = await client(body, env.bunnyCDN.verifyPullzone);
 
     return response.data;
-  } catch (error) {
+  } catch (error: Error | AxiosError | unknown) {
     throw error;
   }
 };

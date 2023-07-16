@@ -3,8 +3,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
 import { AppLog } from '@/utils';
 
-import { bunnyCDNActions } from '../bunny-cdn-slice';
 import { BunnyCDNClient } from '../bunny-cdn-client';
+import { bunnyCDNActions } from '../bunny-cdn-slice';
 
 export const verifyBunnyPullzone = createAsyncThunk<void, string>(
   'BunnyCDN/VerifyPullzone',
