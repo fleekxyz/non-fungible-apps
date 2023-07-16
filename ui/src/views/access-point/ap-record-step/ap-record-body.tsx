@@ -4,29 +4,23 @@ import { Button, Card, Flex, SpinnerDot, Stepper, Text } from '@/components';
 import { bunnyCDNActions, useAppDispatch, useBunnyCDNStore } from '@/store';
 
 import { useAccessPointFormContext } from '../ap-form-step';
-import { CreateAccessPoint } from '../create-ap.context';
 import { DisplayText } from '../display-text';
 import { isSubdomain } from './record-step.utils';
 
 export const APRecordCardBody: React.FC = () => {
   const dispatch = useAppDispatch();
   const { bunnyURL, state } = useBunnyCDNStore();
-  const {
-    nfa: { domain: nfaDomain },
-  } = CreateAccessPoint.useContext();
+
   const {
     form: {
-      domain: {
-        value: [accesPointDomain],
+      targetDomain: {
+        value: [targetDomain],
       },
     },
   } = useAccessPointFormContext();
   const { nextStep } = Stepper.useContext();
 
-  const isSudomain = useMemo(
-    () => isSubdomain(accesPointDomain),
-    [accesPointDomain]
-  );
+  const isSudomain = useMemo(() => isSubdomain(targetDomain), [targetDomain]);
 
   useEffect(() => {
     if (state === 'success') {
@@ -36,7 +30,7 @@ export const APRecordCardBody: React.FC = () => {
   }, [state, nextStep, dispatch]);
 
   const handleContinueClick = (): void => {
-    dispatch(bunnyCDNActions.verifyBunnyPullzone(nfaDomain));
+    dispatch(bunnyCDNActions.verifyBunnyPullzone(targetDomain));
   };
 
   return (
@@ -66,7 +60,10 @@ export const APRecordCardBody: React.FC = () => {
             value={isSudomain ? 'CNAME' : 'ANAME'}
           />
           <DisplayText label="Host" value={isSudomain ? 'App' : '@'} />
-          <DisplayText label="Data (Points to)" value={bunnyURL} />
+          <DisplayText
+            label="Data (Points to)"
+            value={`${bunnyURL}.b-cdn.net`}
+          />
           <Button
             colorScheme="blue"
             variant="solid"

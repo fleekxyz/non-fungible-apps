@@ -11,6 +11,7 @@ import {
   GitRepository,
   Collection,
   Verifier,
+  Build,
 } from '../generated/schema';
 
 export function handleNewMint(event: NewMintEvent): void {
@@ -91,6 +92,16 @@ export function handleNewMint(event: NewMintEvent): void {
   if (!repository) {
     repository = new GitRepository(gitRepository);
   }
+
+  // Populate GitRepository entity
+  let build = new Build(Bytes.fromByteArray(Bytes.fromI32(0)));
+  build.number = 0;
+  build.commitHash = commitHash;
+  build.ipfsHash = ipfsHash;
+  build.domain = externalURL;
+  build.gitRepository = gitRepository;
+  build.token = Bytes.fromByteArray(Bytes.fromBigInt(tokenId));
+  build.save();
 
   // Increase total tokens counter
   const collection = Collection.load(event.address);

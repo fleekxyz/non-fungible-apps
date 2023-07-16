@@ -6,18 +6,26 @@ plugins:
   - serverless-offline
 
 provider:
-    timeout: 150
-    name: aws
-    runtime: nodejs18.x
-    stage: ${opt:stage, 'prd'}
-    region: ${opt:region, 'us-west-2'}
-    apiGateway:
-      minimumCompressionSize: 1024
-      shouldStartNameWithService: true
-    environment:
-      DEBUG: '*'
-      AWS_STAGE: ${self:provider.stage}
-      AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+  timeout: 150
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'prd'}
+  region: ${opt:region, 'us-west-2'}
+  apiGateway:
+    minimumCompressionSize: 1024
+    shouldStartNameWithService: true
+  environment:
+    DEBUG: '*'
+    AWS_STAGE: ${self:provider.stage}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+  httpApi:
+    cors:
+      allowedOrigins: '*'
+      headers: '*'
+      allowedMethods:
+        - POST
+      allowCredentials: false
+      maxAge: 6000 # In seconds
 
 layers:
   TopicAwsNodeModules:
@@ -27,23 +35,29 @@ layers:
   TopicPrismaAwsPrismaClient:
     path: lambda-layers-prisma-client
 
-package: { 
-  patterns: ["dist/**/*.prisma", "**/libquery_engine-rhel-openssl-1.0.x.so.node", "dist/serverless/.env", '!node_modules/**'],
-}
+package:
+  {
+    patterns:
+      [
+        'dist/**/*.prisma',
+        '**/libquery_engine-rhel-openssl-1.0.x.so.node',
+        'dist/serverless/.env',
+        '!node_modules/**',
+      ],
+  }
 
 custom:
   esbuild:
     bundle: true
     minify: true
     sourcemap: false
-    exclude: 
+    exclude:
       - 'aws-sdk'
     target: 'node18'
     platform: 'node'
     concurrency: 10
 
 functions:
-
   submitBuildInfo:
     # Deployment:
     handler: ./dist/src/functions/builds/handler.submitBuildInfo # TODO This will not work, need to change to nfa-serverless/dist/serverless/src/functions/builds/handler.submitBuildInfo
@@ -53,13 +67,12 @@ functions:
       - http:
           path: build
           method: post
-          cors: true
-    environment: # TODO They won't be loaded from the shell environment, need to find a way to pass them from the deployment script
+          cors:
+            origin: '*'
+            headers: '*'
+            allowCredentials: false
+    environment:
       NODE_ENV: production
-      # DATABASE_URL: ${env:DATABASE_URL}
-      # CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
-      # PRIVATE_KEY: ${env:PRIVATE_KEY}
-      # JSON_RPC: ${env:JSON_RPC}
     layers:
       - { Ref: TopicAwsNodeModulesLambdaLayer }
       - { Ref: TopicAwsLibsLambdaLayer }
@@ -74,25 +87,31 @@ functions:
       - http:
           path: mint
           method: post
-          cors: true
-    environment: # TODO They won't be loaded from the shell environment, need to find a way to pass them from the deployment script
+          cors:
+            origin: '*'
+            headers: '*'
+            allowCredentials: false
+    environment:
       NODE_ENV: production
-      # DATABASE_URL: ${env:DATABASE_URL}  
-      # CONTRACT_ADDRESS: ${env:CONTRACT_ADDRESS}
-      # PRIVATE_KEY: ${env:PRIVATE_KEY}
-      # JSON_RPC: ${env:JSON_RPC}
     layers:
       - { Ref: TopicAwsNodeModulesLambdaLayer }
       - { Ref: TopicAwsLibsLambdaLayer }
       - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
 
-  verifyAccessPoint:
+  verifyApp:
     handler: ./dist/src/functions/apps/handler.verifyApp
     events:
       - http:
           path: verifyApp
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers: '*'
+            allowCredentials: false
+    layers:
+      - { Ref: TopicAwsNodeModulesLambdaLayer }
+      - { Ref: TopicAwsLibsLambdaLayer }
+      - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
 
   submitAppInfo:
     handler: ./dist/src/functions/apps/handler.submitAppInfo
@@ -100,4 +119,11 @@ functions:
       - http:
           path: app
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers: '*'
+            allowCredentials: false
+    layers:
+      - { Ref: TopicAwsNodeModulesLambdaLayer }
+      - { Ref: TopicAwsLibsLambdaLayer }
+      - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }

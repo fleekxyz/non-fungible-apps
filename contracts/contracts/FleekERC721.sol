@@ -16,6 +16,7 @@ import "./IERCX.sol";
 error MustBeTokenOwner(uint256 tokenId);
 error MustBeTokenVerifier(uint256 tokenId);
 error ThereIsNoTokenMinted();
+error TransferIsDisabled();
 
 contract FleekERC721 is
     IERCX,
@@ -248,6 +249,14 @@ contract FleekERC721 is
             _clearTokenRoles(tokenId);
         }
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
+    }
+
+    /**
+     * @dev Override of transfer of ERC721.
+     * Transfer is disabled for NFA tokens.
+     */
+    function _transfer(address from, address to, uint256 tokenId) internal virtual override whenNotPaused {
+        revert TransferIsDisabled();
     }
 
     /**

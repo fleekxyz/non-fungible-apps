@@ -29,6 +29,14 @@ export const env = Object.freeze({
   bunnyCDN: {
     url: import.meta.env.VITE_BUNNYCDN_URL || '',
     alchemySignature: import.meta.env.VITE_BUNNYCDN_ALCHEMY_SIGNATURE || '',
+    feSigningKey: import.meta.env.VITE_FE_SIGNING_KEY || '',
+    createPullzone: import.meta.env.VITE_BUNNYCDN_CREATE_PULLZONE || '',
+    verifyPullzone: import.meta.env.VITE_BUNNYCDN_VERIFY_PULLZONE || '',
+    errorMessages: {
+      nameTaken:
+        import.meta.env.VITE_BUNNYCDN_ERROR_MESSAGE_NAME_TAKEN ||
+        'pullzone.hostname_already_registered',
+    },
   },
   QANet: {
     rpc: import.meta.env.VITE_QA_NET_RCP || '',

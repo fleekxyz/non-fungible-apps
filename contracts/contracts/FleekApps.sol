@@ -52,6 +52,14 @@ contract FleekApps is Initializable, ERC721Upgradeable {
         ));
     }
 
+    /**
+     * @dev Override of transfer of ERC721.
+     * Transfer is disabled for NFA tokens.
+     */
+    function _transfer(address from, address to, uint256 tokenId) internal virtual override {
+        revert TransferIsDisabled();
+    }
+
     function _baseURI() internal view virtual override returns (string memory) {
         return "data:application/json;base64,";
     }

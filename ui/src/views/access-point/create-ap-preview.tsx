@@ -25,7 +25,7 @@ export const AccessPointDataFragment: React.FC = () => {
   const { address, status } = useAccount();
   const {
     form: {
-      domain: {
+      targetDomain: {
         value: [domain],
       },
     },
