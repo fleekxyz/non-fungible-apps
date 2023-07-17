@@ -1,0 +1,9 @@
+{
+  "sites": [
+    {
+      "slug": "helpless-shaggy-denmark",
+      "distDir": "dist",
+      "buildCommand": "yarn run build"
+    }
+  ]
+}
