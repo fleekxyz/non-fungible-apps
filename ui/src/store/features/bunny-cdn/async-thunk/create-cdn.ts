@@ -28,8 +28,13 @@ export const createPullzone = createAsyncThunk<void, CNAMERecord>(
         targetDomain
       );
 
-      dispatch(bunnyCDNActions.setCDNRecordData(CDNRecord));
-    } catch (error: Error | AxiosError | any) {
+      if (typeof CDNRecord === 'string') {
+        dispatch(bunnyCDNActions.setCDNRecordData(CDNRecord));
+        return;
+      }
+
+      throw Error();
+    } catch (error: Error | AxiosError | unknown) {
       let message = 'Failed to create the CDN record. Please, try again';
 
       if (

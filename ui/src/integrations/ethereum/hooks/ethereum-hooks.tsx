@@ -11,7 +11,10 @@ import {
 
 import { createContext } from '@/utils';
 
-import { FleekERC721 } from '../contracts';
+// import { FleekERC721 } from '../contracts';
+
+//QA net contract address
+import { FleekERC721 } from '../contracts/qanet';
 
 /**
  * This is a factory to create context factories for contracts write.

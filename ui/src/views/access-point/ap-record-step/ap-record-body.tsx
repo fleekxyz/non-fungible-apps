@@ -20,10 +20,7 @@ export const APRecordCardBody: React.FC = () => {
   } = useAccessPointFormContext();
   const { nextStep } = Stepper.useContext();
 
-  const isSudomain = useMemo(
-    () => isSubdomain(targetDomain),
-    [targetDomain]
-  );
+  const isSudomain = useMemo(() => isSubdomain(targetDomain), [targetDomain]);
 
   useEffect(() => {
     if (state === 'success') {
@@ -63,7 +60,10 @@ export const APRecordCardBody: React.FC = () => {
             value={isSudomain ? 'CNAME' : 'ANAME'}
           />
           <DisplayText label="Host" value={isSudomain ? 'App' : '@'} />
-          <DisplayText label="Data (Points to)" value={`${bunnyURL}.b-cdn.net`} />
+          <DisplayText
+            label="Data (Points to)"
+            value={`${bunnyURL}.b-cdn.net`}
+          />
           <Button
             colorScheme="blue"
             variant="solid"

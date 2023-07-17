@@ -15,7 +15,7 @@ export const env = Object.freeze({
     storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
     messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
     appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
-    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || '',
+    // measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || '', TODO remove is not needed cause we're not using analytics
   },
   twitter: {
     url: import.meta.env.VITE_TWITTER_URL || '',
@@ -28,6 +28,7 @@ export const env = Object.freeze({
   },
   bunnyCDN: {
     url: import.meta.env.VITE_BUNNYCDN_URL || '',
+    alchemySignature: import.meta.env.VITE_BUNNYCDN_ALCHEMY_SIGNATURE || '',
     feSigningKey: import.meta.env.VITE_FE_SIGNING_KEY || '',
     createPullzone: import.meta.env.VITE_BUNNYCDN_CREATE_PULLZONE || '',
     verifyPullzone: import.meta.env.VITE_BUNNYCDN_VERIFY_PULLZONE || '',
@@ -36,5 +37,8 @@ export const env = Object.freeze({
         import.meta.env.VITE_BUNNYCDN_ERROR_MESSAGE_NAME_TAKEN ||
         'pullzone.hostname_already_registered',
     },
+  },
+  QANet: {
+    rpc: import.meta.env.VITE_QA_NET_RCP || '',
   },
 });

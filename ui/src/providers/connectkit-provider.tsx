@@ -3,17 +3,18 @@ import {
   getDefaultClient,
 } from 'connectkit';
 import { createClient, WagmiConfig } from 'wagmi';
-import { goerli } from 'wagmi/chains';
+import { goerli, polygonMumbai, hardhat } from 'wagmi/chains';
 
 import { env } from '@/constants';
+import { qaTestnetChain } from './custom-chains';
 
 const alchemyId = env.alchemy.id;
-const chains = [goerli];
+const chains = [qaTestnetChain];
 
 const wagmiClient = createClient(
   getDefaultClient({
     appName: env.alchemy.appName,
-    alchemyId,
+    // alchemyId,
     chains,
   })
 );

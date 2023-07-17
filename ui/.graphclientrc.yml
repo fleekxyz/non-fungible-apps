@@ -3,7 +3,7 @@ sources:
   - name: FleekNFA
     handler:
       graphql:
-        endpoint: https://api.thegraph.com/subgraphs/name/emperororokusaki/second-test-subgraph
+        endpoint: http://ec2-34-215-155-25.us-west-2.compute.amazonaws.com:8000/subgraphs/name/FleekNFA
 
   - name: ENS
     handler:

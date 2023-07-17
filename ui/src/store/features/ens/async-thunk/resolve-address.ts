@@ -18,7 +18,7 @@ export const resolveAddress = createAsyncThunk<void, string>(
         ENSActions.setAddress({ key: address, value: { state: 'loading' } })
       );
 
-      const provider = new ethers.providers.JsonRpcProvider(env.goerli.rpc);
+      const provider = new ethers.providers.JsonRpcProvider(env.QANet.rpc);
       const value = (await provider.lookupAddress(address)) || undefined;
 
       dispatch(

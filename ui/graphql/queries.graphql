@@ -45,9 +45,6 @@ query getNFADetail($id: ID!) {
     createdAt
     ENS
     externalURL
-    gitRepository {
-      id
-    }
     logo
     name
     owner {
