@@ -6,3 +6,11 @@ export enum CollectionRoles {
 export enum TokenRoles {
   Controller,
 }
+
+export enum Categories {
+  DeFi,
+  NFT,
+  Analytics,
+  Infrastructure,
+  Gaming,
+}

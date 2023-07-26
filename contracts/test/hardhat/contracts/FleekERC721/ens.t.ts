@@ -18,14 +18,11 @@ describe('FleekERC721.ENS', () => {
         owner.address,
         MintParams.name,
         MintParams.description,
-        MintParams.externalUrl,
         'app.eth',
-        MintParams.commitHash,
-        MintParams.gitRepository,
-        MintParams.ipfsHash,
         MintParams.logo,
         MintParams.color,
-        MintParams.accessPointAutoApprovalSettings,
+        TestConstants.MintParams.category,
+        TestConstants.MintParams.build,
         owner.address
       )
     ).to.be.revertedWithCustomError(contract, Errors.MustBeENSOwner);
@@ -40,14 +37,11 @@ describe('FleekERC721.ENS', () => {
       owner.address,
       MintParams.name,
       MintParams.description,
-      MintParams.externalUrl,
       'app.eth',
-      MintParams.commitHash,
-      MintParams.gitRepository,
-      MintParams.ipfsHash,
       MintParams.logo,
       MintParams.color,
-      MintParams.accessPointAutoApprovalSettings,
+      TestConstants.MintParams.category,
+      TestConstants.MintParams.build,
       owner.address
     );
 

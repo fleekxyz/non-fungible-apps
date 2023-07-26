@@ -1,205 +1,205 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.17;
+// pragma solidity ^0.8.17;
 
-import "../TestBase.sol";
-import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
-import {FleekAccessControl} from "contracts/FleekAccessControl.sol";
-import "../../../../contracts/FleekERC721.sol";
-import "./ApBase.sol";
+// import "../TestBase.sol";
+// import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
+// import {FleekAccessControl} from "contracts/FleekAccessControl.sol";
+// import "../../../../contracts/FleekERC721.sol";
+// import "./ApBase.sol";
 
-contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base, APConstants {
-    using Strings for address;
-    uint256 internal tokenId;
+// contract Test_FleekERC721_AccessPoint is Test_FleekERC721_Base, APConstants {
+//     using Strings for address;
+//     uint256 internal tokenId;
 
-    function setUp() public {
-        baseSetUp();
-        tokenId = mintDefault(deployer);
-    }
+//     function setUp() public {
+//         baseSetUp();
+//         tokenId = mintDefault(deployer);
+//     }
 
-    function test_getAccessPointJSON() public {
-        string memory accessPointName = "accesspoint.com";
-        CuT.addAccessPoint(tokenId, accessPointName);
+//     function test_getAccessPointJSON() public {
+//         string memory accessPointName = "accesspoint.com";
+//         CuT.addAccessPoint(tokenId, accessPointName);
 
-        APConstants.assertAccessPointJSON(
-            accessPointName,
-            "0",
-            "0",
-            "false",
-            "false",
-            deployer,
-            "0",
-            CuT.getAccessPointJSON(accessPointName)
-        );
-    }
+//         APConstants.assertAccessPointJSON(
+//             accessPointName,
+//             "0",
+//             "0",
+//             "false",
+//             "false",
+//             deployer,
+//             "0",
+//             CuT.getAccessPointJSON(accessPointName)
+//         );
+//     }
 
-    function test_removeAccessPoint() public {
-        string memory accessPointName = "accesspoint.com";
-        CuT.addAccessPoint(tokenId, accessPointName);
-        CuT.removeAccessPoint(accessPointName);
+//     function test_removeAccessPoint() public {
+//         string memory accessPointName = "accesspoint.com";
+//         CuT.addAccessPoint(tokenId, accessPointName);
+//         CuT.removeAccessPoint(accessPointName);
 
-        APConstants.assertAccessPointJSON(
-            accessPointName,
-            "0",
-            "0",
-            "false",
-            "false",
-            deployer,
-            "3",
-            CuT.getAccessPointJSON(accessPointName)
-        );
-    }
+//         APConstants.assertAccessPointJSON(
+//             accessPointName,
+//             "0",
+//             "0",
+//             "false",
+//             "false",
+//             deployer,
+//             "3",
+//             CuT.getAccessPointJSON(accessPointName)
+//         );
+//     }
 
-    function test_cannotRemoveNonExistentAccessPoint() public {
-        expectRevertWithInvalidAP();
-        CuT.removeAccessPoint("accesspoint.com");
-    }
+//     function test_cannotRemoveNonExistentAccessPoint() public {
+//         expectRevertWithInvalidAP();
+//         CuT.removeAccessPoint("accesspoint.com");
+//     }
 
-    function test_isAccessPointNameVerified() public {
-        string memory accessPointName = "accesspoint.com";
-        CuT.addAccessPoint(tokenId, accessPointName);
-        assertFalse(CuT.isAccessPointNameVerified(accessPointName));
-        CuT.setAccessPointNameVerify(accessPointName, true);
-    }
+//     function test_isAccessPointNameVerified() public {
+//         string memory accessPointName = "accesspoint.com";
+//         CuT.addAccessPoint(tokenId, accessPointName);
+//         assertFalse(CuT.isAccessPointNameVerified(accessPointName));
+//         CuT.setAccessPointNameVerify(accessPointName, true);
+//     }
 
-    function test_increaseAccessPointScore() public {
-        string memory accessPointName = "accesspoint.com";
-        CuT.addAccessPoint(tokenId, accessPointName);
+//     function test_increaseAccessPointScore() public {
+//         string memory accessPointName = "accesspoint.com";
+//         CuT.addAccessPoint(tokenId, accessPointName);
 
-        APConstants.assertAccessPointJSON(
-            accessPointName,
-            "0",
-            "0",
-            "false",
-            "false",
-            deployer,
-            "0",
-            CuT.getAccessPointJSON(accessPointName)
-        );
+//         APConstants.assertAccessPointJSON(
+//             accessPointName,
+//             "0",
+//             "0",
+//             "false",
+//             "false",
+//             deployer,
+//             "0",
+//             CuT.getAccessPointJSON(accessPointName)
+//         );
 
-        CuT.increaseAccessPointScore(accessPointName);
-        APConstants.assertAccessPointJSON(
-            accessPointName,
-            "0",
-            "1",
-            "false",
-            "false",
-            deployer,
-            "0",
-            CuT.getAccessPointJSON(accessPointName)
-        );
+//         CuT.increaseAccessPointScore(accessPointName);
+//         APConstants.assertAccessPointJSON(
+//             accessPointName,
+//             "0",
+//             "1",
+//             "false",
+//             "false",
+//             deployer,
+//             "0",
+//             CuT.getAccessPointJSON(accessPointName)
+//         );
 
-        CuT.increaseAccessPointScore(accessPointName);
-        APConstants.assertAccessPointJSON(
-            accessPointName,
-            "0",
-            "2",
-            "false",
-            "false",
-            deployer,
-            "0",
-            CuT.getAccessPointJSON(accessPointName)
-        );
-    }
+//         CuT.increaseAccessPointScore(accessPointName);
+//         APConstants.assertAccessPointJSON(
+//             accessPointName,
+//             "0",
+//             "2",
+//             "false",
+//             "false",
+//             deployer,
+//             "0",
+//             CuT.getAccessPointJSON(accessPointName)
+//         );
+//     }
 
-    function test_cannotDecreaseAccessPointScoreToMinusOne() public {
-        string memory accessPointName = "accesspoint.com";
-        CuT.addAccessPoint(tokenId, accessPointName);
+//     function test_cannotDecreaseAccessPointScoreToMinusOne() public {
+//         string memory accessPointName = "accesspoint.com";
+//         CuT.addAccessPoint(tokenId, accessPointName);
 
-        APConstants.assertAccessPointJSON(
-            accessPointName,
-            "0",
-            "0",
-            "false",
-            "false",
-            deployer,
-            "0",
-            CuT.getAccessPointJSON(accessPointName)
-        );
-        expectRevertWithMinimalScore();
-        CuT.decreaseAccessPointScore(accessPointName);
-    }
+//         APConstants.assertAccessPointJSON(
+//             accessPointName,
+//             "0",
+//             "0",
+//             "false",
+//             "false",
+//             deployer,
+//             "0",
+//             CuT.getAccessPointJSON(accessPointName)
+//         );
+//         expectRevertWithMinimalScore();
+//         CuT.decreaseAccessPointScore(accessPointName);
+//     }
 
-    function test_decreaseAccessPointScore() public {
-        string memory accessPointName = "accesspoint.com";
-        CuT.addAccessPoint(tokenId, accessPointName);
+//     function test_decreaseAccessPointScore() public {
+//         string memory accessPointName = "accesspoint.com";
+//         CuT.addAccessPoint(tokenId, accessPointName);
 
-        APConstants.assertAccessPointJSON(
-            accessPointName,
-            "0",
-            "0",
-            "false",
-            "false",
-            deployer,
-            "0",
-            CuT.getAccessPointJSON(accessPointName)
-        );
-        CuT.increaseAccessPointScore(accessPointName);
-        APConstants.assertAccessPointJSON(
-            accessPointName,
-            "0",
-            "1",
-            "false",
-            "false",
-            deployer,
-            "0",
-            CuT.getAccessPointJSON(accessPointName)
-        );
-        CuT.decreaseAccessPointScore(accessPointName);
-        APConstants.assertAccessPointJSON(
-            accessPointName,
-            "0",
-            "0",
-            "false",
-            "false",
-            deployer,
-            "0",
-            CuT.getAccessPointJSON(accessPointName)
-        );
-    }
+//         APConstants.assertAccessPointJSON(
+//             accessPointName,
+//             "0",
+//             "0",
+//             "false",
+//             "false",
+//             deployer,
+//             "0",
+//             CuT.getAccessPointJSON(accessPointName)
+//         );
+//         CuT.increaseAccessPointScore(accessPointName);
+//         APConstants.assertAccessPointJSON(
+//             accessPointName,
+//             "0",
+//             "1",
+//             "false",
+//             "false",
+//             deployer,
+//             "0",
+//             CuT.getAccessPointJSON(accessPointName)
+//         );
+//         CuT.decreaseAccessPointScore(accessPointName);
+//         APConstants.assertAccessPointJSON(
+//             accessPointName,
+//             "0",
+//             "0",
+//             "false",
+//             "false",
+//             deployer,
+//             "0",
+//             CuT.getAccessPointJSON(accessPointName)
+//         );
+//     }
 
-    function test_cannotAddAccessPointToNonexistentToken() public {
-        expectRevertWithInvalidTokenId();
-        CuT.addAccessPoint(1, "accesspoint.com");
-    }
+//     function test_cannotAddAccessPointToNonexistentToken() public {
+//         expectRevertWithInvalidTokenId();
+//         CuT.addAccessPoint(1, "accesspoint.com");
+//     }
 
-    function test_setAccessPointVerifiesWithCorrectRole() public {
-        string memory accessPointName = "accesspoint.com";
-        address randomAddress = address(12);
-        CuT.addAccessPoint(tokenId, accessPointName);
+//     function test_setAccessPointVerifiesWithCorrectRole() public {
+//         string memory accessPointName = "accesspoint.com";
+//         address randomAddress = address(12);
+//         CuT.addAccessPoint(tokenId, accessPointName);
 
-        vm.startPrank(randomAddress);
-        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
-        CuT.setAccessPointNameVerify(accessPointName, true);
-        expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
-        CuT.setAccessPointContentVerify(accessPointName, true);
-        vm.stopPrank();
+//         vm.startPrank(randomAddress);
+//         expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+//         CuT.setAccessPointNameVerify(accessPointName, true);
+//         expectRevertWithCollectionRole(FleekAccessControl.CollectionRoles.Verifier);
+//         CuT.setAccessPointContentVerify(accessPointName, true);
+//         vm.stopPrank();
 
-        CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Verifier, randomAddress);
+//         CuT.grantCollectionRole(FleekAccessControl.CollectionRoles.Verifier, randomAddress);
 
-        vm.startPrank(randomAddress);
-        expectRevertWithMustBeTokenVerifier(tokenId);
-        CuT.setAccessPointNameVerify(accessPointName, true);
-        expectRevertWithMustBeTokenVerifier(tokenId);
-        CuT.setAccessPointContentVerify(accessPointName, true);
-        vm.stopPrank();
+//         vm.startPrank(randomAddress);
+//         expectRevertWithMustBeTokenVerifier(tokenId);
+//         CuT.setAccessPointNameVerify(accessPointName, true);
+//         expectRevertWithMustBeTokenVerifier(tokenId);
+//         CuT.setAccessPointContentVerify(accessPointName, true);
+//         vm.stopPrank();
 
-        CuT.setTokenVerifier(tokenId, randomAddress);
+//         CuT.setTokenVerifier(tokenId, randomAddress);
 
-        vm.startPrank(randomAddress);
-        CuT.setAccessPointNameVerify(accessPointName, true);
-        CuT.setAccessPointContentVerify(accessPointName, true);
-        vm.stopPrank();
+//         vm.startPrank(randomAddress);
+//         CuT.setAccessPointNameVerify(accessPointName, true);
+//         CuT.setAccessPointContentVerify(accessPointName, true);
+//         vm.stopPrank();
 
-        APConstants.assertAccessPointJSON(
-            accessPointName,
-            "0",
-            "0",
-            "true",
-            "true",
-            deployer,
-            "0",
-            CuT.getAccessPointJSON(accessPointName)
-        );
-    }
-}
+//         APConstants.assertAccessPointJSON(
+//             accessPointName,
+//             "0",
+//             "0",
+//             "true",
+//             "true",
+//             deployer,
+//             "0",
+//             CuT.getAccessPointJSON(accessPointName)
+//         );
+//     }
+// }

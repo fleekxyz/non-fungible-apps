@@ -50,14 +50,11 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
             deployer,
             TestConstants.APP_NAME,
             TestConstants.APP_DESCRIPTION,
-            TestConstants.APP_EXTERNAL_URL,
             TestConstants.APP_ENS,
-            TestConstants.APP_COMMIT_HASH,
-            TestConstants.APP_GIT_REPOSITORY,
-            TestConstants.APP_IPFS_HASH,
             TestConstants.LOGO_0,
             TestConstants.APP_COLOR,
-            TestConstants.APP_ACCESS_POINT_AUTO_APPROVAL_SETTINGS,
+            TestConstants.CATEGORY,
+            TestConstants.getBuild(),
             deployer
         );
         assertEq(CuT.ownerOf(tokenId), deployer);
@@ -72,14 +69,11 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
             deployer,
             TestConstants.APP_NAME,
             TestConstants.APP_DESCRIPTION,
-            TestConstants.APP_EXTERNAL_URL,
             TestConstants.APP_ENS,
-            TestConstants.APP_COMMIT_HASH,
-            TestConstants.APP_GIT_REPOSITORY,
-            TestConstants.APP_IPFS_HASH,
             TestConstants.LOGO_0,
             TestConstants.APP_COLOR,
-            TestConstants.APP_ACCESS_POINT_AUTO_APPROVAL_SETTINGS,
+            TestConstants.CATEGORY,
+            TestConstants.getBuild(),
             deployer
         );
         assertEq(address(CuT).balance, 0);
@@ -96,14 +90,11 @@ contract Test_FleekERC721_Billing is Test_FleekERC721_Base, Test_FleekERC721_Bil
             deployer,
             TestConstants.APP_NAME,
             TestConstants.APP_DESCRIPTION,
-            TestConstants.APP_EXTERNAL_URL,
             TestConstants.APP_ENS,
-            TestConstants.APP_COMMIT_HASH,
-            TestConstants.APP_GIT_REPOSITORY,
-            TestConstants.APP_IPFS_HASH,
             TestConstants.LOGO_0,
             TestConstants.APP_COLOR,
-            TestConstants.APP_ACCESS_POINT_AUTO_APPROVAL_SETTINGS,
+            TestConstants.CATEGORY,
+            TestConstants.getBuild(),
             deployer
         );
         assertEq(CuT.ownerOf(tokenId), deployer);

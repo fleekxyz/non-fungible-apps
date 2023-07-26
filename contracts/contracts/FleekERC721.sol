@@ -43,7 +43,7 @@ contract FleekERC721 is
         string ipfsHash,
         string logo,
         uint24 color,
-        bool accessPointAutoApproval,
+        Categories category,
         address indexed minter,
         address indexed owner,
         address verifier
@@ -106,14 +106,11 @@ contract FleekERC721 is
         address to,
         string memory name,
         string memory description,
-        string memory externalURL,
         string calldata ens,
-        string memory commitHash,
-        string memory gitRepository,
-        string memory ipfsHash,
         string memory logo,
         uint24 color,
-        bool accessPointAutoApproval,
+        Categories category,
+        Build memory buildParams,
         address verifier
     ) public payable requirePayment(Billing.Mint) returns (uint256) {
         if (!hasCollectionRole(CollectionRoles.Verifier, verifier))
@@ -127,27 +124,33 @@ contract FleekERC721 is
         Token storage app = _apps[tokenId];
         app.name = name;
         app.description = description;
-        app.externalURL = externalURL;
+        app.externalURL = buildParams.domain;
         app.ENS = ens;
         app.logo = logo;
         app.color = color;
+        app.category = category;
 
         // The mint interaction is considered to be the first build of the site. Updates from now on all increment the currentBuild by one and update the mapping.
         app.currentBuild = 0;
-        app.builds[0] = Build(commitHash, gitRepository, ipfsHash, externalURL);
+        app.builds[0] = Build(
+            buildParams.commitHash,
+            buildParams.gitRepository,
+            buildParams.ipfsHash,
+            buildParams.domain
+        );
 
         emit NewMint(
             tokenId,
             name,
             description,
-            externalURL,
+            buildParams.domain,
             ens,
-            commitHash,
-            gitRepository,
-            ipfsHash,
+            buildParams.commitHash,
+            buildParams.gitRepository,
+            buildParams.ipfsHash,
             logo,
             color,
-            accessPointAutoApproval,
+            category,
             msg.sender,
             to,
             verifier
@@ -155,7 +158,6 @@ contract FleekERC721 is
 
         _tokenVerifier[tokenId] = verifier;
         _tokenVerified[tokenId] = false;
-        _setAccessPointAutoApproval(tokenId, accessPointAutoApproval);
 
         return tokenId;
     }
@@ -196,11 +198,35 @@ contract FleekERC721 is
         public
         view
         virtual
-        returns (string memory, string memory, string memory, string memory, uint256, string memory, uint24)
+        returns (
+            string memory,
+            string memory,
+            string memory,
+            uint256,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            uint24,
+            Categories
+        )
     {
         _requireMinted(tokenId);
         Token storage app = _apps[tokenId];
-        return (app.name, app.description, app.externalURL, app.ENS, app.currentBuild, app.logo, app.color);
+        return (
+            app.name,
+            app.description,
+            app.ENS,
+            app.currentBuild,
+            app.builds[app.currentBuild].commitHash,
+            app.builds[app.currentBuild].domain,
+            app.builds[app.currentBuild].gitRepository,
+            app.builds[app.currentBuild].ipfsHash,
+            app.logo,
+            app.color,
+            app.category
+        );
     }
 
     function getAppData(
@@ -388,6 +414,26 @@ contract FleekERC721 is
     }
 
     /**
+     * @dev Updates the `category` metadata field of a minted `tokenId`.
+     *
+     * May emit a {NewTokenCategory} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
+    function setTokenCategory(
+        uint256 tokenId,
+        Categories category
+    ) public virtual requireTokenRole(tokenId, TokenRoles.Controller) {
+        _requireMinted(tokenId);
+        _apps[tokenId].category = category;
+        emit MetadataUpdate(tokenId, "category", category, msg.sender);
+    }
+
+    /**
      * @dev Updates the `logo` and `color` metadata fields of a minted `tokenId`.
      *
      * May emit a {NewTokenLogo} and a {NewTokenColor} event.
@@ -542,23 +588,6 @@ contract FleekERC721 is
     }
 
     /**
-     * @dev Remove an AccessPoint registry for an app token.
-     * It will also remove the AP from the app token APs list.
-     *
-     * May emit a {RemoveAccessPoint} event.
-     *
-     * Requirements:
-     *
-     * - the AP must exist.
-     * - must be called by the AP owner.
-     * - the contract must be not paused.
-     *
-     */
-    function removeAccessPoint(string memory apName) public whenNotPaused {
-        _removeAccessPoint(apName);
-    }
-
-    /**
      * @dev Updates the `accessPointAutoApproval` settings on minted `tokenId`.
      *
      * May emit a {MetadataUpdate} event.
@@ -573,6 +602,23 @@ contract FleekERC721 is
         _requireMinted(tokenId);
         _setAccessPointAutoApproval(tokenId, _apAutoApproval);
         emit MetadataUpdate(tokenId, "accessPointAutoApproval", _apAutoApproval, msg.sender);
+    }
+
+    /**
+     * @dev Remove an AccessPoint registry for an app token.
+     * It will also remove the AP from the app token APs list.
+     *
+     * May emit a {RemoveAccessPoint} event.
+     *
+     * Requirements:
+     *
+     * - the AP must exist.
+     * - must be called by the AP owner.
+     * - the contract must be not paused.
+     *
+     */
+    function removeAccessPoint(string memory apName) public whenNotPaused {
+        _removeAccessPoint(apName);
     }
 
     /**

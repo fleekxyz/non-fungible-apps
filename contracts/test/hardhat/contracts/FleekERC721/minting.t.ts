@@ -13,14 +13,11 @@ describe('FleekERC721.Minting', () => {
       owner.address,
       MintParams.name,
       MintParams.description,
-      MintParams.externalUrl,
       MintParams.ens,
-      MintParams.commitHash,
-      MintParams.gitRepository,
-      MintParams.ipfsHash,
       MintParams.logo,
       MintParams.color,
-      MintParams.accessPointAutoApprovalSettings,
+      TestConstants.MintParams.category,
+      TestConstants.MintParams.build,
       owner.address
     );
 
@@ -37,14 +34,11 @@ describe('FleekERC721.Minting', () => {
       owner.address,
       MintParams.name,
       MintParams.description,
-      MintParams.externalUrl,
       MintParams.ens,
-      MintParams.commitHash,
-      MintParams.gitRepository,
-      MintParams.ipfsHash,
       MintParams.logo,
       MintParams.color,
-      MintParams.accessPointAutoApprovalSettings,
+      TestConstants.MintParams.category,
+      TestConstants.MintParams.build,
       owner.address
     );
 
@@ -64,14 +58,11 @@ describe('FleekERC721.Minting', () => {
         owner.address,
         MintParams.name,
         MintParams.description,
-        MintParams.externalUrl,
         MintParams.ens,
-        MintParams.commitHash,
-        MintParams.gitRepository,
-        MintParams.ipfsHash,
         MintParams.logo,
         MintParams.color,
-        MintParams.accessPointAutoApprovalSettings,
+        TestConstants.MintParams.category,
+        TestConstants.MintParams.build,
         otherAccount.address
       )
     )
@@ -86,14 +77,11 @@ describe('FleekERC721.Minting', () => {
       owner.address,
       MintParams.name,
       MintParams.description,
-      MintParams.externalUrl,
       '',
-      MintParams.commitHash,
-      MintParams.gitRepository,
-      MintParams.ipfsHash,
       MintParams.logo,
       MintParams.color,
-      MintParams.accessPointAutoApprovalSettings,
+      TestConstants.MintParams.category,
+      TestConstants.MintParams.build,
       owner.address
     );
 

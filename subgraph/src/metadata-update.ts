@@ -1,4 +1,4 @@
-import { Bytes } from '@graphprotocol/graph-ts';
+import { Bytes, log } from '@graphprotocol/graph-ts';
 
 // Event Imports [based on the yaml config]
 import {
@@ -6,6 +6,7 @@ import {
   MetadataUpdate2 as MetadataUpdateEvent2,
   MetadataUpdate3 as MetadataUpdateEvent3,
   MetadataUpdate4 as MetadataUpdateEvent4,
+  MetadataUpdate5 as MetadataUpdateEvent5,
 } from '../generated/FleekNFA/FleekNFA';
 
 // Entity Imports [based on the schema]
@@ -15,6 +16,7 @@ import {
   Token,
   Build,
 } from '../generated/schema';
+import { Categories } from './constants';
 
 export function handleMetadataUpdateWithStringValue(
   event: MetadataUpdateEvent1
@@ -62,6 +64,59 @@ export function handleMetadataUpdateWithStringValue(
   }
 }
 
+export function handleMetadataUpdateWithEnumValue(
+  event: MetadataUpdateEvent5
+): void {
+  /**
+   * Metadata handled here:
+   * Category
+   * */
+  const entity = new MetadataUpdate(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
+
+  entity.tokenId = event.params._tokenId;
+  entity.key = event.params.key;
+  entity.enumValue = event.params.value;
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
+
+  entity.save();
+
+  // UPDATE TOKEN
+  const token = Token.load(
+    Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
+  );
+
+  if (token) {
+    if (event.params.key == 'category') {
+      switch (event.params.value) {
+        case Categories.DeFi:
+          token.category = 'DeFi';
+          break;
+
+        case Categories.Gaming:
+          token.category = 'Gaming';
+          break;
+
+        case Categories.Analytics:
+          token.category = 'Analytics';
+          break;
+
+        case Categories.NFT:
+          token.category = 'NFT';
+          break;
+
+        case Categories.Infrastructure:
+          token.category = 'Infrastructure';
+          break;
+      }
+    }
+    token.save();
+  }
+}
+
 export function handleMetadataUpdateWithMultipleStringValues(
   event: MetadataUpdateEvent3
 ): void {
@@ -92,6 +147,16 @@ export function handleMetadataUpdateWithMultipleStringValues(
   const build = new Build(
     Bytes.fromByteArray(Bytes.fromI32(token.builds.length))
   );
+
+  if (token == null) {
+    log.error('Received new build for non-existent token id: {}', [
+      event.params._tokenId.toString(),
+    ]);
+    return;
+  }
+
+  let buildId = token.builds.length;
+  const build = new Build(Bytes.fromByteArray(Bytes.fromI32(buildId)));
   if (event.params.key == 'build') {
     let gitRepositoryEntity = GitRepositoryEntity.load(event.params.value[1]);
     if (!gitRepositoryEntity) {

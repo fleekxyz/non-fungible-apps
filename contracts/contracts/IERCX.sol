@@ -26,6 +26,7 @@ interface IERCX {
     event MetadataUpdate(uint256 indexed _tokenId, string key, uint24 value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, string[4] value, address indexed triggeredBy);
     event MetadataUpdate(uint256 indexed _tokenId, string key, bool value, address indexed triggeredBy);
+    event MetadataUpdate(uint256 indexed _tokenId, string key, Categories value, address indexed triggeredBy);
 
     /**
      * The metadata that is stored for each build.
@@ -35,6 +36,17 @@ interface IERCX {
         string gitRepository;
         string ipfsHash;
         string domain;
+    }
+
+    /**
+     * @dev All available app category traits.
+     */
+    enum Categories {
+        DeFi,
+        NFT,
+        Analytics,
+        Infrastructure,
+        Gaming
     }
 
     /**
@@ -49,6 +61,7 @@ interface IERCX {
         string ENS; // ENS for the site
         string logo; // Branding logo
         uint24 color; // Branding color
+        Categories category; // The category trait associated with the token
         uint256 currentBuild; // The current build number (Increments by one with each change, starts at zero)
         mapping(uint256 => Build) builds; // Mapping to build details for each build number
     }
@@ -82,6 +95,11 @@ interface IERCX {
      * @dev Sets a minted token's color.
      */
     function setTokenColor(uint256 tokenId, uint24 _tokenColor) external;
+
+    /**
+     * @dev Sets a minted token's category.
+     */
+    function setTokenCategory(uint256 tokenId, Categories tokenCategory) external;
 
     /**
      * @dev Sets a minted token's build.

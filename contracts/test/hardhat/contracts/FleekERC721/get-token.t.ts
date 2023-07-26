@@ -14,15 +14,19 @@ describe('FleekERC721.GetToken', () => {
   it('should return the token metadata without nested mappings', async () => {
     const { contract, tokenId } = fixture;
     const metadata = await contract.getToken(tokenId);
-
+    console.log(metadata);
     expect(metadata).to.eql([
       MintParams.name,
       MintParams.description,
-      MintParams.externalUrl,
       MintParams.ens,
       ethers.BigNumber.from(0),
+      MintParams.build.commitHash,
+      MintParams.build.domain,
+      MintParams.build.gitRepository,
+      MintParams.build.ipfsHash,
       MintParams.logo,
       MintParams.color,
+      TestConstants.MintParams.category,
     ]);
   });
 });
