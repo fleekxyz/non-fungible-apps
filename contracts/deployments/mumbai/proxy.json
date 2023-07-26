@@ -1,6 +1,18 @@
 {
   "FleekERC721": [
     {
+      "address": "0xA0F497c58a4C6c125025A090A9BFc1133B6982E3",
+      "timestamp": "7/26/2023, 5:12:46 PM"
+    },
+    {
+      "address": "0x688eeDBAfa393f1ff581d95Ef57a96ba272eAeC7",
+      "timestamp": "7/26/2023, 4:39:21 PM"
+    },
+    {
+      "address": "0x753e7e44Cab4902b671b70937F7f58fC941a5356",
+      "timestamp": "7/26/2023, 4:34:39 PM"
+    },
+    {
       "address": "0xdAbc1E0f926545a2898c644870FA4DC39E83EB70",
       "timestamp": "5/17/2023, 5:27:20 PM"
     },
@@ -31,6 +43,20 @@
     {
       "address": "0x84Dc9a43B3472415a406e1a14d6b94a5c289eF7F",
       "timestamp": "1/16/2023, 8:49:22 AM"
+    }
+  ],
+  "FleekApps": [
+    {
+      "address": "0x420FC3e344005D027AB22527C5bF28e5B19a3DD3",
+      "timestamp": "7/26/2023, 5:16:57 PM"
+    },
+    {
+      "address": "0x4017b131acB95e81898dA49f09B7C75c50a3d376",
+      "timestamp": "7/26/2023, 4:46:46 PM"
+    },
+    {
+      "address": "0x0FFb80c8c857fF44bfd03636fB7F879CC3b9c706",
+      "timestamp": "7/26/2023, 4:35:27 PM"
     }
   ]
 }
