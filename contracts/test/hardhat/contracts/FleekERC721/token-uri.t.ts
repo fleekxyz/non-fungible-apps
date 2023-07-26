@@ -20,8 +20,7 @@ describe('FleekERC721.TokenURI', () => {
       name: TestConstants.MintParams.name,
       description: TestConstants.MintParams.description,
       image: TestConstants.ResultantImage.Default,
-      external_url: TestConstants.MintParams.externalUrl,
-      access_point_auto_approval: false,
+      external_url: TestConstants.MintParams.build.domain,
       verified: false,
       attributes: [
         {
@@ -30,11 +29,15 @@ describe('FleekERC721.TokenURI', () => {
         },
         {
           trait_type: 'Commit Hash',
-          value: TestConstants.MintParams.commitHash,
+          value: TestConstants.MintParams.build.commitHash,
         },
         {
           trait_type: 'Repository',
-          value: TestConstants.MintParams.gitRepository,
+          value: TestConstants.MintParams.build.gitRepository,
+        },
+        {
+          trait_type: 'IPFS Hash',
+          value: TestConstants.MintParams.build.ipfsHash,
         },
         {
           trait_type: 'Version',

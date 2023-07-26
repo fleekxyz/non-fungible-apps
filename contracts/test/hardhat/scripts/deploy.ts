@@ -95,14 +95,11 @@ describe('Deploy', () => {
         owner.address,
         TestConstants.MintParams.name,
         TestConstants.MintParams.description,
-        TestConstants.MintParams.externalUrl,
         TestConstants.MintParams.ens,
-        TestConstants.MintParams.commitHash,
-        TestConstants.MintParams.gitRepository,
-        TestConstants.MintParams.ipfsHash,
         TestConstants.MintParams.logo,
         TestConstants.MintParams.color,
-        TestConstants.MintParams.accessPointAutoApprovalSettings,
+        TestConstants.MintParams.category,
+        TestConstants.MintParams.build,
         owner.address
       )
     ).to.be.reverted;

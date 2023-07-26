@@ -99,29 +99,11 @@ describe('FleekERC721.TokenRoles', () => {
     ).to.be.false;
   });
 
-  it('should transfer the token owner role', async () => {
+  it('should not be able to transfer the token owner role (transfer is disabled)', async () => {
     const { contract, owner, otherAccount, tokenId } = fixture;
-    await contract.transferFrom(owner.address, otherAccount.address, tokenId);
-
-    expect(await contract.ownerOf(tokenId)).to.equal(otherAccount.address);
-  });
-
-  it('should clean the token controller list after transfer', async () => {
-    const { contract, owner, otherAccount, tokenId } = fixture;
-    await contract.grantTokenRole(
-      tokenId,
-      TokenRoles.Controller,
-      otherAccount.address
-    );
-    await contract.transferFrom(owner.address, otherAccount.address, tokenId);
-
-    expect(
-      await contract.hasTokenRole(
-        tokenId,
-        TokenRoles.Controller,
-        otherAccount.address
-      )
-    ).to.be.false;
+    await expect(
+      contract.transferFrom(owner.address, otherAccount.address, tokenId)
+    ).to.be.revertedWithCustomError(contract, Errors.TransferIsDisabled);
   });
 
   it('should not be able to add address role', async () => {

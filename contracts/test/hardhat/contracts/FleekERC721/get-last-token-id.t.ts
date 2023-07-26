@@ -10,14 +10,11 @@ describe('FleekERC721.GetLastTokenId', () => {
       fixture.owner.address,
       TestConstants.MintParams.name,
       TestConstants.MintParams.description,
-      TestConstants.MintParams.externalUrl,
       TestConstants.MintParams.ens,
-      TestConstants.MintParams.commitHash,
-      TestConstants.MintParams.gitRepository,
-      TestConstants.MintParams.ipfsHash,
       TestConstants.MintParams.logo,
       TestConstants.MintParams.color,
-      false,
+      TestConstants.MintParams.category,
+      TestConstants.MintParams.build,
       fixture.owner.address
     );
 

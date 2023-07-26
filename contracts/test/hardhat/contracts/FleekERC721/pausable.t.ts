@@ -14,14 +14,11 @@ describe('FleekERC721.Pausable', () => {
       owner.address,
       MintParams.name,
       MintParams.description,
-      MintParams.externalUrl,
       MintParams.ens,
-      MintParams.commitHash,
-      MintParams.gitRepository,
-      MintParams.ipfsHash,
       MintParams.logo,
       MintParams.color,
-      false,
+      TestConstants.MintParams.category,
+      TestConstants.MintParams.build,
       owner.address
     );
   };

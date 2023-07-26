@@ -16,4 +16,5 @@ export const Errors = Object.freeze({
   ThereIsNoTokenMinted: 'ThereIsNoTokenMinted',
   RequiredPayment: 'RequiredPayment',
   MustBeENSOwner: 'MustBeENSOwner',
+  TransferIsDisabled: 'TransferIsDisabled',
 });
