@@ -136,9 +136,16 @@ export function handleMetadataUpdateWithMultipleStringValues(
 
   entity.save();
 
-  // CREATE BUILD
-  const token = Token.load(
+  // LOAD THE BUILD LIST
+  let token = Token.load(
     Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId))
+  );
+  if (!token) {
+    return;
+  }
+  // CREATE BUILD
+  const build = new Build(
+    Bytes.fromByteArray(Bytes.fromI32(token.builds.length))
   );
 
   if (token == null) {
@@ -156,10 +163,12 @@ export function handleMetadataUpdateWithMultipleStringValues(
       // Create a new gitRepository entity
       gitRepositoryEntity = new GitRepositoryEntity(event.params.value[1]);
     }
+    build.number = token.builds.length;
     build.commitHash = event.params.value[0];
     build.gitRepository = event.params.value[1];
     build.ipfsHash = event.params.value[2];
     build.domain = event.params.value[3];
+    build.token = Bytes.fromByteArray(Bytes.fromBigInt(event.params._tokenId));
     build.save();
     gitRepositoryEntity.save();
   }

@@ -52,15 +52,15 @@ export const CreateAccessPointFormBody: React.FC = () => {
 
   const {
     form: {
-      domain: {
-        value: [domain],
+      targetDomain: {
+        value: [targetDomain],
       },
       isValid: [isValid],
     },
   } = useAccessPointFormContext();
 
   const {
-    form: { domain: domainContext },
+    form: { targetDomain: domainContext },
   } = useAccessPointFormContext();
 
   const { loading: nfaLoading } = useQuery(getNFADocument, {
@@ -108,13 +108,13 @@ export const CreateAccessPointFormBody: React.FC = () => {
       return;
     }
 
-    if (nfa && domain) {
+    if (nfa && targetDomain) {
       try {
-        setArgs([Number(nfa.tokenId), domain, { value: billing }]);
+        setArgs([Number(nfa.tokenId), targetDomain, { value: billing }]);
         dispatch(
-          bunnyCDNActions.createBunnyCDN({
-            domain: 'domain',
-            targetDomain: domain,
+          bunnyCDNActions.createPullzone({
+            sourceDomain: nfa.externalURL,
+            targetDomain: targetDomain,
           })
         );
       } catch (e) {
