@@ -4,6 +4,7 @@ pragma solidity ^0.8.17;
 
 import "./TestBase.sol";
 import {TestConstants} from "./Constants.sol";
+import "../../../contracts/IERCX.sol";
 
 contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
     uint256 internal tokenId;
@@ -17,19 +18,27 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
         (
             string memory name,
             string memory description,
-            string memory externalURL,
             string memory ens,
             uint256 currentBuild,
+            string memory commitHash,
+            string memory domain,
+            string memory gitRepository,
+            string memory ipfsHash,
             string memory logo,
-            uint24 color
+            uint24 color,
+            IERCX.Categories category
         ) = CuT.getToken(tokenId);
         assertEq(name, TestConstants.APP_NAME);
         assertEq(description, TestConstants.APP_DESCRIPTION);
-        assertEq(externalURL, TestConstants.APP_EXTERNAL_URL);
+        assertEq(domain, TestConstants.getBuild().domain);
+        assertEq(commitHash, TestConstants.getBuild().commitHash);
+        assertEq(ipfsHash, TestConstants.getBuild().ipfsHash);
+        assertEq(gitRepository, TestConstants.getBuild().gitRepository);
         assertEq(logo, TestConstants.LOGO_0);
         assertEq(color, TestConstants.APP_COLOR);
         assertEq(ens, TestConstants.APP_ENS);
         assertEq(currentBuild, 0);
+        assertEq(uint(category), uint(TestConstants.CATEGORY));
     }
 
     function testFuzz_getTokenAfterUpdate(
@@ -55,15 +64,22 @@ contract Test_FleekERC721_GetToken is Test_FleekERC721_Base {
         (
             string memory name,
             string memory description,
-            string memory externalURL,
             string memory ens,
             uint256 currentBuild,
+            string memory commitHash,
+            string memory domain,
+            string memory gitRepository,
+            string memory ipfsHash,
             string memory logo,
-            uint24 color
+            uint24 color,
+            IERCX.Categories category
         ) = CuT.getToken(tokenId);
         assertEq(name, newAppName);
         assertEq(description, newDescription);
-        assertEq(externalURL, newExternalURL);
+        assertEq(domain, newDomain);
+        assertEq(commitHash, newCommitHash);
+        assertEq(ipfsHash, newIpfsHash);
+        assertEq(gitRepository, newRepository);
         assertEq(logo, newLogo);
         assertEq(color, newColor);
         assertEq(ens, newENS);

@@ -5,7 +5,7 @@
   "private": "false",
   "scripts": {
     "test": "yarn test:hardhat && yarn test:foundry",
-    "test:foundry": "forge test -vvv --fork-url mainnet --fork-block-number 16876149",
+    "test:foundry": "forge test -vvv --fork-url mainnet",
     "test:hardhat": "hardhat test --network hardhat",
     "format": "prettier --write \"./**/*.{js,json,sol,ts}\"",
     "node:hardhat": "hardhat node",

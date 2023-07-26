@@ -32,39 +32,16 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             address(12),
             "Different App Name",
             "This is a different description for another app.",
-            "https://fleek.xyz",
             "fleek.eth",
-            "94e8ba38568aea4fb277a37a4c472d94a6ce880a",
-            "https://github.com/a-different/repository",
-            "mtwirsqawjuoloq2gvtyug2tc3jbf5htm2zeo4rsknfiv3fdp46a",
             TestConstants.LOGO_1,
             0x654321,
-            false,
+            IERCX.Categories.NFT,
+            IERCX.Build("abcdefg", "repository", "qwerty", "https://fleek.co"),
             deployer
         );
 
         assertEq(firstMint, 0);
         assertEq(secondMint, 1);
-    }
-
-    function test_mintWithAutoApprovalAPsOn() public {
-        transferENS("fleek.eth", deployer);
-        uint256 mint = CuT.mint(
-            address(12),
-            "Different App Name",
-            "This is a different description for another app.",
-            "https://fleek.xyz",
-            "fleek.eth",
-            "94e8ba38568aea4fb277a37a4c472d94a6ce880a",
-            "https://github.com/a-different/repository",
-            "mtwirsqawjuoloq2gvtyug2tc3jbf5htm2zeo4rsknfiv3fdp46a",
-            TestConstants.LOGO_1,
-            0x654321,
-            true,
-            deployer
-        );
-
-        assertEq(mint, 0);
     }
 
     function test_balanceOfDeployerAfterAndBeforeMinting() public {
@@ -85,8 +62,7 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
         string memory gitRepository,
         string memory ipfsHash,
         string memory logo,
-        uint24 color,
-        bool autoApprovalAp
+        uint24 color
     ) public {
         vm.assume(to != address(0));
         transferENS(ens, deployer);
@@ -94,14 +70,11 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             to,
             appName,
             description,
-            externalURL,
             ens,
-            commitHash,
-            gitRepository,
-            ipfsHash,
             logo,
             color,
-            autoApprovalAp,
+            TestConstants.CATEGORY,
+            IERCX.Build(commitHash, gitRepository, ipfsHash, externalURL),
             deployer
         );
         assertEq(tokenId, 0);
@@ -115,14 +88,11 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             deployer,
             TestConstants.APP_NAME,
             TestConstants.APP_DESCRIPTION,
-            TestConstants.APP_EXTERNAL_URL,
             TestConstants.APP_ENS,
-            TestConstants.APP_COMMIT_HASH,
-            TestConstants.APP_GIT_REPOSITORY,
-            TestConstants.APP_IPFS_HASH,
             TestConstants.LOGO_0,
             TestConstants.APP_COLOR,
-            false,
+            TestConstants.CATEGORY,
+            TestConstants.getBuild(),
             verifier
         );
     }
@@ -132,14 +102,11 @@ contract Test_FleekERC721_Mint is Test_FleekERC721_Base {
             deployer,
             TestConstants.APP_NAME,
             TestConstants.APP_DESCRIPTION,
-            TestConstants.APP_EXTERNAL_URL,
             "",
-            TestConstants.APP_COMMIT_HASH,
-            TestConstants.APP_GIT_REPOSITORY,
-            TestConstants.APP_IPFS_HASH,
             TestConstants.LOGO_0,
             TestConstants.APP_COLOR,
-            false,
+            TestConstants.CATEGORY,
+            TestConstants.getBuild(),
             deployer
         );
         assertEq(tokenId, 0);

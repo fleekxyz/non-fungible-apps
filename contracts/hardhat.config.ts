@@ -36,7 +36,7 @@ const config: HardhatUserConfig = {
       forking: MAINNET_API_KEY
         ? {
             url: MAINNET_API_KEY,
-            blockNumber: 16876149,
+            blockNumber: undefined,
           }
         : undefined,
     },

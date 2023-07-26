@@ -77,14 +77,11 @@ abstract contract Test_FleekERC721_Base is Test, Test_FleekERC721_Assertions {
             to,
             TestConstants.APP_NAME,
             TestConstants.APP_DESCRIPTION,
-            TestConstants.APP_EXTERNAL_URL,
             TestConstants.APP_ENS,
-            TestConstants.APP_COMMIT_HASH,
-            TestConstants.APP_GIT_REPOSITORY,
-            TestConstants.APP_IPFS_HASH,
             TestConstants.LOGO_0,
             TestConstants.APP_COLOR,
-            false, // Auto Approval Is OFF
+            TestConstants.CATEGORY,
+            TestConstants.getBuild(),
             deployer
         );
 

@@ -198,11 +198,35 @@ contract FleekERC721 is
         public
         view
         virtual
-        returns (string memory, string memory, string memory, string memory, uint256, string memory, uint24)
+        returns (
+            string memory,
+            string memory,
+            string memory,
+            uint256,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            uint24,
+            Categories
+        )
     {
         _requireMinted(tokenId);
         Token storage app = _apps[tokenId];
-        return (app.name, app.description, app.externalURL, app.ENS, app.currentBuild, app.logo, app.color);
+        return (
+            app.name,
+            app.description,
+            app.ENS,
+            app.currentBuild,
+            app.builds[app.currentBuild].commitHash,
+            app.builds[app.currentBuild].domain,
+            app.builds[app.currentBuild].gitRepository,
+            app.builds[app.currentBuild].ipfsHash,
+            app.logo,
+            app.color,
+            app.category
+        );
     }
 
     function getAppData(
@@ -561,6 +585,23 @@ contract FleekERC721 is
     ) public payable whenNotPaused requirePayment(Billing.AddAccessPoint) {
         _requireMinted(tokenId);
         _addAccessPoint(tokenId, apName);
+    }
+
+    /**
+     * @dev Updates the `accessPointAutoApproval` settings on minted `tokenId`.
+     *
+     * May emit a {MetadataUpdate} event.
+     *
+     * Requirements:
+     *
+     * - the tokenId must be minted and valid.
+     * - the sender must have the `tokenController` role.
+     *
+     */
+    function setAccessPointAutoApproval(uint256 tokenId, bool _apAutoApproval) public requireTokenOwner(tokenId) {
+        _requireMinted(tokenId);
+        _setAccessPointAutoApproval(tokenId, _apAutoApproval);
+        emit MetadataUpdate(tokenId, "accessPointAutoApproval", _apAutoApproval, msg.sender);
     }
 
     /**
