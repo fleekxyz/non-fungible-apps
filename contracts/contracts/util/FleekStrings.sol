@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "./FleekSVG.sol";
 import "../IERCX.sol";
-import "../FleekAccessPoints.sol";
 
 library FleekStrings {
     using Strings for uint256;
@@ -33,12 +32,7 @@ library FleekStrings {
      * @dev Converts IERCX.Token to a JSON string.
      * It requires to receive owner address as a parameter.
      */
-    function toString(
-        IERCX.Token storage app,
-        address owner,
-        bool accessPointAutoApproval,
-        bool verified
-    ) internal view returns (string memory) {
+    function toString(IERCX.Token storage app, address owner, bool verified) internal view returns (string memory) {
         // prettier-ignore
         return string(abi.encodePacked(
             '{',
@@ -47,7 +41,6 @@ library FleekStrings {
                 '"owner":"', uint160(owner).toHexString(20), '",',
                 '"external_url":"', app.externalURL, '",',
                 '"image":"', FleekSVG.generateBase64(app.name, app.ENS, app.logo, app.color.toColorString()), '",',
-                '"access_point_auto_approval":', accessPointAutoApproval.toString(),',',
                 '"verified":',verified.toString(),',',
                 '"attributes": [',
                     '{"trait_type": "ENS", "value":"', app.ENS,'"},',
@@ -57,23 +50,6 @@ library FleekStrings {
                     '{"trait_type": "Color", "value":"', app.color.toColorString(),'"}',
                 ']',
             '}'
-        ));
-    }
-
-    /**
-     * @dev Converts FleekAccessPoints.AccessPoint to a JSON string.
-     */
-    function toString(FleekAccessPoints.AccessPoint storage ap) internal view returns (string memory) {
-        // prettier-ignore
-        return string(abi.encodePacked(
-            "{",
-                '"tokenId":', ap.tokenId.toString(), ",",
-                '"score":', ap.score.toString(), ",",
-                '"nameVerified":', ap.nameVerified.toString(), ",",
-                '"contentVerified":', ap.contentVerified.toString(), ",",
-                '"owner":"', uint160(ap.owner).toHexString(20), '",',
-                '"status":',uint(ap.status).toString(),
-            "}"
         ));
     }
 
