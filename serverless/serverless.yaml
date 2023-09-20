@@ -78,14 +78,14 @@ functions:
       - { Ref: TopicAwsLibsLambdaLayer }
       - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
 
-  submitMintInfo:
+  submitNFA:
     # Deployment:
-    handler: ./dist/src/functions/mints/handler.submitMintInfo # TODO This will not work, need to change to nfa-serverless/dist/serverless/src/functions/mints/handler.submitMintInfo
+    handler: ./dist/src/functions/mints/handler.submitNFA # TODO This will not work, need to change to nfa-serverless/dist/serverless/src/functions/mints/handler.submitMintInfo
     # Local development:
     # handler: ./src/functions/mints/handler.submitMintInfo
     events:
       - http:
-          path: mint
+          path: submitNFA
           method: post
           cors:
             origin: '*'
@@ -93,36 +93,6 @@ functions:
             allowCredentials: false
     environment:
       NODE_ENV: production
-    layers:
-      - { Ref: TopicAwsNodeModulesLambdaLayer }
-      - { Ref: TopicAwsLibsLambdaLayer }
-      - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
-
-  verifyApp:
-    handler: ./dist/src/functions/apps/handler.verifyApp
-    events:
-      - http:
-          path: verifyApp
-          method: post
-          cors:
-            origin: '*'
-            headers: '*'
-            allowCredentials: false
-    layers:
-      - { Ref: TopicAwsNodeModulesLambdaLayer }
-      - { Ref: TopicAwsLibsLambdaLayer }
-      - { Ref: TopicPrismaAwsPrismaClientLambdaLayer }
-
-  submitAppInfo:
-    handler: ./dist/src/functions/apps/handler.submitAppInfo
-    events:
-      - http:
-          path: app
-          method: post
-          cors:
-            origin: '*'
-            headers: '*'
-            allowCredentials: false
     layers:
       - { Ref: TopicAwsNodeModulesLambdaLayer }
       - { Ref: TopicAwsLibsLambdaLayer }
