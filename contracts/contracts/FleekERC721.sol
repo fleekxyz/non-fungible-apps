@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./FleekAccessControl.sol";
 import "./FleekBilling.sol";
 import "./FleekPausable.sol";
-import "./FleekAccessPoints.sol";
 import "./util/FleekENS.sol";
 import "./util/FleekStrings.sol";
 import "./IERCX.sol";
@@ -18,15 +17,7 @@ error MustBeTokenVerifier(uint256 tokenId);
 error ThereIsNoTokenMinted();
 error TransferIsDisabled();
 
-contract FleekERC721 is
-    IERCX,
-    Initializable,
-    ERC721Upgradeable,
-    FleekAccessControl,
-    FleekPausable,
-    FleekBilling,
-    FleekAccessPoints
-{
+contract FleekERC721 is IERCX, Initializable, ERC721Upgradeable, FleekAccessControl, FleekPausable, FleekBilling {
     using Strings for uint256;
     using FleekStrings for FleekERC721.Token;
     using FleekStrings for string;
@@ -43,7 +34,6 @@ contract FleekERC721 is
         string ipfsHash,
         string logo,
         uint24 color,
-        bool accessPointAutoApproval,
         address indexed minter,
         address indexed owner,
         address verifier
@@ -113,7 +103,6 @@ contract FleekERC721 is
         string memory ipfsHash,
         string memory logo,
         uint24 color,
-        bool accessPointAutoApproval,
         address verifier
     ) public payable requirePayment(Billing.Mint) returns (uint256) {
         if (!hasCollectionRole(CollectionRoles.Verifier, verifier))
@@ -147,7 +136,6 @@ contract FleekERC721 is
             ipfsHash,
             logo,
             color,
-            accessPointAutoApproval,
             msg.sender,
             to,
             verifier
@@ -155,7 +143,6 @@ contract FleekERC721 is
 
         _tokenVerifier[tokenId] = verifier;
         _tokenVerified[tokenId] = false;
-        _setAccessPointAutoApproval(tokenId, accessPointAutoApproval);
 
         return tokenId;
     }
@@ -173,11 +160,10 @@ contract FleekERC721 is
     function tokenURI(uint256 tokenId) public view virtual override(ERC721Upgradeable, IERCX) returns (string memory) {
         _requireMinted(tokenId);
         address owner = ownerOf(tokenId);
-        bool accessPointAutoApproval = _getAccessPointAutoApproval(tokenId);
         bool verified = _tokenVerified[tokenId];
         Token storage app = _apps[tokenId];
 
-        return string(abi.encodePacked(_baseURI(), app.toString(owner, accessPointAutoApproval, verified).toBase64()));
+        return string(abi.encodePacked(_baseURI(), app.toString(owner, verified).toBase64()));
     }
 
     /**
@@ -513,122 +499,6 @@ contract FleekERC721 is
     function isTokenVerified(uint256 tokenId) public view returns (bool) {
         _requireMinted(tokenId);
         return _tokenVerified[tokenId];
-    }
-
-    /*//////////////////////////////////////////////////////////////
-        ACCESS POINTS
-    //////////////////////////////////////////////////////////////*/
-
-    /**
-     * @dev Add a new AccessPoint register for an app token.
-     * The AP name should be a DNS or ENS url and it should be unique.
-     * Anyone can add an AP but it should requires a payment.
-     *
-     * May emit a {NewAccessPoint} event.
-     *
-     * Requirements:
-     *
-     * - the tokenId must be minted and valid.
-     * - billing for add acess point may be applied.
-     * - the contract must be not paused.
-     *
-     */
-    function addAccessPoint(
-        uint256 tokenId,
-        string memory apName
-    ) public payable whenNotPaused requirePayment(Billing.AddAccessPoint) {
-        _requireMinted(tokenId);
-        _addAccessPoint(tokenId, apName);
-    }
-
-    /**
-     * @dev Remove an AccessPoint registry for an app token.
-     * It will also remove the AP from the app token APs list.
-     *
-     * May emit a {RemoveAccessPoint} event.
-     *
-     * Requirements:
-     *
-     * - the AP must exist.
-     * - must be called by the AP owner.
-     * - the contract must be not paused.
-     *
-     */
-    function removeAccessPoint(string memory apName) public whenNotPaused {
-        _removeAccessPoint(apName);
-    }
-
-    /**
-     * @dev Updates the `accessPointAutoApproval` settings on minted `tokenId`.
-     *
-     * May emit a {MetadataUpdate} event.
-     *
-     * Requirements:
-     *
-     * - the tokenId must be minted and valid.
-     * - the sender must have the `tokenController` role.
-     *
-     */
-    function setAccessPointAutoApproval(uint256 tokenId, bool _apAutoApproval) public requireTokenOwner(tokenId) {
-        _requireMinted(tokenId);
-        _setAccessPointAutoApproval(tokenId, _apAutoApproval);
-        emit MetadataUpdate(tokenId, "accessPointAutoApproval", _apAutoApproval, msg.sender);
-    }
-
-    /**
-     * @dev Set approval settings for an access point.
-     * It will add the access point to the token's AP list, if `approved` is true.
-     *
-     * May emit a {ChangeAccessPointApprovalStatus} event.
-     *
-     * Requirements:
-     *
-     * - the tokenId must exist and be the same as the tokenId that is set for the AP.
-     * - the AP must exist.
-     * - must be called by a token controller.
-     */
-    function setApprovalForAccessPoint(
-        uint256 tokenId,
-        string memory apName,
-        bool approved
-    ) public requireTokenOwner(tokenId) {
-        _setApprovalForAccessPoint(tokenId, apName, approved);
-    }
-
-    /**
-     * @dev Set the content verification of a AccessPoint registry.
-     *
-     * May emit a {ChangeAccessPointContentVerify} event.
-     *
-     * Requirements:
-     *
-     * - the AP must exist.
-     * - the sender must have the token controller role.
-     *
-     */
-    function setAccessPointContentVerify(
-        string memory apName,
-        bool verified
-    ) public requireCollectionRole(CollectionRoles.Verifier) requireTokenVerifier(_getAccessPointTokenId(apName)) {
-        _setAccessPointContentVerify(apName, verified);
-    }
-
-    /**
-     * @dev Set the name verification of a AccessPoint registry.
-     *
-     * May emit a {ChangeAccessPointNameVerify} event.
-     *
-     * Requirements:
-     *
-     * - the AP must exist.
-     * - the sender must have the token controller role.
-     *
-     */
-    function setAccessPointNameVerify(
-        string memory apName,
-        bool verified
-    ) public requireCollectionRole(CollectionRoles.Verifier) requireTokenVerifier(_getAccessPointTokenId(apName)) {
-        _setAccessPointNameVerify(apName, verified);
     }
 
     /*//////////////////////////////////////////////////////////////
