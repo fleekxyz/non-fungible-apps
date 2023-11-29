@@ -49,4 +49,4 @@ This is a mono repo so testing will be dependent on the specific folder you are 
 
 ## Getting help
 
-Join us at our [Discord Server](https://discord.gg/fleekxyz). Let's build a great community together!
+Join us at our [Discord Server](https://discord.gg/fleek). Let's build a great community together!
