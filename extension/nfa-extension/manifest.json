@@ -1,0 +1,23 @@
+{
+  "name": "Non-Fungible Apps",
+  "version": "1.0",
+  "description": "WIP!",
+  "permissions": ["notifications", "activeTab", "scripting", "storage", "tabs"],
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon-16.png",
+      "128": "images/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "images/icon-16.png",
+    "128": "images/icon-128.png"
+  },
+  "manifest_version": 3
+}
