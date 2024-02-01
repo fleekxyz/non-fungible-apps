@@ -1,0 +1,19 @@
+{
+  "name": "nfa-extension",
+  "version": "1.0.0",
+  "description": "This simple browser extension compares any active tab's URL against the NFA project's registry of domains. If there is a match, recommends the user to open the page via the direct IPNS/IPFS hash. Uses the default browser/metamask gateway to open the ipfs page, if the user accepts.",
+  "main": "options.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmperorOrokuSaki/nfa-extension.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EmperorOrokuSaki/nfa-extension/issues"
+  },
+  "homepage": "https://github.com/EmperorOrokuSaki/nfa-extension#readme"
+}

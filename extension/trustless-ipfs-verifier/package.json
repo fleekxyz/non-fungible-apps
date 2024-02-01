@@ -1,0 +1,11 @@
+{
+  "name": "app-integrity-verifier-extension",
+  "version": "1.0.0",
+  "description": "Chrome manifest v3 extension to verify the integrity of server responses.",
+  "scripts": {
+    "start": "npx http-server -p9191 ./server"
+  },
+  "keywords": [],
+  "author": "Edward Mulraney",
+  "license": "GPL-3.0"
+}
