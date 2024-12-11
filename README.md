@@ -13,7 +13,7 @@ This is the landing point for our initiative to decentralize web3 app frontend i
 2. Users mint prints of the NFA, which allows them to have a decentralized and permanently on-chain access point to any web3 app.
 3. Users can load said apps without relying on DNS, for example, locally via the browser or through a potentially integrated wallet.
 
-We want to have chain and wallet agnostic standard. While we use ERC-721 as a base reference, the base idea is to be kept simple, with extenesions/modules separate, so that NFAs can be easily replicable in any comparable chain, language, or NFT standard.
+We want to have chain and wallet agnostic standard. While we use ERC-721 as a base reference, the base idea is to be kept simple, with extensions/modules separate, so that NFAs can be easily replicable in any comparable chain, language, or NFT standard.
 
 We've developed a base set of contract code so now we want to harden it as well as add more metadata and features to support the additions of new modules - So be sure to open issues or PRs, as we welcome all contributions and collaborations!
 
