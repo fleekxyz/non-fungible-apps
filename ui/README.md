@@ -20,7 +20,7 @@ This can be a local deployment or a deployment on one of the networks.  This mai
 
 ### 🖥️ Running
 
-To run the UI localy follow the steps:
+To run the UI locally follow the steps:
 
 1. Clone the repo, [check out how here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
 
@@ -36,14 +36,14 @@ To run the UI localy follow the steps:
    $ yarn graphclient build
    ```
 
-3. To use ConnecKit is neccessary get an [Alchemy ID](https://alchemy.com/), so create an App and get the credentials. Then set the following .env file
+3. To use ConnecKit is necessary get an [Alchemy ID](https://alchemy.com/), so create an App and get the credentials. Then set the following .env file
 
    ```bash
    VITE_ALCHEMY_API_KEY
    VITE_ALCHEMY_APP_NAME
    ```
 
-   Also, you'll need to set up your firebase cretendials to make work the github login. Add to the .env file the following variables
+   Also, you'll need to set up your firebase credentials to make work the github login. Add to the .env file the following variables
 
    ```bash
    VITE_FIREBASE_API_KEY
@@ -55,7 +55,7 @@ To run the UI localy follow the steps:
    VITE_FIREBASE_MEASUREMENT_ID
    ```
 
-Get them from the project settings on the firebase dashboard. Read [this article](https://support.google.com/firebase/answer/7015592?hl=en#zippy=%2Cin-this-article) to know how to get your porject config
+Get them from the project settings on the firebase dashboard. Read [this article](https://support.google.com/firebase/answer/7015592?hl=en#zippy=%2Cin-this-article) to know how to get your project config
 
 4. To interact with the contract, you need to set the Goerli RPC. Set this variable on the .env file
 
